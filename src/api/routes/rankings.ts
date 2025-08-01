@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { FreeDataService } from '../../services/data-service';
+import { AppwriteDataService } from '../../services/appwrite-data-service';
 import { DataCache } from '../../utils/cache';
 
 const router = Router();
@@ -7,7 +7,7 @@ const router = Router();
 // GET /api/rankings - Get current AP Top 25 rankings
 router.get('/', async (req, res) => {
   try {
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     const cache: DataCache = req.app.locals.cache;
     
     // Check cache first
@@ -43,7 +43,7 @@ router.get('/week/:week', async (req, res) => {
       return res.status(400).json({ error: 'Invalid week number' });
     }
     
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     const cache: DataCache = req.app.locals.cache;
     
     // Check cache
@@ -73,7 +73,7 @@ router.get('/week/:week', async (req, res) => {
 router.get('/team/:teamName', async (req, res) => {
   try {
     const teamName = decodeURIComponent(req.params.teamName);
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     
     const rankings = await dataService.getAPRankings();
     

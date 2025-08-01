@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { FreeDataService } from '../../services/data-service';
+import { AppwriteDataService } from '../../services/appwrite-data-service';
 import { EligibilityChecker } from '../../services/eligibility-checker';
 import { DataCache } from '../../utils/cache';
 
@@ -8,7 +8,7 @@ const router = Router();
 // GET /api/games - Get current week games
 router.get('/', async (req, res) => {
   try {
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     const cache: DataCache = req.app.locals.cache;
     
     // Check cache first
@@ -40,7 +40,7 @@ router.get('/week/:week', async (req, res) => {
       return res.status(400).json({ error: 'Invalid week number' });
     }
     
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     const cache: DataCache = req.app.locals.cache;
     
     // Check cache
@@ -65,7 +65,7 @@ router.get('/week/:week', async (req, res) => {
 // GET /api/games/eligible - Get only eligible games
 router.get('/eligible', async (req, res) => {
   try {
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     const eligibilityChecker: EligibilityChecker = req.app.locals.eligibilityChecker;
     
     // Get current games
@@ -105,7 +105,7 @@ router.get('/eligible', async (req, res) => {
 router.get('/:gameId', async (req, res) => {
   try {
     const gameId = req.params.gameId;
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     
     const gameStats = await dataService.getLiveGameStats(gameId);
     

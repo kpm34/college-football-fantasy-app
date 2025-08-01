@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { FreeDataService } from '../../services/data-service';
+import { AppwriteDataService } from '../../services/appwrite-data-service';
 import { DataCache } from '../../utils/cache';
 
 const router = Router();
@@ -7,7 +7,7 @@ const router = Router();
 // GET /api/teams - Get all Power 4 teams
 router.get('/', async (req, res) => {
   try {
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     const cache: DataCache = req.app.locals.cache;
     
     // Check cache first
@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
 router.get('/:teamId/roster', async (req, res) => {
   try {
     const teamId = req.params.teamId;
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     const cache: DataCache = req.app.locals.cache;
     
     // Check cache

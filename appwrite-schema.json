@@ -1,0 +1,109 @@
+{
+  "collections": [
+    {
+      "name": "games",
+      "id": "games",
+      "permissions": ["read(\"any\")"],
+      "attributes": [
+        {"key": "season", "type": "integer", "required": true},
+        {"key": "week", "type": "integer", "required": true},
+        {"key": "seasonType", "type": "string", "size": 20, "required": true},
+        {"key": "startDate", "type": "datetime", "required": true},
+        {"key": "homeTeam", "type": "string", "size": 100, "required": true},
+        {"key": "homeConference", "type": "string", "size": 20, "required": false},
+        {"key": "homePoints", "type": "integer", "required": false, "default": 0},
+        {"key": "awayTeam", "type": "string", "size": 100, "required": true},
+        {"key": "awayConference", "type": "string", "size": 20, "required": false},
+        {"key": "awayPoints", "type": "integer", "required": false, "default": 0},
+        {"key": "status", "type": "string", "size": 20, "required": true},
+        {"key": "period", "type": "integer", "required": false, "default": 0},
+        {"key": "clock", "type": "string", "size": 10, "required": false},
+        {"key": "isConferenceGame", "type": "boolean", "required": false, "default": false},
+        {"key": "lastUpdated", "type": "datetime", "required": false}
+      ],
+      "indexes": [
+        {"key": "week_index", "attributes": ["week"], "type": "key"},
+        {"key": "season_index", "attributes": ["season"], "type": "key"},
+        {"key": "status_index", "attributes": ["status"], "type": "key"}
+      ]
+    },
+    {
+      "name": "rankings", 
+      "id": "rankings",
+      "permissions": ["read(\"any\")"],
+      "attributes": [
+        {"key": "season", "type": "integer", "required": true},
+        {"key": "week", "type": "integer", "required": true},
+        {"key": "poll", "type": "string", "size": 50, "required": true},
+        {"key": "rankings", "type": "string", "size": 10000, "required": true},
+        {"key": "lastUpdated", "type": "datetime", "required": false}
+      ],
+      "indexes": [
+        {"key": "week_season_index", "attributes": ["week", "season"], "type": "key"}
+      ]
+    },
+    {
+      "name": "teams",
+      "id": "teams", 
+      "permissions": ["read(\"any\")"],
+      "attributes": [
+        {"key": "school", "type": "string", "size": 100, "required": true},
+        {"key": "mascot", "type": "string", "size": 100, "required": false},
+        {"key": "abbreviation", "type": "string", "size": 10, "required": false},
+        {"key": "conference", "type": "string", "size": 20, "required": true},
+        {"key": "conferenceId", "type": "integer", "required": false},
+        {"key": "color", "type": "string", "size": 10, "required": false},
+        {"key": "altColor", "type": "string", "size": 10, "required": false},
+        {"key": "logo", "type": "url", "required": false},
+        {"key": "lastUpdated", "type": "datetime", "required": false}
+      ],
+      "indexes": [
+        {"key": "conference_index", "attributes": ["conference"], "type": "key"}
+      ]
+    },
+    {
+      "name": "leagues",
+      "id": "leagues",
+      "permissions": ["read(\"users\")", "create(\"users\")"],
+      "attributes": [
+        {"key": "name", "type": "string", "size": 100, "required": true},
+        {"key": "commissioner", "type": "string", "size": 36, "required": true},
+        {"key": "season", "type": "integer", "required": true},
+        {"key": "scoringType", "type": "string", "size": 20, "required": false, "default": "PPR"},
+        {"key": "maxTeams", "type": "integer", "required": false, "default": 12},
+        {"key": "draftDate", "type": "datetime", "required": false},
+        {"key": "status", "type": "string", "size": 20, "required": false, "default": "pre-draft"},
+        {"key": "inviteCode", "type": "string", "size": 20, "required": false}
+      ]
+    },
+    {
+      "name": "rosters",
+      "id": "rosters",
+      "permissions": ["read(\"users\")", "create(\"users\")", "update(\"users\")"],
+      "attributes": [
+        {"key": "leagueId", "type": "string", "size": 36, "required": true},
+        {"key": "userId", "type": "string", "size": 36, "required": true},
+        {"key": "teamName", "type": "string", "size": 100, "required": true},
+        {"key": "players", "type": "string", "size": 5000, "required": false},
+        {"key": "wins", "type": "integer", "required": false, "default": 0},
+        {"key": "losses", "type": "integer", "required": false, "default": 0},
+        {"key": "ties", "type": "integer", "required": false, "default": 0},
+        {"key": "pointsFor", "type": "float", "required": false, "default": 0},
+        {"key": "pointsAgainst", "type": "float", "required": false, "default": 0}
+      ]
+    },
+    {
+      "name": "lineups",
+      "id": "lineups",
+      "permissions": ["read(\"users\")", "create(\"users\")", "update(\"users\")"],
+      "attributes": [
+        {"key": "rosterId", "type": "string", "size": 36, "required": true},
+        {"key": "week", "type": "integer", "required": true},
+        {"key": "starters", "type": "string", "size": 2000, "required": false},
+        {"key": "bench", "type": "string", "size": 2000, "required": false},
+        {"key": "points", "type": "float", "required": false, "default": 0},
+        {"key": "locked", "type": "boolean", "required": false, "default": false}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+# College Football Fantasy App - Project Context
+
+## Project Overview
+A fantasy football platform exclusively for Power 4 conferences (SEC, ACC, Big 12, Big Ten) with unique eligibility rules where players can only be started against AP Top-25 teams or in conference games.
+
+## Tech Stack
+- Backend: Express.js + TypeScript
+- Database: Appwrite (NYC region)
+- Frontend: Next.js 15 + Tailwind CSS + Spline 3D
+- Data Sources: ESPN API (free) + CollegeFootballData API
+- Authentication: Appwrite Auth (planned)
+
+## Key Features
+1. Power 4 conferences only
+2. 12-week regular season (no playoffs/bowls)
+3. Player eligibility: AP Top-25 opponents OR conference games only
+4. Real-time scoring via ESPN data
+5. 3D visualizations with Spline
+
+## API Endpoints
+- GET /api/games - Current week games
+- GET /api/games/week/:week - Specific week games
+- GET /api/games/eligible - Only eligible games
+- GET /api/rankings - AP Top 25
+- GET /api/teams - Power 4 teams
+- GET /api/eligibility/check - Check game eligibility
+
+## Database Collections (Appwrite)
+- games: Game data with scores and status
+- rankings: AP Top 25 weekly rankings
+- teams: Power 4 team information
+- leagues: User leagues (planned)
+- rosters: Team rosters (planned)
+- lineups: Weekly lineups (planned)
+
+## Current Status
+✅ Backend API running with Appwrite integration
+✅ Data syncing from ESPN/CFBD to Appwrite
+✅ Frontend scaffolded with Next.js + Spline
+⏳ User authentication (next)
+⏳ League management system
+⏳ Draft system
+⏳ Scoring engine
+
+## Development Commands
+- Backend: npm run server (port 3000)
+- Frontend: cd frontend && npm run dev (port 3001)
+- Sync data: npm run sync-data
+- Test APIs: npm test
+
+## Environment Variables
+- APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
+- APPWRITE_PROJECT_ID=688ccd49002eacc6c020
+- APPWRITE_API_KEY=configured
+- CFBD_API_KEY=optional
+
+## Spline Integration
+- Use @splinetool/react-spline for 3D scenes
+- Dynamic imports to avoid SSR issues
+- Scene ideas: Stadium, trophies, draft board, team logos
+
+## Code Style
+- TypeScript strict mode
+- Functional components with hooks
+- Tailwind for styling
+- Async/await for promises
+- Proper error handling

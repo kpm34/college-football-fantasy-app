@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { FreeDataService } from '../../services/data-service';
+import { AppwriteDataService } from '../../services/appwrite-data-service';
 import { EligibilityChecker } from '../../services/eligibility-checker';
 
 const router = Router();
@@ -15,7 +15,7 @@ router.get('/check', async (req, res) => {
       });
     }
     
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     const eligibilityChecker: EligibilityChecker = req.app.locals.eligibilityChecker;
     
     // Get current rankings
@@ -56,7 +56,7 @@ router.get('/check', async (req, res) => {
 // GET /api/eligibility/report - Get eligibility report for current week
 router.get('/report', async (req, res) => {
   try {
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     const eligibilityChecker: EligibilityChecker = req.app.locals.eligibilityChecker;
     
     // Get current data
@@ -86,7 +86,7 @@ router.get('/report', async (req, res) => {
 router.get('/team/:teamName', async (req, res) => {
   try {
     const teamName = decodeURIComponent(req.params.teamName);
-    const dataService: FreeDataService = req.app.locals.dataService;
+    const dataService: AppwriteDataService = req.app.locals.dataService;
     const eligibilityChecker: EligibilityChecker = req.app.locals.eligibilityChecker;
     
     // Get current data
