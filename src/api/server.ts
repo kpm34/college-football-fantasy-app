@@ -44,7 +44,7 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
 }));
 app.use(cors({
-  origin: ['http://localhost:3001', 'http://localhost:3000'],
+  origin: ['http://localhost:3001', 'http://localhost:3000', 'https://app.spline.design', 'https://prod.spline.design'],
   credentials: true
 }));
 app.use(compression());
