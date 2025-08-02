@@ -1,0 +1,62 @@
+/* Chrome and Metallic Text Effects */
+.chrome-text {
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 25%, #4f46e5 50%, #4338ca 75%, #3730a3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: #6366f1; /* Fallback color */
+  text-shadow: 0 4px 6px rgba(0,0,0,0.5);
+  filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.4));
+}
+
+.metallic-text {
+  background: linear-gradient(145deg, #ffffff 0%, #e5e7eb 25%, #d1d5db 50%, #9ca3af 75%, #6b7280 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: #e5e7eb; /* Fallback color */
+  text-shadow: 0 4px 6px rgba(0,0,0,0.5);
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+}
+
+/* Glass Card Effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+}
+
+/* Chrome Button */
+.chrome-button {
+  background: linear-gradient(145deg, #e6e6e6, #ffffff, #e6e6e6);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.chrome-button:hover {
+  background: linear-gradient(145deg, #ffffff, #e6e6e6, #ffffff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Chrome Shine Animation */
+@keyframes chrome-shine {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.chrome-shine {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: chrome-shine 3s infinite;
+}
+
+/* Spline Viewer Styling */
+spline-viewer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
