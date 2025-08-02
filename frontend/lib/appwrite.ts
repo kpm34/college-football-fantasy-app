@@ -26,13 +26,18 @@ export const COLLECTIONS = {
   SCORES: 'scores',
   DRAFTS: 'drafts',
   DRAFT_PICKS: 'draft_picks',
-  PLAYERS: 'players'
+  PLAYERS: 'players',
+  AUCTION_SESSIONS: 'auction_sessions',
+  AUCTION_BIDS: 'auction_bids',
+  TEAM_BUDGETS: 'team_budgets'
 };
 
 // Realtime channels
 export const REALTIME_CHANNELS = {
   DRAFT_PICKS: (leagueId: string) => `databases.${DATABASE_ID}.collections.${COLLECTIONS.DRAFT_PICKS}.documents`,
-  LEAGUE_UPDATES: (leagueId: string) => `databases.${DATABASE_ID}.collections.${COLLECTIONS.LEAGUES}.documents`
+  LEAGUE_UPDATES: (leagueId: string) => `databases.${DATABASE_ID}.collections.${COLLECTIONS.LEAGUES}.documents`,
+  AUCTION_BIDS: (leagueId: string) => `databases.${DATABASE_ID}.collections.${COLLECTIONS.AUCTION_BIDS}.documents`,
+  AUCTION_SESSIONS: (leagueId: string) => `databases.${DATABASE_ID}.collections.${COLLECTIONS.AUCTION_SESSIONS}.documents`
 };
 
 export default client; 

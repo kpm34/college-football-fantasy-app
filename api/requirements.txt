@@ -1,2 +1,4 @@
 requests==2.31.0
 appwrite==4.1.0
+fastapi==0.104.1
+mangum==0.17.0
