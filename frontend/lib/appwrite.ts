@@ -1,4 +1,4 @@
-import { Client, Databases, Account, Realtime } from 'appwrite';
+import { Client, Databases, Account } from 'appwrite';
 
 // Initialize Appwrite client for frontend
 const client = new Client();
@@ -10,7 +10,8 @@ client
 // Export Appwrite services
 export const databases = new Databases(client);
 export const account = new Account(client);
-export const realtime = new Realtime(client);
+// Realtime functionality temporarily disabled - using client directly where needed
+export { client };
 
 // Database and collection IDs
 export const DATABASE_ID = 'college-football-fantasy';

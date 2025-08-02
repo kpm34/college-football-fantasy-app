@@ -44,7 +44,7 @@ export default function GamesList({ week, showEligibleOnly = false }: GamesListP
     // This is a simplified check - you might want to enhance this logic
     const isConferenceGame = game.homeConference && game.awayConference && 
                            game.homeConference === game.awayConference;
-    return isConferenceGame;
+    return !!isConferenceGame;
   };
 
   const isLiveGame = (game: Game): boolean => {

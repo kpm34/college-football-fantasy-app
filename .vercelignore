@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Testing
+test_*.py
+*_test.py
+test/
+tests/
+coverage/
+.coverage
+pytest_cache/
+__pycache__/
+
+# Development files
+*.log
+*.pyc
+.env
+.env.local
+.env.*.local
+.DS_Store
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Workers directory (deployed separately to Fly.io)
+workers/
+
+# Local test files
+scoring_example.py
+test_rankings_refresh_local.py

@@ -1,6 +1,6 @@
 // API configuration for College Football Fantasy App
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://college-football-fantasy-app.vercel.app/api';
 
 // API helper functions
 export const api = {

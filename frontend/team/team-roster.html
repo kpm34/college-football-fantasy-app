@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Roster - College Football Fantasy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://unpkg.com/appwrite@13.0.1"></script>
+    <script src="../js/appwrite-browser.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        espn: {
+                            green: '#00A651',
+                            blue: '#0066CC',
+                            red: '#CC0000',
+                            orange: '#FF6600',
+                            gray: '#666666'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .espn-green {
+            color: #00A651;
+        }
+        
+        .espn-blue {
+            color: #0066CC;
+        }
+        
+        .team-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .nav-tab {
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .nav-tab.active {
+            border-bottom-color: #00A651;
+            color: #00A651;
+            font-weight: bold;
+        }
+        
+        .nav-tab:hover {
+            border-bottom-color: #00A651;
+            color: #00A651;
+        }
+        
+        .player-row {
+            transition: all 0.2s ease;
+        }
+        
+        .player-row:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .status-active {
+            color: #00A651;
+            font-weight: bold;
+        }
+        
+        .status-inactive {
+            color: #CC0000;
+        }
+        
+        .projection-high {
+            color: #00A651;
+            font-weight: bold;
+        }
+        
+        .projection-low {
+            color: #CC0000;
+        }
+        
+        .week-nav {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        
+        .week-nav button {
+            transition: all 0.2s ease;
+        }
+        
+        .week-nav button.active {
+            background: #00A651;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Top Navigation Bar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Left side - Logo and main nav -->
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-espn-green rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">CF</span>
+                        </div>
+                        <span class="font-bold text-gray-800">College Football Fantasy</span>
+                    </div>
+                    
+                    <div class="hidden md:flex space-x-6">
+                        <a href="#" class="nav-tab active text-gray-700 hover:text-espn-green">My Team</a>
+                        <a href="#" class="nav-tab text-gray-700 hover:text-espn-green">League</a>
+                        <a href="#" class="nav-tab text-gray-700 hover:text-espn-green">Players</a>
+                        <a href="#" class="nav-tab text-gray-700 hover:text-espn-green">FantasyCast</a>
+                        <a href="#" class="nav-tab text-gray-700 hover:text-espn-green">Scoreboard</a>
+                        <a href="#" class="nav-tab text-gray-700 hover:text-espn-green">Standings</a>
+                    </div>
+                </div>
+                
+                <!-- Right side - User team -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2 text-gray-700 hover:text-espn-green">
+                            <span class="font-medium">Power 4 Champions</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Team Header -->
+        <div class="glass-card rounded-lg p-6 mb-6">
+            <div class="flex justify-between items-start">
+                <div class="flex items-center space-x-4">
+                    <div class="team-logo">P4</div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">Power 4 Champions</h1>
+                        <p class="text-gray-600">Kashyap Maheshwari</p>
+                        <div class="flex items-center space-x-4 mt-2">
+                            <span class="text-sm text-gray-500">Managers: Kashyap Maheshwari</span>
+                            <a href="#" class="text-espn-blue hover:text-espn-green text-sm">Add 2nd Manager</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="text-espn-blue hover:text-espn-green text-sm">Draft Picks</a>
+                    <a href="#" class="text-espn-blue hover:text-espn-green text-sm">Keepers</a>
+                    <a href="#" class="text-espn-blue hover:text-espn-green text-sm">Leave League</a>
+                    <button class="flex items-center space-x-2 text-gray-600 hover:text-gray-800">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span>Team Settings</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Draft Status Alert -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 text-yellow-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                <div class="flex-1">
+                    <h3 class="text-sm font-medium text-yellow-800">Your SNAKE Draft is not yet scheduled.</h3>
+                    <p class="text-sm text-yellow-700 mt-1">*Draft order is set based on league settings</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button class="bg-espn-blue text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+                        Remind League Manager
+                    </button>
+                    <button class="bg-espn-green text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">
+                        Edit Draft Strategy
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lineup Management -->
+        <div class="glass-card rounded-lg p-6 mb-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div class="flex items-center space-x-4">
+                    <span class="text-lg font-medium text-gray-800">Set Lineup:</span>
+                    <div class="week-nav flex items-center space-x-1">
+                        <button class="px-3 py-1 rounded-md text-sm font-medium">◀</button>
+                        <button class="px-3 py-1 rounded-md text-sm font-medium active">NFL WEEK 1</button>
+                        <button class="px-3 py-1 rounded-md text-sm font-medium">NFL WEEK 2</button>
+                        <button class="px-3 py-1 rounded-md text-sm font-medium">NFL WEEK 3</button>
+                        <button class="px-3 py-1 rounded-md text-sm font-medium">▶</button>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-gray-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span>NFL WEEK 3</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 text-sm text-gray-600">
+                        <span>Trade & Acquisition Limits</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <button class="bg-espn-blue text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+                        Manage IR
+                    </button>
+                    <button class="bg-espn-green text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">
+                        + Add Player
+                    </button>
+                    <button class="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700">
+                        - Drop Players
+                    </button>
+                </div>
+            </div>
+
+            <!-- Roster Navigation Tabs -->
+            <div class="border-b border-gray-200 mb-6">
+                <nav class="flex space-x-8">
+                    <a href="#" class="nav-tab active py-2">Overview</a>
+                    <a href="#" class="nav-tab py-2">Stats</a>
+                    <a href="#" class="nav-tab py-2">Schedule</a>
+                    <a href="#" class="nav-tab py-2">News</a>
+                    <a href="#" class="nav-tab py-2">Projections</a>
+                    <a href="#" class="nav-tab py-2">Ranks</a>
+                </nav>
+            </div>
+
+            <!-- Projections/Stats View -->
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">Show Stats</span>
+                    <select class="border border-gray-300 rounded-md px-3 py-2 text-sm">
+                        <option>2025 Projections</option>
+                        <option>2024 Stats</option>
+                        <option>Last 7 Days</option>
+                        <option>Last 30 Days</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Roster Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">SLOT</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">PLAYER</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">ACTION</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">OPP</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">STATUS</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">PROJ</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">SCORE</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">OPRK</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">%ST</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">%ROST</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">+/-</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">FPTS</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">AVG</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">LAST</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- STARTERS Section -->
+                        <tr class="bg-blue-50">
+                            <td colspan="13" class="py-2 px-4 font-bold text-blue-800">STARTERS</td>
+                        </tr>
+                        
+                        <!-- QB -->
+                        <tr class="player-row border-b border-gray-100">
+                            <td class="py-3 px-4 font-medium text-gray-800">QB</td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">QB</div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Caleb Williams</div>
+                                        <div class="text-xs text-gray-500">USC QB</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">@ND</td>
+                            <td class="py-3 px-4">
+                                <span class="status-active">Sat 7:30 PM</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="projection-high">17.1</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                            <td class="py-3 px-4 text-gray-600">15</td>
+                            <td class="py-3 px-4 text-gray-600">20.7</td>
+                            <td class="py-3 px-4 text-gray-600">78.2</td>
+                            <td class="py-3 px-4 projection-low">-2.2</td>
+                            <td class="py-3 px-4 text-gray-600">314.5</td>
+                            <td class="py-3 px-4 text-gray-600">18.5</td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                        </tr>
+
+                        <!-- RB1 -->
+                        <tr class="player-row border-b border-gray-100">
+                            <td class="py-3 px-4 font-medium text-gray-800">RB</td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold">RB</div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Jahmyr Gibbs</div>
+                                        <div class="text-xs text-gray-500">Alabama RB</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">@A&M</td>
+                            <td class="py-3 px-4">
+                                <span class="status-active">Sat 3:30 PM</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="projection-high">16.8</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                            <td class="py-3 px-4 text-gray-600">22</td>
+                            <td class="py-3 px-4 text-gray-600">99.5</td>
+                            <td class="py-3 px-4 text-gray-600">99.9</td>
+                            <td class="py-3 px-4 text-gray-600">0</td>
+                            <td class="py-3 px-4 text-gray-600">285.9</td>
+                            <td class="py-3 px-4 text-gray-600">16.8</td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                        </tr>
+
+                        <!-- RB2 -->
+                        <tr class="player-row border-b border-gray-100">
+                            <td class="py-3 px-4 font-medium text-gray-800">RB</td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold">RB</div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Isiah Pacheco</div>
+                                        <div class="text-xs text-gray-500">Rutgers RB</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">@PSU</td>
+                            <td class="py-3 px-4">
+                                <span class="status-active">Sat 12:00 PM</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="projection-high">11.6</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                            <td class="py-3 px-4 text-gray-600">8</td>
+                            <td class="py-3 px-4 text-gray-600">27.0</td>
+                            <td class="py-3 px-4 text-gray-600">88.6</td>
+                            <td class="py-3 px-4 projection-low">-0.5</td>
+                            <td class="py-3 px-4 text-gray-600">188.9</td>
+                            <td class="py-3 px-4 text-gray-600">11.1</td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                        </tr>
+
+                        <!-- WR1 -->
+                        <tr class="player-row border-b border-gray-100">
+                            <td class="py-3 px-4 font-medium text-gray-800">WR</td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">WR</div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Tyreek Hill</div>
+                                        <div class="text-xs text-gray-500">Miami WR</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">@FSU</td>
+                            <td class="py-3 px-4">
+                                <span class="status-active">Sat 8:00 PM</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="projection-high">12.4</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                            <td class="py-3 px-4 text-gray-600">12</td>
+                            <td class="py-3 px-4 text-gray-600">87.6</td>
+                            <td class="py-3 px-4 text-gray-600">98.9</td>
+                            <td class="py-3 px-4 projection-high">+0.1</td>
+                            <td class="py-3 px-4 text-gray-600">216.4</td>
+                            <td class="py-3 px-4 text-gray-600">12.7</td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                        </tr>
+
+                        <!-- WR2 -->
+                        <tr class="player-row border-b border-gray-100">
+                            <td class="py-3 px-4 font-medium text-gray-800">WR</td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">WR</div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Tee Higgins</div>
+                                        <div class="text-xs text-gray-500">Clemson WR</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">@GT</td>
+                            <td class="py-3 px-4">
+                                <span class="status-active">Sat 3:30 PM</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="projection-high">12.7</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                            <td class="py-3 px-4 text-gray-600">18</td>
+                            <td class="py-3 px-4 text-gray-600">90.0</td>
+                            <td class="py-3 px-4 text-gray-600">99.3</td>
+                            <td class="py-3 px-4 text-gray-600">0</td>
+                            <td class="py-3 px-4 text-gray-600">216.8</td>
+                            <td class="py-3 px-4 text-gray-600">12.8</td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                        </tr>
+
+                        <!-- TE -->
+                        <tr class="player-row border-b border-gray-100">
+                            <td class="py-3 px-4 font-medium text-gray-800">TE</td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold">TE</div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Hunter Henry</div>
+                                        <div class="text-xs text-gray-500">Michigan TE</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">@OSU</td>
+                            <td class="py-3 px-4">
+                                <span class="status-active">Sat 12:00 PM</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="projection-high">7.1</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                            <td class="py-3 px-4 text-gray-600">25</td>
+                            <td class="py-3 px-4 text-gray-600">4.0</td>
+                            <td class="py-3 px-4 text-gray-600">19.1</td>
+                            <td class="py-3 px-4 projection-high">+2.2</td>
+                            <td class="py-3 px-4 text-gray-600">118.3</td>
+                            <td class="py-3 px-4 text-gray-600">7.0</td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                        </tr>
+
+                        <!-- FLEX -->
+                        <tr class="player-row border-b border-gray-100">
+                            <td class="py-3 px-4 font-medium text-gray-800">FLEX</td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">WR</div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Romeo Doubs</div>
+                                        <div class="text-xs text-gray-500">Wisconsin WR</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">@Iowa</td>
+                            <td class="py-3 px-4">
+                                <span class="status-active">Sat 3:30 PM</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="projection-high">6.8</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                            <td class="py-3 px-4 text-gray-600">30</td>
+                            <td class="py-3 px-4 text-gray-600">0.4</td>
+                            <td class="py-3 px-4 text-gray-600">3.9</td>
+                            <td class="py-3 px-4 projection-high">+0.5</td>
+                            <td class="py-3 px-4 text-gray-600">102.8</td>
+                            <td class="py-3 px-4 text-gray-600">6.0</td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                        </tr>
+
+                        <!-- D/ST -->
+                        <tr class="player-row border-b border-gray-100">
+                            <td class="py-3 px-4 font-medium text-gray-800">D/ST</td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">D</div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Michigan</div>
+                                        <div class="text-xs text-gray-500">Michigan D/ST</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">@OSU</td>
+                            <td class="py-3 px-4">
+                                <span class="status-active">Sat 12:00 PM</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="projection-high">5.6</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                            <td class="py-3 px-4 text-gray-600">-</td>
+                            <td class="py-3 px-4 text-gray-600">10.6</td>
+                            <td class="py-3 px-4 text-gray-600">12.2</td>
+                            <td class="py-3 px-4 projection-low">-3.1</td>
+                            <td class="py-3 px-4 text-gray-600">80.7</td>
+                            <td class="py-3 px-4 text-gray-600">4.7</td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                        </tr>
+
+                        <!-- K -->
+                        <tr class="player-row border-b border-gray-100">
+                            <td class="py-3 px-4 font-medium text-gray-800">K</td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-bold">K</div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Cairo Santos</div>
+                                        <div class="text-xs text-gray-500">USC K</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">@ND</td>
+                            <td class="py-3 px-4">
+                                <span class="status-active">Sat 7:30 PM</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="projection-high">8.0</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                            <td class="py-3 px-4 text-gray-600">-</td>
+                            <td class="py-3 px-4 text-gray-600">25.2</td>
+                            <td class="py-3 px-4 text-gray-600">27.3</td>
+                            <td class="py-3 px-4 projection-high">+2.3</td>
+                            <td class="py-3 px-4 text-gray-600">138.2</td>
+                            <td class="py-3 px-4 text-gray-600">8.1</td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                        </tr>
+
+                        <!-- TOTALS Row -->
+                        <tr class="bg-gray-50 font-bold">
+                            <td class="py-3 px-4 text-gray-800">TOTALS</td>
+                            <td class="py-3 px-4"></td>
+                            <td class="py-3 px-4"></td>
+                            <td class="py-3 px-4"></td>
+                            <td class="py-3 px-4"></td>
+                            <td class="py-3 px-4 text-gray-800">98.2</td>
+                            <td class="py-3 px-4 text-gray-800">0.0</td>
+                            <td class="py-3 px-4"></td>
+                            <td class="py-3 px-4"></td>
+                            <td class="py-3 px-4"></td>
+                            <td class="py-3 px-4"></td>
+                            <td class="py-3 px-4 text-gray-800">1662.6</td>
+                            <td class="py-3 px-4 text-gray-800">97.8</td>
+                            <td class="py-3 px-4 text-gray-800">0.0</td>
+                        </tr>
+
+                        <!-- BENCH Section -->
+                        <tr class="bg-gray-100">
+                            <td colspan="13" class="py-2 px-4 font-bold text-gray-800">BENCH</td>
+                        </tr>
+                        
+                        <!-- Bench Player -->
+                        <tr class="player-row border-b border-gray-100">
+                            <td class="py-3 px-4 font-medium text-gray-800">Bench</td>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">WR</div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">George Pickens</div>
+                                        <div class="text-xs text-gray-500">Georgia WR</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4">
+                                <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">@Auburn</td>
+                            <td class="py-3 px-4">
+                                <span class="status-active">Sat 3:30 PM</span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="projection-high">10.9</span>
+                            </td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                            <td class="py-3 px-4 text-gray-600">16</td>
+                            <td class="py-3 px-4 text-gray-600">34.3</td>
+                            <td class="py-3 px-4 text-gray-600">91.4</td>
+                            <td class="py-3 px-4 projection-low">-0.4</td>
+                            <td class="py-3 px-4 text-gray-600">183.4</td>
+                            <td class="py-3 px-4 text-gray-600">10.8</td>
+                            <td class="py-3 px-4 text-gray-600">0.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Appwrite Data Integration for Team Roster
+        class TeamRoster {
+            constructor() {
+                this.appwriteService = window.appwriteService;
+                this.currentUser = null;
+                this.currentLeague = null;
+                this.roster = null;
+                this.players = [];
+                this.week = 1;
+                this.init();
+            }
+
+            async init() {
+                try {
+                    // Check if user is logged in
+                    this.currentUser = await this.appwriteService.getCurrentUser();
+                    
+                    if (!this.currentUser) {
+                        this.showLoginPrompt();
+                        return;
+                    }
+
+                    // Get league from URL or user's first league
+                    await this.loadLeagueData();
+                    
+                    // Load roster data
+                    await this.loadRosterData();
+                    
+                    // Initialize animations
+                    this.initAnimations();
+                    
+                } catch (error) {
+                    console.error('Error initializing team roster:', error);
+                    this.appwriteService.handleError(error);
+                }
+            }
+
+            async loadLeagueData() {
+                try {
+                    // Get user's leagues
+                    const leagues = await this.appwriteService.getLeagues(this.currentUser.$id);
+                    
+                    if (leagues.length > 0) {
+                        this.currentLeague = leagues[0]; // Use first league for now
+                        this.updateLeagueInfo();
+                    } else {
+                        this.showNoLeagueMessage();
+                    }
+                } catch (error) {
+                    console.error('Error loading league data:', error);
+                }
+            }
+
+            async loadRosterData() {
+                if (!this.currentLeague) return;
+
+                try {
+                    // Get user's roster for this league
+                    this.roster = await this.appwriteService.getRoster(this.currentLeague.$id, this.currentUser.$id);
+                    
+                    if (this.roster) {
+                        // Load player data for roster
+                        await this.loadPlayerData();
+                        this.updateRosterTable();
+                    } else {
+                        this.showEmptyRoster();
+                    }
+                } catch (error) {
+                    console.error('Error loading roster data:', error);
+                }
+            }
+
+            async loadPlayerData() {
+                if (!this.roster || !this.roster.players) return;
+
+                try {
+                    // Load player details for each player in roster
+                    const playerPromises = this.roster.players.map(playerId => 
+                        this.appwriteService.getPlayers(null, null).then(players => 
+                            players.find(p => p.$id === playerId)
+                        )
+                    );
+                    
+                    this.players = await Promise.all(playerPromises);
+                    this.players = this.players.filter(p => p); // Remove null values
+                } catch (error) {
+                    console.error('Error loading player data:', error);
+                }
+            }
+
+            updateLeagueInfo() {
+                // Update team header with league info
+                const teamName = document.querySelector('h1');
+                if (teamName) {
+                    teamName.textContent = this.currentLeague.name || 'Power 4 Champions';
+                }
+
+                const managerName = document.querySelector('.text-gray-600');
+                if (managerName) {
+                    managerName.textContent = this.currentUser.name || 'Kashyap Maheshwari';
+                }
+            }
+
+            updateRosterTable() {
+                const tbody = document.querySelector('tbody');
+                if (!tbody) return;
+
+                // Clear existing rows except headers
+                const starterHeader = tbody.querySelector('.bg-blue-50');
+                const benchHeader = tbody.querySelector('.bg-gray-100');
+                const totalsRow = tbody.querySelector('.bg-gray-50');
+                
+                tbody.innerHTML = '';
+                
+                if (starterHeader) tbody.appendChild(starterHeader);
+                
+                // Add starter players
+                if (this.roster.starters) {
+                    this.roster.starters.forEach((playerId, index) => {
+                        const player = this.players.find(p => p.$id === playerId);
+                        if (player) {
+                            const row = this.createPlayerRow(player, this.getPositionByIndex(index));
+                            tbody.appendChild(row);
+                        }
+                    });
+                }
+                
+                if (totalsRow) tbody.appendChild(totalsRow);
+                if (benchHeader) tbody.appendChild(benchHeader);
+                
+                // Add bench players
+                if (this.roster.bench) {
+                    this.roster.bench.forEach(playerId => {
+                        const player = this.players.find(p => p.$id === playerId);
+                        if (player) {
+                            const row = this.createPlayerRow(player, 'Bench');
+                            tbody.appendChild(row);
+                        }
+                    });
+                }
+            }
+
+            createPlayerRow(player, position) {
+                const row = document.createElement('tr');
+                row.className = 'player-row border-b border-gray-100';
+                
+                const positionColor = this.getPositionColor(position);
+                const positionText = this.getPositionText(position);
+                
+                row.innerHTML = `
+                    <td class="py-3 px-4 font-medium text-gray-800">${positionText}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 ${positionColor} rounded-full flex items-center justify-center text-white text-xs font-bold">${positionText.substring(0, 2)}</div>
+                            <div>
+                                <div class="font-medium text-gray-800">${player.name || 'Unknown Player'}</div>
+                                <div class="text-xs text-gray-500">${player.team || 'Unknown Team'} ${player.position || 'Unknown'}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4">
+                        <button class="text-espn-blue hover:text-espn-green text-sm font-medium">MOVE</button>
+                    </td>
+                    <td class="py-3 px-4 text-gray-600">@${player.opponent || 'TBD'}</td>
+                    <td class="py-3 px-4">
+                        <span class="status-active">${player.gameTime || 'TBD'}</span>
+                    </td>
+                    <td class="py-3 px-4">
+                        <span class="projection-high">${player.projection || '0.0'}</span>
+                    </td>
+                    <td class="py-3 px-4 text-gray-600">${player.score || '0.0'}</td>
+                    <td class="py-3 px-4 text-gray-600">${player.oppRank || '-'}</td>
+                    <td class="py-3 px-4 text-gray-600">${player.startPercent || '0.0'}</td>
+                    <td class="py-3 px-4 text-gray-600">${player.rostPercent || '0.0'}</td>
+                    <td class="py-3 px-4 ${player.projectionDiff > 0 ? 'projection-high' : 'projection-low'}">${player.projectionDiff || '0'}</td>
+                    <td class="py-3 px-4 text-gray-600">${player.fantasyPoints || '0.0'}</td>
+                    <td class="py-3 px-4 text-gray-600">${player.average || '0.0'}</td>
+                    <td class="py-3 px-4 text-gray-600">${player.lastWeek || '0.0'}</td>
+                `;
+                
+                return row;
+            }
+
+            getPositionByIndex(index) {
+                const positions = ['QB', 'RB', 'RB', 'WR', 'WR', 'TE', 'FLEX', 'D/ST', 'K'];
+                return positions[index] || 'Bench';
+            }
+
+            getPositionColor(position) {
+                const colors = {
+                    'QB': 'bg-blue-500',
+                    'RB': 'bg-green-500',
+                    'WR': 'bg-purple-500',
+                    'TE': 'bg-orange-500',
+                    'D/ST': 'bg-red-500',
+                    'K': 'bg-yellow-500',
+                    'FLEX': 'bg-purple-500',
+                    'Bench': 'bg-gray-500'
+                };
+                return colors[position] || 'bg-gray-500';
+            }
+
+            getPositionText(position) {
+                return position;
+            }
+
+            showLoginPrompt() {
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+                modal.innerHTML = `
+                    <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+                        <h2 class="text-2xl font-bold mb-4">Login Required</h2>
+                        <p class="text-gray-600 mb-6">Please log in to view your team roster.</p>
+                        <div class="space-y-4">
+                            <input type="email" id="loginEmail" placeholder="Email" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                            <input type="password" id="loginPassword" placeholder="Password" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                            <button onclick="teamRoster.login()" class="w-full bg-espn-green text-white py-2 rounded-md font-medium">
+                                Login
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
+
+            showNoLeagueMessage() {
+                const container = document.querySelector('.glass-card.rounded-lg.p-6.mb-6');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="text-center py-8">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">No League Found</h2>
+                            <p class="text-gray-600 mb-6">You need to join or create a league to view your roster.</p>
+                            <button onclick="window.location.href='/league/create'" class="bg-espn-green text-white px-6 py-3 rounded-md font-medium">
+                                Create League
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+
+            showEmptyRoster() {
+                const tbody = document.querySelector('tbody');
+                if (tbody) {
+                    tbody.innerHTML = `
+                        <tr class="text-center py-8">
+                            <td colspan="13" class="py-8">
+                                <h3 class="text-lg font-medium text-gray-800 mb-2">Empty Roster</h3>
+                                <p class="text-gray-600">Your roster is empty. Join a draft to add players.</p>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+
+            async login() {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                try {
+                    await this.appwriteService.createEmailSession(email, password);
+                    this.currentUser = await this.appwriteService.getCurrentUser();
+                    
+                    // Remove login modal
+                    document.querySelector('.fixed.inset-0').remove();
+                    
+                    // Reload roster
+                    await this.init();
+                    
+                } catch (error) {
+                    console.error('Login failed:', error);
+                    alert('Login failed. Please check your credentials.');
+                }
+            }
+
+            initAnimations() {
+                // Animate player rows on load
+                anime({
+                    targets: '.player-row',
+                    opacity: [0, 1],
+                    translateX: [-20, 0],
+                    duration: 600,
+                    delay: anime.stagger(50),
+                    easing: 'easeOutQuad'
+                });
+
+                // Animate week navigation
+                anime({
+                    targets: '.week-nav button',
+                    scale: [0.9, 1],
+                    duration: 400,
+                    delay: anime.stagger(100),
+                    easing: 'easeOutBack'
+                });
+            }
+        }
+
+        // Initialize team roster when page loads
+        let teamRoster;
+        document.addEventListener('DOMContentLoaded', function() {
+            teamRoster = new TeamRoster();
+        });
+    </script>
+</body>
+</html> 

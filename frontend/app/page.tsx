@@ -1,31 +1,29 @@
 'use client';
 
-import { HeroSection } from '@/components/layouts/HeroSection';
-import { FeaturesSection } from '@/components/layouts/FeaturesSection';
-import { GamesSection } from '@/components/layouts/GamesSection';
-import { ConferenceShowcase } from '@/components/layouts/ConferenceShowcase';
-
 export default function Home() {
   return (
-    <main className="bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white min-h-screen overflow-x-hidden">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-slate-600/5 to-slate-400/5 rounded-full blur-3xl"></div>
+    <main className="bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent drop-shadow-lg">
+          🏈 College Football Fantasy
+        </h1>
+        <p className="text-xl text-slate-300 mb-8 drop-shadow-lg">Power 4 Conferences Only</p>
+        <div className="space-y-4">
+          <button
+            onClick={() => window.location.href='https://college-football-fantasy-app.vercel.app/league/create'}
+            className="bg-gradient-to-r from-blue-500 to-purple-500 px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-transform shadow-lg backdrop-blur-sm"
+          >
+            Start a League
+          </button>
+          <br />
+          <button
+            onClick={() => window.location.href='https://college-football-fantasy-app.vercel.app/league/join'}
+            className="bg-white/10 backdrop-blur-sm px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition-colors border border-white/20 shadow-lg"
+          >
+            Join League
+          </button>
+        </div>
       </div>
-
-      {/* Hero Section with 3D Scene */}
-      <HeroSection />
-
-      {/* Features Section */}
-      <FeaturesSection />
-
-      {/* Games Section */}
-      <GamesSection />
-
-      {/* Conference Showcase */}
-      <ConferenceShowcase />
     </main>
   );
 }

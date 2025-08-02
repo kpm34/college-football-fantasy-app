@@ -13,7 +13,7 @@ from datetime import datetime
 from http import HTTPStatus
 
 # Configuration
-PORT = 8000
+PORT = 8001
 FRONTEND_DIR = "frontend"
 
 # Mock data for the API
@@ -86,6 +86,36 @@ class CollegeFootballHandler(http.server.SimpleHTTPRequestHandler):
             self.handle_api_request(path)
             return
         
+        # League pages
+        if path.startswith('/league/'):
+            self.serve_league_page(path)
+            return
+        
+        # Service worker
+        if path == '/service-worker.js':
+            self.serve_service_worker()
+            return
+        
+        # Manifest file
+        if path == '/manifest.json':
+            self.serve_manifest()
+            return
+        
+        # Animation playground
+        if path == '/animation-playground':
+            self.serve_animation_playground()
+            return
+        
+        # Login page
+        if path == '/login':
+            self.serve_login_page()
+            return
+        
+        # Chrome football viewer
+        if path == '/chrome-football-viewer.html':
+            self.serve_chrome_football_viewer()
+            return
+        
         # Serve static files
         self.serve_static_file(path)
     
@@ -114,6 +144,128 @@ class CollegeFootballHandler(http.server.SimpleHTTPRequestHandler):
             response = {"error": "Endpoint not found"}
         
         self.wfile.write(json.dumps(response, indent=2).encode())
+    
+    def serve_league_page(self, path):
+        """Serve league pages"""
+        # Map league routes to HTML files with organized URL structure
+        league_routes = {
+            # League Management
+            '/league/create': 'start-league.html',
+            '/league/start-league': 'start-league.html',  # Add this route
+            '/league/join': 'join-league.html',
+            '/league/manage': 'manage-league.html',
+            
+            # Draft System
+            '/draft/mock': 'mock-draft.html',
+            '/draft/snake': 'snake-draft.html',
+            '/draft/auction': 'auction-draft.html',
+            '/draft/auction-draft': 'auction-draft.html',  # Alternative route
+            
+            # League Dashboard
+            '/league/dashboard': 'league-dashboard.html',
+            '/league/settings': 'league-settings.html',
+            
+            # Team Management
+            '/team/roster': 'team-roster.html',
+            '/team/lineup': 'team-lineup.html',
+            
+            # User Management
+            '/user/profile': 'user-profile.html',
+            '/user/leagues': 'user-leagues.html'
+        }
+        
+        if path in league_routes:
+            file_path = os.path.join(FRONTEND_DIR, 'league', league_routes[path])
+        else:
+            # Default to create league if route not found
+            file_path = os.path.join(FRONTEND_DIR, 'league', 'start-league.html')
+        
+        try:
+            with open(file_path, 'rb') as f:
+                content = f.read()
+            
+            self.send_response(HTTPStatus.OK)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(content)
+            
+        except FileNotFoundError:
+            self.send_error(HTTPStatus.NOT_FOUND, "League page not found")
+    
+    def serve_service_worker(self):
+        """Serve the service worker file"""
+        try:
+            file_path = os.path.join(FRONTEND_DIR, 'public', 'service-worker.js')
+            
+            with open(file_path, 'rb') as f:
+                content = f.read()
+            
+            self.send_response(HTTPStatus.OK)
+            self.send_header('Content-Type', 'application/javascript')
+            self.send_header('Service-Worker-Allowed', '/')
+            self.end_headers()
+            self.wfile.write(content)
+            
+        except FileNotFoundError:
+            self.send_error(HTTPStatus.NOT_FOUND, "Service worker not found")
+    
+    def serve_manifest(self):
+        """Serve the PWA manifest file"""
+        try:
+            file_path = os.path.join(FRONTEND_DIR, 'public', 'manifest.json')
+            
+            with open(file_path, 'rb') as f:
+                content = f.read()
+            
+            self.send_response(HTTPStatus.OK)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(content)
+            
+        except FileNotFoundError:
+            self.send_error(HTTPStatus.NOT_FOUND, "Manifest not found")
+    
+    def serve_animation_playground(self):
+        """Serve the animation playground"""
+        try:
+            file_path = os.path.join(FRONTEND_DIR, 'animation-playground.html')
+            
+            with open(file_path, 'rb') as f:
+                content = f.read()
+            
+            self.send_response(HTTPStatus.OK)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(content)
+            
+        except FileNotFoundError:
+            self.send_error(HTTPStatus.NOT_FOUND, "Animation playground not found")
+    
+    def serve_login_page(self):
+        """Serve the login page"""
+        try:
+            file_path = os.path.join(FRONTEND_DIR, 'login.html')
+            with open(file_path, 'rb') as f:
+                content = f.read()
+            self.send_response(HTTPStatus.OK)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(content)
+        except FileNotFoundError:
+            self.send_error(HTTPStatus.NOT_FOUND, "Login page not found")
+    
+    def serve_chrome_football_viewer(self):
+        """Serve the chrome football viewer"""
+        try:
+            file_path = os.path.join(FRONTEND_DIR, 'chrome-football-viewer.html')
+            with open(file_path, 'rb') as f:
+                content = f.read()
+            self.send_response(HTTPStatus.OK)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(content)
+        except FileNotFoundError:
+            self.send_error(HTTPStatus.NOT_FOUND, "Chrome football viewer not found")
     
     def serve_static_file(self, path):
         """Serve static files from the frontend directory"""

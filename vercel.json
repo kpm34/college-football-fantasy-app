@@ -1,8 +1,6 @@
 {
-  "crons": [
-    {
-      "path": "/api/rankings_refresh",
-      "schedule": "0 6 * * 2"
-    }
-  ]
+  "framework": "nextjs",
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/.next",
+  "installCommand": "cd frontend && npm install"
 }

@@ -1,99 +1,30 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/Button';
+import ChromeHelmetScene from '../ChromeHelmetScene';
 
 export function HeroSection() {
-  const [splineLoaded, setSplineLoaded] = useState(false);
-  const splineContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Load Spline viewer script
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.src = 'https://unpkg.com/@splinetool/viewer@1.9.28/build/spline-viewer.js';
-    script.onload = () => {
-      // Create spline-viewer element after script loads
-      if (splineContainerRef.current) {
-        const splineViewer = document.createElement('spline-viewer');
-        splineViewer.setAttribute('url', 'https://prod.spline.design/JlsVpBPjLj-iOBRj/scene.splinecode');
-        splineViewer.style.width = '100%';
-        splineViewer.style.height = '100%';
-        splineContainerRef.current.appendChild(splineViewer);
-        setTimeout(() => setSplineLoaded(true), 1000);
-      }
-    };
-    document.head.appendChild(script);
-
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-  }, []);
-
   return (
-    <section className="relative min-h-screen overflow-hidden">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-black"></div>
-      
-      {/* Spline 3D Scene Background */}
-      <div 
-        ref={splineContainerRef}
-        className="absolute inset-0 opacity-70" 
-        style={{ zIndex: 1 }}
-      />
-      
-      {/* Loading Overlay */}
-      {!splineLoaded && (
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-black opacity-50" style={{ zIndex: 1 }}>
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="text-center space-y-4 p-8 glass-card rounded-xl">
-              <h3 className="text-xl font-bold chrome-text">🏈 Loading 3D Scene</h3>
-              <div className="w-16 h-16 border-4 border-slate-700 rounded-full animate-spin border-t-blue-500 mx-auto"></div>
-              <p className="text-slate-400 text-sm">Preparing immersive experience...</p>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {/* Hero Content */}
-      <div className="relative min-h-screen flex items-center justify-center px-4" style={{ zIndex: 20 }}>
-        <div className="text-center max-w-6xl mx-auto">
-          <div className="space-y-8">
-            {/* Main Title */}
-            <div className="space-y-4">
-              <h1 className="text-6xl md:text-8xl font-black tracking-tight">
-                <span className="chrome-text block">COLLEGE FOOTBALL</span>
-                <span className="metallic-text block mt-2">FANTASY</span>
-              </h1>
-              
-              {/* Chrome Shine Effect */}
-              <div className="h-1 w-96 mx-auto chrome-shine rounded-full"></div>
-            </div>
-            
-            {/* Description */}
-            <div className="space-y-6">
-              <div className="glass-card p-6 rounded-2xl max-w-3xl mx-auto">
-                <p className="text-xl md:text-2xl text-slate-300 mb-4">
-                  Play fantasy football with the Power 4 conferences.
-                </p>
-                <p className="text-lg md:text-xl chrome-text font-semibold">
-                  Only elite matchups count - AP Top 25 & conference games!
-                </p>
-              </div>
-            </div>
-            
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
-              <Button variant="primary" size="lg">
-                Start a League
-              </Button>
-              <Button variant="secondary" size="lg">
-                Join League
-              </Button>
-            </div>
-          </div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* 3D Chrome Helmet Background */}
+      <div className="absolute inset-0 z-0">
+        <ChromeHelmetScene />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent drop-shadow-lg">
+          College Football Fantasy
+        </h1>
+        <p className="text-xl md:text-2xl text-gray-300 mb-8 drop-shadow-lg">
+          Power 4 Conferences Only • AP Top-25 Matchups • Conference Games
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg backdrop-blur-sm transition-all duration-300 transform hover:scale-105">
+            Start League
+          </button>
+          <button className="px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg shadow-lg backdrop-blur-sm transition-all duration-300 transform hover:scale-105">
+            Join League
+          </button>
         </div>
       </div>
     </section>

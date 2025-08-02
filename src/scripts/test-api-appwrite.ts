@@ -47,7 +47,7 @@ async function testAppwriteAPI() {
 
     console.log('\n🎉 All tests passed! The API is ready to use Appwrite.');
     console.log('\nStart the server with: npm run server');
-    console.log('Then visit: http://localhost:3000/api/games');
+    console.log('Then visit: https://college-football-fantasy-app.vercel.app/api/games');
 
   } catch (error) {
     console.error('❌ Test failed:', error);

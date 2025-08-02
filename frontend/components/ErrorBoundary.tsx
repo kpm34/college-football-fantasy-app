@@ -64,7 +64,6 @@ export class ErrorBoundary extends Component<Props, State> {
 export function SplineErrorBoundary({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <ErrorBoundary
-      className={className}
       fallback={
         <div className={`w-full h-full flex items-center justify-center bg-zinc-900/50 rounded-lg ${className || ''}`}>
           <div className="text-center p-6">

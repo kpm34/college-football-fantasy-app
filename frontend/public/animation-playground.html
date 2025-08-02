@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Playground - College Football Fantasy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        chrome: {
+                            100: '#f8fafc',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a'
+                        }
+                    },
+                    backgroundImage: {
+                        'chrome-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        'metallic-gradient': 'linear-gradient(145deg, #e6e6e6, #ffffff, #e6e6e6)',
+                        'glass-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)'
+                    },
+                    boxShadow: {
+                        'chrome': '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                        'metallic': '0 4px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                        'glass': '0 8px 32px rgba(31, 38, 135, 0.37), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .chrome-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .metallic-text {
+            background: linear-gradient(145deg, #e6e6e6, #ffffff, #e6e6e6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        
+        .chrome-button {
+            background: linear-gradient(145deg, #e6e6e6, #ffffff, #e6e6e6);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .chrome-button:hover {
+            background: linear-gradient(145deg, #ffffff, #e6e6e6, #ffffff);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        /* Animation classes */
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .animate-pulse-slow {
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .animate-rotate-slow {
+            animation: rotate 8s linear infinite;
+        }
+
+        .animate-bounce-slow {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        /* Custom animation elements */
+        .football-element {
+            width: 60px;
+            height: 40px;
+            background: linear-gradient(45deg, #8B4513, #A0522D);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+        }
+
+        .football-element::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 2px;
+            background: #654321;
+            border-radius: 1px;
+        }
+
+        .football-element::after {
+            content: '';
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 1px;
+            background: #654321;
+            border-radius: 0.5px;
+        }
+
+        .stadium-element {
+            width: 100px;
+            height: 60px;
+            background: linear-gradient(135deg, #4A5568, #2D3748);
+            border-radius: 50% 50% 0 0;
+            position: relative;
+        }
+
+        .stadium-element::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 20px;
+            background: linear-gradient(90deg, #48BB78, #38A169);
+            border-radius: 0 0 10px 10px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white min-h-screen">
+    <!-- Animated Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-20 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-20 right-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-chrome/5 rounded-full blur-3xl animate-float" style="animation-delay: -4s;"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative z-10 bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-2xl font-bold chrome-text">🏈 CF Fantasy</a>
+                    <span class="text-slate-400">/</span>
+                    <span class="text-white font-semibold">Animation Playground</span>
+                </div>
+                <a href="/" class="chrome-button px-6 py-2 rounded-lg text-slate-800 font-medium hover:scale-105 transition-transform">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold chrome-text mb-4">Animation Playground</h1>
+            <p class="text-xl text-slate-300">Testing anime.js animations for the College Football Fantasy App</p>
+        </div>
+
+        <!-- Animation Sections -->
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <!-- Hero Animations -->
+            <div class="glass-card p-8 rounded-2xl">
+                <h2 class="text-3xl font-bold metallic-text mb-6">Hero Section Animations</h2>
+                
+                <div class="space-y-6">
+                    <!-- Title Animation -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-white mb-4">Title Entrance</h3>
+                        <div id="hero-title" class="text-4xl font-bold chrome-text opacity-0">
+                            COLLEGE FOOTBALL FANTASY
+                        </div>
+                        <button onclick="animateHeroTitle()" class="mt-4 chrome-button px-4 py-2 rounded-lg text-slate-800 font-medium">
+                            Animate Title
+                        </button>
+                    </div>
+
+                    <!-- Football Element -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-white mb-4">Football Element</h3>
+                        <div id="football-animation" class="flex justify-center">
+                            <div class="football-element"></div>
+                        </div>
+                        <button onclick="animateFootball()" class="mt-4 chrome-button px-4 py-2 rounded-lg text-slate-800 font-medium">
+                            Animate Football
+                        </button>
+                    </div>
+
+                    <!-- Stadium Element -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-white mb-4">Stadium Element</h3>
+                        <div id="stadium-animation" class="flex justify-center">
+                            <div class="stadium-element"></div>
+                        </div>
+                        <button onclick="animateStadium()" class="mt-4 chrome-button px-4 py-2 rounded-lg text-slate-800 font-medium">
+                            Animate Stadium
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Animations -->
+            <div class="glass-card p-8 rounded-2xl">
+                <h2 class="text-3xl font-bold metallic-text mb-6">Button Animations</h2>
+                
+                <div class="space-y-6">
+                    <!-- Chrome Button -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-white mb-4">Chrome Button</h3>
+                        <button id="chrome-btn" class="chrome-button px-8 py-4 rounded-xl font-bold text-lg text-slate-800">
+                            Start a League
+                        </button>
+                        <button onclick="animateChromeButton()" class="mt-4 chrome-button px-4 py-2 rounded-lg text-slate-800 font-medium">
+                            Animate Button
+                        </button>
+                    </div>
+
+                    <!-- Glass Button -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-white mb-4">Glass Button</h3>
+                        <button id="glass-btn" class="glass-card text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition-all duration-300 border border-white/20">
+                            Join League
+                        </button>
+                        <button onclick="animateGlassButton()" class="mt-4 chrome-button px-4 py-2 rounded-lg text-slate-800 font-medium">
+                            Animate Button
+                        </button>
+                    </div>
+
+                    <!-- Pulse Animation -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-white mb-4">Pulse Effect</h3>
+                        <div id="pulse-element" class="w-16 h-16 bg-blue-500 rounded-full mx-auto"></div>
+                        <button onclick="animatePulse()" class="mt-4 chrome-button px-4 py-2 rounded-lg text-slate-800 font-medium">
+                            Start Pulse
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Animations -->
+        <div class="glass-card p-8 rounded-2xl mb-12">
+            <h2 class="text-3xl font-bold metallic-text text-center mb-8">Card Animations</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div id="card-1" class="glass-card p-6 rounded-xl hover:bg-white/15 transition-all duration-300 group">
+                    <div class="text-6xl mb-4 group-hover:scale-110 transition-transform chrome-text">🏈</div>
+                    <h3 class="text-xl font-bold mb-2 metallic-text">Power 4 Only</h3>
+                    <p class="text-slate-300">SEC, ACC, Big 12, and Big Ten</p>
+                </div>
+                
+                <div id="card-2" class="glass-card p-6 rounded-xl hover:bg-white/15 transition-all duration-300 group">
+                    <div class="text-6xl mb-4 group-hover:scale-110 transition-transform chrome-text">🏆</div>
+                    <h3 class="text-xl font-bold mb-2 metallic-text">Elite Matchups</h3>
+                    <p class="text-slate-300">AP Top-25 & conference games</p>
+                </div>
+                
+                <div id="card-3" class="glass-card p-6 rounded-xl hover:bg-white/15 transition-all duration-300 group">
+                    <div class="text-6xl mb-4 group-hover:scale-110 transition-transform chrome-text">📊</div>
+                    <h3 class="text-xl font-bold mb-2 metallic-text">Live Scoring</h3>
+                    <p class="text-slate-300">Real-time ESPN data</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-6">
+                <button onclick="animateCards()" class="chrome-button px-6 py-3 rounded-lg text-slate-800 font-medium">
+                    Animate Cards
+                </button>
+            </div>
+        </div>
+
+        <!-- Text Animations -->
+        <div class="glass-card p-8 rounded-2xl mb-12">
+            <h2 class="text-3xl font-bold metallic-text text-center mb-8">Text Animations</h2>
+            
+            <div class="space-y-8">
+                <div class="text-center">
+                    <h3 class="text-lg font-semibold text-white mb-4">Typing Effect</h3>
+                    <div id="typing-text" class="text-2xl font-bold chrome-text h-8"></div>
+                    <button onclick="animateTyping()" class="mt-4 chrome-button px-4 py-2 rounded-lg text-slate-800 font-medium">
+                        Start Typing
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <h3 class="text-lg font-semibold text-white mb-4">Character Animation</h3>
+                    <div id="character-text" class="text-3xl font-bold metallic-text">
+                        <span class="char">C</span>
+                        <span class="char">O</span>
+                        <span class="char">L</span>
+                        <span class="char">L</span>
+                        <span class="char">E</span>
+                        <span class="char">G</span>
+                        <span class="char">E</span>
+                        <span class="char">&nbsp;</span>
+                        <span class="char">F</span>
+                        <span class="char">O</span>
+                        <span class="char">O</span>
+                        <span class="char">T</span>
+                        <span class="char">B</span>
+                        <span class="char">A</span>
+                        <span class="char">L</span>
+                        <span class="char">L</span>
+                    </div>
+                    <button onclick="animateCharacters()" class="mt-4 chrome-button px-4 py-2 rounded-lg text-slate-800 font-medium">
+                        Animate Characters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Animations -->
+        <div class="glass-card p-8 rounded-2xl">
+            <h2 class="text-3xl font-bold metallic-text text-center mb-8">Advanced Animations</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="text-center">
+                    <h3 class="text-lg font-semibold text-white mb-4">Morphing Shapes</h3>
+                    <div id="morph-container" class="flex justify-center mb-4">
+                        <div id="morph-shape" class="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg"></div>
+                    </div>
+                    <button onclick="animateMorph()" class="chrome-button px-4 py-2 rounded-lg text-slate-800 font-medium">
+                        Morph Shape
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <h3 class="text-lg font-semibold text-white mb-4">Particle Effect</h3>
+                    <div id="particle-container" class="w-32 h-32 mx-auto relative border border-white/20 rounded-lg flex items-center justify-center">
+                        <div class="text-white">Click to add particles</div>
+                    </div>
+                    <button onclick="addParticles()" class="mt-4 chrome-button px-4 py-2 rounded-lg text-slate-800 font-medium">
+                        Add Particles
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Hero Title Animation
+        function animateHeroTitle() {
+            anime({
+                targets: '#hero-title',
+                opacity: [0, 1],
+                translateY: [50, 0],
+                duration: 1500,
+                easing: 'easeOutElastic(1, 0.5)',
+                scale: [0.8, 1],
+                delay: 200
+            });
+        }
+
+        // Football Animation
+        function animateFootball() {
+            anime({
+                targets: '#football-animation .football-element',
+                rotate: [0, 360],
+                scale: [1, 1.2, 1],
+                translateY: [0, -30, 0],
+                duration: 2000,
+                easing: 'easeInOutQuad',
+                direction: 'alternate',
+                loop: true
+            });
+        }
+
+        // Stadium Animation
+        function animateStadium() {
+            anime({
+                targets: '#stadium-animation .stadium-element',
+                scale: [1, 1.1],
+                translateY: [0, -10],
+                duration: 3000,
+                easing: 'easeInOutSine',
+                direction: 'alternate',
+                loop: true
+            });
+        }
+
+        // Chrome Button Animation
+        function animateChromeButton() {
+            anime({
+                targets: '#chrome-btn',
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, -5, 0],
+                duration: 1000,
+                easing: 'easeInOutQuad'
+            });
+        }
+
+        // Glass Button Animation
+        function animateGlassButton() {
+            anime({
+                targets: '#glass-btn',
+                backgroundColor: ['rgba(255,255,255,0.1)', 'rgba(255,255,255,0.3)', 'rgba(255,255,255,0.1)'],
+                scale: [1, 1.05, 1],
+                duration: 1500,
+                easing: 'easeInOutQuad'
+            });
+        }
+
+        // Pulse Animation
+        function animatePulse() {
+            anime({
+                targets: '#pulse-element',
+                scale: [1, 1.5, 1],
+                opacity: [1, 0.5, 1],
+                duration: 2000,
+                easing: 'easeInOutQuad',
+                loop: true
+            });
+        }
+
+        // Card Animations
+        function animateCards() {
+            anime({
+                targets: '#card-1, #card-2, #card-3',
+                translateY: [50, 0],
+                opacity: [0, 1],
+                scale: [0.8, 1],
+                duration: 1000,
+                easing: 'easeOutElastic(1, 0.5)',
+                delay: anime.stagger(200)
+            });
+        }
+
+        // Typing Animation
+        function animateTyping() {
+            const text = "COLLEGE FOOTBALL FANTASY";
+            const element = document.getElementById('typing-text');
+            element.innerHTML = '';
+            
+            anime({
+                targets: element,
+                innerHTML: [0, text],
+                duration: 2000,
+                easing: 'easeInOutQuad',
+                round: 1,
+                update: function(anim) {
+                    element.innerHTML = text.substring(0, Math.round(anim.animations[0].currentValue));
+                }
+            });
+        }
+
+        // Character Animation
+        function animateCharacters() {
+            anime({
+                targets: '#character-text .char',
+                translateY: [50, 0],
+                opacity: [0, 1],
+                rotate: [180, 0],
+                duration: 1500,
+                easing: 'easeOutElastic(1, 0.5)',
+                delay: anime.stagger(100)
+            });
+        }
+
+        // Morph Animation
+        function animateMorph() {
+            const shape = document.getElementById('morph-shape');
+            const shapes = [
+                { borderRadius: '8px' },
+                { borderRadius: '50%' },
+                { borderRadius: '0px' },
+                { borderRadius: '50% 0% 50% 0%' }
+            ];
+            
+            let currentShape = 0;
+            
+            anime({
+                targets: shape,
+                borderRadius: shapes[currentShape].borderRadius,
+                scale: [1, 1.2, 1],
+                rotate: [0, 180, 360],
+                duration: 2000,
+                easing: 'easeInOutQuad',
+                complete: function() {
+                    currentShape = (currentShape + 1) % shapes.length;
+                }
+            });
+        }
+
+        // Particle Animation
+        function addParticles() {
+            const container = document.getElementById('particle-container');
+            
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'absolute w-2 h-2 bg-blue-400 rounded-full';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                container.appendChild(particle);
+                
+                anime({
+                    targets: particle,
+                    translateX: anime.random(-50, 50),
+                    translateY: anime.random(-50, 50),
+                    scale: [0, 1, 0],
+                    opacity: [0, 1, 0],
+                    duration: 2000,
+                    easing: 'easeOutQuad',
+                    complete: function() {
+                        container.removeChild(particle);
+                    }
+                });
+            }
+        }
+
+        // Auto-start some animations on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-animate hero title
+            setTimeout(animateHeroTitle, 500);
+            
+            // Auto-animate cards
+            setTimeout(animateCards, 1000);
+            
+            // Auto-animate characters
+            setTimeout(animateCharacters, 2000);
+        });
+    </script>
+</body>
+</html> 

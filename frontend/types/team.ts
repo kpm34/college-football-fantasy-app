@@ -10,7 +10,8 @@ export interface Team {
   logo?: string;
 }
 
-export interface Player {
+// Renamed to avoid conflict with fantasy Player
+export interface TeamPlayer {
   id: string;
   name: string;
   position: string;
@@ -24,7 +25,7 @@ export interface Player {
 
 export interface TeamRoster {
   team: Team;
-  players: Player[];
+  players: TeamPlayer[];
 }
 
 export interface TeamsResponse {

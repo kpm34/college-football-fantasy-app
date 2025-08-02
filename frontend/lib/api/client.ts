@@ -103,7 +103,7 @@ export class APIClient {
 
 // Create a singleton instance
 const apiClient = new APIClient({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://college-football-fantasy-app.vercel.app/api',
 });
 
 export default apiClient;

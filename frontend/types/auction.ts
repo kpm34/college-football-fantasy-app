@@ -1,3 +1,5 @@
+import type { Player } from '@/types/draft';
+
 export interface AuctionPlayer extends Player {
   startingBid: number;
   currentBid: number;

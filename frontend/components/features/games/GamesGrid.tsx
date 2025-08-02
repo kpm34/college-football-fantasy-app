@@ -76,7 +76,7 @@ export function GamesGrid({ games, loading, error, showEligibleOnly }: GamesGrid
     const isConferenceGame = game.homeConference && 
                             game.awayConference && 
                             game.homeConference === game.awayConference;
-    return isConferenceGame;
+    return !!isConferenceGame;
   };
 
   return (

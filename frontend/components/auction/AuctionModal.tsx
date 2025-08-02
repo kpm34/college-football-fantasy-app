@@ -177,7 +177,7 @@ export default function AuctionModal({
             />
             <button
               onClick={handleCustomBid}
-              disabled={!customAmount || parseInt(customAmount) < minBid || (userBudget && parseInt(customAmount) > userBudget.remainingBudget)}
+              disabled={!customAmount || parseInt(customAmount) < minBid || (userBudget ? parseInt(customAmount) > userBudget.remainingBudget : false)}
               className="px-6 py-2 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-500 rounded-lg transition-colors"
             >
               Bid

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import { databases, realtime, DATABASE_ID, COLLECTIONS, REALTIME_CHANNELS } from '@/lib/appwrite';
+import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { AuctionState, AuctionPlayer, AuctionBid, AuctionSession, TeamBudget } from '@/types/auction';
 import AuctionModal from '@/components/auction/AuctionModal';
 import AuctionBoard from '@/components/auction/AuctionBoard';
@@ -11,13 +11,24 @@ import TeamBudgets from '@/components/auction/TeamBudgets';
 import BidHistory from '@/components/auction/BidHistory';
 
 interface AuctionPageProps {
-  params: { leagueId: string };
-  searchParams: { userId?: string };
+  params: Promise<{ leagueId: string }>;
+  searchParams: Promise<{ userId?: string }>;
 }
 
 export default function AuctionPage({ params, searchParams }: AuctionPageProps) {
-  const { leagueId } = params;
-  const userId = searchParams.userId || 'current-user';
+  const [leagueId, setLeagueId] = useState<string>('');
+  const [userId, setUserId] = useState<string>('current-user');
+
+  // Resolve params and searchParams
+  useEffect(() => {
+    const resolveParams = async () => {
+      const resolvedParams = await params;
+      const resolvedSearchParams = await searchParams;
+      setLeagueId(resolvedParams.leagueId);
+      setUserId(resolvedSearchParams.userId || 'current-user');
+    };
+    resolveParams();
+  }, [params, searchParams]);
 
   const [auctionState, setAuctionState] = useState<AuctionState>({
     session: null,
@@ -34,26 +45,28 @@ export default function AuctionPage({ params, searchParams }: AuctionPageProps) 
 
   // Load initial auction data
   useEffect(() => {
-    loadAuctionData();
+    if (leagueId) {
+      loadAuctionData();
+    }
   }, [leagueId]);
 
-  // Subscribe to realtime updates
-  useEffect(() => {
-    if (!leagueId) return;
+  // Subscribe to realtime updates - temporarily disabled for frontend development
+  // useEffect(() => {
+  //   if (!leagueId) return;
 
-    const unsubscribe = realtime.subscribe(
-      REALTIME_CHANNELS.AUCTION_BIDS(leagueId),
-      (response) => {
-        if (response.events.includes('databases.*.collections.*.documents.*.create')) {
-          loadAuctionData();
-        }
-      }
-    );
+  //   const unsubscribe = client.realtime.subscribe(
+  //     REALTIME_CHANNELS.AUCTION_BIDS(leagueId),
+  //     (response: any) => {
+  //       if (response.events.includes('databases.*.collections.*.documents.*.create')) {
+  //         loadAuctionData();
+  //       }
+  //     }
+  //   );
 
-    return () => {
-      unsubscribe();
-    };
-  }, [leagueId]);
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [leagueId]);
 
   // Timer effect
   useEffect(() => {
@@ -82,7 +95,7 @@ export default function AuctionPage({ params, searchParams }: AuctionPageProps) 
         COLLECTIONS.AUCTION_SESSIONS,
         leagueId
       );
-      const session = sessionResponse as AuctionSession;
+      const session = sessionResponse as unknown as AuctionSession;
 
       // Load current player
       let currentPlayer = null;
@@ -92,7 +105,7 @@ export default function AuctionPage({ params, searchParams }: AuctionPageProps) 
           COLLECTIONS.PLAYERS,
           session.currentPlayerId
         );
-        currentPlayer = playerResponse as AuctionPlayer;
+        currentPlayer = playerResponse as unknown as AuctionPlayer;
       }
 
       // Load available players
@@ -103,7 +116,7 @@ export default function AuctionPage({ params, searchParams }: AuctionPageProps) 
           // Query for available players
         ]
       );
-      const availablePlayers = playersResponse.documents as AuctionPlayer[];
+      const availablePlayers = playersResponse.documents as unknown as AuctionPlayer[];
 
       // Load team budgets
       const budgetsResponse = await databases.listDocuments(
@@ -113,7 +126,7 @@ export default function AuctionPage({ params, searchParams }: AuctionPageProps) 
           // Query by leagueId
         ]
       );
-      const teamBudgets = budgetsResponse.documents as TeamBudget[];
+      const teamBudgets = budgetsResponse.documents as unknown as TeamBudget[];
 
       // Load recent bids
       const bidsResponse = await databases.listDocuments(
@@ -123,7 +136,7 @@ export default function AuctionPage({ params, searchParams }: AuctionPageProps) 
           // Query recent bids
         ]
       );
-      const bids = bidsResponse.documents as AuctionBid[];
+      const bids = bidsResponse.documents as unknown as AuctionBid[];
 
       // Determine if it's current user's turn
       const currentUserTurn = session.currentBidderId === userId;
@@ -154,10 +167,10 @@ export default function AuctionPage({ params, searchParams }: AuctionPageProps) 
     try {
       const newBid: Omit<AuctionBid, '$id'> = {
         leagueId,
-        playerId: auctionState.currentPlayer.$id,
-        playerName: auctionState.currentPlayer.name,
-        playerPosition: auctionState.currentPlayer.position,
-        playerTeam: auctionState.currentPlayer.team,
+        playerId: (auctionState.currentPlayer as any).$id,
+        playerName: (auctionState.currentPlayer as any).name,
+        playerPosition: (auctionState.currentPlayer as any).position,
+        playerTeam: (auctionState.currentPlayer as any).team,
         bidAmount: amount,
         bidderId: userId,
         bidderName: `Team ${userId}`, // In real app, get from user data
@@ -191,7 +204,7 @@ export default function AuctionPage({ params, searchParams }: AuctionPageProps) 
       await databases.updateDocument(
         DATABASE_ID,
         COLLECTIONS.PLAYERS,
-        auctionState.currentPlayer.$id,
+        (auctionState.currentPlayer as any).$id,
         {
           auctionStatus: 'passed'
         }
