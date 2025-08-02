@@ -1,6 +1,10 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+  const router = useRouter();
+
   return (
     <main className="bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white min-h-screen flex items-center justify-center">
       <div className="text-center">
@@ -10,14 +14,14 @@ export default function Home() {
         <p className="text-xl text-slate-300 mb-8 drop-shadow-lg">Power 4 Conferences Only</p>
         <div className="space-y-4">
           <button
-            onClick={() => window.location.href='https://college-football-fantasy-app.vercel.app/league/create'}
+            onClick={() => router.push('/league/create')}
             className="bg-gradient-to-r from-blue-500 to-purple-500 px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-transform shadow-lg backdrop-blur-sm"
           >
             Start a League
           </button>
           <br />
           <button
-            onClick={() => window.location.href='https://college-football-fantasy-app.vercel.app/league/join'}
+            onClick={() => router.push('/league/join')}
             className="bg-white/10 backdrop-blur-sm px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition-colors border border-white/20 shadow-lg"
           >
             Join League
