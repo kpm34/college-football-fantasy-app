@@ -44,14 +44,24 @@ export default function LeaguePortal({ leagueId, leagueName }: LeaguePortalProps
   const [conferenceTeams, setConferenceTeams] = useState<ConferenceTeam[]>([]);
   const [topPlayers, setTopPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
+  const [leagueData, setLeagueData] = useState<any>(null);
 
   useEffect(() => {
     loadLeagueData();
-  }, []);
+  }, [leagueId]);
 
   const loadLeagueData = async () => {
     try {
       setLoading(true);
+      
+      // Fetch league data from Appwrite
+      const leagueResponse = await fetch(`/api/leagues/${leagueId}`);
+      if (leagueResponse.ok) {
+        const leagueResult = await leagueResponse.json();
+        if (leagueResult.success) {
+          setLeagueData(leagueResult.league);
+        }
+      }
       
       // Load conference teams from both APIs
       const bigTenResponse = await fetch('/api/bigten?type=teams');
@@ -91,7 +101,7 @@ export default function LeaguePortal({ leagueId, leagueName }: LeaguePortalProps
       allPlayers.sort((a, b) => b.rating - a.rating);
       setTopPlayers(allPlayers.slice(0, 10));
 
-      // Mock team data for now
+            // Mock team data for now
       setTeams([
         { $id: '1', name: 'Maheshwari\'s Maulers', owner: 'Kashyap', record: '3-1', pointsFor: 450, pointsAgainst: 380, wins: 3, losses: 1, ties: 0 },
         { $id: '2', name: 'Gridiron Giants', owner: 'Alex', record: '2-2', pointsFor: 420, pointsAgainst: 410, wins: 2, losses: 2, ties: 0 },
@@ -103,7 +113,7 @@ export default function LeaguePortal({ leagueId, leagueName }: LeaguePortalProps
     } finally {
       setLoading(false);
     }
-  };
+
 
   const getConferenceColor = (conference: string) => {
     switch (conference) {
@@ -134,11 +144,20 @@ export default function LeaguePortal({ leagueId, leagueName }: LeaguePortalProps
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                🏈 {leagueName}
+                🏈 {leagueData ? leagueData.name : leagueName}
               </h1>
-              <span className="px-3 py-1 bg-green-600/20 text-green-400 text-sm rounded-full border border-green-500/30">
-                Power 4 Conferences
-              </span>
+              <div className="flex items-center gap-2">
+                <span className={`px-3 py-1 text-sm rounded-full border ${
+                  leagueData?.mode === 'CONFERENCE' 
+                    ? 'bg-blue-600/20 text-blue-400 border-blue-500/30' 
+                    : 'bg-purple-600/20 text-purple-400 border-purple-500/30'
+                }`}>
+                  {leagueData?.mode === 'CONFERENCE' ? 'Conference Mode' : 'Power-4 Mode'}
+                </span>
+                <span className="px-3 py-1 bg-green-600/20 text-green-400 text-sm rounded-full border border-green-500/30">
+                  {leagueData ? `${leagueData.currentTeams}/${leagueData.maxTeams} Teams` : 'Power 4 Conferences'}
+                </span>
+              </div>
             </div>
             <div className="flex items-center space-x-6">
               <button className="text-gray-300 hover:text-white transition-colors">My Team</button>

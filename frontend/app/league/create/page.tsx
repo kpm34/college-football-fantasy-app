@@ -47,10 +47,15 @@ export default function CreateLeaguePage() {
     setIsInputFocused(false);
   };
 
+  const [isCreating, setIsCreating] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [createdLeague, setCreatedLeague] = useState<any>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
+      setIsCreating(true);
       const response = await fetch('/api/leagues/create', {
         method: 'POST',
         headers: {
@@ -69,12 +74,19 @@ export default function CreateLeaguePage() {
       const result = await response.json();
       
       if (result.success) {
-        router.push(`/league/${result.league.id}`);
+        setCreatedLeague(result.league);
+        setShowSuccess(true);
+        // Redirect after 3 seconds
+        setTimeout(() => {
+          router.push(`/league/${result.league.id}`);
+        }, 3000);
       } else {
         console.error('Error creating league:', result.error);
       }
     } catch (error) {
       console.error('Error creating league:', error);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -262,9 +274,17 @@ export default function CreateLeaguePage() {
             <div className="text-center pt-6">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-green-500 to-blue-500 px-12 py-4 rounded-xl font-bold text-xl hover:scale-105 transition-transform shadow-lg backdrop-blur-sm"
+                disabled={isCreating}
+                className="bg-gradient-to-r from-green-500 to-blue-500 px-12 py-4 rounded-xl font-bold text-xl hover:scale-105 transition-transform shadow-lg backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Create League
+                {isCreating ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Creating League...
+                  </div>
+                ) : (
+                  'Create League'
+                )}
               </button>
             </div>
           </form>
@@ -296,6 +316,55 @@ export default function CreateLeaguePage() {
             </div>
           </div>
         </div>
+
+        {/* Success Modal */}
+        {showSuccess && createdLeague && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 max-w-md w-full mx-4">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🎉</div>
+                <h2 className="text-2xl font-bold text-white mb-2">League Created!</h2>
+                <p className="text-gray-300 mb-6">
+                  Your league <strong className="text-white">{createdLeague.name}</strong> has been successfully created and is now live in the database.
+                </p>
+                
+                <div className="bg-white/10 rounded-lg p-4 mb-6">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-400">Mode:</span>
+                      <div className="text-white font-semibold">
+                        {createdLeague.mode === 'CONFERENCE' ? 'Conference' : 'Power-4'}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Teams:</span>
+                      <div className="text-white font-semibold">{createdLeague.maxTeams}</div>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Status:</span>
+                      <div className="text-white font-semibold">{createdLeague.status}</div>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">League ID:</span>
+                      <div className="text-white font-semibold text-xs">{createdLeague.id}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-sm text-gray-400 mb-4">
+                  Redirecting to your league portal in 3 seconds...
+                </div>
+
+                <button
+                  onClick={() => router.push(`/league/${createdLeague.id}`)}
+                  className="bg-gradient-to-r from-green-500 to-blue-500 px-6 py-3 rounded-lg font-bold text-lg hover:scale-105 transition-transform"
+                >
+                  Go to League Now
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

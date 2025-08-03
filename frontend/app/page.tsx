@@ -23,12 +23,12 @@ export default function Home() {
               Start a League
             </button>
             <br />
-            <button
-              onClick={() => router.push('/league/join')}
-              className="bg-white/10 backdrop-blur-sm px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition-colors border border-white/20 shadow-lg"
-            >
-              Join League
-            </button>
+                             <button
+                   onClick={() => router.push('/leagues/search')}
+                   className="bg-white/10 backdrop-blur-sm px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition-colors border border-white/20 shadow-lg"
+                 >
+                   Find Leagues
+                 </button>
           </div>
         </div>
       </div>

@@ -168,73 +168,31 @@ class SimpleBig12Seeder:
         if fantasy_pos not in ['QB', 'RB', 'WR', 'TE', 'K']:
             return None
         
-        # Create season stats summary
-        season_stats = {}
-        if fantasy_pos == 'QB':
-            season_stats = {
-                'games': 12,
-                'passing': {
-                    'completions': int(stats.get('COMPLETIONS', 0)),
-                    'attempts': int(stats.get('ATT', 0)),
-                    'yards': int(stats.get('YDS', 0)),
-                    'touchdowns': int(stats.get('TD', 0)),
-                    'interceptions': int(stats.get('INT', 0))
-                }
-            }
-        elif fantasy_pos == 'RB':
-            season_stats = {
-                'games': 12,
-                'rushing': {
-                    'attempts': int(stats.get('CAR', 0)),
-                    'yards': int(stats.get('YDS', 0)),
-                    'touchdowns': int(stats.get('TD', 0))
-                },
-                'receiving': {
-                    'receptions': int(stats.get('REC', 0)),
-                    'yards': int(stats.get('YDS', 0)),
-                    'touchdowns': int(stats.get('TD', 0))
-                }
-            }
-        elif fantasy_pos in ['WR', 'TE']:
-            season_stats = {
-                'games': 12,
-                'receiving': {
-                    'receptions': int(stats.get('REC', 0)),
-                    'yards': int(stats.get('YDS', 0)),
-                    'touchdowns': int(stats.get('TD', 0))
-                }
-            }
+        # Get team abbreviation (first 3-4 letters)
+        team_abbr = info['team'][:3].upper() if len(info['team']) <= 4 else info['team'][:4].upper()
         
-        # Split name into first and last
-        name_parts = info['name'].split(' ', 1)
-        first_name = name_parts[0]
-        last_name = name_parts[1] if len(name_parts) > 1 else ''
+        # Determine year based on position and stats
+        year = 'Senior'  # Default
+        if fantasy_points < 30:
+            year = 'Freshman'
+        elif fantasy_points < 60:
+            year = 'Sophomore'
+        elif fantasy_points < 90:
+            year = 'Junior'
         
+        # Match the schema from Cursor's setup
         return {
-            'espnId': info['id'],
-            'cfbdId': info['id'],
-            'firstName': first_name,
-            'lastName': last_name,
-            'displayName': info['name'],
-            'jersey': '',
-            'position': info['position'],
-            'fantasyPosition': fantasy_pos,
+            'name': info['name'],
+            'position': fantasy_pos,  # Use fantasy position for consistency
             'team': info['team'],
-            'teamId': info['team'].lower().replace(' ', '_'),
+            'team_abbreviation': team_abbr,
             'conference': 'Big 12',
-            'height': '',
-            'weight': 0,
-            'class': '',
-            'depthChartPosition': 1,
-            'isStarter': fantasy_points > 50,
-            'eligibleForWeek': True,
-            'injuryStatus': 'healthy',
-            'injuryNotes': '',
-            'seasonStats': str(season_stats),
-            'weeklyProjections': '[]',
-            'fantasyPoints': fantasy_points,
-            'lastUpdated': datetime.now().isoformat(),
-            'dataSource': 'CFBD'
+            'year': year,
+            'rating': int(min(99, 50 + fantasy_points / 4)),  # Convert fantasy points to rating 50-99
+            'draftable': True,  # All players in this seeder are draftable
+            'conference_id': 'big_12',
+            'power_4': True,  # Big 12 is Power 4
+            'created_at': datetime.now().isoformat()
         }
     
     def save_to_appwrite(self, player_doc):
@@ -242,7 +200,9 @@ class SimpleBig12Seeder:
         try:
             url = f"{APPWRITE_ENDPOINT}/databases/college-football-fantasy/collections/college_players/documents"
             
-            document_id = f"{player_doc['teamId']}_{player_doc['cfbdId']}"
+            # Create unique document ID from team abbreviation and player name
+            safe_name = player_doc['name'].replace(' ', '_').replace('.', '').replace("'", '')
+            document_id = f"{player_doc['team_abbreviation']}_{safe_name}"
             
             response = self.appwrite_session.post(url, json={
                 'documentId': document_id,
@@ -250,10 +210,10 @@ class SimpleBig12Seeder:
             })
             
             if response.status_code in [201, 200]:
-                logger.info(f"✅ Saved {player_doc['displayName']} ({player_doc['fantasyPosition']}) - {player_doc['fantasyPoints']} pts")
+                logger.info(f"✅ Saved {player_doc['name']} ({player_doc['position']}) - Rating: {player_doc['rating']}")
                 return True
             else:
-                logger.error(f"❌ Failed to save {player_doc['displayName']}: {response.status_code} - {response.text}")
+                logger.error(f"❌ Failed to save {player_doc['name']}: {response.status_code} - {response.text}")
                 return False
                 
         except Exception as e:
@@ -269,22 +229,22 @@ class SimpleBig12Seeder:
         for team in BIG12_TEAMS:
             players = self.get_team_players(team)
             
-            # Sort by fantasy points and save top players
+            # Sort by rating and save top players
             player_list = []
             for player_id, player_data in players.items():
                 doc = self.create_player_document(player_data)
-                if doc and doc['fantasyPoints'] > 0:
+                if doc and doc['rating'] > 50:  # Only include players with decent rating
                     player_list.append(doc)
             
-            # Sort by fantasy points
-            player_list.sort(key=lambda x: x['fantasyPoints'], reverse=True)
+            # Sort by rating
+            player_list.sort(key=lambda x: x['rating'], reverse=True)
             
             # Save top players by position
             position_counts = defaultdict(int)
             position_limits = {'QB': 3, 'RB': 5, 'WR': 6, 'TE': 3, 'K': 2}
             
             for player in player_list:
-                pos = player['fantasyPosition']
+                pos = player['position']
                 if position_counts[pos] < position_limits.get(pos, 0):
                     if self.save_to_appwrite(player):
                         total_saved += 1
