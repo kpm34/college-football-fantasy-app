@@ -317,6 +317,7 @@ APPWRITE_API_KEY = os.getenv("APPWRITE_API_KEY", "")
 TEAMS_COLLECTION_ID = "teams"
 PLAYERS_COLLECTION_ID = "college_players"
 GAMES_COLLECTION_ID = "games"
+DATABASE_ID = "college-football-fantasy"
 
 def create_appwrite_client():
     """Create Appwrite client for database operations"""
@@ -340,27 +341,22 @@ def seed_big_ten_teams(databases):
     
     for team_name, team_data in BIG_TEN_TEAMS.items():
         try:
-            # Create team document
+            # Create team document (matching existing collection structure)
             team_doc = {
-                "name": team_data["name"],
+                "school": team_data["name"],
+                "mascot": team_data["mascot"],
                 "abbreviation": team_data["abbreviation"],
                 "conference": team_data["conference"],
-                "division": team_data["division"],
-                "location": team_data["location"],
-                "stadium": team_data["stadium"],
-                "capacity": team_data["capacity"],
-                "colors": team_data["colors"],
-                "mascot": team_data["mascot"],
-                "coach": team_data["coach"],
-                "established": team_data["established"],
-                "conference_id": "big_ten",
-                "power_4": True,
-                "created_at": datetime.now().isoformat()
+                "conferenceId": 1,  # Big Ten
+                "color": team_data["colors"][0] if team_data["colors"] else "#000000",
+                "altColor": team_data["colors"][1] if len(team_data["colors"]) > 1 else "#FFFFFF",
+                "logo": f"https://example.com/logos/{team_data['abbreviation'].lower()}.png",
+                "lastUpdated": datetime.now().isoformat()
             }
             
             # Add to Appwrite
             result = databases.create_document(
-                database_id="college_football",
+                database_id=DATABASE_ID,
                 collection_id=TEAMS_COLLECTION_ID,
                 document_id=f"bigten_{team_data['abbreviation'].lower()}",
                 data=team_doc
@@ -396,7 +392,7 @@ def seed_big_ten_players(databases):
                 
                 # Add to Appwrite
                 result = databases.create_document(
-                    database_id="college_football",
+                    database_id=DATABASE_ID,
                     collection_id=PLAYERS_COLLECTION_ID,
                     document_id=f"bigten_{team_abbr.lower()}_{player['name'].replace(' ', '_').lower()}",
                     data=player_doc
@@ -466,24 +462,33 @@ def create_big_ten_games(databases):
     
     for i, game in enumerate(big_ten_games):
         try:
+            # Create game document (matching existing collection structure)
+            from datetime import datetime, timedelta
+            
+            # Parse the date string
+            game_date = datetime.strptime(game["date"], "%Y-%m-%d")
+            
             game_doc = {
-                "home_team": game["home_team"],
-                "away_team": game["away_team"],
-                "date": game["date"],
-                "time": game["time"],
-                "venue": game["venue"],
-                "conference_game": game["conference_game"],
-                "rivalry": game["rivalry"],
-                "week": game["week"],
                 "season": 2024,
-                "conference": "Big Ten",
+                "week": game["week"],
+                "seasonType": "regular",
+                "startDate": game_date.isoformat(),
+                "homeTeam": game["home_team"],
+                "homeConference": "Big Ten",
+                "homePoints": None,
+                "awayTeam": game["away_team"],
+                "awayConference": "Big Ten",
+                "awayPoints": None,
                 "status": "scheduled",
-                "created_at": datetime.now().isoformat()
+                "period": None,
+                "clock": None,
+                "isConferenceGame": game["conference_game"],
+                "lastUpdated": datetime.now().isoformat()
             }
             
             # Add to Appwrite
             result = databases.create_document(
-                database_id="college_football",
+                database_id=DATABASE_ID,
                 collection_id=GAMES_COLLECTION_ID,
                 document_id=f"bigten_game_{i+1}",
                 data=game_doc

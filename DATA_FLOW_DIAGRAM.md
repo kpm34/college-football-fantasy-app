@@ -1,65 +1,77 @@
 # Data Flow Diagram - APIs to Frontend Pages
 
-## 🔄 Complete Data Flow Architecture
+## 🔄 Complete Data Flow Architecture (Updated Aug 3, 2025)
 
 ```mermaid
 graph TB
     %% External APIs
     subgraph "External APIs"
-        CFBD[CFBD API]
+        CFBD[CFBD API ✅]
         ESPN[ESPN API]
+        ODDS[OddsAPI.io]
+        ROTO[Rotowire]
     end
     
     %% ETL Layer
     subgraph "ETL/Scrapers"
+        SEEDER[Big 12 Seeder ✅]
         ETL[ETL Worker]
         LIVE[Live Score Worker]
         RANK[Rankings Refresh]
+        PROJ[Projection Service]
     end
     
     %% Data Storage
     subgraph "Data Storage"
-        PG[(PostgreSQL)]
+        AW[(Appwrite DB ✅)]
         REDIS[(Redis Cache)]
-        AW[(Appwrite DB)]
     end
     
-    %% Sync Services
-    subgraph "Sync Services"
-        SYNC[Data Sync Service]
-        IDMAP[ID Mapping Service]
+    %% API Routes
+    subgraph "Next.js API Routes"
+        PAPI[/api/players/draftable ✅]
+        DAPI[/api/draft/status ✅]
+        LAPI[/api/leagues]
     end
     
     %% Frontend Pages
     subgraph "Frontend Pages"
         HOME[League Home]
+        CREATE[Create League ✅]
         TEAMS[Teams Page]
         SCORE[Scoreboard]
         DRAFT[Draft Page]
         STATS[Player Stats]
+        TEST[Test Appwrite ✅]
     end
     
     %% Data Flow Connections
+    CFBD --> SEEDER
+    ODDS --> SEEDER
+    ROTO --> SEEDER
+    
+    SEEDER --> AW
     CFBD --> ETL
     CFBD --> RANK
     ESPN --> LIVE
     
-    ETL --> PG
+    ETL --> AW
     RANK --> AW
     LIVE --> REDIS
     
-    PG --> SYNC
-    REDIS --> SYNC
-    SYNC --> AW
+    AW --> PAPI
+    AW --> DAPI
+    AW --> LAPI
     
-    ETL --> IDMAP
-    IDMAP --> AW
+    PAPI --> DRAFT
+    DAPI --> DRAFT
+    LAPI --> HOME
+    LAPI --> CREATE
     
-    AW --> HOME
     AW --> TEAMS
     AW --> SCORE
-    AW --> DRAFT
     AW --> STATS
+    AW --> TEST
     
     REDIS -.->|Real-time| SCORE
     AW -.->|Subscriptions| HOME
@@ -260,3 +272,63 @@ curl https://your-app.vercel.app/api/games
    - Real-time updates: < 5 seconds
 
 This diagram ensures all data flows correctly from external APIs through your backend services to the frontend pages where users interact with the data.
+
+## 🔌 **Current Integration Status** (Aug 3, 2025)
+
+### ✅ **Completed Integrations**
+1. **CFBD API Authentication**
+   - Primary API Key: Working
+   - Backup API Key: Working
+   - Endpoints tested and verified
+
+2. **Appwrite Connection**
+   - Frontend connected via environment variables
+   - Server-side helper created (`appwrite-server.ts`)
+   - Test page available at `/test-appwrite`
+
+3. **API Routes**
+   - `/api/players/draftable`: Connected to Appwrite with fallback
+   - `/api/draft/[leagueId]/status`: Connected to Appwrite with fallback
+   - All routes handle missing data gracefully
+
+4. **Frontend Features**
+   - League Creation: Saves to Appwrite
+   - Draft Page: Ready for Appwrite data
+   - Test Page: Verifies connections
+
+5. **Data Collection Scripts**
+   - Big 12 Seeder: Updated with correct endpoints
+   - Ensemble projection system: Framework ready
+   - Mock data generator: Available as fallback
+
+### ⚠️ **Pending Tasks**
+1. **Appwrite Collections**
+   - Need to create `college_players` collection
+   - Schema defined in `appwrite-schema.json`
+
+2. **Data Population**
+   - Big 12 Seeder ready to run
+   - Waiting for collection creation
+
+3. **Additional API Keys** (Optional)
+   - OddsAPI.io for Vegas lines
+   - Rotowire for injury data
+
+4. **Vercel Deployment**
+   - Add environment variables to Vercel
+   - Deploy updated API routes
+
+### 🚀 **Quick Start Commands**
+```bash
+# Test Appwrite connection
+npm run test-appwrite
+
+# Run Big 12 seeder (after creating collection)
+python3 src/scripts/seed_big12_draftboard.py
+
+# Start frontend dev server
+cd frontend && npm run dev
+
+# Access test page
+open http://localhost:3001/test-appwrite
+```

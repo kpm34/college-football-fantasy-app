@@ -29,6 +29,10 @@ from typing import Dict, List, Optional, Tuple
 from collections import defaultdict
 import statistics
 import math
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -121,15 +125,18 @@ class EnhancedBig12DraftBoardSeeder:
             stat.get("fieldGoals", 0) * SCORING["fg"]
         )
     
-    async def cfbd_request(self, path: str, **params) -> List[Dict]:
+    def cfbd_request(self, path: str, **params) -> List[Dict]:
         """Make request to CollegeFootballData API with fallback"""
         url = f"https://api.collegefootballdata.com/{path}"
+        logger.debug(f"Making CFBD request to: {path} with params: {params}")
         
         # Try primary key first
         for api_key in [CFBD_API_KEY, CFBD_API_KEY_BACKUP]:
             if not api_key:
+                logger.debug(f"Skipping empty API key")
                 continue
                 
+            logger.debug(f"Trying API key ending in ...{api_key[-4:]}")
             headers = {'Authorization': f'Bearer {api_key}'}
             
             try:
@@ -156,7 +163,7 @@ class EnhancedBig12DraftBoardSeeder:
         """Get team's historical pace data (plays per game)"""
         try:
             # Get team stats for plays per game
-            stats = await self.cfbd_request("stats/player/season", 
+            stats = self.cfbd_request("stats/player/season", 
                                           year=year, team=team, category="plays")
             
             if stats:
@@ -179,7 +186,7 @@ class EnhancedBig12DraftBoardSeeder:
         """Get player's usage share based on historical data"""
         try:
             # Get player's stats for the season
-            player_stats = await self.cfbd_request("player/stats", 
+            player_stats = self.cfbd_request("stats/player/season", 
                                                  year=year, team=team, seasonType="regular")
             
             # Find the specific player
@@ -576,7 +583,7 @@ class EnhancedBig12DraftBoardSeeder:
         logger.info(f"Building player lists for {team}")
         
         # Get player stats for 2024 season
-        stats = await self.cfbd_request("player/stats", year=2024, team=team, seasonType="regular")
+        stats = self.cfbd_request("stats/player/season", year=2024, team=team, seasonType="regular")
         
         by_pos = defaultdict(list)
         for stat in stats:
@@ -687,7 +694,7 @@ class EnhancedBig12DraftBoardSeeder:
         picks = await self.build_player_lists(team)
         
         # Get team schedule for 2024
-        schedule = await self.cfbd_request("games", year=2024, team=team, seasonType="regular")
+        schedule = self.cfbd_request("games", year=2024, team=team, seasonType="regular")
         schedule = sorted(schedule, key=lambda x: x["week"])[:12]  # First 12 weeks
         
         for position, player_list in picks.items():

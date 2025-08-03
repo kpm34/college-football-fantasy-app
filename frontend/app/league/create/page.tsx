@@ -2,23 +2,36 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
-import { ID } from 'appwrite';
+
+interface FormData {
+  leagueName: string;
+  gameMode: 'CONFERENCE' | 'POWER4';
+  selectedConference: string;
+  maxTeams: number;
+  seasonStartWeek: number;
+  draftDate: string;
+}
+
+const CONFERENCES = [
+  { id: 'big_ten', name: 'Big Ten Conference', teamCount: 18 },
+  { id: 'sec', name: 'SEC Conference', teamCount: 16 },
+  { id: 'big_12', name: 'Big 12 Conference', teamCount: 16 },
+  { id: 'acc', name: 'ACC Conference', teamCount: 17 }
+];
 
 export default function CreateLeaguePage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    leagueName: '',
-    teamCount: 10,
-    scoringType: 'ppr'
-  });
-  const [loading, setLoading] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [inviteLink, setInviteLink] = useState('https://college-football-fantasy-app.vercel.app/league/123/join');
-  const [createdLeagueId, setCreatedLeagueId] = useState<string>('');
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
+    leagueName: '',
+    gameMode: 'CONFERENCE',
+    selectedConference: 'big_ten',
+    maxTeams: 12,
+    seasonStartWeek: 1,
+    draftDate: ''
+  });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -34,130 +47,60 @@ export default function CreateLeaguePage() {
     setIsInputFocused(false);
   };
 
-  const handleTeamCountSelect = (count: number) => {
-    setFormData(prev => ({
-      ...prev,
-      teamCount: count
-    }));
-  };
-
-  const handleScoringSelect = (type: string) => {
-    setFormData(prev => ({
-      ...prev,
-      scoringType: type
-    }));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate league name
-    if (!formData.leagueName.trim()) {
-      alert('Please enter a league name');
-      return;
-    }
-    
-    setLoading(true);
-
     try {
-      // Create league in Appwrite
-      const leagueId = ID.unique();
-      
-      const leagueData = {
-        name: formData.leagueName,
-        commissioner: 'current-user', // In production, get from auth
-        season: 2025,
-        scoringType: formData.scoringType.toUpperCase(),
-        maxTeams: formData.teamCount,
-        draftDate: new Date().toISOString(),
-        status: 'pre-draft',
-        inviteCode: Math.random().toString(36).substring(2, 8).toUpperCase()
-      };
-      
-      try {
-        const league = await databases.createDocument(
-          DATABASE_ID,
-          COLLECTIONS.LEAGUES,
-          leagueId,
-          leagueData
-        );
-        
-        // Update invite link with real league ID
-        setInviteLink(`https://college-football-fantasy-app.vercel.app/league/${league.$id}/join`);
-        
-        // Show success modal
-        setShowSuccessModal(true);
-      } catch (appwriteError) {
-        console.error('Appwrite error:', appwriteError);
-        // Fall back to mock behavior
-        setShowSuccessModal(true);
+      const response = await fetch('/api/leagues/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          commissionerId: 'demo-user-123' // TODO: Get from auth
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create league');
       }
+
+      const result = await response.json();
       
+      if (result.success) {
+        router.push(`/league/${result.league.id}`);
+      } else {
+        console.error('Error creating league:', result.error);
+      }
     } catch (error) {
       console.error('Error creating league:', error);
-      alert('Failed to create league. Please try again.');
-    } finally {
-      setLoading(false);
     }
-  };
-
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(inviteLink);
-      // You could show a toast notification here
-      alert('Invite link copied to clipboard!');
-    } catch (err) {
-      console.error('Failed to copy link:', err);
-    }
-  };
-
-  const handleInviteEmail = () => {
-    // Open email client with pre-filled invite
-    const subject = encodeURIComponent(`Join my College Football Fantasy League: ${formData.leagueName}`);
-    const body = encodeURIComponent(`Hey! I just created a College Football Fantasy league and want you to join!\n\nLeague: ${formData.leagueName}\nTeams: ${formData.teamCount}\nScoring: ${formData.scoringType === 'ppr' ? 'Points-Per-Reception' : 'Standard'}\n\nJoin here: ${inviteLink}\n\nLet's compete for the championship! 🏈`);
-    
-    window.open(`mailto:?subject=${subject}&body=${body}`);
-  };
-
-  const handleGoToLeague = () => {
-    router.push('/league/123');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          backgroundSize: '60px 60px'
-        }}></div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
+      <div className="max-w-4xl mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            🏈 Create Your League
+          </h1>
+          <p className="text-xl text-gray-400">
+            Set up your college football fantasy league with unique eligibility rules
+          </p>
+        </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
-        <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center mb-4">
-              <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mr-3">
-                <span className="text-white font-bold text-lg">🏈</span>
-              </div>
-              <div className="text-left">
-                <div className="text-green-600 font-bold text-sm">COLLEGE FOOTBALL FANTASY</div>
-                <div className="text-gray-600 text-xs">Power 4 Conferences</div>
-              </div>
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900">Create Your Fantasy Football League</h1>
-          </div>
-
+        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
           <form onSubmit={handleSubmit} className="space-y-8">
+            
             {/* League Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label htmlFor="leagueName" className="block text-lg font-semibold mb-3 text-white">
                 League Name
               </label>
               <input
                 type="text"
+                id="leagueName"
                 name="leagueName"
                 value={formData.leagueName}
                 onChange={handleInputChange}
@@ -170,148 +113,190 @@ export default function CreateLeaguePage() {
               />
             </div>
 
-            {/* Number of Teams */}
+            {/* Game Mode Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Number of Teams
+              <label className="block text-lg font-semibold mb-3 text-white">
+                Game Mode
               </label>
-              <div className="grid grid-cols-5 gap-2">
-                {[4, 6, 8, 10, 12, 14, 16, 18, 20].map((count) => (
-                  <button
-                    key={count}
-                    type="button"
-                    onClick={() => handleTeamCountSelect(count)}
-                    className={`py-3 px-2 rounded-lg font-medium transition-all ${
-                      formData.teamCount === count
-                        ? 'bg-blue-600 text-white border-2 border-blue-600'
-                        : 'bg-gray-100 text-gray-700 border-2 border-gray-200 hover:bg-gray-200'
-                    }`}
-                  >
-                    {count}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Scoring */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Scoring
-              </label>
-              <div className="space-y-3">
-                <button
-                  type="button"
-                  onClick={() => handleScoringSelect('ppr')}
-                  className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-                    formData.scoringType === 'ppr'
-                      ? 'border-blue-600 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="font-medium text-gray-900">Points-Per-Reception</div>
-                  <div className="text-sm text-gray-600">Get extra points for catches by receivers.</div>
-                </button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
-                <button
-                  type="button"
-                  onClick={() => handleScoringSelect('standard')}
-                  className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-                    formData.scoringType === 'standard'
-                      ? 'border-blue-600 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                {/* Conference Mode */}
+                <div 
+                  className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
+                    formData.gameMode === 'CONFERENCE' 
+                      ? 'border-blue-500 bg-blue-500/10' 
+                      : 'border-gray-600 bg-white/5 hover:border-gray-500'
                   }`}
+                  onClick={() => setFormData(prev => ({ ...prev, gameMode: 'CONFERENCE' }))}
                 >
-                  <div className="font-medium text-gray-900">No Points-Per-Reception</div>
-                  <div className="text-sm text-gray-600">Don't get extra points for catches.</div>
-                </button>
+                  <div className="flex items-center mb-3">
+                    <div className={`w-5 h-5 rounded-full border-2 mr-3 ${
+                      formData.gameMode === 'CONFERENCE' ? 'border-blue-500 bg-blue-500' : 'border-gray-400'
+                    }`}>
+                      {formData.gameMode === 'CONFERENCE' && (
+                        <div className="w-2 h-2 bg-white rounded-full m-auto mt-1"></div>
+                      )}
+                    </div>
+                    <h3 className="text-xl font-bold text-white">Conference Mode</h3>
+                  </div>
+                  <p className="text-gray-400 mb-4">
+                    Players from one chosen conference. Always start-eligible.
+                  </p>
+                  <div className="text-sm text-gray-500">
+                    <div>• 1 QB • 1 RB • 2 WR • 1 TE • 1 K</div>
+                    <div>• Simple scoring • No defense</div>
+                  </div>
+                </div>
+
+                {/* Power-4 Mode */}
+                <div 
+                  className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
+                    formData.gameMode === 'POWER4' 
+                      ? 'border-purple-500 bg-purple-500/10' 
+                      : 'border-gray-600 bg-white/5 hover:border-gray-500'
+                  }`}
+                  onClick={() => setFormData(prev => ({ ...prev, gameMode: 'POWER4' }))}
+                >
+                  <div className="flex items-center mb-3">
+                    <div className={`w-5 h-5 rounded-full border-2 mr-3 ${
+                      formData.gameMode === 'POWER4' ? 'border-purple-500 bg-purple-500' : 'border-gray-400'
+                    }`}>
+                      {formData.gameMode === 'POWER4' && (
+                        <div className="w-2 h-2 bg-white rounded-full m-auto mt-1"></div>
+                      )}
+                    </div>
+                    <h3 className="text-xl font-bold text-white">Power-4 Mode</h3>
+                  </div>
+                  <p className="text-gray-400 mb-4">
+                    Players from all Power-4 conferences. Start-eligible only in conference games or vs AP Top-25.
+                  </p>
+                  <div className="text-sm text-gray-500">
+                    <div>• 1 QB • 2 RB • 2 WR • 1 FLEX • 1 TE • 1 K • 1 DEF</div>
+                    <div>• Advanced scoring • Defense included</div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* League Rules Info */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h3 className="text-sm font-medium text-green-900 mb-2">League Rules</h3>
-              <ul className="text-sm text-green-800 space-y-1">
-                <li>• Power 4 conferences only (SEC, ACC, Big 12, Big Ten)</li>
-                <li>• Players eligible only vs AP Top-25 teams or in conference games</li>
-                <li>• 12-week regular season</li>
+            {/* Conference Selection (only for Conference Mode) */}
+            {formData.gameMode === 'CONFERENCE' && (
+              <div>
+                <label htmlFor="selectedConference" className="block text-lg font-semibold mb-3 text-white">
+                  Select Conference
+                </label>
+                <select
+                  id="selectedConference"
+                  name="selectedConference"
+                  value={formData.selectedConference}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg text-black bg-white"
+                  required
+                >
+                  {CONFERENCES.map(conf => (
+                    <option key={conf.id} value={conf.id}>
+                      {conf.name} ({conf.teamCount} teams)
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* League Settings */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              
+              {/* Max Teams */}
+              <div>
+                <label htmlFor="maxTeams" className="block text-lg font-semibold mb-3 text-white">
+                  Max Teams
+                </label>
+                <select
+                  id="maxTeams"
+                  name="maxTeams"
+                  value={formData.maxTeams}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg text-black bg-white"
+                  required
+                >
+                  {[4, 6, 8, 10, 12, 14, 16, 18, 20].map(num => (
+                    <option key={num} value={num}>{num} teams</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Season Start Week */}
+              <div>
+                <label htmlFor="seasonStartWeek" className="block text-lg font-semibold mb-3 text-white">
+                  Season Start Week
+                </label>
+                <select
+                  id="seasonStartWeek"
+                  name="seasonStartWeek"
+                  value={formData.seasonStartWeek}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg text-black bg-white"
+                  required
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(week => (
+                    <option key={week} value={week}>Week {week}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Draft Date */}
+              <div>
+                <label htmlFor="draftDate" className="block text-lg font-semibold mb-3 text-white">
+                  Draft Date (Optional)
+                </label>
+                <input
+                  type="datetime-local"
+                  id="draftDate"
+                  name="draftDate"
+                  value={formData.draftDate}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg text-black bg-white"
+                />
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="text-center pt-6">
+              <button
+                type="submit"
+                className="bg-gradient-to-r from-green-500 to-blue-500 px-12 py-4 rounded-xl font-bold text-xl hover:scale-105 transition-transform shadow-lg backdrop-blur-sm"
+              >
+                Create League
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Game Mode Explanation */}
+        <div className="mt-12 bg-gradient-to-r from-green-600/20 to-green-800/20 backdrop-blur-sm rounded-xl p-8 border border-green-500/30">
+          <h3 className="text-2xl font-bold text-green-400 mb-6 text-center">🎯 Game Mode Details</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <div>
+              <h4 className="text-xl font-semibold text-white mb-3">Conference Mode</h4>
+              <ul className="space-y-2 text-gray-300">
+                <li>• Players from one chosen conference only</li>
+                <li>• Always start-eligible regardless of opponent</li>
+                <li>• Simpler lineup: 1 QB, 1 RB, 2 WR, 1 TE, 1 K</li>
+                <li>• Perfect for beginners or single-conference fans</li>
               </ul>
             </div>
 
-            {/* Create League Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {loading ? 'Creating League...' : 'Create League'}
-            </button>
-          </form>
-
-          {/* Back Link */}
-          <div className="text-center mt-6">
-            <button
-              onClick={() => router.push('/')}
-              className="text-gray-600 hover:text-gray-900 text-sm"
-            >
-              ← Back to Home
-            </button>
+            <div>
+              <h4 className="text-xl font-semibold text-white mb-3">Power-4 Mode</h4>
+              <ul className="space-y-2 text-gray-300">
+                <li>• Players from all Power-4 conferences (SEC, ACC, Big Ten, Big 12)</li>
+                <li>• Start-eligible only in conference games OR vs AP Top-25 teams</li>
+                <li>• Advanced lineup: 1 QB, 2 RB, 2 WR, 1 FLEX, 1 TE, 1 K, 1 DEF</li>
+                <li>• Strategic depth with defense and flex positions</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Success Modal */}
-      {showSuccessModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center">
-                <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-white font-bold text-sm">Go!</span>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowSuccessModal(false)}
-                className="text-gray-400 hover:text-gray-600 text-xl font-bold"
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                Congrats, you created a league!
-              </h2>
-              <p className="text-gray-600">Now invite friends.</p>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="space-y-4">
-              <button
-                onClick={handleInviteEmail}
-                className="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors"
-              >
-                Invite via email
-              </button>
-              
-              <button
-                onClick={handleCopyLink}
-                className="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors"
-              >
-                Copy invite link
-              </button>
-
-              <button
-                onClick={handleGoToLeague}
-                className="w-full bg-gray-200 text-gray-800 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors"
-              >
-                Go to my league
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 } 
