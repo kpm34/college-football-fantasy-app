@@ -33,6 +33,8 @@ interface Player {
 export default function ConferenceShowcase() {
   const [bigTenTeams, setBigTenTeams] = useState<ConferenceTeam[]>([]);
   const [big12Teams, setBig12Teams] = useState<ConferenceTeam[]>([]);
+  const [secTeams, setSecTeams] = useState<ConferenceTeam[]>([]);
+  const [accTeams, setAccTeams] = useState<ConferenceTeam[]>([]);
   const [topPlayers, setTopPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,23 +46,41 @@ export default function ConferenceShowcase() {
     try {
       setLoading(true);
       
-      // Load Big Ten teams
-      const bigTenResponse = await fetch('/api/bigten?type=teams');
+      // Load all conference teams
+      const [bigTenResponse, big12Response, secResponse, accResponse] = await Promise.all([
+        fetch('/api/bigten?type=teams'),
+        fetch('/api/big12?type=teams'),
+        fetch('/api/sec?type=teams'),
+        fetch('/api/acc?type=teams')
+      ]);
+
       if (bigTenResponse.ok) {
         const bigTenData = await bigTenResponse.json();
         setBigTenTeams(bigTenData.data || []);
       }
 
-      // Load Big 12 teams
-      const big12Response = await fetch('/api/big12?type=teams');
       if (big12Response.ok) {
         const big12Data = await big12Response.json();
         setBig12Teams(big12Data.teams || big12Data.data || []);
       }
 
-      // Load top players from both conferences
-      const bigTenPlayersResponse = await fetch('/api/bigten?type=players');
-      const big12PlayersResponse = await fetch('/api/big12?type=players');
+      if (secResponse.ok) {
+        const secData = await secResponse.json();
+        setSecTeams(secData.data || []);
+      }
+
+      if (accResponse.ok) {
+        const accData = await accResponse.json();
+        setAccTeams(accData.data || []);
+      }
+
+      // Load top players from all conferences
+      const [bigTenPlayersResponse, big12PlayersResponse, secPlayersResponse, accPlayersResponse] = await Promise.all([
+        fetch('/api/bigten?type=players'),
+        fetch('/api/big12?type=players'),
+        fetch('/api/sec?type=players'),
+        fetch('/api/acc?type=players')
+      ]);
       
       let allPlayers: Player[] = [];
       
@@ -72,6 +92,16 @@ export default function ConferenceShowcase() {
       if (big12PlayersResponse.ok) {
         const big12PlayersData = await big12PlayersResponse.json();
         allPlayers = [...allPlayers, ...(big12PlayersData.players || big12PlayersData.data || [])];
+      }
+
+      if (secPlayersResponse.ok) {
+        const secPlayersData = await secPlayersResponse.json();
+        allPlayers = [...allPlayers, ...(secPlayersData.data || [])];
+      }
+
+      if (accPlayersResponse.ok) {
+        const accPlayersData = await accPlayersResponse.json();
+        allPlayers = [...allPlayers, ...(accPlayersData.data || [])];
       }
       
       // Sort by rating and take top 8
@@ -86,7 +116,7 @@ export default function ConferenceShowcase() {
   };
 
   // For debugging, show some content even if loading
-  if (loading && bigTenTeams.length === 0 && big12Teams.length === 0) {
+  if (loading && bigTenTeams.length === 0 && big12Teams.length === 0 && secTeams.length === 0 && accTeams.length === 0) {
     return (
       <div className="py-16 bg-gradient-to-br from-slate-900 via-slate-800 to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,7 +130,7 @@ export default function ConferenceShowcase() {
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold text-blue-400">Big Ten Conference</h3>
               <span className="px-4 py-2 bg-blue-600/30 text-blue-300 rounded-full text-sm">
-                5 Teams
+                18 Teams
               </span>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -109,7 +139,8 @@ export default function ConferenceShowcase() {
                 { name: "Ohio State", abbreviation: "OSU", mascot: "Buckeyes" },
                 { name: "Penn State", abbreviation: "PSU", mascot: "Nittany Lions" },
                 { name: "Oregon", abbreviation: "ORE", mascot: "Ducks" },
-                { name: "USC", abbreviation: "USC", mascot: "Trojans" }
+                { name: "USC", abbreviation: "USC", mascot: "Trojans" },
+                { name: "Wisconsin", abbreviation: "WIS", mascot: "Badgers" }
               ].map((team, index) => (
                 <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
                   <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
@@ -123,6 +154,39 @@ export default function ConferenceShowcase() {
             <div className="mt-6 text-center">
               <button className="text-blue-400 hover:text-blue-300 text-sm">
                 View All Big Ten Teams →
+              </button>
+            </div>
+          </div>
+
+          {/* SEC Conference - Static for now */}
+          <div className="bg-gradient-to-r from-yellow-600/20 to-yellow-800/20 backdrop-blur-sm rounded-xl p-8 border border-yellow-500/30 mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-yellow-400">SEC Conference</h3>
+              <span className="px-4 py-2 bg-yellow-600/30 text-yellow-300 rounded-full text-sm">
+                16 Teams
+              </span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {[
+                { name: "Georgia", abbreviation: "UGA", mascot: "Bulldogs" },
+                { name: "Alabama", abbreviation: "ALA", mascot: "Crimson Tide" },
+                { name: "LSU", abbreviation: "LSU", mascot: "Tigers" },
+                { name: "Texas", abbreviation: "TEX", mascot: "Longhorns" },
+                { name: "Florida", abbreviation: "UF", mascot: "Gators" },
+                { name: "Tennessee", abbreviation: "TENN", mascot: "Volunteers" }
+              ].map((team, index) => (
+                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
+                  <div className="w-12 h-12 bg-yellow-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                  </div>
+                  <div className="text-sm font-semibold">{team.name}</div>
+                  <div className="text-xs text-gray-400">{team.mascot}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <button className="text-yellow-400 hover:text-yellow-300 text-sm">
+                View All SEC Teams →
               </button>
             </div>
           </div>
@@ -156,6 +220,39 @@ export default function ConferenceShowcase() {
             <div className="mt-6 text-center">
               <button className="text-red-400 hover:text-red-300 text-sm">
                 View All Big 12 Teams →
+              </button>
+            </div>
+          </div>
+
+          {/* ACC Conference - Static for now */}
+          <div className="bg-gradient-to-r from-green-600/20 to-green-800/20 backdrop-blur-sm rounded-xl p-8 border border-green-500/30 mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-green-400">ACC Conference</h3>
+              <span className="px-4 py-2 bg-green-600/30 text-green-300 rounded-full text-sm">
+                17 Teams
+              </span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {[
+                { name: "Florida State", abbreviation: "FSU", mascot: "Seminoles" },
+                { name: "Clemson", abbreviation: "CLEM", mascot: "Tigers" },
+                { name: "Miami", abbreviation: "MIA", mascot: "Hurricanes" },
+                { name: "Louisville", abbreviation: "LOU", mascot: "Cardinals" },
+                { name: "North Carolina", abbreviation: "UNC", mascot: "Tar Heels" },
+                { name: "Virginia Tech", abbreviation: "VT", mascot: "Hokies" }
+              ].map((team, index) => (
+                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
+                  <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                  </div>
+                  <div className="text-sm font-semibold">{team.name}</div>
+                  <div className="text-xs text-gray-400">{team.mascot}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <button className="text-green-400 hover:text-green-300 text-sm">
+                View All ACC Teams →
               </button>
             </div>
           </div>
@@ -224,20 +321,46 @@ export default function ConferenceShowcase() {
               {bigTenTeams.length} Teams
             </span>
           </div>
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {bigTenTeams.slice(0, 12).map((team, index) => (
-                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-white font-bold text-sm">{team.abbreviation}</span>
-                  </div>
-                  <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
-                  <div className="text-xs text-gray-400">{team.mascot}</div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {bigTenTeams.slice(0, 12).map((team, index) => (
+              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
+                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <span className="text-white font-bold text-sm">{team.abbreviation}</span>
                 </div>
-              ))}
-            </div>
+                <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
+                <div className="text-xs text-gray-400">{team.mascot}</div>
+              </div>
+            ))}
+          </div>
           <div className="mt-6 text-center">
             <button className="text-blue-400 hover:text-blue-300 text-sm">
               View All Big Ten Teams →
+            </button>
+          </div>
+        </div>
+
+        {/* SEC Conference */}
+        <div className="bg-gradient-to-r from-yellow-600/20 to-yellow-800/20 backdrop-blur-sm rounded-xl p-8 border border-yellow-500/30 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold text-yellow-400">SEC Conference</h3>
+            <span className="px-4 py-2 bg-yellow-600/30 text-yellow-300 rounded-full text-sm">
+              {secTeams.length} Teams
+            </span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {secTeams.slice(0, 12).map((team, index) => (
+              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
+                <div className="w-12 h-12 bg-yellow-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                </div>
+                <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
+                <div className="text-xs text-gray-400">{team.mascot}</div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 text-center">
+            <button className="text-yellow-400 hover:text-yellow-300 text-sm">
+              View All SEC Teams →
             </button>
           </div>
         </div>
@@ -250,20 +373,46 @@ export default function ConferenceShowcase() {
               {big12Teams.length} Teams
             </span>
           </div>
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {big12Teams.slice(0, 12).map((team, index) => (
-                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                  <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-white font-bold text-sm">{team.abbreviation}</span>
-                  </div>
-                  <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
-                  <div className="text-xs text-gray-400">{team.mascot}</div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {big12Teams.slice(0, 12).map((team, index) => (
+              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
+                <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <span className="text-white font-bold text-sm">{team.abbreviation}</span>
                 </div>
-              ))}
-            </div>
+                <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
+                <div className="text-xs text-gray-400">{team.mascot}</div>
+              </div>
+            ))}
+          </div>
           <div className="mt-6 text-center">
             <button className="text-red-400 hover:text-red-300 text-sm">
               View All Big 12 Teams →
+            </button>
+          </div>
+        </div>
+
+        {/* ACC Conference */}
+        <div className="bg-gradient-to-r from-green-600/20 to-green-800/20 backdrop-blur-sm rounded-xl p-8 border border-green-500/30 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold text-green-400">ACC Conference</h3>
+            <span className="px-4 py-2 bg-green-600/30 text-green-300 rounded-full text-sm">
+              {accTeams.length} Teams
+            </span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {accTeams.slice(0, 12).map((team, index) => (
+              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
+                <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                </div>
+                <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
+                <div className="text-xs text-gray-400">{team.mascot}</div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 text-center">
+            <button className="text-green-400 hover:text-green-300 text-sm">
+              View All ACC Teams →
             </button>
           </div>
         </div>
