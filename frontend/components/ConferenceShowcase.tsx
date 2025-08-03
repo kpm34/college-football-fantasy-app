@@ -3,12 +3,20 @@
 import { useState, useEffect } from 'react';
 
 interface ConferenceTeam {
-  school: string;
+  name: string;
   mascot: string;
   abbreviation: string;
   conference: string;
-  color: string;
-  altColor: string;
+  colors: string[];
+  division: string;
+  location: string;
+  stadium: string;
+  capacity: number;
+  coach: string;
+  established: number;
+  conference_id: string;
+  power_4: boolean;
+  created_at: string;
 }
 
 interface Player {
@@ -37,14 +45,14 @@ export default function ConferenceShowcase() {
       const bigTenResponse = await fetch('/api/bigten?type=teams');
       if (bigTenResponse.ok) {
         const bigTenData = await bigTenResponse.json();
-        setBigTenTeams(bigTenData.teams || []);
+        setBigTenTeams(bigTenData.data || []);
       }
 
       // Load Big 12 teams
       const big12Response = await fetch('/api/big12?type=teams');
       if (big12Response.ok) {
         const big12Data = await big12Response.json();
-        setBig12Teams(big12Data.teams || []);
+        setBig12Teams(big12Data.data || []);
       }
 
       // Load top players from both conferences
@@ -55,12 +63,12 @@ export default function ConferenceShowcase() {
       
       if (bigTenPlayersResponse.ok) {
         const bigTenPlayersData = await bigTenPlayersResponse.json();
-        allPlayers = [...(bigTenPlayersData.players || [])];
+        allPlayers = [...(bigTenPlayersData.data || [])];
       }
       
       if (big12PlayersResponse.ok) {
         const big12PlayersData = await big12PlayersResponse.json();
-        allPlayers = [...allPlayers, ...(big12PlayersData.players || [])];
+        allPlayers = [...allPlayers, ...(big12PlayersData.data || [])];
       }
       
       // Sort by rating and take top 8
@@ -99,17 +107,17 @@ export default function ConferenceShowcase() {
               {bigTenTeams.length} Teams
             </span>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {bigTenTeams.slice(0, 12).map((team, index) => (
-              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {bigTenTeams.slice(0, 12).map((team, index) => (
+                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
+                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                  </div>
+                  <div className="text-sm font-semibold">{team.name.split(' ')[0]}</div>
+                  <div className="text-xs text-gray-400">{team.mascot}</div>
                 </div>
-                <div className="text-sm font-semibold">{team.school.split(' ')[0]}</div>
-                <div className="text-xs text-gray-400">{team.mascot}</div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
           <div className="mt-6 text-center">
             <button className="text-blue-400 hover:text-blue-300 text-sm">
               View All Big Ten Teams →
@@ -125,17 +133,17 @@ export default function ConferenceShowcase() {
               {big12Teams.length} Teams
             </span>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {big12Teams.slice(0, 12).map((team, index) => (
-              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {big12Teams.slice(0, 12).map((team, index) => (
+                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
+                  <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                  </div>
+                  <div className="text-sm font-semibold">{team.name.split(' ')[0]}</div>
+                  <div className="text-xs text-gray-400">{team.mascot}</div>
                 </div>
-                <div className="text-sm font-semibold">{team.school.split(' ')[0]}</div>
-                <div className="text-xs text-gray-400">{team.mascot}</div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
           <div className="mt-6 text-center">
             <button className="text-red-400 hover:text-red-300 text-sm">
               View All Big 12 Teams →
