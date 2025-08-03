@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getTeamColors } from '@/lib/team-colors';
 
 interface ConferenceTeam {
   name?: string;
@@ -142,9 +143,17 @@ export default function ConferenceShowcase() {
                 { name: "USC", abbreviation: "USC", mascot: "Trojans" },
                 { name: "Wisconsin", abbreviation: "WIS", mascot: "Badgers" }
               ].map((team, index) => (
-                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer group">
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                    style={{ 
+                      backgroundColor: getTeamColors(team.name).primary,
+                      border: `2px solid ${getTeamColors(team.name).secondary}`
+                    }}
+                  >
+                    <span className="font-bold text-xs" style={{ color: getTeamColors(team.name).secondary }}>
+                      {team.abbreviation}
+                    </span>
                   </div>
                   <div className="text-sm font-semibold">{team.name}</div>
                   <div className="text-xs text-gray-400">{team.mascot}</div>
@@ -175,9 +184,17 @@ export default function ConferenceShowcase() {
                 { name: "Florida", abbreviation: "UF", mascot: "Gators" },
                 { name: "Tennessee", abbreviation: "TENN", mascot: "Volunteers" }
               ].map((team, index) => (
-                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                  <div className="w-12 h-12 bg-yellow-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer group">
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                    style={{ 
+                      backgroundColor: getTeamColors(team.name).primary,
+                      border: `2px solid ${getTeamColors(team.name).secondary}`
+                    }}
+                  >
+                    <span className="font-bold text-xs" style={{ color: getTeamColors(team.name).secondary }}>
+                      {team.abbreviation}
+                    </span>
                   </div>
                   <div className="text-sm font-semibold">{team.name}</div>
                   <div className="text-xs text-gray-400">{team.mascot}</div>
@@ -208,9 +225,17 @@ export default function ConferenceShowcase() {
                 { name: "Baylor", abbreviation: "BAYL", mascot: "Bears" },
                 { name: "Texas Tech", abbreviation: "TTU", mascot: "Red Raiders" }
               ].map((team, index) => (
-                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                  <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer group">
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                    style={{ 
+                      backgroundColor: getTeamColors(team.name).primary,
+                      border: `2px solid ${getTeamColors(team.name).secondary}`
+                    }}
+                  >
+                    <span className="font-bold text-xs" style={{ color: getTeamColors(team.name).secondary }}>
+                      {team.abbreviation}
+                    </span>
                   </div>
                   <div className="text-sm font-semibold">{team.name}</div>
                   <div className="text-xs text-gray-400">{team.mascot}</div>
@@ -241,9 +266,17 @@ export default function ConferenceShowcase() {
                 { name: "North Carolina", abbreviation: "UNC", mascot: "Tar Heels" },
                 { name: "Virginia Tech", abbreviation: "VT", mascot: "Hokies" }
               ].map((team, index) => (
-                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                  <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer group">
+                  <div 
+                    className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                    style={{ 
+                      backgroundColor: getTeamColors(team.name).primary,
+                      border: `2px solid ${getTeamColors(team.name).secondary}`
+                    }}
+                  >
+                    <span className="font-bold text-xs" style={{ color: getTeamColors(team.name).secondary }}>
+                      {team.abbreviation}
+                    </span>
                   </div>
                   <div className="text-sm font-semibold">{team.name}</div>
                   <div className="text-xs text-gray-400">{team.mascot}</div>
@@ -323,9 +356,17 @@ export default function ConferenceShowcase() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {bigTenTeams.slice(0, 12).map((team, index) => (
-              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer group">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                  style={{ 
+                    backgroundColor: getTeamColors(team.name || team.school || '').primary,
+                    border: `2px solid ${getTeamColors(team.name || team.school || '').secondary}`
+                  }}
+                >
+                  <span className="font-bold text-xs" style={{ color: getTeamColors(team.name || team.school || '').secondary }}>
+                    {team.abbreviation}
+                  </span>
                 </div>
                 <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
                 <div className="text-xs text-gray-400">{team.mascot}</div>
@@ -349,9 +390,17 @@ export default function ConferenceShowcase() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {secTeams.slice(0, 12).map((team, index) => (
-              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                <div className="w-12 h-12 bg-yellow-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer group">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                  style={{ 
+                    backgroundColor: getTeamColors(team.name || team.school || '').primary,
+                    border: `2px solid ${getTeamColors(team.name || team.school || '').secondary}`
+                  }}
+                >
+                  <span className="font-bold text-xs" style={{ color: getTeamColors(team.name || team.school || '').secondary }}>
+                    {team.abbreviation}
+                  </span>
                 </div>
                 <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
                 <div className="text-xs text-gray-400">{team.mascot}</div>
@@ -375,9 +424,17 @@ export default function ConferenceShowcase() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {big12Teams.slice(0, 12).map((team, index) => (
-              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer group">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                  style={{ 
+                    backgroundColor: getTeamColors(team.name || team.school || '').primary,
+                    border: `2px solid ${getTeamColors(team.name || team.school || '').secondary}`
+                  }}
+                >
+                  <span className="font-bold text-xs" style={{ color: getTeamColors(team.name || team.school || '').secondary }}>
+                    {team.abbreviation}
+                  </span>
                 </div>
                 <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
                 <div className="text-xs text-gray-400">{team.mascot}</div>
@@ -401,9 +458,17 @@ export default function ConferenceShowcase() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {accTeams.slice(0, 12).map((team, index) => (
-              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer">
-                <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <span className="text-white font-bold text-sm">{team.abbreviation}</span>
+              <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer group">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                  style={{ 
+                    backgroundColor: getTeamColors(team.name || team.school || '').primary,
+                    border: `2px solid ${getTeamColors(team.name || team.school || '').secondary}`
+                  }}
+                >
+                  <span className="font-bold text-xs" style={{ color: getTeamColors(team.name || team.school || '').secondary }}>
+                    {team.abbreviation}
+                  </span>
                 </div>
                 <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
                 <div className="text-xs text-gray-400">{team.mascot}</div>

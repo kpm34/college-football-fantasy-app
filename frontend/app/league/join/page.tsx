@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 
 interface League {
@@ -246,11 +247,17 @@ export default function JoinLeaguePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-bold text-gray-900">🏈 College Football Fantasy</h1>
+              <Link href="/" className="text-xl font-bold text-gray-900 hover:text-gray-700 transition-colors">
+                🏈 College Football Fantasy
+              </Link>
             </div>
             <div className="flex items-center space-x-8">
-              <a href="/" className="text-gray-600 hover:text-gray-900">Home</a>
-              <a href="/league/create" className="text-gray-600 hover:text-gray-900">Create League</a>
+              <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
+                Home
+              </Link>
+              <Link href="/league/create" className="text-gray-600 hover:text-gray-900 transition-colors">
+                Create League
+              </Link>
             </div>
           </div>
         </div>

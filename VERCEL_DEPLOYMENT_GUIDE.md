@@ -5,6 +5,41 @@
 Your College Football Fantasy App is now configured for deployment on Vercel at:
 **https://college-football-fantasy-app.vercel.app/**
 
+## Prerequisites
+
+1. **Vercel Account**: Sign up at [vercel.com](https://vercel.com)
+2. **Vercel CLI** (optional): `npm install -g vercel`
+3. **Environment Variables**: Have all required API keys ready
+
+## Basic Deployment Steps
+
+### 1. Install Vercel CLI (Recommended)
+```bash
+npm install -g vercel
+```
+
+### 2. Login to Vercel
+```bash
+vercel login
+```
+
+### 3. Deploy from Frontend Directory
+```bash
+cd frontend
+vercel
+
+# Or for production deployment
+vercel --prod
+```
+
+### 4. First-Time Setup Prompts
+- **Setup and deploy**: Yes
+- **Which scope**: Select your account
+- **Link to existing project**: No (create new)
+- **Project name**: college-football-fantasy-app
+- **Directory**: ./
+- **Build settings**: Accept defaults (Next.js detected)
+
 ## 📋 Updated Configuration
 
 ### ✅ **All Paths Updated**
@@ -21,6 +56,36 @@ Your College Football Fantasy App is now configured for deployment on Vercel at:
 - **Games**: `https://college-football-fantasy-app.vercel.app/api/games`
 - **Rankings**: `https://college-football-fantasy-app.vercel.app/api/rankings`
 - **Teams**: `https://college-football-fantasy-app.vercel.app/api/teams`
+
+## 🔑 Token-Based Deployment (Optional)
+
+### Getting Your Vercel Token
+
+1. **Go to Vercel Tokens Page**
+   - Visit: https://vercel.com/account/tokens
+   - Log in with your Vercel account
+
+2. **Create New Token**
+   - Click "Create Token"
+   - Give it a name: "college-football-fantasy-deployment"
+   - Set expiration (optional, but recommended for security)
+   - Select scope: "Full Account" (for personal projects)
+   - Click "Create"
+
+3. **Copy Your Token**
+   - Copy the token immediately (you won't see it again)
+   - Store it securely
+
+### Using the Token
+
+```bash
+# Method 1: Direct Command
+./deploy-with-token.sh your-vercel-token-here
+
+# Method 2: Environment Variable
+export VERCEL_TOKEN="your-vercel-token-here"
+./deploy-with-token.sh
+```
 
 ## 🔧 Vercel Configuration
 
