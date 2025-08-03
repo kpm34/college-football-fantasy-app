@@ -131,5 +131,4 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     return (
     <LeaguePortal leagueId={leagueId} leagueName={league.name} />
   );
-  );
 } 
