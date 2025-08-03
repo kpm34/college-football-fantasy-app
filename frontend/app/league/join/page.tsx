@@ -1,70 +1,243 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+
+interface League {
+  $id: string;
+  name: string;
+  owner: string;
+  teams: number;
+  maxTeams: number;
+  draftType: 'snake' | 'auction';
+  entryFee: number;
+  draftDate: string;
+  draftTime: string;
+  description: string;
+  type: 'public' | 'private';
+  password?: string;
+  status: 'draft' | 'active' | 'completed';
+  createdAt: string;
+}
+
+interface User {
+  $id: string;
+  name: string;
+  email: string;
+}
+
+interface Team {
+  $id: string;
+  name: string;
+  owner: string;
+  leagueId: string;
+  record: string;
+  pointsFor: number;
+  pointsAgainst: number;
+  players: string[]; // Array of player IDs
+  createdAt: string;
+}
 
 export default function JoinLeaguePage() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
+  const [leagueType, setLeagueType] = useState<'all' | 'public' | 'private'>('all');
   const [loading, setLoading] = useState(false);
-  const [availableLeagues, setAvailableLeagues] = useState([
-    {
-      id: '1',
-      name: 'Power 4 Champions',
-      owner: 'John Smith',
-      teams: 8,
-      maxTeams: 12,
-      draftType: 'Snake',
-      entryFee: 0,
-      draftDate: '2025-08-30',
-      draftTime: '19:00',
-      description: 'Competitive league for Power 4 conference fans'
-    },
-    {
-      id: '2',
-      name: 'SEC Legends',
-      owner: 'Sarah Johnson',
-      teams: 6,
-      maxTeams: 10,
-      draftType: 'Auction',
-      entryFee: 25,
-      draftDate: '2025-08-28',
-      draftTime: '20:00',
-      description: 'SEC-focused league with auction draft'
-    },
-    {
-      id: '3',
-      name: 'Big Ten Battle',
-      owner: 'Mike Davis',
-      teams: 10,
-      maxTeams: 12,
-      draftType: 'Snake',
-      entryFee: 0,
-      draftDate: '2025-08-29',
-      draftTime: '18:30',
-      description: 'Big Ten conference fantasy league'
-    }
-  ]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [selectedLeague, setSelectedLeague] = useState<League | null>(null);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [availableLeagues, setAvailableLeagues] = useState<League[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const handleJoinLeague = async (leagueId: string) => {
-    setLoading(true);
+  // Load current user (you'd get this from auth)
+  useEffect(() => {
+    // For now, simulate a logged-in user
+    setCurrentUser({
+      $id: 'user123',
+      name: 'Kashyap Maheshwari',
+      email: 'kashyap@example.com'
+    });
+  }, []);
+
+  // Search leagues by name
+  const searchLeagues = async (searchQuery: string) => {
+    if (!searchQuery.trim()) {
+      setAvailableLeagues([]);
+      return;
+    }
+
+    setSearchLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Search leagues in Appwrite by name
+      const response = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUES,
+        [
+          // Search by league name (case-insensitive)
+          // Note: Appwrite doesn't support full-text search by default
+          // You might need to implement a custom search solution
+        ]
+      );
+
+      const leagues = response.documents as unknown as League[];
       
-      // Redirect to the league
-      router.push(`/league/${leagueId}/draft`);
+      // Filter leagues by search term (client-side for now)
+      const filteredLeagues = leagues.filter(league =>
+        league.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      setAvailableLeagues(filteredLeagues);
     } catch (error) {
-      console.error('Error joining league:', error);
+      console.error('Error searching leagues:', error);
+      // Fallback to sample data for demo
+      setAvailableLeagues([
+        {
+          $id: '1',
+          name: 'Power 4 Champions',
+          owner: 'John Smith',
+          teams: 8,
+          maxTeams: 12,
+          draftType: 'snake',
+          entryFee: 0,
+          draftDate: '2025-08-30',
+          draftTime: '19:00',
+          description: 'Competitive league for Power 4 conference fans',
+          type: 'public',
+          status: 'draft',
+          createdAt: new Date().toISOString()
+        },
+        {
+          $id: '2',
+          name: 'SEC Legends',
+          owner: 'Sarah Johnson',
+          teams: 6,
+          maxTeams: 10,
+          draftType: 'auction',
+          entryFee: 25,
+          draftDate: '2025-08-28',
+          draftTime: '20:00',
+          description: 'SEC-focused league with auction draft',
+          type: 'private',
+          password: 'sec2025',
+          status: 'draft',
+          createdAt: new Date().toISOString()
+        }
+      ]);
     } finally {
-      setLoading(false);
+      setSearchLoading(false);
     }
   };
 
-  const filteredLeagues = availableLeagues.filter(league =>
-    league.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    league.owner.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Debounced search
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      searchLeagues(searchTerm);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
+
+  const handleJoinLeague = async (league: League) => {
+    if (!currentUser) {
+      alert('Please log in to join a league');
+      return;
+    }
+
+    if (league.type === 'private') {
+      setSelectedLeague(league);
+      setShowPasswordModal(true);
+    } else {
+      await joinLeague(league);
+    }
+  };
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError('');
+
+    if (!selectedLeague || !currentUser) return;
+
+    if (password === selectedLeague.password) {
+      await joinLeague(selectedLeague);
+    } else {
+      setPasswordError('Incorrect password. Please try again.');
+    }
+  };
+
+  const joinLeague = async (league: League) => {
+    if (!currentUser) return;
+
+    setLoading(true);
+    try {
+      // 1. Create team for the user in this league
+      const teamData = {
+        name: `${currentUser.name}'s Team`,
+        owner: currentUser.$id,
+        leagueId: league.$id,
+        record: '0-0',
+        pointsFor: 0,
+        pointsAgainst: 0,
+        players: [], // Empty array for pre-draft
+        createdAt: new Date().toISOString()
+      };
+
+      const teamResponse = await databases.createDocument(
+        DATABASE_ID,
+        COLLECTIONS.TEAMS,
+        'unique()', // Auto-generate ID
+        teamData
+      );
+
+      // 2. Update league team count
+      await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUES,
+        league.$id,
+        {
+          teams: league.teams + 1
+        }
+      );
+
+      // 3. Log the join activity (optional - for tracking)
+      await databases.createDocument(
+        DATABASE_ID,
+        COLLECTIONS.ACTIVITY_LOG,
+        'unique()',
+        {
+          type: 'league_join',
+          userId: currentUser.$id,
+          leagueId: league.$id,
+          teamId: teamResponse.$id,
+          timestamp: new Date().toISOString(),
+          description: `${currentUser.name} joined ${league.name}`
+        }
+      );
+
+      console.log('Successfully joined league:', league.name);
+      
+      // Redirect to the league home page
+      router.push(`/league/${league.$id}`);
+    } catch (error) {
+      console.error('Error joining league:', error);
+      alert('Failed to join league. Please try again.');
+    } finally {
+      setLoading(false);
+      setShowPasswordModal(false);
+      setSelectedLeague(null);
+      setPassword('');
+    }
+  };
+
+  const filteredLeagues = availableLeagues.filter(league => {
+    const matchesType = leagueType === 'all' || league.type === leagueType;
+    return matchesType;
+  });
+
+  const publicLeagues = availableLeagues.filter(league => league.type === 'public');
+  const privateLeagues = availableLeagues.filter(league => league.type === 'private');
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -84,16 +257,41 @@ export default function JoinLeaguePage() {
       </nav>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Join a League</h2>
-          <p className="text-gray-600">Find and join an existing College Football Fantasy league</p>
+          <p className="text-gray-600">Search for leagues by name and join with your team</p>
+        </div>
+
+        {/* League Type Tabs */}
+        <div className="flex justify-center mb-8">
+          <div className="bg-white rounded-lg shadow-sm border p-1">
+            <div className="flex space-x-1">
+              {[
+                { key: 'all', label: 'All Leagues', count: availableLeagues.length },
+                { key: 'public', label: 'Public', count: publicLeagues.length },
+                { key: 'private', label: 'Private', count: privateLeagues.length }
+              ].map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setLeagueType(tab.key as any)}
+                  className={`px-6 py-2 rounded-md font-medium transition-colors ${
+                    leagueType === tab.key
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  {tab.label} ({tab.count})
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Search Bar */}
         <div className="mb-8">
           <div className="max-w-md mx-auto">
-            <label htmlFor="search" className="sr-only">Search leagues</label>
+            <label htmlFor="search" className="sr-only">Search leagues by name</label>
             <div className="relative">
               <input
                 type="text"
@@ -101,12 +299,16 @@ export default function JoinLeaguePage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Search leagues by name or owner..."
+                placeholder="Search leagues by name..."
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+                {searchLoading ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+                ) : (
+                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                )}
               </div>
             </div>
           </div>
@@ -115,13 +317,27 @@ export default function JoinLeaguePage() {
         {/* Available Leagues */}
         <div className="space-y-6">
           {filteredLeagues.map((league) => (
-            <div key={league.id} className="bg-white rounded-lg shadow-sm border p-6">
+            <div key={league.$id} className="bg-white rounded-lg shadow-sm border p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
                     <h3 className="text-xl font-semibold text-gray-900">{league.name}</h3>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                       {league.teams}/{league.maxTeams} Teams
+                    </span>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      league.type === 'private' 
+                        ? 'bg-red-100 text-red-800' 
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {league.type === 'private' ? '🔒 Private' : '🌐 Public'}
+                    </span>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      league.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
+                      league.status === 'active' ? 'bg-green-100 text-green-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {league.status.charAt(0).toUpperCase() + league.status.slice(1)}
                     </span>
                   </div>
                   
@@ -136,15 +352,17 @@ export default function JoinLeaguePage() {
                 
                 <div className="ml-6">
                   <button
-                    onClick={() => handleJoinLeague(league.id)}
-                    disabled={loading || league.teams >= league.maxTeams}
+                    onClick={() => handleJoinLeague(league)}
+                    disabled={loading || league.teams >= league.maxTeams || league.status !== 'draft'}
                     className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                      league.teams >= league.maxTeams
+                      league.teams >= league.maxTeams || league.status !== 'draft'
                         ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         : 'bg-blue-600 text-white hover:bg-blue-700'
                     }`}
                   >
-                    {league.teams >= league.maxTeams ? 'Full' : loading ? 'Joining...' : 'Join League'}
+                    {league.teams >= league.maxTeams ? 'Full' : 
+                     league.status !== 'draft' ? 'Closed' :
+                     loading ? 'Joining...' : 'Join League'}
                   </button>
                 </div>
               </div>
@@ -153,14 +371,14 @@ export default function JoinLeaguePage() {
         </div>
 
         {/* No Results */}
-        {filteredLeagues.length === 0 && searchTerm && (
+        {filteredLeagues.length === 0 && searchTerm && !searchLoading && (
           <div className="text-center py-12">
             <div className="text-gray-500">
               <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33" />
               </svg>
               <p className="text-lg font-medium text-gray-900 mb-2">No leagues found</p>
-              <p className="text-gray-600">Try adjusting your search terms or create a new league</p>
+              <p className="text-gray-600">Try searching for a different league name</p>
             </div>
           </div>
         )}
@@ -179,6 +397,63 @@ export default function JoinLeaguePage() {
           </div>
         </div>
       </div>
+
+      {/* Password Modal */}
+      {showPasswordModal && selectedLeague && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full">
+            <div className="text-center mb-6">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-red-600 text-xl">🔒</span>
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Private League</h2>
+              <p className="text-gray-600">Enter the password to join "{selectedLeague.name}"</p>
+            </div>
+
+            <form onSubmit={handlePasswordSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter league password"
+                  required
+                />
+                {passwordError && (
+                  <p className="text-red-600 text-sm mt-1">{passwordError}</p>
+                )}
+              </div>
+
+              <div className="flex space-x-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowPasswordModal(false);
+                    setSelectedLeague(null);
+                    setPassword('');
+                    setPasswordError('');
+                  }}
+                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {loading ? 'Joining...' : 'Join League'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

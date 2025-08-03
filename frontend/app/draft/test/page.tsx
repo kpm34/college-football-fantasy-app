@@ -107,9 +107,9 @@ export default function DraftTestPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white p-8">
+    <div className="min-h-screen bg-gray-50 text-gray-900 p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold chrome-text mb-8">Draft Components Test</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Draft Components Test</h1>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* Draft Order */}
@@ -140,30 +140,30 @@ export default function DraftTestPage() {
         </div>
 
         {/* Test Controls */}
-        <div className="glass-card p-6 rounded-xl">
-          <h3 className="text-xl font-bold chrome-text mb-4">Test Controls</h3>
+        <div className="bg-white p-6 rounded-xl shadow-sm border">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Test Controls</h3>
           <div className="flex flex-wrap gap-4">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="chrome-button px-6 py-3 rounded-lg"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
             >
               Open Pick Modal
             </button>
             <button
               onClick={() => setTimeRemaining(prev => Math.max(0, prev - 10))}
-              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg"
+              className="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg"
             >
               -10s Timer
             </button>
             <button
               onClick={() => setIsUserTurn(!isUserTurn)}
-              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg"
+              className="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg"
             >
               Toggle Turn
             </button>
             <button
               onClick={() => setTimeRemaining(120)}
-              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg"
+              className="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg"
             >
               Reset Timer
             </button>

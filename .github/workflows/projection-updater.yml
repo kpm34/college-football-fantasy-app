@@ -1,0 +1,54 @@
+name: Projection Updater
+
+on:
+  schedule:
+    # Run every 12 hours at 5 AM and 5 PM UTC
+    - cron: '0 5,17 * * *'
+  workflow_dispatch: # Allow manual triggers
+
+jobs:
+  update-projections:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        pip install requests
+        pip install python-dotenv
+        
+    - name: Run projection updater
+      env:
+        CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+        ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        APPWRITE_ENDPOINT: ${{ secrets.APPWRITE_ENDPOINT }}
+        APPWRITE_PROJECT_ID: ${{ secrets.APPWRITE_PROJECT_ID }}
+        APPWRITE_API_KEY: ${{ secrets.APPWRITE_API_KEY }}
+      run: |
+        python src/scripts/projection_updater.py
+        
+    - name: Run data collector
+      env:
+        CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+        APPWRITE_ENDPOINT: ${{ secrets.APPWRITE_ENDPOINT }}
+        APPWRITE_PROJECT_ID: ${{ secrets.APPWRITE_PROJECT_ID }}
+        APPWRITE_API_KEY: ${{ secrets.APPWRITE_API_KEY }}
+      run: |
+        python src/scripts/data_collector.py
+        
+    - name: Notify on success
+      if: success()
+      run: |
+        echo "✅ Projection update completed successfully at $(date)"
+        
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "❌ Projection update failed at $(date)" 

@@ -78,7 +78,7 @@ In Vercel Dashboard:
 - [ ] **"Start a League" button** works → `/league/create`
 - [ ] **"Join League" button** works → `/league/join`
 - [ ] **"Mock Draft" button** works → `/draft/mock`
-- [ ] **Animation playground** works → `/animation-playground`
+- [x] **Animation playground** removed (no longer needed)
 
 ### **API Tests**
 - [ ] **Health check** → `/api/health`

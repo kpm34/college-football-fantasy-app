@@ -62,6 +62,62 @@
       ]
     },
     {
+      "name": "college_players",
+      "id": "college_players",
+      "permissions": ["read(\"any\")"],
+      "attributes": [
+        {"key": "espnId", "type": "string", "size": 20, "required": false},
+        {"key": "cfbdId", "type": "string", "size": 20, "required": false},
+        {"key": "firstName", "type": "string", "size": 50, "required": true},
+        {"key": "lastName", "type": "string", "size": 50, "required": true},
+        {"key": "displayName", "type": "string", "size": 100, "required": true},
+        {"key": "jersey", "type": "string", "size": 10, "required": false},
+        {"key": "position", "type": "string", "size": 20, "required": true},
+        {"key": "fantasyPosition", "type": "string", "size": 10, "required": true},
+        {"key": "team", "type": "string", "size": 100, "required": true},
+        {"key": "teamId", "type": "string", "size": 20, "required": true},
+        {"key": "conference", "type": "string", "size": 20, "required": true},
+        {"key": "height", "type": "string", "size": 10, "required": false},
+        {"key": "weight", "type": "integer", "required": false},
+        {"key": "class", "type": "string", "size": 20, "required": false},
+        {"key": "depthChartPosition", "type": "integer", "required": false},
+        {"key": "isStarter", "type": "boolean", "required": false},
+        {"key": "eligibleForWeek", "type": "boolean", "required": false, "default": true},
+        {"key": "injuryStatus", "type": "string", "size": 20, "required": false},
+        {"key": "injuryNotes", "type": "string", "size": 500, "required": false},
+        {"key": "seasonStats", "type": "string", "size": 5000, "required": false},
+        {"key": "weeklyProjections", "type": "string", "size": 10000, "required": false},
+        {"key": "fantasyPoints", "type": "float", "required": false, "default": 0},
+        {"key": "lastUpdated", "type": "datetime", "required": false},
+        {"key": "dataSource", "type": "string", "size": 50, "required": false}
+      ],
+      "indexes": [
+        {"key": "team_index", "attributes": ["team"], "type": "key"},
+        {"key": "position_index", "attributes": ["fantasyPosition"], "type": "key"},
+        {"key": "conference_index", "attributes": ["conference"], "type": "key"},
+        {"key": "fantasy_points_index", "attributes": ["fantasyPoints"], "type": "key"},
+        {"key": "eligible_index", "attributes": ["eligibleForWeek"], "type": "key"}
+      ]
+    },
+    {
+      "name": "player_stats",
+      "id": "player_stats",
+      "permissions": ["read(\"any\")"],
+      "attributes": [
+        {"key": "playerId", "type": "string", "size": 36, "required": true},
+        {"key": "season", "type": "integer", "required": true},
+        {"key": "week", "type": "integer", "required": true},
+        {"key": "opponent", "type": "string", "size": 100, "required": true},
+        {"key": "stats", "type": "string", "size": 5000, "required": true},
+        {"key": "fantasyPoints", "type": "float", "required": true},
+        {"key": "lastUpdated", "type": "datetime", "required": false}
+      ],
+      "indexes": [
+        {"key": "player_season_week", "attributes": ["playerId", "season", "week"], "type": "key"},
+        {"key": "fantasy_points_index", "attributes": ["fantasyPoints"], "type": "key"}
+      ]
+    },
+    {
       "name": "leagues",
       "id": "leagues",
       "permissions": ["read(\"users\")", "create(\"users\")"],

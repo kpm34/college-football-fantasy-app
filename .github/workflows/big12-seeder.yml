@@ -1,0 +1,52 @@
+name: Big 12 Draft Board Seeder
+
+on:
+  schedule:
+    # Run once at script start (manual trigger for now)
+    - cron: '0 0 1 8 *'  # August 1st at midnight UTC
+  workflow_dispatch: # Allow manual triggers
+  push:
+    paths:
+      - 'src/scripts/seed_big12_draftboard.py'
+
+jobs:
+  seed-big12-draftboard:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        pip install requests
+        pip install python-dotenv
+        pip install httpx
+        
+    - name: Run Big 12 draft board seeder
+      env:
+        CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+        ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        ROTOWIRE_API_KEY: ${{ secrets.ROTOWIRE_API_KEY }}
+        APPWRITE_ENDPOINT: ${{ secrets.APPWRITE_ENDPOINT }}
+        APPWRITE_PROJECT_ID: ${{ secrets.APPWRITE_PROJECT_ID }}
+        APPWRITE_API_KEY: ${{ secrets.APPWRITE_API_KEY }}
+      run: |
+        python src/scripts/seed_big12_draftboard.py
+        
+    - name: Notify on success
+      if: success()
+      run: |
+        echo "✅ Big 12 draft board seeding completed successfully at $(date)"
+        echo "📊 Processed 16 Big 12 teams with ensemble data sources"
+        
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "❌ Big 12 draft board seeding failed at $(date)"
+        echo "🔍 Check logs for data source errors or API issues" 

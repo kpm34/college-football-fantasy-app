@@ -10,15 +10,11 @@ const OFFLINE_CACHE = 'cf-fantasy-offline-v1.0.0';
 // Files to cache immediately
 const STATIC_FILES = [
   '/',
-  '/index.html',
   '/league/create',
   '/league/join',
-  '/draft/mock',
-  '/draft/snake',
-  '/draft/auction',
-  '/league/start-league.html',
-  '/league/join-league.html',
-  '/league/mock-draft.html',
+  '/draft/test',
+  '/scoreboard',
+  '/standings',
   '/api/games',
   '/api/rankings',
   '/api/teams',

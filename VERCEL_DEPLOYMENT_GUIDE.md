@@ -13,7 +13,7 @@ Your College Football Fantasy App is now configured for deployment on Vercel at:
 - **"Start a League"** → `https://college-football-fantasy-app.vercel.app/league/create`
 - **"Join League"** → `https://college-football-fantasy-app.vercel.app/league/join`
 - **"🎯 Mock Draft Now"** → `https://college-football-fantasy-app.vercel.app/draft/mock`
-- **"✨ Animation Playground"** → `https://college-football-fantasy-app.vercel.app/animation-playground`
+- **"🎯 Mock Draft"** → `https://college-football-fantasy-app.vercel.app/draft/test`
 
 #### **API Endpoints:**
 - **Base URL**: `https://college-football-fantasy-app.vercel.app/api`

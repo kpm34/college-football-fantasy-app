@@ -30,7 +30,8 @@ export const COLLECTIONS = {
   PLAYERS: 'players',
   AUCTION_SESSIONS: 'auction_sessions',
   AUCTION_BIDS: 'auction_bids',
-  TEAM_BUDGETS: 'team_budgets'
+  TEAM_BUDGETS: 'team_budgets',
+  ACTIVITY_LOG: 'activity_log'
 };
 
 // Realtime channels
