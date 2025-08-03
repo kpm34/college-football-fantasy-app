@@ -10,8 +10,9 @@
     "update-projections": "python3 src/scripts/projection_updater.py"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "node-appwrite": "^14.1.0",
-    "dotenv": "^16.4.5"
+    "rotowire-api-client": "^1.0.6"
   },
   "devDependencies": {
     "@types/node": "^20.14.11",

@@ -36,6 +36,7 @@ logger = logging.getLogger(__name__)
 
 # Configuration
 CFBD_API_KEY = os.getenv('CFBD_API_KEY', '')
+CFBD_API_KEY_BACKUP = os.getenv('CFBD_API_KEY_BACKUP', '')
 ODDS_API_KEY = os.getenv('ODDS_API_KEY', '')
 ROTOWIRE_API_KEY = os.getenv('ROTOWIRE_API_KEY', '')
 WEATHER_API_KEY = os.getenv('WEATHER_API_KEY', '')
@@ -121,21 +122,35 @@ class EnhancedBig12DraftBoardSeeder:
         )
     
     async def cfbd_request(self, path: str, **params) -> List[Dict]:
-        """Make request to CollegeFootballData API"""
+        """Make request to CollegeFootballData API with fallback"""
         url = f"https://api.collegefootballdata.com/{path}"
-        headers = {}
-        if CFBD_API_KEY:
-            headers['Authorization'] = f'Bearer {CFBD_API_KEY}'
+        
+        # Try primary key first
+        for api_key in [CFBD_API_KEY, CFBD_API_KEY_BACKUP]:
+            if not api_key:
+                continue
+                
+            headers = {'Authorization': f'Bearer {api_key}'}
             
-        try:
-            # Add small delay to avoid rate limiting
-            time.sleep(0.5)
-            response = self.session.get(url, params=params, headers=headers, timeout=30)
-            response.raise_for_status()
-            return response.json()
-        except requests.exceptions.RequestException as e:
-            logger.error(f"CFBD API error for {path}: {e}")
-            return []
+            try:
+                # Add small delay to avoid rate limiting
+                time.sleep(0.5)
+                response = self.session.get(url, params=params, headers=headers, timeout=30)
+                response.raise_for_status()
+                return response.json()
+            except requests.exceptions.HTTPError as e:
+                if e.response.status_code == 401:
+                    logger.warning(f"Authentication failed with key ending in ...{api_key[-4:]}, trying backup")
+                    continue
+                else:
+                    logger.error(f"CFBD API HTTP error for {path}: {e}")
+                    return []
+            except requests.exceptions.RequestException as e:
+                logger.error(f"CFBD API error for {path}: {e}")
+                return []
+        
+        logger.error(f"All CFBD API keys failed for {path}")
+        return []
     
     async def get_team_pace_data(self, team: str, year: int = 2024) -> Dict:
         """Get team's historical pace data (plays per game)"""

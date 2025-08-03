@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { Query } from 'node-appwrite';
 
 export async function GET(
   request: NextRequest,
@@ -8,8 +10,47 @@ export async function GET(
     const resolvedParams = await params;
     const leagueId = resolvedParams.leagueId;
     
-    // For now, return sample draft data
-    // In production, this would fetch from Appwrite
+    // Try to get real draft data from Appwrite
+    try {
+      // Get league/draft info
+      const league = await databases.getDocument(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUES,
+        leagueId
+      );
+      
+      // Get draft picks for this league
+      const draftPicks = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.DRAFT_PICKS || 'draft_picks',
+        [
+          Query.equal('leagueId', leagueId),
+          Query.orderDesc('pickNumber')
+        ]
+      );
+      
+      // Calculate current pick
+      const currentPick = draftPicks.total + 1;
+      const totalPicks = (league.maxTeams || 12) * 5; // 5 players per team
+      
+      return NextResponse.json({
+        leagueId: leagueId,
+        currentPick: currentPick,
+        totalPicks: totalPicks,
+        draftOrder: league.draftOrder || [],
+        currentUser: league.draftOrder?.[currentPick % league.draftOrder.length],
+        draftedPlayers: draftPicks.documents.map((pick: any) => pick.playerId),
+        draftStatus: league.status || 'pre-draft',
+        timeRemaining: 60,
+        lastUpdated: new Date().toISOString()
+      });
+      
+    } catch (error) {
+      console.error('Error fetching from Appwrite:', error);
+      // Fall back to sample data
+    }
+    
+    // Fallback sample data
     const sampleDraftData = {
       leagueId: leagueId,
       currentPick: 1,

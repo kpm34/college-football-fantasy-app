@@ -20,7 +20,10 @@ export const COLLECTIONS = {
   RANKINGS: 'rankings',
   LEAGUES: 'leagues',
   ROSTERS: 'rosters',
-  LINEUPS: 'lineups'
+  LINEUPS: 'lineups',
+  DRAFT_PICKS: 'draft_picks',
+  PLAYERS: 'players',
+  DRAFTS: 'drafts'
 };
 
 // Helper function to get draftable players
