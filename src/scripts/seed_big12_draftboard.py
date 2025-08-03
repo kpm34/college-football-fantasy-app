@@ -123,11 +123,14 @@ class EnhancedBig12DraftBoardSeeder:
     async def cfbd_request(self, path: str, **params) -> List[Dict]:
         """Make request to CollegeFootballData API"""
         url = f"https://api.collegefootballdata.com/{path}"
+        headers = {}
         if CFBD_API_KEY:
-            params['key'] = CFBD_API_KEY
+            headers['Authorization'] = f'Bearer {CFBD_API_KEY}'
             
         try:
-            response = self.session.get(url, params=params, timeout=30)
+            # Add small delay to avoid rate limiting
+            time.sleep(0.5)
+            response = self.session.get(url, params=params, headers=headers, timeout=30)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
@@ -668,8 +671,8 @@ class EnhancedBig12DraftBoardSeeder:
         # Build player lists
         picks = await self.build_player_lists(team)
         
-        # Get team schedule for 2025
-        schedule = await self.cfbd_request("games", year=2025, team=team, seasonType="regular")
+        # Get team schedule for 2024
+        schedule = await self.cfbd_request("games", year=2024, team=team, seasonType="regular")
         schedule = sorted(schedule, key=lambda x: x["week"])[:12]  # First 12 weeks
         
         for position, player_list in picks.items():
@@ -718,7 +721,7 @@ class EnhancedBig12DraftBoardSeeder:
             "source_sha": season_hash,
             "teams_processed": len(BIG12_TEAMS),
             "conference": "Big 12",
-            "season": 2025,
+            "season": 2024,
             "data_sources": ["CFBD", "Vegas Odds", "SP+ Metrics", "Injury Feeds", "Weather Data", "Depth Charts", "Coaching Changes"],
             "ensemble_weights": ENSEMBLE_WEIGHTS,
             "weather_impacts": WEATHER_IMPACTS

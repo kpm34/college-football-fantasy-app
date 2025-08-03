@@ -1,12 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getDraftablePlayers } from '@/lib/appwrite-server';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const week = parseInt(searchParams.get('week') || '1');
     
-    // For now, return sample data since the service isn't in the frontend
-    // In production, this would call the actual service
+    // Try to get real data from Appwrite first
+    try {
+      const data = await getDraftablePlayers(week);
+      
+      // If we have real data, return it
+      if (data.players.length > 0) {
+        return NextResponse.json(data);
+      }
+    } catch (error) {
+      console.error('Error fetching from Appwrite:', error);
+      // Fall back to sample data if Appwrite fails
+    }
+    
+    // Fallback to sample data if no real data or error
     const samplePlayers = [
       {
         id: '1',

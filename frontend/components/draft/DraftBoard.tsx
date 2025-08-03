@@ -1,10 +1,14 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { DraftPick, League } from '@/types/draft';
+import { SparklesIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 interface DraftBoardProps {
   picks: DraftPick[];
   league: League;
+  currentPickNumber?: number;
+  currentUserId?: string;
 }
 
 const POSITION_COLORS = {
@@ -16,7 +20,45 @@ const POSITION_COLORS = {
   DEF: 'bg-red-500'
 };
 
-export default function DraftBoard({ picks, league }: DraftBoardProps) {
+const POSITION_GRADIENTS = {
+  QB: 'from-blue-500/20 to-blue-600/20',
+  RB: 'from-green-500/20 to-green-600/20',
+  WR: 'from-purple-500/20 to-purple-600/20',
+  TE: 'from-orange-500/20 to-orange-600/20',
+  K: 'from-yellow-500/20 to-yellow-600/20',
+  DEF: 'from-red-500/20 to-red-600/20'
+};
+
+export default function DraftBoard({ picks, league, currentPickNumber = 0, currentUserId }: DraftBoardProps) {
+  const [recentPicks, setRecentPicks] = useState<Set<number>>(new Set());
+  const [animatingPicks, setAnimatingPicks] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    // Track recent picks for animation
+    const latestPick = picks[picks.length - 1];
+    if (latestPick) {
+      setRecentPicks(prev => new Set(prev).add(latestPick.pickNumber));
+      setAnimatingPicks(prev => new Set(prev).add(latestPick.pickNumber));
+      
+      // Remove from animating after animation completes
+      setTimeout(() => {
+        setAnimatingPicks(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(latestPick.pickNumber);
+          return newSet;
+        });
+      }, 1000);
+
+      // Remove from recent after 5 seconds
+      setTimeout(() => {
+        setRecentPicks(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(latestPick.pickNumber);
+          return newSet;
+        });
+      }, 5000);
+    }
+  }, [picks]);
   const getPicksByRound = () => {
     const picksByRound: DraftPick[][] = [];
     const maxRounds = Math.ceil(league.settings.rosterSize / league.members.length);
@@ -38,10 +80,25 @@ export default function DraftBoard({ picks, league }: DraftBoardProps) {
   };
 
   const getPickForPosition = (round: number, position: number) => {
-    const roundPicks = picks.filter(pick => pick.round === round);
     const orderForRound = getDraftOrderForRound(round);
     const userId = orderForRound[position];
-    return roundPicks.find(pick => pick.userId === userId);
+    
+    // Calculate the pick number for this position
+    const pickNumber = round === 1 
+      ? position + 1
+      : round % 2 === 0 
+        ? (round - 1) * league.members.length + (league.members.length - position)
+        : (round - 1) * league.members.length + position + 1;
+    
+    return picks.find(pick => pick.pickNumber === pickNumber);
+  };
+
+  const isCurrentPick = (pickNumber: number) => {
+    return currentPickNumber === pickNumber;
+  };
+
+  const isUserPick = (userId: string) => {
+    return currentUserId === userId;
   };
 
   const formatTime = (timestamp: string) => {
@@ -70,7 +127,7 @@ export default function DraftBoard({ picks, league }: DraftBoardProps) {
             </tr>
           </thead>
           <tbody>
-            {picksByRound.map((roundPicks, roundIndex) => {
+            {picksByRound.map((_, roundIndex) => {
               const round = roundIndex + 1;
               const orderForRound = getDraftOrderForRound(round);
               const isSerpentine = round % 2 === 0;
@@ -81,39 +138,86 @@ export default function DraftBoard({ picks, league }: DraftBoardProps) {
                     <div className="text-center">
                       <div className="text-lg font-bold text-white">{round}</div>
                       <div className="text-xs text-slate-400">
-                        {isSerpentine ? 'Serpentine' : 'Standard'}
+                        {isSerpentine ? '← →' : '→'}
                       </div>
                     </div>
                   </td>
                   {orderForRound.map((userId, position) => {
                     const pick = getPickForPosition(round, position);
+                    const pickNumber = round === 1 
+                      ? position + 1
+                      : round % 2 === 0 
+                        ? (round - 1) * league.members.length + (league.members.length - position)
+                        : (round - 1) * league.members.length + position + 1;
+                    
+                    const isRecent = pick && recentPicks.has(pick.pickNumber);
+                    const isAnimating = pick && animatingPicks.has(pick.pickNumber);
+                    const isCurrent = isCurrentPick(pickNumber);
+                    const isUser = isUserPick(userId);
                     
                     return (
-                      <td key={`${round}-${userId}`} className="p-3">
+                      <td key={`${round}-${userId}`} className="p-3 relative">
                         {pick ? (
-                          <div className="glass-card p-3 rounded-lg border border-slate-600">
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="flex-1">
-                                <div className="font-semibold text-white text-sm">
-                                  {pick.playerName}
-                                </div>
-                                <div className="text-xs text-slate-400">
-                                  {pick.playerTeam}
-                                </div>
+                          <div className={`
+                            relative rounded-lg overflow-hidden transition-all duration-500
+                            ${isAnimating ? 'scale-105 animate-pulse' : ''}
+                            ${isRecent ? 'ring-2 ring-blue-500 ring-opacity-50' : ''}
+                          `}>
+                            {/* Background gradient for position */}
+                            <div className={`absolute inset-0 bg-gradient-to-br ${
+                              POSITION_GRADIENTS[pick.playerPosition as keyof typeof POSITION_GRADIENTS]
+                            } opacity-30`} />
+                            
+                            {/* Recent pick indicator */}
+                            {isRecent && (
+                              <div className="absolute top-1 right-1 z-10">
+                                <SparklesIcon className="w-4 h-4 text-yellow-400 animate-pulse" />
                               </div>
-                              <span className={`px-2 py-1 rounded text-xs font-medium text-white ${POSITION_COLORS[pick.playerPosition as keyof typeof POSITION_COLORS]}`}>
-                                {pick.playerPosition}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between text-xs text-slate-400">
-                              <span>Pick #{pick.pickNumber}</span>
-                              <span>{formatTime(pick.timestamp)}</span>
+                            )}
+                            
+                            <div className="relative glass-card p-3 border border-slate-600">
+                              <div className="flex items-start justify-between mb-2">
+                                <div className="flex-1">
+                                  <div className="font-semibold text-white text-sm">
+                                    {pick.playerName}
+                                  </div>
+                                  <div className="text-xs text-slate-400">
+                                    {pick.playerTeam}
+                                  </div>
+                                </div>
+                                <span className={`px-2 py-1 rounded text-xs font-medium text-white ${
+                                  POSITION_COLORS[pick.playerPosition as keyof typeof POSITION_COLORS]
+                                }`}>
+                                  {pick.playerPosition}
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between text-xs text-slate-400">
+                                <span>Pick #{pick.pickNumber}</span>
+                                <span>{formatTime(pick.timestamp)}</span>
+                              </div>
                             </div>
                           </div>
                         ) : (
-                          <div className="p-3 rounded-lg border-2 border-dashed border-slate-600">
-                            <div className="text-center text-slate-500 text-sm">
-                              Waiting...
+                          <div className={`
+                            relative p-3 rounded-lg border-2 transition-all duration-300
+                            ${isCurrent 
+                              ? 'border-blue-500 bg-blue-500/10 animate-pulse' 
+                              : 'border-dashed border-slate-600 hover:border-slate-500'
+                            }
+                            ${isUser && isCurrent ? 'ring-2 ring-blue-500 ring-opacity-50' : ''}
+                          `}>
+                            {isCurrent && (
+                              <div className="absolute top-1 right-1">
+                                <ClockIcon className="w-4 h-4 text-blue-400 animate-spin" />
+                              </div>
+                            )}
+                            <div className="text-center text-sm">
+                              <div className={`${isCurrent ? 'text-blue-400 font-medium' : 'text-slate-500'}`}>
+                                {isCurrent ? 'On the Clock' : 'Pick #' + pickNumber}
+                              </div>
+                              {isUser && isCurrent && (
+                                <div className="text-xs text-blue-400 mt-1">Your Pick!</div>
+                              )}
                             </div>
                           </div>
                         )}
