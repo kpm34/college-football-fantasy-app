@@ -15,6 +15,8 @@ export default function CreateLeaguePage() {
   const [loading, setLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [inviteLink, setInviteLink] = useState('https://college-football-fantasy-app.vercel.app/league/123/join');
+  const [createdLeagueId, setCreatedLeagueId] = useState<string>('');
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,6 +24,14 @@ export default function CreateLeaguePage() {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleInputFocus = () => {
+    setIsInputFocused(true);
+  };
+
+  const handleInputBlur = () => {
+    setIsInputFocused(false);
   };
 
   const handleTeamCountSelect = (count: number) => {
@@ -151,9 +161,12 @@ export default function CreateLeaguePage() {
                 name="leagueName"
                 value={formData.leagueName}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg text-gray-900 placeholder-gray-400"
-                placeholder="Dawn League"
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg text-black placeholder-gray-500 bg-white"
+                placeholder={isInputFocused ? "" : "Enter your league name..."}
                 required
+                style={{ color: '#000000' }}
               />
             </div>
 

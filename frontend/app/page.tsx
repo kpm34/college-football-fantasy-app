@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import ConferenceShowcase from '@/components/ConferenceShowcase';
 
 export default function Home() {
   const router = useRouter();
@@ -28,6 +29,9 @@ export default function Home() {
           </button>
         </div>
       </div>
+      
+      {/* Conference Showcase */}
+      <ConferenceShowcase />
     </main>
   );
 }
