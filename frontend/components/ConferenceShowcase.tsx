@@ -142,23 +142,29 @@ export default function ConferenceShowcase() {
                 { name: "Oregon", abbreviation: "ORE", mascot: "Ducks" },
                 { name: "USC", abbreviation: "USC", mascot: "Trojans" },
                 { name: "Wisconsin", abbreviation: "WIS", mascot: "Badgers" }
-              ].map((team, index) => (
-                <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer group">
-                  <div 
-                    className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
-                    style={{ 
-                      backgroundColor: getTeamColors(team.name).primary,
-                      border: `2px solid ${getTeamColors(team.name).secondary}`
-                    }}
-                  >
-                    <span className="font-bold text-xs" style={{ color: getTeamColors(team.name).secondary }}>
-                      {team.abbreviation}
-                    </span>
+              ].map((team, index) => {
+                const colors = getTeamColors(team.name);
+                console.log(`Team: ${team.name}, Colors:`, colors);
+                return (
+                  <div key={index} className="bg-white/10 rounded-lg p-4 text-center hover:bg-white/20 transition-colors cursor-pointer group">
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                      style={{ 
+                        backgroundColor: colors.primary,
+                        borderColor: colors.secondary,
+                        borderWidth: '2px',
+                        borderStyle: 'solid'
+                      }}
+                    >
+                      <span className="font-bold text-xs" style={{ color: colors.secondary }}>
+                        {team.abbreviation}
+                      </span>
+                    </div>
+                    <div className="text-sm font-semibold">{team.name}</div>
+                    <div className="text-xs text-gray-400">{team.mascot}</div>
                   </div>
-                  <div className="text-sm font-semibold">{team.name}</div>
-                  <div className="text-xs text-gray-400">{team.mascot}</div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="mt-6 text-center">
               <button className="text-blue-400 hover:text-blue-300 text-sm">

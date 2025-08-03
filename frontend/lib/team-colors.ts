@@ -1,6 +1,6 @@
 // Official team colors for all Power 4 Conference teams
 
-export const TEAM_COLORS = {
+export const TEAM_COLORS: Record<string, { primary: string; secondary: string }> = {
   // Big Ten Conference
   'Michigan': { primary: '#00274C', secondary: '#FFCB05' },
   'Ohio State': { primary: '#BB0000', secondary: '#666666' },
@@ -81,22 +81,69 @@ export const TEAM_COLORS = {
 // Helper function to get team colors
 export function getTeamColors(teamName: string): { primary: string; secondary: string } {
   if (!teamName) {
+    console.log('No team name provided');
     return { primary: '#666666', secondary: '#FFFFFF' };
   }
   
+  console.log('Getting colors for:', teamName);
+  
   // Check for exact match first
   if (TEAM_COLORS[teamName]) {
+    console.log('Exact match found:', teamName);
     return TEAM_COLORS[teamName];
   }
   
   // Handle various team name formats
   const searchName = teamName.trim();
   
+  // Extract just the school name (first part before mascot)
+  // e.g., "Michigan Wolverines" -> "Michigan"
+  const schoolName = searchName.split(' ')[0];
+  
+  // Check for school name match
+  if (TEAM_COLORS[schoolName]) {
+    return TEAM_COLORS[schoolName];
+  }
+  
   // Try to find by checking if the key starts with the search name
   for (const [key, colors] of Object.entries(TEAM_COLORS)) {
     if (key.toLowerCase().includes(searchName.toLowerCase()) || 
-        searchName.toLowerCase().includes(key.toLowerCase())) {
+        searchName.toLowerCase().includes(key.toLowerCase()) ||
+        key.toLowerCase() === schoolName.toLowerCase()) {
       return colors;
+    }
+  }
+  
+  // Special cases for team names that need special handling
+  const teamNameMappings: Record<string, string> = {
+    // Full names to proper keys
+    'Ohio State Buckeyes': 'Ohio State',
+    'Penn State Nittany Lions': 'Penn State',
+    'Michigan State Spartans': 'Michigan State',
+    'Oklahoma State Cowboys': 'Oklahoma State',
+    'Kansas State Wildcats': 'Kansas State',
+    'Iowa State Cyclones': 'Iowa State',
+    'Arizona State Sun Devils': 'Arizona State',
+    'Florida State Seminoles': 'Florida State',
+    'North Carolina Tar Heels': 'North Carolina',
+    'NC State Wolfpack': 'NC State',
+    'Virginia Tech Hokies': 'Virginia Tech',
+    'Texas A&M Aggies': 'Texas A&M',
+    'Ole Miss Rebels': 'Ole Miss',
+    'Mississippi State Bulldogs': 'Mississippi State',
+    'West Virginia Mountaineers': 'West Virginia',
+    'Texas Tech Red Raiders': 'Texas Tech',
+    'Boston College Eagles': 'Boston College',
+    'Georgia Tech Yellow Jackets': 'Georgia Tech',
+    'Wake Forest Demon Deacons': 'Wake Forest',
+    'Notre Dame Fighting Irish': 'Notre Dame',
+  };
+  
+  // Check full name mappings
+  if (teamNameMappings[searchName]) {
+    const mappedName = teamNameMappings[searchName];
+    if (TEAM_COLORS[mappedName]) {
+      return TEAM_COLORS[mappedName];
     }
   }
   
@@ -132,5 +179,6 @@ export function getTeamColors(teamName: string): { primary: string; secondary: s
   }
   
   // Default colors if team not found
+  console.log('No match found for:', teamName, '- using default colors');
   return { primary: '#666666', secondary: '#FFFFFF' };
 }
