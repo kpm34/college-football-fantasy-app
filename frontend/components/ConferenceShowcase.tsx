@@ -3,20 +3,23 @@
 import { useState, useEffect } from 'react';
 
 interface ConferenceTeam {
-  name: string;
+  name?: string;
+  school?: string;
   mascot: string;
   abbreviation: string;
   conference: string;
-  colors: string[];
-  division: string;
-  location: string;
-  stadium: string;
-  capacity: number;
-  coach: string;
-  established: number;
-  conference_id: string;
-  power_4: boolean;
-  created_at: string;
+  colors?: string[];
+  color?: string;
+  altColor?: string;
+  division?: string;
+  location?: string;
+  stadium?: string;
+  capacity?: number;
+  coach?: string;
+  established?: number;
+  conference_id?: string;
+  power_4?: boolean;
+  created_at?: string;
 }
 
 interface Player {
@@ -52,7 +55,7 @@ export default function ConferenceShowcase() {
       const big12Response = await fetch('/api/big12?type=teams');
       if (big12Response.ok) {
         const big12Data = await big12Response.json();
-        setBig12Teams(big12Data.data || []);
+        setBig12Teams(big12Data.teams || big12Data.data || []);
       }
 
       // Load top players from both conferences
@@ -68,7 +71,7 @@ export default function ConferenceShowcase() {
       
       if (big12PlayersResponse.ok) {
         const big12PlayersData = await big12PlayersResponse.json();
-        allPlayers = [...allPlayers, ...(big12PlayersData.data || [])];
+        allPlayers = [...allPlayers, ...(big12PlayersData.players || big12PlayersData.data || [])];
       }
       
       // Sort by rating and take top 8
@@ -113,7 +116,7 @@ export default function ConferenceShowcase() {
                   <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
                     <span className="text-white font-bold text-sm">{team.abbreviation}</span>
                   </div>
-                  <div className="text-sm font-semibold">{team.name.split(' ')[0]}</div>
+                  <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
                   <div className="text-xs text-gray-400">{team.mascot}</div>
                 </div>
               ))}
@@ -139,7 +142,7 @@ export default function ConferenceShowcase() {
                   <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
                     <span className="text-white font-bold text-sm">{team.abbreviation}</span>
                   </div>
-                  <div className="text-sm font-semibold">{team.name.split(' ')[0]}</div>
+                  <div className="text-sm font-semibold">{(team.name || team.school || '').split(' ')[0]}</div>
                   <div className="text-xs text-gray-400">{team.mascot}</div>
                 </div>
               ))}
