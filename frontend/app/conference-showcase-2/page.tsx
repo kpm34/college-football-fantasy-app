@@ -75,7 +75,6 @@ export default function ConferenceShowcasePage2() {
     { name: "Baylor Bears", abbreviation: "BAYL", mascot: "Bears" },
     { name: "Texas Tech Red Raiders", abbreviation: "TTU", mascot: "Red Raiders" },
     { name: "West Virginia Mountaineers", abbreviation: "WVU", mascot: "Mountaineers" },
-    { name: "Iowa State Cyclones", abbreviation: "ISU", mascot: "Cyclones" },
     { name: "Cincinnati Bearcats", abbreviation: "CIN", mascot: "Bearcats" },
     { name: "Houston Cougars", abbreviation: "HOU", mascot: "Cougars" },
     { name: "UCF Knights", abbreviation: "UCF", mascot: "Knights" },

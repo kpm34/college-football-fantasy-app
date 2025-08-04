@@ -47,10 +47,10 @@ export const TEAM_COLORS: Record<string, { primary: string; secondary: string }>
   'Baylor': { primary: '#154734', secondary: '#FFBC35' },
   'Texas Tech': { primary: '#CC0000', secondary: '#000000' },
   'West Virginia': { primary: '#002855', secondary: '#EAAA00' },
-  'Iowa State': { primary: '#C8102E', secondary: '#FFC62F' }, // Cardinal and Gold
+  'Iowa State': { primary: '#C8102E', secondary: '#FFD700' }, // Cardinal and Gold
   'Cincinnati': { primary: '#E00122', secondary: '#000000' },
   'Houston': { primary: '#C8102E', secondary: '#FFFFFF' },
-  'UCF': { primary: '#FFC904', secondary: '#000000' },
+  'UCF': { primary: '#000000', secondary: '#FFC904' }, // Black and Gold
   'BYU': { primary: '#002E5D', secondary: '#FFFFFF' },
   'Colorado': { primary: '#CFB87C', secondary: '#000000' },
   'Arizona': { primary: '#CC0033', secondary: '#003366' },
@@ -59,7 +59,7 @@ export const TEAM_COLORS: Record<string, { primary: string; secondary: string }>
 
   // ACC Conference
   'Clemson': { primary: '#F56600', secondary: '#522D80' },
-  'Florida State': { primary: '#782F40', secondary: '#CEB888' }, // Garnet and Gold
+  'Florida State': { primary: '#782F40', secondary: '#FFD700' }, // Garnet and Gold
   'Miami': { primary: '#F47321', secondary: '#005030' },
   'North Carolina': { primary: '#7BAFD4', secondary: '#FFFFFF' },
   'NC State': { primary: '#CC0000', secondary: '#FFFFFF' },

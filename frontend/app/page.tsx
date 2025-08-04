@@ -18,21 +18,21 @@ export default function Home() {
           <div className="space-y-4">
             <button
               onClick={() => router.push('/league/create')}
-              className="cta-button bg-gradient-to-r from-[#E89A5C] to-[#D4834A] px-8 py-4 rounded-xl hover:scale-105 transition-transform shadow-lg backdrop-blur-sm hover:from-[#D4834A] hover:to-[#C47338]"
+              className="cta-button bg-[#E89A5C] px-8 py-4 rounded-xl hover:bg-[#D4834A] transition-colors shadow-lg backdrop-blur-sm text-white"
             >
               Start a League
             </button>
             <br />
             <button
               onClick={() => router.push('/league/join')}
-              className="cta-button bg-[#8091BB]/90 backdrop-blur-sm px-8 py-4 rounded-xl hover:bg-[#6B7CA6]/90 transition-colors shadow-lg text-white"
+              className="cta-button bg-[#8091BB] px-8 py-4 rounded-xl hover:bg-[#6B7CA6] transition-colors shadow-lg text-white"
             >
               Find Leagues
             </button>
             <br />
             <Link
               href="/conference-showcase"
-              className="cta-button inline-block bg-gradient-to-r from-[#D9BBA4] to-[#C4A58F] px-8 py-4 rounded-xl hover:scale-105 transition-transform shadow-lg backdrop-blur-sm hover:from-[#C4A58F] hover:to-[#AF9079] text-[#3A1220]"
+              className="cta-button inline-block bg-[#D9BBA4] px-8 py-4 rounded-xl hover:bg-[#C4A58F] transition-colors shadow-lg backdrop-blur-sm text-[#3A1220]"
             >
               View Power 4 Conferences
             </Link>
@@ -56,7 +56,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {/* Big Ten */}
             <Link href="/conference-showcase" className="group">
-              <div className="bg-gradient-to-r from-[#8091BB]/20 to-[#6B7CA6]/20 backdrop-blur-sm rounded-xl p-6 border border-[#8091BB]/30 hover:border-[#8091BB]/50 transition-all duration-300 group-hover:scale-105">
+              <div className="bg-[#8091BB]/20 backdrop-blur-sm rounded-xl p-6 border border-[#8091BB]/30 hover:border-[#8091BB]/50 transition-all duration-300 group-hover:scale-105">
                 <h3 className="team-name text-2xl text-[#8091BB] mb-2">Big Ten</h3>
                 <p className="stat-number text-[#D9BBA4] text-sm">18 Teams</p>
                 <p className="text-[#D9BBA4]/80 text-xs mt-2">Michigan, Ohio State, Penn State...</p>
@@ -65,7 +65,7 @@ export default function Home() {
 
             {/* SEC */}
             <Link href="/conference-showcase" className="group">
-              <div className="bg-gradient-to-r from-[#E89A5C]/20 to-[#D4834A]/20 backdrop-blur-sm rounded-xl p-6 border border-[#E89A5C]/30 hover:border-[#E89A5C]/50 transition-all duration-300 group-hover:scale-105">
+              <div className="bg-[#E89A5C]/20 backdrop-blur-sm rounded-xl p-6 border border-[#E89A5C]/30 hover:border-[#E89A5C]/50 transition-all duration-300 group-hover:scale-105">
                 <h3 className="team-name text-2xl text-[#E89A5C] mb-2">SEC</h3>
                 <p className="stat-number text-[#D9BBA4] text-sm">16 Teams</p>
                 <p className="text-[#D9BBA4]/80 text-xs mt-2">Georgia, Alabama, LSU...</p>
@@ -74,7 +74,7 @@ export default function Home() {
 
             {/* Big 12 */}
             <Link href="/conference-showcase-2" className="group">
-              <div className="bg-gradient-to-r from-[#D9BBA4]/20 to-[#C4A58F]/20 backdrop-blur-sm rounded-xl p-6 border border-[#D9BBA4]/30 hover:border-[#D9BBA4]/50 transition-all duration-300 group-hover:scale-105">
+              <div className="bg-[#D9BBA4]/20 backdrop-blur-sm rounded-xl p-6 border border-[#D9BBA4]/30 hover:border-[#D9BBA4]/50 transition-all duration-300 group-hover:scale-105">
                 <h3 className="team-name text-2xl text-[#D9BBA4] mb-2">Big 12</h3>
                 <p className="stat-number text-[#E89A5C] text-sm">16 Teams</p>
                 <p className="text-[#D9BBA4]/80 text-xs mt-2">Texas, Oklahoma State, Kansas State...</p>
@@ -83,7 +83,7 @@ export default function Home() {
 
             {/* ACC */}
             <Link href="/conference-showcase-2" className="group">
-              <div className="bg-gradient-to-r from-[#8091BB]/20 to-[#6B7CA6]/20 backdrop-blur-sm rounded-xl p-6 border border-[#8091BB]/30 hover:border-[#8091BB]/50 transition-all duration-300 group-hover:scale-105">
+              <div className="bg-[#8091BB]/20 backdrop-blur-sm rounded-xl p-6 border border-[#8091BB]/30 hover:border-[#8091BB]/50 transition-all duration-300 group-hover:scale-105">
                 <h3 className="team-name text-2xl text-[#8091BB] mb-2">ACC</h3>
                 <p className="stat-number text-[#D9BBA4] text-sm">17 Teams</p>
                 <p className="text-[#D9BBA4]/80 text-xs mt-2">Florida State, Clemson, Miami...</p>
@@ -92,7 +92,7 @@ export default function Home() {
           </div>
 
           {/* Eligibility Rules */}
-          <div className="mt-12 bg-gradient-to-r from-[#5C1F30]/40 to-[#3A1220]/40 backdrop-blur-sm rounded-xl p-8 border border-[#D9BBA4]/20">
+          <div className="mt-12 bg-[#5C1F30]/40 backdrop-blur-sm rounded-xl p-8 border border-[#D9BBA4]/20">
             <h3 className="section-subtitle text-[#D9BBA4] mb-6 text-center font-montserrat">Unique Eligibility Rules</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
