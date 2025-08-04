@@ -137,6 +137,7 @@ export default function ConferenceShowcasePage2() {
               <Link href="/conference-showcase" className="text-[#5C1F30] hover:text-[#3A1220]">Page 1</Link>
               <Link href="/conference-showcase-2" className="text-[#8091BB] font-medium">Page 2</Link>
               <Link href="/league/create" className="text-[#5C1F30] hover:text-[#3A1220]">Create League</Link>
+              <Link href="/league/join" className="text-[#5C1F30] hover:text-[#3A1220]">Join League</Link>
             </div>
           </div>
         </div>

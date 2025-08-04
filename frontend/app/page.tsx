@@ -24,7 +24,7 @@ export default function Home() {
             </button>
             <br />
             <button
-              onClick={() => router.push('/leagues/search')}
+              onClick={() => router.push('/league/join')}
               className="cta-button bg-[#8091BB]/90 backdrop-blur-sm px-8 py-4 rounded-xl hover:bg-[#6B7CA6]/90 transition-colors shadow-lg text-white"
             >
               Find Leagues
