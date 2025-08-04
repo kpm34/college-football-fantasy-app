@@ -93,6 +93,7 @@ export default function ConferenceShowcasePage() {
     { name: "Alabama Crimson Tide", abbreviation: "ALA", mascot: "Crimson Tide" },
     { name: "LSU Tigers", abbreviation: "LSU", mascot: "Tigers" },
     { name: "Texas Longhorns", abbreviation: "TEX", mascot: "Longhorns" },
+    { name: "Oklahoma Sooners", abbreviation: "OU", mascot: "Sooners" },
     { name: "Florida Gators", abbreviation: "UF", mascot: "Gators" },
     { name: "Tennessee Volunteers", abbreviation: "TENN", mascot: "Volunteers" },
     { name: "Kentucky Wildcats", abbreviation: "UK", mascot: "Wildcats" },

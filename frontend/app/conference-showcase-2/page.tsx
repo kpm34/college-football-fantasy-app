@@ -68,7 +68,7 @@ export default function ConferenceShowcasePage2() {
 
   // Static data for fallback - using full team names
   const staticBig12Teams = [
-    { name: "Texas Longhorns", abbreviation: "TEX", mascot: "Longhorns" },
+    { name: "Kansas Jayhawks", abbreviation: "KU", mascot: "Jayhawks" },
     { name: "Oklahoma State Cowboys", abbreviation: "OKST", mascot: "Cowboys" },
     { name: "Kansas State Wildcats", abbreviation: "KSU", mascot: "Wildcats" },
     { name: "TCU Horned Frogs", abbreviation: "TCU", mascot: "Horned Frogs" },

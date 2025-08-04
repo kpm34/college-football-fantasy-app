@@ -241,21 +241,21 @@ export default function JoinLeaguePage() {
   const privateLeagues = availableLeagues.filter(league => league.type === 'private');
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#5E2B8A] via-[#8A5EAA] to-[#8A6B4D]">
       {/* Top Navigation Bar */}
-      <nav className="bg-white shadow-sm border-b">
+      <nav className="bg-[#F5F0E6]/90 backdrop-blur-sm shadow-lg border-b border-[#5E2B8A]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900 hover:text-gray-700 transition-colors">
+              <Link href="/" className="text-xl font-bold text-[#5E2B8A] hover:text-[#8A5EAA] transition-colors">
                 🏈 College Football Fantasy
               </Link>
             </div>
             <div className="flex items-center space-x-8">
-              <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/" className="text-[#5E2B8A] hover:text-[#FF0080] transition-colors">
                 Home
               </Link>
-              <Link href="/league/create" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/league/create" className="text-[#5E2B8A] hover:text-[#FF0080] transition-colors">
                 Create League
               </Link>
             </div>
@@ -266,13 +266,13 @@ export default function JoinLeaguePage() {
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Join a League</h2>
-          <p className="text-gray-600">Search for leagues by name and join with your team</p>
+          <h2 className="text-3xl font-bold text-[#F5F0E6] mb-2">Join a League</h2>
+          <p className="text-[#F5F0E6]/80">Search for leagues by name and join with your team</p>
         </div>
 
         {/* League Type Tabs */}
         <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-lg shadow-sm border p-1">
+          <div className="bg-[#F5F0E6]/90 backdrop-blur-sm rounded-lg shadow-lg border border-[#5E2B8A]/20 p-1">
             <div className="flex space-x-1">
               {[
                 { key: 'all', label: 'All Leagues', count: availableLeagues.length },
@@ -284,8 +284,8 @@ export default function JoinLeaguePage() {
                   onClick={() => setLeagueType(tab.key as any)}
                   className={`px-6 py-2 rounded-md font-medium transition-colors ${
                     leagueType === tab.key
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-[#FF0080] to-[#8A5EAA] text-white'
+                      : 'text-[#5E2B8A] hover:text-[#FF0080] hover:bg-[#F5F0E6]/50'
                   }`}
                 >
                   {tab.label} ({tab.count})
@@ -305,14 +305,14 @@ export default function JoinLeaguePage() {
                 id="search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 pl-10 border-2 border-[#8A5EAA] rounded-lg focus:ring-4 focus:ring-[#FF0080] focus:border-[#FF0080] bg-[#F5F0E6] text-[#5E2B8A] placeholder-[#8A6B4D]"
                 placeholder="Search leagues by name..."
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 {searchLoading ? (
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#FF0080]"></div>
                 ) : (
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-5 w-5 text-[#8A6B4D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 )}
@@ -324,37 +324,37 @@ export default function JoinLeaguePage() {
         {/* Available Leagues */}
         <div className="space-y-6">
           {filteredLeagues.map((league) => (
-            <div key={league.$id} className="bg-white rounded-lg shadow-sm border p-6">
+            <div key={league.$id} className="bg-[#F5F0E6]/90 backdrop-blur-sm rounded-lg shadow-lg border border-[#5E2B8A]/20 p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-xl font-semibold text-gray-900">{league.name}</h3>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <h3 className="text-xl font-semibold text-[#5E2B8A]">{league.name}</h3>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#FF0080]/20 text-[#FF0080] border border-[#FF0080]/30">
                       {league.teams}/{league.maxTeams} Teams
                     </span>
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       league.type === 'private' 
-                        ? 'bg-red-100 text-red-800' 
-                        : 'bg-blue-100 text-blue-800'
+                        ? 'bg-[#8A6B4D]/20 text-[#8A6B4D] border border-[#8A6B4D]/30' 
+                        : 'bg-[#8A5EAA]/20 text-[#8A5EAA] border border-[#8A5EAA]/30'
                     }`}>
                       {league.type === 'private' ? '🔒 Private' : '🌐 Public'}
                     </span>
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      league.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
-                      league.status === 'active' ? 'bg-green-100 text-green-800' :
-                      'bg-gray-100 text-gray-800'
+                      league.status === 'draft' ? 'bg-[#FF0080]/20 text-[#FF0080] border border-[#FF0080]/30' :
+                      league.status === 'active' ? 'bg-[#8A5EAA]/20 text-[#8A5EAA] border border-[#8A5EAA]/30' :
+                      'bg-[#8A6B4D]/20 text-[#8A6B4D] border border-[#8A6B4D]/30'
                     }`}>
                       {league.status.charAt(0).toUpperCase() + league.status.slice(1)}
                     </span>
                   </div>
                   
-                  <div className="text-sm text-gray-600 mb-3">
+                  <div className="text-sm text-[#5E2B8A]/80 mb-3">
                     <p>Owner: {league.owner}</p>
                     <p>Draft: {league.draftType} • {new Date(league.draftDate).toLocaleDateString()} at {league.draftTime}</p>
                     <p>Entry Fee: {league.entryFee === 0 ? 'Free' : `$${league.entryFee}`}</p>
                   </div>
                   
-                  <p className="text-gray-700">{league.description}</p>
+                  <p className="text-[#5E2B8A]">{league.description}</p>
                 </div>
                 
                 <div className="ml-6">
@@ -363,8 +363,8 @@ export default function JoinLeaguePage() {
                     disabled={loading || league.teams >= league.maxTeams || league.status !== 'draft'}
                     className={`px-6 py-2 rounded-lg font-medium transition-colors ${
                       league.teams >= league.maxTeams || league.status !== 'draft'
-                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                        ? 'bg-[#8A6B4D]/30 text-[#8A6B4D] cursor-not-allowed'
+                        : 'bg-gradient-to-r from-[#FF0080] to-[#8A5EAA] text-white hover:from-[#FF0080]/90 hover:to-[#8A5EAA]/90'
                     }`}
                   >
                     {league.teams >= league.maxTeams ? 'Full' : 
@@ -380,24 +380,24 @@ export default function JoinLeaguePage() {
         {/* No Results */}
         {filteredLeagues.length === 0 && searchTerm && !searchLoading && (
           <div className="text-center py-12">
-            <div className="text-gray-500">
-              <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="text-[#F5F0E6]/80">
+              <svg className="mx-auto h-12 w-12 text-[#8A6B4D] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33" />
               </svg>
-              <p className="text-lg font-medium text-gray-900 mb-2">No leagues found</p>
-              <p className="text-gray-600">Try searching for a different league name</p>
+              <p className="text-lg font-medium text-[#F5F0E6] mb-2">No leagues found</p>
+              <p className="text-[#F5F0E6]/80">Try searching for a different league name</p>
             </div>
           </div>
         )}
 
         {/* Create League CTA */}
         <div className="mt-12 text-center">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <h3 className="text-lg font-medium text-blue-900 mb-2">Can't find the right league?</h3>
-            <p className="text-blue-800 mb-4">Create your own league and invite friends to join!</p>
+          <div className="bg-[#F5F0E6]/90 backdrop-blur-sm border border-[#FF0080]/30 rounded-lg p-6">
+            <h3 className="text-lg font-medium text-[#5E2B8A] mb-2">Can't find the right league?</h3>
+            <p className="text-[#5E2B8A]/80 mb-4">Create your own league and invite friends to join!</p>
             <button
               onClick={() => router.push('/league/create')}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-6 py-3 bg-gradient-to-r from-[#FF0080] to-[#8A5EAA] text-white rounded-lg hover:from-[#FF0080]/90 hover:to-[#8A5EAA]/90 transition-all transform hover:scale-105"
             >
               Create New League
             </button>
