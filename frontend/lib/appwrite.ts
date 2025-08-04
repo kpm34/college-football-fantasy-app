@@ -1,11 +1,12 @@
 import { Client, Databases, Account } from 'appwrite';
+import { APPWRITE_PUBLIC_CONFIG } from './appwrite-config';
 
-// Initialize Appwrite client for frontend
+// Initialize Appwrite client for frontend (NO API KEY - uses session auth)
 const client = new Client();
 
 client
-  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
-  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '');
+  .setEndpoint(APPWRITE_PUBLIC_CONFIG.endpoint)
+  .setProject(APPWRITE_PUBLIC_CONFIG.projectId);
 
 // Export Appwrite services
 export const databases = new Databases(client);
@@ -14,7 +15,7 @@ export const account = new Account(client);
 export { client };
 
 // Database and collection IDs
-export const DATABASE_ID = 'college-football-fantasy';
+export const DATABASE_ID = APPWRITE_PUBLIC_CONFIG.databaseId;
 
 export const COLLECTIONS = {
   USERS: 'users',

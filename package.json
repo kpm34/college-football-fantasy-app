@@ -12,7 +12,8 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "node-appwrite": "^14.1.0",
-    "rotowire-api-client": "^1.0.6"
+    "rotowire-api-client": "^1.0.6",
+    "selenium-webdriver": "^4.34.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.11",

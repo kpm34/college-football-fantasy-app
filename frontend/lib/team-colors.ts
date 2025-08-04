@@ -33,7 +33,7 @@ export const TEAM_COLORS: Record<string, { primary: string; secondary: string }>
   'Ole Miss': { primary: '#14213D', secondary: '#CE1126' },
   'Mississippi State': { primary: '#660000', secondary: '#FFFFFF' },
   'Texas': { primary: '#BF5700', secondary: '#FFFFFF' },
-  'Oklahoma': { primary: '#841617', secondary: '#FFC82E' },
+  'Oklahoma': { primary: '#841617', secondary: '#FFFFFF' },
   'Texas A&M': { primary: '#500000', secondary: '#FFFFFF' },
   'Arkansas': { primary: '#9D2235', secondary: '#FFFFFF' },
   'Auburn': { primary: '#0C2340', secondary: '#E87722' },
@@ -41,20 +41,20 @@ export const TEAM_COLORS: Record<string, { primary: string; secondary: string }>
 
   // Big 12 Conference
   'Kansas': { primary: '#0051BA', secondary: '#E8000D' },
-  'Kansas State': { primary: '#512888', secondary: '#FFFFFF' },
+  'Kansas State': { primary: '#512888', secondary: '#D1D1D1' },
   'Oklahoma State': { primary: '#FF7300', secondary: '#000000' },
   'TCU': { primary: '#4D1979', secondary: '#FFFFFF' },
   'Baylor': { primary: '#154734', secondary: '#FFBC35' },
   'Texas Tech': { primary: '#CC0000', secondary: '#000000' },
   'West Virginia': { primary: '#002855', secondary: '#EAAA00' },
-  'Iowa State': { primary: '#C8102E', secondary: '#F1BE48' },
+  'Iowa State': { primary: '#C8102E', secondary: '#FFC62F' },
   'Cincinnati': { primary: '#E00122', secondary: '#000000' },
   'Houston': { primary: '#C8102E', secondary: '#FFFFFF' },
-  'UCF': { primary: '#000000', secondary: '#FFC904' },
+  'UCF': { primary: '#FFC904', secondary: '#000000' },
   'BYU': { primary: '#002E5D', secondary: '#FFFFFF' },
   'Colorado': { primary: '#CFB87C', secondary: '#000000' },
   'Arizona': { primary: '#CC0033', secondary: '#003366' },
-  'Arizona State': { primary: '#8C1D40', secondary: '#FFC627' },
+  'Arizona State': { primary: '#8C1D40', secondary: '#FFC627' },  // ASU maroon and gold
   'Utah': { primary: '#CC0000', secondary: '#FFFFFF' },
 
   // ACC Conference
@@ -66,8 +66,8 @@ export const TEAM_COLORS: Record<string, { primary: string; secondary: string }>
   'Duke': { primary: '#003087', secondary: '#FFFFFF' },
   'Wake Forest': { primary: '#9E7E38', secondary: '#000000' },
   'Virginia': { primary: '#232D4B', secondary: '#F84C1E' },
-  'Virginia Tech': { primary: '#630031', secondary: '#CF4420' },
-  'Georgia Tech': { primary: '#003057', secondary: '#B3A369' },
+  'Virginia Tech': { primary: '#630031', secondary: '#CF4420' },  // VT maroon and burnt orange
+  'Georgia Tech': { primary: '#B3A369', secondary: '#003057' },
   'Louisville': { primary: '#AD0000', secondary: '#000000' },
   'Syracuse': { primary: '#F76900', secondary: '#002D62' },
   'Boston College': { primary: '#862334', secondary: '#BC9B6A' },
@@ -87,31 +87,23 @@ export function getTeamColors(teamName: string): { primary: string; secondary: s
   
   console.log('Getting colors for:', teamName);
   
-  // Check for exact match first
-  if (TEAM_COLORS[teamName]) {
-    console.log('Exact match found:', teamName);
-    return TEAM_COLORS[teamName];
-  }
+  // Clean the team name
+  const cleanTeamName = teamName.trim();
   
-  // Handle various team name formats
-  const searchName = teamName.trim();
+  // Check for exact match first
+  if (TEAM_COLORS[cleanTeamName]) {
+    console.log('Exact match found:', cleanTeamName);
+    return TEAM_COLORS[cleanTeamName];
+  }
   
   // Extract just the school name (first part before mascot)
   // e.g., "Michigan Wolverines" -> "Michigan"
-  const schoolName = searchName.split(' ')[0];
+  const schoolName = cleanTeamName.split(' ')[0];
   
   // Check for school name match
   if (TEAM_COLORS[schoolName]) {
+    console.log('School name match found:', schoolName);
     return TEAM_COLORS[schoolName];
-  }
-  
-  // Try to find by checking if the key starts with the search name
-  for (const [key, colors] of Object.entries(TEAM_COLORS)) {
-    if (key.toLowerCase().includes(searchName.toLowerCase()) || 
-        searchName.toLowerCase().includes(key.toLowerCase()) ||
-        key.toLowerCase() === schoolName.toLowerCase()) {
-      return colors;
-    }
   }
   
   // Special cases for team names that need special handling
@@ -137,13 +129,70 @@ export function getTeamColors(teamName: string): { primary: string; secondary: s
     'Georgia Tech Yellow Jackets': 'Georgia Tech',
     'Wake Forest Demon Deacons': 'Wake Forest',
     'Notre Dame Fighting Irish': 'Notre Dame',
+    'Michigan Wolverines': 'Michigan',
+    'Indiana Hoosiers': 'Indiana',
+    'Maryland Terrapins': 'Maryland',
+    'Rutgers Scarlet Knights': 'Rutgers',
+    'UCLA Bruins': 'UCLA',
+    'Washington Huskies': 'Washington',
+    'Oregon Ducks': 'Oregon',
+    'USC Trojans': 'USC',
+    'Wisconsin Badgers': 'Wisconsin',
+    'Iowa Hawkeyes': 'Iowa',
+    'Minnesota Golden Gophers': 'Minnesota',
+    'Nebraska Cornhuskers': 'Nebraska',
+    'Illinois Fighting Illini': 'Illinois',
+    'Northwestern Wildcats': 'Northwestern',
+    'Purdue Boilermakers': 'Purdue',
+    'Georgia Bulldogs': 'Georgia',
+    'Alabama Crimson Tide': 'Alabama',
+    'LSU Tigers': 'LSU',
+    'Florida Gators': 'Florida',
+    'Tennessee Volunteers': 'Tennessee',
+    'Kentucky Wildcats': 'Kentucky',
+    'South Carolina Gamecocks': 'South Carolina',
+    'Missouri Tigers': 'Missouri',
+    'Arkansas Razorbacks': 'Arkansas',
+    'Auburn Tigers': 'Auburn',
+    'Vanderbilt Commodores': 'Vanderbilt',
+    'Kansas Jayhawks': 'Kansas',
+    'TCU Horned Frogs': 'TCU',
+    'Baylor Bears': 'Baylor',
+    'Cincinnati Bearcats': 'Cincinnati',
+    'Houston Cougars': 'Houston',
+    'UCF Knights': 'UCF',
+    'BYU Cougars': 'BYU',
+    'Colorado Buffaloes': 'Colorado',
+    'Arizona Wildcats': 'Arizona',
+    'Utah Utes': 'Utah',
+    'Clemson Tigers': 'Clemson',
+    'Miami Hurricanes': 'Miami',
+    'Louisville Cardinals': 'Louisville',
+    'Duke Blue Devils': 'Duke',
+    'Virginia Cavaliers': 'Virginia',
+    'Syracuse Orange': 'Syracuse',
+    'Pitt Panthers': 'Pitt',
+    'California Golden Bears': 'California',
+    'Stanford Cardinal': 'Stanford',
+    'SMU Mustangs': 'SMU'
   };
   
   // Check full name mappings
-  if (teamNameMappings[searchName]) {
-    const mappedName = teamNameMappings[searchName];
+  if (teamNameMappings[cleanTeamName]) {
+    const mappedName = teamNameMappings[cleanTeamName];
     if (TEAM_COLORS[mappedName]) {
+      console.log('Full name mapping found:', mappedName);
       return TEAM_COLORS[mappedName];
+    }
+  }
+  
+  // Try to find by checking if the key starts with the search name
+  for (const [key, colors] of Object.entries(TEAM_COLORS)) {
+    if (key.toLowerCase().includes(cleanTeamName.toLowerCase()) || 
+        cleanTeamName.toLowerCase().includes(key.toLowerCase()) ||
+        key.toLowerCase() === schoolName.toLowerCase()) {
+      console.log('Partial match found:', key);
+      return colors;
     }
   }
   
@@ -168,12 +217,26 @@ export function getTeamColors(teamName: string): { primary: string; secondary: s
     'VT': 'Virginia Tech',
     'MIA': 'Miami',
     'CLEM': 'Clemson',
-    'LOU': 'Louisville'
+    'LOU': 'Louisville',
+    'GT': 'Georgia Tech',
+    'TAMU': 'Texas A&M',
+    'OU': 'Oklahoma',
+    'UK': 'Kentucky',
+    'UF': 'Florida',
+    'TENN': 'Tennessee',
+    'ARK': 'Arkansas',
+    'MISS': 'Ole Miss',
+    'MSST': 'Mississippi State',
+    'SC': 'South Carolina',
+    'MIZ': 'Missouri',
+    'AUB': 'Auburn',
+    'VAN': 'Vanderbilt'
   };
   
-  if (specialCases[searchName.toUpperCase()]) {
-    const fullName = specialCases[searchName.toUpperCase()];
+  if (specialCases[cleanTeamName.toUpperCase()]) {
+    const fullName = specialCases[cleanTeamName.toUpperCase()];
     if (TEAM_COLORS[fullName]) {
+      console.log('Abbreviation match found:', fullName);
       return TEAM_COLORS[fullName];
     }
   }

@@ -1,109 +1,78 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client, Databases, ID } from 'node-appwrite';
+import { APPWRITE_CONFIG } from '@/lib/appwrite-config';
 
-// Initialize Appwrite client
+// Initialize Appwrite client with API key for server-side operations
 const client = new Client()
-  .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
-  .setProject(process.env.APPWRITE_PROJECT_ID || '688ccd49002eacc6c020')
-  .setKey(process.env.APPWRITE_API_KEY || '');
+  .setEndpoint(APPWRITE_CONFIG.endpoint)
+  .setProject(APPWRITE_CONFIG.projectId)
+  .setKey(APPWRITE_CONFIG.apiKey);
 
 const databases = new Databases(client);
-const databaseId = 'college-football-fantasy';
+const DATABASE_ID = APPWRITE_CONFIG.databaseId;
 
-interface CreateLeagueRequest {
-  name: string;
-  gameMode: 'CONFERENCE' | 'POWER4';
-  selectedConference?: string;
-  maxTeams: number;
-  seasonStartWeek: number;
-  draftDate?: string;
-  commissionerId: string;
-}
+const COLLECTIONS = {
+  LEAGUES: 'leagues',
+  TEAMS: 'teams',
+  ROSTERS: 'rosters',
+  MATCHUPS: 'matchups'
+};
 
 export async function POST(request: NextRequest) {
   try {
-    const body: CreateLeagueRequest = await request.json();
-    
+    const body = await request.json();
+    const {
+      leagueName,
+      gameMode,
+      selectedConference,
+      scoringType,
+      maxTeams,
+      seasonStartWeek,
+      draftDate,
+      commissionerId // This would come from auth
+    } = body;
+
+    console.log('Creating league with data:', { leagueName, gameMode, maxTeams, commissionerId });
+
     // Validate required fields
-    if (!body.name || !body.gameMode || !body.maxTeams || !body.seasonStartWeek) {
+    if (!leagueName || !commissionerId) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'League name and commissioner ID are required' },
         { status: 400 }
       );
     }
 
-    // Validate game mode specific requirements
-    if (body.gameMode === 'CONFERENCE' && !body.selectedConference) {
-      return NextResponse.json(
-        { error: 'Conference mode requires a selected conference' },
-        { status: 400 }
-      );
-    }
-
-    // Determine lineup and scoring profile IDs based on game mode
-    const lineupProfileId = body.gameMode === 'CONFERENCE' ? 'lp_conference' : 'lp_power4';
-    const scoringProfileId = 'sp_standard'; // Use standard scoring for both modes
-
-    // Create league document
+    // Create league document with minimal data first
     const leagueData = {
-      name: body.name,
-      mode: body.gameMode,
-      conf: body.selectedConference || null,
-      commissioner_id: body.commissionerId || 'demo-user-123', // TODO: Get from auth
-      members: [body.commissionerId || 'demo-user-123'], // Start with commissioner
-      lineup_profile_id: lineupProfileId,
-      scoring_profile_id: scoringProfileId,
-      max_teams: body.maxTeams,
-      draft_date: body.draftDate || null,
-      season_start_week: body.seasonStartWeek,
-      status: 'DRAFTING',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      schedule_generated: false
     };
 
-    try {
-      const league = await databases.createDocument(
-        databaseId,
-        'leagues',
-        ID.unique(),
-        leagueData
-      );
+    console.log('Creating league document...');
+    const league = await databases.createDocument(
+      DATABASE_ID,
+      COLLECTIONS.LEAGUES,
+      ID.unique(),
+      leagueData
+    );
 
-      return NextResponse.json({
-        success: true,
-        league: {
-          id: league.$id,
-          name: league.name,
-          mode: league.mode,
-          conf: league.conf,
-          maxTeams: league.max_teams,
-          status: league.status,
-          createdAt: league.created_at
-        }
-      });
+    console.log('League created:', league.$id);
 
-    } catch (appwriteError: any) {
-      console.error('Appwrite error:', appwriteError);
-      
-      // Return mock response for development
-      return NextResponse.json({
-        success: true,
-        league: {
-          id: `demo-${Date.now()}`,
-          name: body.name,
-          mode: body.gameMode,
-          conf: body.selectedConference,
-          maxTeams: body.maxTeams,
-          status: 'DRAFTING',
-          createdAt: new Date().toISOString()
-        }
-      });
-    }
+    // For now, return success with the league ID
+    // We'll add the other attributes later when we set up the collection properly
+    return NextResponse.json({
+      success: true,
+      league: {
+        id: league.$id,
+        name: leagueName, // Store in response for now
+        status: 'draft'
+      },
+      message: 'League created successfully! Note: Additional attributes will be added when collection is fully configured.'
+    });
 
   } catch (error) {
     console.error('Error creating league:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to create league', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

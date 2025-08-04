@@ -1,66 +1,58 @@
 'use client';
 
-import { getTeamColors, TEAM_COLORS } from '@/lib/team-colors';
+import { getTeamColors } from '@/lib/team-colors';
 
 export default function TestColorsPage() {
   const testTeams = [
-    "Michigan",
-    "Ohio State",
     "Michigan Wolverines",
-    "Ohio State Buckeyes",
+    "Ohio State Buckeyes", 
     "Penn State Nittany Lions",
-    "Georgia",
-    "Alabama"
+    "Georgia Bulldogs",
+    "Alabama Crimson Tide",
+    "Texas Longhorns"
   ];
 
   return (
-    <div className="p-8 bg-black text-white min-h-screen">
-      <h1 className="text-2xl font-bold mb-8">Team Colors Test</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white p-8">
+      <h1 className="text-4xl font-bold mb-8">Team Colors Test</h1>
       
-      <div className="mb-8">
-        <h2 className="text-xl mb-4">Direct TEAM_COLORS Object:</h2>
-        <div className="grid grid-cols-3 gap-4">
-          {Object.entries(TEAM_COLORS).slice(0, 10).map(([name, colors]) => (
-            <div key={name} className="border p-2">
-              <div>{name}</div>
-              <div className="flex gap-2 mt-2">
-                <div 
-                  className="w-8 h-8 rounded" 
-                  style={{ backgroundColor: colors.primary }}
-                />
-                <div 
-                  className="w-8 h-8 rounded" 
-                  style={{ backgroundColor: colors.secondary }}
-                />
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+        {testTeams.map((teamName, index) => {
+          const colors = getTeamColors(teamName);
+          console.log(`Team: ${teamName}, Colors:`, colors);
+          
+          return (
+            <div key={index} className="bg-white/10 rounded-lg p-6 text-center">
+              <div 
+                className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                style={{ 
+                  backgroundColor: colors.primary,
+                  borderColor: colors.secondary,
+                  borderWidth: '3px',
+                  borderStyle: 'solid',
+                  boxShadow: `0 6px 12px rgba(0,0,0,0.4)`
+                }}
+              >
+                <span 
+                  className="font-bold text-sm" 
+                  style={{ 
+                    color: colors.secondary,
+                    textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+                  }}
+                >
+                  {teamName.split(' ')[0].substring(0, 3).toUpperCase()}
+                </span>
+              </div>
+              <div className="text-lg font-semibold mb-2">{teamName}</div>
+              <div className="text-sm text-gray-400">
+                Primary: {colors.primary}
+              </div>
+              <div className="text-sm text-gray-400">
+                Secondary: {colors.secondary}
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h2 className="text-xl mb-4">Testing getTeamColors Function:</h2>
-        <div className="space-y-4">
-          {testTeams.map((teamName) => {
-            const colors = getTeamColors(teamName);
-            return (
-              <div key={teamName} className="border p-4">
-                <div className="mb-2">Input: "{teamName}"</div>
-                <div className="mb-2">Result: {JSON.stringify(colors)}</div>
-                <div className="flex gap-4">
-                  <div 
-                    className="w-16 h-16 rounded border-2 border-white"
-                    style={{ backgroundColor: colors.primary }}
-                  />
-                  <div 
-                    className="w-16 h-16 rounded border-2 border-white"
-                    style={{ backgroundColor: colors.secondary }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
+          );
+        })}
       </div>
     </div>
   );

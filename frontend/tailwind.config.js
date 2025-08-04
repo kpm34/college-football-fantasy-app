@@ -11,6 +11,12 @@ module.exports = {
         chrome: '#FFD700',
         'chrome-dark': '#FFA500',
       },
+      fontFamily: {
+        'bebas': ['var(--font-bebas)', 'sans-serif'],
+        'montserrat': ['var(--font-montserrat)', 'sans-serif'],
+        'inter': ['var(--font-inter)', 'sans-serif'],
+        'mono': ['var(--font-roboto-mono)', 'monospace'],
+      },
     },
   },
   plugins: [],

@@ -4,7 +4,7 @@
 // Initialize Appwrite Client
 const client = new Appwrite.Client()
     .setEndpoint('https://nyc.cloud.appwrite.io/v1')
-    .setProject('688ccd49002eacc6c020');
+    .setProject('college-football-fantasy-app');
 
 // Initialize services
 const databases = new Appwrite.Databases(client);

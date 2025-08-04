@@ -1,16 +1,17 @@
 import { Client, Databases, Query } from 'node-appwrite';
+import { APPWRITE_CONFIG } from './appwrite-config';
 
-// Server-side Appwrite client
+// Server-side Appwrite client (with API key for admin access)
 const client = new Client();
 
 client
-  .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
-  .setProject(process.env.APPWRITE_PROJECT_ID || '688ccd49002eacc6c020')
-  .setKey(process.env.APPWRITE_API_KEY || '');
+  .setEndpoint(APPWRITE_CONFIG.endpoint)
+  .setProject(APPWRITE_CONFIG.projectId)
+  .setKey(APPWRITE_CONFIG.apiKey);
 
 export const databases = new Databases(client);
 
-export const DATABASE_ID = 'college-football-fantasy';
+export const DATABASE_ID = APPWRITE_CONFIG.databaseId;
 
 export const COLLECTIONS = {
   COLLEGE_PLAYERS: 'college_players',

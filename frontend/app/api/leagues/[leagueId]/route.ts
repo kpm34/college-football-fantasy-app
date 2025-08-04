@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client, Databases } from 'node-appwrite';
+import { APPWRITE_CONFIG } from '@/lib/appwrite-config';
 
 // Initialize Appwrite client
 const client = new Client()
-  .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
-  .setProject(process.env.APPWRITE_PROJECT_ID || '688ccd49002eacc6c020')
-  .setKey(process.env.APPWRITE_API_KEY || '');
+  .setEndpoint(APPWRITE_CONFIG.endpoint)
+  .setProject(APPWRITE_CONFIG.projectId)
+  .setKey(APPWRITE_CONFIG.apiKey);
 
 const databases = new Databases(client);
-const databaseId = 'college-football-fantasy';
+const databaseId = APPWRITE_CONFIG.databaseId;
 
 export async function GET(
   request: NextRequest,

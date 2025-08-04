@@ -414,4 +414,4 @@ export default function LeaguePortal({ leagueId, leagueName }: LeaguePortalProps
       </main>
     </div>
   );
-} 
+}
