@@ -407,19 +407,19 @@ export default function JoinLeaguePage() {
 
       {/* Password Modal */}
       {showPasswordModal && selectedLeague && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-[#F5F0E6] rounded-xl shadow-2xl p-8 max-w-md w-full border border-[#5E2B8A]/20">
             <div className="text-center mb-6">
-              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-red-600 text-xl">🔒</span>
+              <div className="w-12 h-12 bg-[#FF0080]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#FF0080]/30">
+                <span className="text-[#FF0080] text-xl">🔒</span>
               </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Private League</h2>
-              <p className="text-gray-600">Enter the password to join "{selectedLeague.name}"</p>
+              <h2 className="text-xl font-bold text-[#5E2B8A] mb-2">Private League</h2>
+              <p className="text-[#5E2B8A]/80">Enter the password to join "{selectedLeague.name}"</p>
             </div>
 
             <form onSubmit={handlePasswordSubmit} className="space-y-4">
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="password" className="block text-sm font-medium text-[#5E2B8A] mb-2">
                   Password
                 </label>
                 <input
@@ -427,12 +427,12 @@ export default function JoinLeaguePage() {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border-2 border-[#8A5EAA] rounded-lg focus:ring-4 focus:ring-[#FF0080] focus:border-[#FF0080] bg-white text-[#5E2B8A] placeholder-[#8A6B4D]"
                   placeholder="Enter league password"
                   required
                 />
                 {passwordError && (
-                  <p className="text-red-600 text-sm mt-1">{passwordError}</p>
+                  <p className="text-[#FF0080] text-sm mt-1">{passwordError}</p>
                 )}
               </div>
 
@@ -445,14 +445,14 @@ export default function JoinLeaguePage() {
                     setPassword('');
                     setPasswordError('');
                   }}
-                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-3 border-2 border-[#8A6B4D] text-[#8A6B4D] rounded-lg hover:bg-[#8A6B4D]/10 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-[#FF0080] to-[#8A5EAA] text-white rounded-lg hover:from-[#FF0080]/90 hover:to-[#8A5EAA]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105"
                 >
                   {loading ? 'Joining...' : 'Join League'}
                 </button>
