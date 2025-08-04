@@ -71,7 +71,7 @@ export const TEAM_COLORS: Record<string, { primary: string; secondary: string }>
   'Louisville': { primary: '#AD0000', secondary: '#000000' },
   'Syracuse': { primary: '#F76900', secondary: '#002D62' },
   'Boston College': { primary: '#862334', secondary: '#BC9B6A' },
-  'Pitt': { primary: '#003594', secondary: '#FFB81C' },
+  'Pitt': { primary: '#003594', secondary: '#FFB81C' }, // Pitt Navy Blue and Gold
   'Notre Dame': { primary: '#0C2340', secondary: '#C99700' },
   'California': { primary: '#003262', secondary: '#FDB515' },
   'Stanford': { primary: '#8C1515', secondary: '#FFFFFF' },
