@@ -186,16 +186,6 @@ export function getTeamColors(teamName: string): { primary: string; secondary: s
     }
   }
   
-  // Try to find by checking if the key starts with the search name
-  for (const [key, colors] of Object.entries(TEAM_COLORS)) {
-    if (key.toLowerCase().includes(cleanTeamName.toLowerCase()) || 
-        cleanTeamName.toLowerCase().includes(key.toLowerCase()) ||
-        key.toLowerCase() === schoolName.toLowerCase()) {
-      console.log('Partial match found:', key);
-      return colors;
-    }
-  }
-  
   // Special cases for abbreviated names
   const specialCases: Record<string, string> = {
     'OSU': 'Ohio State',
