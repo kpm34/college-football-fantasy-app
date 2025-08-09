@@ -1,13 +1,24 @@
 {
-  "name": "college-football-fantasy-backend",
+  "name": "college-football-fantasy-app",
   "version": "1.0.0",
-  "description": "Backend services for College Football Fantasy App",
+  "description": "Fantasy football platform for Power 4 conferences",
   "main": "index.js",
   "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm run start",
+    "server": "cd src && node api/server.ts",
+    "sync-data": "ts-node src/utils/sync-data.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "test-appwrite": "ts-node src/scripts/test-appwrite-connection.ts",
     "seed-big12": "python3 src/scripts/seed_big12_draftboard.py",
     "collect-data": "python3 src/scripts/data_collector.py",
-    "update-projections": "python3 src/scripts/projection_updater.py"
+    "update-projections": "python3 src/scripts/projection_updater.py",
+    "lint": "cd frontend && npm run lint",
+    "typecheck": "cd frontend && npm run typecheck",
+    "preview": "cd frontend && npm run preview",
+    "deploy": "cd frontend && npm run deploy",
+    "install:all": "npm install && cd frontend && npm install"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
