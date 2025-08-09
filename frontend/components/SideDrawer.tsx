@@ -2,7 +2,17 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { account } from "@/lib/appwrite";
+import { account, databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
+import { Query } from "node-appwrite";
+import {
+  HomeIcon,
+  PlusCircleIcon,
+  UserGroupIcon,
+  MagnifyingGlassIcon,
+  ChartBarIcon,
+  TrophyIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/outline";
 
 type DrawerProps = {
   open: boolean;
@@ -13,6 +23,7 @@ type SessionState = {
   isAuthenticated: boolean;
   name?: string;
   email?: string;
+  userId?: string;
 };
 
 export default function SideDrawer({ open, onClose }: DrawerProps) {
@@ -23,7 +34,8 @@ export default function SideDrawer({ open, onClose }: DrawerProps) {
     (async () => {
       try {
         const me = await account.get();
-        if (!cancelled) setSession({ isAuthenticated: true, name: me.name, email: me.email });
+        if (!cancelled)
+          setSession({ isAuthenticated: true, name: me.name, email: me.email, userId: me.$id });
       } catch {
         if (!cancelled) setSession({ isAuthenticated: false });
       }
@@ -43,6 +55,40 @@ export default function SideDrawer({ open, onClose }: DrawerProps) {
       console.error("Logout failed", e);
     }
   }
+
+  const [leagues, setLeagues] = useState<Array<{ id: string; name: string }>>([]);
+
+  useEffect(() => {
+    if (!session.isAuthenticated || !session.userId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        // Find teams for the current user
+        const teamsRes = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.TEAMS,
+          [Query.equal('user_id', session.userId)]
+        );
+        const leagueIds = Array.from(new Set(teamsRes.documents.map((d: any) => d.league_id)));
+        const fetched = await Promise.all(
+          leagueIds.map(async (lid: string) => {
+            try {
+              const doc = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, lid);
+              return { id: lid, name: (doc as any).name };
+            } catch {
+              return null;
+            }
+          })
+        );
+        if (!cancelled) setLeagues(fetched.filter(Boolean) as Array<{ id: string; name: string }>);
+      } catch (e) {
+        console.error('Failed to load user leagues', e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    }
+  }, [session.isAuthenticated, session.userId]);
 
   return (
     <>
@@ -74,20 +120,50 @@ export default function SideDrawer({ open, onClose }: DrawerProps) {
         </div>
 
         <nav className="px-3 py-3 space-y-1">
-          {[
-            { href: "/", label: "Home", icon: "🏠" },
-            { href: "/league/create", label: "Create League", icon: "🛠️" },
-            { href: "/league/join", label: "Join League", icon: "🤝" },
-            { href: "/leagues/search", label: "Find Leagues", icon: "🔎" },
-            { href: "/scoreboard", label: "Scoreboard", icon: "📊" },
-            { href: "/standings", label: "Standings", icon: "🏆" },
-          ].map((item) => (
-            <Link key={item.href} href={item.href} onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
-              <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
-              <span className="text-lg" aria-hidden>{item.icon}</span>
-              <span className="font-medium">{item.label}</span>
-            </Link>
-          ))}
+          <Link href="/" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
+            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+            <HomeIcon className="h-5 w-5" />
+            <span className="font-medium">Home</span>
+          </Link>
+          <Link href="/league/create" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
+            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+            <PlusCircleIcon className="h-5 w-5" />
+            <span className="font-medium">Create League</span>
+          </Link>
+          <Link href="/league/join" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
+            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+            <UserGroupIcon className="h-5 w-5" />
+            <span className="font-medium">Join League</span>
+          </Link>
+          <Link href="/leagues/search" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
+            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+            <MagnifyingGlassIcon className="h-5 w-5" />
+            <span className="font-medium">Find Leagues</span>
+          </Link>
+          <Link href="/scoreboard" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
+            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+            <ChartBarIcon className="h-5 w-5" />
+            <span className="font-medium">Scoreboard</span>
+          </Link>
+          <Link href="/standings" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
+            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+            <TrophyIcon className="h-5 w-5" />
+            <span className="font-medium">Standings</span>
+          </Link>
+
+          {session.isAuthenticated && leagues.length > 0 && (
+            <>
+              <div className="pt-3 mt-3 border-t border-white/10" />
+              <div className="px-3 pb-1 text-white/60 text-xs uppercase tracking-wider">My Leagues</div>
+              {leagues.map((lg) => (
+                <Link key={lg.id} href={`/league/${lg.id}`} onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
+                  <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+                  <Cog6ToothIcon className="h-5 w-5" />
+                  <span className="font-medium">{lg.name}</span>
+                </Link>
+              ))}
+            </>
+          )}
 
           <div className="pt-3 mt-3 border-t border-white/10" />
 
