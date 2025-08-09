@@ -1,14 +1,10 @@
 'use client';
 
-import ChromeHelmetScene from './ChromeHelmetScene';
-
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* 3D Chrome Helmet Background */}
-      <div className="absolute inset-0 z-0">
-        <ChromeHelmetScene />
-      </div>
+      {/* Background */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-slate-900 via-slate-800 to-black" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
