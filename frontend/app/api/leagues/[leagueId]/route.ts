@@ -171,3 +171,28 @@ export async function GET(
     );
   }
 } 
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { leagueId: string } }
+) {
+  try {
+    const { leagueId } = params;
+    const body = await request.json();
+    const { teamId, name } = body;
+    if (!teamId || !name) {
+      return NextResponse.json({ error: 'teamId and name required' }, { status: 400 });
+    }
+
+    const client = new Client()
+      .setEndpoint(APPWRITE_CONFIG.endpoint)
+      .setProject(APPWRITE_CONFIG.projectId)
+      .setKey(APPWRITE_CONFIG.apiKey);
+    const databases = new Databases(client);
+    await databases.updateDocument(databaseId, 'teams', teamId, { name, updated_at: new Date().toISOString() });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error updating team name:', error);
+    return NextResponse.json({ error: 'Failed to update team name' }, { status: 500 });
+  }
+}

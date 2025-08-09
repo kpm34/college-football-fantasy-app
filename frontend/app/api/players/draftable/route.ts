@@ -5,14 +5,21 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const week = parseInt(searchParams.get('week') || '1');
+    const position = searchParams.get('position') || undefined;
+    const team = searchParams.get('team') || undefined;
+    const conference = searchParams.get('conference') || undefined;
     
     // Try to get real data from Appwrite first
     try {
       const data = await getDraftablePlayers(week);
+      let players = data.players;
+      if (position) players = players.filter((p: any) => p.position?.abbreviation === position);
+      if (team) players = players.filter((p: any) => (p.team || '').toLowerCase().includes(team.toLowerCase()));
+      if (conference) players = players.filter((p: any) => (p.conference || '').toLowerCase() === conference.toLowerCase());
       
       // If we have real data, return it
-      if (data.players.length > 0) {
-        return NextResponse.json(data);
+      if (players.length > 0) {
+        return NextResponse.json({ ...data, players });
       }
     } catch (error) {
       console.error('Error fetching from Appwrite:', error);
