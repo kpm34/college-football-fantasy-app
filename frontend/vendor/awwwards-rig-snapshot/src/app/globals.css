@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Hide Leva copy-to-clipboard buttons to declutter the UI */
+.leva-c-kViQtx, /* copy icon class (may vary by version) */
+.leva-c-kViQtx *,
+.leva-c-kWYeOK-bCBHqk-size-m svg {
+  display: none !important;
+}
+
+/* Material Editor Enhancements */
+.material-editor {
+  --material-editor-bg: rgba(255, 255, 255, 0.98);
+  --material-editor-border: rgba(0, 0, 0, 0.1);
+  --material-editor-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  .material-editor {
+    --material-editor-bg: rgba(30, 30, 30, 0.98);
+    --material-editor-border: rgba(255, 255, 255, 0.1);
+    --material-editor-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Smooth animations for material changes */
+.material-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced Leva styling */
+[class*="leva-"] input[type="text"],
+[class*="leva-"] input[type="number"] {
+  font-size: 14px !important;
+  padding: 6px 8px !important;
+}
+
+/* Larger touch targets for mobile */
+@media (max-width: 640px) {
+  [class*="leva-"] button,
+  [class*="leva-"] input {
+    min-height: 44px !important;
+  }
+}
+
+/* Preset hover effects */
+.preset-gallery button {
+  position: relative;
+  overflow: hidden;
+}
+
+.preset-gallery button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.preset-gallery button:hover::before {
+  opacity: 1;
+}

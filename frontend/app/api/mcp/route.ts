@@ -7,7 +7,6 @@ import os from 'os';
 import { 
   registerAppwriteTools, 
   registerVercelTools, 
-  registerSplineTools,
   registerThirdEyeCapitalTools,
   registerLovableTools,
   registerGoHighLevelTools
@@ -23,7 +22,6 @@ const handler = createMcpHandler(
     // Register platform-specific tools
     registerAppwriteTools(server);
     registerVercelTools(server);
-    registerSplineTools(server);
     registerThirdEyeCapitalTools(server);
     registerLovableTools(server);
     registerGoHighLevelTools(server);
@@ -200,7 +198,7 @@ const handler = createMcpHandler(
           integrations: {
             appwrite: !!process.env.APPWRITE_PROJECT_ID,
             vercel: !!process.env.VERCEL_URL,
-            spline: '3D visualizations',
+            spline: 'removed',
             aiGateway: !!process.env.AI_GATEWAY_API_KEY,
           },
           pages: [

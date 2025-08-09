@@ -48,11 +48,22 @@ A fantasy football platform exclusively for Power 4 conferences (SEC, ACC, Big 1
 - Sync data: npm run sync-data
 - Test APIs: npm test
 
-## Environment Variables
+## Environment Variables (See .env file for all values)
+Primary configuration files:
+- Root: `.env` (for Cursor visibility)
+- Frontend: `frontend/.env.local` (runtime)
+- Production: `.env.production.local`
+
+Key Variables:
 - APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
-- APPWRITE_PROJECT_ID=688ccd49002eacc6c020
-- APPWRITE_API_KEY=configured
-- CFBD_API_KEY=optional
+- APPWRITE_PROJECT_ID=college-football-fantasy-app
+- APPWRITE_DATABASE_ID=college-football-fantasy
+- CFBD_API_KEY=configured (primary + backup)
+- AI_GATEWAY_API_KEY=configured
+- EDGE_CONFIG=configured (feature flags)
+- INNGEST keys for background jobs
+
+All collection names prefixed with NEXT_PUBLIC_APPWRITE_COLLECTION_*
 
 ## Spline Integration
 - Use @splinetool/react-spline for 3D scenes

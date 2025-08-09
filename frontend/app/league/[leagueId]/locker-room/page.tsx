@@ -205,12 +205,12 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
 
   const getPositionColor = (position: string): string => {
     switch (position) {
-      case 'QB': return 'bg-blue-500';
-      case 'RB': return 'bg-green-500';
-      case 'WR': return 'bg-purple-500';
-      case 'TE': return 'bg-orange-500';
-      case 'K': return 'bg-yellow-500';
-      default: return 'bg-gray-500';
+      case 'QB': return 'bg-locker-primary';
+      case 'RB': return 'bg-locker-brown';
+      case 'WR': return 'bg-locker-coral';
+      case 'TE': return 'bg-locker-taupe';
+      case 'K': return 'bg-locker-ice';
+      default: return 'bg-locker-slate';
     }
   };
 
@@ -247,25 +247,25 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
+    <div className="min-h-screen bg-gradient-to-br from-locker-slateDark via-locker-slate to-black text-white">
       {/* Header */}
-      <div className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
+      <div className="bg-locker-primary/20 backdrop-blur-sm border-b border-locker-primary/30">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white">🏈 My Locker Room</h1>
-              <p className="text-slate-300">{league.name}</p>
+              <h1 className="text-3xl font-bold text-white font-bebas tracking-wide">🏈 My Locker Room</h1>
+              <p className="text-locker-ice/80">{league.name}</p>
             </div>
             <div className="flex space-x-4">
               <button
                 onClick={() => router.push(`/league/${leagueId}`)}
-                className="bg-slate-600 hover:bg-slate-700 px-4 py-2 rounded-lg font-semibold transition-colors"
+                className="bg-locker-slate hover:bg-locker-slateDark px-4 py-2 rounded-lg font-semibold transition-colors"
               >
                 Back to League
               </button>
               {saving && (
-                <div className="flex items-center text-green-400">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-400 mr-2"></div>
+                <div className="flex items-center text-locker-ice">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-locker-ice mr-2"></div>
                   Saving...
                 </div>
               )}
@@ -276,7 +276,7 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
 
       {/* Navigation Tabs */}
       <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex space-x-1 bg-slate-800 rounded-lg p-1">
+        <div className="flex space-x-1 bg-locker-slate/60 rounded-lg p-1">
           {[
             { id: 'roster', label: 'My Roster', icon: '👥' },
             { id: 'add-drop', label: 'Add/Drop', icon: '➕' },
@@ -285,10 +285,10 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors text-sm sm:text-base ${
                 activeTab === tab.id
-                  ? 'bg-blue-500 text-white'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-700'
+                  ? 'bg-locker-primary text-white shadow'
+                  : 'text-locker-ice/80 hover:text-white hover:bg-locker-slateDark'
               }`}
             >
               {tab.icon} {tab.label}
@@ -303,7 +303,7 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Starters */}
             <div className="lg:col-span-2">
-              <div className="bg-slate-800/50 rounded-xl p-6">
+              <div className="bg-locker-slate/50 rounded-xl p-6 border border-white/5">
                 <h2 className="text-xl font-bold mb-4 flex items-center">
                   🏆 Starting Lineup
                   <span className="ml-2 text-sm text-slate-400">
@@ -321,14 +321,14 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
                       .slice(0, count);
 
                     return (
-                      <div key={position} className="bg-slate-700/50 rounded-lg p-4">
+                      <div key={position} className="bg-locker-slate/70 rounded-lg p-4">
                         <h3 className="font-semibold mb-3 flex items-center">
                           <span className={`inline-block w-3 h-3 rounded-full mr-2 ${getPositionColor(position)}`}></span>
                           {position} ({positionPlayers.length}/{count})
                         </h3>
                         <div className="space-y-2">
                           {positionPlayers.map((player, index) => (
-                            <div key={player.$id} className="bg-slate-600/50 rounded p-3">
+                            <div key={player.$id} className="bg-locker-slate rounded p-3">
                               <div className="flex items-center justify-between">
                                 <div>
                                   <div className="font-semibold">{player.name}</div>
@@ -343,7 +343,7 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
                               </div>
                               <button
                                 onClick={() => movePlayer(player.$id, 'starters', 'bench')}
-                                className="mt-2 w-full bg-red-500 hover:bg-red-600 py-1 px-2 rounded text-xs font-semibold transition-colors"
+                                className="mt-2 w-full bg-locker-coral hover:bg-locker-primary py-1 px-2 rounded text-xs font-semibold transition-colors text-black"
                               >
                                 Move to Bench
                               </button>
@@ -364,7 +364,7 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
 
             {/* Bench */}
             <div>
-              <div className="bg-slate-800/50 rounded-xl p-6">
+              <div className="bg-locker-slate/50 rounded-xl p-6 border border-white/5">
                 <h2 className="text-xl font-bold mb-4">🪑 Bench ({roster.bench.length})</h2>
                 <div className="space-y-3">
                   {roster.bench.map(playerId => {
@@ -372,7 +372,7 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
                     if (!player) return null;
 
                     return (
-                      <div key={playerId} className="bg-slate-700/50 rounded-lg p-3">
+                      <div key={playerId} className="bg-locker-slate/70 rounded-lg p-3">
                         <div className="flex items-center justify-between mb-2">
                           <div>
                             <div className="font-semibold">{player.name}</div>
@@ -384,10 +384,10 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
                             <div className="text-sm font-semibold">{player.fantasy_points.toFixed(1)} pts</div>
                           </div>
                         </div>
-                        {canMoveToStarters(playerId) && (
+                          {canMoveToStarters(playerId) && (
                           <button
                             onClick={() => movePlayer(playerId, 'bench', 'starters')}
-                            className="w-full bg-green-500 hover:bg-green-600 py-1 px-2 rounded text-xs font-semibold transition-colors"
+                              className="w-full bg-locker-primary hover:bg-locker-primaryDark py-1 px-2 rounded text-xs font-semibold transition-colors"
                           >
                             Move to Starters
                           </button>

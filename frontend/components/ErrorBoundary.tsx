@@ -60,23 +60,4 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 }
 
-// Specialized error boundary for Spline scenes
-export function SplineErrorBoundary({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <ErrorBoundary
-      fallback={
-        <div className={`w-full h-full flex items-center justify-center bg-zinc-900/50 rounded-lg ${className || ''}`}>
-          <div className="text-center p-6">
-            <div className="text-6xl mb-4">🏟️</div>
-            <div className="text-zinc-300 text-lg font-semibold mb-2">3D Scene Unavailable</div>
-            <div className="text-zinc-500 text-sm">
-              The 3D visualization couldn't load. Please try refreshing the page.
-            </div>
-          </div>
-        </div>
-      }
-    >
-      {children}
-    </ErrorBoundary>
-  );
-} 
+// Removed Spline-specific boundary
