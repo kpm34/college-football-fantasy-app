@@ -32,15 +32,15 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#4A1626] via-[#5C1F30] to-[#3A1220] flex items-center justify-center px-4">
-      <form onSubmit={onSubmit} className="w-full max-w-md bg-white/10 backdrop-blur rounded-xl p-6 border border-white/15">
+    <main className="min-h-screen login-bg-1 bg-gradient-to-br from-[#4A1626]/60 via-[#5C1F30]/60 to-[#3A1220]/60 flex items-center justify-center px-4">
+      <form onSubmit={onSubmit} className="w-full max-w-md login-card rounded-xl p-6">
         <h1 className="text-2xl font-bold text-white mb-4">Login</h1>
         {error && <p className="text-red-300 mb-3">{error}</p>}
         <label className="block text-white/80 text-sm mb-1">Email</label>
-        <input className="w-full mb-3 px-3 py-2 rounded-md bg-white/90 text-black" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input className="w-full mb-3 px-3 py-2 rounded-md login-input" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
         <label className="block text-white/80 text-sm mb-1">Password</label>
-        <input className="w-full mb-4 px-3 py-2 rounded-md bg-white/90 text-black" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button disabled={loading} className="w-full rounded-md px-4 py-2 bg-[#E89A5C] hover:bg-[#D4834A] text-white disabled:opacity-60">{loading ? 'Logging in...' : 'Login'}</button>
+        <input className="w-full mb-4 px-3 py-2 rounded-md login-input" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+        <button disabled={loading} className="w-full rounded-md px-4 py-2 login-button text-white disabled:opacity-60">{loading ? 'Logging in...' : 'Login'}</button>
         <div className="mt-4 grid grid-cols-1 gap-2">
           <OAuthButtons />
         </div>

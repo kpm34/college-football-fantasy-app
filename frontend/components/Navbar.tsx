@@ -47,9 +47,6 @@ export default function Navbar() {
               </Link>
             </div>
             <div className="hidden md:flex items-center gap-1 ml-4">
-              <NavLink href="/league/create" label="Create League" />
-              <NavLink href="/league/join" label="Join" />
-              <NavLink href="/leagues/search" label="Leagues" />
               <NavLink href="/scoreboard" label="Scoreboard" />
               <NavLink href="/standings" label="Standings" />
             </div>
