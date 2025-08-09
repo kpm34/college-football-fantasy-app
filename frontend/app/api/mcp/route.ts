@@ -198,7 +198,7 @@ const handler = createMcpHandler(
           integrations: {
             appwrite: !!process.env.APPWRITE_PROJECT_ID,
             vercel: !!process.env.VERCEL_URL,
-            spline: '3D visualizations',
+            spline: 'removed',
             aiGateway: !!process.env.AI_GATEWAY_API_KEY,
           },
           pages: [
