@@ -4,9 +4,9 @@
   "description": "Fantasy football platform for Power 4 conferences",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm run start",
     "server": "cd src && node api/server.ts",
     "sync-data": "ts-node src/utils/sync-data.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -16,8 +16,8 @@
     "update-projections": "python3 src/scripts/projection_updater.py",
     "lint": "cd frontend && npm run lint",
     "typecheck": "cd frontend && npm run typecheck",
-    "preview": "vercel",
-    "deploy": "vercel --prod",
+    "preview": "cd frontend && npm run preview",
+    "deploy": "cd frontend && npm run deploy",
     "install:all": "npm install && cd frontend && npm install"
   },
   "dependencies": {
