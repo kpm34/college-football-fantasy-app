@@ -167,31 +167,31 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
+    <div className="min-h-screen bg-gradient-to-br from-locker-slateDark via-locker-slate to-black text-white">
       {/* Header */}
-      <div className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
+      <div className="bg-locker-primary/20 backdrop-blur-sm border-b border-locker-primary/30">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white">{league.name}</h1>
-              <p className="text-slate-300">
+              <h1 className="text-3xl font-bold text-white font-bebas tracking-wide">{league.name}</h1>
+              <p className="text-locker-ice/80">
                 {league.game_mode === 'CONFERENCE' ? `${league.selected_conference} Conference` : 'Power 4'} • 
                 {teams.length}/{league.max_teams} Teams • 
                 Status: <span className="capitalize">{league.status}</span>
               </p>
             </div>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3">
               {userTeam && (
                 <button
                   onClick={handleViewLockerRoom}
-                  className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-lg font-semibold transition-colors"
+                  className="bg-locker-primary hover:bg-locker-primaryDark px-5 py-2 rounded-lg font-semibold transition-colors shadow-sm"
                 >
                   🏈 My Locker Room
                 </button>
               )}
               <button
                 onClick={handleInviteManagers}
-                className="bg-green-500 hover:bg-green-600 px-6 py-2 rounded-lg font-semibold transition-colors"
+                className="bg-locker-coral hover:bg-locker-primary px-5 py-2 rounded-lg font-semibold text-black transition-colors shadow-sm"
               >
                 Invite Managers
               </button>
@@ -202,7 +202,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
 
       {/* Navigation Tabs */}
       <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex space-x-1 bg-slate-800 rounded-lg p-1">
+        <div className="flex space-x-1 bg-locker-slate/60 rounded-lg p-1">
           {[
             { id: 'overview', label: 'Overview', icon: '🏠' },
             { id: 'members', label: 'Members', icon: '👥' },
@@ -212,10 +212,10 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors text-sm sm:text-base ${
                 activeTab === tab.id
-                  ? 'bg-blue-500 text-white'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-700'
+                  ? 'bg-locker-primary text-white shadow'
+                  : 'text-locker-ice/80 hover:text-white hover:bg-locker-slateDark'
               }`}
             >
               {tab.icon} {tab.label}
@@ -229,7 +229,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         {activeTab === 'overview' && (
           <div className="grid md:grid-cols-2 gap-8">
             {/* League Info */}
-            <div className="bg-slate-800/50 rounded-xl p-6">
+            <div className="bg-locker-slate/50 rounded-xl p-6 border border-white/5">
               <h2 className="text-xl font-bold mb-4">League Information</h2>
               <div className="space-y-3">
                 <div>
@@ -260,13 +260,13 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-slate-800/50 rounded-xl p-6">
+            <div className="bg-locker-slate/50 rounded-xl p-6 border border-white/5">
               <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
               <div className="space-y-3">
                 {league.status === 'draft' && (
                   <button
                     onClick={handleScheduleDraft}
-                    className="w-full bg-orange-500 hover:bg-orange-600 py-3 px-4 rounded-lg font-semibold transition-colors"
+                    className="w-full bg-locker-coral hover:bg-locker-primary py-3 px-4 rounded-lg font-semibold transition-colors text-black"
                   >
                     📅 Schedule Draft
                   </button>
@@ -274,14 +274,14 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                 {userTeam && (
                   <button
                     onClick={handleViewLockerRoom}
-                    className="w-full bg-blue-500 hover:bg-blue-600 py-3 px-4 rounded-lg font-semibold transition-colors"
+                    className="w-full bg-locker-primary hover:bg-locker-primaryDark py-3 px-4 rounded-lg font-semibold transition-colors"
                   >
                     🏈 Manage Roster
                   </button>
                 )}
                 <button
                   onClick={() => setActiveTab('members')}
-                  className="w-full bg-green-500 hover:bg-green-600 py-3 px-4 rounded-lg font-semibold transition-colors"
+                  className="w-full bg-locker-brown hover:bg-locker-primary py-3 px-4 rounded-lg font-semibold transition-colors"
                 >
                   👥 View Members
                 </button>
