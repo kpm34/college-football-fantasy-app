@@ -44,7 +44,14 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
 }));
 app.use(cors({
-  origin: ['http://localhost:3001', 'http://localhost:3000', 'https://app.spline.design', 'https://prod.spline.design', 'https://college-football-fantasy-app.vercel.app'],
+  origin: [
+    'http://localhost:3001',
+    'http://localhost:3000',
+    'https://cfbfantasy.app',
+    'https://www.cfbfantasy.app',
+    'https://collegefootballfantasy.app',
+    'https://www.collegefootballfantasy.app'
+  ],
   credentials: true
 }));
 app.use(compression());
@@ -104,7 +111,7 @@ app.use((_req, res) => {
 app.listen(PORT, () => {
   console.log(`🏈 College Football Fantasy API running on http://localhost:${PORT}`);
 console.log(`📊 Health check: http://localhost:${PORT}/health`);
-console.log(`🌐 Production: https://college-football-fantasy-app.vercel.app`);
+  console.log(`🌐 Production: https://cfbfantasy.app`);
   
   // Start live updates for current games
   liveUpdatesService.startPolling().catch(console.error);
