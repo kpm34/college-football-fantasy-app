@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { account } from "@/lib/appwrite";
 
 function NavLink({ href, label }: { href: string; label: string }) {
   const pathname = usePathname();
@@ -52,11 +53,34 @@ export default function Navbar() {
               <NavLink href="/scoreboard" label="Scoreboard" />
               <NavLink href="/standings" label="Standings" />
             </div>
+            <div className="ml-auto hidden md:flex items-center gap-3">
+              <UserMenu />
+            </div>
           </div>
         </div>
       </nav>
       <SideDrawer open={open} onClose={() => setOpen(false)} />
     </>
+  );
+}
+
+function UserMenu() {
+  const [name, setName] = useState<string | null>(null);
+  useState(() => {
+    (async () => {
+      try {
+        const me = await account.get();
+        setName(me.name || me.email);
+      } catch {
+        setName(null);
+      }
+    })();
+  });
+  if (name) {
+    return <span className="text-white/90 text-sm">{name}</span>;
+  }
+  return (
+    <Link href="/login" className="text-sm px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-white">Login</Link>
   );
 }
 

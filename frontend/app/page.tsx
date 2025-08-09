@@ -17,10 +17,10 @@ export default function Home() {
           <p className="hero-subtitle text-[#D9BBA4]/90 mb-8 drop-shadow-lg">Power 4 Conferences Only</p>
           <div className="space-y-4">
             <button
-              onClick={() => router.push('/league/create')}
+              onClick={() => router.push('/signup')}
               className="cta-button bg-[#E89A5C] px-8 py-4 rounded-xl hover:bg-[#D4834A] transition-colors shadow-lg backdrop-blur-sm text-white"
             >
-              Start a League
+              Sign Up
             </button>
             <br />
             <button

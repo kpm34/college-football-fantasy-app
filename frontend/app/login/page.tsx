@@ -34,9 +34,29 @@ export default function LoginPage() {
         <label className="block text-white/80 text-sm mb-1">Password</label>
         <input className="w-full mb-4 px-3 py-2 rounded-md bg-white/90 text-black" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
         <button disabled={loading} className="w-full rounded-md px-4 py-2 bg-[#E89A5C] hover:bg-[#D4834A] text-white disabled:opacity-60">{loading ? 'Logging in...' : 'Login'}</button>
+        <div className="mt-4 grid grid-cols-1 gap-2">
+          <OAuthButtons />
+        </div>
         <p className="text-white/80 text-sm mt-4">No account? <Link href="/signup" className="underline">Sign up</Link></p>
       </form>
     </main>
+  );
+}
+
+function OAuthButtons() {
+  async function social(provider: 'google' | 'apple') {
+    try {
+      // Redirect-based OAuth
+      await account.createOAuth2Session(provider, '/', '/login');
+    } catch (e) {
+      console.error('OAuth failed', e);
+    }
+  }
+  return (
+    <div className="space-y-2">
+      <button type="button" onClick={() => social('google')} className="w-full rounded-md px-4 py-2 bg-white text-black hover:bg-gray-200">Continue with Google</button>
+      <button type="button" onClick={() => social('apple')} className="w-full rounded-md px-4 py-2 bg-black text-white hover:bg-black/90">Continue with Apple</button>
+    </div>
   );
 }
 
