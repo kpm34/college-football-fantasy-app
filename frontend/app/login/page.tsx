@@ -15,7 +15,14 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      await account.createEmailSession(email, password);
+      const anyAccount: any = account as any;
+      if (typeof anyAccount.createEmailPasswordSession === 'function') {
+        await anyAccount.createEmailPasswordSession(email, password);
+      } else if (typeof anyAccount.createEmailSession === 'function') {
+        await anyAccount.createEmailSession(email, password);
+      } else {
+        throw new Error('Email/password login method not available in Appwrite SDK');
+      }
       window.location.href = '/';
     } catch (err: any) {
       setError(err?.message || 'Login failed');

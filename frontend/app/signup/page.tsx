@@ -21,7 +21,12 @@ export default function SignupPage() {
     try {
       const compositeName = name || `${firstName} ${lastName}`.trim();
       const user = await account.create(ID.unique(), email, password, compositeName || undefined);
-      await account.createEmailSession(email, password);
+      const anyAccount: any = account as any;
+      if (typeof anyAccount.createEmailPasswordSession === 'function') {
+        await anyAccount.createEmailPasswordSession(email, password);
+      } else if (typeof anyAccount.createEmailSession === 'function') {
+        await anyAccount.createEmailSession(email, password);
+      }
       window.location.href = '/';
     } catch (err: any) {
       setError(err?.message || 'Signup failed');
