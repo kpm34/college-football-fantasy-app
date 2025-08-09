@@ -1,6 +1,6 @@
 # Data Flow Diagram - APIs to Frontend Pages
 
-## 🔄 Complete Data Flow Architecture (Updated Aug 3, 2025)
+## 🔄 Complete Data Flow Architecture (Updated Aug 9, 2025)
 
 ```mermaid
 graph TB
@@ -42,7 +42,6 @@ graph TB
         SCORE[Scoreboard]
         DRAFT[Draft Page]
         STATS[Player Stats]
-        TEST[Test Appwrite ✅]
     end
     
     %% Data Flow Connections
@@ -71,7 +70,7 @@ graph TB
     AW --> TEAMS
     AW --> SCORE
     AW --> STATS
-    AW --> TEST
+    %% Test page removed in cleanup
     
     REDIS -.->|Real-time| SCORE
     AW -.->|Subscriptions| HOME
