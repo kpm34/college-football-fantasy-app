@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Bebas_Neue, Montserrat, Roboto_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import dynamic from 'next/dynamic'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -27,6 +28,9 @@ const robotoMono = Roboto_Mono({
   variable: '--font-roboto-mono',
   display: 'swap',
 })
+
+// Lazy-load Navbar on client to avoid SSR issues
+const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'College Football Fantasy App',
@@ -60,7 +64,13 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="CF Fantasy" />
       </head>
       <body className={`${inter.variable} ${bebasNeue.variable} ${montserrat.variable} ${robotoMono.variable} font-sans`}>
-        {children}
+        <div className="min-h-screen flex flex-col">
+          {/* Global Navbar */}
+          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+          {/** Nav placed as component below */}
+          <Navbar />
+          <div className="flex-1">{children}</div>
+        </div>
         <Analytics />
         <ServiceWorkerRegistration />
       </body>
