@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Bebas_Neue, Montserrat, Roboto_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
-import dynamic from 'next/dynamic'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -29,8 +28,7 @@ const robotoMono = Roboto_Mono({
   display: 'swap',
 })
 
-// Lazy-load Navbar on client to avoid SSR issues
-const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false })
+import Navbar from '../components/Navbar'
 
 export const metadata: Metadata = {
   title: 'College Football Fantasy App',
