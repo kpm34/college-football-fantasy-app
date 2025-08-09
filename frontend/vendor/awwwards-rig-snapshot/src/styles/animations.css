@@ -1,0 +1,31 @@
+:root {
+  --easing-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.fade-in-up {
+  animation: fade-in-up 600ms var(--easing-standard) both;
+}
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.blur-in {
+  animation: blur-in 600ms var(--easing-standard) both;
+}
+@keyframes blur-in {
+  from {
+    filter: blur(12px);
+    opacity: 0;
+  }
+  to {
+    filter: blur(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+# Skip hooks in CI environment
+[ -n "$CI" ] && exit 0
+
+# Run lint-staged
+npx lint-staged

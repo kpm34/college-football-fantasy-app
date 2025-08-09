@@ -1,0 +1,71 @@
+# Cursor AI Assistant Rules
+
+## Project Context
+You are working on an Awwwards-style Next.js 15 application with React Three Fiber for 3D graphics.
+
+## Code Style & Conventions
+- Use TypeScript with strict typing
+- Prefer functional components with hooks
+- Use async/await over promises
+- Follow existing file structure patterns
+- Keep components small and focused
+- Use descriptive variable names
+
+## Performance Guidelines
+- Optimize WebGL/Three.js performance first
+- Use React.memo for expensive components
+- Implement proper cleanup in useEffect
+- Minimize re-renders with useMemo/useCallback
+- Lazy load heavy components
+
+## Three.js/R3F Best Practices
+- Use instancing for repeated geometries
+- Implement LOD (Level of Detail) where appropriate
+- Dispose of geometries and materials properly
+- Use texture compression (KTX2, Basis)
+- Limit draw calls and polygon count
+
+## Next.js Specific
+- Use App Router patterns (not Pages Router)
+- Implement proper metadata and SEO
+- Use dynamic imports for client-only code
+- Leverage ISR/SSG where possible
+- Keep API routes lightweight
+
+## Testing & Quality
+- Write TypeScript types for all props
+- Ensure accessibility (ARIA labels, keyboard nav)
+- Test responsive design across viewports
+- Check performance metrics regularly
+
+## Common Commands
+```bash
+npm run dev        # Development server
+npm run build      # Production build
+npm run typecheck  # Type checking
+npm run lint:fix   # Fix linting issues
+npm run preview    # Vercel preview
+npm run deploy     # Production deploy
+```
+
+## File Locations
+- Components: src/app/[route]/
+- 3D Scene: src/app/scene/
+- API Routes: src/app/api/
+- Hooks: src/hooks/
+- Types: Create as needed
+- Assets: public/models/, public/textures/
+
+## DO NOT
+- Create files unless necessary
+- Add console.logs in production code
+- Ignore TypeScript errors
+- Skip performance considerations
+- Use deprecated patterns
+
+## ALWAYS
+- Check existing patterns first
+- Consider mobile performance
+- Handle loading and error states
+- Clean up subscriptions/listeners
+- Update MEMORY folder for significant changes
