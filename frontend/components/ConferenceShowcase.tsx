@@ -243,7 +243,7 @@ export default function ConferenceShowcase() {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
-                { name: "Texas", abbreviation: "TEX", mascot: "Longhorns" },
+                { name: "Oklahoma", abbreviation: "OU", mascot: "Sooners" },
                 { name: "Oklahoma State", abbreviation: "OKST", mascot: "Cowboys" },
                 { name: "Kansas State", abbreviation: "KSU", mascot: "Wildcats" },
                 { name: "TCU", abbreviation: "TCU", mascot: "Horned Frogs" },
