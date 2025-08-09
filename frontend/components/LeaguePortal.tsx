@@ -113,7 +113,7 @@ export default function LeaguePortal({ leagueId, leagueName }: LeaguePortalProps
     } finally {
       setLoading(false);
     }
-
+  };
 
   const getConferenceColor = (conference: string) => {
     switch (conference) {

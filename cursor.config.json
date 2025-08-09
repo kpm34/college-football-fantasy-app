@@ -1,0 +1,150 @@
+{
+  "name": "College Football Fantasy App",
+  "description": "Fantasy football platform for Power 4 conferences",
+  "version": "1.0.0",
+  "environment": {
+    "files": [
+      ".env",
+      "frontend/.env.local",
+      ".env.production.local"
+    ],
+    "runtime": "Node.js 18-22",
+    "framework": "Next.js 15.4.5"
+  },
+  "tools": {
+    "vercel": {
+      "cli": "44.7.3",
+      "project": "college-football-fantasy-app",
+      "team": "kpm34s-projects",
+      "domains": [
+        "cfbfantasy.app",
+        "www.cfbfantasy.app",
+        "collegefootballfantasy.app",
+        "www.collegefootballfantasy.app"
+      ]
+    },
+    "appwrite": {
+      "endpoint": "https://nyc.cloud.appwrite.io/v1",
+      "projectId": "college-football-fantasy-app",
+      "databaseId": "college-football-fantasy",
+      "collections": {
+        "auctions": "Auction draft data",
+        "bids": "Auction bid history",
+        "rosters": "Drafted players",
+        "games": "Game data and scores",
+        "leagues": "Fantasy leagues",
+        "lineups": "Weekly matchups",
+        "college_players": "Player database",
+        "player_stats": "Player statistics",
+        "rankings": "AP Top 25",
+        "teams": "Power 4 teams",
+        "users": "User accounts"
+      }
+    },
+    "apis": {
+      "cfbd": {
+        "description": "College Football Data API",
+        "hasKey": true,
+        "hasBackup": true
+      },
+      "aiGateway": {
+        "description": "Vercel AI Gateway",
+        "url": "https://ai-gateway.vercel.sh/v1/ai",
+        "hasKey": true
+      },
+      "inngest": {
+        "description": "Background job processing",
+        "hasEventKey": true,
+        "hasSigningKey": true
+      },
+      "edgeConfig": {
+        "description": "Feature flags and dynamic config",
+        "hasToken": true
+      }
+    },
+    "mcp": {
+      "enabled": true,
+      "tools": [
+        "File operations (Read, Write, Edit)",
+        "Web fetching and searching",
+        "Task management (TodoWrite)",
+        "Git operations",
+        "IDE diagnostics",
+        "Code execution"
+      ]
+    }
+  },
+  "commands": {
+    "dev": {
+      "frontend": "npm run dev",
+      "backend": "npm run server",
+      "both": "npm run dev & npm run server"
+    },
+    "build": {
+      "frontend": "cd frontend && npm run build",
+      "root": "npm run build"
+    },
+    "deploy": {
+      "preview": "vercel",
+      "production": "vercel --prod",
+      "pull": "vercel pull",
+      "env": "vercel env ls"
+    },
+    "data": {
+      "sync": "npm run sync-data",
+      "test": "npm test"
+    },
+    "quality": {
+      "lint": "npm run lint",
+      "typecheck": "npm run typecheck"
+    }
+  },
+  "paths": {
+    "frontend": "./frontend",
+    "backend": "./src",
+    "api": "./frontend/app/api",
+    "components": "./frontend/components",
+    "types": "./frontend/types",
+    "lib": "./frontend/lib",
+    "public": "./frontend/public",
+    "vendor": "./frontend/vendor",
+    "rosters": "./confrence rosters",
+    "docs": "./"
+  },
+  "features": {
+    "power4Only": true,
+    "eligibilityRules": "AP Top-25 or conference games",
+    "seasonLength": "12 weeks",
+    "draftTypes": ["snake", "auction"],
+    "3dGraphics": true,
+    "pwa": true,
+    "offlineSupport": true,
+    "realTimeScoring": true
+  },
+  "integrations": {
+    "claude": {
+      "contextFile": "CLAUDE.md",
+      "rulesFile": ".cursorrules"
+    },
+    "cursor": {
+      "rulesFile": ".cursorrules",
+      "configFile": "cursor.config.json"
+    },
+    "vercel": {
+      "configFile": "vercel.json",
+      "ignoreFile": ".vercelignore"
+    },
+    "git": {
+      "ignoreFile": ".gitignore",
+      "modulesFile": ".gitmodules"
+    }
+  },
+  "quickAccess": {
+    "envVars": "Open .env file for all environment variables",
+    "claudeContext": "Open CLAUDE.md for project context",
+    "cursorRules": "Open .cursorrules for AI guidelines",
+    "apiEndpoints": "frontend/app/api for all API routes",
+    "appwriteConfig": "frontend/lib/appwrite-config.ts",
+    "types": "frontend/types for TypeScript definitions"
+  }
+}
