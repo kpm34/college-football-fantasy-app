@@ -1,21 +1,3 @@
 {
-    "databases": [
-        {
-            "$id": "(data tables) with Labes for what they are",
-            "name": "My Awesome Database",
-            "enabled": true
-        }
-    ],
-    "collections": [
-        {
-            "$id": "688d8d5500168b11780f",
-            "databaseId": "(data tables) with Labes for what they are",
-            "name": "My Awesome Collection",
-            "documentSecurity": false,
-            "attributes": [],
-            "indexes": [],
-            "enabled": true
-        }
-    ],
     "projectId": "college-football-fantasy-app"
 }

@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { account, databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
-import { Query } from "node-appwrite";
+import { Query } from "appwrite";
+import { useRouter } from "next/navigation";
+import CFPLoadingScreen from "./CFPLoadingScreen";
 import {
   HomeIcon,
   PlusCircleIcon,
@@ -12,6 +14,8 @@ import {
   ChartBarIcon,
   TrophyIcon,
   Cog6ToothIcon,
+  RectangleGroupIcon,
+  LockClosedIcon,
 } from "@heroicons/react/24/outline";
 
 type DrawerProps = {
@@ -27,7 +31,9 @@ type SessionState = {
 };
 
 export default function SideDrawer({ open, onClose }: DrawerProps) {
+  const router = useRouter();
   const [session, setSession] = useState<SessionState>({ isAuthenticated: false });
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -56,31 +62,87 @@ export default function SideDrawer({ open, onClose }: DrawerProps) {
     }
   }
 
+  function handleNavigateWithLoading(href: string) {
+    setIsNavigating(true);
+    onClose();
+    setTimeout(() => {
+      router.push(href);
+      // Reset after navigation completes
+      setTimeout(() => setIsNavigating(false), 500);
+    }, 100);
+  }
+
   const [leagues, setLeagues] = useState<Array<{ id: string; name: string }>>([]);
 
   useEffect(() => {
-    if (!session.isAuthenticated || !session.userId) return;
+    if (!session.isAuthenticated || !session.email) return;
     let cancelled = false;
     (async () => {
       try {
-        // Find teams for the current user
-        const teamsRes = await databases.listDocuments(
+        // Try to get leagues from user document by email
+        const userDocs = await databases.listDocuments(
           DATABASE_ID,
-          COLLECTIONS.TEAMS,
-          [Query.equal('user_id', session.userId)]
+          COLLECTIONS.USERS,
+          [Query.equal('email', session.email)]
         );
-        const leagueIds = Array.from(new Set(teamsRes.documents.map((d: any) => d.league_id)));
-        const fetched = await Promise.all(
-          leagueIds.map(async (lid: string) => {
-            try {
-              const doc = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, lid);
-              return { id: lid, name: (doc as any).name };
-            } catch {
-              return null;
-            }
-          })
+        
+        if (userDocs.documents.length > 0) {
+          const userDoc = userDocs.documents[0];
+          const userLeagues = (userDoc as any).leagues || [];
+          const userLeagueNames = (userDoc as any).leagueNames || [];
+          
+          if (userLeagues.length > 0) {
+            const leagueData = userLeagues.map((id: string, index: number) => ({
+              id,
+              name: userLeagueNames[index] || 'Unnamed League'
+            }));
+            if (!cancelled) setLeagues(leagueData);
+            return; // Exit early if we found leagues
+          }
+        }
+
+        // Fallback: try getting leagues from rosters
+        console.log('No leagues in user doc, trying rosters approach');
+        
+        // Try to find rosters by email first
+        let rostersRes = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.ROSTERS,
+          [Query.equal('email', session.email)]
         );
-        if (!cancelled) setLeagues(fetched.filter(Boolean) as Array<{ id: string; name: string }>);
+        
+        // If not found by email, try by userName
+        if (rostersRes.documents.length === 0 && session.name) {
+          rostersRes = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.ROSTERS,
+            [Query.equal('userName', session.name)]
+          );
+        }
+        
+        // Last resort: try by userId
+        if (rostersRes.documents.length === 0 && session.userId) {
+          rostersRes = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.ROSTERS,
+            [Query.equal('userId', session.userId)]
+          );
+        }
+        
+        if (rostersRes.documents.length > 0) {
+          const leagueIds = Array.from(new Set(rostersRes.documents.map((d: any) => d.leagueId)));
+          const fetched = await Promise.all(
+            leagueIds.map(async (lid: string) => {
+              try {
+                const doc = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, lid);
+                return { id: lid, name: (doc as any).name };
+              } catch {
+                return null;
+              }
+            })
+          );
+          if (!cancelled) setLeagues(fetched.filter(Boolean) as Array<{ id: string; name: string }>);
+        }
       } catch (e) {
         console.error('Failed to load user leagues', e);
       }
@@ -88,10 +150,12 @@ export default function SideDrawer({ open, onClose }: DrawerProps) {
     return () => {
       cancelled = true;
     }
-  }, [session.isAuthenticated, session.userId]);
+  }, [session.isAuthenticated, session.email, session.name, session.userId]);
 
   return (
     <>
+      <CFPLoadingScreen isLoading={isNavigating} />
+      
       {/* Overlay */}
       <div
         className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
@@ -125,45 +189,48 @@ export default function SideDrawer({ open, onClose }: DrawerProps) {
             <HomeIcon className="h-5 w-5" />
             <span className="font-medium">Home</span>
           </Link>
-          <Link href="/league/create" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
-            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
-            <PlusCircleIcon className="h-5 w-5" />
-            <span className="font-medium">Create League</span>
-          </Link>
+
+          {session.isAuthenticated && (
+            <>
+              <Link href="/dashboard" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
+                <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+                <RectangleGroupIcon className="h-5 w-5" />
+                <span className="font-medium">Dashboard</span>
+              </Link>
+
+              {leagues.length > 0 && (
+                <>
+                  <div className="pt-3 mt-3 border-t border-white/10" />
+                  <div className="px-3 pb-1 text-white/60 text-xs uppercase tracking-wider">My Leagues</div>
+                  {leagues.map((lg) => (
+                    <button
+                      key={lg.id}
+                      onClick={() => handleNavigateWithLoading(`/league/${lg.id}/locker-room`)}
+                      className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden w-full text-left"
+                    >
+                      <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+                      <LockClosedIcon className="h-5 w-5" />
+                      <span className="font-medium">{lg.name}</span>
+                    </button>
+                  ))}
+                </>
+              )}
+
+              <div className="pt-3 mt-3 border-t border-white/10" />
+              
+              <Link href="/scoreboard" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
+                <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+                <ChartBarIcon className="h-5 w-5" />
+                <span className="font-medium">Scoreboard</span>
+              </Link>
+            </>
+          )}
+
           <Link href="/league/join" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
             <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
             <UserGroupIcon className="h-5 w-5" />
             <span className="font-medium">Join League</span>
           </Link>
-          <Link href="/leagues/search" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
-            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
-            <MagnifyingGlassIcon className="h-5 w-5" />
-            <span className="font-medium">Find Leagues</span>
-          </Link>
-          <Link href="/scoreboard" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
-            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
-            <ChartBarIcon className="h-5 w-5" />
-            <span className="font-medium">Scoreboard</span>
-          </Link>
-          <Link href="/standings" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
-            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
-            <TrophyIcon className="h-5 w-5" />
-            <span className="font-medium">Standings</span>
-          </Link>
-
-          {session.isAuthenticated && leagues.length > 0 && (
-            <>
-              <div className="pt-3 mt-3 border-t border-white/10" />
-              <div className="px-3 pb-1 text-white/60 text-xs uppercase tracking-wider">My Leagues</div>
-              {leagues.map((lg) => (
-                <Link key={lg.id} href={`/league/${lg.id}`} onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
-                  <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
-                  <Cog6ToothIcon className="h-5 w-5" />
-                  <span className="font-medium">{lg.name}</span>
-                </Link>
-              ))}
-            </>
-          )}
 
           <div className="pt-3 mt-3 border-t border-white/10" />
 

@@ -1,136 +1,148 @@
 # College Football Fantasy App
 
-A fantasy sports platform focused on the Power 4 conferences (Big 12, ACC, Big Ten, SEC) with unique eligibility rules based on AP Top 25 rankings and conference matchups.
+Fantasy football platform exclusively for Power 4 conferences with unique eligibility rules.
 
 ## 🏈 Features
 
-- **Conference Focus**: Covers only Big 12, ACC, Big Ten, and SEC
-- **12-Week Regular Season**: No conference titles, bowls, or playoffs
-- **Unique Eligibility Rules**: Players can only be started when facing:
-  - An AP Top-25 ranked opponent, OR
-  - A conference opponent (same conference game)
-- **Free Data Sources**: Uses ESPN's public API and CollegeFootballData API
-- **Real-time Updates**: Live scoring with 30-second polling intervals
-- **Smart Caching**: Reduces API calls and improves performance
-- **Rate Limiting**: Prevents API throttling
+- **Power 4 Conferences Only**: SEC, ACC, Big 12, Big Ten
+- **Unique Eligibility Rules**: Players only eligible vs AP Top-25 teams or in conference games
+- **12-Week Regular Season**: No playoffs or bowls
+- **Draft Systems**: Snake draft with timer and auto-pick, Auction draft with bidding
+- **Real-time Scoring**: Live updates via ESPN/CFBD APIs
+- **3D Visualizations**: Spline and Three.js for immersive UI
+- **Progressive Web App**: Offline support with service worker
 
-## 🚀 Quick Start
+## 🛠️ Tech Stack
 
-1. **Clone the repository**
+- **Frontend**: Next.js 15.4.5 with App Router, TypeScript, Tailwind CSS
+- **3D Graphics**: Three.js, React Three Fiber, Spline
+- **Animation**: GSAP, Framer Motion, Lenis, Anime.js
+- **Backend**: Appwrite BaaS, Express.js + TypeScript
+- **Database**: Appwrite (NYC) - Project: `college-football-fantasy-app`
+- **AI Integration**: Vercel AI SDK, Anthropic Claude, Chrome AI
+- **Data Sources**: College Football Data API (CFBD), ESPN API
+- **Deployment**: Vercel with Edge Functions
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18-22
+- npm or yarn
+- Vercel CLI (for deployment)
+
+### Installation
 ```bash
-git clone [your-repo-url]
-cd college-football-fantasy-app
+# Install all dependencies
+npm run install:all
+
+# Or install separately
+npm install           # Root dependencies
+cd frontend && npm install  # Frontend dependencies
 ```
 
-2. **Install dependencies**
+### Environment Setup
+1. Copy `.env` to `frontend/.env.local`
+2. Update with your API keys (all variables configured in `.env`)
+3. Key variables:
+   - `APPWRITE_PROJECT_ID=college-football-fantasy-app`
+   - `CFBD_API_KEY` - Configured
+   - `AI_GATEWAY_API_KEY` - Configured
+
+### Development
 ```bash
-npm install
-```
+# Start development server
+npm run dev          # Frontend on port 3001
 
-3. **Get a free CFBD API key** (optional but recommended)
-   - Go to https://collegefootballdata.com
-   - Sign up for a free account
-   - Copy your API key
-   - Update `.env` file:
-```
-CFBD_API_KEY=your_actual_key_here
-```
+# Run backend server
+npm run server       # Express server on port 3000
 
-4. **Run the test suite**
-```bash
-npm test
+# Other commands
+npm run build        # Production build
+npm run lint         # Run linting
+npm run typecheck    # TypeScript checking
+npm run format       # Code formatting
 ```
 
 ## 📁 Project Structure
 
 ```
-college-football-fantasy-app/
-├── src/
-│   ├── types/          # TypeScript interfaces
-│   ├── services/       # Core services
-│   │   ├── data-service.ts      # ESPN & CFBD API integration
-│   │   ├── eligibility-checker.ts # Player eligibility logic
-│   │   └── live-updates.ts      # Real-time game updates
-│   ├── utils/          # Utilities
-│   │   ├── rate-limiter.ts      # API rate limiting
-│   │   └── cache.ts             # Data caching
-│   └── test-services.ts         # Test all services
-├── PRD.md              # Product Requirements Document
-├── data-sources-integration.md  # API documentation
-└── README.md           # This file
+/
+├── frontend/               # Next.js 15 application
+│   ├── app/               # App Router pages and API routes
+│   ├── components/        # React components
+│   ├── lib/              # Utilities and configurations
+│   └── types/            # TypeScript definitions
+├── src/                   # Backend source code
+│   ├── services/         # Business logic
+│   └── scripts/          # Data management
+├── vendor/awwwards-rig/   # 3D graphics submodule
+└── confrence rosters/     # Team roster data
 ```
 
-## 🛠️ Available Scripts
+## 🔗 Production URLs
 
-- `npm run build` - Compile TypeScript to JavaScript
-- `npm run dev` - Run tests in development mode (TypeScript)
-- `npm test` - Run the test suite
-- `npm start` - Run compiled JavaScript
-- `npm run clean` - Clean build directory
+- https://cfbfantasy.app
+- https://www.cfbfantasy.app
+- https://collegefootballfantasy.app
+- https://www.collegefootballfantasy.app
 
-## 📊 Data Sources
+## 🤖 AI & Tool Integration
 
-### ESPN Public API (Primary - No Auth)
-- Live scores and game information
-- Team rosters and schedules
-- No authentication required
-- 60 requests/minute rate limit
+### Cursor AI
+- Configuration: `.cursorrules`
+- Context: `CLAUDE.md`
+- Config: `cursor.config.json`
 
-### CollegeFootballData API (Free Tier)
-- AP Top 25 rankings
-- Historical data and statistics
-- Free API key required
-- 120 requests/minute rate limit
+### Claude Code (MCP)
+- File operations
+- Web fetching
+- Task management
+- Git operations
 
-## 🎮 Eligibility Rules
+### Vercel
+- Edge Config for feature flags
+- KV storage for caching
+- Analytics monitoring
+- AI Gateway for LLM routing
 
-Players are eligible to start only when their game meets these criteria:
+## 📝 Available Scripts
 
-1. **AP Top-25 Opponent**: Facing a team ranked in the current AP Top-25 poll
-2. **Conference Game**: Playing within their own conference
-
-Examples:
-- ✅ Alabama (SEC) vs #15 Tennessee (SEC) - Eligible (both Top-25 AND conference)
-- ✅ Florida (SEC) vs LSU (SEC) - Eligible (conference game)
-- ✅ Michigan (Big Ten) vs #8 Ohio State (Big Ten) - Eligible (Top-25)
-- ❌ Georgia (SEC) vs UAB (C-USA) - Not eligible
-- ❌ Texas (SEC) vs Rice (AAC) - Not eligible
-
-## 🔧 Development
-
-### TypeScript Configuration
-The project uses TypeScript with strict mode enabled. Configuration is in `tsconfig.json`.
-
-### Environment Variables
-Create a `.env` file in the root directory:
-```
-CFBD_API_KEY=your_key_here
-```
-
-### Testing
-Run the test suite to verify all services are working:
 ```bash
-npm test
+# Development
+npm run dev              # Start Next.js dev server
+npm run server           # Start Express backend
+
+# Deployment
+npm run preview          # Vercel preview
+npm run deploy           # Production deployment
+
+# Data Management
+npm run sync-data        # Sync from APIs
+npm run test-appwrite    # Test database connection
+
+# Code Quality
+npm run lint:fix         # Fix linting issues
+npm run format           # Format with Prettier
+npm run typecheck        # TypeScript checking
 ```
 
-## 📈 Next Steps
+## 🔐 Environment Variables
 
-1. **Frontend Development**: Build React/Vue/Angular UI
-2. **Backend API**: Create Express/NestJS API server
-3. **Database**: Set up PostgreSQL for user data
-4. **Authentication**: Implement user auth system
-5. **Draft System**: Build snake draft functionality
-6. **Scoring Engine**: Implement PPR scoring calculations
-7. **Mobile Apps**: Create iOS/Android apps
+See `.env` file for complete list. Key variables:
+- Appwrite configuration
+- CFBD API keys
+- AI Gateway settings
+- Edge Config token
+- Inngest background jobs
 
-## 📝 License
+## 📄 License
 
-ISC
+Private - All rights reserved
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+This is a private project. For access, contact the repository owner.
+
+---
+
+Built with ❤️ for college football fans
