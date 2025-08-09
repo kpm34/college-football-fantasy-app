@@ -32,19 +32,62 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen login-bg-1 bg-gradient-to-br from-[#4A1626]/60 via-[#5C1F30]/60 to-[#3A1220]/60 flex items-center justify-center px-4">
-      <form onSubmit={onSubmit} className="w-full max-w-md login-card rounded-xl p-6">
-        <h1 className="text-2xl font-bold text-white mb-4">Login</h1>
-        {error && <p className="text-red-300 mb-3">{error}</p>}
-        <label className="block text-white/80 text-sm mb-1">Email</label>
-        <input className="w-full mb-3 px-3 py-2 rounded-md login-input" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-        <label className="block text-white/80 text-sm mb-1">Password</label>
-        <input className="w-full mb-4 px-3 py-2 rounded-md login-input" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button disabled={loading} className="w-full rounded-md px-4 py-2 login-button text-white disabled:opacity-60">{loading ? 'Logging in...' : 'Login'}</button>
-        <div className="mt-4 grid grid-cols-1 gap-2">
-          <OAuthButtons />
+    <main className="min-h-screen bg-gradient-to-br from-[#6B3AA0] via-[#A374B5] to-[#E73C7E] flex items-center justify-center px-4">
+      <form onSubmit={onSubmit} className="w-full max-w-md login-card backdrop-blur-lg rounded-xl p-8 shadow-2xl border border-white/20">
+        <h1 className="text-3xl font-bold text-white mb-6 text-center">Welcome Back</h1>
+        {error && <p className="text-red-200 mb-4 text-center bg-red-500/20 py-2 px-3 rounded-lg">{error}</p>}
+        
+        <div className="space-y-4">
+          <div>
+            <label className="block text-[#F7EAE1] text-sm mb-2 font-medium">Email</label>
+            <input 
+              className="w-full px-4 py-3 rounded-lg login-input border border-[#D4A5A5] focus:border-[#E73C7E] focus:outline-none focus:ring-2 focus:ring-[#E73C7E]/20 transition-all" 
+              type="email" 
+              required 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              placeholder="your@email.com"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-[#F7EAE1] text-sm mb-2 font-medium">Password</label>
+            <input 
+              className="w-full px-4 py-3 rounded-lg login-input border border-[#D4A5A5] focus:border-[#E73C7E] focus:outline-none focus:ring-2 focus:ring-[#E73C7E]/20 transition-all" 
+              type="password" 
+              required 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••" 
+            />
+          </div>
         </div>
-        <p className="text-white/80 text-sm mt-4">No account? <Link href="/signup" className="underline">Sign up</Link></p>
+        
+        <button 
+          disabled={loading} 
+          className="w-full mt-6 rounded-lg px-4 py-3 login-button text-white font-semibold disabled:opacity-60 transition-all hover:shadow-lg transform hover:-translate-y-0.5"
+        >
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+        
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[#F7EAE1]/20"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-transparent text-[#F7EAE1]">Or continue with</span>
+            </div>
+          </div>
+          
+          <div className="mt-4">
+            <OAuthButtons />
+          </div>
+        </div>
+        
+        <p className="text-[#F7EAE1] text-sm mt-6 text-center">
+          Don't have an account? <Link href="/signup" className="text-white font-semibold hover:underline">Sign up</Link>
+        </p>
       </form>
     </main>
   );
@@ -53,8 +96,11 @@ export default function LoginPage() {
 function OAuthButtons() {
   async function social(provider: 'google' | 'apple') {
     try {
-      // Redirect-based OAuth
-      await account.createOAuth2Session(provider, '/', '/login');
+      // Redirect-based OAuth with absolute URLs so we return to our site, not the Appwrite host
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const successUrl = `${origin}/`;
+      const failureUrl = `${origin}/login`;
+      await account.createOAuth2Session(provider, successUrl, failureUrl);
     } catch (e) {
       console.error('OAuth failed', e);
     }

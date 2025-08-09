@@ -1,17 +1,25 @@
 import { Client, Databases, Account, Avatars } from 'appwrite';
 import { APPWRITE_CONFIG, DATABASE_ID, COLLECTIONS } from './config/appwrite.config';
 
-// Initialize Appwrite client for frontend (NO API KEY - uses session auth)
+// Initialize Appwrite client with CORS fix
 const client = new Client();
 
-client
-  .setEndpoint(APPWRITE_CONFIG.endpoint)
-  .setProject(APPWRITE_CONFIG.projectId);
+// Force the correct endpoint based on environment
+const endpoint = 'https://nyc.cloud.appwrite.io/v1';
+const projectId = 'college-football-fantasy-app';
 
-// Enable cookie fallback to support Safari/third‑party cookie restrictions
-// @ts-ignore - method exists in browser SDK
-if (typeof (client as any).setCookieFallback === 'function') {
-  (client as any).setCookieFallback(true);
+client
+  .setEndpoint(endpoint)
+  .setProject(projectId);
+
+// Add custom headers to help with CORS
+if (typeof window !== 'undefined') {
+  // Log the initialization for debugging
+  console.log('Initializing Appwrite client:', {
+    endpoint,
+    projectId,
+    origin: window.location.origin
+  });
 }
 
 // Export Appwrite services
@@ -20,7 +28,7 @@ export const account = new Account(client);
 export const avatars = new Avatars(client);
 export { client };
 
-// Re-export configuration for backward compatibility
+// Re-export configuration
 export { DATABASE_ID, COLLECTIONS };
 
 // Realtime channels

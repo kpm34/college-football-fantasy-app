@@ -125,7 +125,7 @@
   "handle_links": "preferred",
   "protocol_handlers": [
     {
-      "protocol": "web+cf-fantasy",
+      "protocol": "web+cffantasy",
       "url": "/league/join?code=%s"
     }
   ]

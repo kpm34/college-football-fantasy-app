@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { account, databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { Query } from 'appwrite';
 
 interface Game {
   id: string;
@@ -24,11 +26,23 @@ interface Game {
   venue?: string;
 }
 
+interface UserPlayer {
+  id: string;
+  name: string;
+  position: string;
+  team: string;
+  points: number;
+  isPlaying: boolean;
+  gameId?: string;
+}
+
 export default function ScoreboardPage() {
   const [currentWeek, setCurrentWeek] = useState<string>('1');
   const [games, setGames] = useState<Game[]>([]);
+  const [userPlayers, setUserPlayers] = useState<UserPlayer[]>([]);
   const [loading, setLoading] = useState(true);
   const [seasonStatus, setSeasonStatus] = useState<'offseason' | 'preseason' | 'regular' | 'postseason'>('offseason');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     loadScoreboardData();

@@ -1,62 +1,64 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
-import { Query } from 'node-appwrite';
-
-interface LockerRoomPageProps {
-  params: Promise<{ leagueId: string }>;
-}
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { databases, account, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
+import { Query } from "appwrite";
+import Link from "next/link";
 
 interface Player {
   $id: string;
   name: string;
   position: string;
   team: string;
-  conference: string;
+  team_abbreviation: string;
   jersey: string;
-  height: string;
-  weight: string;
-  year: string;
-  fantasy_points: number;
   projection: number;
-  rushing_projection: number;
-  receiving_projection: number;
-  td_projection: number;
-  int_projection: number;
-  field_goals_projection: number;
-  extra_points_projection: number;
+  fantasy_points: number;
 }
 
-interface Roster {
+interface Team {
   $id: string;
-  league_id: string;
-  user_id: string;
-  starters: string[]; // Player IDs
-  bench: string[]; // Player IDs
-  ir: string[]; // Player IDs
-  created_at: string;
-  updated_at: string;
+  leagueId: string;
+  userId: string;
+  teamName: string;
+  players?: string;
 }
 
-interface League {
-  $id: string;
-  name: string;
-  roster_settings: Record<string, number>;
-  scoring_settings: Record<string, number>;
-  status: string;
+interface LineupSlot {
+  position: string;
+  player: Player | null;
+}
+
+const ROSTER_POSITIONS = [
+  { position: 'QB', count: 1 },
+  { position: 'RB', count: 2 },
+  { position: 'WR', count: 2 },
+  { position: 'TE', count: 1 },
+  { position: 'FLEX', count: 1 },
+  { position: 'K', count: 1 },
+  { position: 'DEF', count: 1 }
+];
+
+interface LockerRoomPageProps {
+  params: Promise<{
+    leagueId: string;
+  }>;
 }
 
 export default function LockerRoomPage({ params }: LockerRoomPageProps) {
   const router = useRouter();
   const [leagueId, setLeagueId] = useState<string>('');
-  const [league, setLeague] = useState<League | null>(null);
-  const [roster, setRoster] = useState<Roster | null>(null);
-  const [allPlayers, setAllPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<'roster' | 'add-drop' | 'projections'>('roster');
+  const [team, setTeam] = useState<Team | null>(null);
+  const [lineup, setLineup] = useState<LineupSlot[]>([]);
+  const [bench, setBench] = useState<Player[]>([]);
+  const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
+  const [activeWeek, setActiveWeek] = useState(1);
+  const [showAddPlayer, setShowAddPlayer] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [positionFilter, setPositionFilter] = useState('ALL');
 
   // Resolve params
   useEffect(() => {
@@ -67,179 +69,169 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
     resolveParams();
   }, [params]);
 
-  // Load data
+  // Load team data
   useEffect(() => {
     if (leagueId) {
-      loadLockerRoomData();
+      loadTeamData();
     }
   }, [leagueId]);
 
-  const loadLockerRoomData = async () => {
+  const loadTeamData = async () => {
     try {
       setLoading(true);
       
-      // Load league
-      const leagueResponse = await databases.getDocument(
-        DATABASE_ID,
-        COLLECTIONS.LEAGUES,
-        leagueId
-      );
-      setLeague(leagueResponse as unknown as League);
-
-      // Load user's roster (for now, get first roster in league)
-      const rostersResponse = await databases.listDocuments(
+      // Get current user
+      const user = await account.get();
+      const userId = user.$id;
+      
+      // Load user's team in this league
+      const teamsResponse = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.ROSTERS,
-        [Query.equal('league_id', leagueId)]
+        [Query.equal('leagueId', leagueId), Query.equal('userId', userId)]
       );
       
-      if (rostersResponse.documents.length > 0) {
-        const userRoster = rostersResponse.documents[0] as unknown as Roster;
-        setRoster(userRoster);
+      if (teamsResponse.documents.length === 0) {
+        // No team found - redirect to league page
+        router.push(`/league/${leagueId}`);
+        return;
+      }
+      
+      const userTeam = teamsResponse.documents[0] as unknown as Team;
+      setTeam(userTeam);
+      
+      // Parse lineup if exists
+      if (userTeam.players) {
+        const playersData = JSON.parse(userTeam.players);
+        // Initialize lineup slots
+        const lineupSlots: LineupSlot[] = [];
+        ROSTER_POSITIONS.forEach(({ position, count }) => {
+          for (let i = 0; i < count; i++) {
+            lineupSlots.push({ position, player: null });
+          }
+        });
+        setLineup(lineupSlots);
         
-        // Load all players for this roster
-        await loadRosterPlayers(userRoster);
+        // TODO: Load actual player data
+      } else {
+        // Initialize empty lineup
+        const lineupSlots: LineupSlot[] = [];
+        ROSTER_POSITIONS.forEach(({ position, count }) => {
+          for (let i = 0; i < count; i++) {
+            lineupSlots.push({ position, player: null });
+          }
+        });
+        setLineup(lineupSlots);
       }
 
+      // Load available players
+      await loadAvailablePlayers();
+      
     } catch (error) {
-      console.error('Error loading locker room data:', error);
+      console.error('Error loading team data:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const loadRosterPlayers = async (userRoster: Roster) => {
+  const loadAvailablePlayers = async () => {
     try {
-      // Get all players in the roster (starters + bench + IR)
-      const allPlayerIds = [
-        ...userRoster.starters,
-        ...userRoster.bench,
-        ...userRoster.ir
-      ];
-
-      if (allPlayerIds.length === 0) {
-        setAllPlayers([]);
-        return;
-      }
-
-      // Load player details
-      const players: Player[] = [];
-      for (const playerId of allPlayerIds) {
-        try {
-          const playerResponse = await databases.getDocument(
-            DATABASE_ID,
-            COLLECTIONS.COLLEGE_PLAYERS,
-            playerId
-          );
-          players.push(playerResponse as unknown as Player);
-        } catch (error) {
-          console.error(`Error loading player ${playerId}:`, error);
-        }
-      }
-
-      setAllPlayers(players);
+      const playersResponse = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.COLLEGE_PLAYERS,
+        [Query.equal('draftable', true), Query.limit(100)]
+      );
+      setAvailablePlayers(playersResponse.documents as unknown as Player[]);
     } catch (error) {
-      console.error('Error loading roster players:', error);
+      console.error('Error loading available players:', error);
     }
   };
 
-  const getPlayerById = (playerId: string): Player | undefined => {
-    return allPlayers.find(player => player.$id === playerId);
-  };
-
-  const movePlayer = async (playerId: string, fromSlot: 'starters' | 'bench' | 'ir', toSlot: 'starters' | 'bench' | 'ir') => {
-    if (!roster || fromSlot === toSlot) return;
-
+  const saveLineup = async () => {
+    if (!team) return;
+    
+    setSaving(true);
     try {
-      setSaving(true);
+      const lineupData = {
+        starters: lineup.map(slot => ({
+          position: slot.position,
+          playerId: slot.player?.$id || null
+        })),
+        bench: bench.map(player => player.$id)
+      };
 
-      const updatedRoster = { ...roster };
-      
-      // Remove from source slot
-      updatedRoster[fromSlot] = updatedRoster[fromSlot].filter(id => id !== playerId);
-      
-      // Add to destination slot
-      updatedRoster[toSlot] = [...updatedRoster[toSlot], playerId];
-
-      // Update in Appwrite
       await databases.updateDocument(
         DATABASE_ID,
         COLLECTIONS.ROSTERS,
-        roster.$id,
-        {
-          starters: updatedRoster.starters,
-          bench: updatedRoster.bench,
-          ir: updatedRoster.ir,
-          updated_at: new Date().toISOString()
-        }
+        team.$id,
+        { players: JSON.stringify(lineupData) }
       );
-
-      setRoster(updatedRoster);
     } catch (error) {
-      console.error('Error moving player:', error);
+      console.error('Error saving lineup:', error);
     } finally {
       setSaving(false);
     }
   };
 
-  const canMoveToStarters = (playerId: string): boolean => {
-    if (!roster || !league) return false;
+  const addPlayerToRoster = (player: Player) => {
+    // Find first empty slot for player's position
+    const updatedLineup = [...lineup];
+    let added = false;
+
+    for (let i = 0; i < updatedLineup.length; i++) {
+      const slot = updatedLineup[i];
+      if (!slot.player && 
+          (slot.position === player.position || 
+           (slot.position === 'FLEX' && ['RB', 'WR', 'TE'].includes(player.position)))) {
+        updatedLineup[i] = { ...slot, player };
+        added = true;
+        break;
+      }
+    }
+
+    if (!added) {
+      // Add to bench if no starter slot available
+      setBench([...bench, player]);
+    } else {
+      setLineup(updatedLineup);
+    }
+
+    // Remove from available players
+    setAvailablePlayers(availablePlayers.filter(p => p.$id !== player.$id));
+    setShowAddPlayer(false);
     
-    const player = getPlayerById(playerId);
-    if (!player) return false;
-
-    const position = player.position;
-    const currentStarters = roster.starters.length;
-    const maxStarters = Object.values(league.roster_settings).reduce((sum, count) => sum + count, 0) - league.roster_settings.BN;
-
-    // Check if we have room for this position
-    const positionCount = roster.starters.filter(id => {
-      const starter = getPlayerById(id);
-      return starter?.position === position;
-    }).length;
-
-    const maxForPosition = league.roster_settings[position] || 0;
-    
-    return currentStarters < maxStarters && positionCount < maxForPosition;
+    // Auto-save
+    saveLineup();
   };
 
-  const getPositionColor = (position: string): string => {
-    switch (position) {
-      case 'QB': return 'bg-locker-primary';
-      case 'RB': return 'bg-locker-brown';
-      case 'WR': return 'bg-locker-coral';
-      case 'TE': return 'bg-locker-taupe';
-      case 'K': return 'bg-locker-ice';
-      default: return 'bg-locker-slate';
+  const removePlayer = (slotIndex: number) => {
+    const updatedLineup = [...lineup];
+    const player = updatedLineup[slotIndex].player;
+    
+    if (player) {
+      updatedLineup[slotIndex] = { ...updatedLineup[slotIndex], player: null };
+      setLineup(updatedLineup);
+      setAvailablePlayers([...availablePlayers, player]);
+      
+      // Auto-save
+      saveLineup();
     }
   };
 
+  const filteredPlayers = availablePlayers.filter(player => {
+    const matchesSearch = player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         player.team.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesPosition = positionFilter === 'ALL' || player.position === positionFilter;
+    return matchesSearch && matchesPosition;
+  });
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
+      <div className="min-h-screen bg-[#3a3a3a] text-white">
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-lg">Loading your locker room...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!league || !roster) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">No Roster Found</h1>
-            <p className="text-slate-300 mb-4">You don't have a roster in this league yet.</p>
-            <button
-              onClick={() => router.push(`/league/${leagueId}`)}
-              className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-lg font-semibold transition-colors"
-            >
-              Back to League
-            </button>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+            <p className="text-lg">Loading locker room...</p>
           </div>
         </div>
       </div>
@@ -247,218 +239,239 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-locker-slateDark via-locker-slate to-black text-white">
+    <div className="min-h-screen bg-[#3a3a3a] text-white">
       {/* Header */}
-      <div className="bg-locker-primary/20 backdrop-blur-sm border-b border-locker-primary/30">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="bg-[#2a2a2a] border-b border-[#4a4a4a]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-white font-bebas tracking-wide">🏈 My Locker Room</h1>
-              <p className="text-locker-ice/80">{league.name}</p>
-            </div>
-            <div className="flex space-x-4">
-              <button
-                onClick={() => router.push(`/league/${leagueId}`)}
-                className="bg-locker-slate hover:bg-locker-slateDark px-4 py-2 rounded-lg font-semibold transition-colors"
+            <div className="flex items-center gap-4">
+              <Link 
+                href={`/league/${leagueId}`}
+                className="text-gray-400 hover:text-white transition-colors"
               >
-                Back to League
-              </button>
+                ← Back to League
+              </Link>
+              <h1 className="text-2xl font-bold">{team?.teamName || 'My Team'}</h1>
+            </div>
+            
+            <div className="flex items-center gap-4">
               {saving && (
-                <div className="flex items-center text-locker-ice">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-locker-ice mr-2"></div>
-                  Saving...
-                </div>
+                <span className="text-sm text-green-400">Saving...</span>
               )}
+              <button
+                onClick={() => setShowAddPlayer(true)}
+                className="bg-[#5a5a5a] hover:bg-[#6a6a6a] text-white px-4 py-2 rounded transition-colors"
+              >
+                + Add Player
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex space-x-1 bg-locker-slate/60 rounded-lg p-1">
-          {[
-            { id: 'roster', label: 'My Roster', icon: '👥' },
-            { id: 'add-drop', label: 'Add/Drop', icon: '➕' },
-            { id: 'projections', label: 'Projections', icon: '📊' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors text-sm sm:text-base ${
-                activeTab === tab.id
-                  ? 'bg-locker-primary text-white shadow'
-                  : 'text-locker-ice/80 hover:text-white hover:bg-locker-slateDark'
-              }`}
+      {/* Week Selector */}
+      <div className="bg-[#2a2a2a] border-b border-[#4a4a4a]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-4 py-3">
+            <span className="text-sm font-semibold">Set Lineup:</span>
+            <select
+              value={activeWeek}
+              onChange={(e) => setActiveWeek(parseInt(e.target.value))}
+              className="bg-[#3a3a3a] border border-[#4a4a4a] rounded px-3 py-1 text-sm"
             >
-              {tab.icon} {tab.label}
-            </button>
-          ))}
+              {[...Array(12)].map((_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  Week {i + 1}
+                </option>
+              ))}
+            </select>
+            <span className="text-xs text-gray-400">
+              Trade & Acquisition Limits: Unlimited
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {activeTab === 'roster' && (
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Starters */}
-            <div className="lg:col-span-2">
-              <div className="bg-locker-slate/50 rounded-xl p-6 border border-white/5">
-                <h2 className="text-xl font-bold mb-4 flex items-center">
-                  🏆 Starting Lineup
-                  <span className="ml-2 text-sm text-slate-400">
-                    ({roster.starters.length}/{Object.values(league.roster_settings).reduce((sum, count) => sum + count, 0) - league.roster_settings.BN})
-                  </span>
-                </h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {Object.entries(league.roster_settings).map(([position, count]) => {
-                    if (position === 'BN') return null;
-                    
-                    const positionPlayers = roster.starters
-                      .map(id => getPlayerById(id))
-                      .filter(player => player?.position === position)
-                      .slice(0, count);
-
-                    return (
-                      <div key={position} className="bg-locker-slate/70 rounded-lg p-4">
-                        <h3 className="font-semibold mb-3 flex items-center">
-                          <span className={`inline-block w-3 h-3 rounded-full mr-2 ${getPositionColor(position)}`}></span>
-                          {position} ({positionPlayers.length}/{count})
-                        </h3>
-                        <div className="space-y-2">
-                          {positionPlayers.map((player, index) => (
-                            <div key={player.$id} className="bg-locker-slate rounded p-3">
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <div className="font-semibold">{player.name}</div>
-                                  <div className="text-sm text-slate-400">
-                                    {player.team} • {player.position} • #{player.jersey}
-                                  </div>
-                                </div>
-                                <div className="text-right">
-                                  <div className="text-sm font-semibold">{player.fantasy_points.toFixed(1)} pts</div>
-                                  <div className="text-xs text-slate-400">Proj: {player.projection}</div>
-                                </div>
-                              </div>
-                              <button
-                                onClick={() => movePlayer(player.$id, 'starters', 'bench')}
-                                className="mt-2 w-full bg-locker-coral hover:bg-locker-primary py-1 px-2 rounded text-xs font-semibold transition-colors text-black"
-                              >
-                                Move to Bench
-                              </button>
-                            </div>
-                          ))}
-                          {positionPlayers.length < count && (
-                            <div className="text-slate-400 text-sm italic">
-                              {count - positionPlayers.length} spot(s) empty
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* Bench */}
-            <div>
-              <div className="bg-locker-slate/50 rounded-xl p-6 border border-white/5">
-                <h2 className="text-xl font-bold mb-4">🪑 Bench ({roster.bench.length})</h2>
-                <div className="space-y-3">
-                  {roster.bench.map(playerId => {
-                    const player = getPlayerById(playerId);
-                    if (!player) return null;
-
-                    return (
-                      <div key={playerId} className="bg-locker-slate/70 rounded-lg p-3">
-                        <div className="flex items-center justify-between mb-2">
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Starters */}
+          <div>
+            <h2 className="text-lg font-bold mb-4 flex items-center justify-between">
+              STARTERS
+              <span className="text-sm font-normal text-gray-400">NFL WEEK {activeWeek}</span>
+            </h2>
+            
+            <div className="bg-[#2a2a2a] rounded-lg border border-[#4a4a4a] overflow-hidden">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-[#1a1a1a] text-xs">
+                    <th className="text-left py-2 px-3">SLOT</th>
+                    <th className="text-left py-2 px-3">PLAYER</th>
+                    <th className="text-center py-2 px-3">ACTION</th>
+                    <th className="text-center py-2 px-3">OPP</th>
+                    <th className="text-center py-2 px-3">PROJ</th>
+                    <th className="text-center py-2 px-3">SCORE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {lineup.map((slot, index) => (
+                    <tr key={index} className="border-t border-[#3a3a3a] hover:bg-[#3a3a3a] transition-colors">
+                      <td className="py-3 px-3 text-sm font-semibold">{slot.position}</td>
+                      <td className="py-3 px-3">
+                        {slot.player ? (
                           <div>
-                            <div className="font-semibold">{player.name}</div>
-                            <div className="text-sm text-slate-400">
-                              {player.team} • {player.position}
+                            <div className="font-semibold">{slot.player.name}</div>
+                            <div className="text-xs text-gray-400">
+                              {slot.player.team_abbreviation} - {slot.player.position}
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-sm font-semibold">{player.fantasy_points.toFixed(1)} pts</div>
-                          </div>
-                        </div>
-                          {canMoveToStarters(playerId) && (
+                        ) : (
+                          <span className="text-gray-500">Empty</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-3 text-center">
+                        {slot.player && (
                           <button
-                            onClick={() => movePlayer(playerId, 'bench', 'starters')}
-                              className="w-full bg-locker-primary hover:bg-locker-primaryDark py-1 px-2 rounded text-xs font-semibold transition-colors"
+                            onClick={() => removePlayer(index)}
+                            className="text-red-400 hover:text-red-300 text-sm"
                           >
-                            Move to Starters
+                            Remove
                           </button>
                         )}
-                      </div>
-                    );
-                  })}
-                  {roster.bench.length === 0 && (
-                    <div className="text-slate-400 text-sm italic text-center py-4">
-                      No players on bench
-                    </div>
-                  )}
+                      </td>
+                      <td className="py-3 px-3 text-center text-sm">--</td>
+                      <td className="py-3 px-3 text-center text-sm">
+                        {slot.player ? slot.player.projection.toFixed(1) : '--'}
+                      </td>
+                      <td className="py-3 px-3 text-center text-sm">--</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Bench */}
+          <div>
+            <h2 className="text-lg font-bold mb-4">BENCH</h2>
+            
+            <div className="bg-[#2a2a2a] rounded-lg border border-[#4a4a4a] overflow-hidden">
+              {bench.length === 0 ? (
+                <div className="p-8 text-center text-gray-500">
+                  No players on bench
                 </div>
-              </div>
-
-              {/* IR */}
-              {roster.ir.length > 0 && (
-                <div className="bg-slate-800/50 rounded-xl p-6 mt-6">
-                  <h2 className="text-xl font-bold mb-4">🏥 Injured Reserve ({roster.ir.length})</h2>
-                  <div className="space-y-3">
-                    {roster.ir.map(playerId => {
-                      const player = getPlayerById(playerId);
-                      if (!player) return null;
-
-                      return (
-                        <div key={playerId} className="bg-slate-700/50 rounded-lg p-3">
-                          <div className="font-semibold">{player.name}</div>
-                          <div className="text-sm text-slate-400">
-                            {player.team} • {player.position}
+              ) : (
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-[#1a1a1a] text-xs">
+                      <th className="text-left py-2 px-3">PLAYER</th>
+                      <th className="text-center py-2 px-3">PROJ</th>
+                      <th className="text-center py-2 px-3">ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bench.map((player, index) => (
+                      <tr key={player.$id} className="border-t border-[#3a3a3a] hover:bg-[#3a3a3a] transition-colors">
+                        <td className="py-3 px-3">
+                          <div>
+                            <div className="font-semibold">{player.name}</div>
+                            <div className="text-xs text-gray-400">
+                              {player.team_abbreviation} - {player.position}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                        </td>
+                        <td className="py-3 px-3 text-center text-sm">
+                          {player.projection.toFixed(1)}
+                        </td>
+                        <td className="py-3 px-3 text-center">
+                          <button className="text-blue-400 hover:text-blue-300 text-sm">
+                            Move to Lineup
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               )}
             </div>
           </div>
-        )}
-
-        {activeTab === 'add-drop' && (
-          <div className="bg-slate-800/50 rounded-xl p-6">
-            <h2 className="text-xl font-bold mb-4">➕ Add/Drop Players</h2>
-            <p className="text-slate-300 mb-6">
-              Add/Drop functionality will be implemented here. Users will be able to:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-slate-300">
-              <li>Browse available players by position</li>
-              <li>Add players to their roster</li>
-              <li>Drop players from their roster</li>
-              <li>Use waiver priority or FAAB budget</li>
-              <li>View transaction history</li>
-            </ul>
-          </div>
-        )}
-
-        {activeTab === 'projections' && (
-          <div className="bg-slate-800/50 rounded-xl p-6">
-            <h2 className="text-xl font-bold mb-4">📊 Weekly Projections</h2>
-            <p className="text-slate-300 mb-6">
-              Projections functionality will be implemented here. Users will be able to:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-slate-300">
-              <li>View weekly projections for their players</li>
-              <li>Compare projections across positions</li>
-              <li>See matchup-based projections</li>
-              <li>Track projection accuracy</li>
-            </ul>
-          </div>
-        )}
+        </div>
       </div>
+
+      {/* Add Player Modal */}
+      {showAddPlayer && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#2a2a2a] rounded-lg w-full max-w-4xl max-h-[80vh] overflow-hidden">
+            <div className="p-4 border-b border-[#4a4a4a]">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold">Add Player</h3>
+                <button
+                  onClick={() => setShowAddPlayer(false)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="flex gap-4">
+                <input
+                  type="text"
+                  placeholder="Search players..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 bg-[#3a3a3a] border border-[#4a4a4a] rounded px-3 py-2"
+                />
+                <select
+                  value={positionFilter}
+                  onChange={(e) => setPositionFilter(e.target.value)}
+                  className="bg-[#3a3a3a] border border-[#4a4a4a] rounded px-3 py-2"
+                >
+                  <option value="ALL">All Positions</option>
+                  <option value="QB">QB</option>
+                  <option value="RB">RB</option>
+                  <option value="WR">WR</option>
+                  <option value="TE">TE</option>
+                  <option value="K">K</option>
+                  <option value="DEF">DEF</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="overflow-y-auto max-h-[60vh]">
+              <table className="w-full">
+                <thead className="sticky top-0 bg-[#1a1a1a]">
+                  <tr className="text-xs">
+                    <th className="text-left py-2 px-4">PLAYER</th>
+                    <th className="text-center py-2 px-4">POS</th>
+                    <th className="text-center py-2 px-4">TEAM</th>
+                    <th className="text-center py-2 px-4">PROJ</th>
+                    <th className="text-center py-2 px-4">ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredPlayers.map((player) => (
+                    <tr key={player.$id} className="border-t border-[#3a3a3a] hover:bg-[#3a3a3a] transition-colors">
+                      <td className="py-3 px-4 font-semibold">{player.name}</td>
+                      <td className="py-3 px-4 text-center">{player.position}</td>
+                      <td className="py-3 px-4 text-center">{player.team_abbreviation}</td>
+                      <td className="py-3 px-4 text-center">{player.projection.toFixed(1)}</td>
+                      <td className="py-3 px-4 text-center">
+                        <button
+                          onClick={() => addPlayerToRoster(player)}
+                          className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                        >
+                          Add
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-} 
+}

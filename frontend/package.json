@@ -52,6 +52,7 @@
     "r3f-perf": "^7.2.3",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^5.5.0",
     "three": "^0.179.1",
     "zod": "^3.25.76",
     "zustand": "^5.0.7"

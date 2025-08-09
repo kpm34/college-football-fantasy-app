@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { account } from "@/lib/appwrite";
 
 function NavLink({ href, label }: { href: string; label: string }) {
@@ -23,6 +23,7 @@ function NavLink({ href, label }: { href: string; label: string }) {
 }
 
 import SideDrawer from "./SideDrawer";
+import FootballHamburger from "./FootballHamburger";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -33,15 +34,7 @@ export default function Navbar() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 items-center justify-between">
             <div className="flex items-center gap-3">
-              <button
-                className="inline-flex items-center justify-center rounded-md p-2 text-white/90 hover:text-white hover:bg-white/10"
-                aria-label="Open menu"
-                onClick={() => setOpen(true)}
-              >
-                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 6h18M3 12h18M3 18h18" />
-                </svg>
-              </button>
+              <FootballHamburger isOpen={open} onClick={() => setOpen(true)} />
               <Link href="/" className="text-white font-bebas tracking-wide text-2xl">
                 CFB Fantasy
               </Link>
@@ -63,18 +56,29 @@ export default function Navbar() {
 
 function UserMenu() {
   const [name, setName] = useState<string | null>(null);
-  useState(() => {
+  useEffect(() => {
+    let cancelled = false;
     (async () => {
       try {
         const me = await account.get();
-        setName(me.name || me.email);
+        if (!cancelled) setName(me.name || me.email);
       } catch {
-        setName(null);
+        if (!cancelled) setName(null);
       }
     })();
-  });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   if (name) {
-    return <span className="text-white/90 text-sm">{name}</span>;
+    return (
+      <Link 
+        href="/account/settings" 
+        className="text-sm px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-white/90 hover:text-white transition-colors"
+      >
+        {name}
+      </Link>
+    );
   }
   return (
     <Link href="/login" className="text-sm px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-white">Login</Link>

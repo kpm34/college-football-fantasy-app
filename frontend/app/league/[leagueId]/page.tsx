@@ -1,60 +1,54 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
-import { Query } from 'node-appwrite';
-
-interface LeagueHomePageProps {
-  params: Promise<{ leagueId: string }>;
-}
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { databases, account, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
+import { Query } from "appwrite";
+import Link from "next/link";
+import { FiSettings, FiUsers, FiCalendar, FiTrendingUp, FiClipboard, FiAward } from "react-icons/fi";
+import { leagueColors } from "@/lib/theme/colors";
 
 interface League {
   $id: string;
   name: string;
-  season_year: number;
-  commissioner_user_id: string;
-  scoring_settings: Record<string, number>;
-  roster_settings: Record<string, number>;
-  draft_settings: {
-    type: string;
-    rounds: number;
-    start_time: string;
-    time_per_pick: number;
-  };
-  waiver_settings: {
-    type: string;
-    reset_weekly: boolean;
-    budget: number;
-  };
-  trade_deadline_week: number;
-  game_mode: string;
-  selected_conference: string;
-  max_teams: number;
-  season_start_week: number;
-  status: 'draft' | 'active' | 'completed';
-  standings_cache: any[];
-  created_at: string;
-  updated_at: string;
+  commissioner: string;
+  commissionerId: string;
+  season: number;
+  scoringType: string;
+  maxTeams: number;
+  draftDate: string;
+  status: string;
+  inviteCode: string;
+  gameMode?: string;
+  selectedConference?: string;
+  isPrivate?: boolean;
+  password?: string;
+  draftType?: string;
+  scoringRules?: string;
+  pickTimeSeconds?: number;
+  orderMode?: string;
+  draftOrder?: string;
 }
 
 interface Team {
   $id: string;
-  league_id: string;
-  user_id: string;
-  name: string;
-  logo_url: string;
-  record: {
-    wins: number;
-    losses: number;
-    ties: number;
-  };
-  points_for: number;
-  points_against: number;
-  waiver_priority: number;
-  faab_budget_remaining: number;
-  created_at: string;
-  updated_at: string;
+  leagueId: string;
+  userId: string;
+  teamName: string;
+  userName?: string;
+  email?: string;
+  wins: number;
+  losses: number;
+  ties: number;
+  pointsFor: number;
+  pointsAgainst: number;
+  players?: string;
+}
+
+interface LeagueHomePageProps {
+  params: Promise<{
+    leagueId: string;
+  }>;
 }
 
 export default function LeagueHomePage({ params }: LeagueHomePageProps) {
@@ -64,7 +58,31 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
   const [teams, setTeams] = useState<Team[]>([]);
   const [userTeam, setUserTeam] = useState<Team | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'standings' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'standings' | 'schedule' | 'settings' | 'draft'>('overview');
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [isCommissioner, setIsCommissioner] = useState(false);
+  const [savingSettings, setSavingSettings] = useState(false);
+
+  // State for commissioner settings
+  const [scoringSettings, setScoringSettings] = useState({
+    passingTD: 4,
+    passingYard: 0.04,
+    interception: -2,
+    rushingTD: 6,
+    rushingYard: 0.1,
+    receivingTD: 6,
+    receivingYard: 0.1,
+    reception: 1,
+    fumble: -2
+  });
+
+  const [draftSettings, setDraftSettings] = useState({
+    type: 'snake',
+    pickTimeSeconds: 90,
+    date: '',
+    time: '',
+    orderMode: 'random'
+  });
 
   // Resolve params
   useEffect(() => {
@@ -86,26 +104,70 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     try {
       setLoading(true);
       
+      // Get current user
+      let userId = null;
+      try {
+        const user = await account.get();
+        userId = user.$id;
+        setCurrentUserId(userId);
+      } catch (e) {
+        console.log('User not logged in');
+      }
+      
       // Load league from Appwrite
       const leagueResponse = await databases.getDocument(
         DATABASE_ID,
         COLLECTIONS.LEAGUES,
         leagueId
       );
-      setLeague(leagueResponse as unknown as League);
+      const leagueData = leagueResponse as unknown as League;
+      setLeague(leagueData);
+      
+      // Check if current user is commissioner
+      if (userId && (leagueData.commissionerId === userId || leagueData.commissioner === userId)) {
+        setIsCommissioner(true);
+      }
 
-      // Load all teams in this league
-      const teamsResponse = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.TEAMS,
-        [Query.equal('league_id', leagueId)]
-      );
-      const leagueTeams = teamsResponse.documents as unknown as Team[];
-      setTeams(leagueTeams);
+      // Parse scoring rules if they exist
+      if (leagueData.scoringRules) {
+        try {
+          const rules = JSON.parse(leagueData.scoringRules);
+          setScoringSettings(prev => ({ ...prev, ...rules }));
+        } catch (e) {
+          console.log('Error parsing scoring rules');
+        }
+      }
 
-      // For now, set the first team as user's team (in real app, get from auth)
-      if (leagueTeams.length > 0) {
-        setUserTeam(leagueTeams[0]);
+      // Set draft settings
+      setDraftSettings({
+        type: leagueData.draftType || 'snake',
+        pickTimeSeconds: leagueData.pickTimeSeconds || 90,
+        date: leagueData.draftDate ? new Date(leagueData.draftDate).toISOString().split('T')[0] : '',
+        time: leagueData.draftDate ? new Date(leagueData.draftDate).toTimeString().slice(0, 5) : '',
+        orderMode: leagueData.orderMode || 'random'
+      });
+
+      // Load all teams (rosters) in this league
+      try {
+        const teamsResponse = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.ROSTERS,
+          [Query.equal('leagueId', leagueId)]
+        );
+        const leagueTeams = teamsResponse.documents as unknown as Team[];
+        setTeams(leagueTeams);
+
+        // Find user's team
+        if (userId && leagueTeams.length > 0) {
+          const myTeam = leagueTeams.find(team => team.userId === userId);
+          if (myTeam) {
+            setUserTeam(myTeam);
+          }
+        }
+      } catch (e) {
+        console.log('Error loading teams:', e);
+        // Create empty teams array if rosters don't exist yet
+        setTeams([]);
       }
 
     } catch (error) {
@@ -115,32 +177,356 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     }
   };
 
-  const handleInviteManagers = () => {
-    // Open invite modal or redirect to invite page
-    router.push(`/league/${leagueId}/invite`);
+  const renderMembersTab = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-2xl font-bold">League Members</h3>
+        {isCommissioner && (
+          <button
+            onClick={() => router.push(`/league/${leagueId}/invite`)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-all duration-200"
+          >
+            Invite Members
+          </button>
+        )}
+      </div>
+
+      <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-white/10">
+              <th className="text-left py-4 px-6">Team</th>
+              <th className="text-left py-4 px-6">Manager</th>
+              <th className="text-center py-4 px-6">Record</th>
+              <th className="text-center py-4 px-6">Points</th>
+              <th className="text-center py-4 px-6">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {teams.map((team) => (
+              <tr key={team.$id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                <td className="py-4 px-6">
+                  <span className="font-semibold">{team.teamName}</span>
+                  {team.userId === league?.commissionerId && (
+                    <span className="ml-2 text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Commissioner</span>
+                  )}
+                </td>
+                <td className="py-4 px-6">{team.userName || 'Unknown'}</td>
+                <td className="py-4 px-6 text-center">
+                  {team.wins}-{team.losses}-{team.ties}
+                </td>
+                <td className="py-4 px-6 text-center">{team.pointsFor.toFixed(1)}</td>
+                <td className="py-4 px-6 text-center">
+                  <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">Active</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  const renderStandingsTab = () => {
+    const sortedTeams = [...teams].sort((a, b) => {
+      const aWinPct = (a.wins + a.ties * 0.5) / (a.wins + a.losses + a.ties || 1);
+      const bWinPct = (b.wins + b.ties * 0.5) / (b.wins + b.losses + b.ties || 1);
+      if (aWinPct !== bWinPct) return bWinPct - aWinPct;
+      return b.pointsFor - a.pointsFor;
+    });
+
+    return (
+      <div className="space-y-6">
+        <h3 className="text-2xl font-bold mb-6">Standings</h3>
+
+        <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-white/10">
+                <th className="text-left py-4 px-6">Rank</th>
+                <th className="text-left py-4 px-6">Team</th>
+                <th className="text-center py-4 px-6">W-L-T</th>
+                <th className="text-center py-4 px-6">PF</th>
+                <th className="text-center py-4 px-6">PA</th>
+                <th className="text-center py-4 px-6">Win %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedTeams.map((team, index) => {
+                const winPct = ((team.wins + team.ties * 0.5) / (team.wins + team.losses + team.ties || 1) * 100).toFixed(1);
+                return (
+                  <tr key={team.$id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <td className="py-4 px-6 font-bold">{index + 1}</td>
+                    <td className="py-4 px-6">
+                      <span className="font-semibold">{team.teamName}</span>
+                      {team.userId === currentUserId && (
+                        <span className="ml-2 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">You</span>
+                      )}
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      {team.wins}-{team.losses}-{team.ties}
+                    </td>
+                    <td className="py-4 px-6 text-center">{team.pointsFor.toFixed(1)}</td>
+                    <td className="py-4 px-6 text-center">{team.pointsAgainst.toFixed(1)}</td>
+                    <td className="py-4 px-6 text-center">{winPct}%</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
   };
 
-  const handleScheduleDraft = () => {
-    // Redirect to draft scheduling page
-    router.push(`/league/${leagueId}/draft/schedule`);
+  const renderScheduleTab = () => (
+    <div className="space-y-6">
+      <h3 className="text-2xl font-bold mb-6">Schedule</h3>
+      
+      <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+        <p className="text-gray-400">Schedule will be generated after the draft is completed.</p>
+      </div>
+    </div>
+  );
+
+  const renderSettingsTab = () => {
+    const updateScoringSettings = async (key: string, value: number) => {
+      if (!isCommissioner || !league) return;
+
+      const newSettings = { ...scoringSettings, [key]: value };
+      setScoringSettings(newSettings);
+      setSavingSettings(true);
+
+      try {
+        await databases.updateDocument(
+          DATABASE_ID,
+          COLLECTIONS.LEAGUES,
+          league.$id,
+          { scoringRules: JSON.stringify(newSettings) }
+        );
+      } catch (error) {
+        console.error('Error saving scoring settings:', error);
+      } finally {
+        setSavingSettings(false);
+      }
+    };
+
+    const updateDraftSettings = async (key: string, value: string | number) => {
+      if (!isCommissioner || !league) return;
+
+      const newSettings = { ...draftSettings, [key]: value };
+      setDraftSettings(newSettings);
+      setSavingSettings(true);
+
+      try {
+        const updates: Record<string, any> = {};
+        
+        if (key === 'type') updates.draftType = value;
+        if (key === 'pickTimeSeconds') updates.pickTimeSeconds = value;
+        if (key === 'orderMode') updates.orderMode = value;
+        if (key === 'date' || key === 'time') {
+          const date = key === 'date' ? value : draftSettings.date;
+          const time = key === 'time' ? value : draftSettings.time;
+          if (date && time) {
+            updates.draftDate = new Date(`${date}T${time}`).toISOString();
+          }
+        }
+
+        await databases.updateDocument(
+          DATABASE_ID,
+          COLLECTIONS.LEAGUES,
+          league.$id,
+          updates
+        );
+      } catch (error) {
+        console.error('Error saving draft settings:', error);
+      } finally {
+        setSavingSettings(false);
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        <h3 className="text-2xl font-bold mb-6">League Settings</h3>
+
+        {/* Scoring Settings */}
+        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+          <h4 className="text-xl font-bold mb-4">Scoring Settings</h4>
+          {savingSettings && (
+            <p className="text-sm text-green-400 mb-2">Saving changes...</p>
+          )}
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {Object.entries(scoringSettings).map(([key, value]) => (
+              <div key={key} className="flex items-center justify-between">
+                <label className="text-sm capitalize">
+                  {key.replace(/([A-Z])/g, ' $1').trim()}
+                </label>
+                {isCommissioner ? (
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={value}
+                    onChange={(e) => updateScoringSettings(key, parseFloat(e.target.value))}
+                    className="w-20 px-2 py-1 bg-white/10 border border-white/20 rounded text-right"
+                  />
+                ) : (
+                  <span className="font-semibold">{value}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Draft Settings */}
+        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+          <h4 className="text-xl font-bold mb-4">Draft Settings</h4>
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm">Draft Type</label>
+              {isCommissioner ? (
+                <select
+                  value={draftSettings.type}
+                  onChange={(e) => updateDraftSettings('type', e.target.value)}
+                  className="px-3 py-1 bg-white/10 border border-white/20 rounded"
+                >
+                  <option value="snake">Snake</option>
+                  <option value="auction">Auction</option>
+                </select>
+              ) : (
+                <span className="font-semibold capitalize">{draftSettings.type}</span>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between">
+              <label className="text-sm">Pick Time (seconds)</label>
+              {isCommissioner ? (
+                <input
+                  type="number"
+                  value={draftSettings.pickTimeSeconds}
+                  onChange={(e) => updateDraftSettings('pickTimeSeconds', parseInt(e.target.value))}
+                  className="w-20 px-2 py-1 bg-white/10 border border-white/20 rounded text-right"
+                />
+              ) : (
+                <span className="font-semibold">{draftSettings.pickTimeSeconds}s</span>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between">
+              <label className="text-sm">Draft Date</label>
+              {isCommissioner ? (
+                <input
+                  type="date"
+                  value={draftSettings.date}
+                  onChange={(e) => updateDraftSettings('date', e.target.value)}
+                  className="px-2 py-1 bg-white/10 border border-white/20 rounded"
+                />
+              ) : (
+                <span className="font-semibold">
+                  {draftSettings.date ? new Date(draftSettings.date).toLocaleDateString() : 'Not set'}
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between">
+              <label className="text-sm">Draft Time</label>
+              {isCommissioner ? (
+                <input
+                  type="time"
+                  value={draftSettings.time}
+                  onChange={(e) => updateDraftSettings('time', e.target.value)}
+                  className="px-2 py-1 bg-white/10 border border-white/20 rounded"
+                />
+              ) : (
+                <span className="font-semibold">{draftSettings.time || 'Not set'}</span>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between">
+              <label className="text-sm">Draft Order</label>
+              {isCommissioner ? (
+                <select
+                  value={draftSettings.orderMode}
+                  onChange={(e) => updateDraftSettings('orderMode', e.target.value)}
+                  className="px-3 py-1 bg-white/10 border border-white/20 rounded"
+                >
+                  <option value="random">Random</option>
+                  <option value="manual">Manual</option>
+                  <option value="lastYear">Last Year's Standings</option>
+                </select>
+              ) : (
+                <span className="font-semibold capitalize">{draftSettings.orderMode}</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Commissioner Tools */}
+        {isCommissioner && (
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+            <h4 className="text-xl font-bold mb-4">Commissioner Tools</h4>
+            
+            <div className="space-y-3">
+              <button className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                Pause/Resume League
+              </button>
+              <button className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                Reset Draft
+              </button>
+              <button className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                Edit Team Rosters
+              </button>
+              <button className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                Process Waivers
+              </button>
+              <button className="w-full text-left px-4 py-3 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors">
+                Delete League
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
   };
 
-  const handleViewLockerRoom = () => {
-    // Redirect to user's locker room (roster management)
-    router.push(`/league/${leagueId}/locker-room`);
-  };
-
-  const handleViewStandings = () => {
-    setActiveTab('standings');
-  };
+  const renderDraftTab = () => (
+    <div className="space-y-6">
+      <h3 className="text-2xl font-bold mb-6">Draft</h3>
+      
+      <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+        <div className="text-center space-y-4">
+          <FiAward className="text-6xl mx-auto text-yellow-400" />
+          <h4 className="text-xl font-bold">Draft Not Started</h4>
+          <p className="text-gray-400">
+            {league?.draftDate 
+              ? `Draft scheduled for ${new Date(league.draftDate).toLocaleDateString()}`
+              : 'Draft date not set'}
+          </p>
+          
+          {isCommissioner && (
+            <div className="space-y-2 mt-6">
+              <button
+                onClick={() => router.push(`/draft/${leagueId}`)}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-all duration-200"
+              >
+                Start Draft
+              </button>
+              <p className="text-sm text-gray-400">Make sure all teams have joined before starting</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
+      <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main }}>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-lg">Loading league...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderBottomColor: leagueColors.primary.highlight }}></div>
+            <p className="text-lg" style={{ color: leagueColors.text.primary }}>Loading league...</p>
           </div>
         </div>
       </div>
@@ -149,17 +535,13 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
 
   if (!league) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
+      <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main }}>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">League Not Found</h1>
-            <p className="text-slate-300 mb-4">The league you're looking for doesn't exist.</p>
-            <button
-              onClick={() => router.push('/league/create')}
-              className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-lg font-semibold transition-colors"
-            >
-              Create a League
-            </button>
+            <h1 className="text-2xl font-bold mb-4" style={{ color: leagueColors.text.primary }}>League Not Found</h1>
+            <Link href="/dashboard" className="hover:underline" style={{ color: leagueColors.primary.highlight }}>
+              Back to Dashboard
+            </Link>
           </div>
         </div>
       </div>
@@ -167,260 +549,143 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-locker-slateDark via-locker-slate to-black text-white">
+    <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main, color: leagueColors.text.primary }}>
       {/* Header */}
-      <div className="bg-locker-primary/20 backdrop-blur-sm border-b border-locker-primary/30">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+      <div style={{ backgroundColor: leagueColors.background.secondary, borderBottom: `1px solid ${leagueColors.border.medium}` }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white font-bebas tracking-wide">{league.name}</h1>
-              <p className="text-locker-ice/80">
-                {league.game_mode === 'CONFERENCE' ? `${league.selected_conference} Conference` : 'Power 4'} • 
-                {teams.length}/{league.max_teams} Teams • 
-                Status: <span className="capitalize">{league.status}</span>
+              <h1 className="text-3xl font-bold">{league.name}</h1>
+              <p className="text-gray-400 mt-1">
+                {league.gameMode} • {league.selectedConference || 'All Conferences'}
               </p>
             </div>
-            <div className="flex space-x-3">
+            
+            <div className="flex items-center gap-4">
               {userTeam && (
                 <button
-                  onClick={handleViewLockerRoom}
-                  className="bg-locker-primary hover:bg-locker-primaryDark px-5 py-2 rounded-lg font-semibold transition-colors shadow-sm"
+                  onClick={() => router.push(`/league/${leagueId}/locker-room`)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
                 >
-                  🏈 My Locker Room
+                  <FiClipboard />
+                  Locker Room
                 </button>
               )}
-              {userTeam && (
+              
+              {isCommissioner && (
                 <button
-                  onClick={async () => {
-                    const newName = prompt('Enter new team name', userTeam.name);
-                    if (!newName || newName === userTeam.name) return;
-                    await fetch(`/api/leagues/${leagueId}`, {
-                      method: 'PATCH',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ teamId: userTeam.$id, name: newName })
-                    });
-                    setTeams(prev => prev.map(t => t.$id === userTeam.$id ? { ...t, name: newName } : t));
-                  }}
-                  className="bg-locker-brown hover:bg-locker-primary px-5 py-2 rounded-lg font-semibold transition-colors shadow-sm"
+                  onClick={() => setActiveTab('settings')}
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
                 >
-                  ✏️ Rename Team
+                  <FiSettings />
+                  Settings
                 </button>
               )}
-              <button
-                onClick={handleInviteManagers}
-                className="bg-locker-coral hover:bg-locker-primary px-5 py-2 rounded-lg font-semibold text-black transition-colors shadow-sm"
-              >
-                Invite Managers
-              </button>
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex space-x-1 bg-locker-slate/60 rounded-lg p-1">
-          {[
-            { id: 'overview', label: 'Overview', icon: '🏠' },
-            { id: 'members', label: 'Members', icon: '👥' },
-            { id: 'standings', label: 'Standings', icon: '📊' },
-            { id: 'settings', label: 'Settings', icon: '⚙️' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors text-sm sm:text-base ${
-                activeTab === tab.id
-                  ? 'bg-locker-primary text-white shadow'
-                  : 'text-locker-ice/80 hover:text-white hover:bg-locker-slateDark'
-              }`}
-            >
-              {tab.icon} {tab.label}
-            </button>
-          ))}
+      <div className="bg-black/10 backdrop-blur-sm border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="flex space-x-8">
+            {['overview', 'members', 'standings', 'schedule', 'draft', ...(isCommissioner ? ['settings'] : [])].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab as any)}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === tab
+                    ? 'border-blue-500 text-white'
+                    : 'border-transparent text-gray-400 hover:text-white hover:border-gray-300'
+                }`}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </nav>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'overview' && (
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="space-y-6">
             {/* League Info */}
-            <div className="bg-locker-slate/50 rounded-xl p-6 border border-white/5">
-              <h2 className="text-xl font-bold mb-4">League Information</h2>
-              <div className="space-y-3">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+              <h3 className="text-xl font-bold mb-4">League Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <span className="text-slate-400">Game Mode:</span>
-                  <span className="ml-2 font-semibold">
-                    {league.game_mode === 'CONFERENCE' ? `${league.selected_conference} Conference` : 'Power 4'}
-                  </span>
+                  <p className="text-sm text-gray-400">Commissioner</p>
+                  <p className="font-semibold">{league?.commissioner}</p>
                 </div>
                 <div>
-                  <span className="text-slate-400">Scoring:</span>
-                  <span className="ml-2 font-semibold">
-                    {league.scoring_settings.rec > 0 ? 'PPR' : 'Standard'}
-                  </span>
+                  <p className="text-sm text-gray-400">Season</p>
+                  <p className="font-semibold">{league?.season}</p>
                 </div>
                 <div>
-                  <span className="text-slate-400">Draft Type:</span>
-                  <span className="ml-2 font-semibold capitalize">{league.draft_settings.type}</span>
+                  <p className="text-sm text-gray-400">Scoring Type</p>
+                  <p className="font-semibold">{league?.scoringType || 'PPR'}</p>
                 </div>
                 <div>
-                  <span className="text-slate-400">Season Start:</span>
-                  <span className="ml-2 font-semibold">Week {league.season_start_week}</span>
+                  <p className="text-sm text-gray-400">Teams</p>
+                  <p className="font-semibold">{teams.length} / {league?.maxTeams || 12}</p>
                 </div>
                 <div>
-                  <span className="text-slate-400">Trade Deadline:</span>
-                  <span className="ml-2 font-semibold">Week {league.trade_deadline_week}</span>
+                  <p className="text-sm text-gray-400">Draft Date</p>
+                  <p className="font-semibold">
+                    {league?.draftDate ? new Date(league.draftDate).toLocaleDateString() : 'Not scheduled'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Status</p>
+                  <p className="font-semibold capitalize">{league?.status || 'Pre-Draft'}</p>
                 </div>
               </div>
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-locker-slate/50 rounded-xl p-6 border border-white/5">
-              <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <button
+                onClick={() => router.push(`/league/${leagueId}/locker-room`)}
+                className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+              >
+                <FiClipboard className="text-xl" />
+                <span className="font-semibold">Manage Roster</span>
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('standings')}
+                className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+              >
+                <FiTrendingUp className="text-xl" />
+                <span className="font-semibold">View Standings</span>
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('schedule')}
+                className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+              >
+                <FiCalendar className="text-xl" />
+                <span className="font-semibold">Schedule</span>
+              </button>
+            </div>
+
+            {/* Recent Activity */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+              <h3 className="text-xl font-bold mb-4">Recent Activity</h3>
               <div className="space-y-3">
-                {league.status === 'draft' && (
-                  <button
-                    onClick={handleScheduleDraft}
-                    className="w-full bg-locker-coral hover:bg-locker-primary py-3 px-4 rounded-lg font-semibold transition-colors text-black"
-                  >
-                    📅 Schedule Draft
-                  </button>
-                )}
-                {userTeam && (
-                  <button
-                    onClick={handleViewLockerRoom}
-                    className="w-full bg-locker-primary hover:bg-locker-primaryDark py-3 px-4 rounded-lg font-semibold transition-colors"
-                  >
-                    🏈 Manage Roster
-                  </button>
-                )}
-                <button
-                  onClick={() => setActiveTab('members')}
-                  className="w-full bg-locker-brown hover:bg-locker-primary py-3 px-4 rounded-lg font-semibold transition-colors"
-                >
-                  👥 View Members
-                </button>
+                <p className="text-sm text-gray-400">No recent activity</p>
               </div>
             </div>
           </div>
         )}
-
-        {activeTab === 'members' && (
-          <div className="bg-slate-800/50 rounded-xl p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold">League Members</h2>
-              <span className="text-slate-400">{teams.length}/{league.max_teams} Teams</span>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {teams.map((team, index) => (
-                <div key={team.$id} className="bg-slate-700/50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold">{team.name}</h3>
-                    {team.user_id === league.commissioner_user_id && (
-                      <span className="text-xs bg-yellow-500 text-black px-2 py-1 rounded">Commissioner</span>
-                    )}
-                  </div>
-                  <div className="text-sm text-slate-400">
-                    <div>Record: {team.record.wins}-{team.record.losses}-{team.record.ties}</div>
-                    <div>Points: {team.points_for.toFixed(1)}</div>
-                    <div>Waiver Priority: #{team.waiver_priority}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {teams.length < league.max_teams && (
-              <div className="mt-6 text-center">
-                <p className="text-slate-400 mb-4">
-                  {league.max_teams - teams.length} spots remaining
-                </p>
-                <button
-                  onClick={handleInviteManagers}
-                  className="bg-green-500 hover:bg-green-600 px-6 py-2 rounded-lg font-semibold transition-colors"
-                >
-                  Invite More Managers
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'standings' && (
-          <div className="bg-slate-800/50 rounded-xl p-6">
-            <h2 className="text-xl font-bold mb-6">League Standings</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-slate-700">
-                    <th className="text-left py-3 px-4">Rank</th>
-                    <th className="text-left py-3 px-4">Team</th>
-                    <th className="text-center py-3 px-4">Record</th>
-                    <th className="text-center py-3 px-4">Points For</th>
-                    <th className="text-center py-3 px-4">Points Against</th>
-                    <th className="text-center py-3 px-4">Waiver Priority</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {teams
-                    .sort((a, b) => b.points_for - a.points_for)
-                    .map((team, index) => (
-                      <tr key={team.$id} className="border-b border-slate-700/50">
-                        <td className="py-3 px-4 font-semibold">{index + 1}</td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-center">
-                            <span className="font-semibold">{team.name}</span>
-                            {team.user_id === league.commissioner_user_id && (
-                              <span className="ml-2 text-xs bg-yellow-500 text-black px-2 py-1 rounded">C</span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          {team.record.wins}-{team.record.losses}-{team.record.ties}
-                        </td>
-                        <td className="py-3 px-4 text-center font-semibold">{team.points_for.toFixed(1)}</td>
-                        <td className="py-3 px-4 text-center">{team.points_against.toFixed(1)}</td>
-                        <td className="py-3 px-4 text-center">#{team.waiver_priority}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'settings' && (
-          <div className="bg-slate-800/50 rounded-xl p-6">
-            <h2 className="text-xl font-bold mb-6">League Settings</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-semibold mb-3">Scoring Settings</h3>
-                <div className="space-y-2 text-sm">
-                  {Object.entries(league.scoring_settings).map(([key, value]) => (
-                    <div key={key} className="flex justify-between">
-                      <span className="text-slate-400">{key.replace(/_/g, ' ')}:</span>
-                      <span className="font-semibold">{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-3">Roster Settings</h3>
-                <div className="space-y-2 text-sm">
-                  {Object.entries(league.roster_settings).map(([key, value]) => (
-                    <div key={key} className="flex justify-between">
-                      <span className="text-slate-400">{key}:</span>
-                      <span className="font-semibold">{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {activeTab === 'members' && renderMembersTab()}
+        {activeTab === 'standings' && renderStandingsTab()}
+        {activeTab === 'schedule' && renderScheduleTab()}
+        {activeTab === 'settings' && renderSettingsTab()}
+        {activeTab === 'draft' && renderDraftTab()}
       </div>
     </div>
   );
-} 
+}
