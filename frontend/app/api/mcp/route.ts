@@ -7,7 +7,6 @@ import os from 'os';
 import { 
   registerAppwriteTools, 
   registerVercelTools, 
-  registerSplineTools,
   registerThirdEyeCapitalTools,
   registerLovableTools,
   registerGoHighLevelTools
@@ -23,7 +22,6 @@ const handler = createMcpHandler(
     // Register platform-specific tools
     registerAppwriteTools(server);
     registerVercelTools(server);
-    registerSplineTools(server);
     registerThirdEyeCapitalTools(server);
     registerLovableTools(server);
     registerGoHighLevelTools(server);
