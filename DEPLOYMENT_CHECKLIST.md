@@ -65,7 +65,7 @@ vercel --prod
 
 ### **Step 4: Configure Environment Variables**
 In Vercel Dashboard:
-- `NEXT_PUBLIC_API_URL=https://college-football-fantasy-app.vercel.app/api`
+- `NEXT_PUBLIC_API_URL=https://cfbfantasy.app/api`
 - `NEXT_PUBLIC_APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1`
 - `NEXT_PUBLIC_APPWRITE_PROJECT_ID=688ccd49002eacc6c020`
 - `APPWRITE_API_KEY=your_api_key`
@@ -74,7 +74,7 @@ In Vercel Dashboard:
 ## 🧪 Post-Deployment Testing
 
 ### **Frontend Tests**
-- [ ] **Landing page loads** at `https://college-football-fantasy-app.vercel.app/`
+- [ ] **Landing page loads** at `https://cfbfantasy.app/`
 - [ ] **"Start a League" button** works → `/league/create`
 - [ ] **"Join League" button** works → `/league/join`
 - [ ] **"Mock Draft" button** works → `/draft/mock`
@@ -164,7 +164,7 @@ vercel --prod
 ## 🎉 Deployment Complete!
 
 Once all checklist items are verified:
-- ✅ **Production URL**: `https://college-football-fantasy-app.vercel.app/`
+- ✅ **Production URL**: `https://cfbfantasy.app/`
 - ✅ **All features working**
 - ✅ **Data integrity maintained**
 - ✅ **Performance optimized**

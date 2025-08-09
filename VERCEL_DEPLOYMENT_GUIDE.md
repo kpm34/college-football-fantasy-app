@@ -3,7 +3,8 @@
 ## 🚀 Deploying to Vercel
 
 Your College Football Fantasy App is now configured for deployment on Vercel at:
-**https://college-football-fantasy-app.vercel.app/**
+**Primary**: https://cfbfantasy.app/  
+**Secondary**: https://collegefootballfantasy.app/
 
 ## Prerequisites
 
@@ -45,17 +46,15 @@ vercel --prod
 ### ✅ **All Paths Updated**
 
 #### **Main Landing Page Buttons:**
-- **"Start a League"** → `https://college-football-fantasy-app.vercel.app/league/create`
-- **"Join League"** → `https://college-football-fantasy-app.vercel.app/league/join`
-- **"🎯 Mock Draft Now"** → `https://college-football-fantasy-app.vercel.app/draft/mock`
-- **"🎯 Mock Draft"** → `https://college-football-fantasy-app.vercel.app/draft/test`
+- **"Start a League"** → `https://cfbfantasy.app/league/create`
+- **"Join League"** → `https://cfbfantasy.app/league/join`
 
 #### **API Endpoints:**
-- **Base URL**: `https://college-football-fantasy-app.vercel.app/api`
-- **Health Check**: `https://college-football-fantasy-app.vercel.app/api/health`
-- **Games**: `https://college-football-fantasy-app.vercel.app/api/games`
-- **Rankings**: `https://college-football-fantasy-app.vercel.app/api/rankings`
-- **Teams**: `https://college-football-fantasy-app.vercel.app/api/teams`
+- **Base URL**: `https://cfbfantasy.app/api`
+- **Health Check**: `https://cfbfantasy.app/api/health`
+- **Games**: `https://cfbfantasy.app/api/games`
+- **Rankings**: `https://cfbfantasy.app/api/rankings`
+- **Teams**: `https://cfbfantasy.app/api/teams`
 
 ## 🔑 Token-Based Deployment (Optional)
 
@@ -208,7 +207,7 @@ In Vercel Dashboard:
 ## 🎯 Testing Your Deployment
 
 ### **1. Test Landing Page**
-Visit: `https://college-football-fantasy-app.vercel.app/`
+Visit: `https://cfbfantasy.app/`
 
 ### **2. Test All Buttons**
 - Click "Start a League" → Should go to `/league/create`
