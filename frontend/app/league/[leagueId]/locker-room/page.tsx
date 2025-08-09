@@ -205,12 +205,12 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
 
   const getPositionColor = (position: string): string => {
     switch (position) {
-      case 'QB': return 'bg-blue-500';
-      case 'RB': return 'bg-green-500';
-      case 'WR': return 'bg-purple-500';
-      case 'TE': return 'bg-orange-500';
-      case 'K': return 'bg-yellow-500';
-      default: return 'bg-gray-500';
+      case 'QB': return 'bg-locker-primary';
+      case 'RB': return 'bg-locker-brown';
+      case 'WR': return 'bg-locker-coral';
+      case 'TE': return 'bg-locker-taupe';
+      case 'K': return 'bg-locker-ice';
+      default: return 'bg-locker-slate';
     }
   };
 

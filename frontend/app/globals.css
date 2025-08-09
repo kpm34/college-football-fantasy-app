@@ -35,6 +35,20 @@ body {
   min-height: 100vh;
 }
 
+/* Responsive typography */
+h1 { font-size: clamp(1.75rem, 4.5vw, 2.5rem); line-height: 1.15; }
+h2 { font-size: clamp(1.25rem, 3.2vw, 1.75rem); line-height: 1.2; }
+h3 { font-size: clamp(1.125rem, 2.6vw, 1.5rem); line-height: 1.25; }
+p, li, span, div { font-size: clamp(0.95rem, 1.5vw, 1rem); }
+
+/* Utility helpers */
+.container-padded { padding-left: clamp(1rem, 4vw, 2rem); padding-right: clamp(1rem, 4vw, 2rem); }
+.card { @apply rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm; }
+.btn { @apply rounded-lg px-4 py-2 font-semibold transition-colors; }
+.btn-primary { @apply bg-locker-primary hover:bg-locker-primaryDark text-white; }
+.btn-accent { @apply bg-locker-coral hover:bg-locker-primary text-black; }
+.input { @apply bg-white/5 border border-white/10 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-locker-primary; }
+
 /* Typography System */
 .font-bebas {
   font-family: var(--font-bebas);

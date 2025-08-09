@@ -189,6 +189,23 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                   🏈 My Locker Room
                 </button>
               )}
+              {userTeam && (
+                <button
+                  onClick={async () => {
+                    const newName = prompt('Enter new team name', userTeam.name);
+                    if (!newName || newName === userTeam.name) return;
+                    await fetch(`/api/leagues/${leagueId}`, {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ teamId: userTeam.$id, name: newName })
+                    });
+                    setTeams(prev => prev.map(t => t.$id === userTeam.$id ? { ...t, name: newName } : t));
+                  }}
+                  className="bg-locker-brown hover:bg-locker-primary px-5 py-2 rounded-lg font-semibold transition-colors shadow-sm"
+                >
+                  ✏️ Rename Team
+                </button>
+              )}
               <button
                 onClick={handleInviteManagers}
                 className="bg-locker-coral hover:bg-locker-primary px-5 py-2 rounded-lg font-semibold text-black transition-colors shadow-sm"
