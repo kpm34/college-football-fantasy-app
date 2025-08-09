@@ -1,4 +1,4 @@
-import { Client, Databases, Account } from 'appwrite';
+import { Client, Databases, Account, Avatars } from 'appwrite';
 import { APPWRITE_PUBLIC_CONFIG } from './appwrite-config';
 
 // Initialize Appwrite client for frontend (NO API KEY - uses session auth)
@@ -11,6 +11,7 @@ client
 // Export Appwrite services
 export const databases = new Databases(client);
 export const account = new Account(client);
+export const avatars = new Avatars(client);
 // Realtime functionality temporarily disabled - using client directly where needed
 export { client };
 

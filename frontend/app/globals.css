@@ -35,6 +35,17 @@ body {
   min-height: 100vh;
 }
 
+/* Login palette provided by user */
+.login-bg-1 { background-color: #5F2A7F; }
+.login-bg-2 { background-color: #95579A; }
+.login-bg-3 { background-color: #F7EAE1; }
+.login-bg-4 { background-color: #EC0C87; }
+.login-bg-5 { background-color: #8C6B50; }
+.login-card { background: linear-gradient(135deg, rgba(95,42,127,0.35), rgba(149,87,154,0.35)); border: 1px solid rgba(247,234,225,0.2); }
+.login-input { background: rgba(247,234,225,0.9); color: #1a1a1a; }
+.login-button { background: #EC0C87; }
+.login-button:hover { background: #c00a6f; }
+
 /* Responsive typography */
 h1 { font-size: clamp(1.75rem, 4.5vw, 2.5rem); line-height: 1.15; }
 h2 { font-size: clamp(1.25rem, 3.2vw, 1.75rem); line-height: 1.2; }
