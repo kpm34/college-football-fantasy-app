@@ -24,6 +24,7 @@ if (typeof window !== 'undefined') {
 
 // Export Appwrite services
 export const databases = new Databases(client);
+// Deprecated shim. Route through main proxy-aware export instead if ever used.
 export const account = new Account(client);
 export const avatars = new Avatars(client);
 export { client };

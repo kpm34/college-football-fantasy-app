@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://unpkg.com/appwrite@13.0.1"></script>
-    <script src="../js/appwrite-browser.js"></script>
+    <!-- Disabled direct Appwrite browser SDK to avoid CORS; all auth must go via Next.js proxy -->
+    <!-- <script src="../js/appwrite-browser.js"></script> -->
 
     <script>
         tailwind.config = {
