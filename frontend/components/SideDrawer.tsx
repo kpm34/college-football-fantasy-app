@@ -214,6 +214,12 @@ export default function SideDrawer({ open, onClose }: DrawerProps) {
                 <ChartBarIcon className="h-5 w-5" />
                 <span className="font-medium">Scoreboard</span>
               </Link>
+              
+              <Link href="/draft/mock" onClick={onClose} className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden">
+                <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+                <TrophyIcon className="h-5 w-5" />
+                <span className="font-medium">Mock Draft</span>
+              </Link>
             </>
           )}
 
