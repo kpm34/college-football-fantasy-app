@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { databases, account, DATABASE_ID, COLLECTIONS, client } from "@/lib/appwrite";
+import { databases, DATABASE_ID, COLLECTIONS, client } from "@/lib/appwrite";
 import { Query } from "appwrite";
 import { PlayerProjection, DraftPlayer } from "@/types/projections";
 import { ProjectionsService } from "@/lib/services/projections.service";
 import { FiSearch, FiFilter, FiTrendingUp, FiStar, FiInfo } from "react-icons/fi";
+import { useAuth } from "@/hooks/useAuth";
 
 interface DraftRoomProps {
   params: Promise<{
@@ -19,9 +20,9 @@ const CONFERENCES = ['ALL', 'SEC', 'Big Ten', 'Big 12', 'ACC'];
 
 export default function DraftRoom({ params }: DraftRoomProps) {
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [leagueId, setLeagueId] = useState<string>('');
   const [loading, setLoading] = useState(true);
-  const [currentUserId, setCurrentUserId] = useState<string>('');
   
   // Draft state
   const [draftOrder, setDraftOrder] = useState<string[]>([]);
@@ -50,18 +51,19 @@ export default function DraftRoom({ params }: DraftRoomProps) {
   }, [params]);
 
   useEffect(() => {
-    if (leagueId) {
+    if (leagueId && !authLoading && user) {
       initializeDraft();
     }
-  }, [leagueId]);
+  }, [leagueId, authLoading, user]);
 
   const initializeDraft = async () => {
     try {
       setLoading(true);
       
-      // Get current user
-      const user = await account.get();
-      setCurrentUserId(user.$id);
+      if (!user) {
+        router.push('/login');
+        return;
+      }
       
       // Load draft order
       // TODO: Load from draft settings
@@ -142,7 +144,7 @@ export default function DraftRoom({ params }: DraftRoomProps) {
         'unique()',
         {
           leagueId,
-          userId: currentUserId,
+          userId: user?.$id || '',
           playerId: player.$id,
           playerName: player.playerName,
           position: player.position,

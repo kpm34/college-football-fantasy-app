@@ -1,8 +1,6 @@
 'use client';
 
-import { account } from '@/lib/appwrite';
-import { createProxyAwareAccount } from '@/lib/appwrite-proxy';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { APPWRITE_PUBLIC_CONFIG } from '@/lib/appwrite-config';
 
@@ -123,21 +121,10 @@ export default function LoginPage() {
 }
 
 function OAuthButtons() {
-  async function social(provider: 'google' | 'apple') {
-    try {
-      // Redirect-based OAuth with absolute URLs so we return to our site, not the Appwrite host
-      const origin = typeof window !== 'undefined' ? window.location.origin : '';
-      const successUrl = `${origin}/`;
-      const failureUrl = `${origin}/login`;
-      await account.createOAuth2Session(provider, successUrl, failureUrl);
-    } catch (e) {
-      console.error('OAuth failed', e);
-    }
-  }
+  // TODO: Implement OAuth with server-side flow
   return (
     <div className="space-y-2">
-      <button type="button" onClick={() => social('google')} className="w-full rounded-md px-4 py-2 bg-white text-black hover:bg-gray-200">Continue with Google</button>
-      <button type="button" onClick={() => social('apple')} className="w-full rounded-md px-4 py-2 bg-black text-white hover:bg-black/90">Continue with Apple</button>
+      <button type="button" disabled className="w-full rounded-md px-4 py-2 bg-gray-600 text-gray-400 cursor-not-allowed">OAuth coming soon</button>
     </div>
   );
 }

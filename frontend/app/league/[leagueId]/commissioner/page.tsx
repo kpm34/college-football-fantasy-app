@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { account, databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { ID } from 'appwrite';
+import { useAuth } from '@/hooks/useAuth';
 import { 
   CogIcon, 
   UserGroupIcon, 
@@ -37,6 +38,7 @@ const DEFAULT_SCORING_RULES: ScoringRule[] = [
 
 export default function CommissionerSettingsPage({ params }: { params: { leagueId: string } }) {
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isCommissioner, setIsCommissioner] = useState(false);
@@ -56,12 +58,17 @@ export default function CommissionerSettingsPage({ params }: { params: { leagueI
   const [inviteCode, setInviteCode] = useState('');
 
   useEffect(() => {
-    checkCommissionerStatus();
-  }, [params.leagueId]);
+    if (!authLoading && user) {
+      checkCommissionerStatus();
+    } else if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [params.leagueId, user, authLoading, router]);
 
   async function checkCommissionerStatus() {
+    if (!user) return;
+    
     try {
-      const user = await account.get();
       const league = await databases.getDocument(
         DATABASE_ID,
         COLLECTIONS.LEAGUES,
@@ -72,6 +79,7 @@ export default function CommissionerSettingsPage({ params }: { params: { leagueI
         setIsCommissioner(true);
         loadLeagueData(league);
         loadMembers();
+        setLoading(false);
       } else {
         router.push(`/league/${params.leagueId}`);
       }
