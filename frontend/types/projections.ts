@@ -43,6 +43,9 @@ export interface PlayerProjection {
     receptions?: number;
     fantasyPoints: number;
     confidence: number; // 0-100 confidence score
+    floor?: number; // 10th percentile projection
+    ceiling?: number; // 90th percentile projection
+    consistency?: number; // Consistency score (0-1)
   };
   
   // Rankings
@@ -51,6 +54,7 @@ export interface PlayerProjection {
     position: number;
     adp: number; // Average Draft Position
     tier: number;
+    vorp?: number; // Value Over Replacement Player
   };
   
   // Meta data for projection sources
