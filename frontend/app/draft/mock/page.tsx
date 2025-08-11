@@ -95,48 +95,113 @@ export default function MockDraftPage() {
 
   const loadPlayers = async () => {
     try {
-      // Load projections from our API
-      const response = await fetch('/api/projections?mode=season');
+      // Load players from our dedicated draft endpoint
+      const response = await fetch('/api/draft/players?limit=500');
       const data = await response.json();
       
-      if (data.success && data.data) {
-        // Transform projection data to our Player format
-        const transformedPlayers: Player[] = data.data.map((proj: any, index: number) => ({
-          id: proj.playerId || `player-${index}`,
-          name: proj.playerName,
-          position: proj.position as Position,
-          team: proj.team,
-          conference: getConferenceForTeam(proj.team),
-          class: 'JR', // Default, would need roster data for actual class
-          height: '6-0', // Default, would need roster data
-          weight: 200, // Default, would need roster data
-          projectedPoints: proj.fantasyPoints,
-          adp: proj.adp || index + 1,
-          pastStats: {
+      if (data.success && data.players && data.players.length > 0) {
+        // Transform to our Player format
+        const transformedPlayers: Player[] = data.players.map((player: any) => ({
+          id: player.id,
+          name: player.name,
+          position: player.position as Position,
+          team: player.team,
+          conference: player.conference as Conference,
+          class: player.year,
+          height: player.height,
+          weight: typeof player.weight === 'string' ? parseInt(player.weight) : player.weight,
+          projectedPoints: player.projectedPoints,
+          adp: player.adp,
+          pastStats: player.projectedStats || {
             games: 12,
-            passingYards: proj.passingYards || undefined,
-            passingTDs: proj.passingTDs || undefined,
-            rushingYards: proj.rushingYards || undefined,
-            rushingTDs: proj.rushingTDs || undefined,
-            receivingYards: proj.receivingYards || undefined,
-            receptions: proj.receptions || undefined,
-            receivingTDs: proj.receivingTDs || undefined,
+            passingYards: player.projectedStats?.passingYards,
+            passingTDs: player.projectedStats?.passingTDs,
+            rushingYards: player.projectedStats?.rushingYards,
+            rushingTDs: player.projectedStats?.rushingTDs,
+            receivingYards: player.projectedStats?.receivingYards,
+            receptions: player.projectedStats?.receptions,
+            receivingTDs: player.projectedStats?.receivingTDs,
           },
-          eaRating: Math.floor(75 + (proj.valueScore || 0.5) * 25) // Convert value score to EA rating
+          eaRating: player.rating
         }));
         
         setPlayers(transformedPlayers);
         setFilteredPlayers(transformedPlayers);
+        
+        console.log(`Loaded ${transformedPlayers.length} players from Appwrite`);
       } else {
-        // Fallback to mock data if API fails
+        // Fallback to mock data if no players found
+        console.log('No players found in Appwrite, using mock data');
         loadMockPlayers();
       }
       
       setLoading(false);
     } catch (error) {
-      console.error("Error loading players:", error);
+      console.error("Error loading players from Appwrite:", error);
       loadMockPlayers();
       setLoading(false);
+    }
+  };
+
+  const loadPlayersByConference = async () => {
+    try {
+      const conferences = [
+        { endpoint: '/api/sec', name: 'SEC' },
+        { endpoint: '/api/bigten', name: 'Big Ten' },
+        { endpoint: '/api/big12', name: 'Big 12' },
+        { endpoint: '/api/acc', name: 'ACC' }
+      ];
+      
+      const allPlayers: Player[] = [];
+      
+      for (const conf of conferences) {
+        try {
+          const response = await fetch(conf.endpoint);
+          const data = await response.json();
+          
+          if (data.players) {
+            const confPlayers = data.players.map((player: any, index: number) => ({
+              id: player.$id || player.id || `${conf.name}-player-${index}`,
+              name: player.name,
+              position: player.position as Position,
+              team: player.team,
+              conference: conf.name as Conference,
+              class: player.year || 'JR',
+              height: player.height || '6-0',
+              weight: parseInt(player.weight) || 200,
+              projectedPoints: player.projectedPoints || (player.rating ? player.rating * 3 : 150),
+              adp: allPlayers.length + index + 1,
+              pastStats: {
+                games: 12,
+                passingYards: player.passing_yards,
+                passingTDs: player.passing_tds,
+                rushingYards: player.rushing_yards,
+                rushingTDs: player.rushing_tds,
+                receivingYards: player.receiving_yards,
+                receptions: player.receptions,
+                receivingTDs: player.receiving_tds,
+              },
+              eaRating: player.rating || 80
+            }));
+            
+            allPlayers.push(...confPlayers);
+          }
+        } catch (error) {
+          console.error(`Error loading ${conf.name} players:`, error);
+        }
+      }
+      
+      if (allPlayers.length > 0) {
+        // Sort by projected points
+        allPlayers.sort((a, b) => b.projectedPoints - a.projectedPoints);
+        setPlayers(allPlayers);
+        setFilteredPlayers(allPlayers);
+      } else {
+        loadMockPlayers();
+      }
+    } catch (error) {
+      console.error("Error loading conference players:", error);
+      loadMockPlayers();
     }
   };
   
