@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { account, databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
+import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
 import { Query } from "appwrite";
 import { useRouter } from "next/navigation";
 import CFPLoadingScreen from "./CFPLoadingScreen";
+import { useAuth } from "@/hooks/useAuth";
 import {
   HomeIcon,
   PlusCircleIcon,
@@ -32,31 +33,21 @@ type SessionState = {
 
 export default function SideDrawer({ open, onClose }: DrawerProps) {
   const router = useRouter();
-  const [session, setSession] = useState<SessionState>({ isAuthenticated: false });
+  const { user, loading: authLoading, logout } = useAuth();
   const [isNavigating, setIsNavigating] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const me = await account.get();
-        if (!cancelled)
-          setSession({ isAuthenticated: true, name: me.name, email: me.email, userId: me.$id });
-      } catch {
-        if (!cancelled) setSession({ isAuthenticated: false });
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const session: SessionState = {
+    isAuthenticated: !!user,
+    name: user?.name,
+    email: user?.email,
+    userId: user?.$id
+  };
 
   async function handleLogout() {
     try {
-      await account.deleteSessions();
-      setSession({ isAuthenticated: false });
+      await logout();
       onClose();
-      window.location.href = "/";
+      router.push("/");
     } catch (e) {
       console.error("Logout failed", e);
     }

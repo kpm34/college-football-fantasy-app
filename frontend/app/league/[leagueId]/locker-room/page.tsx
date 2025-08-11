@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { databases, account, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
+import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
 import { Query } from "appwrite";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Player {
   $id: string;
@@ -48,6 +49,7 @@ interface LockerRoomPageProps {
 
 export default function LockerRoomPage({ params }: LockerRoomPageProps) {
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [leagueId, setLeagueId] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -71,24 +73,24 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
 
   // Load team data
   useEffect(() => {
-    if (leagueId) {
+    if (leagueId && !authLoading && user) {
       loadTeamData();
+    } else if (leagueId && !authLoading && !user) {
+      router.push('/login');
     }
-  }, [leagueId]);
+  }, [leagueId, authLoading, user, router]);
 
   const loadTeamData = async () => {
+    if (!user) return;
+    
     try {
       setLoading(true);
-      
-      // Get current user
-      const user = await account.get();
-      const userId = user.$id;
       
       // Load user's team in this league
       const teamsResponse = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.ROSTERS,
-        [Query.equal('leagueId', leagueId), Query.equal('userId', userId)]
+        [Query.equal('leagueId', leagueId), Query.equal('userId', user.$id)]
       );
       
       if (teamsResponse.documents.length === 0) {

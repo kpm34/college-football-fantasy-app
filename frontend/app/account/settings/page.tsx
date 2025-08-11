@@ -1,9 +1,10 @@
 'use client';
 
-import { account, databases, DATABASE_ID } from '@/lib/appwrite';
+import { databases, DATABASE_ID } from '@/lib/appwrite';
 import { getTeamColors } from '@/lib/team-colors';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 import { ID } from 'appwrite';
 
 const POWER_4_TEAMS = [
@@ -30,275 +31,275 @@ const POWER_4_TEAMS = [
   'Pittsburgh Panthers', 'Louisville Cardinals', 'California Golden Bears', 'Stanford Cardinal', 'SMU Mustangs'
 ].sort();
 
+const USER_PREFS_COLLECTION = 'user_preferences';
+
 export default function AccountSettingsPage() {
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   
-  // Account fields
-  const [userId, setUserId] = useState('');
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  
-  // Profile fields
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
+  // Form fields
+  const [fullName, setFullName] = useState('');
   const [favoriteTeam, setFavoriteTeam] = useState('');
-  const [userDocId, setUserDocId] = useState<string | null>(null);
+  const [fantasyExperience, setFantasyExperience] = useState('intermediate');
+  const [notificationPrefs, setNotificationPrefs] = useState({
+    leagueUpdates: true,
+    tradeOffers: true,
+    waiverResults: true,
+    gameReminders: true,
+    weeklyRecap: false
+  });
 
   useEffect(() => {
-    loadUserData();
-  }, []);
-
-  async function loadUserData() {
-    try {
-      // Get account info
-      const me = await account.get();
-      setUserId(me.$id);
-      setEmail(me.email);
-      setName(me.name || '');
-      
-      // Parse name into first/last if possible
-      if (me.name) {
-        const parts = me.name.split(' ');
-        if (parts.length >= 2) {
-          setFirstName(parts[0]);
-          setLastName(parts.slice(1).join(' '));
-        } else {
-          setFirstName(me.name);
-        }
-      }
-      
-      // Try to get extended profile from users collection
-      try {
-        // In our setup, the user document ID is the same as the account ID
-        const userDoc = await databases.getDocument(
-          DATABASE_ID,
-          'users',
-          me.$id
-        );
-        setUserDocId(userDoc.$id);
-        setFirstName(userDoc.firstName || firstName);
-        setLastName(userDoc.lastName || lastName);
-        setPhone(userDoc.phoneNumber || '');
-        setFavoriteTeam(userDoc.favoriteTeam || '');
-      } catch (e) {
-        console.log('No user document found, will create one on save');
-        // Set the userDocId to the account ID for consistency
-        setUserDocId(me.$id);
-      }
-    } catch (e: any) {
-      setError('Please login first.');
-      setTimeout(() => router.push('/login'), 2000);
-    } finally {
+    if (!authLoading && !user) {
+      router.push('/login');
+    } else if (user) {
+      setFullName(user.name || '');
+      loadPreferences(user.$id);
       setLoading(false);
+    }
+  }, [user, authLoading, router]);
+
+  async function loadPreferences(userId: string) {
+    try {
+      const docs = await databases.listDocuments(
+        DATABASE_ID,
+        USER_PREFS_COLLECTION,
+        [`equal("userId", "${userId}")`]
+      );
+      
+      if (docs.documents.length > 0) {
+        const prefs = docs.documents[0];
+        setFavoriteTeam(prefs.favoriteTeam || '');
+        setFantasyExperience(prefs.fantasyExperience || 'intermediate');
+        setNotificationPrefs(prefs.notificationPrefs || notificationPrefs);
+      }
+    } catch (error) {
+      console.error('Error loading preferences:', error);
     }
   }
 
-  async function saveProfile(e: React.FormEvent) {
-    e.preventDefault();
-    setSaving(true);
-    setMessage(null);
-    setError(null);
+  async function handleSave() {
+    if (!user) return;
     
+    setSaving(true);
+    setError(null);
+    setSuccess(null);
+
     try {
-      // Update account name
-      const fullName = `${firstName} ${lastName}`.trim() || name;
-      if (fullName) {
-        await account.updateName(fullName);
-      }
-      
-      // Save extended profile to users collection
-      const profileData = {
-        name: fullName,
-        email,
-        firstName,
-        lastName,
-        phoneNumber: phone,
-        favoriteTeam,
-        authMethod: 'email'
-      };
-      
-      if (userDocId === userId) {
-        // The document should exist in Appwrite (was created during user creation)
-        // Update it with new profile data
-        try {
-          await databases.updateDocument(
-            DATABASE_ID,
-            'users',
-            userDocId,
-            profileData
-          );
-        } catch (updateError) {
-          // If update fails, the document might not exist, so create it
-          console.log('Update failed, creating new document');
-          await databases.createDocument(
-            DATABASE_ID,
-            'users',
-            userId, // Use the account ID as document ID
-            {
-              ...profileData,
-              name: fullName,
-              authMethod: 'email',
-              isVerified: true,
-              createdAt: new Date().toISOString()
-            },
-            [
-              `read("user:${userId}")`,
-              `update("user:${userId}")`,
-              `delete("user:${userId}")`
-            ]
-          );
+      // Update name via API
+      if (fullName !== user.name) {
+        const response = await fetch('/api/auth/update-profile', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: fullName }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update name');
         }
       }
-      
-      setMessage('Profile updated successfully!');
-      setTimeout(() => setMessage(null), 3000);
-    } catch (e: any) {
-      console.error('Error saving profile:', e);
-      setError(e?.message || 'Failed to update profile');
+
+      // Save other preferences to database
+      const prefsData = {
+        userId: user.$id,
+        favoriteTeam,
+        fantasyExperience,
+        notificationPrefs,
+        updatedAt: new Date().toISOString()
+      };
+
+      try {
+        // Try to update existing document
+        const docs = await databases.listDocuments(
+          DATABASE_ID,
+          USER_PREFS_COLLECTION,
+          [`equal("userId", "${user.$id}")`]
+        );
+        
+        if (docs.documents.length > 0) {
+          await databases.updateDocument(
+            DATABASE_ID,
+            USER_PREFS_COLLECTION,
+            docs.documents[0].$id,
+            prefsData
+          );
+        } else {
+          // Create new document
+          await databases.createDocument(
+            DATABASE_ID,
+            USER_PREFS_COLLECTION,
+            ID.unique(),
+            prefsData
+          );
+        }
+      } catch (dbError) {
+        console.error('Database error:', dbError);
+        // Continue even if preferences fail to save
+      }
+
+      setSuccess('Settings saved successfully!');
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (error: any) {
+      setError(error.message || 'Failed to save settings');
     } finally {
       setSaving(false);
     }
   }
 
-  if (loading) {
+  const selectedTeamColors = favoriteTeam ? getTeamColors(favoriteTeam) : null;
+
+  if (loading || authLoading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-locker-primary via-locker-primaryDark to-locker-accent flex items-center justify-center">
-        <div className="text-white text-lg">Loading...</div>
-      </main>
+      <div className="min-h-screen bg-[#0B0E13] flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
     );
   }
 
-  const selectedTeamColors = favoriteTeam ? getTeamColors(favoriteTeam) : null;
-
   return (
-    <main className="min-h-screen bg-gradient-to-br from-locker-primary via-locker-primaryDark to-locker-accent">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="bg-black/30 backdrop-blur-lg rounded-xl p-6 md:p-8 border border-white/10">
-          <h1 className="text-3xl font-bold text-white mb-6">Account Settings</h1>
-          
-          {message && (
-            <div className="mb-4 p-3 bg-green-500/20 border border-green-500/50 rounded-lg text-green-300">
-              {message}
-            </div>
-          )}
-          
-          {error && (
-            <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300">
-              {error}
-            </div>
-          )}
-          
-          <form onSubmit={saveProfile} className="space-y-6">
-            {/* Login Info Section */}
-            <div>
-              <h2 className="text-xl font-semibold text-white mb-4">Login Information</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-white/80 text-sm mb-1">Email</label>
-                  <input 
-                    type="email"
-                    className="w-full px-4 py-2 rounded-lg bg-white/10 text-white/70 border border-white/20 cursor-not-allowed"
-                    value={email}
-                    disabled
-                  />
-                </div>
-              </div>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-[#0B0E13] via-[#1A1F2E] to-[#0B0E13]">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-white mb-8">Account Settings</h1>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-400">
+            {success}
+          </div>
+        )}
+
+        <div className="space-y-6">
+          {/* Profile Information */}
+          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/10">
+            <h2 className="text-xl font-semibold text-white mb-4">Profile Information</h2>
             
-            {/* Personal Info Section */}
-            <div>
-              <h2 className="text-xl font-semibold text-white mb-4">Personal Information</h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-white/80 text-sm mb-1">First Name</label>
-                  <input 
-                    type="text"
-                    className="w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:border-locker-ice focus:outline-none"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    placeholder="John"
-                  />
-                </div>
-                <div>
-                  <label className="block text-white/80 text-sm mb-1">Last Name</label>
-                  <input 
-                    type="text"
-                    className="w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:border-locker-ice focus:outline-none"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    placeholder="Doe"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-white/80 text-sm mb-1">Phone Number</label>
-                  <input 
-                    type="tel"
-                    className="w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:border-locker-ice focus:outline-none"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+1 (555) 123-4567"
-                  />
-                </div>
-              </div>
-            </div>
-            
-            {/* Fantasy Preferences Section */}
-            <div>
-              <h2 className="text-xl font-semibold text-white mb-4">Fantasy Preferences</h2>
+            <div className="space-y-4">
               <div>
-                <label className="block text-white/80 text-sm mb-1">Favorite Team</label>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:border-white/40 focus:outline-none"
+                  placeholder="Enter your name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Email
+                </label>
+                <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white/60">
+                  {user?.email}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Fantasy Preferences */}
+          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/10">
+            <h2 className="text-xl font-semibold text-white mb-4">Fantasy Preferences</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Favorite Team
+                </label>
                 <select
-                  className="w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:border-locker-ice focus:outline-none"
                   value={favoriteTeam}
                   onChange={(e) => setFavoriteTeam(e.target.value)}
+                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none"
+                  style={{
+                    backgroundColor: selectedTeamColors ? selectedTeamColors.primary + '20' : undefined,
+                    borderColor: selectedTeamColors ? selectedTeamColors.primary + '60' : undefined
+                  }}
                 >
-                  <option value="">Select your favorite team</option>
+                  <option value="">Select a team...</option>
                   {POWER_4_TEAMS.map(team => (
-                    <option key={team} value={team}>{team}</option>
+                    <option key={team} value={team} className="bg-gray-900">
+                      {team}
+                    </option>
                   ))}
                 </select>
-                {selectedTeamColors && (
-                  <div className="mt-2 flex items-center gap-2">
-                    <div 
-                      className="w-6 h-6 rounded-full border border-white/20"
-                      style={{ backgroundColor: selectedTeamColors.primary }}
-                    />
-                    <div 
-                      className="w-6 h-6 rounded-full border border-white/20"
-                      style={{ backgroundColor: selectedTeamColors.secondary }}
-                    />
-                    <span className="text-white/60 text-sm">Team colors</span>
-                  </div>
-                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-2">
+                  Fantasy Experience Level
+                </label>
+                <select
+                  value={fantasyExperience}
+                  onChange={(e) => setFantasyExperience(e.target.value)}
+                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none"
+                >
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="expert">Expert</option>
+                  <option value="dynasty">Dynasty Veteran</option>
+                </select>
               </div>
             </div>
+          </div>
+
+          {/* Notification Preferences */}
+          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/10">
+            <h2 className="text-xl font-semibold text-white mb-4">Notification Preferences</h2>
             
-            {/* Action Buttons */}
-            <div className="flex gap-4 pt-4">
-              <button
-                type="submit"
-                disabled={saving}
-                className="flex-1 py-3 px-6 rounded-lg bg-locker-ice hover:bg-locker-ice/80 text-black font-semibold transition-colors disabled:opacity-50"
-              >
-                {saving ? 'Saving...' : 'Save Changes'}
-              </button>
-              <button
-                type="button"
-                onClick={() => router.push('/')}
-                className="py-3 px-6 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold transition-colors"
-              >
-                Cancel
-              </button>
+            <div className="space-y-3">
+              {Object.entries({
+                leagueUpdates: 'League Updates',
+                tradeOffers: 'Trade Offers',
+                waiverResults: 'Waiver Results',
+                gameReminders: 'Game Reminders',
+                weeklyRecap: 'Weekly Recap'
+              }).map(([key, label]) => (
+                <label key={key} className="flex items-center justify-between py-2">
+                  <span className="text-white/80">{label}</span>
+                  <input
+                    type="checkbox"
+                    checked={notificationPrefs[key as keyof typeof notificationPrefs]}
+                    onChange={(e) => setNotificationPrefs({
+                      ...notificationPrefs,
+                      [key]: e.target.checked
+                    })}
+                    className="w-5 h-5 rounded bg-white/10 border-white/20 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
+                  />
+                </label>
+              ))}
             </div>
-          </form>
+          </div>
+
+          {/* Save Button */}
+          <div className="flex justify-end gap-4">
+            <button
+              onClick={() => router.back()}
+              className="px-6 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 rounded-lg text-white transition-colors"
+            >
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
-

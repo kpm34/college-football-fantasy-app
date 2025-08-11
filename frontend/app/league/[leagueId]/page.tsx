@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { databases, account, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
+import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
 import { Query } from "appwrite";
 import Link from "next/link";
 import { FiSettings, FiUsers, FiCalendar, FiTrendingUp, FiClipboard, FiAward } from "react-icons/fi";
 import { leagueColors } from "@/lib/theme/colors";
+import { useAuth } from "@/hooks/useAuth";
 
 interface League {
   $id: string;
@@ -53,13 +54,13 @@ interface LeagueHomePageProps {
 
 export default function LeagueHomePage({ params }: LeagueHomePageProps) {
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [leagueId, setLeagueId] = useState<string>('');
   const [league, setLeague] = useState<League | null>(null);
   const [teams, setTeams] = useState<Team[]>([]);
   const [userTeam, setUserTeam] = useState<Team | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'standings' | 'schedule' | 'settings' | 'draft'>('overview');
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isCommissioner, setIsCommissioner] = useState(false);
   const [savingSettings, setSavingSettings] = useState(false);
 
@@ -104,16 +105,6 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     try {
       setLoading(true);
       
-      // Get current user
-      let userId = null;
-      try {
-        const user = await account.get();
-        userId = user.$id;
-        setCurrentUserId(userId);
-      } catch (e) {
-        console.log('User not logged in');
-      }
-      
       // Load league from Appwrite
       const leagueResponse = await databases.getDocument(
         DATABASE_ID,
@@ -124,7 +115,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       setLeague(leagueData);
       
       // Check if current user is commissioner
-      if (userId && (leagueData.commissionerId === userId || leagueData.commissioner === userId)) {
+      if (user && (leagueData.commissionerId === user.$id || leagueData.commissioner === user.$id)) {
         setIsCommissioner(true);
       }
 

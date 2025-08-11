@@ -45,27 +45,52 @@ export default function SignupPage() {
       <form onSubmit={onSubmit} className="w-full max-w-md bg-white/10 backdrop-blur rounded-xl p-6 border border-white/15">
         <h1 className="text-2xl font-bold text-white mb-4">Create Account</h1>
         {error && <p className="text-red-300 mb-3">{error}</p>}
-        <label className="block text-white/80 text-sm mb-1">Name</label>
-        <input className="w-full mb-3 px-3 py-2 rounded-md bg-white/90 text-black" placeholder="Display Name (optional)" value={name} onChange={(e) => setName(e.target.value)} />
-        <div className="grid grid-cols-2 gap-3">
+        
+        <div className="space-y-3">
           <div>
-            <label className="block text-white/80 text-sm mb-1">First Name</label>
-            <input className="w-full mb-3 px-3 py-2 rounded-md bg-white/90 text-black" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+            <label className="block text-white/80 text-sm mb-1">Name</label>
+            <input 
+              className="w-full px-3 py-2 rounded-md bg-white/90 text-black" 
+              placeholder="Your Name" 
+              value={name} 
+              onChange={(e) => setName(e.target.value)} 
+            />
           </div>
+          
           <div>
-            <label className="block text-white/80 text-sm mb-1">Last Name</label>
-            <input className="w-full mb-3 px-3 py-2 rounded-md bg-white/90 text-black" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+            <label className="block text-white/80 text-sm mb-1">Email</label>
+            <input 
+              className="w-full px-3 py-2 rounded-md bg-white/90 text-black" 
+              type="email" 
+              required 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+            />
+          </div>
+          
+          <div>
+            <label className="block text-white/80 text-sm mb-1">Password</label>
+            <input 
+              className="w-full px-3 py-2 rounded-md bg-white/90 text-black" 
+              type="password" 
+              required 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+            />
           </div>
         </div>
-        <label className="block text-white/80 text-sm mb-1">Email</label>
-        <input className="w-full mb-3 px-3 py-2 rounded-md bg-white/90 text-black" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-        <label className="block text-white/80 text-sm mb-1">Password</label>
-        <input className="w-full mb-4 px-3 py-2 rounded-md bg-white/90 text-black" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button disabled={loading} className="w-full rounded-md px-4 py-2 bg-[#8091BB] hover:bg-[#6B7CA6] text-white disabled:opacity-60">{loading ? 'Creating...' : 'Sign Up'}</button>
-        <p className="text-white/80 text-sm mt-4">Already have an account? <Link href="/login" className="underline">Login</Link></p>
+        
+        <button 
+          disabled={loading} 
+          className="w-full mt-4 rounded-md px-4 py-2 bg-[#8091BB] hover:bg-[#6B7CA6] text-white disabled:opacity-60"
+        >
+          {loading ? 'Creating...' : 'Sign Up'}
+        </button>
+        
+        <p className="text-white/80 text-sm mt-4">
+          Already have an account? <Link href="/login" className="underline">Login</Link>
+        </p>
       </form>
     </main>
   );
 }
-
-
