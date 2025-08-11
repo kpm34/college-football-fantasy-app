@@ -2,8 +2,12 @@ import { Account, Client } from 'appwrite';
 import { APPWRITE_PUBLIC_CONFIG as APPWRITE_CONFIG } from './appwrite-config';
 
 // Check if we're in production and need to use the proxy
-const isProduction = process.env.NODE_ENV === 'production' && typeof window !== 'undefined';
-const needsProxy = isProduction && window.location.hostname.includes('cfbfantasy.app');
+const isBrowser = typeof window !== 'undefined';
+const isProduction = process.env.NODE_ENV === 'production';
+const needsProxy = isBrowser && isProduction && (
+  /(^|\.)cfbfantasy\.app$/.test(window.location.hostname) ||
+  /(^|\.)collegefootballfantasy\.app$/.test(window.location.hostname)
+);
 
 class ProxyAccount extends Account {
   async createSession(email: string, password: string) {

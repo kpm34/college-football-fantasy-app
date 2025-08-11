@@ -54,21 +54,32 @@ class AppwriteDataService {
     }
 
     async createEmailSession(email, password) {
+        // Route through Next.js proxy to avoid CORS when used on prod
         try {
-            const response = await this.account.createEmailSession(email, password);
-            return response;
+            const res = await fetch('/api/auth/proxy?path=/account/sessions/email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+                credentials: 'include'
+            });
+            if (!res.ok) throw await res.json();
+            return res.json();
         } catch (error) {
-            console.error('Error creating session:', error);
+            console.error('Error creating session via proxy:', error);
             throw error;
         }
     }
 
     async getCurrentUser() {
         try {
-            const response = await this.account.get();
-            return response;
+            const res = await fetch('/api/auth/proxy?path=/account', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            if (!res.ok) return null;
+            return res.json();
         } catch (error) {
-            console.error('Error getting current user:', error);
+            console.error('Error getting current user via proxy:', error);
             return null;
         }
     }

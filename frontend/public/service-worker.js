@@ -81,6 +81,23 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
   
+  // Belt-and-suspenders: reroute any stray direct Appwrite account calls through our proxy
+  const isAppwriteAccount =
+    url.hostname.endsWith('nyc.cloud.appwrite.io') &&
+    (url.pathname === '/v1/account' || url.pathname.startsWith('/v1/account/'));
+  if (isAppwriteAccount) {
+    const proxyUrl = '/api/auth/proxy?path=' + url.pathname.replace('/v1', '');
+    const init = {
+      method: request.method,
+      headers: request.headers,
+      credentials: 'include',
+      redirect: 'follow',
+      mode: 'same-origin',
+    };
+    event.respondWith(fetch(new Request(proxyUrl, init)));
+    return;
+  }
+  
   // Skip non-GET requests
   if (request.method !== 'GET') {
     return;
