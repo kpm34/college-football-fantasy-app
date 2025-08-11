@@ -1,0 +1,36 @@
+{
+  "scoring_type": "PPR",
+  "points": {
+    "passing": {
+      "yards": 0.04,
+      "touchdowns": 4,
+      "interceptions": -2,
+      "two_point_conversions": 2
+    },
+    "rushing": {
+      "yards": 0.1,
+      "touchdowns": 6,
+      "two_point_conversions": 2
+    },
+    "receiving": {
+      "yards": 0.1,
+      "touchdowns": 6,
+      "receptions": 1.0,
+      "two_point_conversions": 2
+    },
+    "bonuses": {
+      "passing_300_yards": 3,
+      "passing_400_yards": 3,
+      "rushing_100_yards": 3,
+      "rushing_200_yards": 3,
+      "receiving_100_yards": 3,
+      "receiving_200_yards": 3
+    }
+  },
+  "replacement_levels": {
+    "QB": {"12_team": 18, "mean": 15},
+    "RB": {"12_team": 48, "mean": 42, "flex": true},
+    "WR": {"12_team": 60, "mean": 54, "flex": true},
+    "TE": {"12_team": 18, "mean": 15, "flex": true}
+  }
+}

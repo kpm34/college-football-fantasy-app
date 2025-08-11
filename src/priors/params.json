@@ -1,0 +1,56 @@
+{
+  "position_priors": {
+    "QB": {
+      "completion_rate": {"alpha": 65, "beta": 35},
+      "yards_per_attempt": {"mu": 7.5, "sigma": 1.2},
+      "td_rate": 0.05,
+      "int_rate": 0.025,
+      "rush_share": 0.1,
+      "sack_rate": 0.06
+    },
+    "RB": {
+      "rush_share": {"alpha": 25, "beta": 75},
+      "target_share": {"alpha": 15, "beta": 85},
+      "yards_per_carry": {"mu": 4.5, "sigma": 1.5},
+      "catch_rate": 0.75,
+      "td_rate_rush": 0.06,
+      "td_rate_rec": 0.04
+    },
+    "WR": {
+      "target_share": {"alpha": 20, "beta": 80},
+      "catch_rate": {"alpha": 65, "beta": 35},
+      "yards_per_reception": {"mu": 12, "sigma": 3.5},
+      "td_rate": 0.06,
+      "adot": 10.5
+    },
+    "TE": {
+      "target_share": {"alpha": 15, "beta": 85},
+      "catch_rate": {"alpha": 70, "beta": 30},
+      "yards_per_reception": {"mu": 10, "sigma": 3.0},
+      "td_rate": 0.05,
+      "adot": 8.5
+    }
+  },
+  "team_priors": {
+    "pace": {"mu": 70, "sigma": 8},
+    "pass_rate": {"alpha": 58, "beta": 42},
+    "home_advantage": 0.015,
+    "conference_shrink_weight": 0.3
+  },
+  "variance_params": {
+    "passing_yards_cv": 0.25,
+    "rushing_yards_cv": 0.35,
+    "receiving_yards_cv": 0.40,
+    "min_attempts": 5
+  },
+  "returning_production_boost": {
+    "range": [0.05, 0.15],
+    "weight": 0.2
+  },
+  "depth_chart_modifiers": {
+    "starter": 1.0,
+    "backup": 0.3,
+    "third_string": 0.1,
+    "rookie_wr_discount": 0.12
+  }
+}

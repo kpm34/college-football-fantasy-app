@@ -430,6 +430,57 @@ export class CFBProjectionsService {
   }
 
   /**
+   * Get advanced projections from our Python backend
+   */
+  static async getAdvancedProjections(): Promise<PlayerProjection[]> {
+    try {
+      const response = await fetch('/api/projections/advanced');
+      const data = await response.json();
+      
+      if (data.success && data.projections) {
+        return data.projections.map((proj: any) => ({
+          playerId: proj.playerId,
+          playerName: proj.playerName,
+          position: proj.position,
+          team: proj.team,
+          conference: proj.conference,
+          
+          // Stats from advanced model
+          passingYards: proj.projectedStats?.passingYards || 0,
+          passingTDs: proj.projectedStats?.passingTDs || 0,
+          interceptions: proj.projectedStats?.interceptions || 0,
+          rushingYards: proj.projectedStats?.rushingYards || 0,
+          rushingTDs: proj.projectedStats?.rushingTDs || 0,
+          receptions: proj.projectedStats?.receptions || 0,
+          receivingYards: proj.projectedStats?.receivingYards || 0,
+          receivingTDs: proj.projectedStats?.receivingTDs || 0,
+          
+          // Advanced metrics
+          fantasyPoints: proj.fantasyPoints,
+          floor: proj.floor,
+          ceiling: proj.ceiling,
+          consistency: proj.consistency,
+          vorp: proj.vorp,
+          tier: proj.tier,
+          
+          // Rankings
+          overallRank: proj.overallRank,
+          positionRank: proj.positionRank,
+          adp: proj.adp,
+          
+          // Derived metrics
+          confidence: proj.consistency,
+          valueScore: proj.vorp / 100 // Normalize VORP to 0-1 scale
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching advanced projections:', error);
+    }
+    
+    return this.getMockProjections();
+  }
+
+  /**
    * Get mock projections for testing
    */
   private static getMockProjections(): PlayerProjection[] {
