@@ -1,129 +1,115 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Client, Databases, ID } from 'node-appwrite';
-import { APPWRITE_CONFIG } from '@/lib/appwrite-config';
-
-// Initialize Appwrite client with API key for server-side operations
-const client = new Client()
-  .setEndpoint(APPWRITE_CONFIG.endpoint)
-  .setProject(APPWRITE_CONFIG.projectId)
-  .setKey(APPWRITE_CONFIG.apiKey);
-
-const databases = new Databases(client);
-const DATABASE_ID = APPWRITE_CONFIG.databaseId;
-
-const COLLECTIONS = {
-  LEAGUES: 'leagues',
-  TEAMS: 'teams',
-  ROSTERS: 'rosters',
-  MATCHUPS: 'matchups',
-  USERS: 'users',
-  USER_TEAMS: 'user_teams'
-};
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const {
-      leagueName,
-      gameMode,
-      selectedConference,
-      scoringType,
-      maxTeams,
-      seasonStartWeek,
-      draftDate,
-      commissionerId // This would come from auth
-    } = body;
-
-    console.log('Creating league with data:', { leagueName, gameMode, maxTeams, commissionerId });
-
-    // Validate required fields
-    if (!leagueName || !commissionerId) {
-      return NextResponse.json(
-        { error: 'League name and commissioner ID are required' },
-        { status: 400 }
-      );
+    // Check if user is authenticated
+    const sessionId = request.cookies.get('appwrite-session')?.value;
+    if (!sessionId) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    // Create league document with all required data
-    const leagueData = {
-      name: leagueName,
-      commissioner: commissionerId,
-      commissionerId: commissionerId,
+    // Get user info
+    const cookieHeader = `a_session_college-football-fantasy-app=${sessionId}`;
+    const userResponse = await fetch('https://nyc.cloud.appwrite.io/v1/account', {
+      headers: {
+        'X-Appwrite-Project': 'college-football-fantasy-app',
+        'X-Appwrite-Response-Format': '1.4.0',
+        'Cookie': cookieHeader,
+      },
+    });
+
+    if (!userResponse.ok) {
+      return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
+    }
+
+    const user = await userResponse.json();
+    const leagueData = await request.json();
+
+    // Generate invite code
+    const inviteCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+    // Create league document
+    const league = {
+      name: leagueData.leagueName,
+      commissioner: user.name || user.email,
+      commissionerId: user.$id,
       season: new Date().getFullYear(),
-      scoringType: scoringType || 'PPR',
-      maxTeams: maxTeams || 12,
-      draftDate: draftDate || null,
+      scoringType: leagueData.scoringType || 'PPR',
+      maxTeams: leagueData.maxTeams || 12,
+      teams: 1, // Commissioner's team
+      draftDate: leagueData.draftDate,
       status: 'pre-draft',
-      inviteCode: ID.unique().substring(0, 8).toUpperCase(),
-      gameMode: gameMode || 'standard',
-      selectedConference: selectedConference || null,
-      schedule_generated: false,
-      draftType: 'snake',
-      pickTimeSeconds: 90,
-      orderMode: 'random'
+      inviteCode,
+      gameMode: leagueData.gameMode,
+      selectedConference: leagueData.selectedConference,
+      isPrivate: leagueData.isPrivate || false,
+      password: leagueData.password || null,
+      createdAt: new Date().toISOString(),
     };
 
-    console.log('Creating league document...');
-    const league = await databases.createDocument(
-      DATABASE_ID,
-      COLLECTIONS.LEAGUES,
-      ID.unique(),
-      leagueData
-    );
+    // Create league in Appwrite
+    const createResponse = await fetch('https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/leagues/documents', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Appwrite-Project': 'college-football-fantasy-app',
+        'X-Appwrite-Response-Format': '1.4.0',
+        'Cookie': cookieHeader,
+      },
+      body: JSON.stringify({
+        documentId: 'unique()',
+        data: league,
+      }),
+    });
 
-    console.log('League created:', league.$id);
+    if (!createResponse.ok) {
+      const error = await createResponse.json();
+      console.error('Failed to create league:', error);
+      return NextResponse.json({ error: 'Failed to create league' }, { status: 500 });
+    }
 
-    // Create a user_team entry for the commissioner
-    const userTeamData = {
-      userId: commissionerId,
-      leagueId: league.$id,
-      teamName: `${leagueName} Team 1`,
-      leagueName: leagueName
+    const createdLeague = await createResponse.json();
+
+    // Create commissioner's team
+    const teamData = {
+      name: `${user.name || user.email}'s Team`,
+      owner: user.name || user.email,
+      userId: user.$id,
+      leagueId: createdLeague.$id,
+      record: '0-0',
+      pointsFor: 0,
+      pointsAgainst: 0,
+      players: [],
+      createdAt: new Date().toISOString(),
     };
 
-    await databases.createDocument(
-      DATABASE_ID,
-      COLLECTIONS.USER_TEAMS,
-      ID.unique(),
-      userTeamData
-    );
+    const teamResponse = await fetch('https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/teams/documents', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Appwrite-Project': 'college-football-fantasy-app',
+        'X-Appwrite-Response-Format': '1.4.0',
+        'Cookie': cookieHeader,
+      },
+      body: JSON.stringify({
+        documentId: 'unique()',
+        data: teamData,
+      }),
+    });
 
-    // Update the user's leagues array
-    try {
-      const userDoc = await databases.getDocument(DATABASE_ID, COLLECTIONS.USERS, commissionerId);
-      const currentLeagues = (userDoc as any).leagues || [];
-      const currentLeagueNames = (userDoc as any).leagueNames || [];
-      
-      await databases.updateDocument(
-        DATABASE_ID,
-        COLLECTIONS.USERS,
-        commissionerId,
-        {
-          leagues: [...currentLeagues, league.$id],
-          leagueNames: [...currentLeagueNames, leagueName]
-        }
-      );
-    } catch (e) {
-      console.error('Failed to update user leagues array:', e);
-      // Continue anyway - the league was created successfully
+    if (!teamResponse.ok) {
+      console.error('Failed to create team');
     }
 
     return NextResponse.json({
       success: true,
-      league: {
-        id: league.$id,
-        name: leagueName,
-        status: 'pre-draft',
-        inviteCode: leagueData.inviteCode
-      },
-      message: 'League created successfully!'
+      league: createdLeague,
     });
-
   } catch (error) {
-    console.error('Error creating league:', error);
+    console.error('League creation error:', error);
     return NextResponse.json(
-      { error: 'Failed to create league', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Failed to create league', details: error },
       { status: 500 }
     );
   }
-} 
+}
