@@ -84,6 +84,10 @@ self.addEventListener('fetch', (event) => {
   // Belt-and-suspenders: reroute ANY direct Appwrite API call through our proxy
   const isAppwrite = url.hostname.endsWith('nyc.cloud.appwrite.io') && url.pathname.startsWith('/v1/');
   if (isAppwrite) {
+    // Never intercept CORS preflight; let Appwrite respond 204 with correct CORS headers
+    if (request.method === 'OPTIONS') {
+      return; // allow default handling
+    }
     event.respondWith((async () => {
       const proxyUrl = '/api/auth/proxy?path=' + url.pathname.replace('/v1', '');
       const init = {
