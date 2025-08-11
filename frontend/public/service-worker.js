@@ -81,20 +81,28 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
   
-  // Belt-and-suspenders: reroute any stray direct Appwrite account calls through our proxy
-  const isAppwriteAccount =
-    url.hostname.endsWith('nyc.cloud.appwrite.io') &&
-    (url.pathname === '/v1/account' || url.pathname.startsWith('/v1/account/'));
-  if (isAppwriteAccount) {
-    const proxyUrl = '/api/auth/proxy?path=' + url.pathname.replace('/v1', '');
-    const init = {
-      method: request.method,
-      headers: request.headers,
-      credentials: 'include',
-      redirect: 'follow',
-      mode: 'same-origin',
-    };
-    event.respondWith(fetch(new Request(proxyUrl, init)));
+  // Belt-and-suspenders: reroute ANY direct Appwrite API call through our proxy
+  const isAppwrite = url.hostname.endsWith('nyc.cloud.appwrite.io') && url.pathname.startsWith('/v1/');
+  if (isAppwrite) {
+    event.respondWith((async () => {
+      const proxyUrl = '/api/auth/proxy?path=' + url.pathname.replace('/v1', '');
+      const init = {
+        method: request.method,
+        headers: request.headers,
+        credentials: 'include',
+        redirect: 'follow',
+        mode: 'same-origin',
+      };
+      if (request.method !== 'GET' && request.method !== 'HEAD') {
+        try {
+          const clone = request.clone();
+          init.body = await clone.blob();
+        } catch (e) {
+          // ignore body copy errors; let fetch proceed without body
+        }
+      }
+      return fetch(new Request(proxyUrl, init));
+    })());
     return;
   }
   
