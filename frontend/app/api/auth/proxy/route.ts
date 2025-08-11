@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1';
 const APPWRITE_PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app';
+const SESSION_COOKIE = 'APPWRITE_SESSION_ID';
 
 // This is a temporary proxy to work around CORS issues
 // It forwards requests to Appwrite from the server side
@@ -48,6 +49,18 @@ export async function POST(request: NextRequest) {
     if (setCookieHeaders) {
       proxyResponse.headers.set('set-cookie', setCookieHeaders);
     }
+    // If session creation succeeded, also persist the session id on our domain for subsequent calls
+    if (response.ok && path.startsWith('/account/sessions')) {
+      const sessionId = (data && (data.$id || data.sessionId)) as string | undefined;
+      if (sessionId) {
+        proxyResponse.cookies.set(SESSION_COOKIE, sessionId, {
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: true,
+          path: '/',
+        });
+      }
+    }
     
     return proxyResponse;
   } catch (error) {
@@ -72,6 +85,7 @@ export async function GET(request: NextRequest) {
     const referer = request.headers.get('referer') || origin;
     
     // Forward the request to Appwrite
+    const sessionCookie = request.cookies.get(SESSION_COOKIE)?.value;
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -80,10 +94,7 @@ export async function GET(request: NextRequest) {
         'Cookie': cookieHeader,
         'Origin': origin,
         'Referer': referer,
-        // Forward any session cookies
-        ...(request.headers.get('x-appwrite-session') && {
-          'X-Appwrite-Session': request.headers.get('x-appwrite-session')!
-        })
+        ...(sessionCookie && { 'X-Appwrite-Session': sessionCookie })
       },
       credentials: 'include',
       cache: 'no-store'
@@ -95,9 +106,9 @@ export async function GET(request: NextRequest) {
     const proxyResponse = NextResponse.json(data, { status: response.status });
     
     // Forward any Set-Cookie headers from Appwrite
-    const setCookieHeaders = response.headers.get('set-cookie');
-    if (setCookieHeaders) {
-      proxyResponse.headers.set('set-cookie', setCookieHeaders);
+    const setCookieHeaders2 = response.headers.get('set-cookie');
+    if (setCookieHeaders2) {
+      proxyResponse.headers.set('set-cookie', setCookieHeaders2);
     }
     
     return proxyResponse;
@@ -123,6 +134,7 @@ export async function DELETE(request: NextRequest) {
     const referer = request.headers.get('referer') || origin;
     
     // Forward the request to Appwrite
+    const sessionCookie = request.cookies.get(SESSION_COOKIE)?.value;
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
@@ -131,10 +143,7 @@ export async function DELETE(request: NextRequest) {
         'Cookie': cookieHeader,
         'Origin': origin,
         'Referer': referer,
-        // Forward any session cookies
-        ...(request.headers.get('x-appwrite-session') && {
-          'X-Appwrite-Session': request.headers.get('x-appwrite-session')!
-        })
+        ...(sessionCookie && { 'X-Appwrite-Session': sessionCookie })
       },
       credentials: 'include',
       cache: 'no-store'
@@ -146,9 +155,13 @@ export async function DELETE(request: NextRequest) {
     const proxyResponse = NextResponse.json(data, { status: response.status });
     
     // Forward any Set-Cookie headers from Appwrite
-    const setCookieHeaders = response.headers.get('set-cookie');
-    if (setCookieHeaders) {
-      proxyResponse.headers.set('set-cookie', setCookieHeaders);
+    const setCookieHeaders3 = response.headers.get('set-cookie');
+    if (setCookieHeaders3) {
+      proxyResponse.headers.set('set-cookie', setCookieHeaders3);
+    }
+    // Clear our cookie on logout
+    if (path.startsWith('/account/sessions')) {
+      proxyResponse.cookies.set(SESSION_COOKIE, '', { httpOnly: true, path: '/', maxAge: 0 });
     }
     
     return proxyResponse;
