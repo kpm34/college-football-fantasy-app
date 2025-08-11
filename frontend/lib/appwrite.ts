@@ -1,5 +1,6 @@
 import { Client, Databases, Account, Avatars } from 'appwrite';
-import { APPWRITE_CONFIG, DATABASE_ID, COLLECTIONS } from './config/appwrite.config';
+import { APPWRITE_PUBLIC_CONFIG as APPWRITE_CONFIG } from './appwrite-config';
+import { DATABASE_ID, COLLECTIONS } from './appwrite-config';
 
 // Initialize Appwrite client for frontend (NO API KEY - uses session auth)
 const client = new Client();

@@ -1,8 +1,10 @@
 'use client';
 
 import { account } from '@/lib/appwrite';
-import { useState } from 'react';
+import { createProxyAwareAccount } from '@/lib/appwrite-proxy';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { APPWRITE_PUBLIC_CONFIG } from '@/lib/appwrite-config';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,17 +17,36 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      const anyAccount: any = account as any;
+      // Use proxy-aware account for production CORS workaround
+      const isProduction = process.env.NODE_ENV === 'production' && typeof window !== 'undefined';
+      const needsProxy = isProduction && window.location.hostname.includes('cfbfantasy.app');
+      
+      const authAccount = needsProxy ? createProxyAwareAccount() : account;
+      const anyAccount: any = authAccount as any;
+      
       if (typeof anyAccount.createEmailPasswordSession === 'function') {
         await anyAccount.createEmailPasswordSession(email, password);
       } else if (typeof anyAccount.createEmailSession === 'function') {
         await anyAccount.createEmailSession(email, password);
+      } else if (typeof anyAccount.createSession === 'function') {
+        await anyAccount.createSession(email, password);
       } else {
         throw new Error('Email/password login method not available in Appwrite SDK');
       }
       window.location.href = '/';
     } catch (err: any) {
-      setError(err?.message || 'Login failed');
+      console.error('Login error:', err);
+      
+      // More specific error messages
+      if (err?.code === 401) {
+        setError('Invalid email or password');
+      } else if (err?.message?.includes('CORS')) {
+        setError('Domain not configured. Please check Appwrite platform settings.');
+      } else if (err?.message?.includes('fetch')) {
+        setError('Unable to connect to authentication service');
+      } else {
+        setError(err?.message || 'Login failed');
+      }
     } finally {
       setLoading(false);
     }
@@ -88,6 +109,15 @@ export default function LoginPage() {
         <p className="text-[#F7EAE1] text-sm mt-6 text-center">
           Don't have an account? <Link href="/signup" className="text-white font-semibold hover:underline">Sign up</Link>
         </p>
+        
+        {/* Debug info - remove in production */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="mt-4 p-2 bg-black/20 rounded text-xs text-white/70">
+            <p>Endpoint: {APPWRITE_PUBLIC_CONFIG.endpoint}</p>
+            <p>Project: {APPWRITE_PUBLIC_CONFIG.projectId}</p>
+            <p>Domain: {typeof window !== 'undefined' ? window.location.hostname : 'SSR'}</p>
+          </div>
+        )}
       </form>
     </main>
   );
