@@ -1,6 +1,7 @@
 import { Client, Databases, Account, Avatars } from 'appwrite';
 import { APPWRITE_PUBLIC_CONFIG as APPWRITE_CONFIG } from './appwrite-config';
 import { DATABASE_ID, COLLECTIONS } from './appwrite-config';
+import { createProxyAwareAccount } from './appwrite-proxy';
 
 // Initialize Appwrite client for frontend (NO API KEY - uses session auth)
 const client = new Client();
@@ -17,7 +18,17 @@ if (typeof (client as any).setCookieFallback === 'function') {
 
 // Export Appwrite services
 export const databases = new Databases(client);
-export const account = new Account(client);
+
+// In production on our public domains, use a proxy-aware account to avoid CORS
+const isBrowser = typeof window !== 'undefined';
+const isProduction = process.env.NODE_ENV === 'production';
+const hostname = isBrowser ? window.location.hostname : '';
+const needsProxy =
+  isBrowser &&
+  isProduction &&
+  (/(^|\.)cfbfantasy\.app$/.test(hostname) || /(^|\.)collegefootballfantasy\.app$/.test(hostname));
+
+export const account: Account = needsProxy ? (createProxyAwareAccount() as unknown as Account) : new Account(client);
 export const avatars = new Avatars(client);
 export { client };
 
