@@ -19,16 +19,28 @@ if (typeof (client as any).setCookieFallback === 'function') {
 // Export Appwrite services
 export const databases = new Databases(client);
 
-// In production on our public domains, use a proxy-aware account to avoid CORS
-const isBrowser = typeof window !== 'undefined';
-const isProduction = process.env.NODE_ENV === 'production';
-const hostname = isBrowser ? window.location.hostname : '';
-const needsProxy =
-  isBrowser &&
-  isProduction &&
-  (/(^|\.)cfbfantasy\.app$/.test(hostname) || /(^|\.)collegefootballfantasy\.app$/.test(hostname));
+// In production on our public domains, use a proxy-aware account to avoid CORS.
+// We resolve this at call-time using a JS Proxy so SSR imports don't lock the choice.
+function chooseAccount(): Account {
+  const isBrowser = typeof window !== 'undefined';
+  const isProduction = process.env.NODE_ENV === 'production';
+  const hostname = isBrowser ? window.location.hostname : '';
+  const onProdDomain =
+    /(^|\.)cfbfantasy\.app$/.test(hostname) || /(^|\.)collegefootballfantasy\.app$/.test(hostname);
 
-export const account: Account = needsProxy ? (createProxyAwareAccount() as unknown as Account) : new Account(client);
+  if (isBrowser && isProduction && onProdDomain) {
+    return createProxyAwareAccount() as unknown as Account;
+  }
+  return new Account(client);
+}
+
+export const account: Account = new Proxy({} as Account, {
+  get(_target, prop: keyof Account) {
+    const real = chooseAccount() as any;
+    const value = real[prop as any];
+    return typeof value === 'function' ? value.bind(real) : value;
+  },
+}) as Account;
 export const avatars = new Avatars(client);
 export { client };
 
