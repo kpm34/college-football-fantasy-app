@@ -15,6 +15,8 @@ export async function POST(request: NextRequest) {
     
     // Get cookies from the request
     const cookieHeader = request.headers.get('cookie') || '';
+    const origin = request.headers.get('origin') || `${request.nextUrl.protocol}//${request.nextUrl.host}`;
+    const referer = request.headers.get('referer') || origin;
     
     // Forward the request to Appwrite
     const response = await fetch(url, {
@@ -24,13 +26,16 @@ export async function POST(request: NextRequest) {
         'X-Appwrite-Project': APPWRITE_PROJECT_ID,
         'X-Appwrite-Response-Format': '1.4.0',
         'Cookie': cookieHeader,
+        'Origin': origin,
+        'Referer': referer,
         // Forward any session cookies
         ...(request.headers.get('x-appwrite-session') && {
           'X-Appwrite-Session': request.headers.get('x-appwrite-session')!
         })
       },
       body: JSON.stringify(body),
-      credentials: 'include'
+      credentials: 'include',
+      cache: 'no-store'
     });
 
     const data = await response.json();
@@ -63,6 +68,8 @@ export async function GET(request: NextRequest) {
     
     // Get cookies from the request
     const cookieHeader = request.headers.get('cookie') || '';
+    const origin = request.headers.get('origin') || `${request.nextUrl.protocol}//${request.nextUrl.host}`;
+    const referer = request.headers.get('referer') || origin;
     
     // Forward the request to Appwrite
     const response = await fetch(url, {
@@ -71,12 +78,15 @@ export async function GET(request: NextRequest) {
         'X-Appwrite-Project': APPWRITE_PROJECT_ID,
         'X-Appwrite-Response-Format': '1.4.0',
         'Cookie': cookieHeader,
+        'Origin': origin,
+        'Referer': referer,
         // Forward any session cookies
         ...(request.headers.get('x-appwrite-session') && {
           'X-Appwrite-Session': request.headers.get('x-appwrite-session')!
         })
       },
-      credentials: 'include'
+      credentials: 'include',
+      cache: 'no-store'
     });
 
     const data = await response.json();
@@ -109,6 +119,8 @@ export async function DELETE(request: NextRequest) {
     
     // Get cookies from the request
     const cookieHeader = request.headers.get('cookie') || '';
+    const origin = request.headers.get('origin') || `${request.nextUrl.protocol}//${request.nextUrl.host}`;
+    const referer = request.headers.get('referer') || origin;
     
     // Forward the request to Appwrite
     const response = await fetch(url, {
@@ -117,12 +129,15 @@ export async function DELETE(request: NextRequest) {
         'X-Appwrite-Project': APPWRITE_PROJECT_ID,
         'X-Appwrite-Response-Format': '1.4.0',
         'Cookie': cookieHeader,
+        'Origin': origin,
+        'Referer': referer,
         // Forward any session cookies
         ...(request.headers.get('x-appwrite-session') && {
           'X-Appwrite-Session': request.headers.get('x-appwrite-session')!
         })
       },
-      credentials: 'include'
+      credentials: 'include',
+      cache: 'no-store'
     });
 
     const data = await response.json();
