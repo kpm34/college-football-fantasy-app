@@ -27,8 +27,10 @@ export async function POST(request: NextRequest) {
         'X-Appwrite-Project': APPWRITE_PROJECT_ID,
         'X-Appwrite-Response-Format': '1.4.0',
         'Cookie': cookieHeader,
-        'Origin': origin,
-        'Referer': referer,
+        // Don't forward Origin/Referer - let Node.js set them
+        // This ensures Appwrite sees the request as coming from the server
+        // 'Origin': origin,
+        // 'Referer': referer,
         // Forward any session cookies
         ...(request.headers.get('x-appwrite-session') && {
           'X-Appwrite-Session': request.headers.get('x-appwrite-session')!
@@ -92,8 +94,9 @@ export async function GET(request: NextRequest) {
         'X-Appwrite-Project': APPWRITE_PROJECT_ID,
         'X-Appwrite-Response-Format': '1.4.0',
         'Cookie': cookieHeader,
-        'Origin': origin,
-        'Referer': referer,
+        // Don't forward Origin/Referer - let Node.js set them
+        // 'Origin': origin,
+        // 'Referer': referer,
         ...(sessionCookie && { 'X-Appwrite-Session': sessionCookie })
       },
       credentials: 'include',
@@ -141,8 +144,9 @@ export async function DELETE(request: NextRequest) {
         'X-Appwrite-Project': APPWRITE_PROJECT_ID,
         'X-Appwrite-Response-Format': '1.4.0',
         'Cookie': cookieHeader,
-        'Origin': origin,
-        'Referer': referer,
+        // Don't forward Origin/Referer - let Node.js set them
+        // 'Origin': origin,
+        // 'Referer': referer,
         ...(sessionCookie && { 'X-Appwrite-Session': sessionCookie })
       },
       credentials: 'include',
