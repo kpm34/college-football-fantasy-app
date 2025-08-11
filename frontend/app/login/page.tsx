@@ -60,8 +60,9 @@ export default function LoginPage() {
         
         <div className="space-y-4">
           <div>
-            <label className="block text-[#F7EAE1] text-sm mb-2 font-medium">Email</label>
+            <label htmlFor="email" className="block text-[#F7EAE1] text-sm mb-2 font-medium">Email</label>
             <input 
+              id="email"
               className="w-full px-4 py-3 rounded-lg login-input border border-[#D4A5A5] focus:border-[#E73C7E] focus:outline-none focus:ring-2 focus:ring-[#E73C7E]/20 transition-all" 
               type="email" 
               required 
@@ -72,8 +73,9 @@ export default function LoginPage() {
           </div>
           
           <div>
-            <label className="block text-[#F7EAE1] text-sm mb-2 font-medium">Password</label>
+            <label htmlFor="password" className="block text-[#F7EAE1] text-sm mb-2 font-medium">Password</label>
             <input 
+              id="password"
               className="w-full px-4 py-3 rounded-lg login-input border border-[#D4A5A5] focus:border-[#E73C7E] focus:outline-none focus:ring-2 focus:ring-[#E73C7E]/20 transition-all" 
               type="password" 
               required 
