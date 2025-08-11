@@ -17,36 +17,33 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      // Use proxy-aware account for production CORS workaround
-      const isProduction = process.env.NODE_ENV === 'production' && typeof window !== 'undefined';
-      const needsProxy = isProduction && window.location.hostname.includes('cfbfantasy.app');
-      
-      const authAccount = needsProxy ? createProxyAwareAccount() : account;
-      const anyAccount: any = authAccount as any;
-      
-      if (typeof anyAccount.createEmailPasswordSession === 'function') {
-        await anyAccount.createEmailPasswordSession(email, password);
-      } else if (typeof anyAccount.createEmailSession === 'function') {
-        await anyAccount.createEmailSession(email, password);
-      } else if (typeof anyAccount.createSession === 'function') {
-        await anyAccount.createSession(email, password);
-      } else {
-        throw new Error('Email/password login method not available in Appwrite SDK');
+      // Use our secure server-side API route - no CORS issues!
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle specific error codes
+        if (response.status === 401 || data.code === 401) {
+          throw new Error('Invalid email or password');
+        } else if (data.message) {
+          throw new Error(data.message);
+        } else {
+          throw new Error('Login failed');
+        }
       }
-      window.location.href = '/';
+
+      // Success! Redirect to dashboard
+      window.location.href = '/dashboard';
     } catch (err: any) {
       console.error('Login error:', err);
-      
-      // More specific error messages
-      if (err?.code === 401) {
-        setError('Invalid email or password');
-      } else if (err?.message?.includes('CORS')) {
-        setError('Domain not configured. Please check Appwrite platform settings.');
-      } else if (err?.message?.includes('fetch')) {
-        setError('Unable to connect to authentication service');
-      } else {
-        setError(err?.message || 'Login failed');
-      }
+      setError(err?.message || 'Login failed');
     } finally {
       setLoading(false);
     }
