@@ -14,6 +14,17 @@ export function useAuth() {
 
   useEffect(() => {
     checkAuth();
+    
+    // Check if we just completed OAuth
+    if (typeof window !== 'undefined') {
+      const oauthSuccess = document.cookie.includes('oauth_success=true');
+      if (oauthSuccess) {
+        // Clear the cookie
+        document.cookie = 'oauth_success=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        // Force auth check to sync server-side session
+        checkAuth();
+      }
+    }
   }, []);
 
   const checkAuth = async () => {
