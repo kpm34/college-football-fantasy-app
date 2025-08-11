@@ -1,16 +1,14 @@
 'use client';
 
-import { account } from '@/lib/appwrite';
-import { ID } from 'appwrite';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
+  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,15 +17,22 @@ export default function SignupPage() {
     setLoading(true);
     setError(null);
     try {
-      const compositeName = name || `${firstName} ${lastName}`.trim();
-      const user = await account.create(ID.unique(), email, password, compositeName || undefined);
-      const anyAccount: any = account as any;
-      if (typeof anyAccount.createEmailPasswordSession === 'function') {
-        await anyAccount.createEmailPasswordSession(email, password);
-      } else if (typeof anyAccount.createEmailSession === 'function') {
-        await anyAccount.createEmailSession(email, password);
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, name }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Signup failed');
       }
-      window.location.href = '/';
+
+      // Success! Redirect to dashboard
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err?.message || 'Signup failed');
     } finally {

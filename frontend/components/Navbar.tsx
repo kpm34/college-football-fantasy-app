@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { account } from "@/lib/appwrite";
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 function NavLink({ href, label }: { href: string; label: string }) {
   const pathname = usePathname();
@@ -55,31 +55,27 @@ export default function Navbar() {
 }
 
 function UserMenu() {
-  const [name, setName] = useState<string | null>(null);
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const me = await account.get();
-        if (!cancelled) setName(me.name || me.email);
-      } catch {
-        if (!cancelled) setName(null);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-  if (name) {
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="text-sm px-3 py-1.5 rounded-md bg-white/10 text-white/50">
+        Loading...
+      </div>
+    );
+  }
+  
+  if (user) {
     return (
       <Link 
         href="/account/settings" 
         className="text-sm px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-white/90 hover:text-white transition-colors"
       >
-        {name}
+        {user.name || user.email}
       </Link>
     );
   }
+  
   return (
     <Link href="/login" className="text-sm px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-white">Login</Link>
   );
