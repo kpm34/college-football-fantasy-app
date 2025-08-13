@@ -1,0 +1,594 @@
+{
+  "projectId": "college-football-fantasy",
+  "databaseId": "default",
+  "collections": [
+    {
+      "$id": "users",
+      "name": "Users",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        {
+          "key": "userId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "email",
+          "type": "email",
+          "required": true
+        },
+        {
+          "key": "name",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "avatar",
+          "type": "url",
+          "required": false
+        },
+        {
+          "key": "createdAt",
+          "type": "datetime",
+          "required": true
+        }
+      ],
+      "indexes": [
+        {
+          "key": "userId_idx",
+          "type": "unique",
+          "attributes": ["userId"]
+        },
+        {
+          "key": "email_idx",
+          "type": "unique",
+          "attributes": ["email"]
+        }
+      ]
+    },
+    {
+      "$id": "leagues",
+      "name": "Leagues",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        {
+          "key": "name",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "commissioner",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "type",
+          "type": "string",
+          "required": true,
+          "size": 50,
+          "default": "standard"
+        },
+        {
+          "key": "draftType",
+          "type": "string",
+          "required": true,
+          "size": 50,
+          "default": "snake"
+        },
+        {
+          "key": "maxTeams",
+          "type": "integer",
+          "required": true,
+          "default": 12
+        },
+        {
+          "key": "currentTeams",
+          "type": "integer",
+          "required": true,
+          "default": 0
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "required": true,
+          "size": 50,
+          "default": "open"
+        },
+        {
+          "key": "draftDate",
+          "type": "datetime",
+          "required": false
+        },
+        {
+          "key": "createdAt",
+          "type": "datetime",
+          "required": true
+        }
+      ],
+      "indexes": [
+        {
+          "key": "status_idx",
+          "type": "key",
+          "attributes": ["status"]
+        },
+        {
+          "key": "commissioner_idx",
+          "type": "key",
+          "attributes": ["commissioner"]
+        }
+      ]
+    },
+    {
+      "$id": "teams",
+      "name": "Teams",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "userId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "name",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "draftPosition",
+          "type": "integer",
+          "required": false
+        },
+        {
+          "key": "wins",
+          "type": "integer",
+          "required": true,
+          "default": 0
+        },
+        {
+          "key": "losses",
+          "type": "integer",
+          "required": true,
+          "default": 0
+        },
+        {
+          "key": "points",
+          "type": "double",
+          "required": true,
+          "default": 0
+        }
+      ],
+      "indexes": [
+        {
+          "key": "league_idx",
+          "type": "key",
+          "attributes": ["leagueId"]
+        },
+        {
+          "key": "user_idx",
+          "type": "key",
+          "attributes": ["userId"]
+        },
+        {
+          "key": "league_user_idx",
+          "type": "unique",
+          "attributes": ["leagueId", "userId"]
+        }
+      ]
+    },
+    {
+      "$id": "players",
+      "name": "Players",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [
+        {
+          "key": "name",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "team",
+          "type": "string",
+          "required": true,
+          "size": 100
+        },
+        {
+          "key": "conference",
+          "type": "string",
+          "required": true,
+          "size": 50
+        },
+        {
+          "key": "position",
+          "type": "string",
+          "required": true,
+          "size": 10
+        },
+        {
+          "key": "year",
+          "type": "string",
+          "required": false,
+          "size": 20
+        },
+        {
+          "key": "height",
+          "type": "string",
+          "required": false,
+          "size": 10
+        },
+        {
+          "key": "weight",
+          "type": "integer",
+          "required": false
+        },
+        {
+          "key": "hometown",
+          "type": "string",
+          "required": false,
+          "size": 255
+        },
+        {
+          "key": "jerseyNumber",
+          "type": "integer",
+          "required": false
+        },
+        {
+          "key": "cfbdId",
+          "type": "string",
+          "required": false,
+          "size": 50
+        },
+        {
+          "key": "rotowireId",
+          "type": "string",
+          "required": false,
+          "size": 50
+        },
+        {
+          "key": "projection",
+          "type": "double",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "adp",
+          "type": "double",
+          "required": false
+        },
+        {
+          "key": "isActive",
+          "type": "boolean",
+          "required": true,
+          "default": true
+        }
+      ],
+      "indexes": [
+        {
+          "key": "team_idx",
+          "type": "key",
+          "attributes": ["team"]
+        },
+        {
+          "key": "conference_idx",
+          "type": "key",
+          "attributes": ["conference"]
+        },
+        {
+          "key": "position_idx",
+          "type": "key",
+          "attributes": ["position"]
+        },
+        {
+          "key": "projection_idx",
+          "type": "key",
+          "attributes": ["projection"],
+          "orders": ["DESC"]
+        }
+      ]
+    },
+    {
+      "$id": "draft_picks",
+      "name": "Draft Picks",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "teamId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "playerId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "round",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "key": "pick",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "key": "overallPick",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "key": "timestamp",
+          "type": "datetime",
+          "required": true
+        }
+      ],
+      "indexes": [
+        {
+          "key": "league_idx",
+          "type": "key",
+          "attributes": ["leagueId"]
+        },
+        {
+          "key": "team_idx",
+          "type": "key",
+          "attributes": ["teamId"]
+        },
+        {
+          "key": "league_pick_idx",
+          "type": "unique",
+          "attributes": ["leagueId", "overallPick"]
+        }
+      ]
+    },
+    {
+      "$id": "transactions",
+      "name": "Transactions",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "type",
+          "type": "string",
+          "required": true,
+          "size": 50
+        },
+        {
+          "key": "teamId",
+          "type": "string",
+          "required": false,
+          "size": 255
+        },
+        {
+          "key": "playerId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "details",
+          "type": "string",
+          "required": false,
+          "size": 1000
+        },
+        {
+          "key": "timestamp",
+          "type": "datetime",
+          "required": true
+        }
+      ],
+      "indexes": [
+        {
+          "key": "league_idx",
+          "type": "key",
+          "attributes": ["leagueId"]
+        },
+        {
+          "key": "team_idx",
+          "type": "key",
+          "attributes": ["teamId"]
+        },
+        {
+          "key": "timestamp_idx",
+          "type": "key",
+          "attributes": ["timestamp"],
+          "orders": ["DESC"]
+        }
+      ]
+    },
+    {
+      "$id": "matchups",
+      "name": "Matchups",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "week",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "key": "homeTeamId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "awayTeamId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "homeScore",
+          "type": "double",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "awayScore",
+          "type": "double",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "required": true,
+          "size": 50,
+          "default": "scheduled"
+        }
+      ],
+      "indexes": [
+        {
+          "key": "league_week_idx",
+          "type": "key",
+          "attributes": ["leagueId", "week"]
+        },
+        {
+          "key": "home_team_idx",
+          "type": "key",
+          "attributes": ["homeTeamId"]
+        },
+        {
+          "key": "away_team_idx",
+          "type": "key",
+          "attributes": ["awayTeamId"]
+        }
+      ]
+    },
+    {
+      "$id": "scoring",
+      "name": "Scoring",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [
+        {
+          "key": "playerId",
+          "type": "string",
+          "required": true,
+          "size": 255
+        },
+        {
+          "key": "week",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "key": "gameId",
+          "type": "string",
+          "required": false,
+          "size": 255
+        },
+        {
+          "key": "passingYards",
+          "type": "integer",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "passingTDs",
+          "type": "integer",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "interceptions",
+          "type": "integer",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "rushingYards",
+          "type": "integer",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "rushingTDs",
+          "type": "integer",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "receptions",
+          "type": "integer",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "receivingYards",
+          "type": "integer",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "receivingTDs",
+          "type": "integer",
+          "required": false,
+          "default": 0
+        },
+        {
+          "key": "fantasyPoints",
+          "type": "double",
+          "required": true,
+          "default": 0
+        }
+      ],
+      "indexes": [
+        {
+          "key": "player_week_idx",
+          "type": "unique",
+          "attributes": ["playerId", "week"]
+        },
+        {
+          "key": "week_idx",
+          "type": "key",
+          "attributes": ["week"]
+        },
+        {
+          "key": "points_idx",
+          "type": "key",
+          "attributes": ["fantasyPoints"],
+          "orders": ["DESC"]
+        }
+      ]
+    }
+  ]
+}

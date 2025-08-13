@@ -1,13 +1,14 @@
 # Claude Code Project Context - College Football Fantasy App
-Last Updated: 2025-08-09
+Last Updated: 2025-08-13
 
 ## Project Overview
 **Name**: College Football Fantasy App  
-**Type**: Full-stack fantasy sports platform
-**Deployment**: Vercel (Multiple domains)  
-**Production URLs**: 
-- https://cfbfantasy.app
-- https://www.cfbfantasy.app
+**Type**: Full-stack fantasy sports platform for Power 4 conferences
+**Deployment**: Vercel  
+**Current Production URL**: https://college-football-fantasy-fz3de5a3k-kpm34s-projects.vercel.app
+**Target URLs**: 
+- https://cfbfantasy.app (future)
+- https://www.cfbfantasy.app (future)
 - https://collegefootballfantasy.app
 - https://www.collegefootballfantasy.app
 **Framework**: Next.js 15 with App Router, TypeScript, Tailwind CSS
