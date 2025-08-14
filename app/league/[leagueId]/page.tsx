@@ -278,18 +278,18 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             const usersRes = await databases.listDocuments(
               DATABASE_ID,
               COLLECTIONS.USERS,
-              [Query.equal('userId', uniqueUserIds)]
+              [Query.equal('$id', uniqueUserIds)]  // Changed from 'userId' to '$id'
             );
             const idToUser: Record<string, any> = {};
             (usersRes.documents as any[]).forEach((u) => {
-              const key = (u.userId || u.$id) as string;
+              const key = u.$id;  // Use $id directly
               if (key) idToUser[key] = u;
             });
             leagueTeams = leagueTeams.map((t) => {
               const u = idToUser[t.userId || ''];
               return {
                 ...t,
-                userName: t.userName || (u?.name || u?.userName || u?.email || 'Manager'),
+                userName: t.userName || (u?.name || u?.email?.split('@')[0] || 'Unknown Manager'),  // Improved fallback
                 email: t.email || u?.email,
               } as Team;
             });
@@ -298,50 +298,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           console.warn('User enrichment failed, proceeding with team data only:', userErr);
         }
 
-        // Also reflect members listed on the league document (invited/joined) even if TEAMS not created yet
-        try {
-          const rawMembers: unknown = (leagueData as any)?.members || [];
-          const memberIds: string[] = Array.isArray(rawMembers) ? (rawMembers as any[]).map(String) : [];
-          const existingIds = new Set(leagueTeams.map(t => t.userId).filter(Boolean));
-          const missingIds = memberIds.filter(uid => uid && !existingIds.has(uid));
-          if (missingIds.length > 0) {
-            // Fetch user docs for missing members
-            let usersRes: any = null;
-            try {
-              usersRes = await databases.listDocuments(
-                DATABASE_ID,
-                COLLECTIONS.USERS,
-                [Query.equal('userId', missingIds)]
-              );
-            } catch (_) {
-              usersRes = { documents: [] };
-            }
-            const idToUser: Record<string, any> = {};
-            (usersRes.documents as any[]).forEach((u) => {
-              const key = (u.userId || u.$id) as string;
-              if (key) idToUser[key] = u;
-            });
-            const placeholderTeams: Team[] = missingIds.map((uid) => {
-              const u = idToUser[uid];
-              return {
-                $id: `placeholder-${uid}`,
-                leagueId,
-                userId: uid,
-                name: u?.teamName || u?.name || 'Pending Team',
-                userName: u?.name || u?.userName || u?.email || 'Invited Manager',
-                email: u?.email,
-                wins: 0,
-                losses: 0,
-                points: 0,
-              } as unknown as Team;
-            });
-            if (placeholderTeams.length > 0) {
-              leagueTeams = [...leagueTeams, ...placeholderTeams];
-            }
-          }
-        } catch (e) {
-          console.warn('Failed to reflect league.members in UI:', e);
-        }
+        // Since we can't update the league schema, just display the actual team count
+        // The teams array already includes both TEAMS docs and ROSTERS docs from above
 
         setTeams(leagueTeams);
 
@@ -824,7 +782,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                 </div>
                 <div>
                   <p className="text-sm" style={{ color: leagueColors.text.muted }}>Teams</p>
-                  <p className="font-semibold">{(teams.length || (league?.teams || 0))} / {league?.maxTeams || 12}</p>
+                  <p className="font-semibold">{teams.length} / {league?.maxTeams || 12}</p>
                 </div>
                 <div>
                   <p className="text-sm" style={{ color: leagueColors.text.muted }}>Draft Date</p>
