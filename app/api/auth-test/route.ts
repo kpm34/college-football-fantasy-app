@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { APPWRITE_PUBLIC_CONFIG } from '@/lib/appwrite-config';
+import { APPWRITE_CONFIG } from '@/lib/config/appwrite.config';
 
 export async function GET() {
   // Return current configuration for debugging
   const config = {
-    endpoint: APPWRITE_PUBLIC_CONFIG.endpoint,
-    projectId: APPWRITE_PUBLIC_CONFIG.projectId,
-    databaseId: APPWRITE_PUBLIC_CONFIG.databaseId,
+    endpoint: APPWRITE_CONFIG.endpoint,
+    projectId: APPWRITE_CONFIG.projectId,
+    databaseId: APPWRITE_CONFIG.databaseId,
     environment: process.env.NODE_ENV,
     vercelUrl: process.env.VERCEL_URL,
     timestamp: new Date().toISOString(),

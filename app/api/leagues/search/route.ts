@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client, Databases, Query } from 'node-appwrite';
-import { APPWRITE_CONFIG } from '@/lib/appwrite-config';
+import { APPWRITE_CONFIG } from '@/lib/config/appwrite.config';
 
 // Initialize Appwrite client
 const client = new Client()
