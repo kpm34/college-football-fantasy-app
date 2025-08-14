@@ -41,9 +41,15 @@ export class LeagueRepository extends BaseRepository<League> {
    * Create a new league with proper defaults
    */
   async createLeague(data: CreateLeagueData): Promise<League> {
-    // Set defaults
+    // Set defaults and map fields to match database schema
     const leagueData = {
-      ...data,
+      name: data.name,
+      maxTeams: data.maxTeams,
+      draftType: data.draftType,
+      gameMode: data.gameMode,
+      isPublic: data.isPublic,
+      pickTimeSeconds: data.pickTimeSeconds,
+      commissioner: data.commissionerId, // Database expects 'commissioner' not 'commissionerId'
       status: 'open',
       currentTeams: 0,
       season: data.season || new Date().getFullYear(),
@@ -217,7 +223,7 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('League not found');
     }
 
-    if (league.commissionerId !== userId) {
+    if (league.commissioner !== userId) {
       throw new ForbiddenError('Only the commissioner can update league settings');
     }
 
@@ -248,7 +254,7 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('League not found');
     }
 
-    if (league.commissionerId !== userId) {
+    if (league.commissioner !== userId) {
       throw new ForbiddenError('Only the commissioner can start the draft');
     }
 
