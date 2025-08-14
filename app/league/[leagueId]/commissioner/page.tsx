@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
-import { ID } from 'appwrite';
+import { ID, Query } from 'appwrite';
 import { useAuth } from '@/hooks/useAuth';
 import { isUserCommissioner, debugCommissionerMatch } from '@/lib/utils/commissioner';
 import { 
@@ -172,7 +172,7 @@ export default function CommissionerSettingsPage({ params }: { params: { leagueI
       const rosters = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.ROSTERS,
-        [`equal("leagueId", "${params.leagueId}")`]
+        [Query.equal('leagueId', params.leagueId)]
       );
       setMembers(rosters.documents);
     } catch (error) {

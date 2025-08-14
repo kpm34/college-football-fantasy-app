@@ -151,15 +151,15 @@ export default function Navbar() {
               fetched.filter(Boolean) as Array<{ id: string; name: string }>
             );
         } else if (user.$id) {
-          // Final fallback via TEAMS collection
-          const teams = await databases.listDocuments(
+          // Final fallback via ROSTERS collection
+          const rosters = await databases.listDocuments(
             DATABASE_ID,
-            COLLECTIONS.TEAMS,
+            COLLECTIONS.ROSTERS,
             [Query.equal("userId", user.$id)]
           );
-          if (teams.documents.length > 0) {
+          if (rosters.documents.length > 0) {
             const leagueIds = Array.from(
-              new Set((teams.documents as any[]).map((d) => d.leagueId))
+              new Set((rosters.documents as any[]).map((d) => d.leagueId))
             );
             const fetched = await Promise.all(
               leagueIds.map(async (lid: string) => {
