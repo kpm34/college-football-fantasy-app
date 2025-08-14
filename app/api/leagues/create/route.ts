@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -53,28 +54,16 @@ export async function POST(request: NextRequest) {
       createdAt: new Date().toISOString(),
     };
 
-    // Create league in Appwrite
-    const createResponse = await fetch('https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/leagues/documents', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Appwrite-Project': 'college-football-fantasy-app',
-        'X-Appwrite-Response-Format': '1.4.0',
-        'Cookie': cookieHeader,
-      },
-      body: JSON.stringify({
-        documentId: 'unique()',
-        data: league,
-      }),
-    });
-
-    if (!createResponse.ok) {
-      const error = await createResponse.json();
-      console.error('Failed to create league:', error);
-      return NextResponse.json({ error: 'Failed to create league' }, { status: 500 });
-    }
-
-    const createdLeague = await createResponse.json();
+    // Create league using server-side privileges
+    const createdLeague = await databases.createDocument(
+      DATABASE_ID,
+      COLLECTIONS.LEAGUES,
+      'unique()',
+      {
+        ...league,
+        members: [user.$id],
+      }
+    );
 
     // Create commissioner's team
     const teamData = {
@@ -89,22 +78,15 @@ export async function POST(request: NextRequest) {
       createdAt: new Date().toISOString(),
     };
 
-    const teamResponse = await fetch('https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/teams/documents', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Appwrite-Project': 'college-football-fantasy-app',
-        'X-Appwrite-Response-Format': '1.4.0',
-        'Cookie': cookieHeader,
-      },
-      body: JSON.stringify({
-        documentId: 'unique()',
-        data: teamData,
-      }),
-    });
-
-    if (!teamResponse.ok) {
-      console.error('Failed to create team');
+    try {
+      await databases.createDocument(
+        DATABASE_ID,
+        COLLECTIONS.TEAMS,
+        'unique()',
+        teamData
+      );
+    } catch (e) {
+      console.error('Failed to create team', e);
     }
 
     return NextResponse.json({

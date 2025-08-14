@@ -4,8 +4,15 @@ import * as path from 'path';
 
 const client = new Client()
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
-  .setKey(process.env.APPWRITE_API_KEY!);
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
+
+// Only set key if available (for CI/CD environments)
+if (process.env.APPWRITE_API_KEY) {
+  client.setKey(process.env.APPWRITE_API_KEY);
+} else {
+  console.log('⚠️  APPWRITE_API_KEY not found, skipping schema sync');
+  process.exit(0);
+}
 
 const databases = new Databases(client);
 

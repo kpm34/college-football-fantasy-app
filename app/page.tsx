@@ -146,6 +146,15 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="mt-0 border-t border-[#D9BBA4]/20 py-8 text-center text-[#D9BBA4]/60">
+        <p>&copy; 2025 College Football Fantasy. All rights reserved.</p>
+        <p className="mt-2 text-sm">Power 4 Conferences Only • AP Top-25 Eligibility</p>
+        <Link href="/admin" className="inline-block mt-4 text-xs text-[#8091BB] hover:text-[#8091BB]/80 transition-colors">
+          Admin Dashboard
+        </Link>
+      </footer>
     </main>
   );
 }

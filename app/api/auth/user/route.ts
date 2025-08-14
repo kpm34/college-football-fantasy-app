@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Get current user using the session cookie
 export async function GET(request: NextRequest) {
   try {
-    const sessionId = request.cookies.get('appwrite-session')?.value;
+    const sessionCookie = request.cookies.get('appwrite-session')?.value;
     
-    if (!sessionId) {
+    if (!sessionCookie) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
     
-    // Create the Appwrite session cookie format
-    const cookieHeader = `a_session_college-football-fantasy-app=${sessionId}`;
+    // The cookie is now the raw session secret
+    const cookieHeader = `a_session_college-football-fantasy-app=${sessionCookie}`;
     
     const response = await fetch('https://nyc.cloud.appwrite.io/v1/account', {
       method: 'GET',
@@ -27,7 +26,17 @@ export async function GET(request: NextRequest) {
     }
 
     const user = await response.json();
-    return NextResponse.json(user);
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: user.$id,
+        email: user.email,
+        name: user.name,
+        emailVerification: user.emailVerification,
+        prefs: user.prefs,
+        $id: user.$id
+      }
+    });
   } catch (error) {
     console.error('Get user error:', error);
     return NextResponse.json(

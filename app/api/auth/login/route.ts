@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { headers } from 'next/headers';
 
-// Direct server-side authentication that bypasses CORS completely
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
@@ -25,18 +23,24 @@ export async function POST(request: NextRequest) {
     const session = await response.json();
     
     // Create a response with the session data
-    const res = NextResponse.json(session);
+    const res = NextResponse.json({
+      success: true,
+      data: {
+        userId: session.userId,
+        expire: session.expire,
+      }
+    });
     
-    // Extract and set the session cookie from Appwrite's response
+    // Extract the session cookie from Appwrite's response
     const setCookieHeader = response.headers.get('set-cookie');
     if (setCookieHeader) {
       // Parse Appwrite's session cookie
       const sessionMatch = setCookieHeader.match(/a_session_[^=]+=([^;]+)/);
       if (sessionMatch) {
-        // Set our own httpOnly cookie for session management
+        // Store the raw session secret
         res.cookies.set('appwrite-session', sessionMatch[1], {
           httpOnly: true,
-          secure: true,
+          secure: process.env.NODE_ENV === 'production',
           sameSite: 'lax',
           path: '/',
           maxAge: 60 * 60 * 24 * 365, // 1 year

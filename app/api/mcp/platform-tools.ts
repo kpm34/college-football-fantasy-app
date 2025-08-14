@@ -166,6 +166,57 @@ export function registerAppwriteTools(server: any) {
       };
     },
   );
+  // Create/update document (admin, dry-run supported)
+  server.tool(
+    'appwrite_mutate_document',
+    'Creates or updates a document (admin). Set dryRun to preview only.',
+    {
+      databaseId: z.string(),
+      collectionId: z.string(),
+      documentId: z.string().optional(),
+      data: z.record(z.any()),
+      dryRun: z.boolean().optional().default(true)
+    },
+    async ({ databaseId, collectionId, documentId, data, dryRun }) => {
+      try {
+        const client = getAppwriteClient();
+        const databases = new Databases(client);
+        if (dryRun) {
+          return { content: [{ type: 'text', text: `[DRY-RUN] ${documentId ? 'update' : 'create'} ${collectionId} data:\n${JSON.stringify(data, null, 2)}` }] };
+        }
+        const res = documentId
+          ? await databases.updateDocument(databaseId, collectionId, documentId, data)
+          : await databases.createDocument(databaseId, collectionId, 'unique()', data);
+        return { content: [{ type: 'text', text: `Mutation success:\n${JSON.stringify(res, null, 2)}` }] };
+      } catch (error) {
+        return { content: [{ type: 'text', text: `Mutation error: ${error}` }] };
+      }
+    }
+  );
+
+  // Create index (admin)
+  server.tool(
+    'appwrite_create_index',
+    'Creates an index on a collection (admin)',
+    {
+      databaseId: z.string(),
+      collectionId: z.string(),
+      key: z.string(),
+      type: z.enum(['key','unique']).default('key'),
+      attributes: z.array(z.string()),
+      orders: z.array(z.enum(['ASC','DESC'])).optional()
+    },
+    async ({ databaseId, collectionId, key, type, attributes, orders }) => {
+      try {
+        const client = getAppwriteClient();
+        const databases = new Databases(client);
+        const res = await databases.createIndex(databaseId, collectionId, key, type, attributes, orders);
+        return { content: [{ type: 'text', text: `Index created:\n${JSON.stringify(res, null, 2)}` }] };
+      } catch (error) {
+        return { content: [{ type: 'text', text: `Index creation error: ${error}` }] };
+      }
+    }
+  );
 }
 
 // ========== VERCEL TOOLS ==========
@@ -214,6 +265,21 @@ export function registerVercelTools(server: any) {
         }],
       };
     },
+  );
+  // Toggle Edge Config flag (placeholder; implement backend route)
+  server.tool(
+    'vercel_toggle_flag',
+    'Toggles an Edge Config flag by key (requires backend endpoint)',
+    {
+      key: z.string(),
+      value: z.any(),
+      dryRun: z.boolean().optional().default(true)
+    },
+    async ({ key, value, dryRun }) => {
+      const payload = { key, value };
+      if (dryRun) return { content: [{ type: 'text', text: `[DRY-RUN] Toggle flag ${key} -> ${JSON.stringify(value)}` }] };
+      return { content: [{ type: 'text', text: `Implement internal route to update Edge Config with payload: ${JSON.stringify(payload)}` }] };
+    }
   );
 }
 

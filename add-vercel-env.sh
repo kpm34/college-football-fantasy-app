@@ -4,13 +4,13 @@
 
 echo "Adding collection environment variables to Vercel..."
 
-# Collections
+# Collections (aligned with lib/appwrite.ts)
 vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUES production <<< "leagues"
 vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_TEAMS production <<< "teams"
-vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_ROSTERS production <<< "rosters"
-vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_LINEUPS production <<< "lineups"
+vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFTED_PLAYERS production <<< "rosters"
+vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_MATCHUPS production <<< "matchups"
 vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_GAMES production <<< "games"
-vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYERS production <<< "players"
+vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYERS production <<< "college_players"
 vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_RANKINGS production <<< "rankings"
 vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_ACTIVITY_LOG production <<< "activity_log"
 vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS production <<< "draft_picks"

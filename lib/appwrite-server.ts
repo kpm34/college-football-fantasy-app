@@ -1,66 +1,41 @@
-import { Client, Databases, Query } from 'node-appwrite';
-import { APPWRITE_CONFIG } from './appwrite-config';
+import { Client, Databases, Users, Storage, Functions, Messaging } from 'node-appwrite';
 
-// Server-side Appwrite client (with API key for admin access)
-const client = new Client();
+// Server-side Appwrite client configuration (with API key)
+// This should only be used in API routes, never exposed to client
 
-client
-  .setEndpoint(APPWRITE_CONFIG.endpoint)
-  .setProject(APPWRITE_CONFIG.projectId)
-  .setKey(APPWRITE_CONFIG.apiKey);
+if (!process.env.APPWRITE_API_KEY) {
+  console.warn('Warning: APPWRITE_API_KEY not found in environment variables');
+}
 
-export const databases = new Databases(client);
+// Initialize server client with API key
+const serverClient = new Client()
+  .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
+  .setProject(process.env.APPWRITE_PROJECT_ID || 'college-football-fantasy-app')
+  .setKey(process.env.APPWRITE_API_KEY || '');
 
-export const DATABASE_ID = APPWRITE_CONFIG.databaseId;
+// Export server-side services
+export const serverDatabases = new Databases(serverClient);
+export const serverUsers = new Users(serverClient);
+export const serverStorage = new Storage(serverClient);
+export const serverFunctions = new Functions(serverClient);
+export const serverMessaging = new Messaging(serverClient);
 
-export const COLLECTIONS = {
-  COLLEGE_PLAYERS: 'college_players',
-  PLAYER_STATS: 'player_stats',
-  TEAMS: 'teams',
-  GAMES: 'games',
-  RANKINGS: 'rankings',
-  LEAGUES: 'leagues',
-  ROSTERS: 'rosters',
-  LINEUPS: 'lineups',
-  DRAFT_PICKS: 'draft_picks',
-  PLAYERS: 'players',
-  DRAFTS: 'drafts',
-  USERS: 'users'
-};
+// Re-export common constants
+export { DATABASE_ID, COLLECTIONS } from './appwrite';
 
-// Helper function to get draftable players
-export async function getDraftablePlayers(week: number = 1) {
-  try {
-    const response = await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTIONS.COLLEGE_PLAYERS,
-      [
-        Query.equal('eligibleForWeek', true),
-        Query.orderDesc('fantasyPoints'),
-        Query.limit(100)
-      ]
-    );
+// Helper to check if server is properly configured
+export function isServerConfigured(): boolean {
+  return !!(
+    process.env.APPWRITE_API_KEY &&
+    process.env.APPWRITE_ENDPOINT &&
+    process.env.APPWRITE_PROJECT_ID
+  );
+}
 
-    // Parse JSON fields
-    const players = response.documents.map(doc => ({
-      ...doc,
-      seasonStats: doc.seasonStats ? JSON.parse(doc.seasonStats) : null,
-      weeklyProjections: doc.weeklyProjections ? JSON.parse(doc.weeklyProjections) : [],
-      position: {
-        id: doc.fantasyPosition,
-        name: doc.position,
-        abbreviation: doc.fantasyPosition,
-        fantasyCategory: doc.fantasyPosition
-      }
-    }));
-
-    return {
-      players,
-      total: response.total,
-      week
-    };
-  } catch (error) {
-    console.error('Error fetching draftable players from Appwrite:', error);
-    throw error;
+// Helper to get server client (for advanced use cases)
+export function getServerClient(): Client {
+  if (!isServerConfigured()) {
+    throw new Error('Appwrite server not properly configured. Check environment variables.');
   }
+  return serverClient;
 }

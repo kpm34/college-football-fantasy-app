@@ -1,78 +1,226 @@
-# College Football Fantasy App - Project Context
+# College Football Fantasy App - Cursor AI Assistant Rules
 
-## Project Overview
-A fantasy football platform exclusively for Power 4 conferences (SEC, ACC, Big 12, Big Ten) with unique eligibility rules where players can only be started against AP Top-25 teams or in conference games.
+## 🎯 Project Context
+Fantasy football platform for Power 4 conferences (SEC, ACC, Big 12, Big Ten) with unique eligibility rules where players only score against AP Top-25 teams or in conference games.
 
-## Tech Stack
-- Backend: Express.js + TypeScript
-- Database: Appwrite (NYC region)
-- Frontend: Next.js 15 + Tailwind CSS + Spline 3D
-- Data Sources: ESPN API (free) + CollegeFootballData API
-- Authentication: Appwrite Auth (planned)
+## 🛠️ Tech Stack
+- **Frontend**: Next.js 15.4.5, TypeScript, Tailwind CSS, Spline 3D
+- **Backend**: Appwrite BaaS (NYC region)
+- **Database**: Appwrite Collections
+- **APIs**: College Football Data API (CFBD), ESPN API
+- **Deployment**: Vercel Edge Functions
+- **3D**: Three.js, React Three Fiber, Spline
 
-## Key Features
-1. Power 4 conferences only
-2. 12-week regular season (no playoffs/bowls)
-3. Player eligibility: AP Top-25 opponents OR conference games only
-4. Real-time scoring via ESPN data
-5. 3D visualizations with Spline
+## 📁 Project Structure
+```
+/
+├── app/                    # Next.js 15 App Router
+│   ├── api/               # API routes
+│   ├── league/            # League pages
+│   ├── draft/             # Draft interfaces
+│   └── auction/           # Auction draft
+├── components/            # React components
+├── lib/                   # Utilities
+├── types/                 # TypeScript types
+├── scripts/               # Data sync scripts
+└── vendor/awwwards-rig/   # 3D submodule
+```
 
-## API Endpoints
-- GET /api/games - Current week games
-- GET /api/games/week/:week - Specific week games
-- GET /api/games/eligible - Only eligible games
-- GET /api/rankings - AP Top 25
-- GET /api/teams - Power 4 teams
-- GET /api/eligibility/check - Check game eligibility
+## 🚀 Essential Commands
 
-## Database Collections (Appwrite)
-- games: Game data with scores and status
-- rankings: AP Top 25 weekly rankings
-- teams: Power 4 team information
-- leagues: User leagues (planned)
-- rosters: Team rosters (planned)
-- lineups: Weekly lineups (planned)
+### Development
+```bash
+npm run dev                 # Start Next.js (port 3001)
+npm run build              # Production build
+npm run start              # Production server
+npm run lint               # ESLint checks
+npm run typecheck          # TypeScript checking
+```
 
-## Current Status
-✅ Backend API running with Appwrite integration
-✅ Data syncing from ESPN/CFBD to Appwrite
-✅ Frontend scaffolded with Next.js + Spline
-⏳ User authentication (next)
-⏳ League management system
-⏳ Draft system
-⏳ Scoring engine
+### Data Management
+```bash
+npm run sync-data          # Sync from APIs to Appwrite
+npm test                   # Run API tests
+node scripts/setup-appwrite-indexes.ts  # Setup DB indexes
+```
 
-## Development Commands
-- Backend: npm run server (port 3000)
-- Frontend: cd frontend && npm run dev (port 3001)
-- Sync data: npm run sync-data
-- Test APIs: npm test
+### Deployment
+```bash
+vercel                     # Deploy preview
+vercel --prod             # Deploy production
+vercel pull               # Pull env variables
+vercel logs               # View logs
+```
 
-## Environment Variables (See .env file for all values)
-Primary configuration files:
-- Root: `.env` (for Cursor visibility)
-- Frontend: `frontend/.env.local` (runtime)
-- Production: `.env.production.local`
+## 🔑 Environment Variables
+```bash
+# Appwrite
+NEXT_PUBLIC_APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
+NEXT_PUBLIC_APPWRITE_PROJECT_ID=college-football-fantasy-app
+NEXT_PUBLIC_APPWRITE_DATABASE_ID=college-football-fantasy
+APPWRITE_API_KEY=[server-side only]
 
-Key Variables:
-- APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
-- APPWRITE_PROJECT_ID=college-football-fantasy-app
-- APPWRITE_DATABASE_ID=college-football-fantasy
-- CFBD_API_KEY=configured (primary + backup)
-- AI_GATEWAY_API_KEY=configured
-- EDGE_CONFIG=configured (feature flags)
-- INNGEST keys for background jobs
+# APIs
+CFBD_API_KEY=[configured]
+AI_GATEWAY_API_KEY=[configured]
 
-All collection names prefixed with NEXT_PUBLIC_APPWRITE_COLLECTION_*
+# Collections (all prefixed with NEXT_PUBLIC_APPWRITE_COLLECTION_)
+- PLAYERS=college_players
+- LEAGUES=leagues
+- ROSTERS=rosters
+- GAMES=games
+- RANKINGS=rankings
+- AUCTIONS=auctions
+- BIDS=bids
+```
 
-## Spline Integration
-- Use @splinetool/react-spline for 3D scenes
-- Dynamic imports to avoid SSR issues
-- Scene ideas: Stadium, trophies, draft board, team logos
+## 📝 AI Assistant Instructions
 
-## Code Style
-- TypeScript strict mode
-- Functional components with hooks
-- Tailwind for styling
-- Async/await for promises
-- Proper error handling
+### When Writing Code:
+1. **Always use TypeScript** with strict mode
+2. **Follow Next.js 15 App Router** patterns
+3. **Use Tailwind CSS** for styling (no inline styles)
+4. **Implement proper error boundaries** for all components
+5. **Use React Server Components** where possible
+6. **Validate all API responses** with Zod or TypeScript
+7. **Never expose API keys** in client code
+
+### Component Patterns:
+```typescript
+// Use this pattern for components
+'use client' // Only when needed
+
+import { type FC } from 'react'
+
+interface ComponentProps {
+  // Always define props interface
+}
+
+export const Component: FC<ComponentProps> = ({ }) => {
+  // Implementation
+}
+```
+
+### API Route Pattern:
+```typescript
+// app/api/[route]/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+
+export async function GET(request: NextRequest) {
+  try {
+    // Implementation
+    return NextResponse.json({ data })
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 500 })
+  }
+}
+```
+
+### Appwrite Query Pattern:
+```typescript
+import { Query } from 'appwrite'
+import { databases } from '@/lib/appwrite'
+
+const response = await databases.listDocuments(
+  process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+  process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYERS!,
+  [
+    Query.equal('conference', 'SEC'),
+    Query.orderDesc('$createdAt'),
+    Query.limit(100)
+  ]
+)
+```
+
+## 🎮 Fantasy Rules to Enforce
+1. **Players only eligible** vs AP Top-25 or conference games
+2. **12-week regular season** (no playoffs/bowls)
+3. **Power 4 conferences only** (SEC, ACC, Big 12, Big Ten)
+4. **Snake draft** with timer and auto-pick
+5. **Auction draft** with $200 budget
+
+## 🐛 Common Issues & Fixes
+```bash
+# Port conflict
+lsof -i :3001 && kill -9 [PID]
+
+# Clear cache
+rm -rf .next
+
+# Reset dependencies
+rm -rf node_modules package-lock.json
+npm install
+
+# Type errors during build
+SKIP_ENV_VALIDATION=true npm run build
+```
+
+## 🎨 UI/UX Guidelines
+1. **Mobile-first responsive design**
+2. **Dark mode by default** with light mode option
+3. **Smooth animations** with Framer Motion
+4. **3D elements** sparingly for impact
+5. **Loading states** for all async operations
+6. **Error messages** that are helpful, not technical
+
+## 📊 Database Collections
+- `leagues` - Fantasy leagues
+- `rosters` - Team rosters (was teams)
+- `college_players` - Player database
+- `player_stats` - Weekly stats
+- `games` - Game schedule/scores
+- `rankings` - AP Top 25
+- `auctions` - Auction drafts
+- `bids` - Auction bid history
+- `lineups` - Weekly lineups
+
+## 🔍 Quick Debugging
+```bash
+# Check TypeScript errors
+npm run typecheck
+
+# Verify Appwrite connection
+curl https://nyc.cloud.appwrite.io/v1/health
+
+# Test API endpoint
+curl http://localhost:3001/api/games
+
+# View Vercel function logs
+vercel logs --follow
+```
+
+## 🚫 Never Do This
+- Don't commit .env files
+- Don't use var, always const/let
+- Don't use any type, be specific
+- Don't ignore TypeScript errors
+- Don't use synchronous file operations
+- Don't hardcode API URLs or keys
+- Don't use client-side data fetching for initial loads
+
+## ✅ Always Do This
+- Validate user input
+- Handle loading and error states
+- Use environment variables
+- Write semantic HTML
+- Optimize images with next/image
+- Use dynamic imports for heavy libraries
+- Test on mobile devices
+- Add proper SEO meta tags
+
+## 🎯 Current Priorities
+1. Complete draft system (snake + auction)
+2. Implement real-time scoring
+3. Add league management features
+4. Optimize 3D performance
+5. Setup email notifications
+6. Add social features (trash talk, etc.)
+
+## 📚 Useful Links
+- [Vercel Dashboard](https://vercel.com/kpm34s-projects)
+- [Appwrite Console](https://cloud.appwrite.io)
+- [CFBD API Docs](https://collegefootballdata.com)
+- [Next.js 15 Docs](https://nextjs.org/docs)
+
+---
+**Remember**: This is a production app. Code quality, performance, and user experience are paramount. Always test thoroughly before deploying.

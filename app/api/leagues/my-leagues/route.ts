@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
@@ -27,7 +29,8 @@ export async function GET(request: NextRequest) {
     // Helper to fetch documents by field match
     const fetchBy = async (collection: string, field: string, value: string) => {
       if (!value) return [] as any[];
-      const url = `https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/${collection}/documents?queries[]=equal("${field}","${value}")`;
+      const query = encodeURIComponent(`equal("${field}","${value}")`);
+      const url = `https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/${collection}/documents?queries[]=${query}`;
       const res = await fetch(url, {
         headers: {
           'X-Appwrite-Project': 'college-football-fantasy-app',
@@ -47,16 +50,31 @@ export async function GET(request: NextRequest) {
     };
 
     for (const doc of await fetchBy('teams', 'userId', user.$id)) pushUnique(teamsDocs, doc);
-    for (const doc of await fetchBy('teams', 'owner', user.$id)) pushUnique(teamsDocs, doc);
-    for (const doc of await fetchBy('teams', 'email', user.email || '')) pushUnique(teamsDocs, doc);
-    for (const doc of await fetchBy('teams', 'userName', user.name || '')) pushUnique(teamsDocs, doc);
+    // owner may be stored as user's name OR email; do not use $id
+    if (user.name) {
+      for (const doc of await fetchBy('teams', 'owner', user.name)) pushUnique(teamsDocs, doc);
+    }
+    if (user.email) {
+      for (const doc of await fetchBy('teams', 'owner', user.email)) pushUnique(teamsDocs, doc);
+      for (const doc of await fetchBy('teams', 'email', user.email)) pushUnique(teamsDocs, doc);
+    }
+    if (user.name) {
+      for (const doc of await fetchBy('teams', 'userName', user.name)) pushUnique(teamsDocs, doc);
+    }
 
     // Also read legacy rosters collection and adapt to team shape
     const rosterDocs: any[] = [];
     for (const doc of await fetchBy('rosters', 'userId', user.$id)) pushUnique(rosterDocs, doc);
-    for (const doc of await fetchBy('rosters', 'owner', user.$id)) pushUnique(rosterDocs, doc);
-    for (const doc of await fetchBy('rosters', 'email', user.email || '')) pushUnique(rosterDocs, doc);
-    for (const doc of await fetchBy('rosters', 'userName', user.name || '')) pushUnique(rosterDocs, doc);
+    if (user.name) {
+      for (const doc of await fetchBy('rosters', 'owner', user.name)) pushUnique(rosterDocs, doc);
+    }
+    if (user.email) {
+      for (const doc of await fetchBy('rosters', 'owner', user.email)) pushUnique(rosterDocs, doc);
+      for (const doc of await fetchBy('rosters', 'email', user.email)) pushUnique(rosterDocs, doc);
+    }
+    if (user.name) {
+      for (const doc of await fetchBy('rosters', 'userName', user.name)) pushUnique(rosterDocs, doc);
+    }
 
     const adaptedFromRosters = rosterDocs.map((r: any) => ({
       $id: r.$id,
@@ -68,25 +86,32 @@ export async function GET(request: NextRequest) {
     }));
 
     // Build unified teams list
-    const normalizedTeams = teamsDocs.map((t: any) => ({
-      $id: t.$id,
-      leagueId: t.leagueId || t.league_id,
-      name: t.name || t.teamName || 'Team',
-      wins: t.wins ?? 0,
-      losses: t.losses ?? 0,
-      pointsFor: t.pointsFor ?? t.points ?? 0,
-    }));
+    const normalizedTeams = teamsDocs.map((t: any) => {
+      let wins = t.wins ?? 0;
+      let losses = t.losses ?? 0;
+      if ((wins === 0 && losses === 0) && typeof t.record === 'string') {
+        const parts = t.record.split('-').map((p: string) => parseInt(p, 10));
+        if (parts.length === 2 && !Number.isNaN(parts[0]) && !Number.isNaN(parts[1])) {
+          wins = parts[0];
+          losses = parts[1];
+        }
+      }
+      return {
+        $id: t.$id,
+        leagueId: t.leagueId || t.league_id,
+        name: t.name || t.teamName || 'Team',
+        wins,
+        losses,
+        pointsFor: t.pointsFor ?? t.points ?? 0,
+      };
+    });
 
     const teamsCombined: any[] = [];
     for (const t of [...normalizedTeams, ...adaptedFromRosters]) pushUnique(teamsCombined, t, 'leagueId');
 
     const leagueIds = teamsCombined.map((team: any) => team.leagueId).filter(Boolean);
 
-    if (leagueIds.length === 0) {
-      return NextResponse.json({ leagues: [] });
-    }
-
-    // Get all leagues where user has a team
+    // Get all leagues where user has a team (if any)
     const leaguesPromises = leagueIds.map((leagueId: string) =>
       fetch(
         `https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/leagues/documents/${leagueId}`,
@@ -103,8 +128,10 @@ export async function GET(request: NextRequest) {
     const leagues = await Promise.all(leaguesPromises);
 
     // Also get leagues where user is commissioner (in case team wasn't created)
-    const commissionerLeaguesResponse = await fetch(
-      `https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/leagues/documents?queries[]=equal("commissionerId","${user.$id}")`,
+    const commissionerLeaguesAgg: any[] = [];
+    const commissionerIdQuery = encodeURIComponent(`equal("commissionerId","${user.$id}")`);
+    const commissionerIdRes = await fetch(
+      `https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/leagues/documents?queries[]=${commissionerIdQuery}`,
       {
         headers: {
           'X-Appwrite-Project': 'college-football-fantasy-app',
@@ -113,25 +140,43 @@ export async function GET(request: NextRequest) {
         },
       }
     );
-
-    if (commissionerLeaguesResponse.ok) {
-      const commissionerData = await commissionerLeaguesResponse.json();
-      const commissionerLeagues = commissionerData.documents;
-      
-      // Merge and deduplicate
-      const allLeagues = [...leagues, ...commissionerLeagues];
-      const uniqueLeagues = Array.from(
-        new Map(allLeagues.map((league) => [league.$id, league])).values()
-      );
-
-      return NextResponse.json({ 
-        leagues: uniqueLeagues,
-        teams: teamsCombined
-      });
+    if (commissionerIdRes.ok) {
+      const data = await commissionerIdRes.json();
+      (data.documents || []).forEach((d: any) => commissionerLeaguesAgg.push(d));
     }
 
+    // Legacy: commissioner stored as name/email
+    if (user.name) {
+      const q = encodeURIComponent(`equal("commissioner","${user.name}")`);
+      const res = await fetch(
+        `https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/leagues/documents?queries[]=${q}`,
+        { headers: { 'X-Appwrite-Project': 'college-football-fantasy-app', 'X-Appwrite-Response-Format': '1.4.0', 'Cookie': cookieHeader } }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        (data.documents || []).forEach((d: any) => commissionerLeaguesAgg.push(d));
+      }
+    }
+    if (user.email) {
+      const q = encodeURIComponent(`equal("commissioner","${user.email}")`);
+      const res = await fetch(
+        `https://nyc.cloud.appwrite.io/v1/databases/college-football-fantasy/collections/leagues/documents?queries[]=${q}`,
+        { headers: { 'X-Appwrite-Project': 'college-football-fantasy-app', 'X-Appwrite-Response-Format': '1.4.0', 'Cookie': cookieHeader } }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        (data.documents || []).forEach((d: any) => commissionerLeaguesAgg.push(d));
+      }
+    }
+
+    // Merge and deduplicate
+    const allLeagues = [...leagues, ...commissionerLeaguesAgg];
+    const uniqueLeagues = Array.from(
+      new Map(allLeagues.map((league) => [league.$id, league])).values()
+    );
+
     return NextResponse.json({ 
-      leagues,
+      leagues: uniqueLeagues,
       teams: teamsCombined
     });
   } catch (error) {

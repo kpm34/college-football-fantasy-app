@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Bebas_Neue, Montserrat, Roboto_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+import { ServiceWorkerRegistration } from '@/components/ServiceWorkerRegistration'
+import { InstallPrompt } from '@/components/InstallPrompt'
 import './globals.css'
 
 const inter = Inter({ 
@@ -44,7 +47,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#667eea',
+  themeColor: '#8C1818',
+  maximumScale: 5,
+  userScalable: true,
 }
 
 export default function RootLayout({
@@ -70,7 +75,9 @@ export default function RootLayout({
           <div className="flex-1">{children}</div>
         </div>
         <Analytics />
+        <SpeedInsights />
         <ServiceWorkerRegistration />
+        <InstallPrompt />
       </body>
     </html>
   )

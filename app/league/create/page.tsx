@@ -187,7 +187,7 @@ export default function CreateLeaguePage() {
       <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white/90 to-white/60 bg-clip-text text-transparent drop-shadow">
-            🏈 Create Your League
+            Create Your League
           </h1>
           <p className="text-xl" style={{ color: '#5C1F30' }}>
             Set up your college football fantasy league with unique eligibility rules

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
-import { isUserCommissioner } from '@/lib/utils/commissioner';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
 export async function GET(
   request: NextRequest,
@@ -35,7 +34,7 @@ export async function GET(
       leagueId
     );
 
-    const isComm = isUserCommissioner(league, user);
+    const isComm = Boolean(league?.commissionerId && user?.$id && league.commissionerId === user.$id);
     return NextResponse.json({ isCommissioner: isComm });
   } catch (error) {
     console.error('is-commissioner error:', error);

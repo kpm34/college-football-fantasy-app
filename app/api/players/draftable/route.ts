@@ -1,5 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDraftablePlayers } from '@/lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { Query } from 'node-appwrite';
+
+async function getDraftablePlayers(week: number) {
+  try {
+    const response = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.PLAYERS,
+      [
+        Query.equal('isActive', true),
+        Query.orderDesc('fantasyPoints'),
+        Query.limit(500)
+      ]
+    );
+    
+    return {
+      players: response.documents,
+      total: response.total,
+      week
+    };
+  } catch (error) {
+    console.error('Error fetching players from Appwrite:', error);
+    throw error;
+  }
+}
 
 export async function GET(request: NextRequest) {
   try {

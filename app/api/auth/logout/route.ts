@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Logout by clearing the session
 export async function POST(request: NextRequest) {
   try {
-    const sessionId = request.cookies.get('appwrite-session')?.value;
+    const sessionCookie = request.cookies.get('appwrite-session')?.value;
     
-    if (!sessionId) {
+    if (!sessionCookie) {
       return NextResponse.json({ message: 'Already logged out' });
     }
     
-    // Create the Appwrite session cookie format
-    const cookieHeader = `a_session_college-football-fantasy-app=${sessionId}`;
+    // The cookie is now the raw session secret
+    const cookieHeader = `a_session_college-football-fantasy-app=${sessionCookie}`;
     
     // Try to delete the session on Appwrite (optional, can fail)
     await fetch('https://nyc.cloud.appwrite.io/v1/account/sessions/current', {
@@ -26,7 +25,7 @@ export async function POST(request: NextRequest) {
     const res = NextResponse.json({ message: 'Logged out successfully' });
     res.cookies.set('appwrite-session', '', {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
       maxAge: 0, // Delete the cookie
@@ -38,7 +37,7 @@ export async function POST(request: NextRequest) {
     const res = NextResponse.json({ message: 'Logged out successfully' });
     res.cookies.set('appwrite-session', '', {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
       maxAge: 0,
