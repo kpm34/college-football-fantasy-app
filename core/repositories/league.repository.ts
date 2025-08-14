@@ -8,6 +8,7 @@ import { ValidationError, ForbiddenError } from '../errors/app-error';
 import { ID } from 'appwrite';
 import { env } from '../config/environment';
 import type { League } from '../../types/league';
+import { RosterRepository } from './roster.repository';
 
 export interface CreateLeagueData {
   name: string;
@@ -40,9 +41,15 @@ export class LeagueRepository extends BaseRepository<League> {
    * Create a new league with proper defaults
    */
   async createLeague(data: CreateLeagueData): Promise<League> {
-    // Set defaults
+    // Set defaults (using snake_case for database fields)
     const leagueData = {
-      ...data,
+      name: data.name,
+      maxTeams: data.maxTeams,
+      draftType: data.draftType,
+      gameMode: data.gameMode,
+      isPublic: data.isPublic,
+      pickTimeSeconds: data.pickTimeSeconds,
+      commissioner_id: data.commissionerId,
       status: 'open',
       currentTeams: 0,
       season: data.season || new Date().getFullYear(),
@@ -170,10 +177,10 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('You are already in this league');
     }
 
-    // Create roster entry
+    // Create roster entry (using snake_case for database fields)
     const roster = await rosterRepo.create({
-      leagueId,
-      userId,
+      league_id: leagueId,
+      user_id: userId,
       teamName,
       abbreviation: abbreviation || teamName.substring(0, 3).toUpperCase(),
       draftPosition: league.currentTeams + 1,
