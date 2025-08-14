@@ -352,6 +352,3 @@ export class LeagueRepository extends BaseRepository<League> {
     }
   }
 }
-
-// Import after class definition to avoid circular dependency
-import { RosterRepository } from './roster.repository';
