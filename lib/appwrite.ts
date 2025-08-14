@@ -1,12 +1,12 @@
 import { Client, Databases, Avatars, Storage, Functions } from 'appwrite';
-import { APPWRITE_PUBLIC_CONFIG } from './appwrite-config';
+import { APPWRITE_CONFIG } from './config/appwrite.config';
 
 // Initialize Appwrite client for frontend (NO API KEY - uses session auth)
 const client = new Client();
 
 client
-  .setEndpoint(APPWRITE_PUBLIC_CONFIG.endpoint)
-  .setProject(APPWRITE_PUBLIC_CONFIG.projectId);
+  .setEndpoint(APPWRITE_CONFIG.endpoint)
+  .setProject(APPWRITE_CONFIG.projectId);
 
 // Export Appwrite services for data operations only
 // Authentication is handled through API routes
@@ -17,7 +17,7 @@ export const functions = new Functions(client);
 export { client };
 
 // Re-export configuration
-export { APPWRITE_PUBLIC_CONFIG };
+export { APPWRITE_CONFIG };
 
 // Database ID from environment
 export const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || process.env.DATABASE_ID || 'college-football-fantasy';
