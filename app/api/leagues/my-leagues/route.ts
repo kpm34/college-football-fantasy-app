@@ -39,7 +39,7 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
     // Get leagues where user is commissioner
     leagues.find({
       filters: {
-        commissionerId: user.$id
+        commissioner: user.$id  // Database uses 'commissioner' not 'commissionerId'
       },
       cache: {
         key: `league:commissioner:${user.$id}`,

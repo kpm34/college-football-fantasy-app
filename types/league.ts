@@ -2,8 +2,8 @@ import { Models } from 'appwrite';
 
 export interface League extends Models.Document {
   name: string;
-  commissionerId: string;
-  commissioner?: string; // Legacy field
+  commissioner: string; // Database uses 'commissioner'
+  commissionerId?: string; // Legacy field - for backwards compatibility
   season: number;
   maxTeams: number;
   currentTeams: number;
