@@ -165,6 +165,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       // Load all teams in this league (TEAMS + fallback to legacy fields + ROSTERS)
       try {
         let leagueTeams: Team[] = [];
+        let needsMigration = false;
         try {
           const teamsResponse = await databases.listDocuments(
             DATABASE_ID,
@@ -211,6 +212,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           })).filter((t) => t.userId && !existingUserIds2.has(t.userId));
           if (adaptedAltTeams.length > 0) {
             leagueTeams = [...leagueTeams, ...adaptedAltTeams];
+            needsMigration = true;
           }
         } catch (e) {
           // ignore if legacy field not present
@@ -243,9 +245,57 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
 
           if (adaptedFromRosters.length > 0) {
             leagueTeams = [...leagueTeams, ...adaptedFromRosters];
+            needsMigration = true;
           }
         } catch (e) {
           // ignore if rosters collection not present
+        }
+
+        // If we detected legacy data, trigger server-side migration to persist TEAMS and user links
+        if (needsMigration) {
+          try {
+            await fetch('/api/leagues/migrate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ leagueId })
+            });
+            // Re-fetch TEAMS after migration
+            const teamsResponse = await databases.listDocuments(
+              DATABASE_ID,
+              COLLECTIONS.TEAMS,
+              [Query.equal('leagueId', leagueId)]
+            );
+            leagueTeams = teamsResponse.documents as unknown as Team[];
+          } catch (mErr) {
+            console.warn('Migration attempt failed or not needed:', mErr);
+          }
+        }
+
+        // Enrich team manager info from USERS collection so members are connected to actual users
+        try {
+          const uniqueUserIds = Array.from(new Set(leagueTeams.map(t => t.userId).filter(Boolean)));
+          if (uniqueUserIds.length > 0) {
+            const usersRes = await databases.listDocuments(
+              DATABASE_ID,
+              COLLECTIONS.USERS,
+              [Query.equal('userId', uniqueUserIds)]
+            );
+            const idToUser: Record<string, any> = {};
+            (usersRes.documents as any[]).forEach((u) => {
+              const key = (u.userId || u.$id) as string;
+              if (key) idToUser[key] = u;
+            });
+            leagueTeams = leagueTeams.map((t) => {
+              const u = idToUser[t.userId || ''];
+              return {
+                ...t,
+                userName: t.userName || (u?.name || u?.userName || u?.email || 'Manager'),
+                email: t.email || u?.email,
+              } as Team;
+            });
+          }
+        } catch (userErr) {
+          console.warn('User enrichment failed, proceeding with team data only:', userErr);
         }
 
         setTeams(leagueTeams);
