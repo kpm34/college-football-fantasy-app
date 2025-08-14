@@ -1,330 +1,125 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { useAuth } from '@/hooks/useAuth';
+
+interface TeamStanding {
+  rank: number;
+  team: string;
+  conference: string;
+  overall: string;
+  conferenceRecord: string;
+  apRank?: number;
+  streak?: string;
+}
 
 export default function StandingsPage() {
-  const [standings, setStandings] = useState<any[]>([]);
+  const { user } = useAuth();
+  const [conference, setConference] = useState('ALL');
+  const [standings, setStandings] = useState<TeamStanding[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const conferences = ['ALL', 'SEC', 'Big Ten', 'ACC', 'Big 12'];
+
   useEffect(() => {
-    loadStandingsData();
-  }, []);
-
-  const loadStandingsData = async () => {
-    // Simulate loading data
-    setLoading(true);
-    setTimeout(() => {
-      setStandings([
-        {
-          rank: 1,
-          team: "Team Lambda",
-          owner: "John Smith",
-          wins: 1,
-          losses: 0,
-          ties: 0,
-          winPct: 1.000,
-          pointsFor: 167.2,
-          pointsAgainst: 89.4,
-          streak: "W1"
-        },
-        {
-          rank: 2,
-          team: "Team Zeta",
-          owner: "Sarah Johnson",
-          wins: 1,
-          losses: 0,
-          ties: 0,
-          winPct: 1.000,
-          pointsFor: 156.8,
-          pointsAgainst: 89.2,
-          streak: "W1"
-        },
-        {
-          rank: 3,
-          team: "Team Kappa",
-          owner: "Mike Davis",
-          wins: 1,
-          losses: 0,
-          ties: 0,
-          winPct: 1.000,
-          pointsFor: 145.6,
-          pointsAgainst: 112.3,
-          streak: "W1"
-        },
-        {
-          rank: 4,
-          team: "Team Gamma",
-          owner: "Emily Wilson",
-          wins: 1,
-          losses: 0,
-          ties: 0,
-          winPct: 1.000,
-          pointsFor: 142.1,
-          pointsAgainst: 98.3,
-          streak: "W1"
-        },
-        {
-          rank: 5,
-          team: "Team Eta",
-          owner: "David Brown",
-          wins: 1,
-          losses: 0,
-          ties: 0,
-          winPct: 1.000,
-          pointsFor: 134.5,
-          pointsAgainst: 127.9,
-          streak: "W1"
-        },
-        {
-          rank: 6,
-          team: "Team Alpha",
-          owner: "Lisa Garcia",
-          wins: 1,
-          losses: 0,
-          ties: 0,
-          winPct: 1.000,
-          pointsFor: 125.4,
-          pointsAgainst: 118.7,
-          streak: "W1"
-        },
-        {
-          rank: 7,
-          team: "Team Theta",
-          owner: "Robert Miller",
-          wins: 0,
-          losses: 1,
-          ties: 0,
-          winPct: 0.000,
-          pointsFor: 127.9,
-          pointsAgainst: 134.5,
-          streak: "L1"
-        },
-        {
-          rank: 8,
-          team: "Team Beta",
-          owner: "Jennifer Lee",
-          wins: 0,
-          losses: 1,
-          ties: 0,
-          winPct: 0.000,
-          pointsFor: 118.7,
-          pointsAgainst: 125.4,
-          streak: "L1"
-        },
-        {
-          rank: 9,
-          team: "Team Delta",
-          owner: "Thomas Anderson",
-          wins: 0,
-          losses: 1,
-          ties: 0,
-          winPct: 0.000,
-          pointsFor: 98.3,
-          pointsAgainst: 142.1,
-          streak: "L1"
-        },
-        {
-          rank: 10,
-          team: "Team Iota",
-          owner: "Amanda Taylor",
-          wins: 0,
-          losses: 1,
-          ties: 0,
-          winPct: 0.000,
-          pointsFor: 112.3,
-          pointsAgainst: 145.6,
-          streak: "L1"
-        },
-        {
-          rank: 11,
-          team: "Team Epsilon",
-          owner: "Christopher White",
-          wins: 0,
-          losses: 1,
-          ties: 0,
-          winPct: 0.000,
-          pointsFor: 89.2,
-          pointsAgainst: 156.8,
-          streak: "L1"
-        },
-        {
-          rank: 12,
-          team: "Team Mu",
-          owner: "Jessica Martinez",
-          wins: 0,
-          losses: 1,
-          ties: 0,
-          winPct: 0.000,
-          pointsFor: 89.4,
-          pointsAgainst: 167.2,
-          streak: "L1"
-        }
-      ]);
-      setLoading(false);
-    }, 1000);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-xl">Loading standings...</div>
-      </div>
-    );
-  }
+    // TODO: Fetch standings data
+    setLoading(false);
+  }, [conference]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation Bar */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold text-gray-900">🏈 College Football Fantasy</h1>
-            </div>
-            <div className="flex items-center space-x-8">
-              <a href="/team/[teamId]" className="text-gray-600 hover:text-gray-900">My Team</a>
-              <a href="/league/[leagueId]" className="text-gray-600 hover:text-gray-900">League</a>
-              <a href="/players" className="text-gray-600 hover:text-gray-900">Players</a>
-              <a href="/scoreboard" className="text-gray-600 hover:text-gray-900">Scoreboard</a>
-              <a href="/standings" className="text-blue-600 font-medium">Standings</a>
-              <a href="/opponents" className="text-gray-600 hover:text-gray-900">Opposing Teams</a>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <div className="min-h-screen relative" style={{ background: 'var(--color-bg)' }}>
+      <div className="aurora-bg" />
+      
       {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="surface-card border-b border-white/10 relative">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">Standings</h2>
-              <p className="text-gray-600">League Rankings</p>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/dashboard"
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                <ChevronLeftIcon className="h-5 w-5 text-white" />
+              </Link>
+              <h1 className="text-2xl font-bold text-white">Power 4 Standings</h1>
+            </div>
+            
+            <div className="flex gap-2">
+              {conferences.map((conf) => (
+                <button
+                  key={conf}
+                  onClick={() => setConference(conf)}
+                  className={`px-4 py-2 rounded-lg transition-colors ${
+                    conference === conf
+                      ? 'bg-[var(--color-primary)] text-white'
+                      : 'bg-white/10 hover:bg-white/20 text-white'
+                  }`}
+                >
+                  {conf}
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Standings Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-          <div className="overflow-x-auto">
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8 relative">
+        {loading ? (
+          <div className="text-center text-white/60 py-12">Loading standings...</div>
+        ) : standings.length === 0 ? (
+          <div className="surface-card rounded-xl p-12 text-center">
+            <p className="text-xl text-white/60">No standings data available</p>
+          </div>
+        ) : (
+          <div className="surface-card rounded-xl overflow-hidden">
             <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Rank
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Team
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Owner
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    W
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    L
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    T
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    PCT
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    PF
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    PA
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Streak
-                  </th>
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-4 px-6 text-sm font-medium text-white/60">RANK</th>
+                  <th className="text-left py-4 px-6 text-sm font-medium text-white/60">TEAM</th>
+                  <th className="text-left py-4 px-6 text-sm font-medium text-white/60">CONF</th>
+                  <th className="text-center py-4 px-6 text-sm font-medium text-white/60">OVERALL</th>
+                  <th className="text-center py-4 px-6 text-sm font-medium text-white/60">CONF</th>
+                  <th className="text-center py-4 px-6 text-sm font-medium text-white/60">AP</th>
+                  <th className="text-center py-4 px-6 text-sm font-medium text-white/60">STREAK</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {standings.map((team, index) => (
-                  <tr key={team.rank} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-                          team.rank <= 6 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                        }`}>
-                          {team.rank}
+              <tbody>
+                {standings.map((team) => (
+                  <tr key={team.rank} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <td className="py-4 px-6 font-medium text-white">{team.rank}</td>
+                    <td className="py-4 px-6 font-medium text-white">{team.team}</td>
+                    <td className="py-4 px-6 text-white/60">{team.conference}</td>
+                    <td className="py-4 px-6 text-center text-white">{team.overall}</td>
+                    <td className="py-4 px-6 text-center text-white/60">{team.conferenceRecord}</td>
+                    <td className="py-4 px-6 text-center">
+                      {team.apRank ? (
+                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[var(--color-primary)] text-white text-sm font-bold">
+                          {team.apRank}
                         </span>
-                      </div>
+                      ) : (
+                        <span className="text-white/40">-</span>
+                      )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{team.team}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{team.owner}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <div className="text-sm font-medium text-gray-900">{team.wins}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <div className="text-sm font-medium text-gray-900">{team.losses}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <div className="text-sm font-medium text-gray-900">{team.ties}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <div className="text-sm font-medium text-gray-900">
-                        {team.winPct.toFixed(3)}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <div className="text-sm font-medium text-gray-900">{team.pointsFor.toFixed(1)}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <div className="text-sm font-medium text-gray-900">{team.pointsAgainst.toFixed(1)}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <div className={`text-sm font-medium ${
-                        team.streak.startsWith('W') ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {team.streak}
-                      </div>
+                    <td className="py-4 px-6 text-center">
+                      {team.streak && (
+                        <span className={`text-sm font-medium ${
+                          team.streak.startsWith('W') ? 'text-green-400' : 'text-red-400'
+                        }`}>
+                          {team.streak}
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
-
-        {/* Playoff Picture */}
-        <div className="mt-8 bg-white rounded-lg shadow-sm border p-6">
-          <h3 className="text-lg font-semibold mb-4">Playoff Picture</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">In Playoffs (Top 6)</h4>
-              <div className="space-y-1">
-                {standings.slice(0, 6).map((team) => (
-                  <div key={team.rank} className="flex items-center space-x-2">
-                    <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                    <span className="text-sm">{team.team}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">Outside Looking In</h4>
-              <div className="space-y-1">
-                {standings.slice(6).map((team) => (
-                  <div key={team.rank} className="flex items-center space-x-2">
-                    <div className="w-4 h-4 bg-gray-300 rounded-full"></div>
-                    <span className="text-sm">{team.team}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
-} 
+}
