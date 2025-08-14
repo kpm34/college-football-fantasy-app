@@ -1,0 +1,22 @@
+{
+  "$id": "weekly-scoring-calculator",
+  "name": "Weekly Scoring Calculator",
+  "runtime": "node-18.0",
+  "execute": ["any"],
+  "events": [],
+  "schedule": "0 23 * * 0",
+  "timeout": 900,
+  "enabled": true,
+  "logging": true,
+  "entrypoint": "src/index.js",
+  "commands": "npm install",
+  "ignore": [
+    "node_modules",
+    ".npm"
+  ],
+  "environment": {
+    "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
+    "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
+    "DATABASE_ID": "college-football-fantasy"
+  }
+}
