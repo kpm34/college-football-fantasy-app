@@ -120,13 +120,13 @@ college-football-fantasy-app/
 
 ## 🔧 Environment Configuration
 
-### Required Environment Variables
+### Required Environment Variables (consolidated into `.env.local`)
 ```env
 # Appwrite
 NEXT_PUBLIC_APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
 NEXT_PUBLIC_APPWRITE_PROJECT_ID=college-football-fantasy-app
 NEXT_PUBLIC_APPWRITE_DATABASE_ID=college-football-fantasy
-APPWRITE_API_KEY=[your-api-key]
+APPWRITE_API_KEY=standard_******************************** (server-side only)
 
 # External APIs
 CFBD_API_KEY=[optional]
@@ -142,6 +142,9 @@ APPLE_PRIVATE_KEY=[optional]
 
 # Security
 JWT_SECRET=[32+ character secret]
+
+# Vercel
+VERCEL_TOKEN=*** (for non-interactive preview/prod deploys)
 ```
 
 ## 🚢 Deployment Configuration

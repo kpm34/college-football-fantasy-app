@@ -13,16 +13,14 @@ export async function GET(
 
     // Resolve current user from session cookie
     const sessionId = request.cookies.get('appwrite-session')?.value;
-    if (!sessionId) {
-      return NextResponse.json({ isCommissioner: false, reason: 'no-session' });
-    }
+    // session is optional; if missing we still return JSON with isCommissioner false unless name/email override below
 
     const cookieHeader = `a_session_college-football-fantasy-app=${sessionId}`;
     const userRes = await fetch('https://nyc.cloud.appwrite.io/v1/account', {
       headers: {
         'X-Appwrite-Project': 'college-football-fantasy-app',
         'X-Appwrite-Response-Format': '1.4.0',
-        'Cookie': cookieHeader,
+        ...(sessionId ? { 'Cookie': cookieHeader } : {} as any),
       },
     });
     let user: any = null;

@@ -88,11 +88,11 @@ git commit -m "feat: your feature"
 # Push to branch
 git push origin feature/your-feature
 
-# Preview deployment
-vercel
+# Preview deployment (non-interactive using local token in .env.local)
+export $(cat .env.local | xargs) && vercel --yes --token $VERCEL_TOKEN
 
 # Production deployment (after merge)
-vercel --prod
+export $(cat .env.local | xargs) && vercel --prod --yes --token $VERCEL_TOKEN
 ```
 
 ## 📊 Data Flow
@@ -130,6 +130,7 @@ Collections:
 - Project: `college-football-fantasy-app`
 - Database: `college-football-fantasy`
 - Real-time subscriptions available
+- Server API key stored locally in `.env.local` as `APPWRITE_API_KEY` (do not commit). Use this key for server-side cleanup scripts and admin routes.
 
 ### Roster Schema & Guardrails
 - Persist per-league roster schema on create: `POST /api/leagues/create` → `rosterSchema { rb, wr, benchSize }`
