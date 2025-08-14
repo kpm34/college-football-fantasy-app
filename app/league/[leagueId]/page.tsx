@@ -163,63 +163,11 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         orderMode: leagueData.orderMode || 'random'
       });
 
-      // Load all teams in this league (TEAMS + fallback to legacy fields + ROSTERS)
+      // Load all fantasy rosters in this league
       try {
         let leagueTeams: Team[] = [];
-        let needsMigration = false;
-        try {
-          const teamsResponse = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.TEAMS,
-            [Query.equal('leagueId', leagueId)]
-          );
-          leagueTeams = teamsResponse.documents as unknown as Team[];
-        } catch (primaryErr) {
-          // Continue with legacy fallback if primary attribute not present
-          console.warn('Primary teams query failed, trying legacy league_id', primaryErr);
-        }
-
-        // Normalize missing userId from owner if present
-        leagueTeams = (leagueTeams as any[]).map((t) => ({
-          ...t,
-          userId: t.userId || t.owner || '',
-          name: t.name || t.teamName || 'Team',
-        }));
-
-        // Also check legacy field naming: league_id and owner
-        // Legacy TEAMS field fallback
-        try {
-          const altTeamsResponse = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.TEAMS,
-            [Query.equal('league_id', leagueId)]
-          );
-          const altDocs = altTeamsResponse.documents as any[];
-          const existingUserIds2 = new Set(leagueTeams.map(t => t.userId).filter(Boolean));
-          const adaptedAltTeams: Team[] = altDocs.map((d) => ({
-            $id: d.$id,
-            leagueId: d.leagueId || d.league_id,
-            userId: d.userId || d.owner || '',
-            name: d.name || d.teamName || 'Team',
-            userName: d.userName,
-            email: d.email,
-            wins: d.wins ?? 0,
-            losses: d.losses ?? 0,
-            ties: d.ties ?? 0,
-            points: d.points ?? d.pointsFor ?? 0,
-            pointsFor: d.pointsFor ?? d.points ?? 0,
-            pointsAgainst: d.pointsAgainst ?? 0,
-            players: d.players
-          })).filter((t) => t.userId && !existingUserIds2.has(t.userId));
-          if (adaptedAltTeams.length > 0) {
-            leagueTeams = [...leagueTeams, ...adaptedAltTeams];
-            needsMigration = true;
-          }
-        } catch (e) {
-          // ignore if legacy field not present
-        }
-
-        // Fallback: also read legacy ROSTERS and merge any teams not already present
+        
+        // Fetch from ROSTERS collection (fantasy team rosters)
         try {
           const rostersResponse = await databases.listDocuments(
             DATABASE_ID,
@@ -227,8 +175,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             [Query.equal('leagueId', leagueId)]
           );
           const rosterDocs = rostersResponse.documents as any[];
-          const existingUserIds = new Set(leagueTeams.map(t => t.userId).filter(Boolean));
-          const adaptedFromRosters: Team[] = rosterDocs.map((r) => ({
+          leagueTeams = rosterDocs.map((r) => ({
             $id: r.$id,
             leagueId: r.leagueId,
             userId: r.userId || r.owner || '',
@@ -242,34 +189,9 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             pointsFor: r.pointsFor ?? r.points ?? 0,
             pointsAgainst: r.pointsAgainst ?? 0,
             players: r.players
-          })).filter((t) => !existingUserIds.has(t.userId));
-
-          if (adaptedFromRosters.length > 0) {
-            leagueTeams = [...leagueTeams, ...adaptedFromRosters];
-            needsMigration = true;
-          }
+          }));
         } catch (e) {
-          // ignore if rosters collection not present
-        }
-
-        // If we detected legacy data, trigger server-side migration to persist TEAMS and user links
-        if (needsMigration) {
-          try {
-            await fetch('/api/leagues/migrate', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ leagueId })
-            });
-            // Re-fetch TEAMS after migration
-            const teamsResponse = await databases.listDocuments(
-              DATABASE_ID,
-              COLLECTIONS.TEAMS,
-              [Query.equal('leagueId', leagueId)]
-            );
-            leagueTeams = teamsResponse.documents as unknown as Team[];
-          } catch (mErr) {
-            console.warn('Migration attempt failed or not needed:', mErr);
-          }
+          console.error('Error loading rosters:', e);
         }
 
         // Enrich team manager info from USERS collection so members are connected to actual users
