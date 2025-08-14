@@ -298,6 +298,51 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           console.warn('User enrichment failed, proceeding with team data only:', userErr);
         }
 
+        // Also reflect members listed on the league document (invited/joined) even if TEAMS not created yet
+        try {
+          const rawMembers: unknown = (leagueData as any)?.members || [];
+          const memberIds: string[] = Array.isArray(rawMembers) ? (rawMembers as any[]).map(String) : [];
+          const existingIds = new Set(leagueTeams.map(t => t.userId).filter(Boolean));
+          const missingIds = memberIds.filter(uid => uid && !existingIds.has(uid));
+          if (missingIds.length > 0) {
+            // Fetch user docs for missing members
+            let usersRes: any = null;
+            try {
+              usersRes = await databases.listDocuments(
+                DATABASE_ID,
+                COLLECTIONS.USERS,
+                [Query.equal('userId', missingIds)]
+              );
+            } catch (_) {
+              usersRes = { documents: [] };
+            }
+            const idToUser: Record<string, any> = {};
+            (usersRes.documents as any[]).forEach((u) => {
+              const key = (u.userId || u.$id) as string;
+              if (key) idToUser[key] = u;
+            });
+            const placeholderTeams: Team[] = missingIds.map((uid) => {
+              const u = idToUser[uid];
+              return {
+                $id: `placeholder-${uid}`,
+                leagueId,
+                userId: uid,
+                name: u?.teamName || u?.name || 'Pending Team',
+                userName: u?.name || u?.userName || u?.email || 'Invited Manager',
+                email: u?.email,
+                wins: 0,
+                losses: 0,
+                points: 0,
+              } as unknown as Team;
+            });
+            if (placeholderTeams.length > 0) {
+              leagueTeams = [...leagueTeams, ...placeholderTeams];
+            }
+          }
+        } catch (e) {
+          console.warn('Failed to reflect league.members in UI:', e);
+        }
+
         setTeams(leagueTeams);
 
         // Find user's team
