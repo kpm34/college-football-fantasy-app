@@ -221,8 +221,42 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           console.warn('User enrichment failed, proceeding with team data only:', userErr);
         }
 
-        // Since we can't update the league schema, just display the actual team count
-        // The teams array already includes both TEAMS docs and ROSTERS docs from above
+        // If no rosters exist yet but we have members, create placeholder teams
+        if (leagueTeams.length === 0 && leagueData.members && leagueData.members.length > 0) {
+          // Fetch user info for all members
+          try {
+            const memberIds = leagueData.members;
+            const usersResponse = await databases.listDocuments(
+              DATABASE_ID,
+              COLLECTIONS.USERS,
+              [Query.equal('$id', memberIds)]
+            );
+            
+            const userMap = new Map(usersResponse.documents.map(u => [u.$id, u]));
+            
+            // Create placeholder teams for each member
+            leagueTeams = memberIds.map((userId: string) => {
+              const user = userMap.get(userId);
+              return {
+                $id: `placeholder-${userId}`,
+                leagueId: leagueId,
+                userId: userId,
+                name: user?.name ? `${user.name}'s Team` : 'Unnamed Team',
+                userName: user?.name || user?.email?.split('@')[0] || 'Unknown Manager',
+                email: user?.email,
+                wins: 0,
+                losses: 0,
+                ties: 0,
+                points: 0,
+                pointsFor: 0,
+                pointsAgainst: 0,
+                players: '[]'
+              } as Team;
+            });
+          } catch (e) {
+            console.error('Error creating placeholder teams:', e);
+          }
+        }
 
         setTeams(leagueTeams);
 
