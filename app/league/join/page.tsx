@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 
@@ -40,14 +40,19 @@ interface Team {
   createdAt: string;
 }
 
-export default function JoinLeaguePage() {
+function JoinLeagueContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const [leagueType, setLeagueType] = useState<'all' | 'public' | 'private'>('all');
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [selectedLeague, setSelectedLeague] = useState<League | null>(null);
+  const [inviteToken, setInviteToken] = useState<string | null>(null);
+  const [inviteCode, setInviteCode] = useState<string | null>(null);
+  const [inviteLeagueId, setInviteLeagueId] = useState<string | null>(null);
+  const [checkingInvite, setCheckingInvite] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [availableLeagues, setAvailableLeagues] = useState<League[]>([]);
@@ -62,6 +67,47 @@ export default function JoinLeaguePage() {
       email: 'kashyap@example.com'
     });
   }, []);
+
+  // Check for invite token or code in URL
+  useEffect(() => {
+    const token = searchParams.get('token');
+    const code = searchParams.get('code');
+    const leagueId = searchParams.get('league');
+    
+    if (token && leagueId) {
+      setInviteToken(token);
+      setInviteLeagueId(leagueId);
+      checkInviteToken(token, leagueId);
+    } else if (code && leagueId) {
+      setInviteCode(code);
+      setInviteLeagueId(leagueId);
+      setSearchTerm(code);
+      // Auto-search for the league with this code
+      searchLeagues(code);
+    }
+  }, [searchParams]);
+
+  // Validate invite token
+  const checkInviteToken = async (token: string, leagueId: string) => {
+    setCheckingInvite(true);
+    try {
+      const response = await fetch(`/api/leagues/invite?token=${token}&league=${leagueId}`);
+      const data = await response.json();
+      
+      if (response.ok && data.valid) {
+        // Automatically select this league
+        setSelectedLeague(data.league as League);
+        setShowPasswordModal(true);
+      } else {
+        alert(data.error || 'Invalid or expired invite link');
+      }
+    } catch (error) {
+      console.error('Error checking invite:', error);
+      alert('Failed to validate invite link');
+    } finally {
+      setCheckingInvite(false);
+    }
+  };
 
   // Search leagues by name
   const searchLeagues = async (searchQuery: string) => {
@@ -240,8 +286,28 @@ export default function JoinLeaguePage() {
   const publicLeagues = availableLeagues.filter(league => league.type === 'public');
   const privateLeagues = availableLeagues.filter(league => league.type === 'private');
 
+  if (checkingInvite) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#5E2B8A] via-[#8A5EAA] to-[#8A6B4D] flex items-center justify-center">
+        <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-8 text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#5E2B8A] mx-auto mb-4"></div>
+          <p className="text-[#5E2B8A] font-semibold">Validating invite link...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#5E2B8A] via-[#8A5EAA] to-[#8A6B4D]">
+      {/* Invite Info Banner */}
+      {(inviteToken || inviteCode) && (
+        <div className="bg-[#E73C7E] text-white py-2 px-4 text-center">
+          <p className="text-sm">
+            {inviteToken ? '🎉 You have been invited to join a league!' : `📧 Joining with invite code: ${inviteCode}`}
+          </p>
+        </div>
+      )}
+      
       {/* Top Navigation Bar */}
       <nav className="bg-[#F5F0E6]/90 backdrop-blur-sm shadow-lg border-b border-[#5E2B8A]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -462,5 +528,20 @@ export default function JoinLeaguePage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function JoinLeaguePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-[#5E2B8A] via-[#8A5EAA] to-[#8A6B4D] flex items-center justify-center">
+        <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-8 text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#5E2B8A] mx-auto mb-4"></div>
+          <p className="text-[#5E2B8A] font-semibold">Loading...</p>
+        </div>
+      </div>
+    }>
+      <JoinLeagueContent />
+    </Suspense>
   );
 } 

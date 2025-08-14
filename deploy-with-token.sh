@@ -4,7 +4,7 @@ echo "🚀 College Football Fantasy App - Token-based Vercel Deployment"
 echo "=============================================================="
 
 # Check if token is provided as argument or environment variable
-VERCEL_TOKEN="${1:-$VERCEL_TOKEN}"
+VERCEL_TOKEN=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Im1yay00MzAyZWMxYjY3MGY0OGE5OGFkNjFkYWRlNGEyM2JlNyJ9.eyJpc3MiOiJodHRwczovL29pZGMudmVyY2VsLmNvbS9rcG0zNHMtcHJvamVjdHMiLCJzdWIiOiJvd25lcjprcG0zNHMtcHJvamVjdHM6cHJvamVjdDpjb2xsZWdlLWZvb3RiYWxsLWZhbnRhc3ktYXBwOmVudmlyb25tZW50OmRldmVsb3BtZW50Iiwic2NvcGUiOiJvd25lcjprcG0zNHMtcHJvamVjdHM6cHJvamVjdDpjb2xsZWdlLWZvb3RiYWxsLWZhbnRhc3ktYXBwOmVudmlyb25tZW50OmRldmVsb3BtZW50IiwiYXVkIjoiaHR0cHM6Ly92ZXJjZWwuY29tL2twbTM0cy1wcm9qZWN0cyIsIm93bmVyIjoia3BtMzRzLXByb2plY3RzIiwib3duZXJfaWQiOiJ0ZWFtX2o0eUZlVHNEbWZTRzBjQ2w3ZHduMnczYiIsInByb2plY3QiOiJjb2xsZWdlLWZvb3RiYWxsLWZhbnRhc3ktYXBwIiwicHJvamVjdF9pZCI6InByal95bUQyamVXaVdoYlRyeER2TGZLVjRnZGdkOHFEIiwiZW52aXJvbm1lbnQiOiJkZXZlbG9wbWVudCIsInVzZXJfaWQiOiJxamZHekJZZ2JBaFdEV05nQXpta3JPY0IiLCJuYmYiOjE3NTQ2MjcyOTYsImlhdCI6MTc1NDYyNzI5NiwiZXhwIjoxNzU0NjcwNDk2fQ.ZzySQ9WK57hiUCXok4C57Lm4hWXNKtIaf6131CR7ebhKaSShEF3L_xNKvo3Ie4KYj7NmawU7afKCZ8eOxnqp9PMjTEs3itVSdsl0679GdAruQJpJDmxi6lmc4hEVTbgn5JW7wJHr2ZEX1k_8-lSMRoOxMNSX724EmJbOVyU0Wdo3Bzw12MHBz1A9EAcO9rnU2Gdq9sNdetgnVT01SqLKWGcC8TTWq8Y8qVQ5f4O6hfMRyArxxgrE_pzfhtQxmW5nm9h3tPOyuhiNhFAr2hPdHW_qJowVozupfsJImSswF3l5Gv2Y6PHw6mvAMZAgBKLH5EZ0su52WRChOUan-k06YA
 
 if [ -z "$VERCEL_TOKEN" ]; then
     echo "❌ Error: Vercel token not provided"

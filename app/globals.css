@@ -12,6 +12,24 @@
   --font-montserrat: 'Montserrat', sans-serif;
   --font-inter: 'Inter', sans-serif;
   --font-roboto-mono: 'Roboto Mono', monospace;
+
+  /* Graduation-inspired tokens */
+  --color-bg: #0D0B1A; /* Deep Space */
+  --color-surface: #18122B;
+  --color-primary: #FF2E9A; /* Hot Magenta */
+  --color-secondary: #6C2BD9; /* Grape */
+  --color-accent: #FFC300; /* Gold */
+  --color-info: #7CD4FD;
+  --color-success: #22C55E;
+  --color-warning: #FF8A00;
+  --color-danger: #EF4444;
+  --color-text: #F8FAFC;
+  --color-text-muted: #CBD5E1;
+
+  --grad-primary: linear-gradient(135deg, #FF2E9A 0%, #6C2BD9 50%, #FFC300 100%);
+  --grad-aurora: radial-gradient(120% 80% at 20% 10%, #FF47A3 0%, transparent 40%),
+                 radial-gradient(120% 80% at 80% 30%, #6C2BD9 0%, transparent 45%),
+                 radial-gradient(120% 80% at 50% 90%, #FFC300 0%, transparent 35%);
 }
 
 @theme inline {
@@ -29,8 +47,8 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-bg, var(--background));
+  color: var(--color-text, var(--foreground));
   font-family: var(--font-inter);
   min-height: 100vh;
 }
@@ -56,8 +74,9 @@ p, li, span, div { font-size: clamp(0.95rem, 1.5vw, 1rem); }
 .container-padded { padding-left: clamp(1rem, 4vw, 2rem); padding-right: clamp(1rem, 4vw, 2rem); }
 .card { @apply rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm; }
 .btn { @apply rounded-lg px-4 py-2 font-semibold transition-colors; }
-.btn-primary { @apply bg-locker-primary hover:bg-locker-primaryDark text-white; }
-.btn-accent { @apply bg-locker-coral hover:bg-locker-primary text-black; }
+.btn-primary { @apply text-white; background: var(--grad-primary); }
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-accent { background: var(--color-accent); color: #111; }
 .input { @apply bg-white/5 border border-white/10 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-locker-primary; }
 
 /* Typography System */
@@ -177,3 +196,25 @@ p, li, span, div { font-size: clamp(0.95rem, 1.5vw, 1rem); }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
+
+/* Graduation dashboard helpers */
+.aurora-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--grad-aurora);
+  filter: blur(40px) saturate(110%);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.surface-card {
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.glass {
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: saturate(140%) blur(12px);
+}
+
+.text-muted { color: var(--color-text-muted); }

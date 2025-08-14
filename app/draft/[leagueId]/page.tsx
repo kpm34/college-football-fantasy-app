@@ -183,7 +183,7 @@ export default function DraftRoom({ params }: DraftRoomProps) {
     );
   }
 
-  return (
+    return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-gray-900 text-white">
@@ -249,7 +249,7 @@ export default function DraftRoom({ params }: DraftRoomProps) {
                 {CONFERENCES.map(conf => (
                   <option key={conf} value={conf}>{conf}</option>
                 ))}
-              </select>
+          </select>
             </div>
 
             {/* School Filter */}
@@ -561,4 +561,4 @@ export default function DraftRoom({ params }: DraftRoomProps) {
       </div>
     </div>
   );
-}
+} 

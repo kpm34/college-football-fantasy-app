@@ -162,16 +162,20 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         orderMode: leagueData.orderMode || 'random'
       });
 
-      // Load all teams in this league (TEAMS + fallback to ROSTERS)
+      // Load all teams in this league (TEAMS + fallback to legacy fields + ROSTERS)
       try {
-        const teamsResponse = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTIONS.TEAMS,
-          [
-            Query.equal('leagueId', leagueId)
-          ]
-        );
-        let leagueTeams = teamsResponse.documents as unknown as Team[];
+        let leagueTeams: Team[] = [];
+        try {
+          const teamsResponse = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.TEAMS,
+            [Query.equal('leagueId', leagueId)]
+          );
+          leagueTeams = teamsResponse.documents as unknown as Team[];
+        } catch (primaryErr) {
+          // Continue with legacy fallback if primary attribute not present
+          console.warn('Primary teams query failed, trying legacy league_id', primaryErr);
+        }
 
         // Normalize missing userId from owner if present
         leagueTeams = (leagueTeams as any[]).map((t) => ({
@@ -181,6 +185,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         }));
 
         // Also check legacy field naming: league_id and owner
+        // Legacy TEAMS field fallback
         try {
           const altTeamsResponse = await databases.listDocuments(
             DATABASE_ID,
