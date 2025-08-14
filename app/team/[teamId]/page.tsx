@@ -40,7 +40,7 @@ export default function TeamPage({ params, searchParams }: TeamPageProps) {
       // Load team roster from Appwrite
       const response = await databases.getDocument(
         DATABASE_ID,
-        COLLECTIONS.TEAMS,
+        COLLECTIONS.ROSTERS,
         teamId
       );
       setRoster(response as unknown as TeamRoster);

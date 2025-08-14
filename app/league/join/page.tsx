@@ -219,32 +219,39 @@ function JoinLeagueContent() {
 
     setLoading(true);
     try {
-      // 1. Create team for the user in this league
-      const teamData = {
+      // 1. Create roster for the user in this league
+      const rosterData = {
+        teamName: `${currentUser.name}'s Team`,
         name: `${currentUser.name}'s Team`,
-        owner: currentUser.$id,
+        userId: currentUser.$id,
+        userName: currentUser.name,
+        email: currentUser.email,
         leagueId: league.$id,
-        record: '0-0',
+        wins: 0,
+        losses: 0,
+        ties: 0,
         pointsFor: 0,
         pointsAgainst: 0,
-        players: [], // Empty array for pre-draft
+        players: '[]', // Empty JSON string for pre-draft
         createdAt: new Date().toISOString()
       };
 
       const teamResponse = await databases.createDocument(
         DATABASE_ID,
-        COLLECTIONS.TEAMS,
+        COLLECTIONS.ROSTERS,
         'unique()', // Auto-generate ID
-        teamData
+        rosterData
       );
 
-      // 2. Update league team count
+      // 2. Update league team count and members array
+      const updatedMembers = [...(league.members || []), currentUser.$id];
       await databases.updateDocument(
         DATABASE_ID,
         COLLECTIONS.LEAGUES,
         league.$id,
         {
-          teams: league.teams + 1
+          teams: league.teams + 1,
+          members: updatedMembers
         }
       );
 
