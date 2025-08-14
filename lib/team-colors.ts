@@ -81,32 +81,18 @@ export const TEAM_COLORS: Record<string, { primary: string; secondary: string }>
 // Helper function to get team colors
 export function getTeamColors(teamName: string): { primary: string; secondary: string } {
   if (!teamName) {
-    console.log('No team name provided');
     return { primary: '#666666', secondary: '#FFFFFF' };
   }
-  
-  console.log('Getting colors for:', teamName);
-  
-  // Clean the team name
+
   const cleanTeamName = teamName.trim();
-  
-  // Check for exact match first
+
+  // 1) Exact key match (e.g., "Michigan", "Texas A&M")
   if (TEAM_COLORS[cleanTeamName]) {
-    console.log('Exact match found:', cleanTeamName);
     return TEAM_COLORS[cleanTeamName];
   }
-  
-  // Extract just the school name (first part before mascot)
-  // e.g., "Michigan Wolverines" -> "Michigan"
-  const schoolName = cleanTeamName.split(' ')[0];
-  
-  // Check for school name match
-  if (TEAM_COLORS[schoolName]) {
-    console.log('School name match found:', schoolName);
-    return TEAM_COLORS[schoolName];
-  }
-  
-  // Special cases for team names that need special handling
+
+  // 2) Full-name mapping first (before any naive token matching)
+  //    This prevents "Michigan State Spartans" incorrectly mapping to "Michigan"
   const teamNameMappings: Record<string, string> = {
     // Full names to proper keys
     'Ohio State Buckeyes': 'Ohio State',
@@ -176,17 +162,15 @@ export function getTeamColors(teamName: string): { primary: string; secondary: s
     'Stanford Cardinal': 'Stanford',
     'SMU Mustangs': 'SMU'
   };
-  
-  // Check full name mappings
+
   if (teamNameMappings[cleanTeamName]) {
     const mappedName = teamNameMappings[cleanTeamName];
     if (TEAM_COLORS[mappedName]) {
-      console.log('Full name mapping found:', mappedName);
       return TEAM_COLORS[mappedName];
     }
   }
-  
-  // Special cases for abbreviated names
+
+  // 3) Abbreviation mappings (e.g., MICH → Michigan, MSU → Michigan State)
   const specialCases: Record<string, string> = {
     'OSU': 'Ohio State',
     'MICH': 'Michigan',
@@ -222,16 +206,31 @@ export function getTeamColors(teamName: string): { primary: string; secondary: s
     'AUB': 'Auburn',
     'VAN': 'Vanderbilt'
   };
-  
+
   if (specialCases[cleanTeamName.toUpperCase()]) {
     const fullName = specialCases[cleanTeamName.toUpperCase()];
     if (TEAM_COLORS[fullName]) {
-      console.log('Abbreviation match found:', fullName);
       return TEAM_COLORS[fullName];
     }
   }
-  
-  // Default colors if team not found
-  console.log('No match found for:', teamName, '- using default colors');
+
+  // 4) Smart school token extraction
+  //    Handle two-word schools like "Michigan State", "Arizona State", "Florida State",
+  //    as well as A&M/Tech/College variants before falling back to single token.
+  const tokens = cleanTeamName.split(' ');
+  if (tokens.length >= 2) {
+    const twoWord = `${tokens[0]} ${tokens[1]}`;
+    const twoWordTriggers = new Set(['State', 'A&M', 'Tech', 'College']);
+    if (twoWordTriggers.has(tokens[1]) && TEAM_COLORS[twoWord]) {
+      return TEAM_COLORS[twoWord];
+    }
+  }
+
+  const schoolName = tokens[0];
+  if (TEAM_COLORS[schoolName]) {
+    return TEAM_COLORS[schoolName];
+  }
+
+  // 5) Default fallback
   return { primary: '#666666', secondary: '#FFFFFF' };
 }

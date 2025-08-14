@@ -49,17 +49,18 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#6B3AA0] via-[#A374B5] to-[#E73C7E] flex items-center justify-center px-4">
-      <form onSubmit={onSubmit} className="w-full max-w-md login-card backdrop-blur-lg rounded-xl p-8 shadow-2xl border border-white/20">
-        <h1 className="text-3xl font-bold text-white mb-6 text-center">Welcome Back</h1>
-        {error && <p className="text-red-200 mb-4 text-center bg-red-500/20 py-2 px-3 rounded-lg">{error}</p>}
+    <main className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#5B2B8C' }}>
+      <form onSubmit={onSubmit} className="w-full max-w-md rounded-xl p-8 shadow-xl" style={{ backgroundColor: '#FFF4EC', border: '1px solid #9256A4', borderTop: '4px solid #EC0B8F' }}>
+        <h1 className="text-3xl font-bold mb-6 text-center" style={{ color: '#5B2B8C' }}>Welcome Back</h1>
+        {error && <p className="mb-4 text-center py-2 px-3 rounded-lg" style={{ backgroundColor: 'rgba(180,31,36,0.12)', color: '#B41F24' }}>{error}</p>}
         
         <div className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-[#F7EAE1] text-sm mb-2 font-medium">Email</label>
-            <input 
+            <label htmlFor="email" className="block text-sm mb-2 font-medium" style={{ color: '#6B4A35' }}>Email</label>
+            <input
               id="email"
-              className="w-full px-4 py-3 rounded-lg login-input border border-[#D4A5A5] focus:border-[#E73C7E] focus:outline-none focus:ring-2 focus:ring-[#E73C7E]/20 transition-all" 
+              className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors" 
+              style={{ borderColor: '#9256A4', backgroundColor: '#FFFFFF', color: '#5B2B8C' }}
               type="email" 
               required 
               value={email} 
@@ -69,10 +70,11 @@ export default function LoginPage() {
           </div>
           
           <div>
-            <label htmlFor="password" className="block text-[#F7EAE1] text-sm mb-2 font-medium">Password</label>
+            <label htmlFor="password" className="block text-sm mb-2 font-medium" style={{ color: '#6B4A35' }}>Password</label>
             <input 
               id="password"
-              className="w-full px-4 py-3 rounded-lg login-input border border-[#D4A5A5] focus:border-[#E73C7E] focus:outline-none focus:ring-2 focus:ring-[#E73C7E]/20 transition-all" 
+              className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors" 
+              style={{ borderColor: '#9256A4', backgroundColor: '#FFFFFF', color: '#5B2B8C' }}
               type="password" 
               required 
               value={password} 
@@ -82,20 +84,13 @@ export default function LoginPage() {
           </div>
         </div>
         
-        <button 
-          disabled={loading} 
-          className="w-full mt-6 rounded-lg px-4 py-3 login-button text-white font-semibold disabled:opacity-60 transition-all hover:shadow-lg transform hover:-translate-y-0.5"
-        >
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
+        <button disabled={loading} className="w-full mt-6 rounded-lg px-4 py-3 font-semibold disabled:opacity-60 transition-colors" style={{ backgroundColor: '#9256A4', color: '#FFFFFF' }}>{loading ? 'Logging in...' : 'Login'}</button>
         
         <div className="mt-6">
           <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#F7EAE1]/20"></div>
-            </div>
+            <div className="absolute inset-0 flex items-center"><div className="w-full" style={{ borderTop: '1px solid #E6CFBF' }}></div></div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-transparent text-[#F7EAE1]">Or continue with</span>
+              <span className="px-4" style={{ color: '#6B4A35' }}>Or continue with</span>
             </div>
           </div>
           
@@ -104,13 +99,13 @@ export default function LoginPage() {
           </div>
         </div>
         
-        <p className="text-[#F7EAE1] text-sm mt-6 text-center">
-          Don't have an account? <Link href="/signup" className="text-white font-semibold hover:underline">Sign up</Link>
+        <p className="text-sm mt-6 text-center" style={{ color: '#6B4A35' }}>
+          Don't have an account? <Link href="/signup" className="font-semibold hover:underline" style={{ color: '#EC0B8F' }}>Sign up</Link>
         </p>
         
         {/* Debug info - remove in production */}
         {process.env.NODE_ENV === 'development' && (
-          <div className="mt-4 p-2 bg-black/20 rounded text-xs text-white/70">
+          <div className="mt-4 p-2 rounded text-xs" style={{ backgroundColor: '#9256A4', color: '#FFF4EC' }}>
             <p>Endpoint: {APPWRITE_PUBLIC_CONFIG.endpoint}</p>
             <p>Project: {APPWRITE_PUBLIC_CONFIG.projectId}</p>
             <p>Domain: {typeof window !== 'undefined' ? window.location.hostname : 'SSR'}</p>

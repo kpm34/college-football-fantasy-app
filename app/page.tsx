@@ -2,9 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Home() {
   const router = useRouter();
+  const { user } = useAuth();
 
   return (
     <main className="bg-gradient-to-br from-[#4A1626] via-[#5C1F30] to-[#3A1220] text-white min-h-screen">
@@ -17,10 +19,10 @@ export default function Home() {
           <p className="hero-subtitle text-[#D9BBA4]/90 mb-8 drop-shadow-lg">Power 4 Conferences Only</p>
           <div className="space-y-4">
             <button
-              onClick={() => router.push('/signup')}
+              onClick={() => router.push(user ? '/league/create' : '/login')}
               className="cta-button bg-[#E89A5C] px-8 py-4 rounded-xl hover:bg-[#D4834A] transition-colors shadow-lg backdrop-blur-sm text-white"
             >
-              Sign Up
+              Create League
             </button>
             <br />
             <button
@@ -57,7 +59,12 @@ export default function Home() {
             {/* Big Ten */}
             <Link href="/conference-showcase" className="group">
               <div className="bg-[#8091BB]/20 backdrop-blur-sm rounded-xl p-6 border border-[#8091BB]/30 hover:border-[#8091BB]/50 transition-all duration-300 group-hover:scale-105">
-                <h3 className="team-name text-2xl text-[#8091BB] mb-2">Big Ten</h3>
+                <h3
+                  className="team-name text-2xl text-[#8091BB] mb-2 uppercase font-black tracking-tight"
+                  style={{ fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif' }}
+                >
+                  BIG TEN
+                </h3>
                 <p className="stat-number text-[#D9BBA4] text-sm">18 Teams</p>
                 <p className="text-[#D9BBA4]/80 text-xs mt-2">Michigan, Ohio State, Penn State...</p>
               </div>
@@ -66,25 +73,38 @@ export default function Home() {
             {/* SEC */}
             <Link href="/conference-showcase" className="group">
               <div className="bg-[#E89A5C]/20 backdrop-blur-sm rounded-xl p-6 border border-[#E89A5C]/30 hover:border-[#E89A5C]/50 transition-all duration-300 group-hover:scale-105">
-                <h3 className="team-name text-2xl text-[#E89A5C] mb-2">SEC</h3>
+                <h3
+                  className="team-name text-2xl text-[#E89A5C] mb-2 uppercase font-black"
+                  style={{ fontFamily: 'Georgia, serif', letterSpacing: '0.15em' }}
+                >
+                  SEC
+                </h3>
                 <p className="stat-number text-[#D9BBA4] text-sm">16 Teams</p>
                 <p className="text-[#D9BBA4]/80 text-xs mt-2">Georgia, Alabama, LSU...</p>
               </div>
             </Link>
 
             {/* Big 12 */}
-            <Link href="/conference-showcase-2" className="group">
+            <Link href="/conference-showcase" className="group">
               <div className="bg-[#D9BBA4]/20 backdrop-blur-sm rounded-xl p-6 border border-[#D9BBA4]/30 hover:border-[#D9BBA4]/50 transition-all duration-300 group-hover:scale-105">
-                <h3 className="team-name text-2xl text-[#D9BBA4] mb-2">Big 12</h3>
+                <h3
+                  className="team-name text-2xl text-[#D9BBA4] mb-2 uppercase font-black tracking-wider"
+                >
+                  BIG 12
+                </h3>
                 <p className="stat-number text-[#E89A5C] text-sm">16 Teams</p>
                 <p className="text-[#D9BBA4]/80 text-xs mt-2">Texas, Oklahoma State, Kansas State...</p>
               </div>
             </Link>
 
             {/* ACC */}
-            <Link href="/conference-showcase-2" className="group">
+            <Link href="/conference-showcase" className="group">
               <div className="bg-[#8091BB]/20 backdrop-blur-sm rounded-xl p-6 border border-[#8091BB]/30 hover:border-[#8091BB]/50 transition-all duration-300 group-hover:scale-105">
-                <h3 className="team-name text-2xl text-[#8091BB] mb-2">ACC</h3>
+                <h3
+                  className="team-name text-2xl text-[#8091BB] mb-2 uppercase font-black tracking-wide"
+                >
+                  ACC
+                </h3>
                 <p className="stat-number text-[#D9BBA4] text-sm">17 Teams</p>
                 <p className="text-[#D9BBA4]/80 text-xs mt-2">Florida State, Clemson, Miami...</p>
               </div>

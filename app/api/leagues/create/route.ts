@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
       season: new Date().getFullYear(),
       scoringType: leagueData.scoringType || 'PPR',
       maxTeams: leagueData.maxTeams || 12,
+      seasonStartWeek: leagueData.seasonStartWeek || 1,
       teams: 1, // Commissioner's team
       draftDate: leagueData.draftDate,
       status: 'pre-draft',
@@ -44,6 +45,11 @@ export async function POST(request: NextRequest) {
       selectedConference: leagueData.selectedConference,
       isPrivate: leagueData.isPrivate || false,
       password: leagueData.password || null,
+      rosterSchema: {
+        rb: Math.min(Number(leagueData.rosterRB || 2), leagueData.gameMode === 'CONFERENCE' ? 2 : 6),
+        wr: Math.min(Number(leagueData.rosterWR || (leagueData.gameMode === 'CONFERENCE' ? 3 : 4)), leagueData.gameMode === 'CONFERENCE' ? 5 : 6),
+        benchSize: Number(leagueData.benchSize || 5)
+      },
       createdAt: new Date().toISOString(),
     };
 

@@ -16,7 +16,6 @@ const BIG12_TEAMS = [
   { school: "Kansas State Wildcats", mascot: "Wildcats", abbreviation: "KSU", conference: "Big 12", color: "#512888", altColor: "#FFFFFF" },
   { school: "Oklahoma State Cowboys", mascot: "Cowboys", abbreviation: "OKST", conference: "Big 12", color: "#FF7300", altColor: "#000000" },
   { school: "TCU Horned Frogs", mascot: "Horned Frogs", abbreviation: "TCU", conference: "Big 12", color: "#4D1979", altColor: "#FFFFFF" },
-  { school: "Texas Longhorns", mascot: "Longhorns", abbreviation: "TEX", conference: "Big 12", color: "#BF5700", altColor: "#FFFFFF" },
   { school: "Texas Tech Red Raiders", mascot: "Red Raiders", abbreviation: "TTU", conference: "Big 12", color: "#CC0000", altColor: "#000000" },
   { school: "UCF Knights", mascot: "Knights", abbreviation: "UCF", conference: "Big 12", color: "#000000", altColor: "#FFC904" },
   { school: "Utah Utes", mascot: "Utes", abbreviation: "UTAH", conference: "Big 12", color: "#CC0000", altColor: "#FFFFFF" },
@@ -50,10 +49,10 @@ class Big12Service {
       // Fallback to mock data
       return {
         players: [
-          { name: "Quinn Ewers", position: "QB", team: "Texas", rating: 94, conference: "Big 12" },
           { name: "Ollie Gordon II", position: "RB", team: "Oklahoma State", rating: 93, conference: "Big 12" },
           { name: "Avery Johnson", position: "QB", team: "Kansas State", rating: 89, conference: "Big 12" },
-          { name: "DJ Giddens", position: "RB", team: "Kansas State", rating: 90, conference: "Big 12" }
+          { name: "DJ Giddens", position: "RB", team: "Kansas State", rating: 90, conference: "Big 12" },
+          { name: "Devin Neal", position: "RB", team: "Kansas", rating: 90, conference: "Big 12" }
         ],
         total: 4
       };
@@ -81,8 +80,8 @@ class Big12Service {
       // Fallback to mock data
       return {
         games: [
-          { homeTeam: "Texas", awayTeam: "Oklahoma State", week: 12, date: "2024-11-16" },
-          { homeTeam: "Oklahoma State", awayTeam: "Kansas State", week: 11, date: "2024-11-09" }
+          { homeTeam: "Oklahoma State", awayTeam: "Kansas State", week: 11, date: "2024-11-09" },
+          { homeTeam: "Kansas", awayTeam: "Iowa State", week: 10, date: "2024-11-02" }
         ],
         total: 2
       };
@@ -111,19 +110,19 @@ class Big12Service {
           totalTeams: BIG12_TEAMS.length,
           totalPlayers: players.total,
           conferenceGames: games.total,
-          topTeam: "Texas Longhorns",
-          topPlayer: players.documents[0]?.name || "Quinn Ewers"
+          topTeam: "Oklahoma State Cowboys",
+          topPlayer: players.documents[0]?.name || "Ollie Gordon II"
         }
       };
     } catch (error) {
       console.error('Error fetching Big 12 stats:', error);
       return {
         stats: {
-          totalTeams: 16,
+          totalTeams: BIG12_TEAMS.length,
           totalPlayers: 30,
           conferenceGames: 5,
-          topTeam: "Texas Longhorns",
-          topPlayer: "Quinn Ewers"
+          topTeam: "Oklahoma State Cowboys",
+          topPlayer: "Ollie Gordon II"
         }
       };
     }
@@ -157,8 +156,8 @@ class Big12Service {
       // Fallback to mock data
       return {
         draftBoard: [
-          { rank: 1, name: "Quinn Ewers", position: "QB", team: "Texas", rating: 94 },
-          { rank: 2, name: "Ollie Gordon II", position: "RB", team: "Oklahoma State", rating: 93 }
+          { rank: 1, name: "Ollie Gordon II", position: "RB", team: "Oklahoma State", rating: 93 },
+          { rank: 2, name: "Avery Johnson", position: "QB", team: "Kansas State", rating: 89 }
         ]
       };
     }

@@ -82,6 +82,7 @@ college-football-fantasy-app/
 
 ### League Management
 - **Create League**: Custom league creation with settings
+- **Roster Schema**: Persisted customizable roster limits per league with guardrails (Conference: RB≤2, WR≤5; Power-4: WR≤6)
 - **Join League**: Via invite code or search
 - **League Dashboard**: Team standings, matchups, transactions
 - **Commissioner Tools**: League administration features
@@ -92,6 +93,7 @@ college-football-fantasy-app/
 - **Mock Draft**: Practice drafts with AI
 - **Draft Board**: Real-time draft tracking
 - **Player Research**: Stats and projections integration
+ - **Locker Room Moves**: Native drag-and-drop and ESPN-style MOVE flow with eligibility checks and bench capacity guardrails
 
 ### Data Integration
 - **CFBD API**: College football statistics
@@ -194,11 +196,11 @@ vercel --prod       # Deploy to production
 - Some API routes may need error handling improvements
 
 ### Next Steps
-1. Fix team creation/display in leagues
-2. Complete draft functionality testing
+1. Implement react-dnd for enhanced drag previews and keyboard reordering
+2. Persist per-league rosterSchema editing in commissioner settings UI
 3. Implement live scoring system
 4. Add more comprehensive error handling
-5. Enhance UI/UX based on user feedback
+5. Enhance UI/UX and accessibility; tighten mobile ergonomics
 
 ## 🔄 Recent Changes (Aug 13, 2025)
 

@@ -11,6 +11,11 @@ interface FormData {
   maxTeams: number;
   seasonStartWeek: number;
   draftDate: string;
+  isPrivate?: boolean;
+  password?: string;
+  rosterRB?: number;
+  rosterWR?: number;
+  benchSize?: number;
 }
 
 const CONFERENCES = [
@@ -32,8 +37,21 @@ export default function CreateLeaguePage() {
     scoringType: 'PPR',
     maxTeams: 12,
     seasonStartWeek: 1,
-    draftDate: ''
+    draftDate: '',
+    isPrivate: false,
+    password: '',
+    rosterRB: 2,
+    rosterWR: 2,
+    benchSize: 5
   });
+  const palette = {
+    maroon: '#3A1220',
+    orange: '#E89A5C',
+    periwinkle: '#8091BB',
+    tan: '#D9BBA4',
+    gold: '#DAA520',
+    bronze: '#B8860B',
+  } as const;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -57,9 +75,11 @@ export default function CreateLeaguePage() {
       if (mode === 'CONFERENCE') {
         setCurrentStep(3);
         setShowAnimation(3);
+        setFormData(prev => ({ ...prev, rosterRB: Math.min(prev.rosterRB || 2, 2), rosterWR: Math.min(prev.rosterWR || 2, 5) }));
       } else {
         setCurrentStep(4);
         setShowAnimation(4);
+        setFormData(prev => ({ ...prev, rosterRB: prev.rosterRB || 2, rosterWR: Math.min(prev.rosterWR || 4, 6) }));
       }
     }, 300);
   };
@@ -92,6 +112,31 @@ export default function CreateLeaguePage() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [createdLeague, setCreatedLeague] = useState<any>(null);
 
+  const canProceed = (step: number) => {
+    if (step === 1) return !!formData.leagueName?.trim();
+    if (step === 2) return formData.gameMode === 'POWER4' || formData.gameMode === 'CONFERENCE';
+    if (step === 3) return formData.gameMode === 'POWER4' || !!formData.selectedConference;
+    if (step === 4) return !!formData.scoringType;
+    if (step === 5) return !!formData.maxTeams;
+    return true;
+  };
+
+  const goNext = () => {
+    if (currentStep < 5 && canProceed(currentStep)) {
+      const next = currentStep + 1;
+      setCurrentStep(next);
+      setShowAnimation(next);
+    }
+  };
+
+  const goBack = () => {
+    if (currentStep > 1) {
+      const prev = currentStep - 1;
+      setCurrentStep(prev);
+      setShowAnimation(prev);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -104,7 +149,7 @@ export default function CreateLeaguePage() {
         },
         body: JSON.stringify({
           ...formData,
-          commissionerId: 'demo-user-123' // TODO: Get from auth
+          commissionerId: 'auto' // server resolves user from session
         }),
       });
 
@@ -119,7 +164,7 @@ export default function CreateLeaguePage() {
         setShowSuccess(true);
         // Redirect after 3 seconds
         setTimeout(() => {
-          router.push(`/league/${result.league.id}`);
+          router.push(`/league/${result.league.$id || result.league.id}`);
         }, 3000);
       } else {
         console.error('Error creating league:', result.error);
@@ -132,43 +177,64 @@ export default function CreateLeaguePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#8B4513] via-[#D2B48C] to-[#A0522D] text-[#3A1220]">
+    <div
+      className="min-h-screen text-[#3A1220]"
+      style={{
+        background:
+          `linear-gradient(135deg, ${palette.maroon} 0%, ${palette.orange} 35%, ${palette.periwinkle} 65%, ${palette.tan} 100%)`,
+      }}
+    >
       <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-[#3A1220] to-[#5C1F30] bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white/90 to-white/60 bg-clip-text text-transparent drop-shadow">
             🏈 Create Your League
           </h1>
-          <p className="text-xl text-[#5C1F30]">
+          <p className="text-xl" style={{ color: '#5C1F30' }}>
             Set up your college football fantasy league with unique eligibility rules
           </p>
         </div>
 
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            {[1, 2, 3, 4, 5].map((step) => (
-              <div key={step} className="flex items-center">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-500 ${
-                  currentStep >= step 
-                    ? 'bg-gradient-to-r from-[#DAA520] to-[#B8860B] text-white' 
-                    : 'bg-[#3A1220]/20 text-[#5C1F30]'
-                }`}>
-                  {currentStep > step ? '✓' : step}
-                </div>
-                {step < 5 && (
-                  <div className={`w-full h-1 mx-2 transition-all duration-500 ${
-                    currentStep > step ? 'bg-gradient-to-r from-[#DAA520] to-[#B8860B]' : 'bg-[#3A1220]/20'
-                  }`} />
-                )}
-              </div>
-            ))}
+        {/* Progress Bar (tech-styled) */}
+        <div className="mb-10">
+          <div className="relative max-w-4xl mx-auto">
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[3px] bg-white/10 rounded" />
+            <div className="grid grid-cols-5 gap-6 relative">
+              {[1,2,3,4,5].map((step) => {
+                const isDone = currentStep > step;
+                const isActive = currentStep === step;
+                return (
+                  <div key={step} className="flex flex-col items-center">
+                    <div className="relative">
+                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center font-bold tracking-widest transition-all duration-300 ${
+                        isDone ? 'bg-gradient-to-r from-[#DAA520] to-[#B8860B] text-white shadow-lg shadow-[#DAA520]/20'
+                        : isActive ? 'bg-white/90 text-[#3A1220] shadow-md' 
+                        : 'bg-white/20 text-white/70'
+                      }`}>
+                        {isDone ? '✓' : step}
+                      </div>
+                      {isActive && (
+                        <div className="absolute -inset-1 rounded-xl border border-[#DAA520]/40 animate-pulse" />
+                      )}
+                    </div>
+                    <div className="mt-2 text-xs uppercase tracking-wider text-white/70">
+                      {['Name','Mode','Conference','Scoring','Details'][step-1]}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          <div className="text-center text-sm text-[#5C1F30]">
-            Step {currentStep} of 5
-          </div>
+          <div className="text-center mt-3 text-sm text-white/70">Step {currentStep} of 5</div>
         </div>
 
-        <div className="bg-[#F5F5DC]/10 backdrop-blur-sm rounded-2xl p-8 border border-[#3A1220]/20 min-h-[500px]">
+        <div
+          className="backdrop-blur-sm rounded-2xl p-8 min-h-[500px]"
+          style={{
+            background: 'rgba(255,255,255,0.06)',
+            border: `1px solid ${palette.tan}33`,
+            boxShadow: `0 10px 30px ${palette.maroon}33`,
+          }}
+        >
           <form onSubmit={handleSubmit} className="space-y-8">
             
             {/* Step 1: League Name */}
@@ -187,10 +253,15 @@ export default function CreateLeaguePage() {
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
-                className="w-full px-6 py-4 border-2 border-[#D2B48C] rounded-xl focus:ring-4 focus:ring-[#DAA520] focus:border-[#DAA520] text-xl text-[#3A1220] placeholder-[#8B4513] bg-white transition-all"
+                className="w-full px-6 py-4 rounded-xl focus:ring-4 text-xl transition-all"
+                style={{
+                  border: `2px solid ${palette.tan}`,
+                  boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.06)',
+                  background: '#fff',
+                  color: palette.maroon,
+                }}
                 placeholder={isInputFocused ? "" : "Enter your league name..."}
                 required
-                style={{ color: '#3A1220' }}
               />
               {formData.leagueName && (
                 <div className="mt-4 text-[#DAA520] flex items-center">
@@ -215,12 +286,17 @@ export default function CreateLeaguePage() {
                   
                   {/* Conference Mode */}
                   <div 
-                    className={`p-6 rounded-xl border-2 cursor-pointer transition-all transform hover:scale-105 ${
+                    className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105 ${
                       formData.gameMode === 'CONFERENCE' 
-                        ? 'border-[#DAA520] bg-[#DAA520]/20 ring-4 ring-[#DAA520]/30' 
-                        : 'border-[#3A1220]/60 bg-[#3A1220]/5 hover:border-[#DAA520]/40'
+                        ? '' 
+                        : ''
                     }`}
                     onClick={() => handleGameModeSelect('CONFERENCE')}
+                    style={{
+                      border: `2px solid ${formData.gameMode === 'CONFERENCE' ? palette.gold : `${palette.maroon}99`}`,
+                      background: formData.gameMode === 'CONFERENCE' ? `${palette.gold}22` : `${palette.maroon}0D`,
+                      boxShadow: formData.gameMode === 'CONFERENCE' ? `0 0 0 4px ${palette.gold}33` : 'none',
+                    }}
                   >
                     <div className="flex items-center mb-3">
                       <div className={`w-6 h-6 rounded-full border-2 mr-3 transition-all ${
@@ -248,12 +324,17 @@ export default function CreateLeaguePage() {
 
                   {/* Power-4 Mode */}
                   <div 
-                    className={`p-6 rounded-xl border-2 cursor-pointer transition-all transform hover:scale-105 ${
+                    className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105 ${
                       formData.gameMode === 'POWER4' 
-                        ? 'border-[#DAA520] bg-[#DAA520]/20 ring-4 ring-[#DAA520]/30' 
-                        : 'border-[#3A1220]/60 bg-[#3A1220]/5 hover:border-[#DAA520]/40'
+                        ? '' 
+                        : ''
                     }`}
                     onClick={() => handleGameModeSelect('POWER4')}
+                    style={{
+                      border: `2px solid ${formData.gameMode === 'POWER4' ? palette.gold : `${palette.maroon}99`}`,
+                      background: formData.gameMode === 'POWER4' ? `${palette.gold}22` : `${palette.maroon}0D`,
+                      boxShadow: formData.gameMode === 'POWER4' ? `0 0 0 4px ${palette.gold}33` : 'none',
+                    }}
                   >
                     <div className="flex items-center mb-3">
                       <div className={`w-6 h-6 rounded-full border-2 mr-3 transition-all ${
@@ -296,11 +377,12 @@ export default function CreateLeaguePage() {
                     <div
                       key={conf.id}
                       onClick={() => handleConferenceSelect(conf.id)}
-                      className={`p-6 rounded-xl border-2 cursor-pointer transition-all transform hover:scale-105 ${
-                        formData.selectedConference === conf.id
-                          ? 'border-[#DAA520] bg-[#DAA520]/20 ring-4 ring-[#DAA520]/30'
-                          : 'border-[#3A1220]/60 bg-[#3A1220]/5 hover:border-[#DAA520]/40'
-                      }`}
+                      className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105`}
+                      style={{
+                        border: `2px solid ${formData.selectedConference === conf.id ? palette.periwinkle : `${palette.maroon}99`}`,
+                        background: formData.selectedConference === conf.id ? `${palette.periwinkle}22` : `${palette.maroon}0D`,
+                        boxShadow: formData.selectedConference === conf.id ? `0 0 0 4px ${palette.periwinkle}33` : 'none',
+                      }}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <h3 className="text-xl font-bold text-[#3A1220]">{conf.name}</h3>
@@ -333,11 +415,12 @@ export default function CreateLeaguePage() {
                 <p className="text-[#5C1F30] mb-6">Select how points are awarded for player actions</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div 
-                    className={`p-6 rounded-xl border-2 cursor-pointer transition-all transform hover:scale-105 ${
-                      formData.scoringType === 'PPR' 
-                        ? 'border-[#DAA520] bg-[#DAA520]/20 ring-4 ring-[#DAA520]/30' 
-                        : 'border-[#3A1220]/60 bg-[#3A1220]/5 hover:border-[#DAA520]/40'
-                    }`}
+                    className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105`}
+                    style={{
+                      border: `2px solid ${formData.scoringType === 'PPR' ? palette.gold : `${palette.maroon}99`}`,
+                      background: formData.scoringType === 'PPR' ? `${palette.gold}22` : `${palette.maroon}0D`,
+                      boxShadow: formData.scoringType === 'PPR' ? `0 0 0 4px ${palette.gold}33` : 'none',
+                    }}
                     onClick={() => handleScoringTypeSelect('PPR')}
                   >
                     <div className="flex items-center mb-3">
@@ -362,11 +445,12 @@ export default function CreateLeaguePage() {
                   </div>
 
                   <div 
-                    className={`p-6 rounded-xl border-2 cursor-pointer transition-all transform hover:scale-105 ${
-                      formData.scoringType === 'STANDARD' 
-                        ? 'border-[#DAA520] bg-[#DAA520]/20 ring-4 ring-[#DAA520]/30' 
-                        : 'border-[#3A1220]/60 bg-[#3A1220]/5 hover:border-[#DAA520]/40'
-                    }`}
+                    className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105`}
+                    style={{
+                      border: `2px solid ${formData.scoringType === 'STANDARD' ? palette.gold : `${palette.maroon}99`}`,
+                      background: formData.scoringType === 'STANDARD' ? `${palette.gold}22` : `${palette.maroon}0D`,
+                      boxShadow: formData.scoringType === 'STANDARD' ? `0 0 0 4px ${palette.gold}33` : 'none',
+                    }}
                     onClick={() => handleScoringTypeSelect('STANDARD')}
                   >
                     <div className="flex items-center mb-3">
@@ -414,7 +498,8 @@ export default function CreateLeaguePage() {
                       name="maxTeams"
                       value={formData.maxTeams}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-[#D2B48C] rounded-lg focus:ring-4 focus:ring-[#DAA520] focus:border-[#DAA520] text-lg text-[#3A1220] bg-white"
+                      className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
+                      style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
                       required
                     >
                       {[4, 6, 8, 10, 12, 14, 16, 18, 20].map(num => (
@@ -434,7 +519,8 @@ export default function CreateLeaguePage() {
                       name="seasonStartWeek"
                       value={formData.seasonStartWeek}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-[#D2B48C] rounded-lg focus:ring-4 focus:ring-[#DAA520] focus:border-[#DAA520] text-lg text-[#3A1220] bg-white"
+                      className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
+                      style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
                       required
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(week => (
@@ -455,14 +541,104 @@ export default function CreateLeaguePage() {
                       name="draftDate"
                       value={formData.draftDate}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-[#D2B48C] rounded-lg focus:ring-4 focus:ring-[#DAA520] focus:border-[#DAA520] text-lg text-[#3A1220] bg-white"
+                      className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
+                      style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
                     />
                     <p className="text-xs text-[#5C1F30] mt-2">Optional - Set later if needed</p>
                   </div>
                 </div>
 
+                {/* Privacy */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                  <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
+                    <label className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
+                      🔒 Private League
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <input
+                        id="isPrivate"
+                        type="checkbox"
+                        checked={!!formData.isPrivate}
+                        onChange={(e) => setFormData(prev => ({ ...prev, isPrivate: e.target.checked }))}
+                        className="h-5 w-5"
+                      />
+                      <label htmlFor="isPrivate" className="text-sm" style={{ color: '#5C1F30' }}>
+                        Require an invite code to join
+                      </label>
+                    </div>
+                  </div>
+                  <div className="md:col-span-2 bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
+                    <label htmlFor="password" className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
+                      🧷 Optional Password
+                    </label>
+                    <input
+                      type="text"
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
+                      style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
+                      placeholder="Set a simple password for entry (optional)"
+                    />
+                    <p className="text-xs mt-2" style={{ color: '#5C1F30' }}>Useful for friends-only leagues.</p>
+                  </div>
+                </div>
+
+                {/* Roster Settings */}
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
+                    <label className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
+                      🏃‍♂️ RB Slots
+                    </label>
+                    <input
+                      type="number"
+                      name="rosterRB"
+                      min={1}
+                      max={formData.gameMode === 'CONFERENCE' ? 2 : 6}
+                      value={formData.rosterRB}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
+                      style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
+                    />
+                    <p className="text-xs mt-2" style={{ color: '#5C1F30' }}>Max 2 in Conference mode.</p>
+                  </div>
+                  <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
+                    <label className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
+                      🟦 WR Slots
+                    </label>
+                    <input
+                      type="number"
+                      name="rosterWR"
+                      min={2}
+                      max={formData.gameMode === 'CONFERENCE' ? 5 : 6}
+                      value={formData.rosterWR}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
+                      style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
+                    />
+                    <p className="text-xs mt-2" style={{ color: '#5C1F30' }}>Max {formData.gameMode === 'CONFERENCE' ? 5 : 6} in {formData.gameMode === 'CONFERENCE' ? 'Conference' : 'Power-4'} mode.</p>
+                  </div>
+                  <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
+                    <label className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
+                      🛋️ Bench Size
+                    </label>
+                    <input
+                      type="number"
+                      name="benchSize"
+                      min={3}
+                      max={12}
+                      value={formData.benchSize}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
+                      style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
+                    />
+                    <p className="text-xs mt-2" style={{ color: '#5C1F30' }}>Configurable bench capacity.</p>
+                  </div>
+                </div>
+
                 {/* Summary */}
-                <div className="mt-8 bg-gradient-to-r from-[#DAA520]/20 to-[#B8860B]/20 rounded-xl p-6 border border-[#DAA520]/30">
+                <div className="mt-8 rounded-xl p-6" style={{ background: `${palette.tan}22`, border: `1px solid ${palette.tan}66` }}>
                   <h3 className="text-lg font-bold text-[#3A1220] mb-4">League Summary</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
@@ -485,6 +661,10 @@ export default function CreateLeaguePage() {
                       <span className="text-[#5C1F30]">Scoring:</span>
                       <div className="text-[#3A1220] font-semibold">{formData.scoringType}</div>
                     </div>
+                    <div>
+                      <span className="text-[#5C1F30]">Roster:</span>
+                      <div className="text-[#3A1220] font-semibold">RB {formData.rosterRB} • WR {formData.rosterWR} • Bench {formData.benchSize}</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -496,7 +676,12 @@ export default function CreateLeaguePage() {
                 <button
                   type="submit"
                   disabled={isCreating}
-                  className="bg-gradient-to-r from-[#DAA520] to-[#B8860B] px-12 py-4 rounded-xl font-bold text-xl hover:scale-105 transition-all transform shadow-lg backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-12 py-4 rounded-xl font-bold text-xl hover:scale-105 transition-all transform shadow-lg backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{
+                    background: `linear-gradient(90deg, ${palette.gold}, ${palette.bronze})`,
+                    color: '#fff',
+                    boxShadow: `0 10px 20px ${palette.maroon}33`,
+                  }}
                 >
                   {isCreating ? (
                     <div className="flex items-center justify-center">
@@ -517,18 +702,39 @@ export default function CreateLeaguePage() {
           </form>
         </div>
 
-        {/* Quick Tips - Show at bottom */}
-        <div className="mt-12 bg-gradient-to-r from-[#3A1220]/20 to-[#5C1F30]/20 backdrop-blur-sm rounded-xl p-6 border border-[#3A1220]/30">
-          <h3 className="text-lg font-bold text-[#5C1F30] mb-3">💡 Quick Tips</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-[#5C1F30]">
-            <div>
-              <strong className="text-[#5C1F30]">Conference Mode:</strong> Best for beginners or fans of a specific conference
+        {/* Sticky Step Controls (mobile-friendly) */}
+        <div className="fixed bottom-4 left-0 right-0 px-4">
+          <div className="max-w-4xl mx-auto grid grid-cols-2 gap-3">
+            <button
+              onClick={goBack}
+              disabled={currentStep === 1}
+              className="py-3 rounded-xl font-semibold disabled:opacity-40"
+              style={{ background: `${palette.periwinkle}22`, border: `1px solid ${palette.periwinkle}66`, color: palette.periwinkle }}
+            >
+              Back
+            </button>
+            <button
+              onClick={currentStep < 5 ? goNext : undefined}
+              disabled={!canProceed(currentStep)}
+              className="py-3 rounded-xl font-semibold disabled:opacity-40"
+              style={{ background: `linear-gradient(90deg, ${palette.gold}, ${palette.bronze})`, color: '#fff' }}
+            >
+              {currentStep < 5 ? 'Continue' : 'Review'}
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Tips - subtler and smaller */}
+        <div className="mt-16">
+          <div className="max-w-4xl mx-auto bg-white/6 rounded-lg p-4 border border-white/10">
+            <div className="flex items-center gap-2 text-xs text-white/60 mb-2">
+              <span>💡</span>
+              <span className="font-semibold">Quick Tips</span>
             </div>
-            <div>
-              <strong className="text-[#5C1F30]">Power-4 Mode:</strong> More strategic with eligibility rules and larger rosters
-            </div>
-            <div>
-              <strong className="text-[#5C1F30]">PPR Scoring:</strong> Higher scores, more emphasis on pass-catching backs
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] leading-relaxed text-white/60">
+              <div><span className="font-semibold">Conference Mode:</span> Best for beginners or fans of a specific conference</div>
+              <div><span className="font-semibold">Power-4 Mode:</span> More strategic with eligibility rules and larger rosters</div>
+              <div><span className="font-semibold">PPR Scoring:</span> Higher scores; more emphasis on pass-catching backs</div>
             </div>
           </div>
         </div>
@@ -549,12 +755,12 @@ export default function CreateLeaguePage() {
                     <div>
                       <span className="text-[#5C1F30]">Mode:</span>
                       <div className="text-[#3A1220] font-semibold">
-                        {createdLeague.mode === 'CONFERENCE' ? 'Conference' : 'Power-4'}
+                        {(createdLeague.mode || createdLeague.gameMode) === 'CONFERENCE' ? 'Conference' : 'Power-4'}
                       </div>
                     </div>
                     <div>
                       <span className="text-[#5C1F30]">Teams:</span>
-                      <div className="text-[#3A1220] font-semibold">{createdLeague.maxTeams}</div>
+                      <div className="text-[#3A1220] font-semibold">{createdLeague.maxTeams || createdLeague.max_teams}</div>
                     </div>
                     <div>
                       <span className="text-[#5C1F30]">Status:</span>
@@ -562,7 +768,7 @@ export default function CreateLeaguePage() {
                     </div>
                     <div>
                       <span className="text-[#5C1F30]">League ID:</span>
-                      <div className="text-[#3A1220] font-semibold text-xs">{createdLeague.id}</div>
+                      <div className="text-[#3A1220] font-semibold text-xs">{createdLeague.$id || createdLeague.id}</div>
                     </div>
                   </div>
                 </div>
@@ -572,7 +778,7 @@ export default function CreateLeaguePage() {
                 </div>
 
                 <button
-                  onClick={() => router.push(`/league/${createdLeague.id}`)}
+                  onClick={() => router.push(`/league/${createdLeague.$id || createdLeague.id}`)}
                   className="bg-gradient-to-r from-[#DAA520] to-[#B8860B] px-6 py-3 rounded-lg font-bold text-lg hover:scale-105 transition-transform"
                 >
                   Go to League Now

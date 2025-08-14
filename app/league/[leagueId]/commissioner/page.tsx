@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { ID } from 'appwrite';
 import { useAuth } from '@/hooks/useAuth';
+import { isUserCommissioner, debugCommissionerMatch } from '@/lib/utils/commissioner';
 import { 
   CogIcon, 
   UserGroupIcon, 
@@ -74,8 +75,10 @@ export default function CommissionerSettingsPage({ params }: { params: { leagueI
         COLLECTIONS.LEAGUES,
         params.leagueId
       );
-      
-      if (league.commissionerId === user.$id || league.commissioner === user.$id) {
+      debugCommissionerMatch(league, user);
+      const isComm = isUserCommissioner(league, user);
+
+      if (isComm) {
         setIsCommissioner(true);
         loadLeagueData(league);
         loadMembers();
@@ -181,8 +184,8 @@ export default function CommissionerSettingsPage({ params }: { params: { leagueI
     
     try {
       await databases.createDocument(
-        DATABASE_ID,
-        COLLECTIONS.INVITES,
+          DATABASE_ID,
+          COLLECTIONS.ACTIVITY_LOG,
         ID.unique(),
         {
           leagueId: params.leagueId,

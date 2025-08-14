@@ -8,6 +8,7 @@ import Link from "next/link";
 import { FiSettings, FiUsers, FiCalendar, FiTrendingUp, FiClipboard, FiAward } from "react-icons/fi";
 import { leagueColors } from "@/lib/theme/colors";
 import { useAuth } from "@/hooks/useAuth";
+import { isUserCommissioner, debugCommissionerMatch } from "@/lib/utils/commissioner";
 
 interface League {
   $id: string;
@@ -17,6 +18,7 @@ interface League {
   season: number;
   scoringType: string;
   maxTeams: number;
+  teams?: number;
   draftDate: string;
   status: string;
   inviteCode: string;
@@ -35,14 +37,17 @@ interface Team {
   $id: string;
   leagueId: string;
   userId: string;
-  teamName: string;
+  name: string;
   userName?: string;
   email?: string;
   wins: number;
   losses: number;
-  ties: number;
-  pointsFor: number;
-  pointsAgainst: number;
+  // Some environments store only aggregate points
+  points?: number;
+  // Optional legacy fields
+  ties?: number;
+  pointsFor?: number;
+  pointsAgainst?: number;
   players?: string;
 }
 
@@ -94,12 +99,28 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     resolveParams();
   }, [params]);
 
-  // Load league data
+  // Load league data when leagueId resolves or user becomes available
   useEffect(() => {
-    if (leagueId) {
-      loadLeagueData();
-    }
-  }, [leagueId]);
+    if (!leagueId || authLoading) return;
+    loadLeagueData();
+    // server truth override
+    (async () => {
+      try {
+        const res = await fetch(`/api/leagues/is-commissioner/${leagueId}`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (typeof data.isCommissioner === 'boolean') setIsCommissioner(data.isCommissioner);
+        }
+      } catch {}
+    })();
+  }, [leagueId, user?.$id, authLoading]);
+
+  // Re-evaluate commissioner status once both league and user are present
+  useEffect(() => {
+    if (!league || !user) return;
+    debugCommissionerMatch(league, user);
+    setIsCommissioner(isUserCommissioner(league, user));
+  }, [league, user?.$id, (user as any)?.email, (user as any)?.name]);
 
   const loadLeagueData = async () => {
     try {
@@ -114,9 +135,12 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       const leagueData = leagueResponse as unknown as League;
       setLeague(leagueData);
       
-      // Check if current user is commissioner
-      if (user && (leagueData.commissionerId === user.$id || leagueData.commissioner === user.$id)) {
-        setIsCommissioner(true);
+      // Check if current user is commissioner (match by id, email, or name)
+      if (user) {
+        debugCommissionerMatch(leagueData, user);
+        if (isUserCommissioner(leagueData, user)) {
+          setIsCommissioner(true);
+        }
       }
 
       // Parse scoring rules if they exist
@@ -138,19 +162,93 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         orderMode: leagueData.orderMode || 'random'
       });
 
-      // Load all teams (rosters) in this league
+      // Load all teams in this league (TEAMS + fallback to ROSTERS)
       try {
         const teamsResponse = await databases.listDocuments(
           DATABASE_ID,
-          COLLECTIONS.ROSTERS,
-          [Query.equal('leagueId', leagueId)]
+          COLLECTIONS.TEAMS,
+          [
+            Query.equal('leagueId', leagueId)
+          ]
         );
-        const leagueTeams = teamsResponse.documents as unknown as Team[];
+        let leagueTeams = teamsResponse.documents as unknown as Team[];
+
+        // Normalize missing userId from owner if present
+        leagueTeams = (leagueTeams as any[]).map((t) => ({
+          ...t,
+          userId: t.userId || t.owner || '',
+          name: t.name || t.teamName || 'Team',
+        }));
+
+        // Also check legacy field naming: league_id and owner
+        try {
+          const altTeamsResponse = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.TEAMS,
+            [Query.equal('league_id', leagueId)]
+          );
+          const altDocs = altTeamsResponse.documents as any[];
+          const existingUserIds2 = new Set(leagueTeams.map(t => t.userId).filter(Boolean));
+          const adaptedAltTeams: Team[] = altDocs.map((d) => ({
+            $id: d.$id,
+            leagueId: d.leagueId || d.league_id,
+            userId: d.userId || d.owner || '',
+            name: d.name || d.teamName || 'Team',
+            userName: d.userName,
+            email: d.email,
+            wins: d.wins ?? 0,
+            losses: d.losses ?? 0,
+            ties: d.ties ?? 0,
+            points: d.points ?? d.pointsFor ?? 0,
+            pointsFor: d.pointsFor ?? d.points ?? 0,
+            pointsAgainst: d.pointsAgainst ?? 0,
+            players: d.players
+          })).filter((t) => t.userId && !existingUserIds2.has(t.userId));
+          if (adaptedAltTeams.length > 0) {
+            leagueTeams = [...leagueTeams, ...adaptedAltTeams];
+          }
+        } catch (e) {
+          // ignore if legacy field not present
+        }
+
+        // Fallback: also read legacy ROSTERS and merge any teams not already present
+        try {
+          const rostersResponse = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.ROSTERS,
+            [Query.equal('leagueId', leagueId)]
+          );
+          const rosterDocs = rostersResponse.documents as any[];
+          const existingUserIds = new Set(leagueTeams.map(t => t.userId).filter(Boolean));
+          const adaptedFromRosters: Team[] = rosterDocs.map((r) => ({
+            $id: r.$id,
+            leagueId: r.leagueId,
+            userId: r.userId || r.owner || '',
+            name: r.teamName || r.name || 'Team',
+            userName: r.userName,
+            email: r.email,
+            wins: r.wins ?? 0,
+            losses: r.losses ?? 0,
+            ties: r.ties ?? 0,
+            points: r.points ?? r.pointsFor ?? 0,
+            pointsFor: r.pointsFor ?? r.points ?? 0,
+            pointsAgainst: r.pointsAgainst ?? 0,
+            players: r.players
+          })).filter((t) => !existingUserIds.has(t.userId));
+
+          if (adaptedFromRosters.length > 0) {
+            leagueTeams = [...leagueTeams, ...adaptedFromRosters];
+          }
+        } catch (e) {
+          // ignore if rosters collection not present
+        }
+
         setTeams(leagueTeams);
 
         // Find user's team
-        if (userId && leagueTeams.length > 0) {
-          const myTeam = leagueTeams.find(team => team.userId === userId);
+        const currentUserId = user?.$id;
+        if (currentUserId && leagueTeams.length > 0) {
+          const myTeam = leagueTeams.find(team => team.userId === currentUserId);
           if (myTeam) {
             setUserTeam(myTeam);
           }
@@ -197,16 +295,16 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             {teams.map((team) => (
               <tr key={team.$id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                 <td className="py-4 px-6">
-                  <span className="font-semibold">{team.teamName}</span>
+                  <span className="font-semibold">{team.name}</span>
                   {team.userId === league?.commissionerId && (
                     <span className="ml-2 text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Commissioner</span>
                   )}
                 </td>
                 <td className="py-4 px-6">{team.userName || 'Unknown'}</td>
                 <td className="py-4 px-6 text-center">
-                  {team.wins}-{team.losses}-{team.ties}
+                  {team.wins}-{team.losses}
                 </td>
-                <td className="py-4 px-6 text-center">{team.pointsFor.toFixed(1)}</td>
+                <td className="py-4 px-6 text-center">{(team.points ?? team.pointsFor ?? 0).toFixed(1)}</td>
                 <td className="py-4 px-6 text-center">
                   <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">Active</span>
                 </td>
@@ -220,10 +318,14 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
 
   const renderStandingsTab = () => {
     const sortedTeams = [...teams].sort((a, b) => {
-      const aWinPct = (a.wins + a.ties * 0.5) / (a.wins + a.losses + a.ties || 1);
-      const bWinPct = (b.wins + b.ties * 0.5) / (b.wins + b.losses + b.ties || 1);
+      const aTies = a.ties ?? 0;
+      const bTies = b.ties ?? 0;
+      const aWinPct = (a.wins + aTies * 0.5) / (a.wins + a.losses + aTies || 1);
+      const bWinPct = (b.wins + bTies * 0.5) / (b.wins + b.losses + bTies || 1);
       if (aWinPct !== bWinPct) return bWinPct - aWinPct;
-      return b.pointsFor - a.pointsFor;
+      const aPts = a.points ?? a.pointsFor ?? 0;
+      const bPts = b.points ?? b.pointsFor ?? 0;
+      return bPts - aPts;
     });
 
     return (
@@ -249,16 +351,16 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                   <tr key={team.$id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                     <td className="py-4 px-6 font-bold">{index + 1}</td>
                     <td className="py-4 px-6">
-                      <span className="font-semibold">{team.teamName}</span>
-                      {team.userId === currentUserId && (
+                      <span className="font-semibold">{team.name}</span>
+                      {team.userId === user?.$id && (
                         <span className="ml-2 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">You</span>
                       )}
                     </td>
                     <td className="py-4 px-6 text-center">
-                      {team.wins}-{team.losses}-{team.ties}
+                      {team.wins}-{team.losses}
                     </td>
-                    <td className="py-4 px-6 text-center">{team.pointsFor.toFixed(1)}</td>
-                    <td className="py-4 px-6 text-center">{team.pointsAgainst.toFixed(1)}</td>
+                    <td className="py-4 px-6 text-center">{(team.points ?? team.pointsFor ?? 0).toFixed(1)}</td>
+                    <td className="py-4 px-6 text-center">{(team.pointsAgainst ?? 0).toFixed(1)}</td>
                     <td className="py-4 px-6 text-center">{winPct}%</td>
                   </tr>
                 );
@@ -546,8 +648,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold">{league.name}</h1>
-              <p className="text-gray-400 mt-1">
+              <h1 className="text-3xl font-bold" style={{ color: leagueColors.text.primary }}>{league.name}</h1>
+              <p className="mt-1" style={{ color: leagueColors.text.muted }}>
                 {league.gameMode} • {league.selectedConference || 'All Conferences'}
               </p>
             </div>
@@ -556,7 +658,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               {userTeam && (
                 <button
                   onClick={() => router.push(`/league/${leagueId}/locker-room`)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
+                  className="px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
+                  style={{ backgroundColor: leagueColors.primary.brown, color: leagueColors.text.inverse }}
                 >
                   <FiClipboard />
                   Locker Room
@@ -565,11 +668,12 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               
               {isCommissioner && (
                 <button
-                  onClick={() => setActiveTab('settings')}
-                  className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
+                  onClick={() => router.push(`/league/${leagueId}/commissioner`)}
+                  className="px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
+                  style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
                 >
                   <FiSettings />
-                  Settings
+                  Commissioner
                 </button>
               )}
             </div>
@@ -578,18 +682,18 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-black/10 backdrop-blur-sm border-b border-white/10">
+      <div className="backdrop-blur-sm" style={{ backgroundColor: leagueColors.interactive.hover, borderBottom: `1px solid ${leagueColors.border.medium}` }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-8">
             {['overview', 'members', 'standings', 'schedule', 'draft', ...(isCommissioner ? ['settings'] : [])].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === tab
-                    ? 'border-blue-500 text-white'
-                    : 'border-transparent text-gray-400 hover:text-white hover:border-gray-300'
-                }`}
+                className={`py-4 px-1 border-b-2 font-semibold text-sm transition-colors`}
+                style={{
+                  borderColor: activeTab === tab ? leagueColors.primary.coral : 'transparent',
+                  color: activeTab === tab ? leagueColors.text.primary : leagueColors.text.secondary
+                }}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </button>
@@ -603,33 +707,33 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {/* League Info */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+            <div className="backdrop-blur-sm rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
               <h3 className="text-xl font-bold mb-4">League Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-400">Commissioner</p>
+                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>Commissioner</p>
                   <p className="font-semibold">{league?.commissioner}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400">Season</p>
+                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>Season</p>
                   <p className="font-semibold">{league?.season}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400">Scoring Type</p>
+                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>Scoring Type</p>
                   <p className="font-semibold">{league?.scoringType || 'PPR'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400">Teams</p>
-                  <p className="font-semibold">{teams.length} / {league?.maxTeams || 12}</p>
+                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>Teams</p>
+                  <p className="font-semibold">{(teams.length || (league?.teams || 0))} / {league?.maxTeams || 12}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400">Draft Date</p>
+                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>Draft Date</p>
                   <p className="font-semibold">
                     {league?.draftDate ? new Date(league.draftDate).toLocaleDateString() : 'Not scheduled'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400">Status</p>
+                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>Status</p>
                   <p className="font-semibold capitalize">{league?.status || 'Pre-Draft'}</p>
                 </div>
               </div>
@@ -639,15 +743,17 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <button
                 onClick={() => router.push(`/league/${leagueId}/locker-room`)}
-                className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+                className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+                style={{ backgroundColor: leagueColors.primary.coral, color: leagueColors.text.inverse }}
               >
                 <FiClipboard className="text-xl" />
-                <span className="font-semibold">Manage Roster</span>
+                <span className="font-semibold">Locker Room</span>
               </button>
               
               <button
                 onClick={() => setActiveTab('standings')}
-                className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+                className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+                style={{ backgroundColor: leagueColors.primary.brown, color: leagueColors.text.inverse }}
               >
                 <FiTrendingUp className="text-xl" />
                 <span className="font-semibold">View Standings</span>
@@ -655,7 +761,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               
               <button
                 onClick={() => setActiveTab('schedule')}
-                className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+                className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+                style={{ backgroundColor: leagueColors.primary.taupe, color: leagueColors.text.primary }}
               >
                 <FiCalendar className="text-xl" />
                 <span className="font-semibold">Schedule</span>
