@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { APPWRITE_PUBLIC_CONFIG } from '@/lib/appwrite-config';
+import { APPWRITE_CONFIG } from '@/lib/config/appwrite.config';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -108,8 +108,8 @@ export default function LoginPage() {
         {/* Debug info - remove in production */}
         {process.env.NODE_ENV === 'development' && (
           <div className="mt-4 p-2 rounded text-xs" style={{ backgroundColor: '#9256A4', color: '#FFF4EC' }}>
-            <p>Endpoint: {APPWRITE_PUBLIC_CONFIG.endpoint}</p>
-            <p>Project: {APPWRITE_PUBLIC_CONFIG.projectId}</p>
+            <p>Endpoint: {APPWRITE_CONFIG.endpoint}</p>
+            <p>Project: {APPWRITE_CONFIG.projectId}</p>
             <p>Domain: {typeof window !== 'undefined' ? window.location.hostname : 'SSR'}</p>
           </div>
         )}
@@ -139,8 +139,8 @@ function OAuthButtons() {
       
       // Initialize client
       const client = new Client()
-        .setEndpoint(APPWRITE_PUBLIC_CONFIG.endpoint)
-        .setProject(APPWRITE_PUBLIC_CONFIG.projectId);
+        .setEndpoint(APPWRITE_CONFIG.endpoint)
+        .setProject(APPWRITE_CONFIG.projectId);
       
       const account = new Account(client);
       

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { Client, Account } from 'node-appwrite';
-import { APPWRITE_CONFIG } from '@/lib/appwrite-config';
+import { APPWRITE_CONFIG } from '@/lib/config/appwrite.config';
 
 export async function GET(request: NextRequest) {
   try {
