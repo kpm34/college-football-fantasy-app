@@ -652,7 +652,7 @@ export default function CommissionerSettingsPage({ params }: { params: { leagueI
                     type="button"
                     onClick={() => {
                       const baseUrl = window.location.origin;
-                      const link = `${baseUrl}/league/join?code=${inviteCode}&league=${params.leagueId}`;
+                      const link = `${baseUrl}/league/join?code=${inviteCode}&league=${params.leagueId}&name=${encodeURIComponent(leagueName)}&spots=${maxTeams - members.length}/${maxTeams}`;
                       const message = `Join my fantasy football league "${leagueName}"!\n\n🏈 Click here: ${link}\n\n🔑 League Password: ${inviteCode}\n\nSpots available: ${maxTeams - members.length}`;
                       
                       // Copy the message to clipboard
