@@ -28,6 +28,19 @@ export class EnvironmentConfig {
     },
   };
 
+  // Platform features configuration
+  readonly features = {
+    caching: !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN),
+    analytics: !!process.env.NEXT_PUBLIC_VERCEL_ANALYTICS_ID,
+    ai: !!process.env.AI_GATEWAY_API_KEY,
+  };
+
+  // Vercel KV configuration
+  readonly kv = {
+    restApiUrl: process.env.KV_REST_API_URL || '',
+    restApiToken: process.env.KV_REST_API_TOKEN || '',
+  };
+
   // Client-side configuration (safe to expose)
   readonly client = {
     appwrite: {
