@@ -31,8 +31,12 @@ export function useAuth() {
     try {
       const response = await fetch('/api/auth/user');
       if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
+        const payload = await response.json();
+        // Handle both shapes: { success: true, data: {...} } and direct user object
+        const normalized = payload?.data
+          ? { $id: payload.data.$id || payload.data.id, email: payload.data.email, name: payload.data.name }
+          : { $id: payload.$id || payload.id, email: payload.email, name: payload.name };
+        setUser(normalized as any);
       } else {
         setUser(null);
       }
