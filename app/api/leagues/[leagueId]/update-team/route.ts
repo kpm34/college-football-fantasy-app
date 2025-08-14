@@ -72,7 +72,7 @@ export async function PUT(
     );
 
     const isOwner = (teamDoc as any).userId === user.$id || (teamDoc as any).ownerId === user.$id;
-    const isCommissioner = Boolean((league as any)?.commissionerId && (league as any).commissionerId === user.$id);
+    const isCommissioner = Boolean((league as any)?.commissioner && (league as any).commissioner === user.$id);
 
     if (!isOwner && !isCommissioner) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

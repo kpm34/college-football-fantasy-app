@@ -37,7 +37,7 @@ export async function GET(
     );
     
     // Check if user is commissioner
-    if (league.commissionerId !== user.$id) {
+    if (league.commissioner !== user.$id) {
       return NextResponse.json(
         { error: 'Only the commissioner can access these settings' },
         { status: 403 }
@@ -106,7 +106,7 @@ export async function PUT(
       params.leagueId
     );
     
-    if (league.commissionerId !== user.$id) {
+    if (league.commissioner !== user.$id) {
       return NextResponse.json(
         { error: 'Only the commissioner can update league settings' },
         { status: 403 }

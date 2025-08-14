@@ -42,16 +42,25 @@ export async function GET(
     );
 
     // Determine commissioner
-    const isCommissioner = Boolean(league?.commissionerId && league.commissionerId === user.$id);
+    const isCommissioner = Boolean(league?.commissioner && league.commissioner === user.$id);
 
-    // Load team from TEAMS first, fallback to ROSTERS
-    const teamQuery = [AwQuery.equal('leagueId', leagueId), AwQuery.equal('userId', user.$id), AwQuery.limit(1)];
-    const teamsRes = await serverDb.listDocuments(DATABASE_ID, COLLECTIONS.TEAMS, teamQuery);
-    let team = teamsRes.documents[0] || null;
-
-    if (!team) {
+    // Load team from ROSTERS (TEAMS collection deprecated)
+    let team = null;
+    try {
+      const teamQuery = [AwQuery.equal('leagueId', leagueId), AwQuery.equal('userId', user.$id), AwQuery.limit(1)];
       const rostersRes = await serverDb.listDocuments(DATABASE_ID, COLLECTIONS.ROSTERS, teamQuery);
       team = rostersRes.documents[0] || null;
+    } catch (error: any) {
+      console.error('Error loading roster:', error);
+      // If leagueId doesn't exist in rosters, try without it
+      try {
+        const userQuery = [AwQuery.equal('userId', user.$id)];
+        const allRosters = await serverDb.listDocuments(DATABASE_ID, COLLECTIONS.ROSTERS, userQuery);
+        // Filter by leagueId manually
+        team = allRosters.documents.find((r: any) => r.leagueId === leagueId) || null;
+      } catch (fallbackError) {
+        console.error('Fallback roster query failed:', fallbackError);
+      }
     }
 
     // Load players if roster has players field
@@ -71,10 +80,11 @@ export async function GET(
     }
 
     return NextRes.json({
+      success: true,
       league,
-      isCommissioner,
       team,
       players,
+      isCommissioner,
     });
   } catch (error: any) {
     return NextRes.json(

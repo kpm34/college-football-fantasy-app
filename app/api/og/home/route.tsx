@@ -5,10 +5,6 @@ export const runtime = 'edge';
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const leagueName = searchParams.get('name') || 'College Football Fantasy League';
-    const spots = searchParams.get('spots') || '8/12';
-
     return new ImageResponse(
       (
         <div
@@ -19,11 +15,11 @@ export async function GET(request: NextRequest) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'linear-gradient(135deg, #6B3AA0 0%, #A374B5 50%, #E73C7E 100%)',
+            background: 'linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 50%, #1a1a1a 100%)',
             position: 'relative',
           }}
         >
-          {/* Background Pattern */}
+          {/* Chrome effect overlay */}
           <div
             style={{
               position: 'absolute',
@@ -31,7 +27,7 @@ export async function GET(request: NextRequest) {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+              background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 40%)',
             }}
           />
           
@@ -49,23 +45,23 @@ export async function GET(request: NextRequest) {
             {/* Chrome Football */}
             <div
               style={{
-                width: '150px',
-                height: '150px',
+                width: '200px',
+                height: '200px',
                 borderRadius: '50%',
                 background: 'linear-gradient(145deg, #e6e6e6, #c0c0c0)',
-                boxShadow: '15px 15px 45px #b3b3b3, -15px -15px 45px #ffffff',
+                boxShadow: '20px 20px 60px #b3b3b3, -20px -20px 60px #ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginBottom: '30px',
+                marginBottom: '40px',
                 position: 'relative',
               }}
             >
               {/* Inner chrome ball */}
               <div
                 style={{
-                  width: '135px',
-                  height: '135px',
+                  width: '180px',
+                  height: '180px',
                   borderRadius: '50%',
                   background: 'linear-gradient(45deg, #c0c0c0 0%, #ffffff 50%, #c0c0c0 100%)',
                   display: 'flex',
@@ -78,8 +74,8 @@ export async function GET(request: NextRequest) {
                 {/* Football shape */}
                 <div
                   style={{
-                    width: '100px',
-                    height: '70px',
+                    width: '140px',
+                    height: '100px',
                     borderRadius: '50%',
                     background: 'linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #8B4513 100%)',
                     position: 'relative',
@@ -94,26 +90,26 @@ export async function GET(request: NextRequest) {
                       left: '50%',
                       transform: 'translate(-50%, -50%)',
                       width: '2px',
-                      height: '40px',
+                      height: '60px',
                       background: 'white',
                     }}
                   />
                   <div
                     style={{
                       position: 'absolute',
-                      top: '35%',
+                      top: '30%',
                       left: '50%',
                       transform: 'translate(-50%, -50%)',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '6px',
+                      gap: '8px',
                     }}
                   >
-                    {[...Array(3)].map((_, i) => (
+                    {[...Array(4)].map((_, i) => (
                       <div
                         key={i}
                         style={{
-                          width: '15px',
+                          width: '20px',
                           height: '2px',
                           background: 'white',
                         }}
@@ -127,59 +123,51 @@ export async function GET(request: NextRequest) {
             {/* Title */}
             <h1
               style={{
-                fontSize: '56px',
+                fontSize: '72px',
                 fontWeight: 'bold',
-                color: 'white',
+                background: 'linear-gradient(to right, #DC143C, #FF6B6B)',
+                backgroundClip: 'text',
+                color: 'transparent',
                 textAlign: 'center',
-                marginBottom: '10px',
-                textShadow: '0 2px 10px rgba(0,0,0,0.3)',
+                marginBottom: '20px',
+                letterSpacing: '-2px',
               }}
             >
-              Join League
+              CFB Fantasy
             </h1>
             
-            {/* League Name */}
-            <h2
+            {/* Subtitle */}
+            <p
               style={{
-                fontSize: '36px',
-                fontWeight: '600',
-                color: '#F7EAE1',
+                fontSize: '28px',
+                color: '#C8C8C8',
                 textAlign: 'center',
-                marginBottom: '30px',
-                maxWidth: '800px',
+                marginBottom: '40px',
+                fontWeight: '300',
               }}
             >
-              {leagueName}
-            </h2>
+              Power 4 Conference Fantasy Football
+            </p>
             
-            {/* Info Cards */}
+            {/* Feature cards */}
             <div
               style={{
                 display: 'flex',
-                gap: '20px',
+                gap: '30px',
                 marginBottom: '40px',
               }}
             >
               <div
                 style={{
-                  background: 'rgba(255,255,255,0.15)',
-                  padding: '20px 40px',
+                  background: 'rgba(255,255,255,0.05)',
+                  padding: '20px 30px',
                   borderRadius: '12px',
-                  border: '1px solid rgba(255,255,255,0.25)',
+                  border: '1px solid rgba(255,255,255,0.1)',
                 }}
               >
                 <p
                   style={{
-                    fontSize: '18px',
-                    color: 'rgba(247,234,225,0.8)',
-                    marginBottom: '5px',
-                  }}
-                >
-                  Power 4 Conferences
-                </p>
-                <p
-                  style={{
-                    fontSize: '24px',
+                    fontSize: '20px',
                     fontWeight: 'bold',
                     color: 'white',
                   }}
@@ -190,56 +178,29 @@ export async function GET(request: NextRequest) {
               
               <div
                 style={{
-                  background: 'rgba(255,255,255,0.15)',
-                  padding: '20px 40px',
+                  background: 'rgba(255,255,255,0.05)',
+                  padding: '20px 30px',
                   borderRadius: '12px',
-                  border: '1px solid rgba(255,255,255,0.25)',
+                  border: '1px solid rgba(255,255,255,0.1)',
                 }}
               >
                 <p
                   style={{
-                    fontSize: '18px',
-                    color: 'rgba(247,234,225,0.8)',
-                    marginBottom: '5px',
-                  }}
-                >
-                  Spots Available
-                </p>
-                <p
-                  style={{
-                    fontSize: '24px',
+                    fontSize: '20px',
                     fontWeight: 'bold',
                     color: 'white',
                   }}
                 >
-                  {spots} Teams
+                  Elite Matchups Only
                 </p>
               </div>
-            </div>
-            
-            {/* CTA */}
-            <div
-              style={{
-                background: 'white',
-                color: '#6B3AA0',
-                padding: '16px 48px',
-                borderRadius: '100px',
-                fontSize: '20px',
-                fontWeight: 'bold',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-              }}
-            >
-              Join League
-              <span style={{ fontSize: '24px' }}>→</span>
             </div>
             
             {/* Domain */}
             <p
               style={{
-                fontSize: '16px',
-                color: 'rgba(255,255,255,0.6)',
+                fontSize: '18px',
+                color: 'rgba(255,255,255,0.4)',
                 marginTop: '20px',
               }}
             >

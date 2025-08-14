@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
 import { Query } from "appwrite";
 import Link from "next/link";
-import { FiSettings, FiUsers, FiCalendar, FiTrendingUp, FiClipboard, FiAward } from "react-icons/fi";
+import { FiSettings, FiUsers, FiCalendar, FiTrendingUp, FiClipboard, FiAward, FiShare2 } from "react-icons/fi";
 import { leagueColors } from "@/lib/theme/colors";
 import { useAuth } from "@/hooks/useAuth";
 import { isUserCommissioner, debugCommissionerMatch } from "@/lib/utils/commissioner";
+import { InviteModal } from "@/components/league/InviteModal";
 
 interface League {
   $id: string;
@@ -66,6 +67,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
   const [teams, setTeams] = useState<Team[]>([]);
   const [userTeam, setUserTeam] = useState<Team | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'standings' | 'schedule' | 'settings' | 'draft'>('overview');
   const [isCommissioner, setIsCommissioner] = useState(false);
   const [savingSettings, setSavingSettings] = useState(false);
@@ -163,116 +165,27 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         orderMode: leagueData.orderMode || 'random'
       });
 
-      // Load all fantasy rosters in this league
+      // Load all fantasy rosters in this league via API
       try {
-        let leagueTeams: Team[] = [];
+        const teamsResponse = await fetch(`/api/leagues/${leagueId}/teams`);
+        const teamsData = await teamsResponse.json();
         
-        // Fetch from ROSTERS collection (fantasy team rosters)
-        try {
-          const rostersResponse = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.ROSTERS,
-            [Query.equal('leagueId', leagueId)]
-          );
-          const rosterDocs = rostersResponse.documents as any[];
-          leagueTeams = rosterDocs.map((r) => ({
-            $id: r.$id,
-            leagueId: r.leagueId,
-            userId: r.userId || r.owner || '',
-            name: r.teamName || r.name || 'Team',
-            userName: r.userName,
-            email: r.email,
-            wins: r.wins ?? 0,
-            losses: r.losses ?? 0,
-            ties: r.ties ?? 0,
-            points: r.points ?? r.pointsFor ?? 0,
-            pointsFor: r.pointsFor ?? r.points ?? 0,
-            pointsAgainst: r.pointsAgainst ?? 0,
-            players: r.players
-          }));
-        } catch (e) {
-          console.error('Error loading rosters:', e);
-        }
-
-        // Enrich team manager info from USERS collection so members are connected to actual users
-        try {
-          const uniqueUserIds = Array.from(new Set(leagueTeams.map(t => t.userId).filter(Boolean)));
-          if (uniqueUserIds.length > 0) {
-            const usersRes = await databases.listDocuments(
-              DATABASE_ID,
-              COLLECTIONS.USERS,
-              [Query.equal('$id', uniqueUserIds)]  // Changed from 'userId' to '$id'
-            );
-            const idToUser: Record<string, any> = {};
-            (usersRes.documents as any[]).forEach((u) => {
-              const key = u.$id;  // Use $id directly
-              if (key) idToUser[key] = u;
-            });
-            leagueTeams = leagueTeams.map((t) => {
-              const u = idToUser[t.userId || ''];
-              return {
-                ...t,
-                userName: t.userName || (u?.name || u?.email?.split('@')[0] || 'Unknown Manager'),  // Improved fallback
-                email: t.email || u?.email,
-              } as Team;
-            });
+        if (teamsResponse.ok && teamsData.success) {
+          const leagueTeams = teamsData.teams;
+          setTeams(leagueTeams);
+          
+          // Set user's team if they have one
+          if (teamsData.userTeam) {
+            setUserTeam(teamsData.userTeam);
           }
-        } catch (userErr) {
-          console.warn('User enrichment failed, proceeding with team data only:', userErr);
-        }
-
-        // If no rosters exist yet but we have members, create placeholder teams
-        if (leagueTeams.length === 0 && leagueData.members && leagueData.members.length > 0) {
-          // Fetch user info for all members
-          try {
-            const memberIds = leagueData.members;
-            const usersResponse = await databases.listDocuments(
-              DATABASE_ID,
-              COLLECTIONS.USERS,
-              [Query.equal('$id', memberIds)]
-            );
-            
-            const userMap = new Map(usersResponse.documents.map(u => [u.$id, u]));
-            
-            // Create placeholder teams for each member
-            leagueTeams = memberIds.map((userId: string) => {
-              const user = userMap.get(userId);
-              return {
-                $id: `placeholder-${userId}`,
-                leagueId: leagueId,
-                userId: userId,
-                name: user?.name ? `${user.name}'s Team` : 'Unnamed Team',
-                userName: user?.name || user?.email?.split('@')[0] || 'Unknown Manager',
-                email: user?.email,
-                wins: 0,
-                losses: 0,
-                ties: 0,
-                points: 0,
-                pointsFor: 0,
-                pointsAgainst: 0,
-                players: '[]'
-              } as Team;
-            });
-          } catch (e) {
-            console.error('Error creating placeholder teams:', e);
-          }
-        }
-
-        setTeams(leagueTeams);
-
-        // Find user's team
-        const currentUserId = user?.$id;
-        if (currentUserId && leagueTeams.length > 0) {
-          const myTeam = leagueTeams.find(team => team.userId === currentUserId);
-          if (myTeam) {
-            setUserTeam(myTeam);
-          }
+        } else {
+          console.error('Error loading teams:', teamsData.error);
         }
       } catch (e) {
-        console.log('Error loading teams:', e);
-        // Create empty teams array if rosters don't exist yet
-        setTeams([]);
+        console.error('Error loading teams:', e);
       }
+
+
 
     } catch (error) {
       console.error('Error loading league data:', error);
@@ -285,14 +198,6 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-2xl font-bold">League Members</h3>
-        {isCommissioner && (
-          <button
-            onClick={() => router.push(`/league/${leagueId}/invite`)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-all duration-200"
-          >
-            Invite Members
-          </button>
-        )}
       </div>
 
       <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 overflow-hidden">
@@ -361,7 +266,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             </thead>
             <tbody>
               {sortedTeams.map((team, index) => {
-                const winPct = ((team.wins + team.ties * 0.5) / (team.wins + team.losses + team.ties || 1) * 100).toFixed(1);
+                const ties = team.ties ?? 0;
+                const winPct = ((team.wins + ties * 0.5) / (team.wins + team.losses + ties || 1) * 100).toFixed(1);
                 return (
                   <tr key={team.$id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                     <td className="py-4 px-6 font-bold">{index + 1}</td>
@@ -458,8 +364,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         <h3 className="text-2xl font-bold mb-6">League Settings</h3>
 
         {/* Scoring Settings */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-          <h4 className="text-xl font-bold mb-4">Scoring Settings</h4>
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 border border-gray-200 shadow-lg">
+          <h4 className="text-xl font-bold mb-4 text-gray-800">Scoring Settings</h4>
           {savingSettings && (
             <p className="text-sm text-green-400 mb-2">Saving changes...</p>
           )}
@@ -467,7 +373,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {Object.entries(scoringSettings).map(([key, value]) => (
               <div key={key} className="flex items-center justify-between">
-                <label className="text-sm capitalize">
+                <label className="text-sm capitalize font-medium text-gray-700">
                   {key.replace(/([A-Z])/g, ' $1').trim()}
                 </label>
                 {isCommissioner ? (
@@ -476,10 +382,10 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                     step="0.01"
                     value={value}
                     onChange={(e) => updateScoringSettings(key, parseFloat(e.target.value))}
-                    className="w-20 px-2 py-1 bg-white/10 border border-white/20 rounded text-right"
+                    className="w-20 px-2 py-1 bg-white border-2 border-blue-300 rounded text-gray-800 text-center font-medium focus:border-blue-500 focus:outline-none"
                   />
                 ) : (
-                  <span className="font-semibold">{value}</span>
+                  <span className="font-semibold text-gray-700">{value}</span>
                 )}
               </div>
             ))}
@@ -672,14 +578,23 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             <div className="flex items-center gap-4">
               {userTeam && (
                 <button
-                  onClick={() => router.push(`/league/${leagueId}/locker-room`)}
-                  className="px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
-                  style={{ backgroundColor: leagueColors.primary.brown, color: leagueColors.text.inverse }}
+                  onClick={() => router.push(`/league/${leagueId}/scoreboard`)}
+                  className="px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
+                  style={{ backgroundColor: '#4A90E2', color: '#FFFFFF', fontWeight: '600' }}
                 >
-                  <FiClipboard />
-                  Locker Room
+                  <FiTrendingUp />
+                  Scoreboard
                 </button>
               )}
+              
+              <button
+                onClick={() => setShowInviteModal(true)}
+                className="px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
+                style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
+              >
+                <FiShare2 />
+                Invite
+              </button>
               
               {isCommissioner && (
                 <button
@@ -706,7 +621,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                 onClick={() => setActiveTab(tab as any)}
                 className={`py-4 px-1 border-b-2 font-semibold text-sm transition-colors`}
                 style={{
-                  borderColor: activeTab === tab ? leagueColors.primary.coral : 'transparent',
+                  borderColor: activeTab === tab ? leagueColors.primary.crimson : 'transparent',
                   color: activeTab === tab ? leagueColors.text.primary : leagueColors.text.secondary
                 }}
               >
@@ -727,7 +642,11 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm" style={{ color: leagueColors.text.muted }}>Commissioner</p>
-                  <p className="font-semibold">{league?.commissioner}</p>
+                  <p className="font-semibold">
+                    {teams.find(t => t.userId === league?.commissioner)?.userName || 
+                     teams.find(t => t.userId === league?.commissionerId)?.userName || 
+                     league?.commissioner}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm" style={{ color: leagueColors.text.muted }}>Season</p>
@@ -757,18 +676,18 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <button
-                onClick={() => router.push(`/league/${leagueId}/locker-room`)}
-                className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
-                style={{ backgroundColor: leagueColors.primary.coral, color: leagueColors.text.inverse }}
+                onClick={() => router.push(`/league/${leagueId}/scoreboard`)}
+                className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg"
+                style={{ backgroundColor: '#4A90E2', color: '#FFFFFF' }}
               >
-                <FiClipboard className="text-xl" />
-                <span className="font-semibold">Locker Room</span>
+                <FiTrendingUp className="text-xl" />
+                <span className="font-semibold">Weekly Scoreboard</span>
               </button>
               
               <button
                 onClick={() => setActiveTab('standings')}
                 className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
-                style={{ backgroundColor: leagueColors.primary.brown, color: leagueColors.text.inverse }}
+                style={{ backgroundColor: leagueColors.primary.sand, color: leagueColors.text.inverse }}
               >
                 <FiTrendingUp className="text-xl" />
                 <span className="font-semibold">View Standings</span>
@@ -777,7 +696,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               <button
                 onClick={() => setActiveTab('schedule')}
                 className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
-                style={{ backgroundColor: leagueColors.primary.taupe, color: leagueColors.text.primary }}
+                style={{ backgroundColor: leagueColors.primary.mint, color: leagueColors.text.primary }}
               >
                 <FiCalendar className="text-xl" />
                 <span className="font-semibold">Schedule</span>
@@ -799,6 +718,16 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         {activeTab === 'settings' && renderSettingsTab()}
         {activeTab === 'draft' && renderDraftTab()}
       </div>
+      
+      {/* Invite Modal */}
+      {showInviteModal && league && (
+        <InviteModal
+          isOpen={showInviteModal}
+          onClose={() => setShowInviteModal(false)}
+          leagueId={league.$id}
+          leagueName={league.name}
+        />
+      )}
     </div>
   );
 }
