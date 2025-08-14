@@ -12,8 +12,10 @@ import {
   ClockIcon, 
   TrophyIcon,
   PlusIcon,
-  TrashIcon
+  TrashIcon,
+  ChevronLeftIcon
 } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 interface ScoringRule {
   category: string;
@@ -387,21 +389,7 @@ export default function CommissionerSettingsPage({ params }: { params: { leagueI
     }
   }
 
-  async function deleteLeague() {
-    if (!confirm('Are you sure you want to delete this league? This action cannot be undone.')) return;
-    
-    try {
-      await databases.deleteDocument(
-        DATABASE_ID,
-        COLLECTIONS.LEAGUES,
-        params.leagueId
-      );
-      router.push('/dashboard');
-    } catch (error) {
-      console.error('Error deleting league:', error);
-      alert('Failed to delete league');
-    }
-  }
+
 
   async function exportLeagueSettings() {
     const settings = {
@@ -517,8 +505,18 @@ export default function CommissionerSettingsPage({ params }: { params: { leagueI
     <main className="min-h-screen bg-gradient-to-br from-[#6B3AA0] via-[#A374B5] to-[#E73C7E]">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Commissioner Settings</h1>
-          <p className="text-[#F7EAE1]">{leagueName}</p>
+          <div className="flex items-center gap-4 mb-4">
+            <Link
+              href={`/league/${params.leagueId}`}
+              className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <ChevronLeftIcon className="h-5 w-5 text-white" />
+            </Link>
+            <div>
+              <h1 className="text-4xl font-bold text-white">Commissioner Settings</h1>
+              <p className="text-[#F7EAE1]">{leagueName}</p>
+            </div>
+          </div>
         </div>
 
         {/* Tab Navigation */}
@@ -893,13 +891,7 @@ export default function CommissionerSettingsPage({ params }: { params: { leagueI
                     Import Settings
                   </button>
                   
-                  <button
-                    type="button"
-                    onClick={deleteLeague}
-                    className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors ml-auto"
-                  >
-                    Delete League
-                  </button>
+
                 </div>
               </div>
             </form>
