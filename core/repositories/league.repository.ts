@@ -41,15 +41,9 @@ export class LeagueRepository extends BaseRepository<League> {
    * Create a new league with proper defaults
    */
   async createLeague(data: CreateLeagueData): Promise<League> {
-    // Set defaults (using snake_case for database fields)
+    // Set defaults
     const leagueData = {
-      name: data.name,
-      maxTeams: data.maxTeams,
-      draftType: data.draftType,
-      gameMode: data.gameMode,
-      isPublic: data.isPublic,
-      pickTimeSeconds: data.pickTimeSeconds,
-      commissioner_id: data.commissionerId,
+      ...data,
       status: 'open',
       currentTeams: 0,
       season: data.season || new Date().getFullYear(),
@@ -177,10 +171,10 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('You are already in this league');
     }
 
-    // Create roster entry (using snake_case for database fields)
+    // Create roster entry
     const roster = await rosterRepo.create({
-      league_id: leagueId,
-      user_id: userId,
+      leagueId,
+      userId,
       teamName,
       abbreviation: abbreviation || teamName.substring(0, 3).toUpperCase(),
       draftPosition: league.currentTeams + 1,

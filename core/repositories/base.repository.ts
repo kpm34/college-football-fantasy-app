@@ -135,18 +135,10 @@ export abstract class BaseRepository<T extends Models.Document> {
       // Add custom filters
       if (options?.filters) {
         Object.entries(options.filters).forEach(([key, value]) => {
-          // Map camelCase to snake_case for certain fields
-          let fieldName = key;
-          if (key === 'userId') fieldName = 'user_id';
-          else if (key === 'leagueId') fieldName = 'league_id';
-          else if (key === 'teamId') fieldName = 'team_id';
-          else if (key === 'playerId') fieldName = 'player_id';
-          else if (key === 'commissionerId') fieldName = 'commissioner_id';
-          
           if (Array.isArray(value)) {
-            queries.push(Query.equal(fieldName, value));
+            queries.push(Query.equal(key, value));
           } else if (value !== null && value !== undefined) {
-            queries.push(Query.equal(fieldName, [value]));
+            queries.push(Query.equal(key, [value]));
           }
         });
       }
