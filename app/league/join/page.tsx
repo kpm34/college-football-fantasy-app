@@ -2,8 +2,10 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { Query } from 'appwrite';
 
 interface League {
   $id: string;
@@ -56,17 +58,66 @@ function JoinLeagueContent() {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [availableLeagues, setAvailableLeagues] = useState<League[]>([]);
+  const { user: authUser, loading: authLoading } = useAuth();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const hasInvite = Boolean(inviteToken || inviteCode);
 
-  // Load current user (you'd get this from auth)
+  // Validate a plain invite code for a specific league (NOT the password)
+  const validateCodeAndSelectLeague = async (code: string, leagueId: string) => {
+    try {
+      const leagueDoc: any = await databases.getDocument(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUES,
+        leagueId
+      );
+
+      const teamsCount: number = Array.isArray(leagueDoc.members)
+        ? leagueDoc.members.length
+        : (typeof leagueDoc.teams === 'number' ? leagueDoc.teams : 0);
+
+      if (leagueDoc.inviteCode && leagueDoc.inviteCode === code) {
+        const selected: League = {
+          $id: leagueDoc.$id,
+          name: leagueDoc.name,
+          owner: leagueDoc.commissioner || leagueDoc.commissionerId || 'Commissioner',
+          teams: teamsCount,
+          maxTeams: leagueDoc.maxTeams || 12,
+          draftType: (leagueDoc.draftType || 'snake') as 'snake' | 'auction',
+          entryFee: leagueDoc.entryFee || 0,
+          draftDate: leagueDoc.draftDate || new Date().toISOString(),
+          draftTime: leagueDoc.draftDate ? new Date(leagueDoc.draftDate).toTimeString().slice(0, 5) : '19:00',
+          description: leagueDoc.description || '',
+          type: leagueDoc.isPublic === false ? 'private' : 'public',
+          password: leagueDoc.password,
+          status: (leagueDoc.status || 'draft') as 'draft' | 'active' | 'completed',
+          createdAt: leagueDoc.$createdAt
+        };
+
+        setSelectedLeague(selected);
+        if (selected.type === 'private') {
+          setShowPasswordModal(true);
+        } else {
+          await joinLeague(selected);
+        }
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error('validateCodeAndSelectLeague error', err);
+      return false;
+    }
+  };
+
+  // Load current user from auth hook
   useEffect(() => {
-    // For now, simulate a logged-in user
-    setCurrentUser({
-      $id: 'user123',
-      name: 'Kashyap Maheshwari',
-      email: 'kashyap@example.com'
-    });
-  }, []);
+    if (!authLoading) {
+      if (authUser) {
+        setCurrentUser({ $id: authUser.$id, name: authUser.name || authUser.email, email: authUser.email });
+      } else {
+        setCurrentUser(null);
+      }
+    }
+  }, [authUser, authLoading]);
 
   // Check for invite token or code in URL
   useEffect(() => {
@@ -75,17 +126,49 @@ function JoinLeagueContent() {
     const leagueId = searchParams.get('league');
     
     if (token && leagueId) {
+      // If not logged in, redirect to login, then back to this URL
+      if (!authUser && !authLoading) {
+        router.push(`/login?redirect=/league/join?token=${token}&league=${leagueId}`);
+        return;
+      }
       setInviteToken(token);
       setInviteLeagueId(leagueId);
       checkInviteToken(token, leagueId);
     } else if (code && leagueId) {
+      if (!authUser && !authLoading) {
+        router.push(`/login?redirect=/league/join?code=${code}&league=${leagueId}`);
+        return;
+      }
       setInviteCode(code);
       setInviteLeagueId(leagueId);
       setSearchTerm(code);
-      // Auto-search for the league with this code
-      searchLeagues(code);
+      // Validate code for this league and preselect it so user can enter password
+      validateCodeAndSelectLeague(code, leagueId);
+    } else if (code && !leagueId) {
+      // Handle code-only links by looking up the league via inviteCode
+      if (!authUser && !authLoading) {
+        router.push(`/login?redirect=/league/join?code=${code}`);
+        return;
+      }
+      setInviteCode(code);
+      setSearchTerm(code);
+      (async () => {
+        try {
+          const res = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.LEAGUES,
+            [Query.equal('inviteCode', code), Query.limit(1)]
+          );
+          const doc: any = res.documents?.[0];
+          if (doc) {
+            await validateCodeAndSelectLeague(code, doc.$id);
+          }
+        } catch (e) {
+          console.error('Lookup by inviteCode failed', e);
+        }
+      })();
     }
-  }, [searchParams]);
+  }, [searchParams, authUser, authLoading, router]);
 
   // Validate invite token
   const checkInviteToken = async (token: string, leagueId: string) => {
@@ -189,7 +272,7 @@ function JoinLeagueContent() {
 
   const handleJoinLeague = async (league: League) => {
     if (!currentUser) {
-      alert('Please log in to join a league');
+      router.push(`/login?redirect=/league/join?league=${league.$id}`);
       return;
     }
 
@@ -207,7 +290,7 @@ function JoinLeagueContent() {
 
     if (!selectedLeague || !currentUser) return;
 
-    if (password === selectedLeague.password) {
+    if (!selectedLeague.password || password === selectedLeague.password) {
       await joinLeague(selectedLeague);
     } else {
       setPasswordError('Incorrect password. Please try again.');
@@ -402,8 +485,8 @@ function JoinLeagueContent() {
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
                     <h3 className="text-xl font-semibold text-[#5E2B8A]">{league.name}</h3>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#FF0080]/20 text-[#FF0080] border border-[#FF0080]/30">
-                      {league.teams}/{league.maxTeams} Teams
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#FF0080]/20 text-[#FF0080] border border-[#FF0080]/30">
+                      {((league as any).members?.length ?? league.teams)}/{league.maxTeams} Teams
                     </span>
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       league.type === 'private' 
@@ -433,16 +516,26 @@ function JoinLeagueContent() {
                 <div className="ml-6">
                   <button
                     onClick={() => handleJoinLeague(league)}
-                    disabled={loading || league.teams >= league.maxTeams || league.status !== 'draft'}
+                    disabled={
+                      loading ||
+                      (league.teams >= league.maxTeams && !hasInvite) ||
+                      (league.status !== 'draft' && !hasInvite)
+                    }
                     className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                      league.teams >= league.maxTeams || league.status !== 'draft'
+                      (league.teams >= league.maxTeams && !hasInvite) || (league.status !== 'draft' && !hasInvite)
                         ? 'bg-[#8A6B4D]/30 text-[#8A6B4D] cursor-not-allowed'
                         : 'bg-gradient-to-r from-[#FF0080] to-[#8A5EAA] text-white hover:from-[#FF0080]/90 hover:to-[#8A5EAA]/90'
                     }`}
                   >
-                    {league.teams >= league.maxTeams ? 'Full' : 
-                     league.status !== 'draft' ? 'Closed' :
-                     loading ? 'Joining...' : 'Join League'}
+                    {league.teams >= league.maxTeams && !hasInvite
+                      ? 'Full'
+                      : league.status !== 'draft' && !hasInvite
+                      ? 'Closed'
+                      : league.status !== 'draft' && hasInvite
+                      ? 'Join via Invite'
+                      : loading
+                      ? 'Joining...'
+                      : 'Join League'}
                   </button>
                 </div>
               </div>

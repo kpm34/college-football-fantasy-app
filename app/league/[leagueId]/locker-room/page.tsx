@@ -9,10 +9,11 @@ import Link from 'next/link';
 import {
   ChevronLeftIcon,
   PlusIcon,
-  ArrowUpDownIcon,
   XMarkIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
+import { RotowireNews } from '@/components/RotowireNews';
 
 interface Player {
   $id: string;
@@ -85,6 +86,16 @@ export default function LockerRoomPage({ params, searchParams }: {
   const [isCommissioner, setIsCommissioner] = useState(false);
   const [canEdit, setCanEdit] = useState(true);
   
+  // Dashboard color palette
+  const palette = {
+    maroon: '#3A1220',
+    orange: '#E89A5C',
+    periwinkle: '#8091BB',
+    tan: '#D9BBA4',
+    gold: '#DAA520',
+    bronze: '#B8860B',
+  } as const;
+  
   // UI state
   const [isEditingName, setIsEditingName] = useState(false);
   const [teamName, setTeamName] = useState('');
@@ -94,6 +105,7 @@ export default function LockerRoomPage({ params, searchParams }: {
   const [moveMode, setMoveMode] = useState(false);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
   const [guardMessage, setGuardMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const nameInputRef = useRef<HTMLInputElement>(null);
   
   // Drag state
@@ -115,108 +127,111 @@ export default function LockerRoomPage({ params, searchParams }: {
   }, [params, searchParams]);
 
   useEffect(() => {
-    if (!leagueId || authLoading || !user) return;
+    if (!leagueId || authLoading) return;
+    
+    if (!user) {
+      console.log('Locker room: No user found, redirecting to login');
+      router.push('/login');
+      return;
+    }
+    
+    console.log('Locker room: Loading data for user:', user.$id);
     loadLeagueAndTeamData();
-  }, [leagueId, authLoading, user, teamIdParam]);
+  }, [leagueId, authLoading, user, teamIdParam, router]);
 
   const loadLeagueAndTeamData = async () => {
     try {
       setLoading(true);
+      setErrorMessage(''); // Clear any previous errors
+      console.log('Locker room: Loading data from API for league:', leagueId);
       
-      // Load league data
-      const leagueData = await databases.getDocument(
-        DATABASE_ID,
-        COLLECTIONS.LEAGUES,
-        leagueId
-      );
-      setLeague(leagueData as unknown as League);
+      // Fetch all data from server-side API
+      const response = await fetch(`/api/leagues/${leagueId}/locker-room`);
       
-      // Check if user is commissioner
-      const isComm = leagueData.commissionerId === user?.$id;
-      setIsCommissioner(isComm);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to load locker room data');
+      }
+
+      const data = await response.json();
+      console.log('Locker room: API data received:', data);
+      
+      // Set league data
+      setLeague(data.league);
+      setIsCommissioner(data.isCommissioner);
       
       // Configure roster based on league settings
-      if (leagueData.gameMode && leagueData.rosterSchema) {
+      if (data.league.gameMode && data.league.rosterSchema) {
         const config = [...DEFAULT_ROSTER_CONFIG];
-        if (leagueData.gameMode === 'conference') {
+        if (data.league.gameMode === 'conference') {
           // Conference mode adjustments
           const rbIndex = config.findIndex(c => c.position === 'RB');
           const wrIndex = config.findIndex(c => c.position === 'WR');
-          if (rbIndex >= 0) config[rbIndex].count = Math.min(leagueData.rosterSchema.rb || 2, 2);
-          if (wrIndex >= 0) config[wrIndex].count = Math.min(leagueData.rosterSchema.wr || 2, 5);
+          if (rbIndex >= 0) config[rbIndex].count = Math.min(data.league.rosterSchema.rb || 2, 2);
+          if (wrIndex >= 0) config[wrIndex].count = Math.min(data.league.rosterSchema.wr || 2, 5);
         } else {
           // Power 4 mode
           const rbIndex = config.findIndex(c => c.position === 'RB');
           const wrIndex = config.findIndex(c => c.position === 'WR');
-          if (rbIndex >= 0) config[rbIndex].count = leagueData.rosterSchema.rb || 2;
-          if (wrIndex >= 0) config[wrIndex].count = Math.min(leagueData.rosterSchema.wr || 2, 6);
+          if (rbIndex >= 0) config[rbIndex].count = data.league.rosterSchema.rb || 2;
+          if (wrIndex >= 0) config[wrIndex].count = Math.min(data.league.rosterSchema.wr || 2, 6);
         }
         setRosterConfig(config);
-        setBenchSize(leagueData.rosterSchema.benchSize || 7);
+        setBenchSize(data.league.rosterSchema.benchSize || 7);
       }
       
-      // Determine which team to load
-      let targetTeamId = teamIdParam;
-      if (targetTeamId && !isComm) {
-        // Non-commissioner trying to view another team
-        router.push(`/league/${leagueId}/locker-room`);
-        return;
-      }
-      
-      // Load team data
-      let teamQuery: Query[] = [Query.equal('leagueId', leagueId)];
-      if (targetTeamId) {
-        teamQuery.push(Query.equal('$id', targetTeamId));
-        setViewingOtherTeam(true);
-        setCanEdit(false);
-      } else {
-        teamQuery.push(Query.equal('userId', user.$id));
-        setViewingOtherTeam(false);
+      // Set team data
+      if (data.team) {
+        setTeam(data.team);
+        setTeamName(data.team.teamName || data.team.name || 'My Team');
         setCanEdit(true);
-      }
-      
-      const teamsResponse = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.ROSTERS,
-        teamQuery
-      );
-      
-      if (teamsResponse.documents.length > 0) {
-        const teamData = teamsResponse.documents[0] as unknown as Team;
-        setTeam(teamData);
-        setTeamName(teamData.teamName || teamData.name || 'My Team');
+        setViewingOtherTeam(false);
         
-        // Load player data
-        if (teamData.players) {
-          try {
-            const playerIds = JSON.parse(teamData.players);
-            if (playerIds.length > 0) {
-              const playersResponse = await databases.listDocuments(
-                DATABASE_ID,
-                COLLECTIONS.PLAYERS,
-                [Query.equal('$id', playerIds)]
-              );
-              const playerMap = new Map(playersResponse.documents.map(p => [p.$id, p as unknown as Player]));
-              const orderedPlayers = playerIds.map((id: string) => playerMap.get(id)).filter(Boolean);
-              setPlayers(orderedPlayers);
-            }
-          } catch (e) {
-            console.error('Error parsing players:', e);
-          }
+        // Set players
+        if (data.players && data.players.length > 0) {
+          setPlayers(data.players);
+          console.log('Locker room: Players loaded:', data.players.length);
         }
+      } else {
+        console.log('Locker room: No team found for user in this league');
+        setTeam(null);
+        setPlayers([]);
+        setTeamName('My Team');
+        setCanEdit(true); // Allow them to set up their team
       }
       
-      // Load all available players for add player modal
-      const allPlayersResponse = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.PLAYERS,
-        [Query.limit(500)]
-      );
-      setAllPlayers(allPlayersResponse.documents as unknown as Player[]);
+      // TODO: Load all players for add player modal separately when needed
+      setAllPlayers([]); // For now, set empty - will load when modal opens
       
-    } catch (error) {
-      console.error('Error loading data:', error);
-      router.push(`/league/${leagueId}`);
+    } catch (error: any) {
+      console.error('Error loading locker room data:', error);
+      console.error('Locker room loading error details:', {
+        message: error?.message,
+        code: error?.code,
+        type: error?.type,
+        response: error?.response,
+        fullError: error
+      });
+      
+      // Don't redirect - let's see what the error is
+      setLoading(false);
+      
+      // Set error state to show to user
+      if (!team) {
+        setTeam(null);
+        setPlayers([]);
+      }
+      
+      // Set error message for display
+      if (error?.code === 404) {
+        setErrorMessage('League not found. Please check the URL.');
+      } else if (error?.code === 401) {
+        setErrorMessage('You do not have permission to access this league.');
+      } else {
+        setErrorMessage(`Error loading locker room: ${error?.message || 'Unknown error'}`);
+      }
+      
+      return; // Exit early to prevent redirect
     } finally {
       setLoading(false);
     }
@@ -229,12 +244,19 @@ export default function LockerRoomPage({ params, searchParams }: {
     }
     
     try {
-      await databases.updateDocument(
-        DATABASE_ID,
-        COLLECTIONS.ROSTERS,
-        team.$id,
-        { teamName: teamName, name: teamName }
-      );
+      const response = await fetch(`/api/leagues/${leagueId}/update-team`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          teamId: team.$id,
+          updates: { teamName: teamName, name: teamName }
+        })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update team name');
+      }
       setTeam({ ...team, name: teamName, teamName: teamName });
       setIsEditingName(false);
     } catch (error) {
@@ -247,12 +269,19 @@ export default function LockerRoomPage({ params, searchParams }: {
     
     try {
       const playerIds = players.map(p => p.$id);
-      await databases.updateDocument(
-        DATABASE_ID,
-        COLLECTIONS.ROSTERS,
-        team.$id,
-        { players: JSON.stringify(playerIds) }
-      );
+      const response = await fetch(`/api/leagues/${leagueId}/update-team`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          teamId: team.$id,
+          updates: { players: JSON.stringify(playerIds) }
+        })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update roster');
+      }
       showGuardMessage('Lineup saved successfully!', 'success');
     } catch (error) {
       console.error('Error saving lineup:', error);
@@ -401,18 +430,54 @@ export default function LockerRoomPage({ params, searchParams }: {
 
   if (loading || authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: palette.maroon }}>
         <div className="text-xl text-white">Loading...</div>
+      </div>
+    );
+  }
+  
+  // Show error state if there's an error message
+  if (errorMessage) {
+    return (
+      <div className="min-h-screen relative" style={{ background: `linear-gradient(135deg, ${palette.maroon} 0%, ${palette.orange} 35%, ${palette.periwinkle} 65%, ${palette.tan} 100%)` }}>
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-2xl mx-auto">
+            <div className="rounded-2xl p-8 backdrop-blur-sm" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
+              <div className="flex items-center gap-4 mb-4">
+                <ExclamationTriangleIcon className="h-8 w-8 text-red-400" />
+                <h2 className="text-2xl font-bold text-white">Error Loading Locker Room</h2>
+              </div>
+              <p className="text-white/80 mb-6">{errorMessage}</p>
+              <div className="flex gap-4">
+                <Link
+                  href={`/league/${leagueId}`}
+                  className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
+                >
+                  Back to League Home
+                </Link>
+                <button
+                  onClick={() => {
+                    setErrorMessage('');
+                    loadLeagueAndTeamData();
+                  }}
+                  className="px-4 py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-[#DAA520] to-[#B8860B] hover:opacity-90"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen relative" style={{ background: 'var(--color-bg)' }}>
-      <div className="aurora-bg" />
+    <div className="min-h-screen relative" style={{ background: `linear-gradient(135deg, ${palette.maroon} 0%, ${palette.orange} 35%, ${palette.periwinkle} 65%, ${palette.tan} 100%)` }}>
+      {/* Gradient background effect */}
       
       {/* Header */}
-      <div className="surface-card border-b border-white/10 relative">
+      <div className="relative backdrop-blur-sm" style={{ background: 'rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -465,7 +530,8 @@ export default function LockerRoomPage({ params, searchParams }: {
                   </button>
                   <button
                     onClick={handleSaveLineup}
-                    className="px-4 py-2 rounded-lg btn-primary flex items-center gap-2"
+                    className="px-4 py-2 rounded-lg flex items-center gap-2 text-white font-semibold"
+                    style={{ background: `linear-gradient(135deg, ${palette.gold} 0%, ${palette.bronze} 100%)` }}
                   >
                     <CheckCircleIcon className="h-5 w-5" />
                     Save Lineup
@@ -493,7 +559,7 @@ export default function LockerRoomPage({ params, searchParams }: {
       <div className="container mx-auto px-4 py-6 relative">
         <div className="space-y-6">
           {/* Starters */}
-          <div className="surface-card rounded-xl p-6">
+          <div className="rounded-xl p-6 backdrop-blur-sm" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.2)' }}>
             <h2 className="text-xl font-bold text-white mb-4">Starting Lineup</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -597,7 +663,7 @@ export default function LockerRoomPage({ params, searchParams }: {
           </div>
 
           {/* Bench */}
-          <div className="surface-card rounded-xl p-6">
+          <div className="rounded-xl p-6 backdrop-blur-sm" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.2)' }}>
             <h2 className="text-xl font-bold text-white mb-4">Bench ({getBenchPlayers().length}/{benchSize})</h2>
             <div className="space-y-2">
               {Array.from({ length: benchSize }).map((_, index) => {
@@ -643,7 +709,7 @@ export default function LockerRoomPage({ params, searchParams }: {
                                 setMoveMode(true);
                                 setSelectedPlayerId(benchPlayer.$id);
                               }}
-                              className="text-xs px-3 py-1.5 rounded bg-[var(--color-secondary)] hover:opacity-80 text-white transition-opacity"
+                              className="text-xs px-3 py-1.5 rounded bg-gradient-to-r from-[#DAA520] to-[#B8860B] hover:opacity-80 text-white transition-opacity"
                             >
                               Move to Lineup
                             </button>
@@ -664,13 +730,22 @@ export default function LockerRoomPage({ params, searchParams }: {
               })}
             </div>
           </div>
+
+          {/* Rotowire News */}
+          <div className="rounded-xl p-6 backdrop-blur-sm" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.2)' }}>
+            <RotowireNews 
+              team={team?.name} 
+              compact={false} 
+              maxItems={10} 
+            />
+          </div>
         </div>
       </div>
 
       {/* Add Player Modal */}
       {showAddPlayer && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-[var(--color-surface)] rounded-xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
+          <div className="rounded-xl max-w-4xl w-full max-h-[80vh] overflow-hidden backdrop-blur-lg" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.3)' }}>
             <div className="p-6 border-b border-white/10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white">Add Player</h2>
@@ -708,7 +783,7 @@ export default function LockerRoomPage({ params, searchParams }: {
             
             <div className="overflow-y-auto max-h-[60vh]">
               <table className="w-full">
-                <thead className="sticky top-0 bg-[var(--color-surface)]">
+                <thead className="sticky top-0" style={{ background: 'rgba(58,18,32,0.95)' }}>
                   <tr className="border-b border-white/10">
                     <th className="text-left py-3 px-6 text-sm font-medium text-white/60">PLAYER</th>
                     <th className="text-left py-3 px-6 text-sm font-medium text-white/60">TEAM</th>
@@ -739,7 +814,7 @@ export default function LockerRoomPage({ params, searchParams }: {
                       <td className="py-3 px-6 text-center">
                         <button
                           onClick={() => handleAddPlayer(player)}
-                          className="text-sm px-3 py-1 rounded bg-[var(--color-primary)] hover:opacity-80 text-white transition-opacity"
+                          className="text-sm px-3 py-1 rounded bg-gradient-to-r from-[#DAA520] to-[#B8860B] hover:opacity-80 text-white transition-opacity"
                         >
                           Add
                         </button>
@@ -756,7 +831,7 @@ export default function LockerRoomPage({ params, searchParams }: {
       {/* Move Mode Indicator */}
       {moveMode && (
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40">
-          <div className="bg-[var(--color-primary)] text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
+          <div className="text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 bg-gradient-to-r from-[#DAA520] to-[#B8860B]">
             <ArrowUpDownIcon className="h-5 w-5" />
             <span className="font-medium">Select destination slot</span>
             <button

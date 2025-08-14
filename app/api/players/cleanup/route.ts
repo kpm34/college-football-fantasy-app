@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
 
 type AnyDoc = Record<string, any> & { $id: string };

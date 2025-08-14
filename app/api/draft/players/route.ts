@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { databases, DATABASE_ID } from '@/lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
 
 export async function GET(request: NextRequest) {
@@ -9,12 +9,11 @@ export async function GET(request: NextRequest) {
     const conference = searchParams.get('conference');
     const team = searchParams.get('team');
     const search = searchParams.get('search');
-    const limit = parseInt(searchParams.get('limit') || '500');
-    const offset = parseInt(searchParams.get('offset') || '0');
+    const limit = parseInt(searchParams.get('limit') || '500', 10);
+    const offset = parseInt(searchParams.get('offset') || '0', 10);
 
     // Build queries
     const queries: any[] = [
-      Query.equal('draftable', true),
       Query.limit(limit),
       Query.offset(offset)
     ];
@@ -24,8 +23,8 @@ export async function GET(request: NextRequest) {
     if (conference && power4Conferences.includes(conference)) {
       queries.push(Query.equal('conference', conference));
     } else if (!conference) {
-      // Default to only Power 4 conferences
-      queries.push(Query.equal('power_4', true));
+      // Default to Power 4 by conference membership rather than a boolean flag
+      queries.push(Query.equal('conference', power4Conferences as any));
     }
 
     if (position && position !== 'ALL') {
@@ -40,7 +39,7 @@ export async function GET(request: NextRequest) {
       queries.push(Query.search('name', search));
     }
 
-    // Sort by rating (best players first)
+    // Sort by rating (fallback to projection if rating missing)
     queries.push(Query.orderDesc('rating'));
 
     // Fetch players from Appwrite
@@ -49,7 +48,7 @@ export async function GET(request: NextRequest) {
     // Transform players for draft UI
     const players = response.documents.map((player, index) => {
       // Calculate basic projections based on position and rating
-      const baseProjection = calculateBaseProjection(player.position, player.rating);
+      const baseProjection = calculateBaseProjection(player.position, player.rating ?? 80);
       
       return {
         id: player.$id,
@@ -60,10 +59,10 @@ export async function GET(request: NextRequest) {
         conference: player.conference,
         year: player.year || 'JR',
         height: player.height || '6-0',
-        weight: player.weight || '200',
-        rating: player.rating || 80,
+        weight: typeof player.weight === 'string' ? parseInt(player.weight, 10) : (player.weight ?? 200),
+        rating: player.rating ?? 80,
         // Calculate ADP based on rating and position
-        adp: calculateADP(player.position, player.rating, index),
+        adp: calculateADP(player.position, player.rating ?? 80, index),
         projectedPoints: baseProjection.points,
         projectedStats: baseProjection.stats,
         draftable: player.draftable,

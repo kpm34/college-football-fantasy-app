@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { ID } from 'node-appwrite';
+import { Query } from 'node-appwrite';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
     // Create invite record
     const invite = await databases.createDocument(
       DATABASE_ID,
-      COLLECTIONS.ACTIVITY_LOG,
+      'activity_log',
       ID.unique(),
       {
         type: 'league_invite',
@@ -89,11 +90,11 @@ export async function GET(request: NextRequest) {
     // Find the invite
     const invites = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.ACTIVITY_LOG,
+      'activity_log',
       [
-        `equal("inviteToken", "${token}")`,
-        `equal("leagueId", "${leagueId}")`,
-        `equal("status", "pending")`
+        Query.equal('inviteToken', token),
+        Query.equal('leagueId', leagueId),
+        Query.equal('status', 'pending')
       ]
     );
 

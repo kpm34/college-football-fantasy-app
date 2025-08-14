@@ -3,5 +3,15 @@
   "outputDirectory": ".next",
   "framework": "nextjs",
   "installCommand": "npm install",
-  "devCommand": "npm run dev"
+  "devCommand": "npm run dev",
+  "crons": [
+    {
+      "path": "/api/cron/data-sync",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/weekly-scoring",
+      "schedule": "0 3 * * 1"
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 # Claude Code Project Context - College Football Fantasy App
-Last Updated: 2025-08-13
+Last Updated: August 14, 2025
 
 ## Project Overview
 **Name**: College Football Fantasy App  
@@ -203,11 +203,35 @@ Available MCP tools for Claude Code:
 }
 ```
 
-## Known Issues & Fixes
+## Known Issues & Technical Debt
+
+### Critical Issues
+1. **Conference API Duplication**: 4 separate conference APIs with different implementations
+   - `/api/acc`, `/api/big12`, `/api/sec`, `/api/bigten` - need unification
+2. **Appwrite Config Fragmentation**: 6+ different Appwrite configuration files
+   - Primary: `/lib/appwrite.ts`, `/lib/appwrite-server.ts`
+   - Duplicates: `/lib/config/appwrite.config.ts`, `/lib/appwrite-client-fix.ts`
+3. **Collection Name Inconsistency**: `players` vs `college_players` used interchangeably
+4. **Draft System Redundancy**: 4 different draft implementations
+
+### Code Quality Issues
+1. **Duplicate Components**: 
+   - 3 versions of conference showcase pages
+   - 2 versions of HeroSection component
+   - Multiple service worker implementations
+2. **Unused Code**:
+   - Test pages in production (`/test-cors`, `/test-sentry`)
+   - Legacy API client (`/lib/api.ts`)
+   - Python scoring scripts alongside TypeScript versions
+3. **Data Flow Inconsistencies**:
+   - Player data fetched via 3 different patterns
+   - Mixed use of SDK vs REST API for same operations
+4. **Vendor Submodule**: `/vendor/awwwards-rig/` - KEEP (for 3D mascot/logo design features)
+
+### Quick Fixes
 1. **Port Conflicts**: Dev server uses port 3001 if 3000 is in use
 2. **Multiple Lockfiles**: Prefer root package-lock.json
-3. **WebGL Performance**: Reduced DPR and multisampling for stability
-4. **Type Issues**: Ignore TypeScript errors during build (SKIP_ENV_VALIDATION=true)
+3. **Type Issues**: Use SKIP_ENV_VALIDATION=true for builds
 
 ## AI Assistant Instructions
 When working on this project:

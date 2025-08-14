@@ -99,9 +99,11 @@ export default function LoginPage() {
           </div>
         </div>
         
-        <p className="text-sm mt-6 text-center" style={{ color: '#6B4A35' }}>
-          Don't have an account? <Link href="/signup" className="font-semibold hover:underline" style={{ color: '#EC0B8F' }}>Sign up</Link>
-        </p>
+        {process.env.NEXT_PUBLIC_DISABLE_SIGNUPS !== 'true' && (
+          <p className="text-sm mt-6 text-center" style={{ color: '#6B4A35' }}>
+            Don't have an account? <Link href="/signup" className="font-semibold hover:underline" style={{ color: '#EC0B8F' }}>Sign up</Link>
+          </p>
+        )}
         
         {/* Debug info - remove in production */}
         {process.env.NODE_ENV === 'development' && (

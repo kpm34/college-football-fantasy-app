@@ -1,0 +1,61 @@
+name: CFBD Data Sync (Secure)
+
+on:
+  schedule:
+    # Run every day at 5 AM UTC during football season
+    - cron: '0 5 * 8-12 *'  # August through December
+    # Run every hour during Saturdays in season for live updates
+    - cron: '0 * * * 6'  # Every hour on Saturdays
+  workflow_dispatch:
+    inputs:
+      season:
+        description: 'Season year'
+        required: false
+        default: '2025'
+      week:
+        description: 'Week number (optional)'
+        required: false
+
+jobs:
+  sync-cfbd-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm ci --only=production
+        npm install node-appwrite node-fetch
+        
+    - name: Sync CFBD Data
+      env:
+        # Using GitHub Secrets for security
+        CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+        NEXT_PUBLIC_APPWRITE_ENDPOINT: ${{ secrets.APPWRITE_ENDPOINT }}
+        NEXT_PUBLIC_APPWRITE_PROJECT_ID: ${{ secrets.APPWRITE_PROJECT_ID }}
+        NEXT_PUBLIC_APPWRITE_DATABASE_ID: ${{ secrets.APPWRITE_DATABASE_ID }}
+        APPWRITE_API_KEY: ${{ secrets.APPWRITE_API_KEY }}
+      run: |
+        echo "🏈 Starting CFBD data sync..."
+        node scripts/sync-cfbd-data.js ${{ github.event.inputs.season || '2025' }} ${{ github.event.inputs.week || '' }}
+        
+    - name: Notify on failure
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: 'CFBD Data Sync Failed',
+            body: `The CFBD data sync workflow failed at ${new Date().toISOString()}. Please check the logs.`,
+            labels: ['bug', 'data-sync']
+          })

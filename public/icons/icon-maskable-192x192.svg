@@ -1,0 +1,19 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with safe area -->
+  <rect width="192" height="192" fill="#8C1818"/>
+  
+  <!-- Inner content (80% of total size) -->
+  <g transform="translate(19.200000000000003, 19.200000000000003)">
+    <!-- Football shape -->
+    <ellipse cx="76.8" cy="76.8" rx="53.76" ry="38.4" fill="#D2691E" stroke="#8B4513" stroke-width="3.072"/>
+    
+    <!-- Football laces -->
+    <line x1="76.8" y1="53.76" x2="76.8" y2="99.84" stroke="#FFFFFF" stroke-width="2.304"/>
+    <line x1="69.12" y1="69.12" x2="84.48" y2="69.12" stroke="#FFFFFF" stroke-width="2.304"/>
+    <line x1="69.12" y1="76.8" x2="84.48" y2="76.8" stroke="#FFFFFF" stroke-width="2.304"/>
+    <line x1="69.12" y1="84.48" x2="84.48" y2="84.48" stroke="#FFFFFF" stroke-width="2.304"/>
+    
+    <!-- CFB text -->
+    <text x="76.8" y="130.56" font-family="Arial, sans-serif" font-size="18.432" font-weight="bold" fill="#FFFFFF" text-anchor="middle">CFB</text>
+  </g>
+</svg>
