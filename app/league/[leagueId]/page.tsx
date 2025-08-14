@@ -31,6 +31,7 @@ interface League {
   pickTimeSeconds?: number;
   orderMode?: string;
   draftOrder?: string;
+  members?: string[];
 }
 
 interface Team {
@@ -782,7 +783,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                 </div>
                 <div>
                   <p className="text-sm" style={{ color: leagueColors.text.muted }}>Teams</p>
-                  <p className="font-semibold">{teams.length} / {league?.maxTeams || 12}</p>
+                  <p className="font-semibold">{teams.length || (league?.members?.length || 0)} / {league?.maxTeams || 12}</p>
                 </div>
                 <div>
                   <p className="text-sm" style={{ color: leagueColors.text.muted }}>Draft Date</p>
