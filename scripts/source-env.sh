@@ -27,3 +27,4 @@ load_file "$ROOT_DIR/.env.local"
 
 echo "Environment variables loaded from .env and .env.local into current shell." 1>&2
 
+
