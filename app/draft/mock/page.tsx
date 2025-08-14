@@ -3,15 +3,16 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { 
-  ClockIcon, 
-  UserGroupIcon, 
+import {
+  ClockIcon,
+  UserGroupIcon,
   TrophyIcon,
   ChartBarIcon,
   AdjustmentsHorizontalIcon,
   MagnifyingGlassIcon,
   FunnelIcon
 } from "@heroicons/react/24/outline";
+import { leagueColors } from '@/lib/theme/colors';
 
 type DraftType = 'snake' | 'auction';
 type Position = 'ALL' | 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF';
@@ -375,19 +376,20 @@ export default function MockDraftPage() {
 
   if (showSettings) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0B0E13] via-[#1c1117] to-[#0B0E13]">
+      <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main, color: leagueColors.text.primary }}>
         <div className="max-w-4xl mx-auto px-4 py-16">
-          <h1 className="text-4xl font-bold text-white mb-8 text-center">Mock Draft Setup</h1>
+          <h1 className="text-4xl font-bold mb-8 text-center" style={{ color: leagueColors.text.primary }}>Mock Draft Setup</h1>
           
-          <div className="bg-white/5 backdrop-blur rounded-xl p-8 border border-white/10">
+          <div className="rounded-xl p-8" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Draft Type */}
               <div>
-                <label className="block text-white/80 mb-2">Draft Type</label>
+                <label className="block mb-2" style={{ color: leagueColors.text.primary }}>Draft Type</label>
                 <select
                   value={settings.draftType}
                   onChange={(e) => setSettings({...settings, draftType: e.target.value as DraftType})}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white"
+                  className="w-full px-4 py-2 rounded-lg"
+                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
                 >
                   <option value="snake">Snake Draft</option>
                   <option value="auction">Auction Draft</option>
@@ -396,11 +398,12 @@ export default function MockDraftPage() {
 
               {/* Number of Teams */}
               <div>
-                <label className="block text-white/80 mb-2">Number of Teams</label>
+                <label className="block mb-2" style={{ color: leagueColors.text.primary }}>Number of Teams</label>
                 <select
                   value={settings.numTeams}
                   onChange={(e) => setSettings({...settings, numTeams: parseInt(e.target.value)})}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white"
+                  className="w-full px-4 py-2 rounded-lg"
+                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
                 >
                   {[8, 10, 12, 14, 16].map(n => (
                     <option key={n} value={n}>{n} Teams</option>
@@ -410,11 +413,12 @@ export default function MockDraftPage() {
 
               {/* Pick Time */}
               <div>
-                <label className="block text-white/80 mb-2">Seconds Per Pick</label>
+                <label className="block mb-2" style={{ color: leagueColors.text.primary }}>Seconds Per Pick</label>
                 <select
                   value={settings.pickTimeSeconds}
                   onChange={(e) => setSettings({...settings, pickTimeSeconds: parseInt(e.target.value)})}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white"
+                  className="w-full px-4 py-2 rounded-lg"
+                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
                 >
                   <option value="30">30 seconds</option>
                   <option value="60">60 seconds</option>
@@ -426,11 +430,12 @@ export default function MockDraftPage() {
 
               {/* Scoring Type */}
               <div>
-                <label className="block text-white/80 mb-2">Scoring Type</label>
+                <label className="block mb-2" style={{ color: leagueColors.text.primary }}>Scoring Type</label>
                 <select
                   value={settings.scoringType}
                   onChange={(e) => setSettings({...settings, scoringType: e.target.value as any})}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white"
+                  className="w-full px-4 py-2 rounded-lg"
+                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
                 >
                   <option value="PPR">PPR</option>
                   <option value="HALF_PPR">Half PPR</option>
@@ -440,7 +445,7 @@ export default function MockDraftPage() {
 
               {/* Draft Position */}
               <div className="md:col-span-2">
-                <label className="block text-white/80 mb-2">Your Draft Position</label>
+                <label className="block mb-2" style={{ color: leagueColors.text.primary }}>Your Draft Position</label>
                 <div className="grid grid-cols-6 gap-2">
                   {Array.from({length: settings.numTeams}, (_, i) => i + 1).map(pos => (
                     <button
@@ -448,9 +453,10 @@ export default function MockDraftPage() {
                       onClick={() => setSettings({...settings, userPosition: pos})}
                       className={`py-2 rounded-lg transition-colors ${
                         settings.userPosition === pos
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white/10 text-white/70 hover:bg-white/20'
+                          ? 'text-white'
+                          : ''
                       }`}
+                      style={{ backgroundColor: settings.userPosition === pos ? leagueColors.primary.crimson : leagueColors.background.overlay, color: settings.userPosition === pos ? leagueColors.text.inverse : leagueColors.text.secondary, border: `1px solid ${leagueColors.border.light}` }}
                     >
                       {pos}
                     </button>
@@ -462,13 +468,15 @@ export default function MockDraftPage() {
             <div className="mt-8 flex gap-4">
               <button
                 onClick={startDraft}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors"
+                className="flex-1 py-3 rounded-lg font-semibold transition-colors"
+                style={{ backgroundColor: leagueColors.primary.coral, color: leagueColors.text.inverse }}
               >
                 Start Mock Draft
               </button>
               <button
                 onClick={() => router.push('/dashboard')}
-                className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+                className="px-6 py-3 rounded-lg transition-colors"
+                style={{ backgroundColor: leagueColors.background.overlay, color: leagueColors.text.primary, border: `1px solid ${leagueColors.border.light}` }}
               >
                 Cancel
               </button>
@@ -481,14 +489,14 @@ export default function MockDraftPage() {
 
   // Main Draft UI
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B0E13] via-[#1c1117] to-[#0B0E13]">
+    <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main, color: leagueColors.text.primary }}>
       {/* Header */}
-      <div className="bg-black/20 backdrop-blur border-b border-white/10">
+      <div className="border-b" style={{ backgroundColor: leagueColors.background.secondary, borderColor: leagueColors.border.medium }}>
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold text-white">Mock Draft</h1>
-              <div className="flex items-center gap-2 text-white/60">
+              <h1 className="text-2xl font-bold" style={{ color: leagueColors.text.primary }}>Mock Draft</h1>
+              <div className="flex items-center gap-2" style={{ color: leagueColors.text.secondary }}>
                 <UserGroupIcon className="w-5 h-5" />
                 <span>{settings.numTeams} Teams</span>
               </div>
@@ -496,14 +504,12 @@ export default function MockDraftPage() {
             
             {/* Timer */}
             <div className="flex items-center gap-4">
-              <div className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-                timeRemaining < 10 ? 'bg-red-600/20 text-red-400' : 'bg-white/10 text-white'
-              }`}>
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-lg`} style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}`, color: timeRemaining < 10 ? '#B41F24' : leagueColors.text.primary }}>
                 <ClockIcon className="w-5 h-5" />
                 <span className="font-mono">{Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, '0')}</span>
               </div>
               
-              <div className="text-white">
+              <div>
                 Pick {currentPick} - {draftOrder[getCurrentTeam() - 1]}
               </div>
             </div>
@@ -515,28 +521,26 @@ export default function MockDraftPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Player Pool */}
           <div className="lg:col-span-2">
-            <div className="bg-white/5 backdrop-blur rounded-xl border border-white/10 overflow-hidden">
+            <div className="rounded-xl overflow-hidden" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
               {/* Filters */}
-              <div className="p-4 border-b border-white/10">
+              <div className="p-4" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
                 <div className="flex flex-col gap-3">
                   <div className="flex gap-2">
                     <div className="relative flex-1">
-                      <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                      <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: leagueColors.text.muted }} />
                       <input
                         type="text"
                         placeholder="Search players..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40"
+                        className="w-full pl-10 pr-4 py-2 rounded-lg"
+                        style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
                       />
                     </div>
                     <button
                       onClick={() => setShowOnlyAvailable(!showOnlyAvailable)}
-                      className={`px-4 py-2 rounded-lg transition-colors ${
-                        showOnlyAvailable 
-                          ? 'bg-blue-600/20 text-blue-400 border border-blue-600/50'
-                          : 'bg-white/10 text-white/60 border border-white/20'
-                      }`}
+                      className={`px-4 py-2 rounded-lg transition-colors`}
+                      style={{ backgroundColor: showOnlyAvailable ? leagueColors.primary.taupe : leagueColors.background.overlay, color: leagueColors.text.primary, border: `1px solid ${leagueColors.border.light}` }}
                     >
                       Available Only
                     </button>
@@ -546,7 +550,8 @@ export default function MockDraftPage() {
                     <select
                       value={positionFilter}
                       onChange={(e) => setPositionFilter(e.target.value as Position)}
-                      className="px-3 py-1.5 bg-white/10 border border-white/20 rounded-lg text-white text-sm"
+                      className="px-3 py-1.5 rounded-lg text-sm"
+                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
                     >
                       <option value="ALL">All Positions</option>
                       <option value="QB">QB</option>
@@ -560,7 +565,8 @@ export default function MockDraftPage() {
                     <select
                       value={conferenceFilter}
                       onChange={(e) => setConferenceFilter(e.target.value as Conference)}
-                      className="px-3 py-1.5 bg-white/10 border border-white/20 rounded-lg text-white text-sm"
+                      className="px-3 py-1.5 rounded-lg text-sm"
+                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
                     >
                       <option value="ALL">All Conferences</option>
                       <option value="SEC">SEC</option>
@@ -575,8 +581,8 @@ export default function MockDraftPage() {
               {/* Player List */}
               <div className="overflow-y-auto max-h-[600px]">
                 <table className="w-full">
-                  <thead className="sticky top-0 bg-black/50 backdrop-blur">
-                    <tr className="text-xs text-white/60">
+                  <thead className="sticky top-0" style={{ backgroundColor: leagueColors.background.secondary }}>
+                    <tr className="text-xs" style={{ color: leagueColors.text.secondary }}>
                       <th className="text-left py-3 px-4">Rank</th>
                       <th className="text-left py-3 px-4">Player</th>
                       <th className="text-center py-3 px-4">Pos</th>
@@ -594,42 +600,35 @@ export default function MockDraftPage() {
                       return (
                         <tr 
                           key={player.id}
-                          className={`border-b border-white/5 ${
-                            isDrafted ? 'opacity-40' : 'hover:bg-white/5'
-                          }`}
+                          className={`border-b`} style={{ borderColor: leagueColors.border.light, backgroundColor: isDrafted ? 'transparent' : 'transparent' }}
                         >
-                          <td className="py-3 px-4 text-white/60">{index + 1}</td>
+                          <td className="py-3 px-4" style={{ color: leagueColors.text.muted }}>{index + 1}</td>
                           <td className="py-3 px-4">
                             <div>
-                              <div className="text-white font-medium">{player.name}</div>
-                              <div className="text-xs text-white/50">{player.class} • {player.height} • {player.weight}lbs</div>
+                              <div className="font-medium" style={{ color: leagueColors.text.primary }}>{player.name}</div>
+                              <div className="text-xs" style={{ color: leagueColors.text.secondary }}>{player.class} • {player.height} • {player.weight}lbs</div>
                             </div>
                           </td>
                           <td className="py-3 px-4 text-center">
-                            <span className={`px-2 py-1 rounded text-xs font-medium ${
-                              player.position === 'QB' ? 'bg-red-600/20 text-red-400' :
-                              player.position === 'RB' ? 'bg-green-600/20 text-green-400' :
-                              player.position === 'WR' ? 'bg-blue-600/20 text-blue-400' :
-                              player.position === 'TE' ? 'bg-orange-600/20 text-orange-400' :
-                              'bg-gray-600/20 text-gray-400'
-                            }`}>
+                            <span className={`px-2 py-1 rounded text-xs font-medium`} style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
                               {player.position}
                             </span>
                           </td>
-                          <td className="py-3 px-4 text-white/70">{player.team}</td>
-                          <td className="py-3 px-4 text-center text-white font-medium">{player.projectedPoints}</td>
-                          <td className="py-3 px-4 text-center text-white/60">{player.adp}</td>
+                          <td className="py-3 px-4" style={{ color: leagueColors.text.secondary }}>{player.team}</td>
+                          <td className="py-3 px-4 text-center" style={{ color: leagueColors.text.primary, fontWeight: 600 }}>{player.projectedPoints}</td>
+                          <td className="py-3 px-4 text-center" style={{ color: leagueColors.text.muted }}>{player.adp}</td>
                           <td className="py-3 px-4 text-center">
                             {!isDrafted && isMyPick && (
                               <button
                                 onClick={() => draftPlayer(player)}
-                                className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm transition-colors"
+                                className="px-3 py-1 rounded text-sm transition-colors"
+                                style={{ backgroundColor: leagueColors.primary.coral, color: leagueColors.text.inverse }}
                               >
                                 Draft
                               </button>
                             )}
                             {isDrafted && (
-                              <span className="text-xs text-white/40">Drafted</span>
+                              <span className="text-xs" style={{ color: leagueColors.text.muted }}>Drafted</span>
                             )}
                           </td>
                         </tr>
@@ -644,19 +643,19 @@ export default function MockDraftPage() {
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* My Roster */}
-            <div className="bg-white/5 backdrop-blur rounded-xl border border-white/10 p-4">
-              <h3 className="text-lg font-bold text-white mb-3">My Roster</h3>
+            <div className="rounded-xl p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+              <h3 className="text-lg font-bold mb-3" style={{ color: leagueColors.text.primary }}>My Roster</h3>
               <div className="space-y-2">
                 {myRoster.length === 0 ? (
-                  <p className="text-white/40 text-sm">No players drafted yet</p>
+                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>No players drafted yet</p>
                 ) : (
                   myRoster.map((player, index) => (
-                    <div key={player.id} className="flex items-center justify-between py-2 border-b border-white/10">
+                    <div key={player.id} className="flex items-center justify-between py-2" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
                       <div>
-                        <div className="text-white text-sm">{player.name}</div>
-                        <div className="text-white/50 text-xs">{player.position} - {player.team}</div>
+                        <div className="text-sm" style={{ color: leagueColors.text.primary }}>{player.name}</div>
+                        <div className="text-xs" style={{ color: leagueColors.text.secondary }}>{player.position} - {player.team}</div>
                       </div>
-                      <div className="text-white/60 text-xs">Pick {Object.entries(allPicks).find(([_, p]) => p.player.id === player.id)?.[0]}</div>
+                      <div className="text-xs" style={{ color: leagueColors.text.muted }}>Pick {Object.entries(allPicks).find(([_, p]) => p.player.id === player.id)?.[0]}</div>
                     </div>
                   ))
                 )}
@@ -664,17 +663,14 @@ export default function MockDraftPage() {
             </div>
 
             {/* Draft Order */}
-            <div className="bg-white/5 backdrop-blur rounded-xl border border-white/10 p-4">
-              <h3 className="text-lg font-bold text-white mb-3">Draft Order</h3>
+            <div className="rounded-xl p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+              <h3 className="text-lg font-bold mb-3" style={{ color: leagueColors.text.primary }}>Draft Order</h3>
               <div className="space-y-1">
                 {draftOrder.map((team, index) => (
                   <div
                     key={index}
-                    className={`py-2 px-3 rounded ${
-                      getCurrentTeam() - 1 === index
-                        ? 'bg-blue-600/20 text-blue-400 font-medium'
-                        : 'text-white/60'
-                    }`}
+                    className={`py-2 px-3 rounded`}
+                    style={{ backgroundColor: getCurrentTeam() - 1 === index ? leagueColors.background.overlay : 'transparent', color: getCurrentTeam() - 1 === index ? leagueColors.text.primary : leagueColors.text.secondary, border: `1px solid ${leagueColors.border.light}` }}
                   >
                     {index + 1}. {team}
                   </div>

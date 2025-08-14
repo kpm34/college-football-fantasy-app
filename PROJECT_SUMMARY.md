@@ -1,7 +1,7 @@
 # College Football Fantasy App - Comprehensive Project Summary
 
 ## 🎯 Project Overview
-**Last Updated**: 2025-08-09  
+**Last Updated**: 2025-08-14  
 **Status**: Active Development  
 **Deployment**: Vercel (Production)  
 
@@ -21,6 +21,8 @@
 - **Environment Cleanup**: Standardized .env files across all environments
 - **Added Dependencies**: Integrated 3D/animation libraries from awwwards-rig
 - **Improved Structure**: Clear separation of core features and future enhancements
+- **Custom Roster Schema**: Per-league RB/WR/Bench configuration with mode-based caps (Conference: RB≤2, WR≤5; Power-4: WR≤6)
+- **Locker Room UX**: Palette-aligned tables, roster summary chips, guardrails, and drag-and-drop + MOVE actions
 
 ## 📊 Data Flow Architecture
 
@@ -231,6 +233,7 @@ conference rosters/               # Team Roster Data
 ### Protected Endpoints (Auth Required)
 - `POST /api/leagues/create` - Create new league
 - `GET /api/leagues/[id]` - Get league details
+  - Persists `rosterSchema` { rb, wr, benchSize } with mode caps
 - `POST /api/draft/pick` - Make draft pick
 - `GET /api/draft/[id]/status` - Get draft status
 - `POST /api/lineup/set` - Set weekly lineup
@@ -252,6 +255,23 @@ Database: college-football-fantasy
 ├── player_stats                 # Statistics
 ├── auctions                     # Auction drafts
 └── bids                         # Auction bids
+
+### League Document (key fields)
+```
+{
+  name: string,
+  gameMode: 'CONFERENCE' | 'POWER4',
+  selectedConference?: string,
+  maxTeams: number,
+  seasonStartWeek: number,
+  rosterSchema: {
+    rb: number,           // capped by mode
+    wr: number,           // capped by mode
+    benchSize: number
+  },
+  ...
+}
+```
 ```
 
 ## 🔐 Environment Variables
@@ -316,6 +336,7 @@ VERCEL_OIDC_TOKEN=[refresh with vercel pull]
 - ✅ Improved league dashboard with better data handling
 - ✅ Updated login page with proper authentication flow
 - ✅ Fixed Appwrite client initialization with correct project ID
+- ✅ Added customizable roster schema, locker room drag-and-drop, and guardrails
 
 ## 🎯 Current State
 - Development server running on port 3001

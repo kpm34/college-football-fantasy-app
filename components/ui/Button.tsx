@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'periwinkle';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
 }
@@ -17,12 +17,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ...props 
   }, ref) => {
     const baseStyles = 'font-bold rounded-xl transition-all duration-300 relative overflow-hidden';
+    const palette = {
+      maroon: '#3A1220',
+      orange: '#E89A5C',
+      periwinkle: '#8091BB',
+      tan: '#D9BBA4',
+      gold: '#DAA520',
+      bronze: '#B8860B',
+    } as const;
     
     const variants = {
-      primary: 'chrome-button text-slate-800 hover:scale-105 shadow-lg',
-      secondary: 'glass-card text-white hover:bg-white/20 border border-white/20',
-      ghost: 'text-white hover:bg-white/10'
-    };
+      primary: `text-white hover:scale-105 shadow-lg`,
+      secondary: `text-white border`,
+      ghost: 'text-white hover:bg-white/10',
+      periwinkle: 'text-white hover:scale-105 shadow-lg'
+    } as const;
 
     const sizes = {
       sm: 'px-4 py-2 text-sm',
@@ -33,9 +42,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className} ${
-          disabled || isLoading ? 'opacity-50 cursor-not-allowed' : ''
-        }`}
+        className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className} ${disabled || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        style={
+          variant === 'primary'
+            ? { background: `linear-gradient(90deg, ${palette.gold}, ${palette.bronze})`, boxShadow: `0 10px 20px ${palette.maroon}33` }
+            : variant === 'secondary'
+            ? { background: 'rgba(255,255,255,0.06)', borderColor: `${palette.tan}66`, boxShadow: `0 8px 16px ${palette.maroon}22` }
+            : variant === 'periwinkle'
+            ? { background: `linear-gradient(90deg, ${palette.periwinkle}, #6B7CA6)`, boxShadow: `0 10px 20px ${palette.maroon}33` }
+            : undefined
+        }
         disabled={disabled || isLoading}
         {...props}
       >

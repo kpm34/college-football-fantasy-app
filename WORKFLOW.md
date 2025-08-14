@@ -57,11 +57,12 @@ npm run dev
 ### 2️⃣ Feature Development
 
 #### Core Features
-- **Draft System**: `frontend/app/draft/`
-- **Auction System**: `frontend/app/auction/`
-- **League Management**: `frontend/app/league/`
-- **API Endpoints**: `frontend/app/api/`
-- **Data Services**: `src/services/`
+- **Draft System**: `app/draft/`
+- **Auction System**: `app/auction/`
+- **League Management**: `app/league/`
+- **Locker Room**: `app/league/[leagueId]/locker-room/`
+- **API Endpoints**: `app/api/`
+- **Data Services**: `lib/services/`
 
 ### 3️⃣ Testing Flow
 ```bash
@@ -129,6 +130,21 @@ Collections:
 - Project: `college-football-fantasy-app`
 - Database: `college-football-fantasy`
 - Real-time subscriptions available
+
+### Roster Schema & Guardrails
+- Persist per-league roster schema on create: `POST /api/leagues/create` → `rosterSchema { rb, wr, benchSize }`
+- Enforce caps by mode:
+  - Conference: RB ≤ 2, WR ≤ 5
+  - Power-4: WR ≤ 6
+- Locker room derives slots from schema and enforces bench capacity client-side
+
+### Locker Room Interaction Model
+- Drag-and-drop (native) for:
+  - Bench → Slot (eligibility required)
+  - Slot → Slot (swap with dual eligibility check)
+  - Slot → Bench (respects bench size)
+- MOVE (click) flow mirrors ESPN behavior for accessibility and mobile support
+- Guardrail toasts/messages displayed for incompatible moves and full bench
 
 ### Vercel Services
 - **Edge Config**: Feature flags
@@ -205,9 +221,15 @@ npm run lint:fix
    - Player eligibility rules
 
 3. **User Experience**
-   - Responsive design
+   - Responsive design and mobile ergonomics
    - Fast page loads
    - Intuitive navigation
+   - Drag-and-drop with keyboard accessible MOVE fallback
+
+4. **Upcoming UX Enhancements**
+   - Migrate to react-dnd for richer drag previews and smoother interactions
+   - Visual slot highlighting and swap previews
+   - Undo/redo for roster edits
 
 ## 📝 Code Standards
 

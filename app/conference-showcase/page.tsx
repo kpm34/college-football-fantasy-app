@@ -27,6 +27,8 @@ interface ConferenceTeam {
 export default function ConferenceShowcasePage() {
   const [bigTenTeams, setBigTenTeams] = useState<ConferenceTeam[]>([]);
   const [secTeams, setSecTeams] = useState<ConferenceTeam[]>([]);
+  const [big12Teams, setBig12Teams] = useState<ConferenceTeam[]>([]);
+  const [accTeams, setAccTeams] = useState<ConferenceTeam[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,9 +41,11 @@ export default function ConferenceShowcasePage() {
       console.log('Loading conference data...');
       
       // Load conference teams
-      const [bigTenResponse, secResponse] = await Promise.all([
+      const [bigTenResponse, secResponse, big12Response, accResponse] = await Promise.all([
         fetch('/api/bigten?type=teams'),
-        fetch('/api/sec?type=teams')
+        fetch('/api/sec?type=teams'),
+        fetch('/api/big12?type=teams'),
+        fetch('/api/acc?type=teams')
       ]);
 
       console.log('Big Ten Response:', bigTenResponse.status);
@@ -57,6 +61,16 @@ export default function ConferenceShowcasePage() {
         const secData = await secResponse.json();
         console.log('SEC Data:', secData);
         setSecTeams(secData.data || []);
+      }
+
+      if (big12Response.ok) {
+        const big12Data = await big12Response.json();
+        setBig12Teams(big12Data.teams || big12Data.data || []);
+      }
+
+      if (accResponse.ok) {
+        const accData = await accResponse.json();
+        setAccTeams(accData.data || []);
       }
 
     } catch (error) {
@@ -147,7 +161,7 @@ export default function ConferenceShowcasePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-[#3A1220] mb-4">Power 4 Conferences</h1>
-          <p className="text-xl text-[#5C1F30]">Page 1: Big Ten & SEC</p>
+          <p className="text-xl text-[#5C1F30]">Big Ten, SEC, Big 12, ACC</p>
         </div>
 
         {/* Big Ten Conference */}
@@ -238,14 +252,60 @@ export default function ConferenceShowcasePage() {
           </div>
         </div>
 
-        {/* Navigation Footer */}
-        <div className="mt-12 text-center">
-          <Link 
-            href="/conference-showcase-2"
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#8091BB] to-[#6B7CA6] rounded-xl font-bold text-lg hover:scale-105 transition-transform shadow-lg text-white"
-          >
-            View Big 12 & ACC →
-          </Link>
+        {/* Big 12 Conference */}
+        <div className="bg-gradient-to-r from-[#7a1c1c]/20 to-[#7a1c1c]/10 backdrop-blur-sm rounded-xl p-8 border border-[#7a1c1c]/30 mb-12">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-4xl font-black text-[#7a1c1c] uppercase">BIG 12</h2>
+            <span className="px-4 py-2 bg-[#7a1c1c]/10 text-[#7a1c1c] rounded-full text-sm font-bold">
+              {big12Teams.length} Teams
+            </span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {big12Teams.map((team, index) => {
+              const teamName = team.name || (team as any).school || '';
+              const colors = getTeamColors(teamName);
+              return (
+                <div key={index} className="bg-[#7a1c1c]/5 rounded-lg p-4 text-center hover:bg-[#7a1c1c]/10 transition-all duration-300 cursor-pointer group">
+                  <div 
+                    className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                    style={{ backgroundColor: colors.primary, borderColor: colors.secondary, borderWidth: '3px', borderStyle: 'solid' }}
+                  >
+                    <span className="font-bold text-xs" style={{ color: colors.secondary }}>{team.abbreviation}</span>
+                  </div>
+                  <div className="text-sm font-bold mb-1 text-[#7a1c1c]">{teamName}</div>
+                  <div className="text-xs text-[#7a1c1c]/70">{team.mascot}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ACC Conference */}
+        <div className="bg-gradient-to-r from-[#0B0E13]/20 to-[#0B0E13]/10 backdrop-blur-sm rounded-xl p-8 border border-[#0B0E13]/30">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-4xl font-black text-[#0B0E13] uppercase">ACC</h2>
+            <span className="px-4 py-2 bg-[#0B0E13]/10 text-[#0B0E13] rounded-full text-sm font-bold">
+              {accTeams.length} Teams
+            </span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {accTeams.map((team, index) => {
+              const teamName = team.name || (team as any).school || '';
+              const colors = getTeamColors(teamName);
+              return (
+                <div key={index} className="bg-[#0B0E13]/5 rounded-lg p-4 text-center hover:bg-[#0B0E13]/10 transition-all duration-300 cursor-pointer group">
+                  <div 
+                    className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl"
+                    style={{ backgroundColor: colors.primary, borderColor: colors.secondary, borderWidth: '3px', borderStyle: 'solid' }}
+                  >
+                    <span className="font-bold text-xs" style={{ color: colors.secondary }}>{team.abbreviation}</span>
+                  </div>
+                  <div className="text-sm font-bold mb-1 text-[#0B0E13]">{teamName}</div>
+                  <div className="text-xs text-[#0B0E13]/70">{team.mascot}</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

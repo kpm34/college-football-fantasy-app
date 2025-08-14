@@ -14,7 +14,7 @@ export const APPWRITE_CONFIG = {
 export const APPWRITE_PUBLIC_CONFIG = {
   endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1',
   projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app',
-  databaseId: process.env.NEXT_PUBLIC_DATABASE_ID || 'college-football-fantasy',
+  databaseId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'college-football-fantasy',
 } as { endpoint: string; projectId: string; databaseId: string };
 
 // Runtime override for production domains to avoid misconfigured envs

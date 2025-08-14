@@ -9,6 +9,10 @@ These environment variables should be set in Vercel Dashboard for Production, Pr
 NEXT_PUBLIC_APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
 NEXT_PUBLIC_APPWRITE_PROJECT_ID=college-football-fantasy-app
 NEXT_PUBLIC_APPWRITE_DATABASE_ID=college-football-fantasy
+APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
+APPWRITE_PROJECT_ID=college-football-fantasy-app
+DATABASE_ID=college-football-fantasy
+APPWRITE_API_KEY=your-api-key-here
 ```
 
 ### Collection IDs
@@ -28,11 +32,8 @@ NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_PROJECTIONS=player_projections
 NEXT_PUBLIC_APPWRITE_COLLECTION_USERS=users
 ```
 
-### Server-Side Only (Optional)
+### Server-Side Only (Optional extras)
 ```env
-# Only add if using server-side Appwrite SDK
-APPWRITE_API_KEY=your-api-key-here
-
 # External APIs
 CFBD_API_KEY=your-cfbd-api-key
 AI_GATEWAY_API_KEY=your-ai-gateway-key
@@ -51,6 +52,7 @@ EDGE_CONFIG=your-edge-config-url
 2. Don't duplicate variables with different names
 3. Keep server-side API keys without the NEXT_PUBLIC_ prefix
 4. All collection names should match exactly with Appwrite collection IDs
+5. Avoid creating duplicate env var entries in Vercel (e.g., both `DATABASE_ID` and `NEXT_PUBLIC_DATABASE_ID`). Use the names above.
 
 ## Local Development
 

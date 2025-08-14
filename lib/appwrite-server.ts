@@ -24,7 +24,8 @@ export const COLLECTIONS = {
   LINEUPS: 'lineups',
   DRAFT_PICKS: 'draft_picks',
   PLAYERS: 'players',
-  DRAFTS: 'drafts'
+  DRAFTS: 'drafts',
+  USERS: 'users'
 };
 
 // Helper function to get draftable players

@@ -22,7 +22,7 @@ interface Team {
   $id: string;
   leagueId: string;
   userId: string;
-  teamName: string;
+  name: string;
   players?: string;
 }
 
@@ -59,6 +59,8 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
   const [activeWeek, setActiveWeek] = useState(1);
   const [showAddPlayer, setShowAddPlayer] = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const [teamNameInput, setTeamNameInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [positionFilter, setPositionFilter] = useState('ALL');
 
@@ -89,18 +91,31 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
       // Load user's team in this league
       const teamsResponse = await databases.listDocuments(
         DATABASE_ID,
-        COLLECTIONS.ROSTERS,
+        COLLECTIONS.TEAMS,
         [Query.equal('leagueId', leagueId), Query.equal('userId', user.$id)]
       );
+      let teamDoc: any | null = null;
+      if (teamsResponse.documents.length > 0) {
+        teamDoc = teamsResponse.documents[0];
+      } else {
+        // Legacy field names fallback
+        const alt = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.TEAMS,
+          [Query.equal('league_id', leagueId), Query.equal('owner', user.$id)]
+        );
+        if (alt.documents.length > 0) teamDoc = alt.documents[0];
+      }
       
-      if (teamsResponse.documents.length === 0) {
+      if (!teamDoc) {
         // No team found - redirect to league page
         router.push(`/league/${leagueId}`);
         return;
       }
       
-      const userTeam = teamsResponse.documents[0] as unknown as Team;
+      const userTeam = teamDoc as unknown as Team;
       setTeam(userTeam);
+      setTeamNameInput((userTeam as any).name || '');
       
       // Parse lineup if exists
       if (userTeam.players) {
@@ -164,12 +179,31 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
 
       await databases.updateDocument(
         DATABASE_ID,
-        COLLECTIONS.ROSTERS,
+        COLLECTIONS.TEAMS,
         team.$id,
         { players: JSON.stringify(lineupData) }
       );
     } catch (error) {
       console.error('Error saving lineup:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const saveTeamName = async () => {
+    if (!team) return;
+    try {
+      setSaving(true);
+      await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.TEAMS,
+        team.$id,
+        { name: teamNameInput }
+      );
+      setTeam({ ...team, name: teamNameInput });
+      setEditingName(false);
+    } catch (error) {
+      console.error('Error updating team name:', error);
     } finally {
       setSaving(false);
     }
@@ -253,7 +287,39 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
               >
                 ← Back to League
               </Link>
-              <h1 className="text-2xl font-bold">{team?.teamName || 'My Team'}</h1>
+              <div className="flex items-center gap-3">
+                {!editingName ? (
+                  <>
+                    <h1 className="text-2xl font-bold">{team?.name || 'My Team'}</h1>
+                    <button
+                      onClick={() => setEditingName(true)}
+                      className="text-sm text-gray-300 hover:text-white underline"
+                    >
+                      Edit
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <input
+                      value={teamNameInput}
+                      onChange={(e) => setTeamNameInput(e.target.value)}
+                      className="bg-[#3a3a3a] border border-[#4a4a4a] rounded px-3 py-1"
+                    />
+                    <button
+                      onClick={saveTeamName}
+                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => { setEditingName(false); setTeamNameInput(team?.name || ''); }}
+                      className="bg-[#5a5a5a] hover:bg-[#6a6a6a] text-white px-3 py-1 rounded"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
             
             <div className="flex items-center gap-4">
@@ -263,8 +329,9 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
               <button
                 onClick={() => setShowAddPlayer(true)}
                 className="bg-[#5a5a5a] hover:bg-[#6a6a6a] text-white px-4 py-2 rounded transition-colors"
+                aria-label="Open waivers and add player"
               >
-                + Add Player
+                Waivers / Add Player
               </button>
             </div>
           </div>
@@ -387,7 +454,7 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
                           {player.projection.toFixed(1)}
                         </td>
                         <td className="py-3 px-3 text-center">
-                          <button className="text-blue-400 hover:text-blue-300 text-sm">
+                          <button className="text-[#6B7CA6] hover:text-[#5F6F95] text-sm">
                             Move to Lineup
                           </button>
                         </td>
@@ -401,7 +468,7 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
         </div>
       </div>
 
-      {/* Add Player Modal */}
+      {/* Waivers / Add Player Modal (single entry point) */}
       {showAddPlayer && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-[#2a2a2a] rounded-lg w-full max-w-4xl max-h-[80vh] overflow-hidden">

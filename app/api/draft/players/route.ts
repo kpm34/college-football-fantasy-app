@@ -44,11 +44,7 @@ export async function GET(request: NextRequest) {
     queries.push(Query.orderDesc('rating'));
 
     // Fetch players from Appwrite
-    const response = await databases.listDocuments(
-      DATABASE_ID,
-      'college_players',
-      queries
-    );
+    const response = await databases.listDocuments(DATABASE_ID, 'college_players', queries);
 
     // Transform players for draft UI
     const players = response.documents.map((player, index) => {

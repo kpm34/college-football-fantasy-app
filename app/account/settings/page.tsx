@@ -42,7 +42,9 @@ export default function AccountSettingsPage() {
   const [success, setSuccess] = useState<string | null>(null);
   
   // Form fields
-  const [fullName, setFullName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [favoriteTeam, setFavoriteTeam] = useState('');
   const [fantasyExperience, setFantasyExperience] = useState('intermediate');
   const [notificationPrefs, setNotificationPrefs] = useState({
@@ -57,7 +59,11 @@ export default function AccountSettingsPage() {
     if (!authLoading && !user) {
       router.push('/login');
     } else if (user) {
-      setFullName(user.name || '');
+      // Parse the full name into first and last name
+      const nameParts = (user.name || '').split(' ');
+      setFirstName(nameParts[0] || '');
+      setLastName(nameParts.slice(1).join(' ') || '');
+      setEmail(user.email || '');
       loadPreferences(user.$id);
       setLoading(false);
     }
@@ -90,18 +96,29 @@ export default function AccountSettingsPage() {
     setSuccess(null);
 
     try {
-      // Update name via API
+      // Combine first and last name
+      const fullName = `${firstName} ${lastName}`.trim();
+      
+      // Update name and email via API
+      const updates: any = {};
       if (fullName !== user.name) {
+        updates.name = fullName;
+      }
+      if (email !== user.email) {
+        updates.email = email;
+      }
+      
+      if (Object.keys(updates).length > 0) {
         const response = await fetch('/api/auth/update-profile', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: fullName }),
+          body: JSON.stringify(updates),
         });
 
         if (!response.ok) {
-          throw new Error('Failed to update name');
+          throw new Error('Failed to update profile');
         }
       }
 
@@ -185,26 +202,45 @@ export default function AccountSettingsPage() {
             <h2 className="text-xl font-semibold text-white mb-4">Profile Information</h2>
             
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:border-white/40 focus:outline-none"
-                  placeholder="Enter your name"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:border-white/40 focus:outline-none"
+                    placeholder="First name"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:border-white/40 focus:outline-none"
+                    placeholder="Last name"
+                  />
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">
                   Email
                 </label>
-                <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white/60">
-                  {user?.email}
-                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:border-white/40 focus:outline-none"
+                  placeholder="Enter your email"
+                />
               </div>
             </div>
           </div>
