@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
 import { Query } from "appwrite";
 import Link from "next/link";
@@ -49,6 +49,7 @@ interface LockerRoomPageProps {
 
 export default function LockerRoomPage({ params }: LockerRoomPageProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, loading: authLoading } = useAuth();
   const [leagueId, setLeagueId] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -63,6 +64,8 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
   const [teamNameInput, setTeamNameInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [positionFilter, setPositionFilter] = useState('ALL');
+  const [isCommissioner, setIsCommissioner] = useState(false);
+  const [readOnly, setReadOnly] = useState(false);
 
   // Resolve params
   useEffect(() => {
@@ -82,29 +85,63 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
     }
   }, [leagueId, authLoading, user, router]);
 
+  // Determine commissioner status (server truth)
+  useEffect(() => {
+    if (!leagueId) return;
+    (async () => {
+      try {
+        const res = await fetch(`/api/leagues/is-commissioner/${leagueId}`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (typeof data.isCommissioner === 'boolean') setIsCommissioner(data.isCommissioner);
+        }
+      } catch {}
+    })();
+  }, [leagueId]);
+
   const loadTeamData = async () => {
     if (!user) return;
     
     try {
       setLoading(true);
       
-      // Load user's team in this league
-      const teamsResponse = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.TEAMS,
-        [Query.equal('leagueId', leagueId), Query.equal('userId', user.$id)]
-      );
+      // Optional commissioner view: teamId query param
+      const viewTeamId = searchParams.get('teamId');
       let teamDoc: any | null = null;
-      if (teamsResponse.documents.length > 0) {
-        teamDoc = teamsResponse.documents[0];
+      if (viewTeamId) {
+        // Only commissioners can view arbitrary teams
+        if (!isCommissioner) {
+          router.push(`/league/${leagueId}`);
+          return;
+        }
+        try {
+          teamDoc = await databases.getDocument(
+            DATABASE_ID,
+            COLLECTIONS.TEAMS,
+            viewTeamId
+          );
+        } catch (_) {
+          router.push(`/league/${leagueId}`);
+          return;
+        }
       } else {
-        // Legacy field names fallback
-        const alt = await databases.listDocuments(
+        // Load current user's team in this league
+        const teamsResponse = await databases.listDocuments(
           DATABASE_ID,
           COLLECTIONS.TEAMS,
-          [Query.equal('league_id', leagueId), Query.equal('owner', user.$id)]
+          [Query.equal('leagueId', leagueId), Query.equal('userId', user.$id)]
         );
-        if (alt.documents.length > 0) teamDoc = alt.documents[0];
+        if (teamsResponse.documents.length > 0) {
+          teamDoc = teamsResponse.documents[0];
+        } else {
+          // Legacy field names fallback
+          const alt = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.TEAMS,
+            [Query.equal('league_id', leagueId), Query.equal('owner', user.$id)]
+          );
+          if (alt.documents.length > 0) teamDoc = alt.documents[0];
+        }
       }
       
       if (!teamDoc) {
@@ -116,6 +153,7 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
       const userTeam = teamDoc as unknown as Team;
       setTeam(userTeam);
       setTeamNameInput((userTeam as any).name || '');
+      setReadOnly(userTeam.userId !== user.$id);
       
       // Parse lineup if exists
       if (userTeam.players) {
@@ -165,7 +203,7 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
   };
 
   const saveLineup = async () => {
-    if (!team) return;
+    if (!team || readOnly) return;
     
     setSaving(true);
     try {
@@ -191,7 +229,7 @@ export default function LockerRoomPage({ params }: LockerRoomPageProps) {
   };
 
   const saveTeamName = async () => {
-    if (!team) return;
+    if (!team || readOnly) return;
     try {
       setSaving(true);
       await databases.updateDocument(
