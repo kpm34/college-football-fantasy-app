@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
-import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { leagueColors } from '@/lib/theme/colors';
+import { InviteModal } from '@/components/league/InviteModal';
 
 interface ScoringRules {
   // Passing
@@ -67,6 +68,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
   const [league, setLeague] = useState<League | null>(null);
   const [members, setMembers] = useState<Member[]>([]);
   const [savedMessage, setSavedMessage] = useState('');
+  const [showInviteModal, setShowInviteModal] = useState(false);
   
   // Form states
   const [leagueName, setLeagueName] = useState('');
@@ -546,7 +548,25 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
 
           {/* Members */}
           <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
-            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>League Members</h2>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-xl font-semibold" style={{ color: leagueColors.text.primary }}>League Members</h2>
+                <p className="text-sm" style={{ color: leagueColors.text.secondary }}>
+                  {members.length} of {league?.maxTeams || 12} spots filled
+                </p>
+              </div>
+              <button
+                onClick={() => setShowInviteModal(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+                style={{ 
+                  backgroundColor: leagueColors.accent.pink, 
+                  color: leagueColors.text.inverse 
+                }}
+              >
+                <ShareIcon className="w-4 h-4" />
+                Invite Players
+              </button>
+            </div>
             
             <div className="space-y-2">
               {members.map((member) => (
@@ -568,6 +588,16 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
           </div>
         </div>
       </div>
+      
+      {/* Invite Modal */}
+      {showInviteModal && league && (
+        <InviteModal
+          isOpen={showInviteModal}
+          onClose={() => setShowInviteModal(false)}
+          leagueId={league.$id}
+          leagueName={league.name}
+        />
+      )}
     </div>
   );
 }

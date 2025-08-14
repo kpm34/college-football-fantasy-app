@@ -207,7 +207,7 @@ export default function DashboardPage() {
                 <div
                   key={league.$id}
                   className="rounded-2xl p-6 transition-all hover:shadow-md hover:-translate-y-0.5 backdrop-blur-sm"
-                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}
+                  style={{ background: 'rgba(30, 144, 255, 0.15)', border: '1px solid rgba(30, 144, 255, 0.25)' }}
                 >
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-xl font-semibold" style={{ color: palette.primary }}>{league.name}</h3>

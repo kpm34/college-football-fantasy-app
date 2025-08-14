@@ -1,37 +1,40 @@
-// League Home Color Palette (from user-provided swatches)
-// Swatches approximated to hex: coral #DE6656, brown #6B4A35, taupe #B4A6A6,
-// crimson #B41F24, ice #CBD9DB
+// League Home Color Palette (updated from new swatches)
 export const leagueColors = {
   primary: {
-    coral: '#DE6656',
-    brown: '#6B4A35',
-    taupe: '#B4A6A6',
-    crimson: '#B41F24',
-    ice: '#CBD9DB',
-    highlight: '#DE6656'
+    mauve: '#C8A2A8',      // Soft mauve/dusty rose
+    sand: '#D4C4B8',       // Warm sand/beige
+    mint: '#C8DDD4',       // Soft mint green
+    sky: '#B8D4DC',        // Light sky blue
+    crimson: '#DC143C',    // Bright crimson red
+    highlight: '#DC143C'
+  },
+  accent: {
+    pink: '#C8A2A8',       // Using mauve as accent pink
+    blue: '#B8D4DC',       // Sky blue for accents
+    green: '#C8DDD4'       // Mint for success states
   },
   background: {
-    main: '#CBD9DB',     // ice
-    secondary: '#B4A6A6',
-    tertiary: '#6B4A35',
-    overlay: 'rgba(203, 217, 219, 0.9)',
-    card: 'rgba(180, 166, 166, 0.35)'
+    main: '#F5F0EB',       // Light warm background
+    secondary: '#D4C4B8',  // Sand color for sections
+    tertiary: '#C8DDD4',   // Mint for alternate sections
+    overlay: 'rgba(212, 196, 184, 0.9)',
+    card: 'rgba(200, 162, 168, 0.15)'
   },
   text: {
-    primary: '#2B201B',
-    secondary: '#4A3A31',
-    muted: '#6C5951',
+    primary: '#2C2428',    // Dark charcoal
+    secondary: '#5A4A52',  // Medium gray-brown
+    muted: '#8A7A82',      // Muted gray-purple
     inverse: '#FFFFFF'
   },
   border: {
-    light: 'rgba(107, 74, 53, 0.2)',
-    medium: 'rgba(107, 74, 53, 0.35)',
-    dark: 'rgba(107, 74, 53, 0.5)'
+    light: 'rgba(200, 162, 168, 0.2)',
+    medium: 'rgba(200, 162, 168, 0.35)',
+    dark: 'rgba(200, 162, 168, 0.5)'
   },
   interactive: {
-    hover: 'rgba(222, 102, 86, 0.15)',
-    active: 'rgba(222, 102, 86, 0.25)',
-    focus: '#B41F24'
+    hover: 'rgba(220, 20, 60, 0.15)',
+    active: 'rgba(220, 20, 60, 0.25)',
+    focus: '#DC143C'
   }
 };
 

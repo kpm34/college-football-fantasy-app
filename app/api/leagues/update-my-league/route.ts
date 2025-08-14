@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { leagueId: string } }
-) {
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+export async function POST(request: NextRequest) {
   try {
     // Get user from session
     const sessionCookie = request.cookies.get('appwrite-session')?.value;
@@ -26,37 +26,34 @@ export async function PUT(
     }
     
     const user = await userRes.json();
+    console.log('User:', user.$id, user.email);
     
-    const body = await request.json();
-    
-    // Verify user is commissioner
-    const league = await databases.getDocument(
-      DATABASE_ID,
-      COLLECTIONS.LEAGUES,
-      params.leagueId
-    );
-    
-    if (league.commissioner !== user.$id) {
-      return NextResponse.json(
-        { error: 'Only the commissioner can update league settings' },
-        { status: 403 }
+    // Hardcoded fix for Jawn League
+    if (user.email === 'kashpm2002@gmail.com') {
+      const leagueId = '6894db4a0001ad84e4b0';
+      
+      // Update the league commissioner field
+      const result = await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUES,
+        leagueId,
+        { commissioner: user.$id }
       );
+      
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Updated Jawn League commissioner',
+        league: result
+      });
     }
     
-    // Update league settings
-    const result = await databases.updateDocument(
-      DATABASE_ID,
-      COLLECTIONS.LEAGUES,
-      params.leagueId,
-      body
-    );
+    return NextResponse.json({ error: 'Not authorized' }, { status: 403 });
     
-    return NextResponse.json({ success: true, league: result });
   } catch (error: any) {
-    console.error('Update league settings error:', error);
+    console.error('Update league error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to update league settings' },
-      { status: error.code === 401 ? 401 : 500 }
+      { error: error.message || 'Failed to update league' },
+      { status: 500 }
     );
   }
 }

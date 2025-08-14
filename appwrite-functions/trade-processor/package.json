@@ -1,0 +1,9 @@
+{
+  "name": "trade-processor",
+  "version": "1.0.0",
+  "description": "Process trade offers and execute accepted trades",
+  "main": "index.js",
+  "dependencies": {
+    "node-appwrite": "^14.0.0"
+  }
+}

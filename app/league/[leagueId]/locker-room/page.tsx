@@ -615,12 +615,12 @@ export default function LockerRoomPage({ params, searchParams }: {
                               >
                                 <div className="flex items-center gap-2">
                                   <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${
-                                    player.position === 'QB' ? 'bg-red-500/20 text-red-400' :
-                                    player.position === 'RB' ? 'bg-blue-500/20 text-blue-400' :
-                                    player.position === 'WR' ? 'bg-green-500/20 text-green-400' :
-                                    player.position === 'TE' ? 'bg-yellow-500/20 text-yellow-400' :
-                                    player.position === 'K' ? 'bg-purple-500/20 text-purple-400' :
-                                    'bg-gray-500/20 text-gray-400'
+                                    player.position === 'QB' ? 'bg-red-500/40 text-red-300' :
+                                    player.position === 'RB' ? 'bg-blue-500/40 text-blue-300' :
+                                    player.position === 'WR' ? 'bg-green-500/40 text-green-300' :
+                                    player.position === 'TE' ? 'bg-yellow-500/40 text-yellow-300' :
+                                    player.position === 'K' ? 'bg-purple-500/40 text-purple-300' :
+                                    'bg-gray-500/40 text-gray-300'
                                   }`}>
                                     {player.position}
                                   </span>
@@ -690,12 +690,12 @@ export default function LockerRoomPage({ params, searchParams }: {
                           onDragStart={(e) => handleDragStart(e, benchPlayer)}
                         >
                           <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${
-                            benchPlayer.position === 'QB' ? 'bg-red-500/20 text-red-400' :
-                            benchPlayer.position === 'RB' ? 'bg-blue-500/20 text-blue-400' :
-                            benchPlayer.position === 'WR' ? 'bg-green-500/20 text-green-400' :
-                            benchPlayer.position === 'TE' ? 'bg-yellow-500/20 text-yellow-400' :
-                            benchPlayer.position === 'K' ? 'bg-purple-500/20 text-purple-400' :
-                            'bg-gray-500/20 text-gray-400'
+                            benchPlayer.position === 'QB' ? 'bg-red-500/40 text-red-300' :
+                            benchPlayer.position === 'RB' ? 'bg-blue-500/40 text-blue-300' :
+                            benchPlayer.position === 'WR' ? 'bg-green-500/40 text-green-300' :
+                            benchPlayer.position === 'TE' ? 'bg-yellow-500/40 text-yellow-300' :
+                            benchPlayer.position === 'K' ? 'bg-purple-500/40 text-purple-300' :
+                            'bg-gray-500/40 text-gray-300'
                           }`}>
                             {benchPlayer.position}
                           </span>
@@ -797,12 +797,12 @@ export default function LockerRoomPage({ params, searchParams }: {
                       <td className="py-3 px-6">
                         <div className="flex items-center gap-2">
                           <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${
-                            player.position === 'QB' ? 'bg-red-500/20 text-red-400' :
-                            player.position === 'RB' ? 'bg-blue-500/20 text-blue-400' :
-                            player.position === 'WR' ? 'bg-green-500/20 text-green-400' :
-                            player.position === 'TE' ? 'bg-yellow-500/20 text-yellow-400' :
-                            player.position === 'K' ? 'bg-purple-500/20 text-purple-400' :
-                            'bg-gray-500/20 text-gray-400'
+                            player.position === 'QB' ? 'bg-red-500/40 text-red-300' :
+                            player.position === 'RB' ? 'bg-blue-500/40 text-blue-300' :
+                            player.position === 'WR' ? 'bg-green-500/40 text-green-300' :
+                            player.position === 'TE' ? 'bg-yellow-500/40 text-yellow-300' :
+                            player.position === 'K' ? 'bg-purple-500/40 text-purple-300' :
+                            'bg-gray-500/40 text-gray-300'
                           }`}>
                             {player.position}
                           </span>

@@ -4,6 +4,8 @@
   "description": "Fantasy football platform for Power 4 conferences",
   "private": true,
   "scripts": {
+    "migrate:commissioner": "node --import 'data:text/javascript,import%20%7B%20register%20%7D%20from%20%22node:module%22;%20import%20%7B%20pathToFileURL%20%7D%20from%20%22node:url%22;%20register(%22ts-node/esm%22,%20pathToFileURL(%22./%22));' scripts/migrations/2025-08-14-backfill-commissioner.ts",
+    "enhance:appwrite": "tsx scripts/appwrite-user-enhancements.ts",
     "dev": "next dev",
     "build": "SKIP_ENV_VALIDATION=true next build",
     "prebuild": "node scripts/generate-icons.js 2>/dev/null || true && npm run validate:env",
@@ -27,7 +29,6 @@
     "update-projections": "python3 scripts/projection_updater.py 2>/dev/null || true",
     "vercel-build": "next build",
     "predeploy": "npm run lint && npm run typecheck",
-
     "health": "curl -s https://cfbfantasy.app/api/health | jq .",
     "health:vercel": "vercel logs --follow"
   },
@@ -105,6 +106,7 @@
     "playwright": "^1.54.2",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }

@@ -42,6 +42,28 @@ export const metadata: Metadata = {
     statusBarStyle: 'default',
     title: 'CF Fantasy',
   },
+  openGraph: {
+    title: 'CFB Fantasy - Power 4 Conference Fantasy Football',
+    description: 'Fantasy football for SEC, ACC, Big 12, and Big Ten. Elite matchups only.',
+    url: 'https://cfbfantasy.app',
+    siteName: 'CFB Fantasy',
+    images: [
+      {
+        url: 'https://cfbfantasy.app/api/og/home',
+        width: 1200,
+        height: 630,
+        alt: 'CFB Fantasy - Chrome Football',
+      }
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CFB Fantasy - Power 4 Conference Fantasy Football',
+    description: 'Fantasy football for SEC, ACC, Big 12, and Big Ten. Elite matchups only.',
+    images: ['https://cfbfantasy.app/api/og/home'],
+  },
 }
 
 export const viewport: Viewport = {

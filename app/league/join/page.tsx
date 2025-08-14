@@ -167,6 +167,43 @@ function JoinLeagueContent() {
           console.error('Lookup by inviteCode failed', e);
         }
       })();
+    } else if (leagueId && !token && !code) {
+      // Handle direct league link without token or code
+      if (!authUser && !authLoading) {
+        router.push(`/login?redirect=/league/join?league=${leagueId}`);
+        return;
+      }
+      // Fetch and display the league
+      (async () => {
+        try {
+          const leagueDoc = await databases.getDocument(
+            DATABASE_ID,
+            COLLECTIONS.LEAGUES,
+            leagueId
+          );
+          const league: League = {
+            id: leagueDoc.$id,
+            name: leagueDoc.name,
+            teams: leagueDoc.currentTeams || leagueDoc.members?.length || 0,
+            maxTeams: leagueDoc.maxTeams || 12,
+            draftType: leagueDoc.draftType || 'snake',
+            scoringType: leagueDoc.scoringType || 'PPR',
+            buyIn: leagueDoc.buyIn || 0,
+            prize: leagueDoc.prize || 0,
+            draftDate: leagueDoc.draftDate || '',
+            draftTime: leagueDoc.draftTime || '',
+            description: leagueDoc.description || '',
+            type: leagueDoc.isPublic === false ? 'private' : 'public',
+            password: leagueDoc.password,
+            status: (leagueDoc.status || 'draft') as 'draft' | 'active' | 'completed',
+            createdAt: leagueDoc.$createdAt
+          };
+          setSelectedLeague(league);
+          setShowPasswordModal(true);
+        } catch (e) {
+          console.error('Failed to fetch league', e);
+        }
+      })();
     }
   }, [searchParams, authUser, authLoading, router]);
 
@@ -290,81 +327,52 @@ function JoinLeagueContent() {
 
     if (!selectedLeague || !currentUser) return;
 
-    if (!selectedLeague.password || password === selectedLeague.password) {
-      await joinLeague(selectedLeague);
-    } else {
-      setPasswordError('Incorrect password. Please try again.');
-    }
+    await joinLeague(selectedLeague, password);
   };
 
-  const joinLeague = async (league: League) => {
+  const joinLeague = async (league: League, password?: string) => {
     if (!currentUser) return;
 
     setLoading(true);
     try {
-      // 1. Create roster for the user in this league
-      const rosterData = {
-        teamName: `${currentUser.name}'s Team`,
-        name: `${currentUser.name}'s Team`,
-        userId: currentUser.$id,
-        userName: currentUser.name,
-        email: currentUser.email,
-        leagueId: league.$id,
-        wins: 0,
-        losses: 0,
-        ties: 0,
-        pointsFor: 0,
-        pointsAgainst: 0,
-        players: '[]', // Empty JSON string for pre-draft
-        createdAt: new Date().toISOString()
-      };
-
-      const teamResponse = await databases.createDocument(
-        DATABASE_ID,
-        COLLECTIONS.ROSTERS,
-        'unique()', // Auto-generate ID
-        rosterData
-      );
-
-      // 2. Update league team count and members array
-      const updatedMembers = [...(league.members || []), currentUser.$id];
-      await databases.updateDocument(
-        DATABASE_ID,
-        COLLECTIONS.LEAGUES,
-        league.$id,
-        {
-          teams: league.teams + 1,
-          members: updatedMembers
-        }
-      );
-
-      // 3. Log the join activity (optional - for tracking)
-      await databases.createDocument(
-        DATABASE_ID,
-        COLLECTIONS.ACTIVITY_LOG,
-        'unique()',
-        {
-          type: 'league_join',
-          userId: currentUser.$id,
+      // Use the API endpoint for joining
+      const response = await fetch('/api/leagues/join', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           leagueId: league.$id,
-          teamId: teamResponse.$id,
-          timestamp: new Date().toISOString(),
-          description: `${currentUser.name} joined ${league.name}`
+          password: password,
+          inviteCode: inviteCode,
+          teamName: `${currentUser.name}'s Team`
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 403) {
+          setPasswordError(data.error || 'Invalid password. Please try again.');
+          return;
         }
-      );
+        throw new Error(data.error || 'Failed to join league');
+      }
 
       console.log('Successfully joined league:', league.name);
       
       // Redirect to the league home page
       router.push(`/league/${league.$id}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error joining league:', error);
-      alert('Failed to join league. Please try again.');
+      alert(error.message || 'Failed to join league. Please try again.');
     } finally {
       setLoading(false);
-      setShowPasswordModal(false);
-      setSelectedLeague(null);
-      setPassword('');
+      if (!password || !passwordError) {
+        setShowPasswordModal(false);
+        setSelectedLeague(null);
+        setPassword('');
+      }
     }
   };
 
@@ -518,21 +526,16 @@ function JoinLeagueContent() {
                     onClick={() => handleJoinLeague(league)}
                     disabled={
                       loading ||
-                      (league.teams >= league.maxTeams && !hasInvite) ||
-                      (league.status !== 'draft' && !hasInvite)
+                      (league.teams >= league.maxTeams)
                     }
                     className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                      (league.teams >= league.maxTeams && !hasInvite) || (league.status !== 'draft' && !hasInvite)
+                      (league.teams >= league.maxTeams)
                         ? 'bg-[#8A6B4D]/30 text-[#8A6B4D] cursor-not-allowed'
                         : 'bg-gradient-to-r from-[#FF0080] to-[#8A5EAA] text-white hover:from-[#FF0080]/90 hover:to-[#8A5EAA]/90'
                     }`}
                   >
-                    {league.teams >= league.maxTeams && !hasInvite
+                    {league.teams >= league.maxTeams
                       ? 'Full'
-                      : league.status !== 'draft' && !hasInvite
-                      ? 'Closed'
-                      : league.status !== 'draft' && hasInvite
-                      ? 'Join via Invite'
                       : loading
                       ? 'Joining...'
                       : 'Join League'}
