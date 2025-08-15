@@ -98,6 +98,13 @@ All conference team colors have been preserved exactly in `/lib/conference-data.
 - **Big 12**: 16 teams with original hex colors
 - **Big Ten**: 18 teams with original hex colors
 
+## 🧮 Projections Pipeline (Aug 2025)
+- New collections: `projections_yearly`, `projections_weekly`, `model_inputs`, `user_custom_projections`.
+- Ingest scripts (Node/TS): EA ratings → `ea_ratings_json`, mock draft capital → `nfl_draft_capital_json`, depth charts → `depth_chart_json` + `usage_priors_json`, team efficiency/pace → `team_efficiency_json` + `pace_estimates_json`.
+- Projectors: Yearly Simple (functions/project-yearly-simple) and Pro distributions (functions/project-pro-distributions).
+- Custom recalculation (per-user): functions/recalc-custom-projection; reads `user_custom_projections`, returns ephemeral projections.
+- API `/api/projections` can read from Appwrite (`source=db`) or compute (`source=calc`).
+
 ## 🚀 Quick Commands
 
 ### Development
