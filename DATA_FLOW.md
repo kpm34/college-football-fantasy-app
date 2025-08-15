@@ -165,6 +165,25 @@ User Action → Appwrite SDK Update
     UI Update (optimistic + confirmed)
 ```
 
+## Projections Data Flow (2025)
+
+### Ingestion → model_inputs
+- EA Ratings (EA CSV) → `ea_ratings_json`
+- Mock Draft (aggregated CSV/JSON) → `nfl_draft_capital_json`
+- Depth Charts (team sites/OurLads/247) → `depth_chart_json` + `usage_priors_json`
+- Team Efficiency & Pace (SP+/FEI + pace) → `team_efficiency_json` + `pace_estimates_json`
+- Opponent Grades (derived) → `opponent_grades_by_pos`
+
+### Projectors
+- Yearly Simple: reads model_inputs → writes `projections_yearly` (games_played_est, usage_rate, pace_adj, statline_simple_json, fantasy_points_simple)
+- Pro Distributions: Monte Carlo → writes:
+  - weekly: floor/median/ceiling, boom/bust, grades, rank_pro
+  - yearly: range_*, percentiles_json, volatility_score, replacement_value
+
+### User Custom Recalc (Pro)
+- Read overrides from `user_custom_projections` and merge into baselines
+- Recalculate (weekly/yearly) on demand and return ephemeral result (no global mutation)
+
 ## Data Models & Collections
 
 ### Core Collections (Appwrite)
