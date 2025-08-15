@@ -269,13 +269,23 @@ Complete documentation of all API routes, their functions, required permissions,
 ---
 
 ### GET `/api/draft/players`
-**Description**: Get available draft players  
+**Description**: Get available draft players (Power 4, fantasy positions only)  
 **Auth Required**: Yes  
-**Query Params**: Same as `/api/players/draftable`  
+**Query Params**: 
+- `position` (QB|RB|WR|TE|K|ALL)
+- `conference` (SEC|Big Ten|Big 12|ACC|ALL)
+- `team` (school name)
+- `search` (player name)
+- `limit` (max 1000)
 **Database Operations**:
-- Reads from `players` collection
-- Filters out already drafted players
-**Returns**: Array of available players
+- Reads from `college_players` collection with filters:
+  - Power 4 conferences only (SEC, Big Ten, Big 12, ACC)
+  - Fantasy positions only (QB, RB, WR, TE, K)
+  - `draftable = true`
+- Deduplicates by `name|team|position`, keeps highest-rated entry
+- Applies projection model (rating + depth chart + previous-year stats + SoS)
+- Caps output to top 1000 by rating
+**Returns**: Array of available players with `projectedPoints`, `adp`
 
 ---
 
@@ -400,6 +410,49 @@ Complete documentation of all API routes, their functions, required permissions,
 **Description**: Test authentication status  
 **Auth Required**: Yes  
 **Returns**: Auth test result
+
+---
+
+## Admin Data Maintenance Routes
+
+### POST `/api/admin/dedupe/players`
+**Description**: Detect and optionally remove duplicate player documents  
+**Auth Required**: Admin only  
+**Request Body**:
+```json
+{ "dryRun": true, "limit": 1000, "offset": 0 }
+```
+**Database Operations**:
+- Scans `college_players` and returns duplicate candidates grouped by `name|team|position`
+- If `dryRun=false`, deletes duplicates, keeping best-rated entry
+**Returns**: Scan summary and deleted IDs
+
+---
+
+### POST `/api/admin/players/refresh`
+**Description**: Sync current-season Power 4 rosters from CFBD and upsert to `college_players`  
+**Auth Required**: Admin only  
+**Request Body**:
+```json
+{ "season": 2025 }
+```
+**Database Operations**:
+- Upserts Power 4 fantasy positions for the given season
+- Marks missing/non-current players as `draftable=false`
+**Returns**: Created/updated counts and summary
+
+---
+
+### POST `/api/admin/players/retire`
+**Description**: Mark specific players as not draftable (manual cleanup)  
+**Auth Required**: Admin only  
+**Request Body**:
+```json
+{ "players": [{ "name": "Player Name", "team": "School", "position": "QB" }], "reason": "string" }
+```
+**Database Operations**:
+- Updates matching `college_players` documents with `draftable=false` and `retired_reason`
+**Returns**: Updated IDs and not-found names
 
 ---
 

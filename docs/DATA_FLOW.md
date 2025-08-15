@@ -1,7 +1,7 @@
 # Data Flow Architecture
 
-**Last Updated**: 8/14/2025 1:15:00 PM
-**Next Update**: 1:45:00 PM (30 min cycle)
+**Last Updated**: 8/15/2025
+**Notes**: Draft pool now sourced exclusively from `college_players` (Power 4, QB/RB/WR/TE/K, draftable=true). Projections incorporate rating, depth, previous-year stats, and strength of schedule. Admin endpoints added for dedupe and roster refresh.
 
 ## 🔄 High-Level Data Flow
 
@@ -103,21 +103,23 @@ graph TB
 }
 ```
 
-#### 4. **players**
+#### 4. **college_players** (draft pool)
 ```typescript
 {
   $id: string,
-  espnId: string,
-  cfbdId?: string,
-  firstName: string,
-  lastName: string,
-  displayName: string,
+  cfbd_id?: string,
+  first_name?: string,
+  last_name?: string,
+  name: string,
   jersey?: string,
-  position: object,
+  position: 'QB'|'RB'|'WR'|'TE'|'K',
   team: string,
-  conference: string,
-  isActive: boolean,
-  fantasyPoints: number
+  conference: 'SEC'|'Big Ten'|'Big 12'|'ACC',
+  year?: 'FR'|'SO'|'JR'|'SR',
+  season: number,
+  draftable: boolean,
+  power_4: boolean,
+  rating?: number
 }
 ```
 
@@ -257,18 +259,14 @@ if (cached) return NextResponse.json(cached);
 
 ## 🔄 Data Sync Patterns
 
-### External API Sync
+### External API Sync (Players)
 ```mermaid
 graph LR
-    A[Cron Job] -->|Every hour| B[Sync Script]
-    B --> C[Fetch CFBD Data]
-    B --> D[Fetch ESPN Data]
-    B --> E[Fetch Rankings]
-    C --> F[Update Players]
-    D --> F
-    E --> G[Update Rankings]
-    F --> H[Invalidate Cache]
-    G --> H
+    A[Admin Trigger] --> B[/api/admin/players/refresh]
+    B --> C[Fetch CFBD Rosters (Power 4)]
+    C --> D[Upsert to college_players]
+    D --> E[Mark missing as draftable=false]
+    E --> F[Invalidate caches]
 ```
 
 ### Permissions Model
