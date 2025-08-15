@@ -47,7 +47,7 @@ export function useLeagueMembersRealtime(leagueId: string) {
   const [loading, setLoading] = useState<boolean>(true)
   const [connected, setConnected] = useState<boolean>(false)
 
-  // Initial load
+  // Initial load via API route
   useEffect(() => {
     let cancelled = false
     if (!leagueId) return
@@ -55,14 +55,20 @@ export function useLeagueMembersRealtime(leagueId: string) {
     ;(async () => {
       try {
         setLoading(true)
-        const res = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTIONS.ROSTERS,
-          [Query.equal('leagueId', leagueId), Query.limit(100)]
-        )
-        if (!cancelled) {
-          setTeams(res.documents.map(mapRosterToTeam))
+        console.log('Fetching rosters for league:', leagueId)
+        
+        // Use API route instead of direct database access
+        const response = await fetch(`/api/leagues/${leagueId}/members`);
+        const data = await response.json();
+        
+        if (data.success && !cancelled) {
+          console.log('Fetched rosters:', data.teams.length)
+          setTeams(data.teams)
+        } else if (!data.success) {
+          console.error('Failed to fetch rosters:', data.error)
         }
+      } catch (error) {
+        console.error('Error fetching rosters:', error)
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -77,29 +83,35 @@ export function useLeagueMembersRealtime(leagueId: string) {
   useEffect(() => {
     if (!leagueId) return
 
-    const channel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.ROSTERS}.documents`
-    const unsubscribe = client.subscribe(channel, (event: RealtimeResponseEvent<any>) => {
-      setConnected(true)
-      const payload = event.payload as any
-      if (!payload || payload.leagueId !== leagueId) return
+    try {
+      const channel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.ROSTERS}.documents`
+      console.log('Subscribing to channel:', channel)
+      const unsubscribe = client.subscribe(channel, (event: RealtimeResponseEvent<any>) => {
+        setConnected(true)
+        const payload = event.payload as any
+        if (!payload || payload.leagueId !== leagueId) return
 
-      // Handle create/update/delete
-      if (event.events.some(e => e.endsWith('.create'))) {
-        setTeams(prev => {
-          const exists = prev.some(t => t.$id === payload.$id)
-          const next = exists ? prev : [...prev, mapRosterToTeam(payload)]
-          return next
-        })
-      }
-      if (event.events.some(e => e.endsWith('.update'))) {
-        setTeams(prev => prev.map(t => (t.$id === payload.$id ? mapRosterToTeam(payload) : t)))
-      }
-      if (event.events.some(e => e.endsWith('.delete'))) {
-        setTeams(prev => prev.filter(t => t.$id !== payload.$id))
-      }
-    })
+        // Handle create/update/delete
+        if (event.events.some(e => e.endsWith('.create'))) {
+          setTeams(prev => {
+            const exists = prev.some(t => t.$id === payload.$id)
+            const next = exists ? prev : [...prev, mapRosterToTeam(payload)]
+            return next
+          })
+        }
+        if (event.events.some(e => e.endsWith('.update'))) {
+          setTeams(prev => prev.map(t => (t.$id === payload.$id ? mapRosterToTeam(payload) : t)))
+        }
+        if (event.events.some(e => e.endsWith('.delete'))) {
+          setTeams(prev => prev.filter(t => t.$id !== payload.$id))
+        }
+      })
 
-    return () => unsubscribe()
+      return () => unsubscribe()
+    } catch (error) {
+      console.error('Error subscribing to realtime:', error)
+      setConnected(false)
+    }
   }, [leagueId])
 
   const count = useMemo(() => teams.length, [teams])
