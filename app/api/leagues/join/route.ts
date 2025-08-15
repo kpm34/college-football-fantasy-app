@@ -110,15 +110,44 @@ export async function POST(request: NextRequest) {
     
     // Update league members and team count
     const updatedMembers = [...(league.members || []), user.$id];
-    await databases.updateDocument(
-      DATABASE_ID,
-      COLLECTIONS.LEAGUES,
-      leagueId,
-      {
-        members: updatedMembers,
-        currentTeams: currentTeams + 1
+
+    // Only include attributes that actually exist in the leagues collection to avoid
+    // Appwrite "Unknown attribute" errors across environments with drifting schemas
+    let updatePayload: Record<string, any> = {};
+    try {
+      const leaguesCollection = await databases.getCollection(DATABASE_ID, COLLECTIONS.LEAGUES);
+      const attributes: string[] = Array.isArray((leaguesCollection as any).attributes)
+        ? (leaguesCollection as any).attributes.map((a: any) => a.key)
+        : [];
+
+      if (attributes.includes('members')) {
+        updatePayload.members = updatedMembers;
       }
-    );
+      if (attributes.includes('currentTeams')) {
+        updatePayload.currentTeams = currentTeams + 1;
+      }
+      // Optionally set status to full when we hit capacity, but only if field exists
+      const nextTeams = currentTeams + 1;
+      if (attributes.includes('status') && typeof league.maxTeams === 'number') {
+        if (nextTeams >= league.maxTeams) {
+          updatePayload.status = 'full';
+        } else if (league.status === 'full') {
+          updatePayload.status = 'open';
+        }
+      }
+    } catch {
+      // If schema lookup fails, fall back to safest minimal update (members only)
+      updatePayload = { members: updatedMembers };
+    }
+
+    if (Object.keys(updatePayload).length > 0) {
+      await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUES,
+        leagueId,
+        updatePayload
+      );
+    }
     
     // Log activity
     try {
