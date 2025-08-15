@@ -49,7 +49,7 @@ export class LeagueRepository extends BaseRepository<League> {
       gameMode: data.gameMode,
       isPublic: data.isPublic,
       pickTimeSeconds: data.pickTimeSeconds,
-      commissioner: data.commissionerId, // Database expects 'commissioner' not 'commissionerId'
+      commissioner: data.commissionerId, // Database has 'commissioner' field only
       status: 'open',
       currentTeams: 0,
       season: data.season || new Date().getFullYear(),

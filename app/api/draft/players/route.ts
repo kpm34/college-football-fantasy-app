@@ -4,6 +4,10 @@ import { Query } from 'node-appwrite';
 import fs from 'node:fs';
 import path from 'node:path';
 
+function cleanName(name: string): string {
+  return name.replace(/\b(Jr\.?|Sr\.?|II|III|IV|V)\b/gi, '').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -239,6 +243,22 @@ export async function GET(request: NextRequest) {
       let fantasyPoints = player.projection || player.fantasy_points;
       if (!fantasyPoints || fantasyPoints <= 0) {
         fantasyPoints = calculateProjection(position, rating);
+      }
+      
+      // Apply depth multiplier if we have depth chart data
+      if (depthIndex && depth) {
+        const playerKey = `${cleanName(player.name)}|${position}`;
+        const teamId = depthIndex.get(playerKey);
+        if (teamId && depth[teamId] && depth[teamId][position]) {
+          const depthList = depth[teamId][position];
+          const playerDepthInfo = depthList.find((p: any) => 
+            cleanName(p.player_name) === cleanName(player.name)
+          );
+          if (playerDepthInfo?.pos_rank) {
+            const multiplier = depthMultiplier(position, playerDepthInfo.pos_rank);
+            fantasyPoints = Math.round(fantasyPoints * multiplier);
+          }
+        }
       }
       
       return {
