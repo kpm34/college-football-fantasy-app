@@ -47,7 +47,9 @@
     "project:yearly": "ts-node functions/project-yearly-simple/index.ts --season=2025",
     "project:pro:weekly": "ts-node functions/project-pro-distributions/index.ts --season=2025 --week=1 --runs=5000 --seed=42",
     "project:pro:yearly": "ts-node functions/project-pro-distributions/index.ts --season=2025 --runs=5000 --seed=42",
-    "recalc:custom": "ts-node functions/recalc-custom-projection/index.ts --season=2025 --user=USER_ID --player=PLAYER_ID"
+    "recalc:custom": "ts-node functions/recalc-custom-projection/index.ts --season=2025 --user=USER_ID --player=PLAYER_ID",
+    "check:versions": "ts-node scripts/check-file-versions.ts",
+    "commit:safe": "npm run check:versions && git add -A && git commit"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
