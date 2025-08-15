@@ -1,7 +1,7 @@
 # College Football Fantasy App - Comprehensive Project Summary
 
 ## 🎯 Project Overview
-**Last Updated**: 2025-08-14 (12:57 PM)  
+**Last Updated**: 2025-08-15  
 **Status**: Active Development  
 **Deployment**: Vercel (Production) ✅ Latest build successful  
 
@@ -15,14 +15,12 @@
 - **Database**: Appwrite BaaS (NYC Region)
 - **Project ID**: `college-football-fantasy-app` (readable format, NOT numeric)
 
-### Key Changes Summary
-- **Consolidated Documentation**: Reduced from 40+ files to 4 essential guides
-- **Fixed Project IDs**: All numeric IDs replaced with readable format
-- **Environment Cleanup**: Standardized .env files across all environments
-- **Added Dependencies**: Integrated 3D/animation libraries from awwwards-rig
-- **Improved Structure**: Clear separation of core features and future enhancements
-- **Custom Roster Schema**: Per-league RB/WR/Bench configuration with mode-based caps (Conference: RB≤2, WR≤5; Power-4: WR≤6)
-- **Locker Room UX**: Palette-aligned tables, roster summary chips, guardrails, and drag-and-drop + MOVE actions
+### Key Changes Summary (last 7 days)
+- Draft: `/api/draft/players` now sources strictly from `college_players` (Power 4 only; QB/RB/WR/TE/K; `draftable=true`), dedupes by `name|team|position`, caps to top 1000, and computes projections using rating + depth + previous-year stats + strength of schedule
+- Mock Draft UI: added Team filter and Sort (Proj/Team/Name/ADP)
+- Admin: added maintenance endpoints `/api/admin/dedupe/players`, `/api/admin/players/refresh`, `/api/admin/players/retire`
+- Invite/Join: dedicated `/invite/[leagueId]` with proper OG image and encoded redirects; join only blocks when league is full; private leagues prompt password modal
+- League: replaced Locker Room quick action with Weekly Scoreboard; improved button contrast
 
 ## 📊 Data Flow Architecture
 
@@ -69,209 +67,60 @@ Live Game Data → Scoring Algorithm → Player Points → League Standings → 
 └── .cursorrules                  # Cursor AI behavior rules
 ```
 
-### Frontend Application Structure
+### Frontend Application Structure (current)
 ```
-frontend/
+/
 ├── app/                          # Next.js App Router
 │   ├── api/                      # Backend API Routes
-│   │   ├── acc/                  # ACC conference data endpoints
-│   │   ├── big12/                # Big 12 conference data endpoints
-│   │   ├── bigten/               # Big Ten conference data endpoints
-│   │   ├── sec/                  # SEC conference data endpoints
+│   │   ├── conferences/          # Unified conference data endpoints
 │   │   ├── cfbd/                 # College Football Data API integration
 │   │   ├── draft/                # Draft system endpoints
 │   │   ├── leagues/              # League management endpoints
-│   │   │   ├── create/           # League creation
-│   │   │   └── [leagueId]/       # League-specific operations
 │   │   ├── players/              # Player data endpoints
-│   │   ├── rotowire/             # Injury/news data integration
-│   │   ├── edge-config/          # Vercel Edge Config
-│   │   └── mcp/                  # MCP tool integration
+│   │   ├── admin/                # Admin maintenance endpoints (dedupe/refresh/retire)
+│   │   └── og/                   # Open Graph image routes
 │   │
 │   ├── league/                   # League Pages
 │   │   └── [leagueId]/           # Dynamic league routes
 │   │       ├── page.tsx          # League dashboard
 │   │       ├── locker-room/      # Team management
 │   │       ├── commissioner/     # Commissioner tools
-│   │       ├── draft/            # Draft interface
-│   │       └── standings/        # League standings
+│   │       ├── scoreboard/       # Weekly scoreboard
+│   │       └── draft/            # Draft interface (future real draft)
 │   │
 │   ├── draft/                    # Draft System
-│   │   └── [leagueId]/
-│   │       └── draft-room/       # Live draft interface
+│   │   └── mock/                 # Mock draft interface
 │   │
-│   ├── auction/                  # Auction Draft
-│   │   └── [leagueId]/           # Auction-specific UI
+│   ├── auction/                  # Auction Draft (future)
 │   │
 │   ├── dashboard/                # User Dashboard
-│   │   ├── page.tsx              # Main dashboard
-│   │   └── components/           # Dashboard widgets
-│   │
-│   ├── conference-showcase/      # Conference Displays
-│   │   ├── acc/                  # ACC teams showcase
-│   │   ├── big12/                # Big 12 teams showcase
-│   │   ├── bigten/               # Big Ten teams showcase
-│   │   └── sec/                  # SEC teams showcase
-│   │
-│   ├── account/                  # User Account
-│   │   ├── settings/             # User settings
-│   │   └── profile/              # User profile
+│   │   └── page.tsx              # Main dashboard
 │   │
 │   ├── login/                    # Authentication
 │   │   └── page.tsx              # Login interface
 │   │
-│   ├── scoreboard/               # Live Scores
+│   ├── invite/                   # Invite landing
+│   │   └── [leagueId]/page.tsx   # Invite redirect + OG metadata
+│   │
+│   ├── scoreboard/               # Live Scores (global)
 │   │   └── page.tsx              # Scoreboard display
 │   │
 │   └── layout.tsx                # Root layout with providers
-│
-├── components/                   # React Components
-│   ├── league/                   # League-specific components
-│   │   ├── LeagueCard.tsx        # League display card
-│   │   ├── LeagueSettings.tsx    # Settings interface
-│   │   └── TeamRoster.tsx        # Team roster display
-│   │
-│   ├── draft/                    # Draft components
-│   │   ├── DraftBoard.tsx        # Draft board UI
-│   │   ├── PlayerCard.tsx        # Player selection card
-│   │   └── Timer.tsx             # Draft timer
-│   │
-│   ├── ui/                       # Shared UI components
-│   │   ├── Button.tsx            # Button component
-│   │   ├── Card.tsx              # Card component
-│   │   └── Modal.tsx             # Modal component
-│   │
-│   ├── Navbar.tsx                # Navigation bar
-│   ├── SideDrawer.tsx            # Mobile navigation drawer
-│   ├── FootballHamburger.tsx     # Custom hamburger menu
-│   └── CFPLoadingScreen.tsx      # Loading animation
-│
-├── lib/                          # Utilities & Libraries
-│   ├── config/                   # Configuration files
-│   │   ├── constants.ts          # App constants
-│   │   └── scoring.ts            # Scoring configuration
-│   │
-│   ├── services/                 # Service layers
-│   │   ├── league.service.ts     # League operations
-│   │   ├── draft.service.ts      # Draft operations
-│   │   └── player.service.ts     # Player operations
-│   │
-│   ├── theme/                    # Theme configuration
-│   │   ├── colors.ts             # Color palette
-│   │   └── typography.ts         # Typography settings
-│   │
-│   ├── appwrite.ts               # Appwrite client setup
-│   ├── appwrite-config.ts        # Appwrite configuration
-│   └── utils.ts                  # Utility functions
-│
-├── types/                        # TypeScript Definitions
-│   ├── league.ts                 # League types
-│   ├── player.ts                 # Player types
-│   ├── draft.ts                  # Draft types
-│   ├── projections.ts            # Projection types
-│   └── index.ts                  # Type exports
-│
-├── public/                       # Static Assets
-│   ├── icons/                    # App icons
-│   │   ├── icon-192.png         # PWA icon
-│   │   └── icon-512.png         # PWA icon large
-│   ├── images/                   # Image assets
-│   └── manifest.json             # PWA manifest
-│
-├── scripts/                      # Utility Scripts
-│   ├── sync-rosters.ts           # Roster synchronization
-│   └── update-stats.ts           # Statistics updater
-│
-├── vendor/                       # External Code
-│   └── awwwards-rig/            # 3D Graphics (Future Enhancement)
-│       ├── src/                  # Source code
-│       ├── package.json          # Dependencies
-│       └── README.md             # Documentation
-│
-└── Configuration Files
-    ├── .env.local                # Local environment
-    ├── package.json              # Frontend dependencies
-    ├── next.config.mjs           # Next.js configuration
-    ├── tailwind.config.ts        # Tailwind CSS config
-    └── tsconfig.json             # TypeScript config
 ```
 
-### Backend Services Structure
+### Components/Lib/Types
 ```
-src/
-├── services/                     # Business Logic
-│   ├── cfbd.service.ts          # CFBD API integration
-│   ├── scoring.service.ts       # Scoring calculations
-│   └── notification.service.ts  # User notifications
-│
-├── scripts/                      # Data Management
-│   ├── import-rosters.ts        # Roster importer
-│   └── update-rankings.ts       # Rankings updater
-│
-└── config/                       # API Configurations
-    ├── api.config.ts            # API settings
-    └── database.config.ts       # Database settings
+components/
+lib/
+│  ├── appwrite.ts               # Client
+│  ├── appwrite-server.ts        # Server (API key)
+│  └── theme/colors.ts           # Palette
+types/
 ```
-
-### Data Directory
-```
-conference rosters/               # Team Roster Data
-├── ACC/                         # ACC team rosters
-├── Big 12/                      # Big 12 team rosters
-├── Big Ten/                     # Big Ten team rosters
-└── SEC/                         # SEC team rosters
-```
-
-## 🔄 API Endpoints Map
-
-### Public Endpoints
-- `GET /api/cfbd/teams` - Get all teams
-- `GET /api/cfbd/players` - Get all players
-- `GET /api/cfbd/games` - Get game schedules
-- `GET /api/rankings` - Get AP Top 25
-
-### Protected Endpoints (Auth Required)
-- `POST /api/leagues/create` - Create new league
-- `GET /api/leagues/[id]` - Get league details
-  - Persists `rosterSchema` { rb, wr, benchSize } with mode caps
-- `POST /api/draft/pick` - Make draft pick
-- `GET /api/draft/[id]/status` - Get draft status
-- `POST /api/lineup/set` - Set weekly lineup
-- `GET /api/player/stats` - Get player statistics
-
-## 🗄️ Database Collections
 
 ### Appwrite Collections
 ```
-Database: college-football-fantasy
-├── leagues                      # Fantasy leagues
-├── users                        # User profiles
-├── college_players              # Player database
-├── teams                        # College teams
-├── games                        # Game schedules
-├── rankings                     # AP rankings
-├── rosters                      # Drafted players
-├── lineups                      # Weekly lineups
-├── player_stats                 # Statistics
-├── auctions                     # Auction drafts
-└── bids                         # Auction bids
-
-### League Document (key fields)
-```
-{
-  name: string,
-  gameMode: 'CONFERENCE' | 'POWER4',
-  selectedConference?: string,
-  maxTeams: number,
-  seasonStartWeek: number,
-  rosterSchema: {
-    rb: number,           // capped by mode
-    wr: number,           // capped by mode
-    benchSize: number
-  },
-  ...
-}
-```
+college_players, leagues, rosters, games, rankings, player_stats, auctions, bids, lineups, draft_picks
 ```
 
 ## 🔐 Environment Variables
@@ -279,7 +128,7 @@ Database: college-football-fantasy
 ### Critical Variables (All Fixed)
 ```bash
 # Appwrite Configuration
-APPWRITE_PROJECT_ID=college-football-fantasy-app  # Readable format
+APPWRITE_PROJECT_ID=college-football-fantasy-app
 APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
 APPWRITE_DATABASE_ID=college-football-fantasy
 APPWRITE_API_KEY=[secured]
@@ -287,83 +136,20 @@ APPWRITE_API_KEY=[secured]
 # External APIs
 CFBD_API_KEY=[secured]
 AI_GATEWAY_API_KEY=[secured]
-
-# Vercel Services
-EDGE_CONFIG=[secured]
-VERCEL_OIDC_TOKEN=[refresh with vercel pull]
 ```
 
-## 🚀 Deployment Information
-
-### Vercel Deployment
-- **Team**: kpm34s-projects
-- **Project**: college-football-fantasy-app
-- **Framework**: Next.js
-- **Region**: Global Edge Network
-- **Domains**: 4 custom domains configured
-
-### Build Configuration
-```json
-{
-  "buildCommand": "cd frontend && npm run build",
-  "outputDirectory": "frontend/.next",
-  "installCommand": "npm install",
-  "framework": "nextjs"
-}
-```
-
-## 📝 Recent Changes Log
-
-### Latest Updates (August 14, 2025 1:10 PM)
-- ✅ Fixed locker room 401 authorization errors by creating server-side API route
-- ✅ Fixed createSessionClient import warnings in lib/auth-utils.ts
-- ✅ Added comprehensive locker room API endpoint `/api/leagues/[leagueId]/locker-room`
-- ✅ Updated locker room page to use server-side data fetching
-- ✅ Documented all API routes and data flow architecture
-
-### Environment & Configuration
-- ✅ Fixed all Appwrite project IDs from numeric to readable format
-- ✅ Consolidated environment variables across all .env files
-- ✅ Added VERCEL_OIDC_TOKEN to main configuration
-- ✅ Removed old script files with incorrect IDs
-
-### Documentation
-- ✅ Consolidated 40+ documentation files into 4 essential guides
-- ✅ Created unified DEPLOYMENT.md guide
-- ✅ Updated WORKFLOW.md with current practices
-- ✅ Cleaned up duplicate and outdated documentation
-- ✅ Created comprehensive API_ROUTES.md documentation
-- ✅ Updated DATA_FLOW.md with current architecture
-
-### Dependencies
-- ✅ Added 3D/animation libraries from awwwards-rig submodule
-- ✅ Updated package.json with missing dependencies
-- ✅ Fixed version conflicts with React Three Fiber
-- ✅ Added date-fns for date formatting
-
-### Code Updates
-- ✅ Enhanced user settings page with comprehensive options
-- ✅ Improved league dashboard with better data handling
-- ✅ Updated login page with proper authentication flow
-- ✅ Fixed Appwrite client initialization with correct project ID
-- ✅ Added customizable roster schema, locker room drag-and-drop, and guardrails
-- ✅ Created server-side API routes for secure data access
+## 📝 Recent Changes Log (last 7 days)
+- Fixed invite/redirect flow and OG images; added `/invite/[leagueId]`
+- League join only closes when full; private leagues prompt password
+- Added team filter and sort in mock draft UI
+- Draft API updated to use `college_players` strictly; added dedupe, top-1000 cap, and richer projections
+- Added admin endpoints: dedupe, refresh from CFBD, retire
 
 ## 🎯 Current State
-- Development server running on port 3001
-- All environment variables properly configured
-- Database connections verified
-- API integrations functional
-- Ready for feature development
+- Production builds green; database connected; auth working
+- Draft mock ready; real draft in progress (realtime + timer pending)
 
-## 🔮 Future Enhancements
-- Awwwards-rig 3D graphics (submodule present, not integrated)
-- Enhanced real-time features with WebSockets
-- Advanced analytics dashboard
-- Mobile app development
-- AI-powered draft assistant
-
----
-**Generated**: 2025-08-09
-**Project Status**: Active Development
-**Next Steps**: Continue core fantasy features implementation
+## 🔮 Near-term Enhancements (next 2 weeks)
+- Schedule generator when league fills
+- Real-time draft: Appwrite Realtime + Functions for timer/auto-pick
+- Live scoring integration
