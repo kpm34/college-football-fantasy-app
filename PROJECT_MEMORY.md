@@ -1,25 +1,20 @@
 # Project Memory - College Football Fantasy App
-Last Updated: August 14, 2025
+Last Updated: August 15, 2025
 
 ## 🎯 Current Project State
 
-### Recent Changes (August 14, 2025)
-1. **Consolidated Documentation**
-   - Merged 3 product vision files into single `PRODUCT_VISION.md`
-   - Created unified `VERCEL_GUIDE.md` from 4 separate docs
-   - Created `DATA_FLOW.md` for architecture documentation
-   - Created `CODE_AUDIT_REPORT.md` identifying technical debt
+### Recent Changes (last 7 days)
+1. **Draft Pool & Projections**
+   - `/api/draft/players` now reads strictly from `college_players` (Power 4; QB/RB/WR/TE/K; `draftable=true`)
+   - Dedupe by `name|team|position`; cap to top 1000; projections = rating + depth + previous-year stats + SoS
+   - Mock Draft UI: Team filter and Sort (Proj/Team/Name/ADP)
 
-2. **API Consolidation**
-   - Created unified conference API: `/api/conferences/[conference]/route.ts`
-   - Preserved all team colors in `/lib/conference-data.ts`
-   - Now using Appwrite database for player data (not mock data)
-   - Old conference APIs can be deleted: `/api/acc`, `/api/sec`, `/api/big12`, `/api/bigten`
+2. **Invite/Join Flow**
+   - Dedicated `/invite/[leagueId]` with correct OG image and encoded redirects
+   - Join only blocked when league is full; private leagues prompt password modal
 
-3. **Cleaned Up Files**
-   - Deleted old migration scripts (`migrate-to-kash.sh`, etc.)
-   - Removed test pages from production
-   - Kept `/vendor/awwwards-rig/` for 3D mascot features
+3. **Admin Maintenance**
+   - `/api/admin/dedupe/players`, `/api/admin/players/refresh`, `/api/admin/players/retire` added
 
 ## 🏗️ Technical Architecture
 
@@ -53,10 +48,8 @@ Comprehensive commissioner system already implemented at `/app/league/[leagueId]
 ## 🔴 Critical Technical Debt
 
 ### High Priority Issues
-1. **Collection Name Inconsistency**
-   - `players` vs `college_players` used interchangeably
-   - `teams` vs `rosters` confusion
-   - Will cause database query failures
+1. **Collection Name Inconsistency** (partially resolved)
+   - Standardize on `college_players`, `leagues`, `rosters`, `games`, `rankings`
 
 2. **Duplicate Components**
    - 3 versions of conference showcase pages
@@ -67,11 +60,10 @@ Comprehensive commissioner system already implemented at `/app/league/[leagueId]
    - Production console.log statements need removal
    - No unified error handling strategy
 
-### Files Safe to Delete
+### Files Safe to Delete (verify)
 - `/app/test-cors/page.tsx`
 - `/app/test-sentry/page.tsx`
-- `/lib/api.ts` (legacy, replaced by modular clients)
-- Python scoring scripts (`scoring.py`, `scoring_example.py`)
+- `/lib/api.ts` (legacy)
 
 ### Files to Keep
 - `/vendor/awwwards-rig/` - For 3D mascot/logo features
@@ -79,12 +71,8 @@ Comprehensive commissioner system already implemented at `/app/league/[leagueId]
 ## 📅 Current Roadmap (4-Month Plan)
 
 ### August 2025 (NOW)
-- ✅ Core platform setup
-- ✅ Unified conference APIs
-- ✅ Commissioner tools complete
-- ⏳ Complete draft system
-- ⏳ Real-time scoring
-- ⏳ Authentication finalization
+- Draft mock complete; real draft in progress (timer + realtime)
+- Invite/Join flow fixed and live
 
 ### September 2025
 - Live draft rooms
@@ -102,10 +90,6 @@ Comprehensive commissioner system already implemented at `/app/league/[leagueId]
 
 ### November 2025
 - AI Integration (Draft Assistant, Lineup Optimizer, Trade Analyzer)
-- Voice commands
-- Vision analysis
-- Target: 1,000,000+ users
-- Market leader position
 
 ## 🎨 Team Colors Preserved
 All conference team colors have been preserved exactly in `/lib/conference-data.ts`:
