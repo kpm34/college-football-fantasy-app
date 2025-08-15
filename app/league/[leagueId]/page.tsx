@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 // import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
 import Link from "next/link";
-import { FiSettings, FiUsers, FiCalendar, FiTrendingUp, FiClipboard, FiAward, FiShare2 } from "react-icons/fi";
+import { FiSettings, FiUsers, FiCalendar, FiTrendingUp, FiClipboard, FiAward, FiShare2, FiActivity } from "react-icons/fi";
 import { leagueColors } from "@/lib/theme/colors";
 import { useAuth } from "@/hooks/useAuth";
 import { useLeagueMembersRealtime } from "@/hooks/useLeagueMembersRealtime";
@@ -643,16 +643,14 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             </div>
             
             <div className="flex items-center gap-4">
-              {userTeam && (
-                <button
-                  onClick={() => router.push(`/league/${leagueId}/scoreboard`)}
-                  className="px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
-                  style={{ backgroundColor: '#4A90E2', color: '#FFFFFF', fontWeight: '600' }}
-                >
-                  <FiTrendingUp />
-                  Scoreboard
-                </button>
-              )}
+              <button
+                onClick={() => router.push(`/league/${leagueId}/scoreboard`)}
+                className="px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
+                style={{ backgroundColor: '#4A90E2', color: '#FFFFFF', fontWeight: '600' }}
+              >
+                <FiTrendingUp />
+                Scoreboard
+              </button>
               
               <button
                 onClick={() => setShowInviteModal(true)}
@@ -741,7 +739,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {userTeam ? (
                 <button
                   onClick={() => router.push(`/team/${userTeam.$id}`)}
@@ -763,8 +761,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               )}
               
               <button
-                onClick={() => setActiveTab('standings')}
-                className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+                onClick={() => router.push(`/league/${leagueId}/standings`)}
+                className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg"
                 style={{ backgroundColor: leagueColors.primary.sand, color: leagueColors.text.inverse }}
               >
                 <FiTrendingUp className="text-xl" />
@@ -772,8 +770,17 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               </button>
               
               <button
-                onClick={() => setActiveTab('schedule')}
-                className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+                onClick={() => router.push(`/league/${leagueId}/scoreboard`)}
+                className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg"
+                style={{ backgroundColor: '#E94B3C', color: '#FFFFFF' }}
+              >
+                <FiActivity className="text-xl" />
+                <span className="font-semibold">Scoreboard</span>
+              </button>
+              
+              <button
+                onClick={() => router.push(`/league/${leagueId}/schedule`)}
+                className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg"
                 style={{ backgroundColor: leagueColors.primary.mint, color: leagueColors.text.primary }}
               >
                 <FiCalendar className="text-xl" />
