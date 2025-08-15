@@ -50,6 +50,106 @@
       ]
     },
     {
+      "$id": "projections_yearly",
+      "name": "projections_yearly",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        { "key": "player_id", "type": "string", "required": true, "size": 64 },
+        { "key": "season", "type": "integer", "required": true },
+        { "key": "team_id", "type": "string", "required": false, "size": 64 },
+        { "key": "position", "type": "string", "required": true, "size": 4 },
+        { "key": "model_version", "type": "string", "required": true, "size": 32 },
+        { "key": "games_played_est", "type": "double", "required": false },
+        { "key": "usage_rate", "type": "double", "required": false },
+        { "key": "pace_adj", "type": "double", "required": false },
+        { "key": "fantasy_points_simple", "type": "double", "required": false },
+        { "key": "range_floor", "type": "double", "required": false },
+        { "key": "range_median", "type": "double", "required": false },
+        { "key": "range_ceiling", "type": "double", "required": false },
+        { "key": "injury_risk", "type": "double", "required": false },
+        { "key": "volatility_score", "type": "double", "required": false },
+        { "key": "replacement_value", "type": "double", "required": false },
+        { "key": "adp_est", "type": "double", "required": false },
+        { "key": "ecr_rank", "type": "integer", "required": false }
+      ],
+      "indexes": [
+        { "key": "player_season", "type": "unique", "attributes": ["player_id", "season"] },
+        { "key": "season_position", "type": "key", "attributes": ["season", "position"] },
+        { "key": "range_median_idx", "type": "key", "attributes": ["range_median"], "orders": ["DESC"] }
+      ]
+    },
+    {
+      "$id": "projections_weekly",
+      "name": "projections_weekly",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        { "key": "player_id", "type": "string", "required": true, "size": 64 },
+        { "key": "season", "type": "integer", "required": true },
+        { "key": "week", "type": "integer", "required": true },
+        { "key": "opponent_team_id", "type": "string", "required": false, "size": 64 },
+        { "key": "home_away", "type": "string", "required": false, "size": 1 },
+        { "key": "team_total_est", "type": "double", "required": false },
+        { "key": "pace_matchup_adj", "type": "double", "required": false },
+        { "key": "fantasy_points_simple", "type": "double", "required": false },
+        { "key": "boom_prob", "type": "double", "required": false },
+        { "key": "bust_prob", "type": "double", "required": false },
+        { "key": "defense_vs_pos_grade", "type": "double", "required": false },
+        { "key": "injury_status", "type": "string", "required": false, "size": 12 },
+        { "key": "utilization_trend", "type": "string", "required": false, "size": 1 },
+        { "key": "rank_pro", "type": "integer", "required": false },
+        { "key": "start_sit_color", "type": "string", "required": false, "size": 6 }
+      ],
+      "indexes": [
+        { "key": "player_season_week", "type": "unique", "attributes": ["player_id", "season", "week"] },
+        { "key": "season_week", "type": "key", "attributes": ["season", "week"] },
+        { "key": "rank_pro_idx", "type": "key", "attributes": ["rank_pro"] }
+      ]
+    },
+    {
+      "$id": "model_inputs",
+      "name": "model_inputs",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        { "key": "season", "type": "integer", "required": true },
+        { "key": "week", "type": "integer", "required": false },
+        { "key": "depth_chart", "type": "string", "required": false, "size": 16384 },
+        { "key": "team_pace", "type": "string", "required": false, "size": 4096 },
+        { "key": "pass_rate", "type": "string", "required": false, "size": 4096 },
+        { "key": "rush_rate", "type": "string", "required": false, "size": 4096 },
+        { "key": "opponent_grades_by_pos", "type": "string", "required": false, "size": 8192 },
+        { "key": "injury_reports", "type": "string", "required": false, "size": 8192 },
+        { "key": "vegas_spread", "type": "string", "required": false, "size": 2048 },
+        { "key": "vegas_total", "type": "string", "required": false, "size": 2048 },
+        { "key": "manual_overrides", "type": "string", "required": false, "size": 8192 }
+      ],
+      "indexes": [
+        { "key": "season_week", "type": "key", "attributes": ["season", "week"] }
+      ]
+    },
+    {
+      "$id": "user_custom_projections",
+      "name": "user_custom_projections",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        { "key": "user_id", "type": "string", "required": true, "size": 64 },
+        { "key": "player_id", "type": "string", "required": true, "size": 64 },
+        { "key": "season", "type": "integer", "required": true },
+        { "key": "week", "type": "integer", "required": false },
+        { "key": "custom_usage", "type": "double", "required": false },
+        { "key": "custom_pace", "type": "double", "required": false },
+        { "key": "notes", "type": "string", "required": false, "size": 1024 },
+        { "key": "locked_rank", "type": "boolean", "required": false }
+      ],
+      "indexes": [
+        { "key": "user_player", "type": "unique", "attributes": ["user_id", "player_id"] },
+        { "key": "user_player_week", "type": "key", "attributes": ["user_id", "player_id", "week"] }
+      ]
+    },
+    {
       "$id": "leagues",
       "name": "Leagues",
       "enabled": true,

@@ -67,6 +67,10 @@ export class EnvironmentConfig {
       matchups: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MATCHUPS || 'matchups',
       lineups: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_LINEUPS || 'lineups',
       playerProjections: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_PROJECTIONS || 'player_projections',
+      playerProjectionsYearly: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_YEARLY || 'projections_yearly',
+      playerProjectionsWeekly: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_WEEKLY || 'projections_weekly',
+      modelInputs: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_INPUTS || 'model_inputs',
+      userCustomProjections: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER_CUSTOM_PROJECTIONS || 'user_custom_projections',
       
       // User collections
       users: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USERS || 'users',

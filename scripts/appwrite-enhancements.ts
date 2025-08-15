@@ -1,12 +1,13 @@
 import { Client, Databases, Functions, Storage, Teams, Users, Messaging, Query, ID, Permission, Role } from 'node-appwrite';
 import { APPWRITE_CONFIG } from '../lib/config/appwrite.config';
+import 'dotenv/config';
 import { COLLECTIONS } from '../lib/appwrite';
 
 // Initialize Appwrite Admin Client
 const client = new Client()
-  .setEndpoint(APPWRITE_CONFIG.endpoint)
-  .setProject(APPWRITE_CONFIG.projectId)
-  .setKey(APPWRITE_CONFIG.apiKey);
+  .setEndpoint(process.env.APPWRITE_ENDPOINT || APPWRITE_CONFIG.endpoint)
+  .setProject(process.env.APPWRITE_PROJECT_ID || APPWRITE_CONFIG.projectId)
+  .setKey(process.env.APPWRITE_API_KEY || APPWRITE_CONFIG.apiKey);
 
 const databases = new Databases(client);
 const functions = new Functions(client);
@@ -34,81 +35,11 @@ async function createAppwriteFunctions() {
   log('\n🚀 Creating Appwrite Functions...', 'blue');
   
   try {
-    // 1. Weekly Scoring Function
-    log('Creating weekly scoring function...', 'yellow');
-    const scoringFunction = await functions.create(
-      ID.unique(),
-      'weekly-scoring',
-      'node-18.0',
-      [
-        Permission.read(Role.any()),
-        Permission.execute(Role.any())
-      ],
-      [
-        { name: 'APPWRITE_FUNCTION_PROJECT_ID', value: APPWRITE_CONFIG.projectId },
-        { name: 'APPWRITE_FUNCTION_ENDPOINT', value: APPWRITE_CONFIG.endpoint },
-        { name: 'APPWRITE_FUNCTION_API_KEY', value: APPWRITE_CONFIG.apiKey },
-        { name: 'DATABASE_ID', value: DATABASE_ID },
-        { name: 'CFBD_API_KEY', value: process.env.CFBD_API_KEY || '' }
-      ],
-      'appwrite-functions/weekly-scoring',
-      'index.js',
-      60, // 60 second timeout
-      '0 0 * * 1', // Every Monday at midnight
-      true, // enabled
-      true // logging
-    );
-    log(`✅ Created weekly scoring function: ${scoringFunction.$id}`, 'green');
+    // NOTE: Function creation and permissions vary between SDK versions; skip in script, create via Console
+    log('Skipping Appwrite Functions creation (create in Console with env vars)', 'yellow');
 
-    // 2. Draft Reminder Function
-    log('Creating draft reminder function...', 'yellow');
-    const draftReminderFunction = await functions.create(
-      ID.unique(),
-      'draft-reminder',
-      'node-18.0',
-      [
-        Permission.read(Role.any()),
-        Permission.execute(Role.any())
-      ],
-      [
-        { name: 'APPWRITE_FUNCTION_PROJECT_ID', value: APPWRITE_CONFIG.projectId },
-        { name: 'APPWRITE_FUNCTION_ENDPOINT', value: APPWRITE_CONFIG.endpoint },
-        { name: 'APPWRITE_FUNCTION_API_KEY', value: APPWRITE_CONFIG.apiKey },
-        { name: 'DATABASE_ID', value: DATABASE_ID }
-      ],
-      'appwrite-functions/draft-reminder',
-      'index.js',
-      30,
-      '', // No schedule, triggered by events
-      true,
-      true
-    );
-    log(`✅ Created draft reminder function: ${draftReminderFunction.$id}`, 'green');
 
-    // 3. Trade Processor Function
-    log('Creating trade processor function...', 'yellow');
-    const tradeFunction = await functions.create(
-      ID.unique(),
-      'trade-processor',
-      'node-18.0',
-      [
-        Permission.read(Role.any()),
-        Permission.execute(Role.any())
-      ],
-      [
-        { name: 'APPWRITE_FUNCTION_PROJECT_ID', value: APPWRITE_CONFIG.projectId },
-        { name: 'APPWRITE_FUNCTION_ENDPOINT', value: APPWRITE_CONFIG.endpoint },
-        { name: 'APPWRITE_FUNCTION_API_KEY', value: APPWRITE_CONFIG.apiKey },
-        { name: 'DATABASE_ID', value: DATABASE_ID }
-      ],
-      'appwrite-functions/trade-processor',
-      'index.js',
-      30,
-      '',
-      true,
-      true
-    );
-    log(`✅ Created trade processor function: ${tradeFunction.$id}`, 'green');
+    // See above note.
 
   } catch (error: any) {
     log(`❌ Error creating functions: ${error.message}`, 'red');
@@ -174,6 +105,36 @@ async function createDatabaseIndexes() {
         { key: 'round', type: 'key', attributes: ['round'] },
         { key: 'leagueId_round_pick', type: 'key', attributes: ['leagueId', 'round', 'pick'] }
       ]
+    },
+    // Projections collections
+    {
+      collection: COLLECTIONS.PROJECTIONS_YEARLY,
+      indexes: [
+        { key: 'player_season', type: 'unique', attributes: ['player_id', 'season'] },
+        { key: 'season_position', type: 'key', attributes: ['season', 'position'] },
+        { key: 'range_median', type: 'key', attributes: ['range_median'] },
+      ]
+    },
+    {
+      collection: COLLECTIONS.PROJECTIONS_WEEKLY,
+      indexes: [
+        { key: 'player_season_week', type: 'unique', attributes: ['player_id', 'season', 'week'] },
+        { key: 'season_week', type: 'key', attributes: ['season', 'week'] },
+        { key: 'rank_pro', type: 'key', attributes: ['rank_pro'] },
+      ]
+    },
+    {
+      collection: COLLECTIONS.MODEL_INPUTS,
+      indexes: [
+        { key: 'season_week', type: 'key', attributes: ['season', 'week'] }
+      ]
+    },
+    {
+      collection: COLLECTIONS.USER_CUSTOM_PROJECTIONS,
+      indexes: [
+        { key: 'user_player', type: 'unique', attributes: ['user_id', 'player_id'] },
+        { key: 'user_player_week', type: 'key', attributes: ['user_id', 'player_id', 'week'] }
+      ]
     }
   ];
 
@@ -185,10 +146,10 @@ async function createDatabaseIndexes() {
         await databases.createIndex(
           DATABASE_ID,
           collection,
-          index.type as 'key' | 'fulltext' | 'unique',
           index.key,
+          index.type as 'key' | 'fulltext' | 'unique',
           index.attributes,
-          ['asc'] // Default order
+          ['ASC'] // Default order
         );
         log(`✅ Created index: ${index.key}`, 'green');
       } catch (error: any) {
@@ -197,6 +158,107 @@ async function createDatabaseIndexes() {
         } else {
           log(`❌ Error creating index ${index.key}: ${error.message}`, 'red');
         }
+      }
+    }
+  }
+}
+
+async function ensureProjectionCollections() {
+  log('\n📚 Ensuring Projections Collections exist...', 'blue');
+  const projectionCollections = [
+    { id: COLLECTIONS.PROJECTIONS_YEARLY, name: 'projections_yearly' },
+    { id: COLLECTIONS.PROJECTIONS_WEEKLY, name: 'projections_weekly' },
+    { id: COLLECTIONS.MODEL_INPUTS, name: 'model_inputs' },
+    { id: COLLECTIONS.USER_CUSTOM_PROJECTIONS, name: 'user_custom_projections' },
+  ];
+
+  for (const col of projectionCollections) {
+    try {
+      log(`Ensuring collection ${col.name}...`, 'yellow');
+      try {
+        await databases.getCollection(DATABASE_ID, col.id);
+        log(`⏭️  ${col.name} already exists`, 'yellow');
+      } catch {
+        await databases.createCollection(
+          DATABASE_ID,
+          col.id,
+          col.name,
+          [Permission.read(Role.any()), Permission.create(Role.users()), Permission.update(Role.users())],
+          true
+        );
+        log(`✅ Created ${col.name}`, 'green');
+      }
+
+      // Add attributes per spec (simplified core set)
+      switch (col.id) {
+        case COLLECTIONS.PROJECTIONS_YEARLY:
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'player_id', 64, true);
+          await databases.createIntegerAttribute(DATABASE_ID, col.id, 'season', true);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'team_id', 64, false);
+          await databases.createEnumAttribute(DATABASE_ID, col.id, 'position', ['QB','RB','WR','TE'], true);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'model_version', 32, true);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'games_played_est', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'usage_rate', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'pace_adj', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'fantasy_points_simple', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'range_floor', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'range_median', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'range_ceiling', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'injury_risk', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'volatility_score', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'replacement_value', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'adp_est', false);
+          await databases.createIntegerAttribute(DATABASE_ID, col.id, 'ecr_rank', false);
+          break;
+        case COLLECTIONS.PROJECTIONS_WEEKLY:
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'player_id', 64, true);
+          await databases.createIntegerAttribute(DATABASE_ID, col.id, 'season', true);
+          await databases.createIntegerAttribute(DATABASE_ID, col.id, 'week', true);
+          await databases.createEnumAttribute(DATABASE_ID, col.id, 'position', ['QB','RB','WR','TE'], false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'opponent_team_id', 64, false);
+          await databases.createEnumAttribute(DATABASE_ID, col.id, 'home_away', ['H','A','N'], false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'team_total_est', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'pace_matchup_adj', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'fantasy_points_simple', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'boom_prob', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'bust_prob', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'defense_vs_pos_grade', false);
+          await databases.createEnumAttribute(DATABASE_ID, col.id, 'injury_status', ['Healthy','Questionable','Doubtful','Out'], false);
+          await databases.createEnumAttribute(DATABASE_ID, col.id, 'utilization_trend', ['+','=','-'], false);
+          await databases.createIntegerAttribute(DATABASE_ID, col.id, 'rank_pro', false);
+          await databases.createEnumAttribute(DATABASE_ID, col.id, 'start_sit_color', ['Green','Yellow','Red'], false);
+          break;
+        case COLLECTIONS.MODEL_INPUTS:
+          await databases.createIntegerAttribute(DATABASE_ID, col.id, 'season', true);
+          await databases.createIntegerAttribute(DATABASE_ID, col.id, 'week', false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'depth_chart', 16384, false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'team_pace', 4096, false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'pass_rate', 4096, false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'rush_rate', 4096, false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'opponent_grades_by_pos', 8192, false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'injury_reports', 8192, false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'vegas_spread', 2048, false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'vegas_total', 2048, false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'manual_overrides', 8192, false);
+          break;
+        case COLLECTIONS.USER_CUSTOM_PROJECTIONS:
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'user_id', 64, true);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'player_id', 64, true);
+          await databases.createIntegerAttribute(DATABASE_ID, col.id, 'season', true);
+          await databases.createIntegerAttribute(DATABASE_ID, col.id, 'week', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'custom_usage', false);
+          await databases.createFloatAttribute(DATABASE_ID, col.id, 'custom_pace', false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'notes', 1024, false);
+          await databases.createBooleanAttribute(DATABASE_ID, col.id, 'locked_rank', false);
+          break;
+      }
+
+      // Allow attributes to be ready
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      log(`✅ Ensured ${col.name}`, 'green');
+    } catch (error: any) {
+      if (error.code !== 409) {
+        log(`❌ Error ensuring ${col.name}: ${error.message}`, 'red');
       }
     }
   }
@@ -273,20 +335,8 @@ async function setupMessaging() {
   log('\n📧 Setting up Messaging...', 'blue');
   
   try {
-    // Create Email Provider (using Appwrite's built-in SMTP)
-    log('Creating email provider...', 'yellow');
-    const emailProvider = await messaging.createSmtpProvider(
-      ID.unique(),
-      'default-smtp',
-      'smtp.appwrite.io',
-      587,
-      'noreply@cfbfantasy.app',
-      'CFB Fantasy',
-      '', // No username for Appwrite SMTP
-      '', // No password for Appwrite SMTP
-      'tls'
-    );
-    log(`✅ Created email provider: ${emailProvider.$id}`, 'green');
+    // Skip provider creation in script to avoid encryption mismatch; configure via console
+    log('Skipping email provider creation (configure via Console)', 'yellow');
 
     // Create message templates
     const templates = [
@@ -499,6 +549,7 @@ async function main() {
   
   try {
     // Run all enhancements
+    await ensureProjectionCollections();
     await createDatabaseIndexes();
     await createStorageBuckets();
     await setupMessaging();

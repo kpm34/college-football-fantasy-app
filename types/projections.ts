@@ -83,3 +83,60 @@ export interface DraftPlayer extends PlayerProjection {
   draftPosition?: number;
   draftRound?: number;
 }
+
+// New typed shapes for projections_yearly and projections_weekly collections
+export interface ProjectionsYearly {
+  $id: string;
+  player_id: string;
+  season: number;
+  team_id?: string;
+  position: 'QB' | 'RB' | 'WR' | 'TE';
+  model_version: string;
+  // Simple
+  games_played_est?: number;
+  usage_rate?: number;
+  pace_adj?: number;
+  statline_simple?: Record<string, number>;
+  fantasy_points_simple?: number;
+  // Pro
+  range_floor?: number;
+  range_median?: number;
+  range_ceiling?: number;
+  percentiles?: { p10?: number; p25?: number; p50?: number; p75?: number; p90?: number };
+  injury_risk?: number; // 0-1
+  volatility_score?: number; // 0-100
+  notes?: string;
+  sim_runs?: number;
+  sim_seed?: number;
+  tier?: 'S' | 'A' | 'B' | 'C';
+  replacement_value?: number;
+  adp_est?: number;
+  ecr_rank?: number;
+  updatedAt?: string;
+}
+
+export interface ProjectionsWeekly {
+  $id: string;
+  player_id: string;
+  season: number;
+  week: number;
+  opponent_team_id?: string;
+  home_away?: 'H' | 'A' | 'N';
+  team_total_est?: number;
+  pace_matchup_adj?: number;
+  // Simple
+  statline_simple?: Record<string, number>;
+  fantasy_points_simple?: number;
+  // Pro
+  statline_median?: Record<string, number>;
+  statline_floor?: Record<string, number>;
+  statline_ceiling?: Record<string, number>;
+  boom_prob?: number;
+  bust_prob?: number;
+  defense_vs_pos_grade?: number; // 0-100
+  injury_status?: 'Healthy' | 'Questionable' | 'Doubtful' | 'Out';
+  utilization_trend?: '+' | '=' | '-';
+  rank_pro?: number;
+  start_sit_color?: 'Green' | 'Yellow' | 'Red';
+  updatedAt?: string;
+}
