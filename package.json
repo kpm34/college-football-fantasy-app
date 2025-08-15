@@ -36,6 +36,8 @@
     "ingest:mockdraft": "ts-node scripts/ingestMockDraft.ts --season=2025",
     "ingest:depth": "ts-node scripts/ingestDepthCharts.ts --season=2025",
     "ingest:efficiency": "ts-node scripts/ingestTeamEfficiency.ts --season=2025",
+    "reconcile:draftpool": "ts-node scripts/cleanup-draft-pool.ts --season=2025 --apply=true",
+    "export:players": "ts-node scripts/export-college-players.ts --season=2025",
     "project:yearly": "ts-node functions/project-yearly-simple/index.ts --season=2025",
     "project:pro:weekly": "ts-node functions/project-pro-distributions/index.ts --season=2025 --week=1 --runs=5000 --seed=42",
     "project:pro:yearly": "ts-node functions/project-pro-distributions/index.ts --season=2025 --runs=5000 --seed=42",

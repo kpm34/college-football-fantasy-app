@@ -13,6 +13,7 @@ import {
   FunnelIcon
 } from "@heroicons/react/24/outline";
 import { leagueColors } from '@/lib/theme/colors';
+import CFPLoadingScreen from '@/components/CFPLoadingScreen';
 
 type DraftType = 'snake' | 'auction';
 type Position = 'ALL' | 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF';
@@ -57,6 +58,7 @@ export default function MockDraftPage() {
   const [loading, setLoading] = useState(true);
   const [showSettings, setShowSettings] = useState(true);
   const [draftStarted, setDraftStarted] = useState(false);
+  const [draftInitializing, setDraftInitializing] = useState(false);
   
   // Draft settings
   const [settings, setSettings] = useState<MockDraftSettings>({
@@ -99,7 +101,8 @@ export default function MockDraftPage() {
   const loadPlayers = async () => {
     try {
       // Load players from our dedicated draft endpoint
-      const response = await fetch('/api/draft/players?limit=1000');
+      const season = new Date().getFullYear();
+      const response = await fetch(`/api/draft/players?limit=1000&season=${season}`);
       const data = await response.json();
       
       if (data.success && data.players && data.players.length > 0) {
@@ -286,9 +289,15 @@ export default function MockDraftPage() {
     return conferenceMap[team] || 'ALL';
   };
 
-  const startDraft = () => {
+  const startDraft = async () => {
+    setDraftInitializing(true);
+    
+    // Simulate draft initialization delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
     setShowSettings(false);
     setDraftStarted(true);
+    setDraftInitializing(false);
     initializeDraftOrder();
   };
 
@@ -386,12 +395,8 @@ export default function MockDraftPage() {
     return () => clearInterval(timer);
   }, [draftStarted, timeRemaining]);
 
-  if (loading || authLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0B0E13] via-[#1c1117] to-[#0B0E13] flex items-center justify-center">
-        <div className="text-white">Loading draft room...</div>
-      </div>
-    );
+  if (loading || authLoading || draftInitializing) {
+    return <CFPLoadingScreen isLoading={true} minDuration={1000} />;
   }
 
   if (showSettings) {
