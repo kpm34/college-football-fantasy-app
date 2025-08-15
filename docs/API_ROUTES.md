@@ -384,10 +384,13 @@ Complete documentation of all API routes, their functions, required permissions,
 **Description**: Get player projections  
 **Auth Required**: Yes  
 **Query Params**: 
-- `week` - Week number
-- `playerId` - Specific player
+- `mode` - `season` | `weekly`
+- `week` - Week number (required for `weekly`)
+- `position` - Filter by position
+- `conference` - Filter by conference
+- `source` - `db` | `calc` (db reads `projections_yearly`/`projections_weekly`; calc computes live)
 **Database Operations**:
-- Reads from `player_projections` collection
+- Reads from `projections_yearly` or `projections_weekly` (when `source=db`)
 **Returns**: Player projection data
 
 ---

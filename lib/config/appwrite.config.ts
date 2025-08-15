@@ -5,6 +5,7 @@ export const APPWRITE_CONFIG = {
   endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1',
   projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app',
   databaseId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'college-football-fantasy',
+  apiKey: process.env.APPWRITE_API_KEY || '',
   
   // Collection IDs
   collections: {
@@ -19,6 +20,10 @@ export const APPWRITE_CONFIG = {
     LINEUPS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_LINEUPS || 'lineups',
     DRAFT_PICKS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS || 'draft_picks',
     PLAYER_PROJECTIONS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_PROJECTIONS || 'player_projections',
+    PROJECTIONS_YEARLY: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_YEARLY || 'projections_yearly',
+    PROJECTIONS_WEEKLY: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_WEEKLY || 'projections_weekly',
+    MODEL_INPUTS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_INPUTS || 'model_inputs',
+    USER_CUSTOM_PROJECTIONS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER_CUSTOM_PROJECTIONS || 'user_custom_projections',
     SCHEDULE: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_SCHEDULE || 'schedule',
     SCORING_RESULTS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_SCORING_RESULTS || 'scoring_results',
   }

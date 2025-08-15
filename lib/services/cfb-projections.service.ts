@@ -32,7 +32,7 @@ export class CFBProjectionsService {
   private static readonly CFBD_BASE_URL = 'https://api.collegefootballdata.com';
   private static readonly ESPN_BASE_URL = 'https://site.api.espn.com/apis/site/v2/sports/football/college-football';
   
-  private static cfbdApiKey = process.env.NEXT_PUBLIC_CFBD_API_KEY || '';
+  private static cfbdApiKey = process.env.CFBD_API_KEY || process.env.NEXT_PUBLIC_CFBD_API_KEY || '';
 
   /**
    * Get player projections for the season

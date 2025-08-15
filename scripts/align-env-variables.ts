@@ -81,6 +81,26 @@ const ENV_VARS = {
     value: 'player_projections',
     description: 'Player projections collection ID'
   },
+  NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_YEARLY: {
+    environments: ENVIRONMENTS,
+    value: 'projections_yearly',
+    description: 'Yearly projections collection ID'
+  },
+  NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_WEEKLY: {
+    environments: ENVIRONMENTS,
+    value: 'projections_weekly',
+    description: 'Weekly projections collection ID'
+  },
+  NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_INPUTS: {
+    environments: ENVIRONMENTS,
+    value: 'model_inputs',
+    description: 'Model inputs collection ID'
+  },
+  NEXT_PUBLIC_APPWRITE_COLLECTION_USER_CUSTOM_PROJECTIONS: {
+    environments: ENVIRONMENTS,
+    value: 'user_custom_projections',
+    description: 'User custom projections collection ID'
+  },
   NEXT_PUBLIC_APPWRITE_COLLECTION_ACTIVITY_LOG: {
     environments: ENVIRONMENTS,
     value: 'activity_log',
