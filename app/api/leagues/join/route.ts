@@ -77,23 +77,29 @@ export async function POST(request: NextRequest) {
     }
     
     // Create roster for the user
-    const rosterData = {
+    const rosterData: Record<string, any> = {
       teamName: teamName || `${user.name || user.email}'s Team`,
       userId: user.$id,
       userName: user.name || user.email,
       email: user.email,
       leagueId: leagueId,
-      draftPosition: currentTeams + 1,
-      abbreviation: (teamName || user.name || 'TEAM').substring(0, 3).toUpperCase(),
       wins: 0,
       losses: 0,
       ties: 0,
       pointsFor: 0,
       pointsAgainst: 0,
-      players: '[]',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      players: '[]'
     };
+
+    // Only include fields that exist in the collection
+    // Abbreviation is optional and may not exist in schema
+    try {
+      const rostersCollection = await databases.getCollection(DATABASE_ID, COLLECTIONS.ROSTERS);
+      const hasAbbreviation = Array.isArray((rostersCollection as any).attributes) && (rostersCollection as any).attributes.some((a: any) => a.key === 'abbreviation');
+      if (hasAbbreviation) {
+        rosterData.abbreviation = (teamName || user.name || 'TEAM').substring(0, 3).toUpperCase();
+      }
+    } catch {}
     
     const roster = await databases.createDocument(
       DATABASE_ID,
