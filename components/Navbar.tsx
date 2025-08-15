@@ -58,45 +58,19 @@ export default function Navbar() {
     let cancelled = false;
     (async () => {
       try {
-        if (!user?.email) return;
-        const byEmail = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTIONS.USERS,
-          [Query.equal("email", user.email)]
-        );
-        if (byEmail.documents.length > 0) {
-          const doc: any = byEmail.documents[0];
-          const ids: string[] = doc.leagues || [];
-          const names: string[] = doc.leagueNames || [];
-          if (ids.length > 0) {
-            const next = await Promise.all(ids.map(async (id, i) => {
-              try {
-                // Trust server if available
-                let isCommissioner = false;
-                try {
-                  const res = await fetch(`/api/leagues/is-commissioner/${id}`, { cache: 'no-store' });
-                  if (res.ok) {
-                    const data = await res.json();
-                    isCommissioner = !!data.isCommissioner;
-                  }
-                } catch {}
-                if (!isCommissioner) {
-                  const d = await databases.getDocument(
-                    DATABASE_ID,
-                    COLLECTIONS.LEAGUES,
-                    id
-                  );
-                  isCommissioner = isUserCommissioner(d, user);
-                }
-                return { id, name: (d as any).name || names[i] || "Unnamed League", isCommissioner };
-              } catch {
-                return { id, name: names[i] || "Unnamed League" };
-              }
-            }));
-            if (!cancelled) setLeagues(next);
-            return;
+        // Prefer unified server endpoint (handles membership + commissioner)
+        try {
+          const res = await fetch('/api/leagues/mine', { cache: 'no-store' });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data.leagues) && !cancelled) {
+              setLeagues(data.leagues);
+              return;
+            }
           }
-        }
+        } catch {}
+
+        if (!user?.email) return;
 
         // Fallback via rosters
         let rosters = await databases.listDocuments(
@@ -335,15 +309,6 @@ export default function Navbar() {
                         <LockClosedIcon className="h-4 w-4" />
                         Locker
                       </button>
-                      {lg.isCommissioner && (
-                        <button
-                          onClick={() => handleNavigateWithLoading(`/league/${lg.id}/commissioner`)}
-                          className="shrink-0 px-3 py-2 rounded-md bg-white/10 hover:bg-white/15 text-white text-sm"
-                          aria-label="Open Commissioner"
-                        >
-                          Commish
-                        </button>
-                      )}
                     </div>
                   ))}
                 </>
