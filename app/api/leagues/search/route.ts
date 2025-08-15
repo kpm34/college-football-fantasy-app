@@ -33,12 +33,11 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-      // Append pagination and ordering using Query helpers
+      // Preferred: server-side indexed search
       const paginatedQueries = [
         ...queries,
         Query.limit(limit),
         Query.offset(offset),
-        Query.orderDesc('created_at')
       ];
 
       const leagues = await databases.listDocuments(
@@ -49,25 +48,53 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        leagues: leagues.documents.map(league => ({
+        leagues: leagues.documents.map((league: any) => ({
           id: league.$id,
           name: league.name,
           mode: league.mode,
           conf: league.conf,
-          maxTeams: league.max_teams,
-          currentTeams: league.members?.length || 0,
+          maxTeams: league.maxTeams ?? league.max_teams ?? 12,
+          currentTeams: league.currentTeams ?? league.members?.length ?? 0,
           status: league.status,
-          commissionerId: league.commissioner_id,
-          createdAt: league.created_at,
-          updatedAt: league.updated_at
+          commissionerId: league.commissioner ?? league.commissioner_id,
+          createdAt: league.created_at ?? league.$createdAt,
+          updatedAt: league.updated_at ?? league.$updatedAt
         })),
         total: leagues.total
       });
 
     } catch (appwriteError: any) {
-      console.error('Appwrite error:', appwriteError);
-      const status = appwriteError?.code === 401 ? 401 : 500;
-      return NextResponse.json({ success: false, error: 'Search failed' }, { status });
+      // Fallback: fetch a reasonable page and filter in memory (for collections lacking full-text index)
+      console.warn('Search index not available; falling back to filtered list:', appwriteError?.message || appwriteError);
+      const fallback = await databases.listDocuments(
+        databaseId,
+        COLLECTIONS.leagues,
+        [Query.limit(Math.max(50, limit + offset))]
+      );
+
+      const term = (search || '').trim().toLowerCase();
+      const filtered = fallback.documents.filter((doc: any) => {
+        const matchesName = term ? String(doc.name || '').toLowerCase().includes(term) : true;
+        const matchesMode = mode ? String(doc.mode || '').toLowerCase() === mode.toLowerCase() : true;
+        return matchesName && matchesMode;
+      });
+
+      return NextResponse.json({
+        success: true,
+        leagues: filtered.slice(0, limit).map((league: any) => ({
+          id: league.$id,
+          name: league.name,
+          mode: league.mode,
+          conf: league.conf,
+          maxTeams: league.maxTeams ?? league.max_teams ?? 12,
+          currentTeams: league.currentTeams ?? league.members?.length ?? 0,
+          status: league.status,
+          commissionerId: league.commissioner ?? league.commissioner_id,
+          createdAt: league.created_at ?? league.$createdAt,
+          updatedAt: league.updated_at ?? league.$updatedAt
+        })),
+        total: filtered.length
+      });
     }
 
   } catch (error) {
