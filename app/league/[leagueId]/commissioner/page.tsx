@@ -62,7 +62,7 @@ interface Member {
 
 export default function CommissionerSettings({ params }: { params: { leagueId: string } }) {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [league, setLeague] = useState<League | null>(null);
@@ -103,16 +103,15 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
   });
 
   useEffect(() => {
-    // Wait for auth state to resolve before deciding
-    if ((user as any) === undefined) return;
+    // Wait for auth to finish resolving before deciding
+    if (authLoading) return;
     if (!user) {
-      // Do not immediately redirect to login to avoid flicker; let app layout handle auth
-      // Navigate only if clearly unauthenticated after auth check completes
-      router.push('/login');
+      const next = encodeURIComponent(`/league/${params.leagueId}/commissioner`);
+      router.replace(`/login?next=${next}`);
       return;
     }
     loadSettings();
-  }, [user, params.leagueId, router]);
+  }, [authLoading, user, params.leagueId, router]);
 
   const loadSettings = async () => {
     try {
