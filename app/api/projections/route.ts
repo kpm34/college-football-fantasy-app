@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CFBProjectionsService } from '@/lib/services/cfb-projections.service';
-import { NextRequest, NextResponse } from 'next/server';
 import { Databases, Query, Client } from 'node-appwrite';
 import { env } from '@/core/config/environment';
 
