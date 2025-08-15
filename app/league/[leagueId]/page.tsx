@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
-import { Query } from "appwrite";
+// import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
 import Link from "next/link";
 import { FiSettings, FiUsers, FiCalendar, FiTrendingUp, FiClipboard, FiAward, FiShare2 } from "react-icons/fi";
 import { leagueColors } from "@/lib/theme/colors";
@@ -128,28 +127,51 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
   const loadLeagueData = async () => {
     try {
       setLoading(true);
-      
-      // Load league from Appwrite
-      const leagueResponse = await databases.getDocument(
-        DATABASE_ID,
-        COLLECTIONS.LEAGUES,
-        leagueId
-      );
-      const leagueData = leagueResponse as unknown as League;
-      setLeague(leagueData);
+      // Load league via server API (handles documentSecurity and membership)
+      let mapped: League | null = null;
+      const res = await fetch(`/api/leagues/${leagueId}`, {
+        cache: 'no-store',
+        headers: user?.$id ? { 'x-user-id': user.$id } as any : undefined
+      });
+      if (!res.ok) {
+        setLeague(null);
+      } else {
+        const data = await res.json();
+        const l = data.league;
+        mapped = {
+          $id: l.id,
+          name: l.name,
+          commissioner: l.commissionerId,
+          commissionerId: l.commissionerId,
+          season: l.seasonStartWeek ? new Date().getFullYear() : (l.season || new Date().getFullYear()),
+          scoringType: 'PPR',
+          maxTeams: l.maxTeams || 12,
+          teams: l.members?.length || 0,
+          draftDate: l.draftDate || '',
+          status: l.status || 'ACTIVE',
+          inviteCode: '',
+          gameMode: l.mode,
+          selectedConference: l.conf || undefined,
+          draftType: (l as any).draftType,
+          pickTimeSeconds: (l as any).pickTimeSeconds,
+          orderMode: (l as any).orderMode,
+          members: l.members || []
+        };
+        setLeague(mapped);
+      }
       
       // Check if current user is commissioner (match by id, email, or name)
-      if (user) {
-        debugCommissionerMatch(leagueData, user);
-        if (isUserCommissioner(leagueData, user)) {
+      if (mapped && user && (typeof window !== 'undefined')) {
+        debugCommissionerMatch(mapped as any, user as any);
+        if (isUserCommissioner(mapped as any, user as any)) {
           setIsCommissioner(true);
         }
       }
 
       // Parse scoring rules if they exist
-      if (leagueData.scoringRules) {
+      if ((league as any)?.scoringRules) {
         try {
-          const rules = JSON.parse(leagueData.scoringRules);
+          const rules = JSON.parse((league as any).scoringRules);
           setScoringSettings(prev => ({ ...prev, ...rules }));
         } catch (e) {
           console.log('Error parsing scoring rules');
@@ -157,13 +179,15 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       }
 
       // Set draft settings
-      setDraftSettings({
-        type: leagueData.draftType || 'snake',
-        pickTimeSeconds: leagueData.pickTimeSeconds || 90,
-        date: leagueData.draftDate ? new Date(leagueData.draftDate).toISOString().split('T')[0] : '',
-        time: leagueData.draftDate ? new Date(leagueData.draftDate).toTimeString().slice(0, 5) : '',
-        orderMode: leagueData.orderMode || 'random'
-      });
+      if (mapped) {
+        setDraftSettings({
+          type: (mapped as any).draftType || 'snake',
+          pickTimeSeconds: (mapped as any).pickTimeSeconds || 90,
+          date: mapped.draftDate ? new Date(mapped.draftDate).toISOString().split('T')[0] : '',
+          time: mapped.draftDate ? new Date(mapped.draftDate).toTimeString().slice(0, 5) : '',
+          orderMode: (mapped as any).orderMode || 'random'
+        });
+      }
 
       // Load all fantasy rosters in this league via API
       try {
@@ -312,12 +336,11 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       setSavingSettings(true);
 
       try {
-        await databases.updateDocument(
-          DATABASE_ID,
-          COLLECTIONS.LEAGUES,
-          league.$id,
-          { scoringRules: JSON.stringify(newSettings) }
-        );
+        await fetch(`/api/leagues/${league.$id}/update-settings`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ scoringRules: JSON.stringify(newSettings) })
+        });
       } catch (error) {
         console.error('Error saving scoring settings:', error);
       } finally {
@@ -346,12 +369,11 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           }
         }
 
-        await databases.updateDocument(
-          DATABASE_ID,
-          COLLECTIONS.LEAGUES,
-          league.$id,
-          updates
-        );
+        await fetch(`/api/leagues/${league.$id}/update-settings`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates)
+        });
       } catch (error) {
         console.error('Error saving draft settings:', error);
       } finally {
