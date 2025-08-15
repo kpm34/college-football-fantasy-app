@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-
+import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
 import { parse as parseCsv } from 'csv-parse/sync';
@@ -134,6 +134,9 @@ export async function loadDepthSources(season: number): Promise<RawDepth[]> {
         rows.push(row);
       }
     }
+  }
+  if (rows.length === 0) {
+    console.warn(`No depth sources found under data/depth for season ${season}. Expected files like 247_${season}.csv/json, ourlads_${season}.csv/json, team_sites_${season}.csv/json.`);
   }
   return rows;
 }
@@ -331,8 +334,21 @@ async function main() {
   console.log(`✅ Depth charts ingested: teams=${teamCount}, positions=${positions}, players=${players}`);
 }
 
-if (require.main === module) {
-  main().catch((e) => { console.error('❌ Ingest depth charts failed', e); process.exit(1); });
-}
+// Support both CJS and ESM execution
+try {
+  // @ts-ignore
+  if (typeof require !== 'undefined' && require.main === module) {
+    main().catch((e) => { console.error('❌ Ingest depth charts failed', e); process.exit(1); });
+  }
+} catch {}
+
+try {
+  // ESM direct run check
+  // eslint-disable-next-line no-undef
+  const isDirect = (import.meta as any)?.url && process.argv[1] && (new URL((import.meta as any).url).pathname.endsWith(path.basename(process.argv[1])));
+  if (isDirect) {
+    main().catch((e) => { console.error('❌ Ingest depth charts failed', e); process.exit(1); });
+  }
+} catch {}
 
 

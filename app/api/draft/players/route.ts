@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export async function GET(request: NextRequest) {
   try {
@@ -27,7 +29,7 @@ export async function GET(request: NextRequest) {
       queries.push(Query.equal('conference', conference));
     } else if (!conference) {
       // Prefer Power 4 but we will gracefully fallback to all on empty result
-      queries.push(Query.equal('conference', power4Conferences as any));
+      try { queries.push(Query.equal('conference', power4Conferences as any)); } catch {}
     }
 
     // Filter to fantasy positions by default
@@ -46,10 +48,9 @@ export async function GET(request: NextRequest) {
       queries.push(Query.search('name', search));
     }
 
-    // Only draftable records
-    try {
-      queries.push(Query.equal('draftable', true));
-    } catch {}
+    // Power 4 and current season when available (we'll decide draftable from roster/depth later)
+    try { queries.push(Query.equal('power_4', true)); } catch {}
+    try { queries.push(Query.equal('season', season)); } catch {}
 
     // Fetch players from Appwrite
     let response = await databases.listDocuments(
@@ -70,6 +71,68 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Optional: load manual overrides from model_inputs to correct teams/draftable flags
+    let overrides: Record<string, any> | null = null;
+    let depthIndex: Map<string, string> | null = null; // name|pos -> team_id
+    let teamIdToName: Record<string, string> = {};
+    // Note: do not use CFBD here; rely solely on our database (depth_chart_json + overrides)
+    try {
+      const mi = await databases.listDocuments(
+        DATABASE_ID,
+        (COLLECTIONS as any).MODEL_INPUTS || 'model_inputs',
+        [Query.equal('season', season), Query.limit(1)]
+      );
+      const doc = mi.documents?.[0];
+      overrides = (doc?.manual_overrides_json as any) || null;
+      // Build depth index for additional correction
+      let depth: any = doc?.depth_chart_json;
+      if (typeof depth === 'string') {
+        try { depth = JSON.parse(depth); } catch {}
+      }
+      if (depth && typeof depth === 'object') {
+        depthIndex = new Map<string, string>();
+        // Load team map to translate team_id -> team name
+        try {
+          const file = path.join(process.cwd(), 'data/teams_map.json');
+          if (fs.existsSync(file)) {
+            const map = JSON.parse(fs.readFileSync(file, 'utf8')) as Record<string, string>;
+            // invert
+            for (const [name, id] of Object.entries(map)) {
+              teamIdToName[id] = name;
+            }
+          }
+        } catch {}
+        for (const [teamId, posMap] of Object.entries(depth)) {
+          for (const pos of Object.keys(posMap as any)) {
+            const arr = (posMap as any)[pos] as Array<any>;
+            if (!Array.isArray(arr)) continue;
+            for (const entry of arr) {
+              const key = `${(entry.player_name || '').toString().trim().toLowerCase()}|${pos}`;
+              depthIndex.set(key, teamId);
+            }
+          }
+        }
+      }
+    } catch {
+      // best-effort only
+    }
+
+    // (Removed CFBD roster supplement.)
+
+    // Known quick-fix overrides for urgent corrections without waiting on DB sync
+    function getKnownFixes(y: number) {
+      const lower = (s: string) => (s || '').toLowerCase();
+      const byNamePosTeam: Record<string, string> = {};
+      const nonDraftableByNamePos = new Set<string>();
+      if (y === 2025) {
+        // User-reported corrections
+        nonDraftableByNamePos.add('quinn ewers|qb'); // graduated / not in pool
+        byNamePosTeam['carson beck|qb'] = 'Miami'; // transferred per user
+      }
+      return { byNamePosTeam, nonDraftableByNamePos };
+    }
+    const known = getKnownFixes(season);
+
     // Transform players for draft UI
     // Build a team-position depth map to apply depth-based projection multipliers
     const depthMap = new Map<string, number>();
@@ -81,11 +144,28 @@ export async function GET(request: NextRequest) {
       const ratingValue = player.rating ?? player.ea_rating ?? 80;
       const baseProjection = calculateBaseProjection(positionValue, ratingValue);
       
+      // Apply manual override if present for this player id
+      const override = overrides ? overrides[player.$id] : null;
+      const teamOverride = override?.team || override?.team_name || override?.team_id;
+      const draftableOverride = typeof override?.draftable === 'boolean' ? override?.draftable : undefined;
+      // Depth-based correction if available and no explicit override
+      let correctedTeam = teamOverride || player.team || player.school;
+      if (!teamOverride && depthIndex) {
+        const key = `${(player.name || `${player.firstName ?? ''} ${player.lastName ?? ''}`.trim()).toLowerCase()}|${positionValue}`;
+        const teamId = depthIndex.get(key);
+        if (teamId) {
+          const name = teamIdToName[teamId];
+          if (name) correctedTeam = name;
+        }
+      }
+      // Only manual overrides + depth corrections are used
+
       return {
         id: player.$id,
+        cfbd_id: player.cfbd_id || player.cfbdId,
         name: player.name || `${player.firstName ?? ''} ${player.lastName ?? ''}`.trim(),
         position: positionValue,
-        team: player.team || player.school,
+        team: correctedTeam,
         team_abbreviation: player.team_abbreviation || player.abbreviation,
         conference: player.conference || player.conf || 'ALL',
         year: player.year || 'JR',
@@ -96,10 +176,22 @@ export async function GET(request: NextRequest) {
         adp: calculateADP(positionValue, ratingValue, index),
         projectedPoints: baseProjection.points,
         projectedStats: baseProjection.stats,
-        draftable: player.draftable,
+        draftable: (draftableOverride !== undefined ? draftableOverride : player.draftable),
         power_4: player.power_4
       };
     });
+
+    // Enforce final filters client-side as safety net
+    const localNormalize = (s: string | undefined | null) => (s || '').trim().toLowerCase();
+    const onDepth = (p: any) => {
+      if (!depthIndex) return false;
+      const key = `${localNormalize(p.name)}|${p.position}`;
+      return depthIndex.has(key);
+    };
+    // Keep players explicitly draftable OR present on current depth chart
+    players = players.filter((p: any) => p.draftable === true || onDepth(p));
+    players = players.filter((p: any) => allowedPositions.includes(p.position));
+    players = players.filter((p: any) => !conference || power4Conferences.includes(p.conference));
 
     // Sort by rating desc and cap to top N to limit compute
     players.sort((a: any, b: any) => (b.rating ?? 0) - (a.rating ?? 0));
@@ -224,9 +316,9 @@ export async function GET(request: NextRequest) {
       // If stats not available, skip previous-year adjustment
     }
 
-    // Deduplicate by normalized (name + team + position)
+    // Deduplicate by cfbd_id when available, else by normalized (name + team + position)
     const normalize = (s: string | undefined | null) => (s || '').trim().toLowerCase();
-    const buildKey = (p: any) => `${normalize(p.name)}|${normalize(p.team)}|${normalize(p.position)}`;
+    const buildKey = (p: any) => p.cfbd_id ? `cfbd:${p.cfbd_id}` : `${normalize(p.name)}|${normalize(p.team)}|${normalize(p.position)}`;
     const dedupedMap = new Map<string, any>();
     for (const p of players) {
       const key = buildKey(p);
@@ -246,9 +338,39 @@ export async function GET(request: NextRequest) {
       }
     }
     // Final cap after dedupe
-    const dedupedPlayers = Array.from(dedupedMap.values())
+    let dedupedPlayers = Array.from(dedupedMap.values())
       .sort((a: any, b: any) => (b.rating ?? 0) - (a.rating ?? 0))
       .slice(0, maxCount);
+
+    // Enrich with projections_yearly when available so draft uses synced projections
+    try {
+      const ids: string[] = dedupedPlayers.map((p: any) => p.id).filter(Boolean);
+      const chunkSize = 100;
+      const projMap = new Map<string, any>();
+      for (let i = 0; i < ids.length; i += chunkSize) {
+        const chunk = ids.slice(i, i + chunkSize);
+        const projRes = await databases.listDocuments(
+          DATABASE_ID,
+          (COLLECTIONS as any).PROJECTIONS_YEARLY || 'projections_yearly',
+          [Query.equal('season', season), Query.equal('player_id', chunk), Query.limit(1000)]
+        );
+        for (const d of projRes.documents || []) {
+          projMap.set(d.player_id || d.playerId, d);
+        }
+      }
+      dedupedPlayers = dedupedPlayers.map((p: any) => {
+        const proj = projMap.get(p.id);
+        if (!proj) return p;
+        const fp = Number(proj.fantasy_points_simple || proj.range_median || p.projectedPoints || 0);
+        return {
+          ...p,
+          projectedPoints: Math.round(fp),
+          projectedStats: proj.statline_simple_json || p.projectedStats,
+        };
+      });
+    } catch {
+      // Projections might be missing early on; keep baseline
+    }
 
     return NextResponse.json({
       success: true,
