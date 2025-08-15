@@ -1,0 +1,22 @@
+{
+  "ND": {
+    "off_eff": 0,
+    "def_eff": 0,
+    "special_teams_eff": 0,
+    "pace_est": 69.5,
+    "sp_plus": {
+      "off": 33.2,
+      "def": 16.1,
+      "st": 0.5,
+      "total": 17.6,
+      "rank": 10
+    },
+    "fei": {
+      "off": 0.18,
+      "def": -0.05,
+      "st": 0.02,
+      "total": 0.21,
+      "rank": 12
+    }
+  }
+}
