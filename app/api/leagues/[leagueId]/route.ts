@@ -36,7 +36,7 @@ export async function GET(
           'rosters',
           [Query.equal('leagueId', leagueId), Query.equal('userId', userId), Query.limit(1)]
         );
-        if (rosters.total === 0 && league.commissioner_id !== userId) {
+        if (rosters.total === 0 && league.commissioner !== userId) {
           return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
       } catch {}
@@ -72,7 +72,8 @@ export async function GET(
         currentTeams: league.members?.length || 0,
         members: league.members || [],
         status: league.status,
-        commissionerId: league.commissioner_id,
+        commissionerId: league.commissioner || league.commissionerId,
+        commissioner: league.commissioner,
         lineupProfileId: league.lineup_profile_id,
         scoringProfileId: league.scoring_profile_id,
         draftDate: league.draft_date,

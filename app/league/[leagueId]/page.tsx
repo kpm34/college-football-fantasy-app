@@ -126,8 +126,18 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
   // Re-evaluate commissioner status once both league and user are present
   useEffect(() => {
     if (!league || !user) return;
+    console.log('Commissioner check data:', {
+      league_commissioner: league.commissioner,
+      league_commissionerId: league.commissionerId,
+      league_commissionerEmail: league.commissionerEmail,
+      user_id: user.$id,
+      user_email: user.email,
+      user_name: user.name
+    });
     debugCommissionerMatch(league, user);
-    setIsCommissioner(isUserCommissioner(league, user));
+    const result = isUserCommissioner(league, user);
+    console.log('Is commissioner result:', result);
+    setIsCommissioner(result);
   }, [league, user?.$id, (user as any)?.email, (user as any)?.name]);
 
   const loadLeagueData = async () => {
@@ -147,9 +157,9 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         mapped = {
           $id: l.id,
           name: l.name,
-          commissioner: l.commissioner_id || l.commissionerId || l.commissioner,
-          commissionerId: l.commissioner_id || l.commissionerId || l.commissioner,
-          commissionerEmail: l.commissioner_email || l.commissionerEmail,
+          commissioner: l.commissioner || l.commissionerId || l.userId,
+          commissionerId: l.commissioner || l.commissionerId || l.userId,
+          commissionerEmail: l.commissionerEmail,
           season: l.seasonStartWeek ? new Date().getFullYear() : (l.season || new Date().getFullYear()),
           scoringType: 'PPR',
           maxTeams: l.maxTeams || 12,

@@ -30,15 +30,13 @@ export function isUserCommissioner(league: any, user: any): boolean {
   const norm = (s: any) => String(s ?? '').trim().toLowerCase();
 
   const leagueCandidates = [
-    league.commissionerId,
     league.commissioner,
+    league.commissionerId,
     league.commissionerEmail,
-    league.commissioner_id,
-    league.commissioner_email,
+    league.userId,
     league.ownerId,
     league.owner,
     league.createdBy,
-    league.created_by,
   ].filter(Boolean);
 
   const userCandidates = [user.$id, (user as any).email, (user as any).name].filter(Boolean) as string[];
