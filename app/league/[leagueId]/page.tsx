@@ -653,14 +653,25 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             </div>
             
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => router.push(`/league/${leagueId}/scoreboard`)}
-                className="px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
-                style={{ backgroundColor: '#4A90E2', color: '#FFFFFF', fontWeight: '600' }}
-              >
-                <FiTrendingUp />
-                Scoreboard
-              </button>
+              {userTeam ? (
+                <button
+                  onClick={() => router.push(`/team/${userTeam.$id}`)}
+                  className="px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
+                  style={{ backgroundColor: '#4A90E2', color: '#FFFFFF', fontWeight: '600' }}
+                >
+                  <FiUsers />
+                  My Locker Room
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md opacity-50 cursor-not-allowed"
+                  style={{ backgroundColor: '#4A90E2', color: '#FFFFFF', fontWeight: '600' }}
+                >
+                  <FiUsers />
+                  Join League First
+                </button>
+              )}
               
               <button
                 onClick={() => setShowInviteModal(true)}
@@ -749,27 +760,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {userTeam ? (
-                <button
-                  onClick={() => router.push(`/team/${userTeam.$id}`)}
-                  className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg"
-                  style={{ backgroundColor: '#4A90E2', color: '#FFFFFF' }}
-                >
-                  <FiUsers className="text-xl" />
-                  <span className="font-semibold">My Locker Room</span>
-                </button>
-              ) : (
-                <button
-                  disabled
-                  className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 opacity-50 cursor-not-allowed"
-                  style={{ backgroundColor: '#4A90E2', color: '#FFFFFF' }}
-                >
-                  <FiUsers className="text-xl" />
-                  <span className="font-semibold">Join League First</span>
-                </button>
-              )}
-              
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+
               <button
                 onClick={() => router.push(`/league/${leagueId}/standings`)}
                 className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg"
@@ -797,16 +789,6 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                 <span className="font-semibold">Schedule</span>
               </button>
               
-              {isCommissioner && (
-                <button
-                  onClick={() => router.push(`/league/${leagueId}/commissioner`)}
-                  className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg"
-                  style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
-                >
-                  <FiSettings className="text-xl" />
-                  <span className="font-semibold">Commissioner Tools</span>
-                </button>
-              )}
             </div>
 
             {/* Recent Activity */}

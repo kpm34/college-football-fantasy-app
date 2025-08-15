@@ -103,7 +103,11 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
   });
 
   useEffect(() => {
+    // Wait for auth state to resolve before deciding
+    if ((user as any) === undefined) return;
     if (!user) {
+      // Do not immediately redirect to login to avoid flicker; let app layout handle auth
+      // Navigate only if clearly unauthenticated after auth check completes
       router.push('/login');
       return;
     }
