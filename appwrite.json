@@ -1,0 +1,7 @@
+{
+    "projectId": "college-football-fantasy-app",
+    "projectName": "College Football Fantasy App",
+    "settings": {
+        "endpoint": "https://nyc.cloud.appwrite.io/v1"
+    }
+}

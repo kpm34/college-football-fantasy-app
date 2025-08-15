@@ -7,11 +7,18 @@ if (!process.env.APPWRITE_API_KEY) {
   console.warn('Warning: APPWRITE_API_KEY not found in environment variables');
 }
 
+// Normalize API key to avoid common env formatting pitfalls (quotes/newlines)
+function sanitizeApiKey(raw: string | undefined): string {
+  if (!raw) return '';
+  // Remove surrounding quotes and trailing newline/CR characters
+  return raw.replace(/^"|"$/g, '').replace(/\r?\n$/g, '');
+}
+
 // Initialize server client with API key
 const serverClient = new Client()
   .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
   .setProject(process.env.APPWRITE_PROJECT_ID || 'college-football-fantasy-app')
-  .setKey(process.env.APPWRITE_API_KEY || '');
+  .setKey(sanitizeApiKey(process.env.APPWRITE_API_KEY));
 
 // Export server-side services
 export const serverDatabases = new Databases(serverClient);
