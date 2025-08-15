@@ -31,7 +31,15 @@
     "vercel-build": "next build",
     "predeploy": "npm run lint && npm run typecheck",
     "health": "curl -s https://cfbfantasy.app/api/health | jq .",
-    "health:vercel": "vercel logs --follow"
+    "health:vercel": "vercel logs --follow",
+    "ingest:ea": "ts-node scripts/ingestEA.ts --season=2025",
+    "ingest:mockdraft": "ts-node scripts/ingestMockDraft.ts --season=2025",
+    "ingest:depth": "ts-node scripts/ingestDepthCharts.ts --season=2025",
+    "ingest:efficiency": "ts-node scripts/ingestTeamEfficiency.ts --season=2025",
+    "project:yearly": "ts-node functions/project-yearly-simple/index.ts --season=2025",
+    "project:pro:weekly": "ts-node functions/project-pro-distributions/index.ts --season=2025 --week=1 --runs=5000 --seed=42",
+    "project:pro:yearly": "ts-node functions/project-pro-distributions/index.ts --season=2025 --runs=5000 --seed=42",
+    "recalc:custom": "ts-node functions/recalc-custom-projection/index.ts --season=2025 --user=USER_ID --player=PLAYER_ID"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -91,12 +99,13 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.19.10",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "autoprefixer": "^10.4.20",
+    "csv-parse": "^6.1.0",
     "dotenv": "^17.2.1",
     "eslint": "^9.0.0",
     "eslint-config-next": "15.0.3",

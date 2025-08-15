@@ -231,6 +231,8 @@ async function ensureProjectionCollections() {
         case COLLECTIONS.MODEL_INPUTS:
           await databases.createIntegerAttribute(DATABASE_ID, col.id, 'season', true);
           await databases.createIntegerAttribute(DATABASE_ID, col.id, 'week', false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'ea_ratings_json', 16384, false);
+          await databases.createStringAttribute(DATABASE_ID, col.id, 'nfl_draft_capital_json', 8192, false);
           await databases.createStringAttribute(DATABASE_ID, col.id, 'depth_chart', 16384, false);
           await databases.createStringAttribute(DATABASE_ID, col.id, 'team_pace', 4096, false);
           await databases.createStringAttribute(DATABASE_ID, col.id, 'pass_rate', 4096, false);

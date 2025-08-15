@@ -1,0 +1,4 @@
+{
+  "__comment": "Optional overrides: team_id -> position -> array of { player_name, snap_share, rush_share?, target_share? }. Values here replace computed priors.",
+  
+}
