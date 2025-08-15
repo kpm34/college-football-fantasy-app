@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases as databases, DATABASE_ID } from '@/lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
 
 export async function GET(request: NextRequest) {
@@ -9,26 +9,32 @@ export async function GET(request: NextRequest) {
     const conference = searchParams.get('conference');
     const team = searchParams.get('team');
     const search = searchParams.get('search');
-    const limit = parseInt(searchParams.get('limit') || '500', 10);
+    const seasonParam = searchParams.get('season');
+    const season = seasonParam ? parseInt(seasonParam, 10) : new Date().getFullYear();
+    const prevSeason = season - 1;
+    const maxCount = 1000;
+    const requestedLimit = parseInt(searchParams.get('limit') || `${maxCount}`, 10);
+    const limit = Math.min(requestedLimit, maxCount);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
 
     // Build queries
-    const queries: any[] = [
-      Query.limit(limit),
-      Query.offset(offset)
-    ];
+    const queries: any[] = [Query.limit(limit), Query.offset(offset)];
+    const allowedPositions = ['QB', 'RB', 'WR', 'TE', 'K'];
 
-    // Only add Power 4 conferences
+    // Only add Power 4 conferences, but avoid strict dependency if index is missing
     const power4Conferences = ['SEC', 'Big Ten', 'Big 12', 'ACC'];
     if (conference && power4Conferences.includes(conference)) {
       queries.push(Query.equal('conference', conference));
     } else if (!conference) {
-      // Default to Power 4 by conference membership rather than a boolean flag
+      // Prefer Power 4 but we will gracefully fallback to all on empty result
       queries.push(Query.equal('conference', power4Conferences as any));
     }
 
+    // Filter to fantasy positions by default
     if (position && position !== 'ALL') {
       queries.push(Query.equal('position', position));
+    } else {
+      queries.push(Query.equal('position', allowedPositions as any));
     }
 
     if (team) {
@@ -36,33 +42,58 @@ export async function GET(request: NextRequest) {
     }
 
     if (search) {
+      // name search requires fulltext index; attempt but tolerate failures
       queries.push(Query.search('name', search));
     }
 
-    // Sort by rating (fallback to projection if rating missing)
-    queries.push(Query.orderDesc('rating'));
+    // Only draftable records
+    try {
+      queries.push(Query.equal('draftable', true));
+    } catch {}
 
     // Fetch players from Appwrite
-    const response = await databases.listDocuments(DATABASE_ID, 'college_players', queries);
+    let response = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.PLAYERS || 'college_players',
+      queries
+    );
+
+    // If no data returned (or minimal), try a relaxed query without conference filter/search/sort
+    if (!response.documents || response.documents.length < 5) {
+      const relaxed = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.PLAYERS || 'college_players',
+        [Query.limit(limit), Query.offset(offset)]
+      );
+      if (relaxed.documents && relaxed.documents.length > response.documents.length) {
+        response = relaxed;
+      }
+    }
 
     // Transform players for draft UI
-    const players = response.documents.map((player, index) => {
+    // Build a team-position depth map to apply depth-based projection multipliers
+    const depthMap = new Map<string, number>();
+    const makeKey = (team: string, pos: string) => `${(team || '').toLowerCase()}|${(pos || '').toLowerCase()}`;
+
+    let players = response.documents.map((player: any, index: number) => {
       // Calculate basic projections based on position and rating
-      const baseProjection = calculateBaseProjection(player.position, player.rating ?? 80);
+      const positionValue = player.position || player.pos || 'WR';
+      const ratingValue = player.rating ?? player.ea_rating ?? 80;
+      const baseProjection = calculateBaseProjection(positionValue, ratingValue);
       
       return {
         id: player.$id,
-        name: player.name,
-        position: player.position,
-        team: player.team,
-        team_abbreviation: player.team_abbreviation,
-        conference: player.conference,
+        name: player.name || `${player.firstName ?? ''} ${player.lastName ?? ''}`.trim(),
+        position: positionValue,
+        team: player.team || player.school,
+        team_abbreviation: player.team_abbreviation || player.abbreviation,
+        conference: player.conference || player.conf || 'ALL',
         year: player.year || 'JR',
         height: player.height || '6-0',
         weight: typeof player.weight === 'string' ? parseInt(player.weight, 10) : (player.weight ?? 200),
-        rating: player.rating ?? 80,
+        rating: ratingValue,
         // Calculate ADP based on rating and position
-        adp: calculateADP(player.position, player.rating ?? 80, index),
+        adp: calculateADP(positionValue, ratingValue, index),
         projectedPoints: baseProjection.points,
         projectedStats: baseProjection.stats,
         draftable: player.draftable,
@@ -70,11 +101,160 @@ export async function GET(request: NextRequest) {
       };
     });
 
+    // Sort by rating desc and cap to top N to limit compute
+    players.sort((a: any, b: any) => (b.rating ?? 0) - (a.rating ?? 0));
+    players = players.slice(0, maxCount);
+
+    // Apply depth multiplier per team/position
+    for (const p of players) {
+      const key = makeKey(p.team, p.position);
+      const depth = (depthMap.get(key) ?? 0) + 1;
+      depthMap.set(key, depth);
+      const mult = depthMultiplier(p.position, depth);
+      p.projectedPoints = Math.round(p.projectedPoints * mult);
+      // Optionally scale select stats if present
+      if (p.projectedStats) {
+        Object.keys(p.projectedStats).forEach((k) => {
+          const val = (p.projectedStats as any)[k];
+          if (typeof val === 'number') (p.projectedStats as any)[k] = Math.round(val * mult);
+        });
+      }
+    }
+
+    // Strength of Schedule multiplier per team using games collection
+    try {
+      const gamesRes = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.GAMES || 'games',
+        [Query.limit(1000)]
+      );
+      const teamDifficulty = new Map<string, number>();
+      const teamGames = new Map<string, number>();
+      for (const g of gamesRes.documents || []) {
+        const homeTeam = g.homeTeam || g.home_team;
+        const awayTeam = g.awayTeam || g.away_team;
+        const homeRanked = Boolean(g.homeTeamRanked || g.home_ranked || false);
+        const awayRanked = Boolean(g.awayTeamRanked || g.away_ranked || false);
+        const isConf = Boolean(g.isConferenceGame || g.conferenceGame || false);
+        if (homeTeam && awayTeam) {
+          // Home team faces away opponent
+          const inc = (awayRanked ? 1 : 0) + (isConf ? 0.3 : 0);
+          teamDifficulty.set(homeTeam, (teamDifficulty.get(homeTeam) || 0) + inc);
+          teamGames.set(homeTeam, (teamGames.get(homeTeam) || 0) + 1);
+          // Away team faces home opponent
+          const inc2 = (homeRanked ? 1 : 0) + (isConf ? 0.3 : 0);
+          teamDifficulty.set(awayTeam, (teamDifficulty.get(awayTeam) || 0) + inc2);
+          teamGames.set(awayTeam, (teamGames.get(awayTeam) || 0) + 1);
+        }
+      }
+      // Normalize to [0.9, 1.1] multiplier range
+      let minD = Infinity, maxD = -Infinity;
+      const avgPerGame: Map<string, number> = new Map();
+      for (const [teamName, dTotal] of teamDifficulty.entries()) {
+        const games = teamGames.get(teamName) || 1;
+        const perGame = dTotal / games;
+        avgPerGame.set(teamName, perGame);
+        if (perGame < minD) minD = perGame;
+        if (perGame > maxD) maxD = perGame;
+      }
+      const spread = Math.max(0.0001, maxD - minD);
+      for (const p of players) {
+        const perGame = avgPerGame.get(p.team);
+        if (perGame !== undefined) {
+          const normalized = (perGame - minD) / spread; // 0..1
+          const sosMult = 0.9 + normalized * 0.2; // 0.9..1.1
+          p.projectedPoints = Math.round(p.projectedPoints * sosMult);
+          if (p.projectedStats) {
+            Object.keys(p.projectedStats).forEach((k) => {
+              const val = (p.projectedStats as any)[k];
+              if (typeof val === 'number') (p.projectedStats as any)[k] = Math.round(val * sosMult);
+            });
+          }
+        }
+      }
+    } catch {
+      // If games not available, skip SoS adjustment
+    }
+
+    // Previous-year stats multiplier using player_stats (batched)
+    try {
+      const ids = players.map((p) => p.id);
+      // Appwrite supports array values in equal
+      const statsRes = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.PLAYER_STATS || 'player_stats',
+        [Query.equal('season', prevSeason), Query.equal('player_id', ids), Query.limit(10000)]
+      );
+      const agg: Map<string, { passY: number; passTD: number; passINT: number; rushY: number; rushTD: number; rec: number; recY: number; recTD: number }>
+        = new Map();
+      for (const s of statsRes.documents || []) {
+        const pid = s.player_id || s.playerId || s.playerID || s.player; // tolerate variants
+        if (!pid) continue;
+        const cur = agg.get(pid) || { passY: 0, passTD: 0, passINT: 0, rushY: 0, rushTD: 0, rec: 0, recY: 0, recTD: 0 };
+        cur.passY += Number(s.passing_yards || s.passingYards || 0);
+        cur.passTD += Number(s.passing_tds || s.passingTDs || 0);
+        cur.passINT += Number(s.interceptions || s.passing_ints || s.interceptionsThrown || 0);
+        cur.rushY += Number(s.rushing_yards || s.rushingYards || 0);
+        cur.rushTD += Number(s.rushing_tds || s.rushingTDs || 0);
+        cur.rec += Number(s.receptions || s.catches || 0);
+        cur.recY += Number(s.receiving_yards || s.receivingYards || 0);
+        cur.recTD += Number(s.receiving_tds || s.receivingTDs || 0);
+        agg.set(pid, cur);
+      }
+      // Compute fantasy-ish points and normalize by position baselines
+      for (const p of players) {
+        const a = agg.get(p.id);
+        if (!a) continue;
+        // Simple scoring: 1/25 passY, 4 passTD, -2 INT, 1/10 rushY, 6 rushTD, 1 rec, 1/10 recY, 6 recTD
+        const prevPts = (a.passY / 25) + (a.passTD * 4) - (a.passINT * 2)
+          + (a.rushY / 10) + (a.rushTD * 6)
+          + (a.rec * 1) + (a.recY / 10) + (a.recTD * 6);
+        const baseline = basePointsForPosition(p.position);
+        const ratio = baseline > 0 ? prevPts / baseline : 1;
+        const prevMult = clamp(0.7, 1.3, ratio);
+        p.projectedPoints = Math.round(p.projectedPoints * prevMult);
+        if (p.projectedStats) {
+          Object.keys(p.projectedStats).forEach((k) => {
+            const val = (p.projectedStats as any)[k];
+            if (typeof val === 'number') (p.projectedStats as any)[k] = Math.round(val * prevMult);
+          });
+        }
+      }
+    } catch {
+      // If stats not available, skip previous-year adjustment
+    }
+
+    // Deduplicate by normalized (name + team + position)
+    const normalize = (s: string | undefined | null) => (s || '').trim().toLowerCase();
+    const buildKey = (p: any) => `${normalize(p.name)}|${normalize(p.team)}|${normalize(p.position)}`;
+    const dedupedMap = new Map<string, any>();
+    for (const p of players) {
+      const key = buildKey(p);
+      const existing = dedupedMap.get(key);
+      if (!existing) {
+        dedupedMap.set(key, p);
+      } else {
+        // Keep the better candidate (higher rating, then higher projectedPoints)
+        const better = (p.rating ?? 0) > (existing.rating ?? 0)
+          ? p
+          : (p.rating ?? 0) < (existing.rating ?? 0)
+          ? existing
+          : (p.projectedPoints ?? 0) >= (existing.projectedPoints ?? 0)
+          ? p
+          : existing;
+        dedupedMap.set(key, better);
+      }
+    }
+    // Final cap after dedupe
+    const dedupedPlayers = Array.from(dedupedMap.values())
+      .sort((a: any, b: any) => (b.rating ?? 0) - (a.rating ?? 0))
+      .slice(0, maxCount);
+
     return NextResponse.json({
       success: true,
-      players,
-      total: response.total,
-      hasMore: offset + limit < response.total
+      players: dedupedPlayers,
+      total: dedupedPlayers.length,
+      hasMore: offset + limit < response.total // underlying total before dedupe
     });
 
   } catch (error) {
@@ -171,4 +351,26 @@ function calculateADP(position: string, rating: number, index: number): number {
   
   // Base ADP on index, then adjust by position and rating
   return Math.round((index + 1) * multiplier + ratingFactor * 10);
+}
+
+// Heuristic depth multipliers so only likely starters project as full volume
+function depthMultiplier(position: string, rank: number): number {
+  const r = Math.max(1, rank);
+  switch (position) {
+    case 'QB':
+      // Only one starter; backups have negligible projection
+      return [1.0, 0.25, 0.08, 0.03, 0.01][r - 1] ?? 0.01;
+    case 'RB':
+      // Committees are common
+      return [1.0, 0.6, 0.4, 0.25, 0.15][r - 1] ?? 0.1;
+    case 'WR':
+      // 3 WR sets
+      return [1.0, 0.8, 0.6, 0.35, 0.2][r - 1] ?? 0.15;
+    case 'TE':
+      return [1.0, 0.35, 0.15][r - 1] ?? 0.1;
+    case 'K':
+      return [1.0, 0.2][r - 1] ?? 0.1;
+    default:
+      return 1.0;
+  }
 }
