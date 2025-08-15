@@ -163,7 +163,23 @@ export async function GET(request: NextRequest) {
       // Build depth index for additional correction
       let depth: any = doc?.depth_chart_json;
       if (typeof depth === 'string') {
-        try { depth = JSON.parse(depth); } catch {}
+        try { 
+          depth = JSON.parse(depth);
+          // Convert compact format back to full format if needed
+          if (depth && typeof depth === 'object') {
+            for (const [teamId, positions] of Object.entries(depth)) {
+              for (const [pos, players] of Object.entries(positions as any)) {
+                if (Array.isArray(players) && players.length > 0 && typeof players[0] === 'string') {
+                  // Convert "name:rank" format back to object format
+                  (depth[teamId] as any)[pos] = players.map((p: string) => {
+                    const [name, rank] = p.split(':');
+                    return { player_name: name, pos_rank: parseInt(rank) || 1 };
+                  });
+                }
+              }
+            }
+          }
+        } catch {}
       }
       if (depth && typeof depth === 'object') {
         depthIndex = new Map<string, string>();
