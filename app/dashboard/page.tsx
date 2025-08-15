@@ -87,7 +87,7 @@ export default function DashboardPage() {
       <div className="container mx-auto px-4 py-8 relative">
         <div className="mb-8 flex justify-between items-start">
           <div>
-            <h1 className="text-5xl md:text-6xl font-semibold mb-2" style={{ color: palette.primary }}>Dashboard</h1>
+            <h1 className="font-bebas uppercase tracking-wide !text-3xl md:!text-4xl leading-tight mb-2" style={{ color: palette.primary }}>Dashboard</h1>
             <p style={{ color: palette.brown }}>Welcome back, {user?.name || user?.email}!</p>
           </div>
           <Link
