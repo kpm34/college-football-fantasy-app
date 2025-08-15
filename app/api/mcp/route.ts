@@ -209,7 +209,6 @@ const handler = createMcpHandler(
             '/league/join',
             '/draft/[leagueId]',
             '/auction/[leagueId]',
-            '/team/[teamId]',
             '/scoreboard',
             '/standings',
           ]

@@ -133,7 +133,7 @@ export default function LeagueStandingsPage({ params }: PageProps) {
                   </td>
                   <td className="py-4 px-6">
                     <Link 
-                      href={`/team/${team.$id}`} 
+                      href={`/league/${leagueId}/locker-room?teamId=${team.$id}`} 
                       className="font-semibold hover:underline"
                       style={{ color: leagueColors.primary.highlight }}
                     >

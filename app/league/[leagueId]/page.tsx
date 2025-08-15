@@ -655,7 +655,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             <div className="flex items-center gap-4">
               {userTeam ? (
                 <button
-                  onClick={() => router.push(`/team/${userTeam.$id}`)}
+                  onClick={() => router.push(`/league/${leagueId}/locker-room`)}
                   className="px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
                   style={{ backgroundColor: '#4A90E2', color: '#FFFFFF', fontWeight: '600' }}
                 >
