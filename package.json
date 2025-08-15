@@ -4,6 +4,7 @@
   "description": "Fantasy football platform for Power 4 conferences",
   "private": true,
   "scripts": {
+    "migrate:auth-users": "ts-node --transpile-only scripts/migrations/2025-08-15-backfill-auth-users.ts",
     "migrate:commissioner": "node --import 'data:text/javascript,import%20%7B%20register%20%7D%20from%20%22node:module%22;%20import%20%7B%20pathToFileURL%20%7D%20from%20%22node:url%22;%20register(%22ts-node/esm%22,%20pathToFileURL(%22./%22));' scripts/migrations/2025-08-14-backfill-commissioner.ts",
     "enhance:appwrite": "tsx scripts/appwrite-user-enhancements.ts",
     "dev": "next dev",

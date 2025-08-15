@@ -1,15 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { APPWRITE_CONFIG } from '@/lib/config/appwrite.config';
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen flex items-center justify-center px-4"><div className="text-white/70">Loading...</div></main>}>
+      <LoginPageContent />
+    </Suspense>
+  );
+}
+
+function LoginPageContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -38,7 +48,19 @@ export default function LoginPage() {
         }
       }
 
-      // Success! Redirect to dashboard
+      // Success! Redirect back if redirect param present
+      const redirectParam = searchParams?.get('redirect');
+      if (redirectParam) {
+        try {
+          const decoded = decodeURIComponent(redirectParam);
+          // Only allow internal redirects
+          if (decoded.startsWith('/')) {
+            window.location.href = decoded;
+            return;
+          }
+        } catch {}
+      }
+      // Fallback
       window.location.href = '/dashboard';
     } catch (err: any) {
       console.error('Login error:', err);

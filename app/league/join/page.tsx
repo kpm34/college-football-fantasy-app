@@ -94,7 +94,7 @@ function JoinLeagueContent() {
         };
 
         setSelectedLeague(selected);
-        if (selected.type === 'private') {
+        if (selected.type === 'private' || !!selected.password) {
           setShowPasswordModal(true);
         } else {
           await joinLeague(selected);
@@ -128,7 +128,8 @@ function JoinLeagueContent() {
     if (token && leagueId) {
       // If not logged in, redirect to login, then back to this URL
       if (!authUser && !authLoading) {
-        router.push(`/login?redirect=/league/join?token=${token}&league=${leagueId}`);
+        const redirectUrl = encodeURIComponent(`/league/join?token=${token}&league=${leagueId}`);
+        router.push(`/login?redirect=${redirectUrl}`);
         return;
       }
       setInviteToken(token);
@@ -136,7 +137,8 @@ function JoinLeagueContent() {
       checkInviteToken(token, leagueId);
     } else if (code && leagueId) {
       if (!authUser && !authLoading) {
-        router.push(`/login?redirect=/league/join?code=${code}&league=${leagueId}`);
+        const redirectUrl = encodeURIComponent(`/league/join?code=${code}&league=${leagueId}`);
+        router.push(`/login?redirect=${redirectUrl}`);
         return;
       }
       setInviteCode(code);
@@ -147,7 +149,8 @@ function JoinLeagueContent() {
     } else if (code && !leagueId) {
       // Handle code-only links by looking up the league via inviteCode
       if (!authUser && !authLoading) {
-        router.push(`/login?redirect=/league/join?code=${code}`);
+        const redirectUrl = encodeURIComponent(`/league/join?code=${code}`);
+        router.push(`/login?redirect=${redirectUrl}`);
         return;
       }
       setInviteCode(code);
@@ -170,7 +173,8 @@ function JoinLeagueContent() {
     } else if (leagueId && !token && !code) {
       // Handle direct league link without token or code
       if (!authUser && !authLoading) {
-        router.push(`/login?redirect=/league/join?league=${leagueId}`);
+        const redirectUrl = encodeURIComponent(`/league/join?league=${leagueId}`);
+        router.push(`/login?redirect=${redirectUrl}`);
         return;
       }
       // Fetch and display the league
@@ -182,7 +186,7 @@ function JoinLeagueContent() {
             leagueId
           );
           const league: League = {
-            id: leagueDoc.$id,
+            $id: leagueDoc.$id,
             name: leagueDoc.name,
             teams: leagueDoc.currentTeams || leagueDoc.members?.length || 0,
             maxTeams: leagueDoc.maxTeams || 12,
@@ -193,13 +197,17 @@ function JoinLeagueContent() {
             draftDate: leagueDoc.draftDate || '',
             draftTime: leagueDoc.draftTime || '',
             description: leagueDoc.description || '',
-            type: leagueDoc.isPublic === false ? 'private' : 'public',
+            type: (leagueDoc.isPublic === false || !!leagueDoc.password) ? 'private' : 'public',
             password: leagueDoc.password,
             status: (leagueDoc.status || 'draft') as 'draft' | 'active' | 'completed',
             createdAt: leagueDoc.$createdAt
           };
           setSelectedLeague(league);
-          setShowPasswordModal(true);
+          if (league.type === 'private' || !!league.password) {
+            setShowPasswordModal(true);
+          } else {
+            await joinLeague(league);
+          }
         } catch (e) {
           console.error('Failed to fetch league', e);
         }
@@ -309,11 +317,12 @@ function JoinLeagueContent() {
 
   const handleJoinLeague = async (league: League) => {
     if (!currentUser) {
-      router.push(`/login?redirect=/league/join?league=${league.$id}`);
+      const redirectUrl = encodeURIComponent(`/league/join?league=${league.$id}`);
+      router.push(`/login?redirect=${redirectUrl}`);
       return;
     }
 
-    if (league.type === 'private') {
+    if (league.type === 'private' || !!league.password) {
       setSelectedLeague(league);
       setShowPasswordModal(true);
     } else {
