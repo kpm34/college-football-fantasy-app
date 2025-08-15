@@ -80,6 +80,8 @@ export default function MockDraftPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [positionFilter, setPositionFilter] = useState<Position>("ALL");
   const [conferenceFilter, setConferenceFilter] = useState<Conference>("ALL");
+  const [teamFilter, setTeamFilter] = useState<string>("ALL");
+  const [sortBy, setSortBy] = useState<'PROJ'|'TEAM'|'NAME'|'ADP'>('PROJ');
   const [showOnlyAvailable, setShowOnlyAvailable] = useState(true);
 
   // Player data
@@ -97,7 +99,7 @@ export default function MockDraftPage() {
   const loadPlayers = async () => {
     try {
       // Load players from our dedicated draft endpoint
-      const response = await fetch('/api/draft/players?limit=500');
+      const response = await fetch('/api/draft/players?limit=1000');
       const data = await response.json();
       
       if (data.success && data.players && data.players.length > 0) {
@@ -345,15 +347,33 @@ export default function MockDraftPage() {
       filtered = filtered.filter(p => p.conference === conferenceFilter);
     }
     
+    if (teamFilter !== 'ALL') {
+      filtered = filtered.filter(p => p.team === teamFilter);
+    }
+    
     if (showOnlyAvailable) {
       filtered = filtered.filter(p => !draftedPlayers.has(p.id));
     }
     
-    // Sort by projected points
-    filtered.sort((a, b) => b.projectedPoints - a.projectedPoints);
+    // Sorting
+    switch (sortBy) {
+      case 'TEAM':
+        filtered.sort((a, b) => a.team.localeCompare(b.team) || b.projectedPoints - a.projectedPoints);
+        break;
+      case 'NAME':
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'ADP':
+        filtered.sort((a, b) => (a.adp ?? 9999) - (b.adp ?? 9999));
+        break;
+      case 'PROJ':
+      default:
+        filtered.sort((a, b) => b.projectedPoints - a.projectedPoints);
+        break;
+    }
     
     setFilteredPlayers(filtered);
-  }, [players, searchQuery, positionFilter, conferenceFilter, showOnlyAvailable, draftedPlayers]);
+  }, [players, searchQuery, positionFilter, conferenceFilter, teamFilter, sortBy, showOnlyAvailable, draftedPlayers]);
 
   // Timer countdown
   useEffect(() => {
@@ -468,8 +488,8 @@ export default function MockDraftPage() {
             <div className="mt-8 flex gap-4">
               <button
                 onClick={startDraft}
-                className="flex-1 py-3 rounded-lg font-semibold transition-colors"
-                style={{ backgroundColor: leagueColors.primary.coral, color: leagueColors.text.inverse }}
+                className="flex-1 py-3 rounded-lg font-semibold text-lg transition-all shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2"
+                style={{ backgroundImage: `linear-gradient(90deg, ${leagueColors.primary.coral}, ${leagueColors.primary.crimson})`, color: '#FFFFFF', border: `2px solid ${leagueColors.border.light}` }}
               >
                 Start Mock Draft
               </button>
@@ -573,6 +593,30 @@ export default function MockDraftPage() {
                       <option value="Big Ten">Big Ten</option>
                       <option value="Big 12">Big 12</option>
                       <option value="ACC">ACC</option>
+                    </select>
+
+                    <select
+                      value={teamFilter}
+                      onChange={(e) => setTeamFilter(e.target.value)}
+                      className="px-3 py-1.5 rounded-lg text-sm"
+                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                    >
+                      <option value="ALL">All Teams</option>
+                      {Array.from(new Set(players.map(p => p.team))).sort((a, b) => a.localeCompare(b)).map(team => (
+                        <option key={team} value={team}>{team}</option>
+                      ))}
+                    </select>
+
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as any)}
+                      className="px-3 py-1.5 rounded-lg text-sm"
+                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                    >
+                      <option value="PROJ">Sort: Proj</option>
+                      <option value="TEAM">Sort: Team A–Z</option>
+                      <option value="NAME">Sort: Name A–Z</option>
+                      <option value="ADP">Sort: ADP</option>
                     </select>
                   </div>
                 </div>
