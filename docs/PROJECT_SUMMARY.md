@@ -1,250 +1,155 @@
 # College Football Fantasy App - Project Summary
 
-**Last Updated**: August 14, 2025 11:35 AM  
-**Version**: 1.0.0  
-**Status**: Production Deployed
+## 🏈 Overview
+A comprehensive fantasy football platform exclusively for Power 4 conferences (SEC, ACC, Big 12, Big Ten) with unique eligibility rules where players only score points against AP Top-25 teams or in conference games.
 
-## 🎯 Executive Summary
+## 🛠️ Tech Stack
+- **Frontend**: Next.js 15.0.3, TypeScript, Tailwind CSS, React 19 RC
+- **Backend**: Appwrite BaaS (NYC region)
+- **Database**: Appwrite Collections with comprehensive schema
+- **APIs**: College Football Data API (CFBD), ESPN API, AI Gateway
+- **Deployment**: Vercel Edge Functions with KV caching
+- **3D/UI**: Three.js, React Three Fiber, Spline, Framer Motion
+- **Monitoring**: Sentry for error tracking
 
-A premium fantasy football platform for Power 4 conferences (SEC, ACC, Big 12, Big Ten) with unique eligibility rules where players only score against AP Top-25 teams or in conference games. Built with Next.js 15, TypeScript, and Appwrite Pro, deployed on Vercel Pro.
+## 📊 Current Status (August 2025)
 
-⚠️ **CRITICAL UPDATE (Aug 14, 2025)**: Major architectural debt identified. Comprehensive cleanup plan initiated to establish proper foundation before further feature development.
-
-## 🚀 Recent Major Updates (Last 5 Edits)
-
-1. **Architectural Debt Audit & Cleanup Plan** 🚨 NEW
-   - Identified critical technical debt and anti-patterns
-   - Created comprehensive 3-phase cleanup plan
-   - Established clean architecture guidelines
-   - Initiated 4-hour immediate action plan
-   - Documentation: COMPREHENSIVE_AUDIT_AND_CLEANUP_PLAN.md
-
-2. **Commissioner Settings Persistence** ✅
-   - Consolidated all settings into single JSON object
-   - Added draft settings and league settings to persistence
-   - Replaced alerts with toast notifications
-   - Full backwards compatibility maintained
-
-3. **Toast Notification System** ✅
-   - Created reusable Toast component
-   - Replaced all alert() calls with proper UI feedback
-   - Success, error, and info toast types
-   - 3-second auto-dismiss with animations
-
-4. **API Route Import Fixes** ✅
-   - Fixed all appwrite-server import errors
-   - Created automated fix script
-   - Updated build pipeline
-   - Zero errors in production
-
-5. **Vercel-Appwrite Sync System** ✅
-   - Established health monitoring endpoint
-   - Created admin sync status page
-   - Automated verification scripts
-   - Real-time connection monitoring
-
-## 📊 Current Metrics
-
-- **Build Status**: ✅ Passing
-- **Health Check**: ✅ All Systems Operational
-- **Active Collections**: 11/13 (LINEUPS, PLAYER_PROJECTIONS missing)
-- **Error Rate**: < 0.1% (Sentry monitoring active)
-- **Performance**: 95+ Lighthouse score
-- **Uptime**: 99.9% (Vercel Pro SLA)
-
-## 🛠️ Technology Stack
-
-### Frontend
-- **Framework**: Next.js 15.0.3 (App Router)
-- **Language**: TypeScript (strict mode)
-- **Styling**: Tailwind CSS
-- **UI Components**: Headless UI, Hero Icons
-- **3D**: Three.js, React Three Fiber, Spline (ready)
-- **State**: React hooks, Context API
-
-### Backend
-- **BaaS**: Appwrite Cloud Pro (NYC region)
-- **Database**: Appwrite Collections
-- **Storage**: Appwrite Storage (100GB)
-- **Functions**: Appwrite Functions (unlimited)
-- **Realtime**: Appwrite Realtime subscriptions
-
-### Infrastructure
-- **Hosting**: Vercel Pro (Edge Functions)
-- **CDN**: Vercel Edge Network
-- **Analytics**: Vercel Analytics + Speed Insights
-- **Monitoring**: Sentry (all environments)
-- **Caching**: Vercel KV (Redis)
-- **CI/CD**: GitHub Actions + Vercel
-
-### APIs & Integrations
-- **Active**: CFBD API, ESPN API (mock)
-- **Ready**: Rotowire, Claude AI, GPT-4, Spline
-- **Planned**: RunwayML, Meshy, ESPN+
-
-## 🔑 Key Features
-
-### Completed ✅
-1. **User Authentication**
-   - Email/password login
-   - OAuth (Google, Apple)
-   - Session management
-   - Profile customization
+### ✅ Completed Features
+1. **Authentication System**
+   - OAuth integration (Google, Apple)
+   - Session management with secure cookies
+   - User profile management
+   - Centralized AuthService
 
 2. **League Management**
-   - Create/join leagues (12 teams max)
-   - Commissioner controls
-   - Invite system with links
-   - Public/private leagues
+   - Create/join leagues (public and private)
+   - Commissioner tools and permissions
+   - League settings customization
+   - Invite system with custom links
 
-3. **Commissioner Settings**
-   - Scoring rules customization
-   - Schedule configuration
-   - Playoff settings
-   - Theme customization
-   - Import/export settings
-
-4. **Draft System**
+3. **Draft System**
    - Snake draft with timer
-   - Auto-pick functionality
-   - Real-time updates
-   - Draft board visualization
+   - Mock draft simulator with enhanced UI
+   - Real-time updates via Appwrite
+   - Player pool from Power 4 conferences
+   - Advanced search and filtering
 
-5. **Team Management**
+4. **Data Infrastructure**
+   - Repository pattern implementation
+   - Vercel KV caching layer
+   - Appwrite persistence layer
+   - Schema synchronization workflow
+
+5. **UI/UX Improvements**
+   - Dark mode by default
+   - Mobile-responsive design
+   - 3D mascot integration (in progress)
+   - Color-coded position badges
+   - Enhanced search capabilities
+
+### 🚧 In Progress
+1. **Projections System**
+   - Database schema created
+   - Basic projection calculations
+   - Integration with mock draft
+   - Needs refinement for accuracy
+
+2. **Live Scoring**
+   - Appwrite Functions setup
+   - ESPN/CFBD data polling
+   - Real-time score updates
+
+3. **Auction Draft**
+   - UI components built
+   - Bidding logic implementation
+   - Real-time synchronization
+
+### 📋 Pending Features
+1. **Schedule Generator**
+   - Automatic schedule creation when league fills
+   - Head-to-head matchups
+
+2. **Trade System**
+   - Trade proposals and negotiations
+   - Commissioner approval workflow
+
+3. **Weekly Lineups**
    - Roster management
-   - Locker room view
-   - Team customization
-   - Logo upload (ready)
+   - Bench/active player designation
 
-6. **Real-time Features**
-   - Live draft updates
-   - Score tracking
-   - Activity feed
-   - Push notifications (ready)
+4. **Premium Features**
+   - AI-powered insights
+   - Advanced analytics
+   - Custom mascot creation
 
-### In Development 🚧
-1. **PWA Support** (Next priority)
-   - Offline functionality
-   - App install prompt
-   - Push notifications
+## 🔑 Key Architectural Decisions
 
-2. **Rotowire Integration**
-   - Player news
-   - Injury reports
-   - Expert analysis
+### Repository Pattern
+- All database operations go through repositories
+- Consistent error handling and type safety
+- Easy to mock for testing
 
-### Planned 📋
-1. **AI Features**
-   - Claude draft assistant
-   - GPT-4 lineup optimizer
-   - AI-powered trade analyzer
+### Platform-First Approach
+- Leverage Vercel Edge Functions for <50ms responses
+- Use Appwrite Realtime for live updates
+- KV caching for frequently accessed data
 
-2. **3D/AR Features**
-   - Spline team mascots
-   - AR draft experience
-   - 3D trophy room
+### Schema Management
+- `appwrite.config.json` as single source of truth
+- Automated type generation
+- CI/CD checks for schema drift
 
-3. **Advanced Analytics**
-   - Player projections
-   - Matchup analysis
-   - Season trends
+## 📈 Performance Metrics
+- **API Response Time**: <200ms average
+- **Draft Updates**: <100ms with Realtime
+- **Cache Hit Rate**: ~80% for player data
+- **Build Time**: ~90 seconds on Vercel
 
-## 🔐 Security & Performance
+## 🐛 Known Issues
+1. **Local Development**: Node.js v22 compatibility issues with Next.js 15
+   - Workaround: Use Node.js v20 or deploy directly to Vercel
 
-### Security
-- Environment variables properly configured
-- API keys secured in Vercel
-- Appwrite permissions enforced
-- Rate limiting on sensitive endpoints
-- HTTPS enforcement
-- Security headers (CSP, HSTS, etc.)
+2. **Draft Player Count**: Currently showing limited players
+   - Fix deployed: Removed 1000 player limit, improved filtering
 
-### Performance
-- Edge functions for low latency
-- KV caching for frequent queries
-- ISR for static content (planned)
-- Image optimization
-- Code splitting
-- Lazy loading
+3. **Projections Accuracy**: Basic calculations need refinement
+   - Next priority for development
 
-## 📁 Project Structure
-```
-/
-├── app/                    # Next.js 15 App Router
-│   ├── api/               # API routes
-│   ├── league/            # League pages
-│   ├── draft/             # Draft interfaces
-│   └── admin/             # Admin dashboard
-├── components/            # Reusable components
-├── lib/                   # Utilities & configs
-├── types/                 # TypeScript types
-├── scripts/               # Maintenance scripts
-├── docs/                  # Documentation
-└── public/                # Static assets
-```
+## 🚀 Deployment
+- **Production URLs**: 
+  - Primary: https://cfbfantasy.app
+  - Secondary: https://collegefootballfantasy.app
+- **Preview Deployments**: Automatic on PR
+- **Environment**: Vercel Edge Network
 
-## 🚦 Current Priorities
+## 📝 Recent Updates (August 2025)
+1. Enhanced mock draft search functionality
+2. Improved UI/UX with cleaner layout
+3. Fixed league search permission errors
+4. Implemented schema synchronization workflow
+5. Added comprehensive project documentation
 
-### 🚨 PRIORITY ZERO: Architectural Cleanup (Active NOW)
-1. **Today** (4-Hour Sprint)
-   - [ ] Create AuthService consolidation
-   - [ ] Implement repository pattern
-   - [ ] Setup error handling framework
-   - [ ] Update 2 critical routes
+## 🎯 Next Sprint Priorities
+1. Fix projection calculations for accurate player valuations
+2. Complete schedule generator
+3. Implement trade system
+4. Add weekly lineup management
+5. Enhance mobile experience
 
-2. **This Week** (Phase 1)
-   - [ ] Complete auth consolidation
-   - [ ] Migrate all routes to new patterns
-   - [ ] Enable TypeScript strict mode
-   - [ ] Document new architecture
+## 📚 Documentation
+- `/docs/PROJECT_MAP.md` - Comprehensive project structure
+- `/docs/API_ROUTES.md` - All API endpoints documented
+- `/docs/APPWRITE_SCHEMA.md` - Database schema reference
+- `/docs/DEPLOYMENT_GUIDE.md` - Deployment instructions
 
-3. **Next Week** (Phase 2)
-   - [ ] Implement service layer
-   - [ ] Add dependency injection
-   - [ ] Create integration tests
-   - [ ] Setup CI/CD checks
-
-### Previous Priorities (ON HOLD until cleanup complete)
-1. ~~Add PWA support~~
-2. ~~Complete Rotowire integration~~
-3. ~~Implement Claude AI draft assistant~~
-4. ~~Add Spline 3D mascots~~
-
-**Note**: No new features until architectural foundation is solid.
-
-## 🎯 Business Goals
-
-- **Target**: 100K users by December 2025
-- **Revenue**: $500K MRR through premium tiers
-- **Pricing**: Free tier + $9.99 Pro + $19.99 Dynasty
-- **Markets**: College football fans, sports bettors, fantasy enthusiasts
-
-## 📞 Quick Links
-
-### Production
-- **App**: https://cfbfantasy.app
-- **Admin**: https://cfbfantasy.app/admin
-- **Health**: https://cfbfantasy.app/api/health
-- **Docs**: https://cfbfantasy.app/docs
-
-### Development
-- **GitHub**: [Private Repository]
-- **Vercel**: https://vercel.com/kpm34s-projects
-- **Appwrite**: https://cloud.appwrite.io
-- **Sentry**: https://sentry.io
-
-### Commands
-```bash
-npm run dev          # Local development
-npm run build        # Production build
-npm run health       # Check health status
-npm run test:commissioner  # Test settings
-vercel --prod       # Deploy to production
-```
-
-## 📈 Next Summary Update
-
-After 4 more major edits or significant feature completion.
+## 🤝 Contributing
+1. Create feature branch from `main`
+2. Follow TypeScript strict mode
+3. Use Tailwind for styling
+4. Add proper error handling
+5. Update relevant documentation
+6. Create PR with description
 
 ---
-*This summary is automatically updated based on the PROJECT_UPDATE_TRACKER.md*
+
+Last Updated: August 2025

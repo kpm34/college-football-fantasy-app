@@ -98,6 +98,14 @@ vercel --prod                  # Deploy to production
 vercel pull                    # Pull environment variables
 ```
 
+## Appwrite CLI Status
+- **Status**: ✅ Configured and authenticated
+- **User**: kashpm2002@gmail.com  
+- **Project ID**: college-football-fantasy-app
+- **Database ID**: college-football-fantasy
+- **Config Files**: `appwrite.json`, `appwrite.config.json`
+- **CLI Version**: 8.3.0
+
 ## Environment Variables
 ```bash
 # Appwrite Configuration

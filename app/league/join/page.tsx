@@ -4,8 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
-import { Query } from 'appwrite';
+// Removed direct Appwrite imports - using API routes instead
 
 interface League {
   $id: string;
@@ -65,11 +64,15 @@ function JoinLeagueContent() {
   // Validate a plain invite code for a specific league (NOT the password)
   const validateCodeAndSelectLeague = async (code: string, leagueId: string) => {
     try {
-      const leagueDoc: any = await databases.getDocument(
-        DATABASE_ID,
-        COLLECTIONS.LEAGUES,
-        leagueId
-      );
+      // Use API to get league details
+      const response = await fetch(`/api/leagues/${leagueId}`);
+      const data = await response.json();
+      
+      if (!response.ok || !data.success) {
+        throw new Error('League not found');
+      }
+      
+      const leagueDoc: any = data.league;
 
       const teamsCount: number = Array.isArray(leagueDoc.members)
         ? leagueDoc.members.length
@@ -157,14 +160,19 @@ function JoinLeagueContent() {
       setSearchTerm(code);
       (async () => {
         try {
-          const res = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.LEAGUES,
-            [Query.equal('inviteCode', code), Query.limit(1)]
-          );
-          const doc: any = res.documents?.[0];
-          if (doc) {
-            await validateCodeAndSelectLeague(code, doc.$id);
+          // Search for leagues with this invite code using API
+          const params = new URLSearchParams();
+          params.append('search', code);
+          params.append('includePrivate', 'true');
+          const response = await fetch(`/api/leagues/search?${params}`);
+          const data = await response.json();
+          
+          if (data.success && data.leagues) {
+            // Check if any league has this invite code
+            const league = data.leagues.find((l: any) => l.inviteCode === code);
+            if (league) {
+              await validateCodeAndSelectLeague(code, league.id || league.$id);
+            }
           }
         } catch (e) {
           console.error('Lookup by inviteCode failed', e);
@@ -180,13 +188,16 @@ function JoinLeagueContent() {
       // Fetch and display the league
       (async () => {
         try {
-          const leagueDoc = await databases.getDocument(
-            DATABASE_ID,
-            COLLECTIONS.LEAGUES,
-            leagueId
-          );
+          const response = await fetch(`/api/leagues/${leagueId}`);
+          const data = await response.json();
+          
+          if (!response.ok || !data.success) {
+            throw new Error('League not found');
+          }
+          
+          const leagueDoc = data.league;
           const league: League = {
-            $id: leagueDoc.$id,
+            $id: leagueDoc.$id || leagueDoc.id,
             name: leagueDoc.name,
             teams: leagueDoc.currentTeams || leagueDoc.members?.length || 0,
             maxTeams: leagueDoc.maxTeams || 12,
@@ -246,25 +257,20 @@ function JoinLeagueContent() {
 
     setSearchLoading(true);
     try {
-      // Search leagues in Appwrite by name
-      const response = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.LEAGUES,
-        [
-          // Search by league name (case-insensitive)
-          // Note: Appwrite doesn't support full-text search by default
-          // You might need to implement a custom search solution
-        ]
-      );
-
-      const leagues = response.documents as unknown as League[];
+      // Use the API endpoint to search leagues
+      const params = new URLSearchParams();
+      params.append('search', searchQuery);
+      params.append('includePrivate', 'true'); // Include private leagues in search
       
-      // Filter leagues by search term (client-side for now)
-      const filteredLeagues = leagues.filter(league =>
-        league.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      const response = await fetch(`/api/leagues/search?${params}`);
+      const data = await response.json();
 
-      setAvailableLeagues(filteredLeagues);
+      if (data.success) {
+        setAvailableLeagues(data.leagues);
+      } else {
+        console.error('Error searching leagues:', data.error);
+        setAvailableLeagues([]);
+      }
     } catch (error) {
       console.error('Error searching leagues:', error);
       // Fallback to sample data for demo

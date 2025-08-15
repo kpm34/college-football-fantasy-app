@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     const seasonParam = searchParams.get('season');
     const season = seasonParam ? parseInt(seasonParam, 10) : new Date().getFullYear();
     const prevSeason = season - 1;
-    const maxCount = top200 ? 200 : 1000; // Limit to 200 for top players
+    const maxCount = top200 ? 200 : 5000; // Allow up to 5000 players
     const requestedLimit = parseInt(searchParams.get('limit') || `${maxCount}`, 10);
     const limit = Math.min(requestedLimit, maxCount);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
@@ -30,6 +30,15 @@ export async function GET(request: NextRequest) {
       Query.limit(limit), 
       Query.offset(offset)
     ];
+
+    // Enforce draftability by default
+    queries.push(Query.equal('draftable', true));
+    
+    // Only add conference filter if not searching for ALL or specific conference
+    if (!conference) {
+      const power4 = ['SEC', 'Big Ten', 'Big 12', 'ACC'];
+      queries.push(Query.equal('conference', power4 as any));
+    }
 
     // Add position filter
     const allowedPositions = ['QB', 'RB', 'WR', 'TE', 'K'];
@@ -57,23 +66,16 @@ export async function GET(request: NextRequest) {
 
     // Handle ordering based on search type
     if (top200 || orderBy === 'projection') {
-      // For top 200 or projection ordering, try fantasy_points first
-      try {
-        queries.push(Query.orderDesc('fantasy_points'));
-      } catch {
-        // Fallback to rating if fantasy_points doesn't exist
-        queries.push(Query.orderDesc('rating'));
-      }
+      // For top 200 or projection ordering, use fantasy_points
+      queries.push(Query.orderDesc('fantasy_points'));
     } else if (orderBy === 'rating') {
-      queries.push(Query.orderDesc('rating'));
+      // Order by fantasy_points since rating doesn't exist
+      queries.push(Query.orderDesc('fantasy_points'));
     } else if (orderBy === 'name') {
       queries.push(Query.orderAsc('name'));
     } else {
-      // Default: Use randomized offset for variety (existing behavior)
-      const randomOffset = Math.floor(Date.now() / 1000 / 60) % 500;
-      const adjustedOffset = offset + randomOffset;
-      queries[1] = Query.offset(adjustedOffset);
-      queries.push(Query.orderAsc('name'));
+      // Default: deterministic ordering to avoid empty pages
+      queries.push(Query.orderDesc('fantasy_points'));
     }
 
     console.log('Draft players API - Simplified queries:', queries.map(q => q.toString()));
@@ -110,7 +112,7 @@ export async function GET(request: NextRequest) {
       }
       
       // Simple ordering for fallback
-      fallbackQueries.push(Query.orderDesc('rating'));
+      fallbackQueries.push(Query.orderDesc('fantasy_points'));
       
       response = await databases.listDocuments(
         DATABASE_ID,
@@ -155,6 +157,7 @@ export async function GET(request: NextRequest) {
     let overrides: Record<string, any> | null = null;
     let depthIndex: Map<string, string> | null = null; // name|pos -> team_id
     let teamIdToName: Record<string, string> = {};
+    let depth: any = null; // Declare depth in outer scope
     // Note: do not use CFBD here; rely solely on our database (depth_chart_json + overrides)
     try {
       const mi = await databases.listDocuments(
@@ -165,7 +168,7 @@ export async function GET(request: NextRequest) {
       const doc = mi.documents?.[0];
       overrides = (doc?.manual_overrides_json as any) || null;
       // Build depth index for additional correction
-      let depth: any = doc?.depth_chart_json;
+      depth = doc?.depth_chart_json;
       if (typeof depth === 'string') {
         try { 
           depth = JSON.parse(depth);
@@ -234,7 +237,7 @@ export async function GET(request: NextRequest) {
       // Use existing projection field first, then calculate if needed
       const position = player.position || 'RB';
       const conference = player.conference || 'Other';
-      const rating = player.rating || player.ea_rating || 80;
+      const rating = player.fantasy_points ? Math.min(99, Math.round(60 + (player.fantasy_points / 10))) : 80;
       
       // Priority order for projections:
       // 1. Existing projection field (most accurate)
@@ -274,11 +277,29 @@ export async function GET(request: NextRequest) {
         adp: calculateADP(position, rating, index),
         draftable: player.draftable !== false,
         rating: rating,
-        // Additional stats for better projections
+        // Comprehensive projections from database
+        projections: {
+          season: {
+            total: player.projection || player.fantasy_points || 0,
+            passing: player.passing_projection || 0,
+            rushing: player.rushing_projection || 0,
+            receiving: player.receiving_projection || 0,
+            touchdowns: player.td_projection || 0,
+            fieldGoals: player.field_goals_projection || 0,
+            extraPoints: player.extra_points_projection || 0
+          },
+          perGame: {
+            points: player.projection ? (player.projection / 12).toFixed(1) : '0.0'
+          }
+        },
+        // Additional stats for better context
         prevSeasonStats: {
           games: player.games_played || 0,
           touchdowns: player.touchdowns || 0,
-          yards: player.total_yards || 0
+          yards: player.total_yards || 0,
+          passingYards: player.passing_yards || 0,
+          rushingYards: player.rushing_yards || 0,
+          receivingYards: player.receiving_yards || 0
         }
       };
     });
@@ -304,8 +325,21 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Error fetching draft players:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorDetails = {
+      message: errorMessage,
+      database: DATABASE_ID,
+      collection: COLLECTIONS.PLAYERS || 'college_players',
+      error: error
+    };
+    console.error('Draft players API error details:', errorDetails);
+    
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch players' },
+      { 
+        success: false, 
+        error: 'Failed to fetch players',
+        details: process.env.NODE_ENV === 'development' ? errorDetails : undefined
+      },
       { status: 500 }
     );
   }

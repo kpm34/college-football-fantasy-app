@@ -309,6 +309,16 @@ export default function Navbar() {
                         <LockClosedIcon className="h-4 w-4" />
                         Locker
                       </button>
+                      {lg.isCommissioner && (
+                        <button
+                          onClick={() => handleNavigateWithLoading(`/league/${lg.id}/commissioner`)}
+                          className="shrink-0 px-3 py-2 rounded-md bg-white/10 hover:bg-white/15 text-white text-sm"
+                          aria-label="Commissioner Settings"
+                          title="Commissioner Settings"
+                        >
+                          Commish
+                        </button>
+                      )}
                     </div>
                   ))}
                 </>

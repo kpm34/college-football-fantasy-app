@@ -39,6 +39,20 @@ interface Player {
   weight: number;
   projectedPoints: number;
   adp: number; // Average Draft Position
+  projections?: {
+    season: {
+      total: number;
+      passing: number;
+      rushing: number;
+      receiving: number;
+      touchdowns: number;
+      fieldGoals: number;
+      extraPoints: number;
+    };
+    perGame: {
+      points: string;
+    };
+  };
   pastStats?: {
     games: number;
     passingYards?: number;
@@ -50,6 +64,7 @@ interface Player {
     receivingTDs?: number;
   };
   eaRating?: number; // EA Sports rating if available
+  rating?: number;
 }
 
 export default function MockDraftPage() {
@@ -102,7 +117,7 @@ export default function MockDraftPage() {
     try {
       // Load players from our dedicated draft endpoint
       const season = new Date().getFullYear();
-      const response = await fetch(`/api/draft/players?limit=1000&season=${season}`);
+      const response = await fetch(`/api/draft/players?limit=5000&season=${season}`);
       const data = await response.json();
       
       if (data.success && data.players && data.players.length > 0) {
@@ -342,9 +357,12 @@ export default function MockDraftPage() {
     let filtered = players;
     
     if (searchQuery) {
+      const searchLower = searchQuery.toLowerCase();
       filtered = filtered.filter(p => 
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.team.toLowerCase().includes(searchQuery.toLowerCase())
+        p.name.toLowerCase().includes(searchLower) ||
+        p.team.toLowerCase().includes(searchLower) ||
+        p.conference.toLowerCase().includes(searchLower) ||
+        p.position.toLowerCase().includes(searchLower)
       );
     }
     
@@ -364,7 +382,7 @@ export default function MockDraftPage() {
       filtered = filtered.filter(p => !draftedPlayers.has(p.id));
     }
     
-    // Sorting
+    // Sorting - Default to projections (highest first)
     switch (sortBy) {
       case 'TEAM':
         filtered.sort((a, b) => a.team.localeCompare(b.team) || b.projectedPoints - a.projectedPoints);
@@ -548,136 +566,174 @@ export default function MockDraftPage() {
           <div className="lg:col-span-2">
             <div className="rounded-xl overflow-hidden" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
               {/* Filters */}
-              <div className="p-4" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-2">
-                    <div className="relative flex-1">
-                      <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: leagueColors.text.muted }} />
-                      <input
-                        type="text"
-                        placeholder="Search players..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 rounded-lg"
-                        style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
-                      />
-                    </div>
-                    <button
-                      onClick={() => setShowOnlyAvailable(!showOnlyAvailable)}
-                      className={`px-4 py-2 rounded-lg transition-colors`}
-                      style={{ backgroundColor: showOnlyAvailable ? leagueColors.primary.taupe : leagueColors.background.overlay, color: leagueColors.text.primary, border: `1px solid ${leagueColors.border.light}` }}
-                    >
-                      Available Only
-                    </button>
-                  </div>
+              <div className="p-4 space-y-4" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
+                {/* Search Bar */}
+                <div className="relative">
+                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: leagueColors.text.muted }} />
+                  <input
+                    type="text"
+                    placeholder="Search by player name, team, conference, or position..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg font-medium"
+                    style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  />
+                </div>
+                
+                {/* Filter Controls */}
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                  <select
+                    value={positionFilter}
+                    onChange={(e) => setPositionFilter(e.target.value as Position)}
+                    className="px-3 py-2 rounded-lg text-sm font-medium"
+                    style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  >
+                    <option value="ALL">All Positions</option>
+                    <option value="QB">QB</option>
+                    <option value="RB">RB</option>
+                    <option value="WR">WR</option>
+                    <option value="TE">TE</option>
+                    <option value="K">K</option>
+                  </select>
                   
-                  <div className="flex gap-2">
-                    <select
-                      value={positionFilter}
-                      onChange={(e) => setPositionFilter(e.target.value as Position)}
-                      className="px-3 py-1.5 rounded-lg text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
-                    >
-                      <option value="ALL">All Positions</option>
-                      <option value="QB">QB</option>
-                      <option value="RB">RB</option>
-                      <option value="WR">WR</option>
-                      <option value="TE">TE</option>
-                      <option value="K">K</option>
-                      <option value="DEF">DEF</option>
-                    </select>
-                    
-                    <select
-                      value={conferenceFilter}
-                      onChange={(e) => setConferenceFilter(e.target.value as Conference)}
-                      className="px-3 py-1.5 rounded-lg text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
-                    >
-                      <option value="ALL">All Conferences</option>
-                      <option value="SEC">SEC</option>
-                      <option value="Big Ten">Big Ten</option>
-                      <option value="Big 12">Big 12</option>
-                      <option value="ACC">ACC</option>
-                    </select>
+                  <select
+                    value={conferenceFilter}
+                    onChange={(e) => setConferenceFilter(e.target.value as Conference)}
+                    className="px-3 py-2 rounded-lg text-sm font-medium"
+                    style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  >
+                    <option value="ALL">All Conferences</option>
+                    <option value="SEC">SEC</option>
+                    <option value="Big Ten">Big Ten</option>
+                    <option value="Big 12">Big 12</option>
+                    <option value="ACC">ACC</option>
+                  </select>
 
-                    <select
-                      value={teamFilter}
-                      onChange={(e) => setTeamFilter(e.target.value)}
-                      className="px-3 py-1.5 rounded-lg text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
-                    >
-                      <option value="ALL">All Teams</option>
-                      {Array.from(new Set(players.map(p => p.team))).sort((a, b) => a.localeCompare(b)).map(team => (
-                        <option key={team} value={team}>{team}</option>
-                      ))}
-                    </select>
+                  <select
+                    value={teamFilter}
+                    onChange={(e) => setTeamFilter(e.target.value)}
+                    className="px-3 py-2 rounded-lg text-sm font-medium"
+                    style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  >
+                    <option value="ALL">All Teams</option>
+                    {Array.from(new Set(players.map(p => p.team))).sort((a, b) => a.localeCompare(b)).map(team => (
+                      <option key={team} value={team}>{team}</option>
+                    ))}
+                  </select>
 
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as any)}
-                      className="px-3 py-1.5 rounded-lg text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
-                    >
-                      <option value="PROJ">Sort: Proj</option>
-                      <option value="TEAM">Sort: Team A–Z</option>
-                      <option value="NAME">Sort: Name A–Z</option>
-                      <option value="ADP">Sort: ADP</option>
-                    </select>
-                  </div>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as any)}
+                    className="px-3 py-2 rounded-lg text-sm font-medium"
+                    style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  >
+                    <option value="PROJ">↓ Projections</option>
+                    <option value="ADP">↑ ADP</option>
+                    <option value="NAME">A-Z Name</option>
+                    <option value="TEAM">A-Z Team</option>
+                  </select>
+
+                  <button
+                    onClick={() => setShowOnlyAvailable(!showOnlyAvailable)}
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-1.5`}
+                    style={{ backgroundColor: showOnlyAvailable ? leagueColors.primary.coral : leagueColors.background.overlay, color: showOnlyAvailable ? leagueColors.text.inverse : leagueColors.text.primary, border: `1px solid ${showOnlyAvailable ? leagueColors.primary.coral : leagueColors.border.light}` }}
+                  >
+                    <FunnelIcon className="w-4 h-4" />
+                    Available
+                  </button>
+                </div>
+                
+                {/* Results Count */}
+                <div className="text-sm" style={{ color: leagueColors.text.secondary }}>
+                  Showing {filteredPlayers.length} of {players.length} players
                 </div>
               </div>
 
               {/* Player List */}
               <div className="overflow-y-auto max-h-[600px]">
                 <table className="w-full">
-                  <thead className="sticky top-0" style={{ backgroundColor: leagueColors.background.secondary }}>
-                    <tr className="text-xs" style={{ color: leagueColors.text.secondary }}>
-                      <th className="text-left py-3 px-4">Rank</th>
-                      <th className="text-left py-3 px-4">Player</th>
-                      <th className="text-center py-3 px-4">Pos</th>
-                      <th className="text-left py-3 px-4">Team</th>
-                      <th className="text-center py-3 px-4">Proj</th>
-                      <th className="text-center py-3 px-4">ADP</th>
-                      <th className="text-center py-3 px-4">Action</th>
+                  <thead className="sticky top-0 z-10" style={{ backgroundColor: leagueColors.background.secondary }}>
+                    <tr className="text-xs uppercase tracking-wider" style={{ color: leagueColors.text.secondary }}>
+                      <th className="text-left py-3 px-4 font-semibold">#</th>
+                      <th className="text-left py-3 px-4 font-semibold">Player</th>
+                      <th className="text-center py-3 px-4 font-semibold">Pos</th>
+                      <th className="text-left py-3 px-4 font-semibold">School</th>
+                      <th className="text-center py-3 px-4 font-semibold">Proj</th>
+                      <th className="text-center py-3 px-4 font-semibold">PPG</th>
+                      <th className="text-center py-3 px-4 font-semibold">ADP</th>
+                      <th className="text-center py-3 px-4 font-semibold">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredPlayers.map((player, index) => {
                       const isDrafted = draftedPlayers.has(player.id);
                       const isMyPick = getCurrentTeam() - 1 === settings.userPosition - 1;
+                      const ppg = player.projections?.perGame?.points || (player.projectedPoints / 12).toFixed(1);
                       
                       return (
                         <tr 
                           key={player.id}
-                          className={`border-b`} style={{ borderColor: leagueColors.border.light, backgroundColor: isDrafted ? 'transparent' : 'transparent' }}
+                          className={`border-b hover:bg-opacity-5 hover:bg-white transition-colors ${isDrafted ? 'opacity-50' : ''}`} 
+                          style={{ borderColor: leagueColors.border.light }}
                         >
-                          <td className="py-3 px-4" style={{ color: leagueColors.text.muted }}>{index + 1}</td>
+                          <td className="py-3 px-4 font-medium text-sm" style={{ color: leagueColors.text.muted }}>
+                            {index + 1}
+                          </td>
                           <td className="py-3 px-4">
                             <div>
-                              <div className="font-medium" style={{ color: leagueColors.text.primary }}>{player.name}</div>
-                              <div className="text-xs" style={{ color: leagueColors.text.secondary }}>{player.class} • {player.height} • {player.weight}lbs</div>
+                              <div className="font-semibold text-sm" style={{ color: isDrafted ? leagueColors.text.muted : leagueColors.text.primary }}>
+                                {player.name}
+                              </div>
+                              <div className="text-xs mt-0.5" style={{ color: leagueColors.text.secondary }}>
+                                {player.conference} • {player.class} • {player.height} • {player.weight}lbs
+                              </div>
                             </div>
                           </td>
                           <td className="py-3 px-4 text-center">
-                            <span className={`px-2 py-1 rounded text-xs font-medium`} style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
+                            <span className={`inline-flex items-center justify-center w-10 h-6 rounded text-xs font-bold`} 
+                              style={{ 
+                                backgroundColor: player.position === 'QB' ? '#3B82F6' : 
+                                               player.position === 'RB' ? '#10B981' : 
+                                               player.position === 'WR' ? '#F59E0B' : 
+                                               player.position === 'TE' ? '#8B5CF6' : 
+                                               player.position === 'K' ? '#6B7280' : leagueColors.background.overlay,
+                                color: player.position === 'K' ? leagueColors.text.primary : '#FFFFFF'
+                              }}
+                            >
                               {player.position}
                             </span>
                           </td>
-                          <td className="py-3 px-4" style={{ color: leagueColors.text.secondary }}>{player.team}</td>
-                          <td className="py-3 px-4 text-center" style={{ color: leagueColors.text.primary, fontWeight: 600 }}>{player.projectedPoints}</td>
-                          <td className="py-3 px-4 text-center" style={{ color: leagueColors.text.muted }}>{player.adp}</td>
+                          <td className="py-3 px-4 text-sm" style={{ color: leagueColors.text.secondary }}>
+                            {player.team}
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <div className="text-sm font-bold" style={{ color: leagueColors.text.primary }}>
+                              {player.projectedPoints}
+                            </div>
+                          </td>
+                          <td className="py-3 px-4 text-center text-sm" style={{ color: leagueColors.text.secondary }}>
+                            {ppg}
+                          </td>
+                          <td className="py-3 px-4 text-center text-sm" style={{ color: leagueColors.text.muted }}>
+                            {player.adp.toFixed(1)}
+                          </td>
                           <td className="py-3 px-4 text-center">
                             {!isDrafted && isMyPick && (
                               <button
                                 onClick={() => draftPlayer(player)}
-                                className="px-3 py-1 rounded text-sm transition-colors"
-                                style={{ backgroundColor: leagueColors.primary.coral, color: leagueColors.text.inverse }}
+                                className="px-4 py-1.5 rounded-lg text-sm font-bold transition-all hover:shadow-lg hover:scale-105 transform"
+                                style={{ 
+                                  backgroundColor: '#B41F24',  // Strong crimson for better contrast
+                                  color: '#FFFFFF',
+                                  border: '2px solid #8B0000',  // Dark red border for definition
+                                  boxShadow: '0 2px 4px rgba(180, 31, 36, 0.3)'
+                                }}
                               >
-                                Draft
+                                DRAFT
                               </button>
                             )}
                             {isDrafted && (
-                              <span className="text-xs" style={{ color: leagueColors.text.muted }}>Drafted</span>
+                              <span className="text-xs font-medium" style={{ color: leagueColors.text.muted }}>Drafted</span>
                             )}
                           </td>
                         </tr>
