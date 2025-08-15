@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client, Databases, Query } from 'node-appwrite';
 import { APPWRITE_CONFIG } from '@/lib/config/appwrite.config';
+import { COLLECTIONS } from '@/core/config/environment';
 
 // Initialize Appwrite client
 const client = new Client()
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20');
     const offset = parseInt(searchParams.get('offset') || '0');
 
-    let queries = [];
+    let queries = [] as string[];
     
     // Add search query if provided
     if (search) {
@@ -32,14 +33,18 @@ export async function GET(request: NextRequest) {
     }
 
     try {
+      // Append pagination and ordering using Query helpers
+      const paginatedQueries = [
+        ...queries,
+        Query.limit(limit),
+        Query.offset(offset),
+        Query.orderDesc('created_at')
+      ];
+
       const leagues = await databases.listDocuments(
         databaseId,
-        'leagues',
-        queries,
-        limit,
-        offset,
-        'created_at',
-        'DESC'
+        COLLECTIONS.leagues,
+        paginatedQueries
       );
 
       return NextResponse.json({
@@ -61,38 +66,8 @@ export async function GET(request: NextRequest) {
 
     } catch (appwriteError: any) {
       console.error('Appwrite error:', appwriteError);
-      
-      // Return mock data for development
-      return NextResponse.json({
-        success: true,
-        leagues: [
-          {
-            id: 'demo-league-1',
-            name: 'Big Ten Showdown',
-            mode: 'CONFERENCE',
-            conf: 'big_ten',
-            maxTeams: 12,
-            currentTeams: 8,
-            status: 'DRAFTING',
-            commissionerId: 'demo-user-123',
-            createdAt: '2024-08-03T10:00:00Z',
-            updatedAt: '2024-08-03T10:00:00Z'
-          },
-          {
-            id: 'demo-league-2',
-            name: 'Power 4 Elite',
-            mode: 'POWER4',
-            conf: null,
-            maxTeams: 16,
-            currentTeams: 12,
-            status: 'ACTIVE',
-            commissionerId: 'demo-user-456',
-            createdAt: '2024-08-02T15:30:00Z',
-            updatedAt: '2024-08-03T09:15:00Z'
-          }
-        ],
-        total: 2
-      });
+      const status = appwriteError?.code === 401 ? 401 : 500;
+      return NextResponse.json({ success: false, error: 'Search failed' }, { status });
     }
 
   } catch (error) {
