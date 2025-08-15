@@ -292,33 +292,36 @@ export default function Navbar() {
                     My Leagues
                   </div>
                   {leagues.map((lg) => (
-                    <div key={lg.id} className="flex items-center justify-between gap-2 px-2 py-1">
+                    <div key={lg.id} className="mb-3">
                       <button
                         onClick={() => handleNavigateWithLoading(`/league/${lg.id}`)}
-                        className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden flex-1 text-left"
+                        className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden w-full text-left"
                       >
                         <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
-                        <RectangleGroupIcon className="h-5 w-5" />
-                        <span className="font-medium truncate">{lg.name}</span>
+                        <RectangleGroupIcon className="h-5 w-5 shrink-0" />
+                        <span className="font-medium">{lg.name}</span>
                       </button>
-                      <button
-                        onClick={() => handleNavigateWithLoading(`/league/${lg.id}/locker-room`)}
-                        className="shrink-0 px-3 py-2 rounded-md bg-white/10 hover:bg-white/15 text-white text-sm flex items-center gap-2"
-                        aria-label="Open Locker Room"
-                      >
-                        <LockClosedIcon className="h-4 w-4" />
-                        Locker
-                      </button>
-                      {lg.isCommissioner && (
+                      <div className="ml-8 mt-1 flex gap-2">
                         <button
-                          onClick={() => handleNavigateWithLoading(`/league/${lg.id}/commissioner`)}
-                          className="shrink-0 px-3 py-2 rounded-md bg-white/10 hover:bg-white/15 text-white text-sm"
-                          aria-label="Commissioner Settings"
-                          title="Commissioner Settings"
+                          onClick={() => handleNavigateWithLoading(`/league/${lg.id}/locker-room`)}
+                          className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm flex items-center gap-1.5 transition-colors"
+                          aria-label="Open Locker Room"
                         >
-                          Commish
+                          <LockClosedIcon className="h-3.5 w-3.5" />
+                          <span>Locker Room</span>
                         </button>
-                      )}
+                        {lg.isCommissioner && (
+                          <button
+                            onClick={() => handleNavigateWithLoading(`/league/${lg.id}/commissioner`)}
+                            className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm flex items-center gap-1.5 transition-colors"
+                            aria-label="Commissioner Settings"
+                            title="Commissioner Settings"
+                          >
+                            <UserGroupIcon className="h-3.5 w-3.5" />
+                            <span>Commissioner</span>
+                          </button>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </>
