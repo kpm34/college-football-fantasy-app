@@ -16,6 +16,7 @@ interface League {
   name: string;
   commissioner: string;
   commissionerId: string;
+  commissionerEmail?: string;
   season: number;
   scoringType: string;
   maxTeams: number;
@@ -146,8 +147,9 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         mapped = {
           $id: l.id,
           name: l.name,
-          commissioner: l.commissionerId,
-          commissionerId: l.commissionerId,
+          commissioner: l.commissioner_id || l.commissionerId || l.commissioner,
+          commissionerId: l.commissioner_id || l.commissionerId || l.commissioner,
+          commissionerEmail: l.commissioner_email || l.commissionerEmail,
           season: l.seasonStartWeek ? new Date().getFullYear() : (l.season || new Date().getFullYear()),
           scoringType: 'PPR',
           maxTeams: l.maxTeams || 12,

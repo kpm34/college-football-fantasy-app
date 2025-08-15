@@ -2,48 +2,63 @@ import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { leagueId: string } }
+  context: { params: Promise<{ leagueId: string }> }
 ) {
   try {
-    // Get user from session
-    const sessionCookie = request.cookies.get('appwrite-session')?.value;
-    if (!sessionCookie) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    const { leagueId } = await context.params;
+    
+    if (!leagueId) {
+      return NextResponse.json(
+        { success: false, error: 'League ID is required' },
+        { status: 400 }
+      );
     }
-    
-    const cookieHeader = `a_session_college-football-fantasy-app=${sessionCookie}`;
-    const userRes = await fetch('https://nyc.cloud.appwrite.io/v1/account', {
-      headers: {
-        'X-Appwrite-Project': 'college-football-fantasy-app',
-        'X-Appwrite-Response-Format': '1.4.0',
-        'Cookie': cookieHeader,
-      },
-    });
-    
-    if (!userRes.ok) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
-    }
-    
-    const user = await userRes.json();
-    
-    // Get rosters for this league
-    const rostersResponse = await databases.listDocuments(
+
+    // Fetch all rosters/teams in this league
+    const rosters = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.ROSTERS,
-      [Query.equal('leagueId', params.leagueId)]
+      [
+        Query.equal('leagueId', leagueId),
+        Query.limit(100)
+      ]
     );
-    
-    return NextResponse.json({ 
-      success: true, 
-      members: rostersResponse.documents 
+
+    // Map to consistent format
+    const teams = rosters.documents.map((doc: any) => ({
+      $id: doc.$id,
+      leagueId: doc.leagueId,
+      userId: doc.userId || doc.owner || '',
+      name: doc.teamName || doc.name || 'Team',
+      userName: doc.userName,
+      email: doc.email,
+      wins: doc.wins ?? 0,
+      losses: doc.losses ?? 0,
+      ties: doc.ties ?? 0,
+      points: doc.points ?? doc.pointsFor ?? 0,
+      pointsFor: doc.pointsFor ?? doc.points ?? 0,
+      pointsAgainst: doc.pointsAgainst ?? 0,
+      players: doc.players,
+      isActive: doc.isActive ?? true,
+      status: doc.status,
+    }));
+
+    return NextResponse.json({
+      success: true,
+      teams,
+      count: teams.length,
+      activeCount: teams.filter(t => t.isActive !== false).length
     });
-  } catch (error: any) {
-    console.error('Get members error:', error);
+  } catch (error) {
+    console.error('Error fetching league members:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to get members' },
-      { status: error.code === 401 ? 401 : 500 }
+      { success: false, error: 'Failed to fetch league members' },
+      { status: 500 }
     );
   }
 }
