@@ -749,7 +749,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {userTeam ? (
                 <button
                   onClick={() => router.push(`/team/${userTeam.$id}`)}
@@ -800,7 +800,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               {isCommissioner && (
                 <button
                   onClick={() => router.push(`/league/${leagueId}/commissioner`)}
-                  className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3"
+                  className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg"
                   style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
                 >
                   <FiSettings className="text-xl" />
