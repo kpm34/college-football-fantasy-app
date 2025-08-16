@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation';
 export default function DraftBoardRedirect() {
   const router = useRouter();
   useEffect(() => {
-    // Redirect deprecated draft board route to canonical draft room
+    // Redirect deprecated draft board route to canonical realtime draft room
     const path = window.location.pathname;
     const leagueId = path.split('/')[3];
-    router.replace(`/draft/${leagueId}`);
+    router.replace(`/draft/${leagueId}/realtime`);
   }, [router]);
   return null;
 }
