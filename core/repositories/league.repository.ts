@@ -53,8 +53,6 @@ export class LeagueRepository extends BaseRepository<League> {
       currentTeams: 0,
       season: data.season || new Date().getFullYear(),
       scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules()),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     };
 
     return this.create(leagueData, {
@@ -183,9 +181,7 @@ export class LeagueRepository extends BaseRepository<League> {
       pointsAgainst: 0,
       players: [],
       lineup: {},
-      bench: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      bench: []
     });
 
     // Update league team count
@@ -226,8 +222,7 @@ export class LeagueRepository extends BaseRepository<League> {
     }
 
     return this.update(leagueId, {
-      ...updates,
-      updatedAt: new Date().toISOString()
+      ...updates
     }, {
       partial: true,
       invalidateCache: [
