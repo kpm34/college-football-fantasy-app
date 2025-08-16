@@ -234,8 +234,24 @@ function JoinLeagueContent() {
       const data = await response.json();
       
       if (response.ok && data.valid) {
-        // Automatically select this league
-        setSelectedLeague(data.league as League);
+        // Normalize API response (which uses `id`) to expected League shape (which uses `$id`)
+        const normalized: League = {
+          $id: data.league.id,
+          name: data.league.name,
+          owner: data.league.commissioner || 'Commissioner',
+          teams: data.league.currentTeams || 0,
+          maxTeams: data.league.maxTeams || 12,
+          draftType: 'snake',
+          entryFee: 0,
+          draftDate: new Date().toISOString(),
+          draftTime: '19:00',
+          description: '',
+          type: 'private',
+          status: 'draft',
+          createdAt: new Date().toISOString(),
+        };
+        setSelectedLeague(normalized);
+        setInviteLeagueId(data.league.id);
         setShowPasswordModal(true);
       } else {
         alert(data.error || 'Invalid or expired invite link');
