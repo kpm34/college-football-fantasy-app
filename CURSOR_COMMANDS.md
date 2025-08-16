@@ -183,6 +183,54 @@ npm test
 "access dev environment" → Frontend runs on port 3001 (npm run dev), backend on port 3000 (npm run server). Use npm run build, npm run typecheck, npm run lint for code quality. npm run sync-data for API data syncing.
 ```
 
+## AI Development Toolbox
+
+### AI Assistant Tools Access
+```bash
+# Quick access commands for AI tools
+"use runway" → AI video generation: /lib/runway.ts, API: /api/runway/create
+"use openai" → Direct OpenAI client: /lib/openai.ts (text, images, embeddings)  
+"use meshy" → 3D model generation: /vendor/awwwards-rig/src/lib/meshy.ts, API: /api/meshy/jobs
+"use ffmpeg" → Local video processing: scripts/ffmpeg-helpers.js (requires FFmpeg installed)
+"check ai jobs" → Job polling status: /api/cron/poll-jobs, types: /types/jobs.ts
+```
+
+### AI Tool Examples
+```typescript
+// Runway video generation
+import { createRunwayJob } from '@/lib/runway';
+const { jobId } = await createRunwayJob({ prompt: "Football highlights", model: 'gen3' });
+
+// OpenAI direct access
+import { generateText, analyzeImage } from '@/lib/openai';
+const text = await generateText("Explain this code");
+const analysis = await analyzeImage(imgUrl, "What's in this image?");
+
+// Meshy 3D generation  
+import { createMeshyJob } from '@/vendor/awwwards-rig/src/lib/meshy';
+const { jobId } = await createMeshyJob({ prompt: "Low-poly stadium" });
+```
+
+### Local FFmpeg Usage
+```bash
+# Convert video (local development only)
+node scripts/ffmpeg-helpers.js convert input.mov output.mp4 --quality high
+
+# Compress video
+node scripts/ffmpeg-helpers.js compress large.mp4 small.mp4 --target-size 10
+
+# Extract frames
+node scripts/ffmpeg-helpers.js extract-frames video.mp4 frames/ --fps 1
+```
+
+### Environment Variables for AI Tools
+```bash
+RUNWAY_API_KEY=your-runway-key-here
+OPENAI_API_KEY=your-openai-key-here
+MESHY_API_KEY=your-meshy-key-here
+CRON_SECRET=secure-cron-secret
+```
+
 ## Combined Quick Reference
 
 ### For Cursor AI Assistant
@@ -194,6 +242,7 @@ When you need to access:
 4. **"access dev"** → Frontend: port 3001, backend: port 3000, build with `npm run build`
 5. **"access apis"** → CFBD API key configured, endpoints in `/app/api/` directory
 6. **"access database"** → Collections: leagues, rosters, games, rankings, teams, college_players, player_stats, auctions, bids
+7. **"use ai tools"** → Runway videos, OpenAI text/images, Meshy 3D, FFmpeg local processing
 
 ### Environment Files
 - **Local**: `.env.local`

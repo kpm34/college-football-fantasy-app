@@ -60,6 +60,29 @@
       "edgeConfig": {
         "description": "Feature flags and dynamic config",
         "hasToken": true
+      },
+      "aiToolbox": {
+        "description": "AI Development Assistant Tools",
+        "runway": {
+          "description": "Video generation via Runway AI",
+          "endpoint": "/api/runway/create",
+          "hasKey": false
+        },
+        "openai": {
+          "description": "OpenAI direct client (text, images, embeddings)",
+          "wrapper": "/lib/openai.ts",
+          "hasKey": false
+        },
+        "meshy": {
+          "description": "3D model generation via Meshy AI",
+          "endpoint": "/api/meshy/jobs",
+          "hasKey": false
+        },
+        "ffmpeg": {
+          "description": "Local video processing utilities",
+          "script": "/scripts/ffmpeg-helpers.js",
+          "localOnly": true
+        }
       }
     },
     "mcp": {
@@ -73,6 +96,13 @@
         "brave-search - Web search capabilities",
         "puppeteer - Web scraping and automation"
       ],
+      "aiToolbox": {
+        "runway": "AI video generation wrapper",
+        "openai": "Direct OpenAI client with all capabilities", 
+        "meshy": "3D model generation wrapper",
+        "ffmpeg": "Local video processing utilities",
+        "jobPolling": "Async AI job status management"
+      },
       "authentication": {
         "appwrite": "Configured with API key and project credentials",
         "github": "Requires GITHUB_TOKEN environment variable",
