@@ -27,8 +27,43 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   const user = await userResponse.json();
   const requestData = await request.json();
 
+  // Normalize incoming fields from Create League page
+  const name: string | undefined = requestData.name || requestData.leagueName;
+  const rawGameMode: string | undefined = requestData.gameMode;
+  const selectedConference: string | undefined = requestData.selectedConference;
+  const maxTeams: number | undefined = typeof requestData.maxTeams === 'number'
+    ? requestData.maxTeams
+    : parseInt(requestData.maxTeams);
+  const draftType: string = requestData.draftType || 'snake';
+  const isPrivate: boolean = Boolean(requestData.isPrivate);
+  const pickTimeSeconds: number = typeof requestData.pickTimeSeconds === 'number'
+    ? requestData.pickTimeSeconds
+    : parseInt(requestData.pickTimeSeconds) || 90;
+
+  // Map Create League UI game mode to repository-expected values
+  const normalizeConference = (conf?: string): 'sec' | 'acc' | 'big12' | 'bigten' | undefined => {
+    const c = String(conf || '').toLowerCase();
+    if (c === 'sec') return 'sec';
+    if (c === 'acc') return 'acc';
+    if (c === 'big_12' || c === 'big12') return 'big12';
+    if (c === 'big_ten' || c === 'bigten' || c === 'big10') return 'bigten';
+    return undefined;
+  };
+
+  const normalizeGameMode = (mode?: string, conf?: string): 'power4' | 'sec' | 'acc' | 'big12' | 'bigten' | undefined => {
+    const m = String(mode || '').toLowerCase();
+    if (m === 'power4' || m === 'power-4') return 'power4';
+    if (m === 'conference') {
+      return normalizeConference(conf);
+    }
+    if (m === 'sec' || m === 'acc' || m === 'big12' || m === 'bigten') return m as any;
+    return undefined;
+  };
+
+  const gameMode = normalizeGameMode(rawGameMode, selectedConference);
+
   // Validate required fields
-  if (!requestData.name || !requestData.maxTeams || !requestData.gameMode) {
+  if (!name || !maxTeams || !gameMode) {
     throw new ValidationError('Missing required fields: name, maxTeams, gameMode');
   }
 
@@ -37,12 +72,12 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
 
   // Create the league using repository
   const league = await leagues.createLeague({
-    name: requestData.name,
-    maxTeams: parseInt(requestData.maxTeams),
-    draftType: requestData.draftType || 'snake',
-    gameMode: requestData.gameMode,
-    isPublic: !requestData.isPrivate,
-    pickTimeSeconds: parseInt(requestData.pickTimeSeconds) || 90,
+    name,
+    maxTeams,
+    draftType: draftType as any,
+    gameMode,
+    isPublic: !isPrivate,
+    pickTimeSeconds,
     commissionerId: user.$id,
     scoringRules: requestData.scoringRules,
     draftDate: requestData.draftDate,

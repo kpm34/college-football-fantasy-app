@@ -422,7 +422,10 @@ export class ProjectionsService {
       const depthInfo = modelInputs?.depthIndex.get(key);
       // If depth chart missing, do NOT suppress projection. Treat as unknown starter status
       // and rely on other inputs (ratings, pace, usage). Use neutral multiplier of 1.0.
-      const depthMult = depthInfo ? this.depthMultiplier(p.position, depthInfo.posRank) : 1.0;
+      let depthMult = depthInfo ? this.depthMultiplier(p.position, depthInfo.posRank) : 1.0;
+      
+      // Apply returning production adjustment
+      depthMult = this.applyReturningProductionBoost(depthMult, p, playerUsage);
 
       switch (p.position) {
         case 'QB': {
@@ -518,13 +521,22 @@ export class ProjectionsService {
     const r = Math.max(1, rank);
     switch (position) {
       case 'QB':
-        return [1.0, 0.25, 0.08, 0.03, 0.01][r - 1] ?? 0.01;
+        // QB: rank1 = 0.95 share, rank2 = 0.05, rank3+ = 0.0
+        return [0.95, 0.05, 0.0, 0.0, 0.0][r - 1] ?? 0.0;
       case 'RB':
-        return [1.0, 0.6, 0.4, 0.25, 0.15][r - 1] ?? 0.1;
+        // RB: rank1 = 0.55, rank2 = 0.25, rank3 = 0.15, others share remaining 0.05
+        return [0.55, 0.25, 0.15, 0.025, 0.025][r - 1] ?? 0.01;
       case 'WR':
-        return [1.0, 0.8, 0.6, 0.35, 0.2][r - 1] ?? 0.15;
+        // WR: rank1 = 0.25, rank2 = 0.20, rank3 = 0.15, rank4 = 0.10, rank5+ share 0.30 equally
+        if (r <= 4) {
+          return [0.25, 0.20, 0.15, 0.10][r - 1];
+        } else {
+          // WR5+ share remaining 0.30 equally (assuming max 6 WRs = 0.15 each)
+          return 0.15;
+        }
       case 'TE':
-        return [1.0, 0.35, 0.15][r - 1] ?? 0.1;
+        // TE: rank1 = 0.7, rank2 = 0.3
+        return [0.7, 0.3, 0.0][r - 1] ?? 0.0;
       default:
         return 1.0;
     }
@@ -586,5 +598,162 @@ export class ProjectionsService {
       if (g.away_team === teamName) return g.away_conference || null;
     }
     return null;
+  }
+
+  /**
+   * Apply returning production boost
+   * If player had >20% team share last season in yards or TDs, add +0.05 to their multiplier
+   */
+  private static applyReturningProductionBoost(
+    baseMult: number, 
+    player: any, 
+    playerUsage: Map<string, any>
+  ): number {
+    const usage = playerUsage.get(player.id);
+    if (!usage) return baseMult;
+
+    // Check if player had >20% team share last season
+    const hadHighYardShare = (usage.prevYardShare || 0) > 0.20;
+    const hadHighTDShare = (usage.prevTDShare || 0) > 0.20;
+
+    if (hadHighYardShare || hadHighTDShare) {
+      return Math.min(1.0, baseMult + 0.05); // Cap at 100%
+    }
+
+    return baseMult;
+  }
+
+  /**
+   * Enforce minimum/maximum floors and caps
+   * Apply post-calculation caps to ensure proper hierarchy
+   */
+  static enforceProjectionCaps(projections: PlayerProjection[]): PlayerProjection[] {
+    // Group by team and position
+    const teamPositionGroups: Record<string, PlayerProjection[]> = {};
+    
+    for (const projection of projections) {
+      const key = `${projection.team}_${projection.position}`;
+      if (!teamPositionGroups[key]) teamPositionGroups[key] = [];
+      teamPositionGroups[key].push(projection);
+    }
+
+    // Apply caps for each team-position group
+    for (const [key, group] of Object.entries(teamPositionGroups)) {
+      const [team, position] = key.split('_');
+      this.applyPositionCaps(group, position);
+    }
+
+    return projections;
+  }
+
+  /**
+   * Apply position-specific caps to a group of players
+   */
+  private static applyPositionCaps(players: PlayerProjection[], position: string): void {
+    // Sort by fantasy points descending to identify starters
+    const sortedPlayers = players.sort((a, b) => 
+      (b.projections?.fantasyPoints || 0) - (a.projections?.fantasyPoints || 0)
+    );
+
+    if (sortedPlayers.length === 0) return;
+
+    const starter = sortedPlayers[0];
+    const starterPoints = starter.projections?.fantasyPoints || 0;
+
+    for (let i = 1; i < sortedPlayers.length; i++) {
+      const player = sortedPlayers[i];
+      if (!player.projections) continue;
+
+      let maxPoints = starterPoints;
+
+      switch (position) {
+        case 'QB':
+          if (i === 1) {
+            // QB2 cannot exceed 25% of QB1 projection unless starter flagged as OUT
+            maxPoints = starterPoints * 0.25;
+          } else {
+            // QB3+ get minimal projections
+            maxPoints = starterPoints * 0.05;
+          }
+          break;
+
+        case 'RB':
+          // Non-starters (depth rank >3) cap at 10% of starter projection
+          if (i >= 3) {
+            maxPoints = starterPoints * 0.10;
+          }
+          break;
+
+        case 'WR':
+          // Non-starters (depth rank >4) cap at 10% of starter projection  
+          if (i >= 4) {
+            maxPoints = starterPoints * 0.10;
+          }
+          break;
+
+        case 'TE':
+          // TE3+ get minimal projections
+          if (i >= 2) {
+            maxPoints = starterPoints * 0.05;
+          }
+          break;
+
+        default:
+          continue; // No caps for other positions
+      }
+
+      // Apply the cap if needed
+      if (player.projections.fantasyPoints > maxPoints) {
+        const scaleFactor = maxPoints / player.projections.fantasyPoints;
+        this.scalePlayerProjection(player, scaleFactor);
+      }
+    }
+  }
+
+  /**
+   * Scale all stats in a player's projection by a factor
+   */
+  private static scalePlayerProjection(player: PlayerProjection, scaleFactor: number): void {
+    if (!player.projections) return;
+
+    const p = player.projections;
+    
+    // Scale all counting stats
+    if (p.passingYards) p.passingYards = Math.round(p.passingYards * scaleFactor);
+    if (p.passingTDs) p.passingTDs = Math.round(p.passingTDs * scaleFactor);
+    if (p.interceptions) p.interceptions = Math.round(p.interceptions * scaleFactor);
+    if (p.rushingYards) p.rushingYards = Math.round(p.rushingYards * scaleFactor);
+    if (p.rushingTDs) p.rushingTDs = Math.round(p.rushingTDs * scaleFactor);
+    if (p.receivingYards) p.receivingYards = Math.round(p.receivingYards * scaleFactor);
+    if (p.receivingTDs) p.receivingTDs = Math.round(p.receivingTDs * scaleFactor);
+    if (p.receptions) p.receptions = Math.round(p.receptions * scaleFactor);
+    
+    // Recalculate fantasy points
+    p.fantasyPoints = Math.round(p.fantasyPoints * scaleFactor);
+    
+    // Adjust floor and ceiling
+    if (p.floor) p.floor = Math.round(p.floor * scaleFactor);
+    if (p.ceiling) p.ceiling = Math.round(p.ceiling * scaleFactor);
+  }
+
+  /**
+   * Generate enhanced projections with proper depth chart enforcement
+   */
+  static async getEnhancedSeasonProjections(
+    conference?: string,
+    position?: string
+  ): Promise<PlayerProjection[]> {
+    try {
+      // Get base projections
+      let projections = await this.getSeasonProjections(conference, position);
+      
+      // Apply caps to enforce proper depth chart distribution
+      projections = this.enforceProjectionCaps(projections);
+      
+      return projections;
+    } catch (error) {
+      console.error('Error getting enhanced season projections:', error);
+      return [];
+    }
   }
 }

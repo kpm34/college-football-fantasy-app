@@ -30,7 +30,6 @@ export interface UpdateLeagueData {
   pickTimeSeconds?: number;
   scoringRules?: Record<string, number>;
   draftDate?: string;
-  settings?: Record<string, any>;
 }
 
 export class LeagueRepository extends BaseRepository<League> {
@@ -53,14 +52,7 @@ export class LeagueRepository extends BaseRepository<League> {
       status: 'open',
       currentTeams: 0,
       season: data.season || new Date().getFullYear(),
-      scoringRules: data.scoringRules || this.getDefaultScoringRules(),
-      settings: {
-        allowTrades: true,
-        tradeDeadline: null,
-        waiverPeriodDays: 2,
-        playoffTeams: 4,
-        regularSeasonWeeks: 12,
-      },
+      scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules()),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
