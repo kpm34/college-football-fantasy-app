@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
     const position = searchParams.get('position');
     const conference = searchParams.get('conference');
     const team = searchParams.get('team');
+    const school = searchParams.get('school');
     const search = searchParams.get('search');
     const top200 = searchParams.get('top200') === 'true'; // New: Top 200 players
     const orderBy = searchParams.get('orderBy') || 'rating'; // New: projection, rating, name
@@ -54,9 +55,11 @@ export async function GET(request: NextRequest) {
       queries.push(Query.equal('conference', conference));
     }
 
-    // Add team filter if specified
+    // Add team/school filter if specified (prefer team; fallback to school)
     if (team) {
       queries.push(Query.equal('team', team));
+    } else if (school) {
+      queries.push(Query.equal('team', school));
     }
 
     // Add search filter if specified
@@ -109,6 +112,9 @@ export async function GET(request: NextRequest) {
       
       if (team) {
         fallbackQueries.push(Query.equal('team', team));
+      } else if (school) {
+        // Try school field in fallback
+        fallbackQueries.push(Query.equal('school', school));
       }
       
       // Simple ordering for fallback
@@ -125,6 +131,16 @@ export async function GET(request: NextRequest) {
     const uniqueTeams = new Set(response.documents?.map((p: any) => p.team || p.school) || []);
     const uniqueConferences = new Set(response.documents?.map((p: any) => p.conference) || []);
     
+    // If a school was specified, defensively filter results client-side to that school/team name
+    if (school) {
+      const schoolLc = school.toLowerCase();
+      response.documents = (response.documents as any[]).filter((p: any) => {
+        const t = (p.team || '').toString().toLowerCase();
+        const s = (p.school || '').toString().toLowerCase();
+        return t === schoolLc || s === schoolLc;
+      });
+      response.total = response.documents.length;
+    }
     console.log('Draft players API - Response:', {
       total: response.total,
       documentsLength: response.documents?.length,
