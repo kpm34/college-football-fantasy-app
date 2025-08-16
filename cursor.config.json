@@ -64,14 +64,20 @@
     },
     "mcp": {
       "enabled": true,
-      "tools": [
-        "File operations (Read, Write, Edit)",
-        "Web fetching and searching",
-        "Task management (TodoWrite)",
-        "Git operations",
-        "IDE diagnostics",
-        "Code execution"
-      ]
+      "servers": [
+        "appwrite - Database operations with full CRUD",
+        "filesystem - File system operations",
+        "memory - Persistent memory across sessions",
+        "git - Git repository operations",
+        "github - GitHub API operations",
+        "brave-search - Web search capabilities",
+        "puppeteer - Web scraping and automation"
+      ],
+      "authentication": {
+        "appwrite": "Configured with API key and project credentials",
+        "github": "Requires GITHUB_TOKEN environment variable",
+        "braveSearch": "Requires BRAVE_API_KEY environment variable"
+      }
     }
   },
   "commands": {
@@ -115,7 +121,10 @@
     "power4Only": true,
     "eligibilityRules": "AP Top-25 or conference games",
     "seasonLength": "12 weeks",
-    "draftTypes": ["snake", "auction"],
+    "draftTypes": [
+      "snake",
+      "auction"
+    ],
     "3dGraphics": true,
     "pwa": true,
     "offlineSupport": true,
