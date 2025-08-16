@@ -419,8 +419,9 @@ export class ProjectionsService {
 
       // Depth multiplier from model inputs
       const key = `${(`${p.first_name || ''} ${p.last_name || p.name || ''}`).trim().toLowerCase()}|${p.position}`;
-      const posRank = modelInputs?.depthIndex.get(key)?.posRank || 1;
-      const depthMult = this.depthMultiplier(p.position, posRank);
+      const depthInfo = modelInputs?.depthIndex.get(key);
+      // If missing from position-specific depth chart, assume non-starter/redshirt: multiplier 0
+      const depthMult = depthInfo ? this.depthMultiplier(p.position, depthInfo.posRank) : 0;
 
       switch (p.position) {
         case 'QB': {
