@@ -1,5 +1,5 @@
 # 🏈 College Football Fantasy App - Data Flow Documentation
-Last Updated: August 16, 2025
+Last Updated: August 16, 2025 (09:25 AM PST)
 
 ## Overview
 This document outlines the complete data flow architecture for the College Football Fantasy platform, covering user interactions, database operations, and API integrations.
@@ -37,8 +37,12 @@ User Search → /api/leagues/search → Filter Results → Join Request
 /api/leagues/join → Validation → Database Update → Success Response
 ```
 
-**Recently Fixed Join League Flow (August 2025):**
-- ✅ Fixed missing database attributes (`season`, `currentTeams`, `maxTeams`)
+**Recent Updates to Join League Flow (August 16, 2025):**
+- ✅ Fixed Appwrite schema to include `inviteToken`, `status`, and `expiresAt` fields in activity_log collection
+- ✅ Resolved 'League ID is required' error by properly handling invite token validation
+- ✅ Fixed invite API to use proper schema fields instead of searching in data field
+- ✅ Updated schema sync script to include new invite-related fields
+- ✅ All join league tests now passing (4/4)
 - ✅ Updated schema constraints (max teams: 24 for college football)
 - ✅ Fixed public/private league logic
 - ✅ Implemented proper validation and error handling
