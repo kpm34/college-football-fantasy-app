@@ -210,18 +210,8 @@ Complete documentation of all API routes, their functions, required permissions,
 
 ## Player Data Routes
 
-### GET `/api/players/draftable`
-**Description**: Get all draftable players  
-**Auth Required**: Yes  
-**Query Params**: 
-- `position` - Filter by position
-- `conference` - Filter by conference
-- `team` - Filter by team
-**Database Operations**:
-- Reads from `players` collection with filters
-**Returns**: Array of player objects
-
----
+### GET `/api/draft/players` (canonical)
+See Draft Routes below. This is the single, canonical endpoint for the player pool used by drafts and mock drafts.
 
 ### GET `/api/cfbd/players`
 **Description**: Search players from CFBD API  
