@@ -1,5 +1,5 @@
 # Claude Code Project Context - College Football Fantasy App
-Last Updated: August 14, 2025
+Last Updated: August 16, 2025
 
 ## Project Overview
 **Name**: College Football Fantasy App  
@@ -151,7 +151,7 @@ ODDS_API_KEY=your_key_here
 ROTOWIRE_API_KEY=your_key_here
 
 # Development
-SEASON_YEAR=2024
+SEASON_YEAR=2025
 NEXT_DISABLE_FAST_REFRESH=true
 ```
 
@@ -178,6 +178,7 @@ NEXT_DISABLE_FAST_REFRESH=true
 - `/api/draft/[leagueId]/status` - Draft status
 - `/api/leagues/create` - Create new league
 - `/api/leagues/search` - Search for leagues
+- `/api/leagues/join` - Join a league (✅ Fixed database schema issues)
 
 ## Database Collections (Appwrite)
 - `games` - Game data with scores and status
@@ -212,6 +213,13 @@ Available MCP tools for Claude Code:
 ```
 
 ## Known Issues & Technical Debt
+
+### Recently Fixed ✅
+1. **Join League Feature**: Database schema issues resolved (August 2025)
+   - Fixed missing attributes: `season`, `currentTeams`, `maxTeams`
+   - Updated max teams to 24 for college football (vs 12 for NFL)
+   - Fixed public/private league logic
+   - All tests passing (4/4)
 
 ### Critical Issues
 1. **Conference API Duplication**: 4 separate conference APIs with different implementations
