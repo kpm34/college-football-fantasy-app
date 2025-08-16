@@ -1,0 +1,46 @@
+{
+  "codeConnect": {
+    "parser": "react",
+    "include": ["**/*.figma.tsx"],
+    "exclude": ["node_modules/**"],
+    "importPaths": {
+      "@/components/*": "./components/*"
+    }
+  },
+  "figmaFiles": {
+    "componentLibrary": {
+      "name": "College Football Fantasy Components",
+      "fileId": "YOUR_FIGMA_FILE_ID",
+      "documentationUrl": "https://www.figma.com/file/YOUR_FILE_ID"
+    }
+  },
+  "tokens": {
+    "output": {
+      "css": "./styles/tokens.css",
+      "js": "./styles/tokens.js",
+      "json": "./styles/tokens.json"
+    },
+    "platforms": {
+      "css": {
+        "transformGroup": "css",
+        "buildPath": "./styles/",
+        "files": [
+          {
+            "destination": "figma-tokens.css",
+            "format": "css/variables"
+          }
+        ]
+      },
+      "js": {
+        "transformGroup": "js",
+        "buildPath": "./styles/",
+        "files": [
+          {
+            "destination": "figma-tokens.js",
+            "format": "javascript/es6"
+          }
+        ]
+      }
+    }
+  }
+}
