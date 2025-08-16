@@ -6,7 +6,7 @@
  */
 
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '../lib/appwrite-server';
-import { CFBProjectionsService } from '../lib/services/cfb-projections.service';
+import { ProjectionsService } from '../lib/services/projections.service';
 import { Query } from 'node-appwrite';
 
 interface ProjectionData {
@@ -38,7 +38,7 @@ async function populateSeasonProjections() {
   
   try {
     // Get projections from the service
-    const projections = await CFBProjectionsService.getSeasonProjections();
+    const projections = await ProjectionsService.getSeasonProjections();
     console.log(`📊 Calculated ${projections.length} season projections`);
     
     if (projections.length === 0) {
@@ -124,7 +124,7 @@ async function populateWeeklyProjections() {
   console.log('📅 Starting weekly projections for Week 1...');
   
   try {
-    const projections = await CFBProjectionsService.getWeeklyProjections(1);
+    const projections = await ProjectionsService.getWeeklyProjections(1);
     console.log(`📊 Calculated ${projections.length} weekly projections`);
     
     if (projections.length === 0) {

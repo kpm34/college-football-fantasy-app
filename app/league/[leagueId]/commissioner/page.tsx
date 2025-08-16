@@ -323,8 +323,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         <div className="mb-8">
           <Link 
             href={`/league/${params.leagueId}`}
-            className="inline-flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity"
-            style={{ color: leagueColors.text.secondary }}
+            className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 rounded-md border border-white/30 bg-white/10 text-white hover:bg-white/20 hover:border-white/40 transition-colors backdrop-blur-sm"
           >
             <ChevronLeftIcon className="w-4 h-4" />
             Back to League

@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'You are already in this league' }, { status: 400 });
     }
     
-    // Verify password or invite code
-    const isPrivate = league.isPrivate || league.password;
+    // Verify access for private leagues only
+    const isPrivate = league.isPublic === false || !!league.password;
     
     if (isPrivate) {
       // Check invite code first

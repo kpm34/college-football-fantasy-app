@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CFBProjectionsService } from '@/lib/services/cfb-projections.service';
+import { ProjectionsService } from '@/lib/services/projections.service';
 import { Databases, Query, Client } from 'node-appwrite';
 import { env } from '@/core/config/environment';
 
@@ -42,6 +42,12 @@ export async function GET(request: NextRequest) {
       }
     } else {
       // Fallback to calculating from college_players data
+      const client = new Client()
+        .setEndpoint(env.server.appwrite.endpoint)
+        .setProject(env.server.appwrite.projectId)
+        .setKey(env.server.appwrite.apiKey);
+      const databases = new Databases(client);
+
       const queries: any[] = [Query.limit(1000)];
       if (position) queries.push(Query.equal('position', position));
       if (conference) queries.push(Query.equal('conference', conference));

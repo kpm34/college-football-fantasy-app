@@ -15,13 +15,14 @@ export async function GET(request: NextRequest) {
     
     // If token is provided, validate it
     if (token && leagueId) {
-      // Find the invite
+      // Find the invite using the inviteToken field
       const invites = await databases.listDocuments(
         DATABASE_ID,
         'activity_log',
         [
-          Query.equal('inviteToken', token),
+          Query.equal('type', 'league_invite'),
           Query.equal('leagueId', leagueId),
+          Query.equal('inviteToken', token),
           Query.equal('status', 'pending')
         ]
       );
@@ -31,9 +32,9 @@ export async function GET(request: NextRequest) {
       }
 
       const invite = invites.documents[0];
-
+      
       // Check if expired
-      if (new Date(invite.expiresAt) < new Date()) {
+      if (invite.expiresAt && new Date(invite.expiresAt) < new Date()) {
         return NextResponse.json({ error: 'Invite has expired' }, { status: 410 });
       }
 
@@ -54,7 +55,56 @@ export async function GET(request: NextRequest) {
           currentTeams: league.currentTeams || league.members?.length || 0
         },
         invite: {
-          email: invite.email,
+          email: invite.data ? JSON.parse(invite.data).email : null,
+          expiresAt: invite.expiresAt
+        }
+      });
+    }
+
+    // Support token-only validation by resolving the leagueId from the invite record
+    if (token && !leagueId) {
+      const invites = await databases.listDocuments(
+        DATABASE_ID,
+        'activity_log',
+        [
+          Query.equal('type', 'league_invite'),
+          Query.equal('inviteToken', token),
+          Query.equal('status', 'pending')
+        ]
+      );
+
+      if (invites.documents.length === 0) {
+        return NextResponse.json({ error: 'Invalid or expired invite' }, { status: 404 });
+      }
+
+      const invite: any = invites.documents[0];
+      const resolvedLeagueId: string | undefined = invite.leagueId;
+
+      if (!resolvedLeagueId) {
+        return NextResponse.json({ error: 'Invalid invite: league not found' }, { status: 400 });
+      }
+
+      if (invite.expiresAt && new Date(invite.expiresAt) < new Date()) {
+        return NextResponse.json({ error: 'Invite has expired' }, { status: 410 });
+      }
+
+      const league = await databases.getDocument(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUES,
+        resolvedLeagueId
+      );
+
+      return NextResponse.json({
+        valid: true,
+        league: {
+          id: league.$id,
+          name: league.name,
+          commissioner: league.commissioner,
+          maxTeams: league.maxTeams,
+          currentTeams: league.currentTeams || league.members?.length || 0
+        },
+        invite: {
+          email: invite.data ? JSON.parse(invite.data).email : null,
           expiresAt: invite.expiresAt
         }
       });
@@ -164,75 +214,85 @@ export async function POST(request: NextRequest) {
     }
     
     const user = await userRes.json();
-
+    
     // Get league details
     const league = await databases.getDocument(
       DATABASE_ID,
       COLLECTIONS.LEAGUES,
       leagueId
     );
-
-    // Check if user is commissioner
-    if (league.commissioner !== user.$id) {
-      return NextResponse.json({ error: 'Only the commissioner can send invites' }, { status: 403 });
-    }
-
-    // Check if league has space
-    const currentTeams = league.currentTeams || league.members?.length || 0;
-    if (currentTeams >= league.maxTeams) {
-      return NextResponse.json({ error: 'League is full' }, { status: 400 });
-    }
-
-    // Generate a unique invite token
-    const inviteToken = ID.unique();
     
-    // Create invite record
-    const invite = await databases.createDocument(
+    // Check if user is commissioner or member
+    const isMember = league.members?.includes(user.$id) || league.commissioner === user.$id;
+    if (!isMember) {
+      return NextResponse.json({ error: 'You must be a league member to send invites' }, { status: 403 });
+    }
+    
+    // Generate unique invite token
+    const inviteToken = ID.unique();
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+    
+    // Store invite in activity_log with proper fields
+    const inviteData = {
+      email: email,
+      sentBy: user.$id,
+      sentAt: new Date().toISOString()
+    };
+    
+    await databases.createDocument(
       DATABASE_ID,
       'activity_log',
       ID.unique(),
       {
         type: 'league_invite',
-        leagueId,
-        leagueName: league.name,
-        email,
-        inviteToken,
-        inviteCode: league.inviteCode,
+        userId: user.$id,
+        leagueId: leagueId,
+        description: `${user.name || user.email} invited ${email} to join ${league.name}`,
+        data: JSON.stringify(inviteData),
+        inviteToken: inviteToken,
         status: 'pending',
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
-        createdAt: new Date().toISOString(),
-        createdBy: user.$id
+        expiresAt: expiresAt.toISOString(),
+        createdAt: new Date().toISOString()
       }
     );
-
+    
     // Generate invite link
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://cfbfantasy.app';
     const inviteLink = `${baseUrl}/league/join?token=${inviteToken}&league=${leagueId}`;
-
-    // Send email if requested (you'll need to implement email service)
+    
+    // Send email if requested
     if (sendEmail) {
-      // TODO: Implement email sending via SendGrid, Resend, or another service
-      console.log('Email invite would be sent to:', email);
-      console.log('Invite link:', inviteLink);
+      try {
+        // Use Appwrite Functions to send email
+        await fetch('https://nyc.cloud.appwrite.io/v1/functions/email-invite/executions', {
+          method: 'POST',
+          headers: {
+            'X-Appwrite-Project': 'college-football-fantasy-app',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            leagueName: league.name,
+            inviteLink: inviteLink,
+            inviterName: user.name || user.email,
+            expiresAt: expiresAt.toISOString()
+          })
+        });
+      } catch (emailError) {
+        console.error('Failed to send email:', emailError);
+        // Don't fail the request if email fails
+      }
     }
-
+    
     return NextResponse.json({
       success: true,
-      invite: {
-        id: invite.$id,
-        inviteToken,
-        inviteLink,
-        expiresAt: invite.expiresAt
-      },
-      league: {
-        id: league.$id,
-        name: league.name,
-        inviteCode: league.inviteCode
-      }
+      inviteToken: inviteToken,
+      inviteLink: inviteLink,
+      expiresAt: expiresAt.toISOString()
     });
-
+    
   } catch (error: any) {
-    console.error('Create invite error:', error);
+    console.error('POST invite error:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to create invite' },
       { status: 500 }
