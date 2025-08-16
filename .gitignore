@@ -17,9 +17,12 @@
 *.pem
 *.tsbuildinfo
 .DS_Store
+# Environment files (keep .env.example for reference)
 .env
-.env*
-.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .idea/
 .pnp.*
 .pnpm-debug.log*
