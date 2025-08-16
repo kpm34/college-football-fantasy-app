@@ -15,9 +15,9 @@
 
 ### **AI Development Tools**
 ```bash
-"use runway" → AI video generation: /lib/runway.ts, API: /api/runway/create
+"use runway" → AI video generation: /lib/runway.ts (app), toolbox client: toolbox/packages/clients/src/runway.ts, API: /api/runway/create
 "use openai" → Direct OpenAI client: /lib/openai.ts (text, images, embeddings)  
-"use meshy" → 3D model generation: /vendor/awwwards-rig/src/lib/meshy.ts, API: /api/meshy/jobs
+"use meshy" → 3D model generation: /vendor/awwwards-rig/src/lib/meshy.ts (app), toolbox client: toolbox/packages/clients/src/meshy.ts, API: /api/meshy/jobs
 "use ffmpeg" → Local video processing: scripts/ffmpeg-helpers.js (requires FFmpeg installed)
 "use claude" → Claude API integration: /lib/claude.ts, CLI: scripts/claude-cli.js
 "check ai jobs" → Job polling status: /api/cron/poll-jobs, types: /types/jobs.ts
@@ -26,6 +26,7 @@
 ### **Development Tools**
 ```bash
 "use figma" → Design sync: scripts/figma-sync.js, lib/figma.ts
+"video workflow" → Complete video production: scripts/video-workflow.js
 "run tests" → npm run typecheck, npm run lint, npx playwright test
 "deploy" → vercel --prod, vercel env pull for env vars
 "git operations" → gh pr create, gh issue list, standard git workflow
@@ -46,12 +47,12 @@
   - Classes: `OpenAIChat` for conversations
   
 - ✅ **Runway AI** - Video generation
-  - Library: `/lib/runway.ts`
+  - Libraries: `/lib/runway.ts` (app), `toolbox/packages/clients/src/runway.ts` (global)
   - API Route: `/api/runway/create`
   - Models: gen3, gen2
   
 - ✅ **Meshy AI** - 3D model generation
-  - Library: `/vendor/awwwards-rig/src/lib/meshy.ts`
+  - Libraries: `/vendor/awwwards-rig/src/lib/meshy.ts` (app), `toolbox/packages/clients/src/meshy.ts` (global)
   - API Route: `/api/meshy/jobs`
   - Output: GLB files
 
@@ -71,11 +72,21 @@
 - ✅ **npm-check-updates** (`ncu`) - Dependency updates
 
 ### **Design & Media Tools**
+- ✅ **Complete Video Production Pipeline** - Professional video editing workflows
+  - Main Tool: `/scripts/video-workflow.js`
+  - Capabilities: Highlight reels, transitions, music mixing, social media formats
+  - Features: 10 transition types, text animations, batch processing
+  
 - ✅ **Figma Integration** - Complete design-to-code pipeline
   - Library: `/lib/figma.ts`
   - Sync Tool: `/scripts/figma-sync.js`
   - Config: `/figma.config.json`
   - Code Connect: Component linking
+  
+- ✅ **Media Processing Suite**
+  - FFmpeg: Advanced video/audio processing
+  - SoX: Audio effects and transitions  
+  - Blender: 3D animation and video editing
   
 - ✅ **3D Graphics** - Three.js, React Three Fiber, Spline
   - Spline Constants: `/lib/spline-constants.ts`
@@ -216,9 +227,9 @@ ANTHROPIC_API_KEY=[configured]
 ### **AI Tools (Optional)**
 ```bash
 # AI Development Tools
-RUNWAY_API_KEY=your-runway-key-here
+RUNWAY_API_KEY=[configured]
 OPENAI_API_KEY=your-openai-key-here
-MESHY_API_KEY=your-meshy-key-here
+MESHY_API_KEY=[configured]
 CRON_SECRET=secure-cron-secret
 
 # Design Tools
@@ -236,8 +247,8 @@ BRAVE_API_KEY=your-brave-api-key-here
 college-football-fantasy-app/
 ├── app/                      # Next.js App Router
 │   ├── api/                 # API routes
-│   │   ├── runway/create/   # Runway video generation
-│   │   ├── meshy/jobs/      # Meshy 3D generation
+│   │   ├── runway/create/   # Runway video generation (toolbox client also available)
+│   │   ├── meshy/jobs/      # Meshy 3D generation (toolbox client also available)
 │   │   ├── cron/poll-jobs/  # Job status polling
 │   │   ├── claude/          # Claude API
 │   │   └── [others]/        # Other API routes

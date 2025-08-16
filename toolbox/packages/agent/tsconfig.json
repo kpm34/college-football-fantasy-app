@@ -1,0 +1,11 @@
+// <toolbox:BEGIN toolbox/packages/agent/tsconfig.json v2>
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "composite": true
+  },
+  "include": ["src/**/*" ]
+}
+// <toolbox:END toolbox/packages/agent/tsconfig.json v2>
