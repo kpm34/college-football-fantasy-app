@@ -92,14 +92,10 @@ Generated to summarize overlapping pages, APIs, services, and types in the repos
 
 ## API Routes
 
-### Draftable Players Endpoints (2)
+### Draftable Players Endpoint (consolidated)
 - **Paths**:
-  - `app/api/players/draftable/route.ts`
-  - `app/api/draft/players/route.ts`
-- **Similarities**: Return draftable player lists; filters; mock/sample fallbacks.
-- **Differences**:
-  - `/players/draftable`: Uses `getDraftablePlayers()` from `lib/appwrite-server.ts` (eligibleForWeek, fantasyPoints), returns ESPN/CFBD-like fields with nested `position` object; accepts `week`.
-  - `/draft/players`: Queries `college_players` via `node-appwrite`; computes projections + ADP on the fly; defaults to Power 4; different field names/shape.
+  - `app/api/draft/players/route.ts` (canonical)
+- **Status**: Legacy `app/api/players/draftable/route.ts` removed. All UIs should call `/api/draft/players`.
 
 ### Conference Endpoints (4 similar) ✅ Consolidated
 - **Paths**:
@@ -128,13 +124,11 @@ Generated to summarize overlapping pages, APIs, services, and types in the repos
 - **Differences**:
   - Mix of direct REST calls with cookie plumbing vs SDK elsewhere; missing `/api/auth/proxy` referenced by the browser script.
 
-### Projections Endpoint vs Services
+### Projections (consolidated)
 - **Paths**:
   - Endpoint: `app/api/projections/route.ts`
-  - Services: `lib/services/cfb-projections.service.ts`, `lib/services/projections.service.ts`
-- **Similarities**: Provide player projections by conference/position.
-- **Differences**:
-  - Endpoint uses `CFBProjectionsService` (CFBD/ESPN); some UIs use `ProjectionsService` (Appwrite `PLAYER_PROJECTIONS`), producing different shapes.
+  - Service: `lib/services/projections.service.ts` (canonical)
+- **Status**: `lib/services/cfb-projections.service.ts` deleted. All projection logic consolidated, with model inputs (depth, pace, pass/rush, ratings, ADP).
 
 ## Services and Config
 
