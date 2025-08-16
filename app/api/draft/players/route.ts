@@ -276,13 +276,7 @@ export async function GET(request: NextRequest) {
           if (playerDepthInfo?.pos_rank) {
             const multiplier = depthMultiplier(position, playerDepthInfo.pos_rank);
             fantasyPoints = Math.round(fantasyPoints * multiplier);
-          } else {
-            // If the player is not in the position-specific depth chart, assume non-starter/redshirt
-            fantasyPoints = 0;
           }
-        } else {
-          // No depth info for this player/position -> zero out
-          fantasyPoints = 0;
         }
       }
       

@@ -420,8 +420,9 @@ export class ProjectionsService {
       // Depth multiplier from model inputs
       const key = `${(`${p.first_name || ''} ${p.last_name || p.name || ''}`).trim().toLowerCase()}|${p.position}`;
       const depthInfo = modelInputs?.depthIndex.get(key);
-      // If missing from position-specific depth chart, assume non-starter/redshirt: multiplier 0
-      const depthMult = depthInfo ? this.depthMultiplier(p.position, depthInfo.posRank) : 0;
+      // If depth chart missing, do NOT suppress projection. Treat as unknown starter status
+      // and rely on other inputs (ratings, pace, usage). Use neutral multiplier of 1.0.
+      const depthMult = depthInfo ? this.depthMultiplier(p.position, depthInfo.posRank) : 1.0;
 
       switch (p.position) {
         case 'QB': {
@@ -498,7 +499,8 @@ export class ProjectionsService {
           receivingTDs: statline.receivingTDs || undefined,
           receptions: statline.receptions || undefined,
           fantasyPoints,
-          confidence: 70,
+          // Lower confidence when depth is unknown
+          confidence: depthInfo ? 70 : 55,
           floor: Math.round(fantasyPoints * 0.7),
           ceiling: Math.round(fantasyPoints * 1.4),
           consistency: 0.6,
