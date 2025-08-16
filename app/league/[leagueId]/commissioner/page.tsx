@@ -24,10 +24,16 @@ interface ScoringRules {
   receivingTouchdowns: number;
   
   // Kicking
+  // Back-compat generic fields
   fieldGoalMade: number;
   fieldGoalMissed: number;
   extraPointMade: number;
   extraPointMissed: number;
+
+  // Distance-based field goals (new)
+  fieldGoal_0_39: number;
+  fieldGoal_40_49: number;
+  fieldGoal_50_plus: number;
 }
 
 interface League {
@@ -100,6 +106,9 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
     fieldGoalMissed: -1,
     extraPointMade: 1,
     extraPointMissed: -1,
+    fieldGoal_0_39: 3,
+    fieldGoal_40_49: 4,
+    fieldGoal_50_plus: 5,
   });
 
   useEffect(() => {
@@ -155,7 +164,20 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       if (league.scoringRules) {
         try {
           const parsed = JSON.parse(league.scoringRules);
-          setScoringRules(prev => ({ ...prev, ...parsed }));
+          setScoringRules(prev => {
+            const merged = { ...prev, ...parsed } as ScoringRules;
+            // Backward compatibility: if old generic FG is set but no distance fields provided,
+            // use generic value for 0-39 and keep sensible defaults for longer distances.
+            if (
+              parsed.fieldGoalMade !== undefined &&
+              parsed.fieldGoal_0_39 === undefined &&
+              parsed.fieldGoal_40_49 === undefined &&
+              parsed.fieldGoal_50_plus === undefined
+            ) {
+              merged.fieldGoal_0_39 = Number(parsed.fieldGoalMade) || prev.fieldGoal_0_39;
+            }
+            return merged;
+          });
         } catch (e) {
           console.error('Failed to parse scoring rules:', e);
         }
@@ -286,8 +308,16 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
     );
   }
 
+  // Commissioner page palette (provided)
+  const palette = {
+    brown: '#6b321c',
+    steel: '#7399ad',
+    gold: '#c5aa12',
+    charcoal: '#332c1f'
+  } as const;
+
   return (
-    <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main }}>
+    <div className="min-h-screen" style={{ background: `linear-gradient(135deg, ${palette.brown} 0%, ${palette.steel} 38%, ${palette.gold} 72%, ${palette.charcoal} 100%)` }}>
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -519,6 +549,81 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                       type="number"
                       value={scoringRules.receivingTouchdowns}
                       onChange={(e) => setScoringRules({...scoringRules, receivingTouchdowns: parseInt(e.target.value)})}
+                      className="w-full px-3 py-1.5 rounded text-sm"
+                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Kicking */}
+              <div>
+                <h3 className="font-semibold mb-3" style={{ color: leagueColors.text.primary }}>Kicking</h3>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>FG 0-39 yards</label>
+                    <input
+                      type="number"
+                      value={scoringRules.fieldGoal_0_39}
+                      onChange={(e) => setScoringRules({ ...scoringRules, fieldGoal_0_39: parseFloat(e.target.value) })}
+                      step="0.5"
+                      className="w-full px-3 py-1.5 rounded text-sm"
+                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>FG 40-49 yards</label>
+                    <input
+                      type="number"
+                      value={scoringRules.fieldGoal_40_49}
+                      onChange={(e) => setScoringRules({ ...scoringRules, fieldGoal_40_49: parseFloat(e.target.value) })}
+                      step="0.5"
+                      className="w-full px-3 py-1.5 rounded text-sm"
+                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>FG 50+ yards</label>
+                    <input
+                      type="number"
+                      value={scoringRules.fieldGoal_50_plus}
+                      onChange={(e) => setScoringRules({ ...scoringRules, fieldGoal_50_plus: parseFloat(e.target.value) })}
+                      step="0.5"
+                      className="w-full px-3 py-1.5 rounded text-sm"
+                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>XP Made</label>
+                      <input
+                        type="number"
+                        value={scoringRules.extraPointMade}
+                        onChange={(e) => setScoringRules({ ...scoringRules, extraPointMade: parseFloat(e.target.value) })}
+                        step="0.5"
+                        className="w-full px-3 py-1.5 rounded text-sm"
+                        style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>XP Missed</label>
+                      <input
+                        type="number"
+                        value={scoringRules.extraPointMissed}
+                        onChange={(e) => setScoringRules({ ...scoringRules, extraPointMissed: parseFloat(e.target.value) })}
+                        step="0.5"
+                        className="w-full px-3 py-1.5 rounded text-sm"
+                        style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>FG Missed (any distance)</label>
+                    <input
+                      type="number"
+                      value={scoringRules.fieldGoalMissed}
+                      onChange={(e) => setScoringRules({ ...scoringRules, fieldGoalMissed: parseFloat(e.target.value) })}
+                      step="0.5"
                       className="w-full px-3 py-1.5 rounded text-sm"
                       style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
                     />
