@@ -63,6 +63,14 @@ APPWRITE_API_KEY=[server-side only]
 # APIs
 CFBD_API_KEY=[configured]
 AI_GATEWAY_API_KEY=[configured]
+ANTHROPIC_API_KEY=[configured]
+
+# AI Development Tools (Optional)
+OPENAI_API_KEY=[set as needed]
+RUNWAY_API_KEY=[set as needed]
+MESHY_API_KEY=[set as needed]
+FIGMA_ACCESS_TOKEN=[set as needed]
+CRON_SECRET=[required for job polling]
 
 # Collections (all prefixed with NEXT_PUBLIC_APPWRITE_COLLECTION_)
 - PLAYERS=college_players
@@ -221,6 +229,77 @@ vercel logs --follow
 - [Appwrite Console](https://cloud.appwrite.io)
 - [CFBD API Docs](https://collegefootballdata.com)
 - [Next.js 15 Docs](https://nextjs.org/docs)
+
+## 🧭 AI Session Bootstrap (Claude Code + Cursor)
+- Always load these at session start so tools and capabilities are known:
+  - `CLAUDE_TOOLBOX.md` – Complete toolbox and dev environment reference
+  - `CLAUDE.md` – Project context and architecture
+  - `tools/capabilities.json` – Machine-readable capabilities (stack, env, APIs, MCP)
+  - `docs/MCP_CONFIG.json` – Comprehensive MCP server configuration
+  - `TOOLING_SUMMARY.md` – MCP/Appwrite tooling setup summary
+- If MCP is not active, prompt the user to configure `~/.cursor/mcp.json` with Appwrite and Vercel servers (see sections below).
+
+## 🧰 MCP & AI Tooling
+- Configure MCP in `~/.cursor/mcp.json` so Cursor/Claude can operate our stack:
+  - Appwrite server (users/projects) via `uvx mcp-server-appwrite --users`
+  - Vercel CLI server (`VERCEL_TOKEN` required)
+- Keep this file and `CLAUDE.md`, `DATA_FLOW.md`, `docs/API_ROUTES.md`, and `docs/PROJECT_MAP.md` in sync so every AI session knows the system model.
+
+## 🔌 SDK vs API vs CLI vs MCP (Usage)
+- SDK: Use server-side (Node runtime) for type-safe Appwrite operations inside API routes/repos. Avoid in Edge.
+- API: Use raw HTTP `fetch` for Edge functions or minimal footprint; handle auth manually (Appwrite cookie header).
+- CLI: Use for deploys, env pulls, logs, and automation in CI.
+- MCP: Dev-time automation inside Cursor (schema tasks, ops, inspections), not for app runtime.
+
+## 🌐 Domains & Deployment
+- Primary prod alias: `cfbfantasy.app` (always point latest prod to this)
+- Secondary: `collegefootballfantasy.app` (only as needed)
+- Common commands:
+  - `vercel pull --environment=production`
+  - `vercel --prod --force` (cache-busting deploy)
+  - `vercel alias set <deployment> cfbfantasy.app`
+
+## 🗄️ Data Collections (Extended)
+- `projections_yearly`, `projections_weekly`, `model_inputs`, `user_custom_projections`
+- Ensure env has: `NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_PROJECTIONS`, `NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_WEEKLY`, `NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_YEARLY`, `NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_INPUTS`, `NEXT_PUBLIC_APPWRITE_COLLECTION_USER_CUSTOM_PROJECTIONS`
+
+## 🔐 Env & Runtime Notes
+- Never expose server keys in client. Use API routes for server work.
+- Edge vs Node:
+  - Use Node runtime for Appwrite SDK usage
+  - Use Edge/runtime `fetch` for light endpoints without SDK
+
+## 🔗 Key API Routes (Core)
+- `POST /api/leagues/create` → Creates league; normalizes UI fields:
+  - Maps `leagueName` → `name`
+  - Maps `gameMode` + `selectedConference` → `'power4'|'sec'|'acc'|'big12'|'bigten'`
+  - Coerces numbers; joins commissioner automatically
+- `POST /api/leagues/join` → Validates capacity, membership, and password/invite; creates roster; updates league count
+- `GET /api/leagues/search` → Returns `$id`, `id`, `teams`, `type`, `hasPassword` for UI compatibility; excludes full leagues unless `includeClosed=true`
+- `GET /api/leagues/invite` → Validates token and returns league, or generates invite links
+
+## 🔁 Join & Invite Flow (Important)
+- Join page expects league objects with `$id` and `type` (`private` when `password` present)
+- Search API must return `$id` and `hasPassword` so UI opens password modal
+- Invite links support `token` and optional `league` param; token-only resolves league via API
+
+## 🧪 Operational Checklists
+- Bootstrap: `vercel pull` → `npm run typecheck` → `npm run lint` → `curl /api/health`
+- Cache clear: `vercel --prod --force`
+- Appwrite verify: `curl https://nyc.cloud.appwrite.io/v1/health`
+
+## 🧱 Architecture Notes
+- Repository pattern with Vercel KV caching and Appwrite persistence
+- Real-time: Appwrite Realtime + Functions; draft timer/auto-pick in background job
+- Edge Functions for low-latency search; server functions for DB writes
+
+## 🎯 Product Priorities (Live)
+1. Real-time draft (snake + auction) with timer and auto-pick
+2. Live scoring via ESPN/CFBD + Appwrite Functions
+3. League management UX polish (commissioner tools, invites)
+4. Projections system and data inputs consolidation
+5. Performance & 3D optimization
+6. Email notifications and social features
 
 ---
 **Remember**: This is a production app. Code quality, performance, and user experience are paramount. Always test thoroughly before deploying.

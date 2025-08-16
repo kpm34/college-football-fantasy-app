@@ -12,6 +12,10 @@
     {
       "path": "/api/cron/weekly-scoring",
       "schedule": "0 3 * * 1"
+    },
+    {
+      "path": "/api/cron/poll-jobs",
+      "schedule": "*/5 * * * *"
     }
   ]
 }

@@ -65,5 +65,43 @@
         "@modelcontextprotocol/server-puppeteer"
       ]
     }
+  },
+  "aiToolbox": {
+    "description": "AI Development Toolbox - Custom tools for development assistance",
+    "runway": {
+      "available": true,
+      "description": "Runway AI video generation",
+      "wrapper": "/lib/runway.ts",
+      "apiRoute": "/api/runway/create",
+      "envRequired": "RUNWAY_API_KEY"
+    },
+    "openai": {
+      "available": true,
+      "description": "OpenAI direct client (separate from Vercel AI SDK)",
+      "wrapper": "/lib/openai.ts", 
+      "capabilities": ["text-generation", "image-analysis", "image-generation", "embeddings", "moderation"],
+      "envRequired": "OPENAI_API_KEY"
+    },
+    "meshy": {
+      "available": true,
+      "description": "Meshy AI 3D model generation",
+      "wrapper": "/vendor/awwwards-rig/src/lib/meshy.ts",
+      "apiRoute": "/api/meshy/jobs",
+      "envRequired": "MESHY_API_KEY"
+    },
+    "ffmpeg": {
+      "available": true,
+      "description": "Local FFmpeg video processing utilities",
+      "script": "/scripts/ffmpeg-helpers.js",
+      "localOnly": true,
+      "requires": "FFmpeg installed locally"
+    },
+    "jobPolling": {
+      "available": true,
+      "description": "Automated job status polling for async AI operations",
+      "cronRoute": "/api/cron/poll-jobs",
+      "schedule": "*/5 * * * *",
+      "types": "/types/jobs.ts"
+    }
   }
 }
