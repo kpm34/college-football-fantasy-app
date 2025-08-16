@@ -1,7 +1,104 @@
 {
-    "projectId": "college-football-fantasy-app",
-    "projectName": "College Football Fantasy App",
-    "settings": {
-        "endpoint": "https://nyc.cloud.appwrite.io/v1"
+  "projectId": "college-football-fantasy-app",
+  "projectName": "College Football Fantasy App",
+  "endpoint": "https://nyc.cloud.appwrite.io/v1",
+  "functions": {},
+  "collections": [
+    {
+      "$id": "games",
+      "name": "Games",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "teams",
+      "name": "Teams",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "leagues",
+      "name": "Leagues",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "college_players",
+      "name": "College Players",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "player_stats",
+      "name": "Player Stats",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "rankings",
+      "name": "Rankings",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "rosters",
+      "name": "Rosters",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "lineups",
+      "name": "Lineups",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "auctions",
+      "name": "Auctions",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "bids",
+      "name": "Bids",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "users",
+      "name": "Users",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
+    },
+    {
+      "$id": "activity_log",
+      "name": "Activity Log",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [],
+      "indexes": []
     }
+  ]
 }

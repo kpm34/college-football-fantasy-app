@@ -75,13 +75,21 @@ export async function GET(request: NextRequest) {
           const currentTeams = league.currentTeams ?? league.members?.length ?? 0;
           const isFull = currentTeams >= maxTeams;
           const computedStatus = isFull ? 'closed' : 'open';
+          const hasPassword = Boolean(league.password);
+          const isPrivate = (league.isPublic === false) || hasPassword;
           return {
+            // Provide both id styles for compatibility with client code
             id: league.$id,
+            $id: league.$id,
             name: league.name,
             mode: league.mode,
             conf: league.conf,
             maxTeams,
             currentTeams,
+            // Common aliases used by UI
+            teams: currentTeams,
+            type: isPrivate ? 'private' : 'public',
+            hasPassword,
             status: computedStatus,
             commissionerId: league.commissioner ?? league.commissioner_id,
             createdAt: league.created_at ?? league.$createdAt,
@@ -120,18 +128,28 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        leagues: filtered.slice(0, limit).map((league: any) => ({
-          id: league.$id,
-          name: league.name,
-          mode: league.mode,
-          conf: league.conf,
-          maxTeams: league.maxTeams ?? league.max_teams ?? 12,
-          currentTeams: league.currentTeams ?? league.members?.length ?? 0,
-          status: (league.currentTeams ?? league.members?.length ?? 0) >= (league.maxTeams ?? league.max_teams ?? 12) ? 'closed' : 'open',
-          commissionerId: league.commissioner ?? league.commissioner_id,
-          createdAt: league.created_at ?? league.$createdAt,
-          updatedAt: league.updated_at ?? league.$updatedAt
-        })),
+        leagues: filtered.slice(0, limit).map((league: any) => {
+          const maxTeams = league.maxTeams ?? league.max_teams ?? 12;
+          const currentTeams = league.currentTeams ?? league.members?.length ?? 0;
+          const hasPassword = Boolean(league.password);
+          const isPrivate = (league.isPublic === false) || hasPassword;
+          return {
+            id: league.$id,
+            $id: league.$id,
+            name: league.name,
+            mode: league.mode,
+            conf: league.conf,
+            maxTeams,
+            currentTeams,
+            teams: currentTeams,
+            type: isPrivate ? 'private' : 'public',
+            hasPassword,
+            status: currentTeams >= maxTeams ? 'closed' : 'open',
+            commissionerId: league.commissioner ?? league.commissioner_id,
+            createdAt: league.created_at ?? league.$createdAt,
+            updatedAt: league.updated_at ?? league.$updatedAt
+          };
+        }),
         total: filtered.length
       });
     }
