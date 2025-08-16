@@ -202,15 +202,14 @@ const handler = createMcpHandler(
             aiGateway: !!process.env.AI_GATEWAY_API_KEY,
           },
           pages: [
-            '/',
-            '/conference-showcase',
-            '/conference-showcase-2',
-            '/league/create',
-            '/league/join',
-            '/draft/[leagueId]',
-            '/auction/[leagueId]',
-            '/scoreboard',
-            '/standings',
+          '/',
+          '/conference-showcase',
+          '/league/create',
+          '/league/join',
+          '/draft/[leagueId]',
+          '/auction/[leagueId]',
+          '/scoreboard',
+          '/standings',
           ]
         };
         

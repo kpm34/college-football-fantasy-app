@@ -87,7 +87,15 @@ export default function LockerRoomPage({ params, searchParams }: {
   const [isCommissioner, setIsCommissioner] = useState(false);
   const [canEdit, setCanEdit] = useState(true);
   
-
+  // Dashboard color palette
+  const palette = {
+    maroon: '#3A1220',
+    orange: '#E89A5C',
+    periwinkle: '#8091BB',
+    tan: '#D9BBA4',
+    gold: '#DAA520',
+    bronze: '#B8860B',
+  } as const;
   
   // UI state
   const [isEditingName, setIsEditingName] = useState(false);
@@ -423,7 +431,7 @@ export default function LockerRoomPage({ params, searchParams }: {
 
   if (loading || authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${palette.maroon} 0%, ${palette.orange} 35%, ${palette.periwinkle} 65%, ${palette.tan} 100%)` }}>
         <div className="text-xl text-white">Loading...</div>
       </div>
     );
@@ -432,11 +440,10 @@ export default function LockerRoomPage({ params, searchParams }: {
   // Show error state if there's an error message
   if (errorMessage) {
     return (
-      <div className="min-h-screen relative" style={{ background: 'var(--color-bg)' }}>
-        <div className="aurora-bg" />
+      <div className="min-h-screen relative" style={{ background: `linear-gradient(135deg, ${palette.maroon} 0%, ${palette.orange} 35%, ${palette.periwinkle} 65%, ${palette.tan} 100%)` }}>
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-2xl mx-auto">
-            <div className="surface-card rounded-2xl p-8">
+            <div className="bg-[#F5F5DC]/10 backdrop-blur-sm rounded-2xl p-8 border border-[#3A1220]/20">
               <div className="flex items-center gap-4 mb-4">
                 <ExclamationTriangleIcon className="h-8 w-8 text-red-400" />
                 <h2 className="text-2xl font-bold text-white">Error Loading Locker Room</h2>
@@ -445,7 +452,7 @@ export default function LockerRoomPage({ params, searchParams }: {
               <div className="flex gap-4">
                 <Link
                   href={`/league/${leagueId}`}
-                  className="btn bg-white/10 hover:bg-white/20 text-white"
+                  className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
                 >
                   Back to League Home
                 </Link>
@@ -454,7 +461,7 @@ export default function LockerRoomPage({ params, searchParams }: {
                     setErrorMessage('');
                     loadLeagueAndTeamData();
                   }}
-                  className="btn btn-primary"
+                  className="px-4 py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-[#DAA520] to-[#B8860B] hover:opacity-90"
                 >
                   Try Again
                 </button>
@@ -467,12 +474,11 @@ export default function LockerRoomPage({ params, searchParams }: {
   }
 
   return (
-    <div className="min-h-screen relative" style={{ background: 'var(--color-bg)' }}>
-      <div className="aurora-bg" />
+    <div className="min-h-screen relative" style={{ background: `linear-gradient(135deg, ${palette.maroon} 0%, ${palette.orange} 35%, ${palette.periwinkle} 65%, ${palette.tan} 100%)` }}>
       {/* Gradient background effect */}
       
       {/* Header */}
-      <div className="surface-card border-b border-white/10 relative">
+      <div className="bg-white/10 backdrop-blur-sm border-b border-white/20 relative">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -525,7 +531,8 @@ export default function LockerRoomPage({ params, searchParams }: {
                   </button>
                   <button
                     onClick={handleSaveLineup}
-                    className="px-4 py-2 rounded-lg btn-primary flex items-center gap-2"
+                    className="px-4 py-2 rounded-lg flex items-center gap-2 text-white font-semibold"
+                    style={{ background: `linear-gradient(135deg, ${palette.gold} 0%, ${palette.bronze} 100%)` }}
                   >
                     <CheckCircleIcon className="h-5 w-5" />
                     Save Lineup
@@ -553,7 +560,7 @@ export default function LockerRoomPage({ params, searchParams }: {
       <div className="container mx-auto px-4 py-6 relative">
         <div className="space-y-6">
           {/* Starters */}
-          <div className="surface-card rounded-xl p-6">
+          <div className="bg-[#F5F5DC]/10 backdrop-blur-sm rounded-xl p-6 border border-[#3A1220]/20">
             <h2 className="text-xl font-bold text-white mb-4">Starting Lineup</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -657,7 +664,7 @@ export default function LockerRoomPage({ params, searchParams }: {
           </div>
 
           {/* Bench */}
-          <div className="surface-card rounded-xl p-6">
+          <div className="bg-[#F5F5DC]/10 backdrop-blur-sm rounded-xl p-6 border border-[#3A1220]/20">
             <h2 className="text-xl font-bold text-white mb-4">Bench ({getBenchPlayers().length}/{benchSize})</h2>
             <div className="space-y-2">
               {Array.from({ length: benchSize }).map((_, index) => {
@@ -726,7 +733,7 @@ export default function LockerRoomPage({ params, searchParams }: {
           </div>
 
           {/* Rotowire News */}
-          <div className="surface-card rounded-xl p-6">
+          <div className="bg-[#F5F5DC]/10 backdrop-blur-sm rounded-xl p-6 border border-[#3A1220]/20">
             <RotowireNews 
               team={team?.name} 
               compact={false} 
