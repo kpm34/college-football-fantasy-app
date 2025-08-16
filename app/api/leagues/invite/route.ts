@@ -59,6 +59,54 @@ export async function GET(request: NextRequest) {
         }
       });
     }
+
+    // Support token-only validation by resolving the leagueId from the invite record
+    if (token && !leagueId) {
+      const invites = await databases.listDocuments(
+        DATABASE_ID,
+        'activity_log',
+        [
+          Query.equal('inviteToken', token),
+          Query.equal('status', 'pending')
+        ]
+      );
+
+      if (invites.documents.length === 0) {
+        return NextResponse.json({ error: 'Invalid or expired invite' }, { status: 404 });
+      }
+
+      const invite: any = invites.documents[0];
+      const resolvedLeagueId: string | undefined = invite.leagueId;
+
+      if (!resolvedLeagueId) {
+        return NextResponse.json({ error: 'Invalid invite: league not found' }, { status: 400 });
+      }
+
+      if (new Date(invite.expiresAt) < new Date()) {
+        return NextResponse.json({ error: 'Invite has expired' }, { status: 410 });
+      }
+
+      const league = await databases.getDocument(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUES,
+        resolvedLeagueId
+      );
+
+      return NextResponse.json({
+        valid: true,
+        league: {
+          id: league.$id,
+          name: league.name,
+          commissioner: league.commissioner,
+          maxTeams: league.maxTeams,
+          currentTeams: league.currentTeams || league.members?.length || 0
+        },
+        invite: {
+          email: invite.email,
+          expiresAt: invite.expiresAt
+        }
+      });
+    }
     
     // Otherwise, generate invite links for a league
     if (!leagueId) {

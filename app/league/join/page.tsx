@@ -138,6 +138,49 @@ function JoinLeagueContent() {
       setInviteToken(token);
       setInviteLeagueId(leagueId);
       checkInviteToken(token, leagueId);
+    } else if (token && !leagueId) {
+      // Token-only link: resolve league via API
+      if (!authUser && !authLoading) {
+        const redirectUrl = encodeURIComponent(`/league/join?token=${token}`);
+        router.push(`/login?redirect=${redirectUrl}`);
+        return;
+      }
+      setInviteToken(token);
+      setInviteLeagueId(null);
+      setCheckingInvite(true);
+      (async () => {
+        try {
+          const response = await fetch(`/api/leagues/invite?token=${token}`);
+          const data = await response.json();
+          if (response.ok && data.valid) {
+            const normalized: League = {
+              $id: data.league.id,
+              name: data.league.name,
+              owner: data.league.commissioner || 'Commissioner',
+              teams: data.league.currentTeams || 0,
+              maxTeams: data.league.maxTeams || 12,
+              draftType: 'snake',
+              entryFee: 0,
+              draftDate: new Date().toISOString(),
+              draftTime: '19:00',
+              description: '',
+              type: 'private',
+              status: 'draft',
+              createdAt: new Date().toISOString(),
+            };
+            setSelectedLeague(normalized);
+            setInviteLeagueId(data.league.id);
+            setShowPasswordModal(true);
+          } else {
+            alert(data.error || 'Invalid or expired invite link');
+          }
+        } catch (e) {
+          console.error('Token-only invite resolution failed', e);
+          alert('Failed to validate invite link');
+        } finally {
+          setCheckingInvite(false);
+        }
+      })();
     } else if (code && leagueId) {
       if (!authUser && !authLoading) {
         const redirectUrl = encodeURIComponent(`/league/join?code=${code}&league=${leagueId}`);
@@ -199,12 +242,13 @@ function JoinLeagueContent() {
           const league: League = {
             $id: leagueDoc.$id || leagueDoc.id,
             name: leagueDoc.name,
+            owner: leagueDoc.commissioner || leagueDoc.commissionerId || 'Commissioner',
             teams: leagueDoc.currentTeams || leagueDoc.members?.length || 0,
             maxTeams: leagueDoc.maxTeams || 12,
             draftType: leagueDoc.draftType || 'snake',
-            scoringType: leagueDoc.scoringType || 'PPR',
-            buyIn: leagueDoc.buyIn || 0,
-            prize: leagueDoc.prize || 0,
+            entryFee: typeof leagueDoc.entryFee === 'number' ? leagueDoc.entryFee : 0,
+            // scoringType omitted; not part of League interface
+            // buyIn/prize omitted; not part of League interface
             draftDate: leagueDoc.draftDate || '',
             draftTime: leagueDoc.draftTime || '',
             description: leagueDoc.description || '',
