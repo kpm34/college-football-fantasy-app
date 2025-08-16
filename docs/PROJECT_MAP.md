@@ -61,6 +61,10 @@ This document is a high-signal map of the codebase: where things live, what they
 - `vendor/`
   - External subprojects (e.g., `awwwards-rig` 3D mascot tooling).
 
+- `docs/`
+  - Canonical documentation. Start at `docs/README.md`.
+  - Memory: `docs/PROJECT_CANONICAL_MEMORY.md` (archived plans in `docs/archive/`).
+
 ---
 
 ## Core Configuration and Collections
@@ -141,15 +145,20 @@ export async function GET(request: NextRequest) {
 - Draft
   - UI: `app/draft/[leagueId]/page.tsx`, `components/draft/*`
   - Mock Draft: `app/draft/mock/page.tsx`
+  - Note: Legacy duplicate route `app/draft/[leagueId]/draft-room/page.tsx` was removed.
 
 - Auction
   - UI: `app/auction/[leagueId]/page.tsx`, `components/auction/*`
 
 - League
   - Create/Join/Details: `app/league/*`, `components/league/*`
+  - Locker Room: `app/league/[leagueId]/locker-room/page.tsx` (light gradient theme; team roster pages removed)
 
 - Scoreboard/Standings
-  - `app/scoreboard/page.tsx`, `app/standings/page.tsx`
+  - Global CFB Scoreboard: `app/scoreboard/page.tsx`
+  - Global Standings: `app/standings/page.tsx`
+  - League Fantasy Scoreboard: `app/league/[leagueId]/scoreboard/page.tsx`
+  - League Standings: `app/league/[leagueId]/standings/page.tsx`
 
 - Onboarding/Auth
   - `app/login/page.tsx`, `app/signup/page.tsx`, `app/invite/[leagueId]/*`
@@ -269,6 +278,7 @@ flowchart LR
 - Draft UI: `components/draft/*`, `app/draft/[leagueId]/page.tsx`
 - Auction UI: `components/auction/*`, `app/auction/[leagueId]/page.tsx`
 - Players data (Power 4/draftable): `app/api/draft/players/route.ts`
+- League locker room UI theme is aligned with create league (light gradient); team roster routes were removed to avoid duplication.
 - Projections service: `lib/services/projections.service.ts`
 - Projections API: `app/api/projections/route.ts`
 - Games API client: `lib/api/games.ts`
@@ -289,6 +299,7 @@ flowchart LR
   - Dev: `npm run dev` (Next, port 3001)
   - Build: `npm run build` / `npm run start`
   - Lint/Types: `npm run lint` / `npm run typecheck`
+  - Schema Sync: `pnpm schema:*` scripts; CI checks drift; runtime schema guard
   - Sync Data: `npm run sync-data` (see `lib/data-sync/*`)
   - Deployment: `vercel`, `vercel --prod`
 
@@ -304,5 +315,10 @@ flowchart LR
 ---
 
 Maintainer: Keep this file updated when adding new top-level features or data flows.
+
+### Recent Structural Changes
+- Removed routes: `/conference-showcase-2`, `/draft/[leagueId]/draft-room`.
+- Consolidated docs into `docs/PROJECT_CANONICAL_MEMORY.md`; archived legacy plans under `docs/archive/`.
+- Locker Room styling aligned to light gradient theme; redundant team roster pages removed.
 
 
