@@ -32,9 +32,9 @@ export default function CreateLeaguePage() {
   const [showAnimation, setShowAnimation] = useState<number>(0);
   const [formData, setFormData] = useState<FormData>({
     leagueName: '',
-    gameMode: 'CONFERENCE',
-    selectedConference: 'big_ten',
-    scoringType: 'PPR',
+    gameMode: '' as any, // No default selection
+    selectedConference: '',
+    scoringType: '' as any, // No default selection
     maxTeams: 12,
     seasonStartWeek: 1,
     draftDate: '',
@@ -140,24 +140,59 @@ export default function CreateLeaguePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('🏈 Creating league with data:', formData);
+    
     try {
       setIsCreating(true);
+      
+      // Validate required fields
+      if (!formData.leagueName?.trim()) {
+        alert('Please enter a league name');
+        return;
+      }
+      
+      if (!formData.gameMode) {
+        alert('Please select a game mode');
+        return;
+      }
+      
+      if (formData.gameMode === 'CONFERENCE' && !formData.selectedConference) {
+        alert('Please select a conference');
+        return;
+      }
+      
+      if (!formData.scoringType) {
+        alert('Please select a scoring type');
+        return;
+      }
+      
+      const requestData = {
+        ...formData,
+        commissionerId: 'auto', // server resolves user from session
+        season: 2025
+      };
+      
+      console.log('📡 Sending request:', requestData);
+      
       const response = await fetch('/api/leagues/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          commissionerId: 'auto' // server resolves user from session
-        }),
+        body: JSON.stringify(requestData),
       });
 
+      console.log('📨 Response status:', response.status);
+      
       if (!response.ok) {
-        throw new Error('Failed to create league');
+        const errorText = await response.text();
+        console.error('❌ Response error:', errorText);
+        alert(`Failed to create league: ${response.status} - ${errorText}`);
+        return;
       }
 
       const result = await response.json();
+      console.log('✅ Success result:', result);
       
       if (result.success) {
         setCreatedLeague(result.league);
@@ -167,10 +202,12 @@ export default function CreateLeaguePage() {
           router.push(`/league/${result.league.$id || result.league.id}`);
         }, 3000);
       } else {
-        console.error('Error creating league:', result.error);
+        console.error('❌ Server error:', result.error);
+        alert(`Error creating league: ${result.error || 'Unknown error'}`);
       }
     } catch (error) {
-      console.error('Error creating league:', error);
+      console.error('❌ Network error:', error);
+      alert(`Network error creating league: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsCreating(false);
     }
@@ -189,7 +226,7 @@ export default function CreateLeaguePage() {
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white/90 to-white/60 bg-clip-text text-transparent drop-shadow">
             Create Your League
           </h1>
-          <p className="text-xl" style={{ color: '#5C1F30' }}>
+          <p className="text-xl" style={{ color: '#2D0E17' }}>
             Set up your college football fantasy league with unique eligibility rules
           </p>
         </div>
@@ -244,7 +281,7 @@ export default function CreateLeaguePage() {
               <label htmlFor="leagueName" className="block text-2xl font-bold mb-4 text-[#3A1220]">
                 Step 1: Name Your League
               </label>
-              <p className="text-[#5C1F30] mb-6">Choose a unique name that represents your league's identity</p>
+              <p className="text-[#2D0E17] mb-6 font-medium">Choose a unique name that represents your league's identity</p>
               <input
                 type="text"
                 id="leagueName"
@@ -281,16 +318,12 @@ export default function CreateLeaguePage() {
                 <label className="block text-2xl font-bold mb-4 text-[#3A1220]">
                   Step 2: Choose Your Game Mode
                 </label>
-                <p className="text-[#5C1F30] mb-6">Select how player eligibility and roster construction will work</p>
+                <p className="text-[#2D0E17] mb-6 font-medium">Select how player eligibility and roster construction will work</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   
                   {/* Conference Mode */}
                   <div 
-                    className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105 ${
-                      formData.gameMode === 'CONFERENCE' 
-                        ? '' 
-                        : ''
-                    }`}
+                    className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105`}
                     onClick={() => handleGameModeSelect('CONFERENCE')}
                     style={{
                       border: `2px solid ${formData.gameMode === 'CONFERENCE' ? palette.gold : `${palette.maroon}99`}`,
@@ -318,17 +351,13 @@ export default function CreateLeaguePage() {
                           <div className="mt-1">• Simple scoring • No defense</div>
                         </div>
                       </div>
-                      <div className="text-xs text-[#5C1F30]">Perfect for beginners</div>
+                      <div className="text-xs text-[#2D0E17] font-medium">Perfect for beginners</div>
                     </div>
                   </div>
 
                   {/* Power-4 Mode */}
                   <div 
-                    className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105 ${
-                      formData.gameMode === 'POWER4' 
-                        ? '' 
-                        : ''
-                    }`}
+                    className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105`}
                     onClick={() => handleGameModeSelect('POWER4')}
                     style={{
                       border: `2px solid ${formData.gameMode === 'POWER4' ? palette.gold : `${palette.maroon}99`}`,
@@ -356,7 +385,7 @@ export default function CreateLeaguePage() {
                           <div className="mt-1">• 1 TE • 1 K • 1 DEF</div>
                         </div>
                       </div>
-                      <div className="text-xs text-[#5C1F30]">Advanced strategy required</div>
+                      <div className="text-xs text-[#2D0E17] font-medium">Advanced strategy required</div>
                     </div>
                   </div>
                 </div>
@@ -371,7 +400,7 @@ export default function CreateLeaguePage() {
                 <label className="block text-2xl font-bold mb-4 text-[#3A1220]">
                   Step 3: Select Your Conference
                 </label>
-                <p className="text-[#5C1F30] mb-6">Choose which conference your league will draft players from</p>
+                <p className="text-[#2D0E17] mb-6 font-medium">Choose which conference your league will draft players from</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {CONFERENCES.map(conf => (
                     <div
@@ -396,7 +425,7 @@ export default function CreateLeaguePage() {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-[#3A1220]">{conf.teamCount} Teams</span>
-                        <span className="text-sm text-[#5C1F30]">Established powerhouse</span>
+                        <span className="text-sm text-[#2D0E17] font-medium">Established powerhouse</span>
                       </div>
                     </div>
                   ))}
@@ -412,7 +441,7 @@ export default function CreateLeaguePage() {
                 <label className="block text-2xl font-bold mb-4 text-[#3A1220]">
                   Step 4: Choose Scoring System
                 </label>
-                <p className="text-[#5C1F30] mb-6">Select how points are awarded for player actions</p>
+                <p className="text-[#2D0E17] mb-6 font-medium">Select how points are awarded for player actions</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div 
                     className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105`}
@@ -439,7 +468,7 @@ export default function CreateLeaguePage() {
                         +1 point for each catch
                       </p>
                     </div>
-                    <p className="text-xs text-[#5C1F30] mt-3">
+                    <p className="text-xs text-[#2D0E17] font-medium mt-3">
                       Rewards high-volume pass catchers and adds strategy to WR/TE selections
                     </p>
                   </div>
@@ -469,7 +498,7 @@ export default function CreateLeaguePage() {
                         No reception points
                       </p>
                     </div>
-                    <p className="text-xs text-[#5C1F30] mt-3">
+                    <p className="text-xs text-[#2D0E17] font-medium mt-3">
                       Values touchdowns and big plays more, traditional fantasy format
                     </p>
                   </div>
@@ -485,7 +514,7 @@ export default function CreateLeaguePage() {
                 <label className="block text-2xl font-bold mb-4 text-[#3A1220]">
                   Step 5: Final Details
                 </label>
-                <p className="text-[#5C1F30] mb-6">Configure the last few settings for your league</p>
+                <p className="text-[#2D0E17] mb-6 font-medium">Configure the last few settings for your league</p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   
                   {/* Max Teams */}
@@ -506,7 +535,7 @@ export default function CreateLeaguePage() {
                         <option key={num} value={num}>{num} teams</option>
                       ))}
                     </select>
-                    <p className="text-xs text-[#5C1F30] mt-2">Recommended: 10-12 teams</p>
+                    <p className="text-xs text-[#2D0E17] font-medium mt-2">Recommended: 10-12 teams</p>
                   </div>
 
                   {/* Season Start Week */}
@@ -527,7 +556,7 @@ export default function CreateLeaguePage() {
                         <option key={week} value={week}>Week {week}</option>
                       ))}
                     </select>
-                    <p className="text-xs text-[#5C1F30] mt-2">When your season begins</p>
+                    <p className="text-xs text-[#2D0E17] font-medium mt-2">When your season begins</p>
                   </div>
 
                   {/* Draft Date */}
@@ -544,7 +573,7 @@ export default function CreateLeaguePage() {
                       className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
                       style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
                     />
-                    <p className="text-xs text-[#5C1F30] mt-2">Optional - Set later if needed</p>
+                    <p className="text-xs text-[#2D0E17] font-medium mt-2">Optional - Set later if needed</p>
                   </div>
                 </div>
 
@@ -562,7 +591,7 @@ export default function CreateLeaguePage() {
                         onChange={(e) => setFormData(prev => ({ ...prev, isPrivate: e.target.checked }))}
                         className="h-5 w-5"
                       />
-                      <label htmlFor="isPrivate" className="text-sm" style={{ color: '#5C1F30' }}>
+                      <label htmlFor="isPrivate" className="text-sm text-[#2D0E17] font-medium">
                         Require an invite code to join
                       </label>
                     </div>
@@ -581,7 +610,7 @@ export default function CreateLeaguePage() {
                       style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
                       placeholder="Set a simple password for entry (optional)"
                     />
-                    <p className="text-xs mt-2" style={{ color: '#5C1F30' }}>Useful for friends-only leagues.</p>
+                    <p className="text-xs mt-2 text-[#2D0E17] font-medium">Useful for friends-only leagues.</p>
                   </div>
                 </div>
 
@@ -601,7 +630,7 @@ export default function CreateLeaguePage() {
                       className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
                       style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
                     />
-                    <p className="text-xs mt-2" style={{ color: '#5C1F30' }}>Max 2 in Conference mode.</p>
+                    <p className="text-xs mt-2 text-[#2D0E17] font-medium">Max 2 in Conference mode.</p>
                   </div>
                   <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
                     <label className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
@@ -617,7 +646,7 @@ export default function CreateLeaguePage() {
                       className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
                       style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
                     />
-                    <p className="text-xs mt-2" style={{ color: '#5C1F30' }}>Max {formData.gameMode === 'CONFERENCE' ? 5 : 6} in {formData.gameMode === 'CONFERENCE' ? 'Conference' : 'Power-4'} mode.</p>
+                    <p className="text-xs mt-2 text-[#2D0E17] font-medium">Max {formData.gameMode === 'CONFERENCE' ? 5 : 6} in {formData.gameMode === 'CONFERENCE' ? 'Conference' : 'Power-4'} mode.</p>
                   </div>
                   <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
                     <label className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
@@ -633,7 +662,7 @@ export default function CreateLeaguePage() {
                       className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
                       style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
                     />
-                    <p className="text-xs mt-2" style={{ color: '#5C1F30' }}>Configurable bench capacity.</p>
+                    <p className="text-xs mt-2 text-[#2D0E17] font-medium">Configurable bench capacity.</p>
                   </div>
                 </div>
 
@@ -642,27 +671,27 @@ export default function CreateLeaguePage() {
                   <h3 className="text-lg font-bold text-[#3A1220] mb-4">League Summary</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
-                      <span className="text-[#5C1F30]">Name:</span>
+                      <span className="text-[#2D0E17] font-medium">Name:</span>
                       <div className="text-[#3A1220] font-semibold">{formData.leagueName}</div>
                     </div>
                     <div>
-                      <span className="text-[#5C1F30]">Mode:</span>
+                      <span className="text-[#2D0E17] font-medium">Mode:</span>
                       <div className="text-[#3A1220] font-semibold">{formData.gameMode === 'CONFERENCE' ? 'Conference' : 'Power-4'}</div>
                     </div>
                     {formData.gameMode === 'CONFERENCE' && (
                       <div>
-                        <span className="text-[#5C1F30]">Conference:</span>
+                        <span className="text-[#2D0E17] font-medium">Conference:</span>
                         <div className="text-[#3A1220] font-semibold">
                           {CONFERENCES.find(c => c.id === formData.selectedConference)?.name.split(' ')[0]}
                         </div>
                       </div>
                     )}
                     <div>
-                      <span className="text-[#5C1F30]">Scoring:</span>
+                      <span className="text-[#2D0E17] font-medium">Scoring:</span>
                       <div className="text-[#3A1220] font-semibold">{formData.scoringType}</div>
                     </div>
                     <div>
-                      <span className="text-[#5C1F30]">Roster:</span>
+                      <span className="text-[#2D0E17] font-medium">Roster:</span>
                       <div className="text-[#3A1220] font-semibold">RB {formData.rosterRB} • WR {formData.rosterWR} • Bench {formData.benchSize}</div>
                     </div>
                   </div>
@@ -746,34 +775,34 @@ export default function CreateLeaguePage() {
               <div className="text-center">
                 <div className="text-6xl mb-4">🎉</div>
                 <h2 className="text-2xl font-bold text-[#3A1220] mb-2">League Created!</h2>
-                <p className="text-[#5C1F30] mb-6">
+                <p className="text-[#2D0E17] mb-6">
                   Your league <strong className="text-[#3A1220]">{createdLeague.name}</strong> has been successfully created and is now live in the database.
                 </p>
                 
                 <div className="bg-[#F5F5DC]/10 rounded-lg p-4 mb-6">
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="text-[#5C1F30]">Mode:</span>
+                      <span className="text-[#2D0E17] font-medium">Mode:</span>
                       <div className="text-[#3A1220] font-semibold">
                         {(createdLeague.mode || createdLeague.gameMode) === 'CONFERENCE' ? 'Conference' : 'Power-4'}
                       </div>
                     </div>
                     <div>
-                      <span className="text-[#5C1F30]">Teams:</span>
+                      <span className="text-[#2D0E17] font-medium">Teams:</span>
                       <div className="text-[#3A1220] font-semibold">{createdLeague.maxTeams || createdLeague.max_teams}</div>
                     </div>
                     <div>
-                      <span className="text-[#5C1F30]">Status:</span>
+                      <span className="text-[#2D0E17] font-medium">Status:</span>
                       <div className="text-[#3A1220] font-semibold">{createdLeague.status}</div>
                     </div>
                     <div>
-                      <span className="text-[#5C1F30]">League ID:</span>
+                      <span className="text-[#2D0E17] font-medium">League ID:</span>
                       <div className="text-[#3A1220] font-semibold text-xs">{createdLeague.$id || createdLeague.id}</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="text-sm text-[#5C1F30] mb-4">
+                <div className="text-sm text-[#2D0E17] font-medium mb-4">
                   Redirecting to your league portal in 3 seconds...
                 </div>
 
