@@ -111,6 +111,9 @@ const SCHEMA = {
       { key: 'teamId', type: 'string', size: 255, required: false },
       { key: 'description', type: 'string', size: 1000, required: true },
       { key: 'data', type: 'string', size: 5000, required: false },
+      { key: 'inviteToken', type: 'string', size: 255, required: false },
+      { key: 'status', type: 'string', size: 50, required: false, default: 'pending' },
+      { key: 'expiresAt', type: 'datetime', required: false },
       { key: 'createdAt', type: 'datetime', required: true },
     ],
     indexes: [
@@ -118,6 +121,8 @@ const SCHEMA = {
       { key: 'idx_user', type: 'key', attributes: ['userId'] },
       { key: 'idx_league', type: 'key', attributes: ['leagueId'] },
       { key: 'idx_created', type: 'key', attributes: ['createdAt'] },
+      { key: 'idx_invite_token', type: 'unique', attributes: ['inviteToken'] },
+      { key: 'idx_status', type: 'key', attributes: ['status'] },
     ]
   },
   users: {
