@@ -1,5 +1,5 @@
 # Claude Code Project Context - College Football Fantasy App
-Last Updated: August 16, 2025
+Last Updated: August 16, 2025 (09:25 AM PST)
 
 ## Project Overview
 **Name**: College Football Fantasy App  
@@ -212,16 +212,30 @@ Available MCP tools for Claude Code:
 }
 ```
 
+## Recent Updates & Fixes ✅
+
+### August 16, 2025
+1. **Join League Feature**: Complete implementation and fixes
+   - Fixed Appwrite schema to include inviteToken, status, and expiresAt fields in activity_log collection
+   - Resolved 'League ID is required' error by properly handling invite token validation
+   - Fixed invite API to use proper schema fields instead of searching in data field
+   - Updated schema sync script to include new invite-related fields
+   - All join league tests now passing (4/4)
+
+2. **Code Consolidation**: Reduced technical debt
+   - Consolidated projection services into single canonical source
+   - Redirected legacy draft pages to realtime draft room
+   - Improved UI contrast for commissioner page buttons
+   - Removed duplicate implementations
+
+3. **3D Mascot System**: Enhanced visualization features
+   - Integrated enhanced 3D mascot editing system
+   - Awwwards-rig submodule for future enhancements
+   - Improved performance with WebGL optimizations
+
 ## Known Issues & Technical Debt
 
-### Recently Fixed ✅
-1. **Join League Feature**: Database schema issues resolved (August 2025)
-   - Fixed missing attributes: `season`, `currentTeams`, `maxTeams`
-   - Updated max teams to 24 for college football (vs 12 for NFL)
-   - Fixed public/private league logic
-   - All tests passing (4/4)
-
-### Critical Issues
+### Outstanding Issues
 1. **Conference API Duplication**: 4 separate conference APIs with different implementations
    - `/api/acc`, `/api/big12`, `/api/sec`, `/api/bigten` - need unification
 2. **Appwrite Config Fragmentation**: 6+ different Appwrite configuration files
@@ -285,9 +299,11 @@ vercel env ls
 ## Session Context
 - Team: kpm34s-projects
 - Latest deployment: https://cfbfantasy.app
-- Git branch: feat/animations-style
+- Git branch: main
 - Node version: 18-22
 - Vercel CLI: 44.7.3
+- Last sync: August 16, 2025
+- Repository: Up to date with origin/main
 
 ## Links & Resources
 - [Vercel Dashboard](https://vercel.com/kpm34s-projects/college-football-fantasy-app)
