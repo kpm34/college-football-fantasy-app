@@ -598,7 +598,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           {isCommissioner && (
             <div className="space-y-2 mt-6">
               <button
-                onClick={() => router.push(`/draft/${leagueId}`)}
+                onClick={() => router.push(`/draft/${leagueId}/realtime`)}
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-all duration-200"
               >
                 Start Draft

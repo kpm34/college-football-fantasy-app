@@ -86,13 +86,13 @@ module.exports = async function (req, res) {
               subject: `Your CFB Fantasy Draft Starts Soon!`,
               content: `Hi ${user.name || user.email},\n\n` +
                        `Your draft for ${league.name} starts in ${timeUntil}!\n\n` +
-                       `Join here: https://cfbfantasy.app/draft/${league.$id}\n\n` +
+                       `Join here: https://cfbfantasy.app/draft/${league.$id}/realtime\n\n` +
                        `Good luck!\n` +
                        `CFB Fantasy Team`,
               html: `<h2>Draft Reminder</h2>` +
                     `<p>Hi ${user.name || user.email},</p>` +
                     `<p>Your draft for <strong>${league.name}</strong> starts in <strong>${timeUntil}</strong>!</p>` +
-                    `<p><a href="https://cfbfantasy.app/draft/${league.$id}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Join Draft</a></p>` +
+                    `<p><a href="https://cfbfantasy.app/draft/${league.$id}/realtime" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Join Draft</a></p>` +
                     `<p>Good luck!<br>CFB Fantasy Team</p>`
             };
             
