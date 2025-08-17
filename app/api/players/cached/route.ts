@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
-import { Query } from 'appwrite';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { Query } from 'node-appwrite';
 import { cache, CACHE_DURATIONS } from '@/lib/cache';
 
 export const runtime = 'edge'; // Use Edge Runtime for better performance
@@ -23,50 +23,42 @@ export async function GET(request: NextRequest) {
       search,
     };
 
-    // Use cache wrapper
-    const cacheHelper = cache.api.get('players', cacheParams);
-    
-    const players = await cacheHelper.get(
-      async () => {
-        // Build queries
-        const queries: string[] = [
-          Query.limit(limit),
-          Query.offset(offset),
-          Query.orderDesc('fantasyPoints'),
-        ];
+    // Build queries
+    const queries: string[] = [
+      Query.limit(limit),
+      Query.offset(offset),
+      Query.orderDesc('fantasy_points'),
+    ];
 
-        if (position && position !== 'ALL') {
-          queries.push(Query.equal('position', position));
-        }
+    if (position && position !== 'ALL') {
+      queries.push(Query.equal('position', position));
+    }
 
-        if (conference && conference !== 'ALL') {
-          queries.push(Query.equal('conference', conference));
-        }
+    if (conference && conference !== 'ALL') {
+      queries.push(Query.equal('conference', conference));
+    }
 
-        if (search) {
-          queries.push(Query.search('playerName', search));
-        }
+    if (search) {
+      queries.push(Query.search('name', search));
+    }
 
-        // Fetch from Appwrite
-        const response = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTIONS.PLAYERS,
-          queries
-        );
-
-        return {
-          players: response.documents,
-          total: response.total,
-        };
-      },
-      CACHE_DURATIONS.LONG // Cache player data for 1 hour
+    // Fetch from Appwrite using college_players collection
+    const response = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.PLAYERS,
+      queries
     );
+
+    const players = {
+      players: response.documents,
+      total: response.total,
+    };
 
     // Add cache headers
     return NextResponse.json(players, {
       headers: {
         'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
-        'X-Cache-Status': players ? 'HIT' : 'MISS',
+        'X-Cache-Status': 'DIRECT',
       },
     });
   } catch (error) {
