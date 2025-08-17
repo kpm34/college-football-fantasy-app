@@ -22,7 +22,7 @@
     "eval_proj": "npx tsx scripts/eval_proj.ts",
     "dev": "next dev",
     "build": "SKIP_ENV_VALIDATION=true next build",
-    "prebuild": "node scripts/generate-icons.js 2>/dev/null || true && npm run validate:env",
+    "prebuild": "node scripts/check-no-test-pages.js && node scripts/check-collection-consistency.js && node scripts/generate-icons.js 2>/dev/null || true && npm run validate:env",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
