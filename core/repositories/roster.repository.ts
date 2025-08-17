@@ -6,6 +6,7 @@
 import { BaseRepository, QueryOptions } from './base.repository';
 import { ValidationError } from '../errors/app-error';
 import { Query } from 'appwrite';
+import { SchemaValidator, enforceSchema } from '../validation/schema-enforcer';
 import type { Roster } from '../../types/roster';
 
 export interface CreateRosterData {
@@ -35,6 +36,23 @@ export interface AddPlayerData {
 export class RosterRepository extends BaseRepository<Roster> {
   protected collectionId = 'rosters';
   protected cachePrefix = 'roster';
+
+  /**
+   * Validate roster data using schema enforcer
+   */
+  protected async validateCreate(data: Partial<Roster>): Promise<void> {
+    const validation = SchemaValidator.validate('rosters', data);
+    if (!validation.success) {
+      throw new ValidationError(`Roster validation failed: ${validation.errors?.join(', ')}`);
+    }
+  }
+
+  protected async validateUpdate(id: string, data: Partial<Roster>): Promise<void> {
+    const validation = SchemaValidator.validate('rosters', data);
+    if (!validation.success) {
+      throw new ValidationError(`Roster validation failed: ${validation.errors?.join(', ')}`);
+    }
+  }
 
   /**
    * Get roster by league and user
@@ -110,10 +128,13 @@ export class RosterRepository extends BaseRepository<Roster> {
       }
     ];
 
-    return this.update(rosterId, {
-      players: updatedPlayers,
+    // Transform data for schema compliance (JSON stringify for large arrays)
+    const updateData = SchemaValidator.transform('rosters', {
+      players: JSON.stringify(updatedPlayers),
       updatedAt: new Date().toISOString()
-    }, {
+    });
+
+    return this.update(rosterId, updateData, {
       invalidateCache: [
         `roster:league:${roster.leagueId}:*`,
         `player:roster:${playerData.playerId}`

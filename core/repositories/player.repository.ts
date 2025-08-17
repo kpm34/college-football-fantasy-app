@@ -6,6 +6,7 @@
 import { BaseRepository, QueryOptions } from './base.repository';
 import { Query } from 'appwrite';
 import { env } from '../config/environment';
+import { SchemaValidator, enforceSchema } from '../validation/schema-enforcer';
 import type { Player } from '../../types/player';
 
 export interface PlayerSearchOptions extends QueryOptions {
@@ -253,7 +254,7 @@ export class PlayerRepository extends BaseRepository<Player> {
   }
 
   /**
-   * Bulk import players (for data sync)
+   * Bulk import players (for data sync) with schema validation
    */
   async bulkImport(players: Partial<Player>[]): Promise<void> {
     // Process in batches of 100
@@ -265,22 +266,32 @@ export class PlayerRepository extends BaseRepository<Player> {
       await Promise.all(
         batch.map(async (playerData) => {
           try {
+            // Validate data before processing
+            const validation = SchemaValidator.validate('college_players', playerData);
+            if (!validation.success) {
+              console.error(`Skipping invalid player ${playerData.name}: ${validation.errors?.join(', ')}`);
+              return;
+            }
+
+            // Transform data if needed
+            const transformedData = SchemaValidator.transform('college_players', playerData);
+
             // Check if player exists
             const existing = await this.find({
               filters: {
-                externalId: playerData.externalId
+                external_id: transformedData.external_id
               },
               limit: 1
             });
 
             if (existing.documents.length > 0) {
               // Update existing
-              await this.update(existing.documents[0].$id, playerData, {
+              await this.update(existing.documents[0].$id, transformedData, {
                 partial: true
               });
             } else {
               // Create new
-              await this.create(playerData);
+              await this.create(transformedData);
             }
           } catch (error) {
             console.error(`Failed to import player ${playerData.name}:`, error);
@@ -355,20 +366,19 @@ export class PlayerRepository extends BaseRepository<Player> {
   }
 
   /**
-   * Validate player data
+   * Validate player data using schema enforcer
    */
   protected async validateCreate(data: Partial<Player>): Promise<void> {
-    if (!data.name) {
-      throw new Error('Player name is required');
+    const validation = SchemaValidator.validate('college_players', data);
+    if (!validation.success) {
+      throw new Error(`Player validation failed: ${validation.errors?.join(', ')}`);
     }
-    if (!data.position) {
-      throw new Error('Player position is required');
-    }
-    if (!data.team) {
-      throw new Error('Player team is required');
-    }
-    if (!data.conference) {
-      throw new Error('Player conference is required');
+  }
+
+  protected async validateUpdate(id: string, data: Partial<Player>): Promise<void> {
+    const validation = SchemaValidator.validate('college_players', data);
+    if (!validation.success) {
+      throw new Error(`Player validation failed: ${validation.errors?.join(', ')}`);
     }
   }
 }

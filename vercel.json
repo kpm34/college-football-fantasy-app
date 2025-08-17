@@ -16,6 +16,22 @@
     {
       "path": "/api/cron/poll-jobs",
       "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/health",
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/synthetic-monitoring",
+      "schedule": "*/10 * * * *"
     }
-  ]
+  ],
+  "functions": {
+    "app/api/health/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/cron/synthetic-monitoring/route.ts": {
+      "maxDuration": 60
+    }
+  }
 }

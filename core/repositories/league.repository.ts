@@ -9,6 +9,7 @@ import { ID } from 'appwrite';
 import { env } from '../config/environment';
 import type { League } from '../../types/league';
 import { RosterRepository } from './roster.repository';
+import { SchemaValidator, enforceSchema } from '../validation/schema-enforcer';
 
 export interface CreateLeagueData {
   name: string;
@@ -56,7 +57,13 @@ export class LeagueRepository extends BaseRepository<League> {
       scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules())
     };
 
-    return this.create(leagueData, {
+    // Schema validation - ensure data conforms to canonical schema
+    const validation = SchemaValidator.validate('leagues', leagueData);
+    if (!validation.success) {
+      throw new ValidationError(`League creation failed schema validation: ${validation.errors?.join(', ')}`);
+    }
+
+    return this.create(validation.data, {
       invalidateCache: ['league:public:*', `league:user:${data.commissionerId}:*`]
     });
   }
@@ -181,10 +188,16 @@ export class LeagueRepository extends BaseRepository<League> {
       ties: 0,
       pointsFor: 0,
       pointsAgainst: 0,
-      players: [] as string[]
+      players: JSON.stringify([])  // JSON string as per schema
     };
+
+    // Schema validation for roster data
+    const rosterValidation = SchemaValidator.validate('rosters', cleanRosterData);
+    if (!rosterValidation.success) {
+      throw new ValidationError(`Roster creation failed schema validation: ${rosterValidation.errors?.join(', ')}`);
+    }
     
-    const roster = await rosterRepo.create(cleanRosterData);
+    const roster = await rosterRepo.create(rosterValidation.data);
 
     // Update league team count
     const updatedLeague = await this.update(leagueId, {

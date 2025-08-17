@@ -1,0 +1,50 @@
+# Post-Deploy Smoke Tests
+# Runs 30-second smoke tests after each deployment to catch regressions
+
+name: Post-Deploy Smoke Tests
+
+on:
+  deployment_status:
+
+jobs:
+  smoke-tests:
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+        
+      - name: Wait for deployment
+        run: sleep 30
+        
+      - name: Run smoke tests
+        run: npm run test:smoke:ci
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-test-results
+          path: test-results/
+          retention-days: 7
+          
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "🚨 Smoke tests failed for deployment: ${{ github.event.deployment_status.target_url }}"
+          echo "Check the test results artifact for details."
