@@ -85,7 +85,8 @@ export async function GET(request: NextRequest) {
             status: computedStatus,
             commissionerId: league.commissioner ?? league.commissioner_id,
             createdAt: league.created_at ?? league.$createdAt,
-            updatedAt: league.updated_at ?? league.$updatedAt
+            updatedAt: league.updated_at ?? league.$updatedAt,
+            inviteCode: league.inviteCode || league.invite_code || undefined
           };
         }),
         total: filteredByCapacity.length
