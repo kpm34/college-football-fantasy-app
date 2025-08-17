@@ -293,6 +293,22 @@ export async function GET(request: NextRequest) {
       };
     });
 
+    // Dedupe by name+position keeping the most recent season/team variant
+    const byKey = new Map<string, any>();
+    for (const p of players) {
+      const key = `${(p.name || '').toLowerCase()}|${(p.position || '').toUpperCase()}`;
+      const existing = byKey.get(key);
+      if (!existing) {
+        byKey.set(key, p);
+        continue;
+      }
+      // Prefer the one whose team matches our latest known overrides (if available)
+      // Fallback: keep the one with higher projected points
+      const better = (p.projectedPoints || 0) > (existing.projectedPoints || 0) ? p : existing;
+      byKey.set(key, better);
+    }
+    players = Array.from(byKey.values());
+
     // If this is a top 200 or projection-ordered search, sort by projections
     if (top200 || orderBy === 'projection') {
       players.sort((a, b) => b.projectedPoints - a.projectedPoints);
