@@ -2,10 +2,14 @@
  * Comprehensive Data Flow Mapping System
  * 
  * This system maps the complete data pipeline from external APIs 
- * through Appwrite to frontend components and deployment sync.
+ * through Appwrite to frontend components, with comprehensive monitoring,
+ * testing infrastructure, and deployment automation.
  * 
- * Data Flow Architecture:
- * External APIs → Sync Scripts → Appwrite → API Routes → Frontend → User Actions → Appwrite → Vercel Deployment
+ * Enhanced Data Flow Architecture (August 17, 2025):
+ * External APIs → Sync Scripts → Schema Validation → Appwrite → API Routes → 
+ * Frontend → User Actions → Repository Validation → Appwrite → 
+ * Synthetic Monitoring → Contract Testing → Vercel Deployment → 
+ * Smoke Tests → Health Monitoring → Alert System
  */
 
 import { APPWRITE_SCHEMA, type CollectionConfig } from '../schema/appwrite-schema-map';
@@ -165,6 +169,49 @@ export const DATA_SOURCES: Record<string, DataSource> = {
     type: 'calculated',
     reliability: 'high',
     updateFrequency: 'hourly'
+  },
+
+  projection_evaluation: {
+    id: 'projection_evaluation',
+    name: 'Projection Model Evaluation System',
+    type: 'calculated',
+    endpoint: '/evaluation/eval_proj.ts',
+    reliability: 'high',
+    updateFrequency: 'manual'
+  },
+
+  synthetic_monitoring: {
+    id: 'synthetic_monitoring', 
+    name: 'Synthetic Monitoring System',
+    type: 'calculated',
+    endpoint: '/api/cron/synthetic-monitoring',
+    reliability: 'high',
+    updateFrequency: 'realtime'
+  },
+
+  contract_testing: {
+    id: 'contract_testing',
+    name: 'Schema Contract Testing',
+    type: 'calculated',
+    reliability: 'high',
+    updateFrequency: 'realtime'
+  },
+
+  smoke_testing: {
+    id: 'smoke_testing',
+    name: 'Playwright Smoke Tests',
+    type: 'calculated',
+    reliability: 'high', 
+    updateFrequency: 'realtime'
+  },
+
+  health_monitoring: {
+    id: 'health_monitoring',
+    name: 'System Health Monitoring',
+    type: 'calculated',
+    endpoint: '/api/health',
+    reliability: 'high',
+    updateFrequency: 'realtime'
   }
 };
 
@@ -339,6 +386,98 @@ export const SYNC_JOBS: Record<string, SyncJob> = {
       parallelization: true,
       timeout: 600
     }
+  },
+
+  evaluate_projection_models: {
+    id: 'evaluate_projection_models',
+    name: 'Projection Model Evaluation',
+    description: 'Evaluate projection accuracy using MAE, sMAPE, R², calibration metrics',
+    source: 'projection_evaluation',
+    target: 'evaluation_reports',
+    transform: 'projections_to_metrics',
+    schedule: {
+      frequency: 'manual',
+      dependencies: ['calculate_projections']
+    },
+    errorHandling: {
+      retries: 1,
+      backoffStrategy: 'linear',
+      failureNotification: true
+    },
+    performance: {
+      batchSize: 1000,
+      parallelization: false,
+      timeout: 300
+    }
+  },
+
+  synthetic_health_checks: {
+    id: 'synthetic_health_checks',
+    name: 'Synthetic Health Monitoring',
+    description: 'Automated health checks and system monitoring via Vercel Cron',
+    source: 'synthetic_monitoring',
+    target: 'monitoring_kv_store',
+    transform: 'health_to_metrics',
+    schedule: {
+      frequency: 'realtime',
+      dependencies: []
+    },
+    errorHandling: {
+      retries: 1,
+      backoffStrategy: 'linear',
+      failureNotification: true
+    },
+    performance: {
+      batchSize: 1,
+      parallelization: false,
+      timeout: 30
+    }
+  },
+
+  schema_compliance_validation: {
+    id: 'schema_compliance_validation',
+    name: 'Schema Contract Testing',
+    description: 'Automated schema compliance validation and drift detection',
+    source: 'contract_testing',
+    target: 'schema_validation_logs',
+    transform: 'contract_to_compliance',
+    schedule: {
+      frequency: 'realtime',
+      dependencies: []
+    },
+    errorHandling: {
+      retries: 0,
+      backoffStrategy: 'linear',
+      failureNotification: true
+    },
+    performance: {
+      batchSize: 1,
+      parallelization: false,
+      timeout: 10
+    }
+  },
+
+  post_deploy_smoke_tests: {
+    id: 'post_deploy_smoke_tests',
+    name: 'Post-Deploy Smoke Testing',
+    description: '30-second regression detection via Playwright after deployments',
+    source: 'smoke_testing',
+    target: 'test_results_storage',
+    transform: 'smoke_to_results',
+    schedule: {
+      frequency: 'manual',
+      dependencies: []
+    },
+    errorHandling: {
+      retries: 2,
+      backoffStrategy: 'linear',
+      failureNotification: true
+    },
+    performance: {
+      batchSize: 1,
+      parallelization: true,
+      timeout: 60
+    }
   }
 };
 
@@ -450,6 +589,71 @@ export const FRONTEND_DATA_FLOWS: Record<string, FrontendDataFlow> = {
       }
     },
     userActions: []
+  },
+
+  health_monitoring: {
+    page: '/api/health',
+    component: 'HealthEndpoint',
+    dataRequirements: {
+      collections: ['leagues', 'rosters', 'college_players'], // for connectivity tests
+      realtime: false,
+      caching: {
+        enabled: false,
+        strategy: 'server'
+      }
+    },
+    userActions: []
+  },
+
+  synthetic_monitoring: {
+    page: '/api/cron/synthetic-monitoring',
+    component: 'SyntheticMonitoringCron',
+    dataRequirements: {
+      collections: ['leagues', 'college_players', 'games'], // for comprehensive testing
+      realtime: false,
+      caching: {
+        enabled: false,
+        strategy: 'server'
+      }
+    },
+    userActions: []
+  },
+
+  monitoring_dashboard: {
+    page: '/api/monitoring/dashboard',
+    component: 'MonitoringDashboard',
+    dataRequirements: {
+      collections: [], // reads from KV store
+      realtime: true,
+      caching: {
+        enabled: true,
+        ttl: 60,
+        strategy: 'server'
+      }
+    },
+    userActions: []
+  },
+
+  projection_evaluation_cli: {
+    page: '/evaluation/eval_proj.ts',
+    component: 'ProjectionEvaluationCLI',
+    dataRequirements: {
+      collections: ['projections_weekly', 'projections_yearly', 'scoring', 'player_stats', 'leagues'],
+      realtime: false,
+      caching: {
+        enabled: false,
+        strategy: 'server'
+      }
+    },
+    userActions: [
+      {
+        action: 'run_evaluation',
+        method: 'GET',
+        endpoint: 'CLI: eval_proj --weeks RANGE --out PATH',
+        affectedCollections: [], // read-only operation
+        revalidationNeeded: []
+      }
+    ]
   }
 };
 
@@ -513,6 +717,49 @@ export const DEPLOYMENT_SYNC: Record<string, DeploymentSync> = {
       development: true,
       staging: true,
       production: false // Manual approval required
+    }
+  },
+
+  monitoring_infrastructure_sync: {
+    trigger: 'code_push',
+    preDeployTasks: [
+      'validate_monitoring_config',
+      'test_health_endpoints',
+      'validate_cron_schedules'
+    ],
+    postDeployTasks: [
+      'activate_synthetic_monitoring',
+      'verify_contract_tests',
+      'run_smoke_tests',
+      'initialize_monitoring_dashboard',
+      'setup_alert_thresholds'
+    ],
+    rollbackStrategy: 'revert_monitoring_config',
+    environmentSync: {
+      development: true,
+      staging: true,
+      production: true
+    }
+  },
+
+  test_infrastructure_sync: {
+    trigger: 'code_push',
+    preDeployTasks: [
+      'validate_test_config',
+      'setup_msw_handlers',
+      'prepare_mock_data'
+    ],
+    postDeployTasks: [
+      'run_contract_tests',
+      'execute_playwright_smoke_tests',
+      'validate_test_isolation',
+      'store_test_results'
+    ],
+    rollbackStrategy: 'restore_test_config',
+    environmentSync: {
+      development: true,
+      staging: true,
+      production: false // Tests run but don't affect production
     }
   }
 };
@@ -609,6 +856,11 @@ graph TD
     LEAGUES[(leagues)]
     ROSTERS[(rosters)]
     
+    %% Schema & Validation Layer
+    SCHEMA[Schema Enforcer]
+    CONTRACT[Contract Tests]
+    MSW[MSW Test Isolation]
+    
     %% Frontend Pages
     CREATE[League Create]
     DRAFT[Draft Room]
@@ -616,20 +868,29 @@ graph TD
     DASHBOARD[League Dashboard]
     SCOREBOARD[Scoreboard]
     
-    %% Sync Flow
-    CFBD -->|Daily Sync| PLAYERS
-    CFBD -->|Hourly Sync| GAMES
-    CFBD -->|Weekly Sync| RANKINGS
-    CFBD -->|Weekly Sync| TEAMS
+    %% Monitoring & Testing Infrastructure
+    HEALTH[Health Endpoint]
+    SYNTHETIC[Synthetic Monitoring]
+    SMOKE[Playwright Smoke Tests]
+    MONITOR_DASH[Monitoring Dashboard]
+    KV[KV Storage]
     
-    ESPN -->|Backup Data| GAMES
-    ROTOWIRE -->|Player News| PLAYERS
+    %% Data Sync Flow
+    CFBD -->|Daily Sync| SCHEMA
+    ESPN -->|Backup Data| SCHEMA
+    ROTOWIRE -->|Player News| SCHEMA
+    SCHEMA -->|Validated Data| PLAYERS
+    SCHEMA -->|Validated Data| GAMES
+    SCHEMA -->|Validated Data| TEAMS
+    SCHEMA -->|Validated Data| RANKINGS
     
-    %% User Interactions
-    USER -->|Create League| LEAGUES
-    USER -->|Join League| ROSTERS
-    USER -->|Draft Pick| ROSTERS
-    USER -->|Auction Bid| PLAYERS
+    %% User Interactions with Validation
+    USER -->|Create League| SCHEMA
+    USER -->|Join League| SCHEMA
+    USER -->|Draft Pick| SCHEMA
+    USER -->|Auction Bid| SCHEMA
+    SCHEMA -->|Validated Actions| LEAGUES
+    SCHEMA -->|Validated Actions| ROSTERS
     
     %% Frontend Data Flow
     PLAYERS --> DRAFT
@@ -639,15 +900,36 @@ graph TD
     ROSTERS --> DASHBOARD
     GAMES --> SCOREBOARD
     
+    %% Monitoring & Testing Flow
+    HEALTH -->|Every 5min| SYNTHETIC
+    SYNTHETIC -->|Comprehensive Checks| KV
+    KV -->|Metrics Storage| MONITOR_DASH
+    CONTRACT -->|Schema Validation| SCHEMA
+    MSW -->|Test Isolation| CONTRACT
+    SMOKE -->|Post-Deploy| HEALTH
+    
     %% Realtime Updates
     ROSTERS -.->|Realtime| DRAFT
     PLAYERS -.->|Realtime| AUCTION
     GAMES -.->|Realtime| SCOREBOARD
+    KV -.->|Realtime Metrics| MONITOR_DASH
+    
+    %% GitHub Actions Integration
+    GHA[GitHub Actions]
+    VERCEL[Vercel Deployment]
+    GHA -->|Post-Deploy| SMOKE
+    VERCEL -->|Deployment Status| GHA
+    SMOKE -->|Test Results| HEALTH
     
     style CFBD fill:#e1f5fe
     style PLAYERS fill:#c8e6c9
     style DRAFT fill:#fff3e0
     style AUCTION fill:#fff3e0
+    style SCHEMA fill:#e8f5e8
+    style HEALTH fill:#fff8e1
+    style SYNTHETIC fill:#f3e5f5
+    style CONTRACT fill:#e0f2f1
+    style MSW fill:#fce4ec
     `;
   }
 }
