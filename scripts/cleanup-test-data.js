@@ -67,7 +67,7 @@ async function findTestData() {
     log('  Searching for test rosters...', 'blue');
     const allRosters = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.rosters,
+      COLLECTIONS.userTeams,
       [Query.limit(200)]
     );
     testData.rosters = allRosters.documents.filter(roster => 
@@ -127,7 +127,7 @@ async function removeTestData(testData, dryRun = false) {
     for (const roster of testData.rosters) {
       try {
         if (!dryRun) {
-          await databases.deleteDocument(DATABASE_ID, COLLECTIONS.rosters, roster.$id);
+          await databases.deleteDocument(DATABASE_ID, COLLECTIONS.userTeams, roster.$id);
         }
         log(`    ${dryRun ? 'Would delete' : '✅ Deleted'} roster: ${roster.teamName} (${roster.$id})`, 'green');
         totalDeleted++;

@@ -113,7 +113,7 @@ async function testJoinLeague(league, user) {
   try {
     // Check current collection schema
     log('  Checking roster collection schema...', 'blue');
-    const rostersCollection = await databases.getCollection(DATABASE_ID, COLLECTIONS.rosters);
+    const rostersCollection = await databases.getCollection(DATABASE_ID, COLLECTIONS.userTeams);
     const attributes = (rostersCollection.attributes || []).map(a => a.key);
     log(`  Available attributes: ${attributes.join(', ')}`, 'blue');
     
@@ -141,7 +141,7 @@ async function testJoinLeague(league, user) {
     log('  Creating roster...', 'blue');
     const roster = await databases.createDocument(
       DATABASE_ID,
-      COLLECTIONS.rosters,
+      COLLECTIONS.userTeams,
       ID.unique(),
       joinData
     );
@@ -207,7 +207,7 @@ async function testDuplicateJoin(league, user) {
     // Check for existing rosters
     const existingRosters = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.rosters,
+      COLLECTIONS.userTeams,
       [
         Query.equal('leagueId', league.$id),
         Query.equal('userId', user.$id)
@@ -262,7 +262,7 @@ async function cleanupTestData(league, rosters) {
   try {
     // Delete rosters
     for (const roster of rosters) {
-      await databases.deleteDocument(DATABASE_ID, COLLECTIONS.rosters, roster.$id);
+      await databases.deleteDocument(DATABASE_ID, COLLECTIONS.userTeams, roster.$id);
       log(`  ✅ Deleted roster: ${roster.$id}`, 'green');
     }
     
