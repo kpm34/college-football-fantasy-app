@@ -321,6 +321,7 @@ function JoinLeagueContent() {
       const params = new URLSearchParams();
       params.append('search', searchQuery);
       params.append('includePrivate', 'true'); // Include private leagues in search
+      params.append('includeClosed', 'true'); // Show full leagues too so users can find specific leagues like Jawn
       
       const response = await fetch(`/api/leagues/search?${params}`);
       const data = await response.json();
