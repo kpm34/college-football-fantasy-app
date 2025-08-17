@@ -258,24 +258,30 @@ See Draft Routes below. This is the single, canonical endpoint for the player po
 
 ---
 
-### GET `/api/draft/players`
-**Description**: Get available draft players (Power 4, fantasy positions only)  
-**Auth Required**: Yes  
+### GET `/api/players/cached` (canonical)
+**Description**: Get available draft players with enhanced depth chart projections  
+**Auth Required**: Yes (server-side connection)
 **Query Params**: 
 - `position` (QB|RB|WR|TE|K|ALL)
 - `conference` (SEC|Big Ten|Big 12|ACC|ALL)
-- `team` (school name)
 - `search` (player name)
-- `limit` (max 1000)
+- `limit` (max 100, default 100)
+- `offset` (for pagination, default 0)
 **Database Operations**:
-- Reads from `college_players` collection with filters:
-  - Power 4 conferences only (SEC, Big Ten, Big 12, ACC)
-  - Fantasy positions only (QB, RB, WR, TE, K)
-  - `draftable = true`
-- Deduplicates by `name|team|position`, keeps highest-rated entry
-- Applies projection model (rating + depth chart + previous-year stats + SoS)
-- Caps output to top 1000 by rating
-**Returns**: Array of available players with `projectedPoints`, `adp`
+- Reads from `college_players` collection using server-side Appwrite connection
+- Filters: Power 4 conferences, draftable players only
+- **Orders by `fantasy_points` DESC** (enhanced projections with depth chart logic)
+- **Searches by `name` field** for player lookup
+**Projection Algorithm** (Aug 17, 2025 enhancement): 
+- **QB depth multipliers**: QB1: 100% projection, QB2: 25%, QB3+: 5%
+- **RB share distribution**: RB1: 55%, RB2: 25%, RB3: 15%
+- **WR target distribution**: WR1-4: 25%, 20%, 15%, 10% respectively
+- Applied via `scripts/sync-enhanced-projections.js`
+**Returns**: Array of players with `fantasy_points` reflecting proper starter/backup differentiation
+
+### GET `/api/draft/players` (legacy)
+**Description**: Legacy endpoint - may use outdated projection logic  
+**Status**: ⚠️ Use `/api/players/cached` instead for enhanced projections
 
 ---
 

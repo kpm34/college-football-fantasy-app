@@ -2,6 +2,14 @@ import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 import { PlayerProjection } from '@/types/projections';
 
+/**
+ * @deprecated This service is deprecated as of August 17, 2025
+ * The enhanced projection logic has been consolidated into:
+ * - projections.service.ts (getEnhancedSeasonProjections method)
+ * - /api/players/cached endpoint
+ * - scripts/sync-enhanced-projections.js for data updates
+ */
+
 interface DepthChartPlayer {
   playerName: string;
   depth_chart_rank: number;
