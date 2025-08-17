@@ -448,4 +448,4 @@ npm run mock:human:e2e:24     # 24 teams
 
 ---
 *Last Updated: January 2025*  
-*Live Draft System: Production-ready for 2-24 team drafts*
+*Live Draft System: Production-ready for 2-24 team drafts*2

@@ -3,14 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import DraftCore from '@/components/draft/DraftCore';
+import { DraftPlayer } from '@/types/projections';
 import {
   ClockIcon,
   UserGroupIcon,
   TrophyIcon,
   ChartBarIcon,
-  AdjustmentsHorizontalIcon,
-  MagnifyingGlassIcon,
-  FunnelIcon
+  AdjustmentsHorizontalIcon
 } from "@heroicons/react/24/outline";
 import { leagueColors } from '@/lib/theme/colors';
 import CFPLoadingScreen from '@/components/CFPLoadingScreen';
@@ -70,10 +70,22 @@ interface Player {
 export default function MockDraftPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
+  const [mockDraftStarted, setMockDraftStarted] = useState(false);
+  const [myMockPicks, setMyMockPicks] = useState<DraftPlayer[]>([]);
+  const [selectedPlayer, setSelectedPlayer] = useState<DraftPlayer | null>(null);
   const [loading, setLoading] = useState(true);
   const [showSettings, setShowSettings] = useState(true);
-  const [draftStarted, setDraftStarted] = useState(false);
-  const [draftInitializing, setDraftInitializing] = useState(false);
+  
+  // Mock draft handlers
+  const handleStartMockDraft = () => {
+    setMockDraftStarted(true);
+    setShowSettings(false);
+  };
+  
+  const handleMockDraftPlayer = (player: DraftPlayer) => {
+    setMyMockPicks(prev => [...prev, player]);
+    setSelectedPlayer(null);
+  };
   
   // Draft settings
   const [settings, setSettings] = useState<MockDraftSettings>({
@@ -431,6 +443,37 @@ export default function MockDraftPage() {
     return <CFPLoadingScreen isLoading={true} minDuration={1000} />;
   }
 
+  // Show DraftCore when mock draft is started
+  if (mockDraftStarted) {
+    return (
+      <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main }}>
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold" style={{ color: leagueColors.text.primary }}>
+              Mock Draft Practice
+            </h1>
+            <button
+              onClick={() => setMockDraftStarted(false)}
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              style={{ backgroundColor: leagueColors.background.overlay, color: leagueColors.text.primary }}
+            >
+              ← Back to Settings
+            </button>
+          </div>
+          
+          <DraftCore
+            leagueId="mock-draft"
+            draftType="mock"
+            onPlayerSelect={setSelectedPlayer}
+            onPlayerDraft={handleMockDraftPlayer}
+            myPicks={myMockPicks}
+            draftedPlayers={[]}
+          />
+        </div>
+      </div>
+    );
+  }
+
   if (showSettings) {
     return (
       <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main, color: leagueColors.text.primary }}>
@@ -524,7 +567,7 @@ export default function MockDraftPage() {
 
             <div className="mt-8 flex gap-4">
               <button
-                onClick={startDraft}
+                onClick={handleStartMockDraft}
                 className="flex-1 py-3 rounded-lg font-semibold text-lg transition-all shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2"
                 style={{ backgroundImage: `linear-gradient(90deg, ${leagueColors.primary.coral}, ${leagueColors.primary.crimson})`, color: '#FFFFFF', border: `2px solid ${leagueColors.border.light}` }}
               >

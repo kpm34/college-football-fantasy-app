@@ -5,14 +5,14 @@
  * through Appwrite to frontend components, with comprehensive monitoring,
  * testing infrastructure, and deployment automation.
  * 
- * Enhanced Data Flow Architecture (August 17, 2025 - ALIGNED):
+ * Enhanced Data Flow Architecture (August 17, 2025 - CONSOLIDATED):
  * External APIs → Pipeline Scripts → Appwrite Database (Single Source) → API Routes (Passthrough) → 
- * Frontend UI → User Actions → Repository Validation → Appwrite → 
- * Synthetic Monitoring → Contract Testing → Vercel Deployment → 
+ * **CONSOLIDATED DRAFT COMPONENTS** → User Actions → Repository Validation → Appwrite → 
+ * CI Guards → Build Validation → Vercel Deployment → 
  * Smoke Tests → Health Monitoring → Alert System
  *
- * PROJECTION FLOW (Aligned August 17, 2025):
- * functions/project-yearly-simple/ → college_players.fantasy_points → /api/draft/players → UI
+ * PROJECTION FLOW (Consolidated August 17, 2025):
+ * functions/project-yearly-simple/ → user_teams.fantasy_points → /api/draft/players → **DraftCore** → UI
  */
 
 import { APPWRITE_SCHEMA, type CollectionConfig } from '../schema/appwrite-schema-map';
@@ -598,7 +598,7 @@ export const FRONTEND_DATA_FLOWS: Record<string, FrontendDataFlow> = {
         action: 'create_league',
         method: 'POST',
         endpoint: '/api/leagues/create',
-        affectedCollections: ['leagues', 'rosters'],
+        affectedCollections: ['leagues', 'user_teams'],
         revalidationNeeded: ['/dashboard', '/leagues/my-leagues']
       }
     ]
@@ -606,7 +606,7 @@ export const FRONTEND_DATA_FLOWS: Record<string, FrontendDataFlow> = {
   
   draft_room: {
     page: '/draft/[leagueId]/realtime',
-    component: 'RealtimeDraftRoom',
+    component: 'RealtimeDraftRoom + DraftCore (Consolidated)',
     dataRequirements: {
       collections: ['college_players'],
       realtime: true,
@@ -628,8 +628,31 @@ export const FRONTEND_DATA_FLOWS: Record<string, FrontendDataFlow> = {
         action: 'make_pick',
         method: 'POST',
         endpoint: '/api/draft/[leagueId]/pick',
-        affectedCollections: ['rosters'],
+        affectedCollections: ['user_teams'],
         revalidationNeeded: ['draft/[leagueId]/realtime', 'league/[leagueId]/standings']
+      }
+    ]
+  },
+
+  mock_draft: {
+    page: '/draft/mock',
+    component: 'MockDraftPage + DraftCore (Consolidated)',
+    dataRequirements: {
+      collections: ['college_players'],
+      realtime: false,
+      caching: {
+        enabled: true,
+        ttl: 300,
+        strategy: 'server'
+      }
+    },
+    userActions: [
+      {
+        action: 'practice_pick',
+        method: 'LOCAL',
+        endpoint: 'Client-side only (DraftCore)',
+        affectedCollections: [],
+        revalidationNeeded: []
       }
     ]
   },
@@ -638,7 +661,7 @@ export const FRONTEND_DATA_FLOWS: Record<string, FrontendDataFlow> = {
     page: '/auction/[leagueId]',
     component: 'AuctionDraftRoom',
     dataRequirements: {
-      collections: ['college_players', 'auctions', 'bids', 'rosters'],
+      collections: ['college_players', 'auctions', 'bids', 'user_teams'],
       realtime: true,
       caching: {
         enabled: true,
@@ -661,7 +684,7 @@ export const FRONTEND_DATA_FLOWS: Record<string, FrontendDataFlow> = {
     page: '/league/[leagueId]',
     component: 'LeagueDashboard',
     dataRequirements: {
-      collections: ['leagues', 'rosters', 'games', 'lineups'],
+      collections: ['leagues', 'user_teams', 'games', 'lineups'],
       realtime: false,
       caching: {
         enabled: true,
@@ -699,7 +722,7 @@ export const FRONTEND_DATA_FLOWS: Record<string, FrontendDataFlow> = {
     page: '/api/health',
     component: 'HealthEndpoint',
     dataRequirements: {
-      collections: ['leagues', 'rosters', 'college_players'], // for connectivity tests
+      collections: ['leagues', 'user_teams', 'college_players'], // for connectivity tests
       realtime: false,
       caching: {
         enabled: false,
@@ -894,6 +917,28 @@ export const DEPLOYMENT_SYNC: Record<string, DeploymentSync> = {
       staging: true,
       production: false // Tests run but don't affect production
     }
+  },
+
+  codebase_consolidation_sync: {
+    trigger: 'code_push',
+    preDeployTasks: [
+      'check_no_test_pages',
+      'check_collection_consistency',
+      'validate_component_consolidation',
+      'verify_draft_core_integration'
+    ],
+    postDeployTasks: [
+      'verify_consolidated_components',
+      'test_draft_functionality',
+      'validate_collection_naming',
+      'confirm_ci_guards_active'
+    ],
+    rollbackStrategy: 'revert_consolidation_changes',
+    environmentSync: {
+      development: true,
+      staging: true,
+      production: true
+    }
   }
 };
 
@@ -997,7 +1042,7 @@ graph TD
     TEAMS[(teams)]
     RANKINGS[(rankings)]
     LEAGUES[(leagues)]
-    ROSTERS[(rosters)]
+    USER_TEAMS[(user_teams)]
     
     %% ALIGNED API LAYER (Passthrough Only)
     API_DRAFT[/api/draft/players]
@@ -1009,9 +1054,10 @@ graph TD
     MSW[MSW Test Isolation]
     VERIFY[Data Flow Verifier]
     
-    %% Frontend Pages (Aligned)
+    %% Frontend Pages (Consolidated)
     CREATE[League Create]
-    DRAFT[Draft Room - 10K Players]
+    DRAFT[Draft Room + DraftCore - 10K Players]
+    MOCK_DRAFT[Mock Draft + DraftCore]
     AUCTION[Auction Room]
     DASHBOARD[League Dashboard]
     SCOREBOARD[Scoreboard]
@@ -1047,15 +1093,16 @@ graph TD
     USER -->|Draft Pick| SCHEMA
     USER -->|Auction Bid| SCHEMA
     SCHEMA -->|Validated Actions| LEAGUES
-    SCHEMA -->|Validated Actions| ROSTERS
+    SCHEMA -->|Validated Actions| USER_TEAMS
     
-    %% ALIGNED FRONTEND DATA FLOW
+    %% CONSOLIDATED FRONTEND DATA FLOW
     API_DRAFT -->|10,000 Players| DRAFT
+    API_DRAFT -->|Practice Mode| MOCK_DRAFT
     API_DRAFT -->|Ordered Projections| AUCTION
     API_DRAFT -->|Algorithm Demo| SHOWCASE
     API_LEAGUES --> CREATE
     API_LEAGUES --> DASHBOARD
-    ROSTERS --> DASHBOARD
+    USER_TEAMS --> DASHBOARD
     GAMES --> SCOREBOARD
     
     %% DATA FLOW VERIFICATION
@@ -1071,8 +1118,9 @@ graph TD
     MSW -->|Test Isolation| CONTRACT
     SMOKE -->|Post-Deploy| HEALTH
     
-    %% Realtime Updates (Aligned)
-    ROSTERS -.->|Realtime| DRAFT
+    %% Realtime Updates (Consolidated)
+    USER_TEAMS -.->|Realtime| DRAFT
+    USER_TEAMS -.->|Realtime| MOCK_DRAFT  
     PLAYERS -.->|Single Source| AUCTION
     GAMES -.->|Realtime| SCOREBOARD
     KV -.->|Realtime Metrics| MONITOR_DASH
@@ -1142,44 +1190,74 @@ export function getOptimalSyncOrder(): string[] {
 }
 
 /**
- * ALIGNED DATA FLOW VERIFICATION (August 17, 2025)
+ * CONSOLIDATED DATA FLOW VERIFICATION (August 17, 2025)
  * 
- * This section documents the completed data flow alignment work that established
- * a single source of truth for all fantasy projections across the application.
+ * This section documents the completed consolidation work including:
+ * - Single source of truth for fantasy projections
+ * - Consolidated draft components (DraftCore)
+ * - Standardized collection naming (rosters → user_teams)
+ * - CI guards against test pages and legacy imports
+ * - Eliminated duplicate components and code paths
  */
-export interface AlignedDataFlow {
+export interface ConsolidatedDataFlow {
   pipelineSource: string;
   databaseField: string;
   apiEndpoint: string;
-  frontendComponent: string;
+  consolidatedComponents: string[];
   verificationScript: string;
-  alignmentStatus: 'aligned' | 'needs_review' | 'deprecated';
+  consolidationStatus: 'consolidated' | 'needs_review' | 'deprecated';
 }
 
-export const ALIGNED_PROJECTION_FLOW: AlignedDataFlow = {
+export const CONSOLIDATED_PROJECTION_FLOW: ConsolidatedDataFlow = {
   pipelineSource: 'functions/project-yearly-simple/index.ts',
-  databaseField: 'college_players.fantasy_points',
+  databaseField: 'user_teams.fantasy_points',
   apiEndpoint: '/api/draft/players?orderBy=projection&limit=10000',
-  frontendComponent: 'RealtimeDraftRoom (/draft/[leagueId]/realtime)',
+  consolidatedComponents: [
+    'components/draft/DraftCore.tsx',
+    'RealtimeDraftRoom (/draft/[leagueId]/realtime)',
+    'MockDraftPage (/draft/mock)'
+  ],
   verificationScript: '/scripts/verify-data-flow-alignment.ts',
-  alignmentStatus: 'aligned'
+  consolidationStatus: 'consolidated'
 };
 
 export const REMOVED_REDUNDANCIES: string[] = [
+  // Original projection redundancies
   '/lib/services/enhanced-projections.service.ts',
   '/app/api/projections/route.ts',
   'calculateBaseProjection() in /app/api/draft/players/route.ts',
   'depthMultiplier() in /app/api/draft/players/route.ts',
   '/lib/services/projections.service.ts',
-  '/lib/services/weekly-projections-builder.service.ts'
+  '/lib/services/weekly-projections-builder.service.ts',
+  
+  // Consolidation cleanup (August 17, 2025)
+  'components/layouts/HeroSection.tsx (duplicate)',
+  'app/test-sentry/ (test page)',
+  'app/test-cors/ (test page)',
+  'app/api/test-sentry-error/ (test API)',
+  'app/api/test-deployment/ (test API)',
+  'app/api/auth-test/ (test API)',
+  'app/api/debug/test-realtime/ (test API)',
+  'app/api/draft/test/ (test API)',
+  'app/api/draft/test-complete/ (test API)',
+  'app/api/test/ (test API)',
+  'Legacy @/lib/api import in GamesList.tsx'
 ];
 
 export const DOCUMENTATION_CREATED: string[] = [
+  // Original alignment docs
   '/docs/DATA_FLOW_ALIGNMENT.md',
   '/scripts/verify-data-flow-alignment.ts',
   '/app/projection-showcase/page.tsx',
+  
+  // Consolidation documentation (August 17, 2025)
+  'components/draft/DraftCore.tsx (shared component)',
+  'scripts/check-no-test-pages.js (CI guard)',
+  'scripts/check-collection-consistency.js (CI guard)',
   'Updated /core/pipeline/data-flow-map.ts (this file)',
-  'Updated CLAUDE.md with alignment completion'
+  'Updated /core/config/environment.ts (rosters → user_teams)',
+  'Updated CLAUDE.md with consolidation completion',
+  'Updated package.json prebuild with new CI guards'
 ];
 
 /**
@@ -1211,47 +1289,60 @@ export async function verifyAlignedDataFlow(): Promise<{
 }
 
 /**
- * Generate a summary of the aligned data flow
+ * Generate a summary of the consolidated data flow
  */
-export function generateAlignedFlowSummary(): string {
+export function generateConsolidatedFlowSummary(): string {
   return `
-# ALIGNED DATA FLOW SUMMARY (August 17, 2025)
+# CONSOLIDATED DATA FLOW SUMMARY (August 17, 2025)
 
-## 🎯 Single Source of Truth Established
+## 🎯 Complete System Consolidation
 
-**Pipeline**: ${ALIGNED_PROJECTION_FLOW.pipelineSource}
+### Single Source of Truth + Consolidated Components
+
+**Pipeline**: ${CONSOLIDATED_PROJECTION_FLOW.pipelineSource}
 - Comprehensive algorithm with 6+ data inputs
 - Team pace, efficiency, depth charts, usage priors, injury risk, NFL draft capital
 
-**Database**: ${ALIGNED_PROJECTION_FLOW.databaseField}  
+**Database**: ${CONSOLIDATED_PROJECTION_FLOW.databaseField}  
 - Canonical storage for all fantasy projections
+- Standardized collection naming (rosters → user_teams)
 - Updated by pipeline scripts only (no API calculations)
 
-**API**: ${ALIGNED_PROJECTION_FLOW.apiEndpoint}
+**API**: ${CONSOLIDATED_PROJECTION_FLOW.apiEndpoint}
 - Direct passthrough of database values
 - No projection calculations in API layer
 - Supports up to 10,000 players (all available)
 
-**Frontend**: ${ALIGNED_PROJECTION_FLOW.frontendComponent}
-- Displays API projection values directly
-- Shows proper ordering (highest to lowest)
-- Real-time updates for draft interactions
+**Consolidated Frontend Components**: 
+${CONSOLIDATED_PROJECTION_FLOW.consolidatedComponents.map(item => `- ${item}`).join('\n')}
+- DraftCore: Shared component for all draft functionality
+- Unified player filtering, search, and selection logic
+- Consistent UI/UX across mock and live drafts
 
-## 🧹 Removed Redundancies
+## 🧹 Complete Cleanup (Removed Redundancies)
 ${REMOVED_REDUNDANCIES.map(item => `- ${item}`).join('\n')}
 
-## 📚 Documentation Created  
+## 🛡️ CI Guards Added
+- **Test Page Guard**: Prevents test pages from production deployment
+- **Collection Consistency**: Validates centralized collection usage
+- **Legacy Import Detection**: Blocks deprecated import patterns
+- **Build-time Validation**: Integrated into prebuild process
+
+## 📚 Documentation & Scripts Created  
 ${DOCUMENTATION_CREATED.map(item => `- ${item}`).join('\n')}
 
-## ✅ Verification
-**Status**: ${ALIGNED_PROJECTION_FLOW.alignmentStatus.toUpperCase()}
-**Verification Script**: ${ALIGNED_PROJECTION_FLOW.verificationScript}
-**Last Verified**: August 17, 2025
+## ✅ Consolidation Status
+**Status**: ${CONSOLIDATED_PROJECTION_FLOW.consolidationStatus.toUpperCase()}
+**Verification Script**: ${CONSOLIDATED_PROJECTION_FLOW.verificationScript}
+**Last Consolidated**: August 17, 2025
 
-## 🚀 Data Flow
-\`${ALIGNED_PROJECTION_FLOW.pipelineSource}\` 
-→ \`${ALIGNED_PROJECTION_FLOW.databaseField}\` 
-→ \`${ALIGNED_PROJECTION_FLOW.apiEndpoint}\` 
-→ \`${ALIGNED_PROJECTION_FLOW.frontendComponent}\`
+## 🚀 Consolidated Data Flow
+\`${CONSOLIDATED_PROJECTION_FLOW.pipelineSource}\` 
+→ \`${CONSOLIDATED_PROJECTION_FLOW.databaseField}\` 
+→ \`${CONSOLIDATED_PROJECTION_FLOW.apiEndpoint}\` 
+→ \`DraftCore + Multiple Components\`
+
+## 🔄 Build Process Integration
+\`prebuild\` → \`check-no-test-pages\` → \`check-collection-consistency\` → \`build\` → \`deploy\`
 `;
 }

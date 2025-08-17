@@ -1,7 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { api, Game } from '@/lib/api';
+// Game interface
+interface Game {
+  id: string;
+  week: number;
+  home_team: string;
+  away_team: string;
+  date: string;
+  completed: boolean;
+  eligible: boolean;
+}
 
 interface GamesListProps {
   week?: number;
@@ -19,15 +28,19 @@ export default function GamesList({ week, showEligibleOnly = false }: GamesListP
         setLoading(true);
         setError(null);
         
-        let gamesData: Game[];
+        let endpoint: string;
         if (showEligibleOnly) {
-          gamesData = await api.games.getEligible();
+          endpoint = '/api/games/eligible';
         } else if (week) {
-          gamesData = await api.games.getWeek(week);
+          endpoint = `/api/games/week/${week}`;
         } else {
-          gamesData = await api.games.getCurrent();
+          endpoint = '/api/games';
         }
         
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error('Failed to fetch games');
+        
+        const gamesData = await response.json();
         setGames(gamesData);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch games');
