@@ -58,6 +58,34 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Database Management */}
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 mb-8">
+          <h2 className="text-2xl font-bold text-white mb-6">🗄️ Database Management</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <button 
+              onClick={() => fetch('/api/admin/players/refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ season: 2025 }) }).then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)))}
+              className="block p-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <h3 className="font-semibold text-white">🔄 Refresh Players</h3>
+              <p className="text-sm text-gray-200 mt-1">Update with 2025 CFBD data</p>
+            </button>
+            <button
+              onClick={() => fetch('/api/admin/dedupe/players', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ dryRun: false, limit: 5000 }) }).then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)))}
+              className="block p-4 bg-gradient-to-r from-red-600 to-pink-600 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <h3 className="font-semibold text-white">🧹 Remove Duplicates</h3>
+              <p className="text-sm text-gray-200 mt-1">Clean Carson Beck dupes</p>
+            </button>
+            <button
+              onClick={() => fetch('/api/admin/players/retire', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ names: ['Quinn Ewers'], season: 2024 }) }).then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)))}
+              className="block p-4 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <h3 className="font-semibold text-white">📜 Retire Graduated</h3>
+              <p className="text-sm text-gray-200 mt-1">Mark old players inactive</p>
+            </button>
+          </div>
+        </div>
+
         {/* Quick Actions */}
         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
           <h2 className="text-2xl font-bold text-white mb-6">⚡ Quick Actions</h2>
@@ -69,6 +97,10 @@ export default function AdminDashboard() {
             <Link href="/admin/cache-status" className="block p-4 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg hover:opacity-90 transition-opacity">
               <h3 className="font-semibold text-white">Cache Status</h3>
               <p className="text-sm text-gray-200 mt-1">Vercel KV Statistics</p>
+            </Link>
+            <Link href="/admin/sec-survey" className="block p-4 bg-gradient-to-r from-red-600 to-rose-700 rounded-lg hover:opacity-90 transition-opacity">
+              <h3 className="font-semibold text-white">SEC NFL Survey</h3>
+              <p className="text-sm text-gray-200 mt-1">Find NFL/graduated SEC players</p>
             </Link>
             <button className="p-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg hover:opacity-90 transition-opacity">
               <h3 className="font-semibold text-white">Launch Beta</h3>
