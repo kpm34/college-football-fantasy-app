@@ -243,37 +243,15 @@ export async function GET(request: NextRequest) {
     }
     const known = getKnownFixes(season);
 
-    // Enhanced player transformation with better projections
+    // Enhanced player transformation - uses pipeline-calculated projections
     let players = response.documents.map((player: any, index: number) => {
-      // Use existing projection field first, then calculate if needed
       const position = player.position || 'RB';
       const conference = player.conference || 'Other';
       const rating = player.fantasy_points ? Math.min(99, Math.round(60 + (player.fantasy_points / 10))) : 80;
       
-      // Priority order for projections:
-      // 1. Enhanced fantasy_points field (most accurate - has depth chart logic)
-      // 2. Calculated projection
-      // 3. Legacy projection field (last resort)
-      let fantasyPoints = player.fantasy_points;
-      if (!fantasyPoints || fantasyPoints <= 0) {
-        fantasyPoints = calculateProjection(position, rating);
-      }
-      
-      // Apply depth multiplier if we have depth chart data
-      if (depthIndex && depth) {
-        const playerKey = `${cleanName(player.name)}|${position}`;
-        const teamId = depthIndex.get(playerKey);
-        if (teamId && depth[teamId] && depth[teamId][position]) {
-          const depthList = depth[teamId][position];
-          const playerDepthInfo = depthList.find((p: any) => 
-            cleanName(p.player_name) === cleanName(player.name)
-          );
-          if (playerDepthInfo?.pos_rank) {
-            const multiplier = depthMultiplier(position, playerDepthInfo.pos_rank);
-            fantasyPoints = Math.round(fantasyPoints * multiplier);
-          }
-        }
-      }
+      // Use fantasy_points from database (calculated by comprehensive pipeline)
+      // Pipeline includes: pace, efficiency, depth charts, usage priors, injury risk, NFL draft capital
+      const fantasyPoints = player.fantasy_points || 0;
       
       return {
         id: player.$id,
@@ -356,101 +334,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Helper function to calculate fantasy point projections for the API
-function calculateProjection(position: string, rating: number): number {
-  // Use existing projection if available, otherwise calculate
-  const ratingMultiplier = Math.max(0.5, (rating || 80) / 80); // Minimum 50% of base
-  
-  const baseProjections: Record<string, number> = {
-    'QB': 280,  // Top QBs: 320+ pts (Arch Manning, Quinn Ewers)
-    'RB': 220,  // Top RBs: 260+ pts (Top conference RBs)
-    'WR': 200,  // Top WRs: 240+ pts (Ryan Williams, etc.)
-    'TE': 160,  // Top TEs: 190+ pts (College TEs less fantasy relevant)
-    'K': 140    // Kickers: 120-160 pts range
-  };
-  
-  const baseProjection = baseProjections[position] || 180;
-  
-  // Add position-specific variance based on conference strength
-  const conferenceMultipliers: Record<string, number> = {
-    'SEC': 1.15,      // SEC gets 15% boost
-    'Big Ten': 1.10,  // Big Ten gets 10% boost  
-    'Big 12': 1.05,   // Big 12 gets 5% boost
-    'ACC': 1.02       // ACC gets 2% boost
-  };
-  
-  return Math.round(baseProjection * ratingMultiplier);
-}
-
-function calculateBaseProjection(position: string, rating: number) {
-  // Base projections scaled by rating (60-99 scale)
-  const ratingMultiplier = rating / 80; // 80 is average
-  
-  switch (position) {
-    case 'QB':
-      return {
-        points: Math.round(250 * ratingMultiplier),
-        stats: {
-          passingYards: Math.round(3000 * ratingMultiplier),
-          passingTDs: Math.round(25 * ratingMultiplier),
-          interceptions: Math.round(10 / ratingMultiplier),
-          rushingYards: Math.round(200 * ratingMultiplier),
-          rushingTDs: Math.round(3 * ratingMultiplier)
-        }
-      };
-    
-    case 'RB':
-      return {
-        points: Math.round(200 * ratingMultiplier),
-        stats: {
-          rushingYards: Math.round(1000 * ratingMultiplier),
-          rushingTDs: Math.round(10 * ratingMultiplier),
-          receptions: Math.round(30 * ratingMultiplier),
-          receivingYards: Math.round(250 * ratingMultiplier),
-          receivingTDs: Math.round(2 * ratingMultiplier)
-        }
-      };
-    
-    case 'WR':
-      return {
-        points: Math.round(180 * ratingMultiplier),
-        stats: {
-          receptions: Math.round(60 * ratingMultiplier),
-          receivingYards: Math.round(900 * ratingMultiplier),
-          receivingTDs: Math.round(7 * ratingMultiplier),
-          rushingYards: Math.round(50 * ratingMultiplier),
-          rushingTDs: Math.round(0.5 * ratingMultiplier)
-        }
-      };
-    
-    case 'TE':
-      return {
-        points: Math.round(140 * ratingMultiplier),
-        stats: {
-          receptions: Math.round(40 * ratingMultiplier),
-          receivingYards: Math.round(500 * ratingMultiplier),
-          receivingTDs: Math.round(5 * ratingMultiplier)
-        }
-      };
-    
-    case 'K':
-      return {
-        points: Math.round(120 * ratingMultiplier),
-        stats: {
-          fieldGoalsMade: Math.round(20 * ratingMultiplier),
-          fieldGoalAttempts: Math.round(25 * ratingMultiplier),
-          extraPointsMade: Math.round(35 * ratingMultiplier),
-          extraPointAttempts: Math.round(37 * ratingMultiplier)
-        }
-      };
-    
-    default:
-      return {
-        points: Math.round(100 * ratingMultiplier),
-        stats: {}
-      };
-  }
-}
+// PROJECTIONS: Now handled entirely by comprehensive pipeline scripts
+// Data flow: functions/project-yearly-simple/ → college_players.fantasy_points → API → UI
+// Pipeline includes: team pace, efficiency, depth charts, usage priors, injury risk, NFL draft capital
 
 function calculateADP(position: string, rating: number, index: number): number {
   // Position value multipliers (QBs typically go later in CFB)
@@ -469,24 +355,3 @@ function calculateADP(position: string, rating: number, index: number): number {
   return Math.round((index + 1) * multiplier + ratingFactor * 10);
 }
 
-// Heuristic depth multipliers so only likely starters project as full volume
-function depthMultiplier(position: string, rank: number): number {
-  const r = Math.max(1, rank);
-  switch (position) {
-    case 'QB':
-      // Only one starter; backups have negligible projection
-      return [1.0, 0.25, 0.08, 0.03, 0.01][r - 1] ?? 0.01;
-    case 'RB':
-      // Committees are common
-      return [1.0, 0.6, 0.4, 0.25, 0.15][r - 1] ?? 0.1;
-    case 'WR':
-      // 3 WR sets
-      return [1.0, 0.8, 0.6, 0.35, 0.2][r - 1] ?? 0.15;
-    case 'TE':
-      return [1.0, 0.35, 0.15][r - 1] ?? 0.1;
-    case 'K':
-      return [1.0, 0.2][r - 1] ?? 0.1;
-    default:
-      return 1.0;
-  }
-}
