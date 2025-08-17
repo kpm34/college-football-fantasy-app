@@ -1,13 +1,12 @@
 import { Client, Databases, Avatars, Storage, Functions } from 'appwrite';
-import { APPWRITE_CONFIG } from './config/appwrite.config';
 import { env, COLLECTIONS as ENV_COLLECTIONS } from '@/core/config/environment';
 
 // Initialize Appwrite client for frontend (NO API KEY - uses session auth)
 const client = new Client();
 
 client
-  .setEndpoint(APPWRITE_CONFIG.endpoint)
-  .setProject(APPWRITE_CONFIG.projectId);
+  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app');
 
 // Export Appwrite services for data operations only
 // Authentication is handled through API routes
@@ -17,8 +16,12 @@ export const storage = new Storage(client);
 export const functions = new Functions(client);
 export { client };
 
-// Re-export configuration
-export { APPWRITE_CONFIG };
+// Legacy configuration object for compatibility
+export const APPWRITE_CONFIG = {
+  endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1',
+  projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app',
+  databaseId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'college-football-fantasy',
+};
 
 // Centralized database and collections (single source of truth)
 export const DATABASE_ID = env.client.appwrite.databaseId;

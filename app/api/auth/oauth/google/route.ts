@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { OAuthProvider } from 'appwrite';
+import { Client, Account, OAuthProvider } from 'appwrite';
+import { cookies } from 'next/headers';
 
 // Since Appwrite OAuth must be initiated client-side, we'll return the proper URL
 export async function GET(request: NextRequest) {
@@ -43,9 +44,9 @@ export async function POST(request: NextRequest) {
     
     // Initialize Appwrite client
     const client = new Client()
-      .setEndpoint(APPWRITE_CONFIG.endpoint)
-      .setProject(APPWRITE_CONFIG.projectId)
-      .setKey(APPWRITE_CONFIG.apiKey!);
+      .setEndpoint(process.env.APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1")
+      .setProject(process.env.APPWRITE_PROJECT_ID || "college-football-fantasy-app")
+      .setKey(process.env.APPWRITE_API_KEY!);
     
     const account = new Account(client);
     

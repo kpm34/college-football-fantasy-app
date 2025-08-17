@@ -1,17 +1,17 @@
 import { z } from 'zod';
 import { Client, Databases, Teams, Functions, Storage, Users } from 'appwrite';
-import { APPWRITE_CONFIG } from '@/lib/config/appwrite.config';
+import { client, databases, DATABASE_ID } from '@/lib/appwrite-generated';
 
 // ========== APPWRITE TOOLS ==========
 export function registerAppwriteTools(server: any) {
   // Initialize Appwrite client
   const getAppwriteClient = () => {
     const client = new Client()
-      .setEndpoint(APPWRITE_CONFIG.endpoint)
-      .setProject(APPWRITE_CONFIG.projectId);
+      .setEndpoint(process.env.APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1")
+      .setProject(process.env.APPWRITE_PROJECT_ID || "college-football-fantasy-app");
     
-    if (APPWRITE_CONFIG.apiKey) {
-      client.setKey(APPWRITE_CONFIG.apiKey);
+    if (process.env.APPWRITE_API_KEY) {
+      client.setKey(process.env.APPWRITE_API_KEY);
     }
     
     return client;
@@ -152,10 +152,10 @@ export function registerAppwriteTools(server: any) {
     {},
     async () => {
       const info = {
-        endpoint: APPWRITE_CONFIG.endpoint,
-        projectId: APPWRITE_CONFIG.projectId,
-        apiKeySet: !!APPWRITE_CONFIG.apiKey,
-        databaseId: APPWRITE_CONFIG.databaseId,
+        endpoint: process.env.APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1",
+        projectId: process.env.APPWRITE_PROJECT_ID || "college-football-fantasy-app",
+        apiKeySet: !!process.env.APPWRITE_API_KEY,
+        databaseId: process.env.APPWRITE_DATABASE_ID,
       };
       
       return {
