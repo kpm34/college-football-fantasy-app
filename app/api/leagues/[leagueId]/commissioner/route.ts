@@ -117,16 +117,28 @@ export async function PUT(
     
     const updates = await request.json();
 
-    // Map camelCase fields from UI to snake_case fields used in Appwrite schema
+    // Map and sanitize: allow only known fields; ignore others (e.g., selectedConference in power4 mode)
     const mapped: Record<string, any> = {};
-    if ('name' in updates) mapped.name = updates.name;
-    if ('maxTeams' in updates) mapped.max_teams = Number(updates.maxTeams);
-    if ('pickTimeSeconds' in updates) mapped.pick_time_seconds = Number(updates.pickTimeSeconds);
-    if ('draftDate' in updates) mapped.draft_date = updates.draftDate; // ISO string
-    if ('orderMode' in updates) mapped.order_mode = updates.orderMode;
-    if ('gameMode' in updates) mapped.mode = updates.gameMode; // power4|sec|acc|big12|bigten
-    if ('selectedConference' in updates) mapped.conf = updates.selectedConference;
-    if ('scoringRules' in updates) mapped.scoring_rules = updates.scoringRules; // stringified JSON from UI
+    const setIfPresent = (key: string, value: any) => {
+      if (value !== undefined && value !== null && value !== '') mapped[key] = value;
+    };
+    setIfPresent('name', updates.name);
+    if ('maxTeams' in updates) setIfPresent('max_teams', Number(updates.maxTeams));
+    if ('pickTimeSeconds' in updates) setIfPresent('pick_time_seconds', Number(updates.pickTimeSeconds));
+    if ('draftDate' in updates) setIfPresent('draft_date', updates.draftDate); // ISO string
+    if ('orderMode' in updates) setIfPresent('order_mode', updates.orderMode);
+    if ('gameMode' in updates) setIfPresent('mode', updates.gameMode); // power4|sec|acc|big12|bigten
+    if (updates.gameMode === 'conference' && 'selectedConference' in updates) {
+      setIfPresent('conf', updates.selectedConference);
+    }
+    if ('scoringRules' in updates) setIfPresent('scoring_rules', updates.scoringRules); // stringified JSON from UI
+    if ('seasonStartWeek' in updates) setIfPresent('season_start_week', Number(updates.seasonStartWeek));
+    if ('playoffTeams' in updates) setIfPresent('playoff_teams', Number(updates.playoffTeams));
+    if ('playoffStartWeek' in updates) setIfPresent('playoff_start_week', Number(updates.playoffStartWeek));
+    if ('primaryColor' in updates) setIfPresent('primary_color', updates.primaryColor);
+    if ('secondaryColor' in updates) setIfPresent('secondary_color', updates.secondaryColor);
+    if ('leagueTrophyName' in updates) setIfPresent('league_trophy_name', updates.leagueTrophyName);
+    if ('draftType' in updates) setIfPresent('draft_type', updates.draftType);
 
     // Fallback: if no mapped keys found, pass original (for backwards compatibility)
     const payload = Object.keys(mapped).length > 0 ? mapped : updates;
