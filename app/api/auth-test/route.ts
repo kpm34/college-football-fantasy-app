@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { APPWRITE_CONFIG } from '@/lib/config/appwrite.config';
+import { client, databases, DATABASE_ID } from '@/lib/appwrite-generated';
 
 export async function GET() {
   // Return current configuration for debugging
   const config = {
-    endpoint: APPWRITE_CONFIG.endpoint,
-    projectId: APPWRITE_CONFIG.projectId,
-    databaseId: APPWRITE_CONFIG.databaseId,
+    endpoint: process.env.APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1",
+    projectId: process.env.APPWRITE_PROJECT_ID || "college-football-fantasy-app",
+    databaseId: process.env.APPWRITE_DATABASE_ID,
     environment: process.env.NODE_ENV,
     vercelUrl: process.env.VERCEL_URL,
     timestamp: new Date().toISOString(),

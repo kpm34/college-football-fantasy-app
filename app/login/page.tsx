@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { APPWRITE_CONFIG } from '@/lib/config/appwrite.config';
+import { client } from '@/lib/appwrite-generated';
 
 export default function LoginPage() {
   return (
@@ -130,8 +130,8 @@ function LoginPageContent() {
         {/* Debug info - remove in production */}
         {process.env.NODE_ENV === 'development' && (
           <div className="mt-4 p-2 rounded text-xs" style={{ backgroundColor: '#9256A4', color: '#FFF4EC' }}>
-            <p>Endpoint: {APPWRITE_CONFIG.endpoint}</p>
-            <p>Project: {APPWRITE_CONFIG.projectId}</p>
+            <p>Endpoint: {process.env.APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1"}</p>
+            <p>Project: {process.env.APPWRITE_PROJECT_ID || "college-football-fantasy-app"}</p>
             <p>Domain: {typeof window !== 'undefined' ? window.location.hostname : 'SSR'}</p>
           </div>
         )}
@@ -161,8 +161,8 @@ function OAuthButtons() {
       
       // Initialize client
       const client = new Client()
-        .setEndpoint(APPWRITE_CONFIG.endpoint)
-        .setProject(APPWRITE_CONFIG.projectId);
+        .setEndpoint(process.env.APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1")
+        .setProject(process.env.APPWRITE_PROJECT_ID || "college-football-fantasy-app");
       
       const account = new Account(client);
       
