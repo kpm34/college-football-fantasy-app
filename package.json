@@ -49,7 +49,13 @@
     "project:pro:yearly": "ts-node functions/project-pro-distributions/index.ts --season=2025 --runs=5000 --seed=42",
     "recalc:custom": "ts-node functions/recalc-custom-projection/index.ts --season=2025 --user=USER_ID --player=PLAYER_ID",
     "check:versions": "ts-node scripts/check-file-versions.ts",
-    "commit:safe": "npm run check:versions && git add -A && git commit"
+    "commit:safe": "npm run check:versions && git add -A && git commit",
+    "generate:types": "node schema/generators/types.ts",
+    "generate:appwrite": "node schema/generators/appwrite.ts",
+    "generate:env": "node schema/generators/env.ts",
+    "generate:all": "npm run generate:types && npm run generate:appwrite && npm run generate:env",
+    "seed:appwrite": "node schema/generators/seed-appwrite.ts",
+    "cleanup:schema": "node scripts/cleanup-old-schema-references.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",
