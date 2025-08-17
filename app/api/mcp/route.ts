@@ -191,7 +191,6 @@ const handler = createMcpHandler(
             eligibility: 'AP Top-25 opponents OR conference games only',
             season: '12-week regular season',
             draftSystem: 'Real-time drafting with Appwrite',
-            auctionSystem: 'Live bidding with budget management',
             teamColors: 'Individual team colors for all Power 4 teams',
             dataSources: ['ESPN API', 'CollegeFootballData API', 'Appwrite'],
           },
@@ -207,7 +206,6 @@ const handler = createMcpHandler(
           '/league/create',
           '/league/join',
           '/draft/[leagueId]',
-          '/auction/[leagueId]',
           '/scoreboard',
           '/standings',
           ]
@@ -312,25 +310,8 @@ const handler = createMcpHandler(
             'types/draft.ts'
           ];
           
-          const auctionComponents = [
-            'app/auction/[leagueId]/page.tsx',
-            'components/auction/AuctionBoard.tsx',
-            'components/auction/AuctionModal.tsx',
-            'components/auction/AuctionTimer.tsx',
-            'components/auction/TeamBudgets.tsx',
-            'types/auction.ts'
-          ];
-          
-          const results = await Promise.all([
-            ...draftComponents.map(async (comp) => {
-              try {
-                await fs.access(path.join(process.cwd(), comp));
-                return { component: comp, exists: true };
-              } catch {
-                return { component: comp, exists: false };
-              }
-            }),
-            ...auctionComponents.map(async (comp) => {
+          const results = await Promise.all(
+            draftComponents.map(async (comp) => {
               try {
                 await fs.access(path.join(process.cwd(), comp));
                 return { component: comp, exists: true };
@@ -338,15 +319,12 @@ const handler = createMcpHandler(
                 return { component: comp, exists: false };
               }
             })
-          ]);
-          
-          const draftStatus = results.slice(0, draftComponents.length);
-          const auctionStatus = results.slice(draftComponents.length);
+          );
           
           return {
             content: [{ 
               type: 'text', 
-              text: `Draft System Status:\n${draftStatus.map(r => `${r.exists ? '✅' : '❌'} ${r.component}`).join('\n')}\n\nAuction System Status:\n${auctionStatus.map(r => `${r.exists ? '✅' : '❌'} ${r.component}`).join('\n')}` 
+              text: `Realtime Draft System Status:\n${results.map(r => `${r.exists ? '✅' : '❌'} ${r.component}`).join('\n')}` 
             }],
           };
         } catch (error) {
