@@ -41,18 +41,19 @@ export class LeagueRepository extends BaseRepository<League> {
    */
   async createLeague(data: CreateLeagueData): Promise<League> {
     // Set defaults and map fields to match database schema
+    // Explicitly clean and type-cast all data to prevent schema conflicts
     const leagueData = {
-      name: data.name,
-      maxTeams: data.maxTeams,
-      draftType: data.draftType,
-      gameMode: data.gameMode,
-      isPublic: data.isPublic,
-      pickTimeSeconds: data.pickTimeSeconds,
-      commissioner: data.commissionerId, // Database has 'commissioner' field only
-      status: 'open',
+      name: String(data.name).trim(),
+      maxTeams: Number(data.maxTeams),
+      draftType: String(data.draftType) as 'snake' | 'auction',
+      gameMode: String(data.gameMode) as 'power4' | 'sec' | 'acc' | 'big12' | 'bigten',
+      isPublic: Boolean(data.isPublic),
+      pickTimeSeconds: Number(data.pickTimeSeconds),
+      commissioner: String(data.commissionerId), // Database has 'commissioner' field only
+      status: 'open' as const,
       currentTeams: 0,
-      season: data.season || new Date().getFullYear(),
-      scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules()),
+      season: Number(data.season || new Date().getFullYear()),
+      scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules())
     };
 
     return this.create(leagueData, {
@@ -167,22 +168,23 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('You are already in this league');
     }
 
-    // Create roster entry
-    const roster = await rosterRepo.create({
-      leagueId,
-      userId,
-      teamName,
-      abbreviation: abbreviation || teamName.substring(0, 3).toUpperCase(),
-      draftPosition: league.currentTeams + 1,
+    // Create roster entry (only attributes guaranteed in schema)
+    // Explicitly define clean roster data to avoid schema conflicts
+    const cleanRosterData = {
+      leagueId: String(leagueId),
+      userId: String(userId),
+      teamName: String(teamName),
+      abbreviation: String(abbreviation || teamName.substring(0, 3).toUpperCase()),
+      draftPosition: Number(league.currentTeams + 1),
       wins: 0,
       losses: 0,
       ties: 0,
       pointsFor: 0,
       pointsAgainst: 0,
-      players: [],
-      lineup: {},
-      bench: []
-    });
+      players: [] as string[]
+    };
+    
+    const roster = await rosterRepo.create(cleanRosterData);
 
     // Update league team count
     const updatedLeague = await this.update(leagueId, {

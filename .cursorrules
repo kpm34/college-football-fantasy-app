@@ -1,5 +1,47 @@
 # College Football Fantasy App - Cursor AI Assistant Rules
 
+## 🤖 AI Model Selection Strategy
+
+### Primary Model Assignments:
+- **Primary Coder**: Claude Opus 4.x / Sonnet 4 (day-to-day code edits & refactors)
+- **Planner/Agent**: GPT-5 (Thinking/High) for tricky multi-tool chains  
+- **Max Mode/Huge Context**: Claude Opus 4.1 for massive context requirements
+- **Available (Not Default)**: Grok 4 (keep accessible but don't auto-select)
+
+### Auto Model Selection Rules:
+```
+Code Generation/Edits → Claude Opus 4.x / Sonnet 4
+Code Refactoring → Claude Opus 4.x / Sonnet 4  
+Planning/Architecture → GPT-5 (Thinking/High)
+Multi-tool Workflows → GPT-5 (Thinking/High)
+Large Context Analysis → Claude Opus 4.1
+Complex Problem Solving → GPT-5 (Thinking/High)
+Daily Development → Claude Opus 4.x / Sonnet 4
+```
+
+### Model Preferences by Task:
+- **Default for coding**: Always start with Claude Opus 4.x/Sonnet 4
+- **Switch to GPT-5**: When dealing with complex planning, multi-step workflows, or agent-style tasks
+- **Escalate to Opus 4.1**: When context exceeds normal limits or need maximum reasoning
+- **Grok 4**: Manual selection only, keep in toolkit but don't auto-suggest
+
+### Trigger Keywords for Model Selection:
+**Claude Opus 4.x/Sonnet 4 (Primary Coder):**
+- "fix", "edit", "refactor", "update", "modify", "change"
+- "implement", "create component", "add feature", "write function"
+- "debug", "optimize", "clean up", "improve"
+
+**GPT-5 Thinking/High (Planner/Agent):**
+- "plan", "design", "architecture", "strategy", "approach"
+- "multi-step", "workflow", "pipeline", "automation"
+- "complex problem", "analyze system", "breakdown"
+- "integrate multiple", "coordinate", "orchestrate"
+
+**Claude Opus 4.1 (Max Mode/Huge Context):**
+- "analyze entire codebase", "large refactor", "massive context"
+- "understand whole project", "comprehensive review"
+- "max context", "full analysis", "complete understanding"
+
 ## 🎯 Project Context
 Fantasy football platform for Power 4 conferences (SEC, ACC, Big 12, Big Ten) with unique eligibility rules where players only score against AP Top-25 teams or in conference games.
 
