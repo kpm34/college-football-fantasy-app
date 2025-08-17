@@ -1,4 +1,9 @@
 {
   "__comment": "Optional overrides: team_id -> position -> array of { player_name, snap_share, rush_share?, target_share? }. Values here replace computed priors.",
-  
+  "FLA": {
+    "QB": [
+      { "player_name": "DJ Lagway", "snap_share": 0.95 },
+      { "player_name": "Harrison Bailey", "snap_share": 0.05 }
+    ]
+  }
 }

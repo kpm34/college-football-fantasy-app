@@ -115,9 +115,9 @@ export default function MockDraftPage() {
 
   const loadPlayers = async () => {
     try {
-      // Load players from our dedicated draft endpoint
+      // Load players from our enhanced draft endpoint with top 200 ordering
       const season = new Date().getFullYear();
-      const response = await fetch(`/api/draft/players?limit=5000&season=${season}`);
+      const response = await fetch(`/api/draft/players?limit=5000&season=${season}&top200=true&orderBy=projection`);
       const data = await response.json();
       
       if (data.success && data.players && data.players.length > 0) {
@@ -131,17 +131,31 @@ export default function MockDraftPage() {
           class: player.year,
           height: player.height,
           weight: typeof player.weight === 'string' ? parseInt(player.weight) : player.weight,
-          projectedPoints: player.projectedPoints,
+          projectedPoints: player.projectedPoints || player.fantasy_points || 0, // Use enhanced projections
           adp: player.adp,
-          pastStats: player.projectedStats || {
+          projections: player.projections || {
+            season: {
+              total: player.projectedPoints || player.fantasy_points || 0,
+              passing: 0,
+              rushing: 0,
+              receiving: 0,
+              touchdowns: 0,
+              fieldGoals: 0,
+              extraPoints: 0,
+            },
+            perGame: {
+              points: player.projectedPoints ? (player.projectedPoints / 12).toFixed(1) : '0.0'
+            }
+          },
+          pastStats: player.prevSeasonStats || {
             games: 12,
-            passingYards: player.projectedStats?.passingYards,
-            passingTDs: player.projectedStats?.passingTDs,
-            rushingYards: player.projectedStats?.rushingYards,
-            rushingTDs: player.projectedStats?.rushingTDs,
-            receivingYards: player.projectedStats?.receivingYards,
-            receptions: player.projectedStats?.receptions,
-            receivingTDs: player.projectedStats?.receivingTDs,
+            passingYards: player.prevSeasonStats?.passingYards,
+            passingTDs: player.prevSeasonStats?.passingTDs || player.projectedStats?.passingTDs,
+            rushingYards: player.prevSeasonStats?.rushingYards || player.projectedStats?.rushingYards,
+            rushingTDs: player.prevSeasonStats?.rushingTDs || player.projectedStats?.rushingTDs,
+            receivingYards: player.prevSeasonStats?.receivingYards || player.projectedStats?.receivingYards,
+            receptions: player.prevSeasonStats?.receptions || player.projectedStats?.receptions,
+            receivingTDs: player.prevSeasonStats?.receivingTDs || player.projectedStats?.receivingTDs,
           },
           eaRating: player.rating
         }));

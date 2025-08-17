@@ -1,4 +1,5 @@
 {
   "__comment": "Map external school names to your internal team_id codes (e.g., 'Notre Dame' -> 'ND').",
-  "Notre Dame": "ND"
+  "Notre Dame": "ND",
+  "Florida": "FLA"
 }

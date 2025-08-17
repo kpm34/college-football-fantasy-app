@@ -256,10 +256,10 @@ export async function GET(request: NextRequest) {
       const rating = player.fantasy_points ? Math.min(99, Math.round(60 + (player.fantasy_points / 10))) : 80;
       
       // Priority order for projections:
-      // 1. Existing projection field (most accurate)
-      // 2. Fantasy_points field 
-      // 3. Calculated projection
-      let fantasyPoints = player.projection || player.fantasy_points;
+      // 1. Enhanced fantasy_points field (most accurate - has depth chart logic)
+      // 2. Calculated projection
+      // 3. Legacy projection field (last resort)
+      let fantasyPoints = player.fantasy_points;
       if (!fantasyPoints || fantasyPoints <= 0) {
         fantasyPoints = calculateProjection(position, rating);
       }
@@ -296,7 +296,7 @@ export async function GET(request: NextRequest) {
         // Comprehensive projections from database
         projections: {
           season: {
-            total: player.projection || player.fantasy_points || 0,
+            total: fantasyPoints,
             passing: player.passing_projection || 0,
             rushing: player.rushing_projection || 0,
             receiving: player.receiving_projection || 0,
@@ -305,7 +305,7 @@ export async function GET(request: NextRequest) {
             extraPoints: player.extra_points_projection || 0
           },
           perGame: {
-            points: player.projection ? (player.projection / 12).toFixed(1) : '0.0'
+            points: (fantasyPoints / 12).toFixed(1)
           }
         },
         // Additional stats for better context

@@ -5,9 +5,9 @@ import { PlayerProjection } from '@/types/projections';
 /**
  * @deprecated This service is deprecated as of August 17, 2025
  * The enhanced projection logic has been consolidated into:
- * - projections.service.ts (getEnhancedSeasonProjections method)
- * - /api/players/cached endpoint
- * - scripts/sync-enhanced-projections.js for data updates
+ * - /api/draft/players endpoint (with depth chart logic)
+ * - /api/players/cached endpoint (cached player data)
+ * - scripts/ingestDepthCharts.ts for depth chart updates
  */
 
 interface DepthChartPlayer {
