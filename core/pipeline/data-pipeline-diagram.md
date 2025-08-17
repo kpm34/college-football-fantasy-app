@@ -151,14 +151,14 @@ graph TB
     API_MOCK_DRAFT --> ACTIVITY
     USERS --> ACTIVITY
     
-    %% Styling
-    classDef external fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    classDef sync fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    classDef database fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    classDef api fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    classDef frontend fill:#fce4ec,stroke:#c2185b,stroke-width:2px
-    classDef infra fill:#e0f2f1,stroke:#00796b,stroke-width:2px
-    classDef realtime fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+    %% Styling - High Contrast for Better Legibility
+    classDef external fill:#ffffff,stroke:#1976d2,stroke-width:3px,color:#000000
+    classDef sync fill:#ffffff,stroke:#7b1fa2,stroke-width:3px,color:#000000
+    classDef database fill:#ffffff,stroke:#2e7d32,stroke-width:3px,color:#000000
+    classDef api fill:#ffffff,stroke:#ef6c00,stroke-width:3px,color:#000000
+    classDef frontend fill:#ffffff,stroke:#c2185b,stroke-width:3px,color:#000000
+    classDef infra fill:#ffffff,stroke:#00695c,stroke-width:3px,color:#000000
+    classDef realtime fill:#ffffff,stroke:#558b2f,stroke-width:3px,color:#000000
     
     class CFBD,ESPN,ROTOWIRE external
     class SYNC_ENGINE,TRANSFORM,QUEUE sync
@@ -227,10 +227,10 @@ flowchart TD
     L --> Q
     Q --> O
     
-    style A fill:#e8f5e8
-    style O fill:#e8f5e8
-    style Q fill:#ffebee
-    style L fill:#ffebee
+    style A fill:#ffffff,stroke:#4caf50,stroke-width:3px,color:#000000
+    style O fill:#ffffff,stroke:#4caf50,stroke-width:3px,color:#000000
+    style Q fill:#ffffff,stroke:#f44336,stroke-width:3px,color:#000000
+    style L fill:#ffffff,stroke:#f44336,stroke-width:3px,color:#000000
 ```
 
 ## Real-time Data Flow (WebSocket Events)
@@ -297,10 +297,10 @@ flowchart LR
     T4 --> L3
     T4 --> L4
     
-    style T1 fill:#ffcdd2
-    style T2 fill:#dcedc1
-    style T3 fill:#ffe0b2
-    style T4 fill:#e1bee7
+    style T1 fill:#ffffff,stroke:#f44336,stroke-width:3px,color:#000000
+    style T2 fill:#ffffff,stroke:#4caf50,stroke-width:3px,color:#000000
+    style T3 fill:#ffffff,stroke:#ff9800,stroke-width:3px,color:#000000
+    style T4 fill:#ffffff,stroke:#9c27b0,stroke-width:3px,color:#000000
 ```
 
 ## Deployment Sync Pipeline
@@ -330,9 +330,12 @@ flowchart TD
     Q -->|No| R[Auto-Rollback<br/>Alert Team]
     Q -->|Yes| S[Deployment Complete<br/>Notify Success]
     
-    style A fill:#e8f5e8
-    style S fill:#e8f5e8
-    style D,G,K,R fill:#ffebee
+    style A fill:#ffffff,stroke:#4caf50,stroke-width:3px,color:#000000
+    style S fill:#ffffff,stroke:#4caf50,stroke-width:3px,color:#000000
+    style D fill:#ffffff,stroke:#f44336,stroke-width:3px,color:#000000
+    style G fill:#ffffff,stroke:#f44336,stroke-width:3px,color:#000000
+    style K fill:#ffffff,stroke:#f44336,stroke-width:3px,color:#000000
+    style R fill:#ffffff,stroke:#f44336,stroke-width:3px,color:#000000
 ```
 
 ## Key Improvements Over Old System
