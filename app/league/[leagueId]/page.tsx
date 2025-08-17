@@ -391,13 +391,27 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       setSavingSettings(true);
 
       try {
-        await fetch(`/api/leagues/${league.$id}/update-settings`, {
+        const response = await fetch(`/api/leagues/${league.$id}/update-settings`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ scoringRules: JSON.stringify(newSettings) })
         });
-      } catch (error) {
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+          throw new Error(errorData.error || `HTTP ${response.status}`);
+        }
+        
+        console.log('Scoring settings saved successfully');
+        
+      } catch (error: any) {
         console.error('Error saving scoring settings:', error);
+        alert(`Failed to save scoring settings: ${error.message || 'Unknown error'}`);
+        
+        // Revert the UI state on error
+        const originalValue = (league as any).scoringRules ? 
+          JSON.parse((league as any).scoringRules)[key] || 0 : 0;
+        setScoringSettings(prev => ({ ...prev, [key]: originalValue }));
       } finally {
         setSavingSettings(false);
       }
@@ -424,13 +438,32 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           }
         }
 
-        await fetch(`/api/leagues/${league.$id}/update-settings`, {
+        const response = await fetch(`/api/leagues/${league.$id}/update-settings`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updates)
         });
-      } catch (error) {
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+          throw new Error(errorData.error || `HTTP ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('Settings saved successfully:', result);
+        
+      } catch (error: any) {
         console.error('Error saving draft settings:', error);
+        alert(`Failed to save settings: ${error.message || 'Unknown error'}`);
+        
+        // Revert the UI state on error
+        const originalValue = key === 'type' ? (league as any).draftType || 'snake' :
+                             key === 'pickTimeSeconds' ? (league as any).pickTimeSeconds || 90 :
+                             key === 'orderMode' ? (league as any).orderMode || 'random' :
+                             key === 'date' ? (league.draftDate ? new Date(league.draftDate).toISOString().split('T')[0] : '') :
+                             key === 'time' ? (league.draftDate ? new Date(league.draftDate).toTimeString().slice(0, 5) : '') : value;
+        
+        setDraftSettings(prev => ({ ...prev, [key]: originalValue }));
       } finally {
         setSavingSettings(false);
       }

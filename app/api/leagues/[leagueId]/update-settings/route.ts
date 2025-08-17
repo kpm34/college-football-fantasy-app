@@ -1,6 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+// Valid league attributes that can be updated
+const VALID_LEAGUE_ATTRIBUTES = [
+  'name',
+  'maxTeams', 
+  'isPublic',
+  'pickTimeSeconds',
+  'scoringRules',
+  'draftDate',
+  'draftType',
+  'orderMode',
+  'gameMode',
+  'status',
+  'season',
+  'commissioner',
+  'currentTeams'
+];
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: { leagueId: string } }
@@ -28,6 +48,7 @@ export async function PUT(
     const user = await userRes.json();
     
     const body = await request.json();
+    console.log('Update settings request body:', body);
     
     // Verify user is commissioner
     const league = await databases.getDocument(
@@ -43,19 +64,64 @@ export async function PUT(
       );
     }
     
-    // Update league settings
+    // Filter out invalid attributes to prevent schema errors
+    const validUpdates: Record<string, any> = {};
+    const invalidFields: string[] = [];
+    
+    for (const [key, value] of Object.entries(body)) {
+      if (VALID_LEAGUE_ATTRIBUTES.includes(key)) {
+        validUpdates[key] = value;
+      } else {
+        invalidFields.push(key);
+      }
+    }
+    
+    if (invalidFields.length > 0) {
+      console.warn('Filtered out invalid league attributes:', invalidFields);
+    }
+    
+    if (Object.keys(validUpdates).length === 0) {
+      return NextResponse.json(
+        { error: 'No valid attributes to update', invalidFields },
+        { status: 400 }
+      );
+    }
+    
+    console.log('Valid updates to apply:', validUpdates);
+    
+    // Update league settings with only valid attributes
     const result = await databases.updateDocument(
       DATABASE_ID,
       COLLECTIONS.LEAGUES,
       params.leagueId,
-      body
+      validUpdates
     );
     
-    return NextResponse.json({ success: true, league: result });
+    return NextResponse.json({ 
+      success: true, 
+      league: result,
+      appliedUpdates: validUpdates,
+      filteredFields: invalidFields
+    });
   } catch (error: any) {
     console.error('Update league settings error:', error);
+    
+    // Provide more specific error messages
+    let errorMessage = 'Failed to update league settings';
+    if (error.message?.includes('Unknown attribute')) {
+      errorMessage = 'Invalid field in update request';
+    } else if (error.message?.includes('Invalid document structure')) {
+      errorMessage = 'Invalid data format';
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
     return NextResponse.json(
-      { error: error.message || 'Failed to update league settings' },
+      { 
+        error: errorMessage,
+        details: error.message,
+        code: error.code 
+      },
       { status: error.code === 401 ? 401 : 500 }
     );
   }
