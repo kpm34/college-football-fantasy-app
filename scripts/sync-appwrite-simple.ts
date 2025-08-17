@@ -36,7 +36,12 @@ async function ensureStringAttr(collectionId: string, key: string, required: boo
   }
   catch { 
     console.log(`    ➕ Adding string '${key}' (${size} chars, required: ${required})`);
-    await db.createStringAttribute(databaseId, collectionId, key, size, required, defaultValue);
+    // Don't pass defaultValue if required is true
+    if (required && defaultValue !== undefined) {
+      await db.createStringAttribute(databaseId, collectionId, key, size, required);
+    } else {
+      await db.createStringAttribute(databaseId, collectionId, key, size, required, defaultValue);
+    }
     await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for attribute
   }
 }
@@ -47,7 +52,12 @@ async function ensureIntegerAttr(collectionId: string, key: string, required: bo
   }
   catch { 
     console.log(`    ➕ Adding integer '${key}' (required: ${required})`);
-    await db.createIntegerAttribute(databaseId, collectionId, key, required, min, max, defaultValue);
+    // Don't pass defaultValue if required is true
+    if (required && defaultValue !== undefined) {
+      await db.createIntegerAttribute(databaseId, collectionId, key, required, min, max);
+    } else {
+      await db.createIntegerAttribute(databaseId, collectionId, key, required, min, max, defaultValue);
+    }
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 }
@@ -58,7 +68,12 @@ async function ensureDoubleAttr(collectionId: string, key: string, required: boo
   }
   catch { 
     console.log(`    ➕ Adding double '${key}' (required: ${required})`);
-    await db.createFloatAttribute(databaseId, collectionId, key, required, undefined, undefined, defaultValue);
+    // Don't pass defaultValue if required is true
+    if (required && defaultValue !== undefined) {
+      await db.createFloatAttribute(databaseId, collectionId, key, required);
+    } else {
+      await db.createFloatAttribute(databaseId, collectionId, key, required, undefined, undefined, defaultValue);
+    }
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 }
@@ -69,7 +84,12 @@ async function ensureBooleanAttr(collectionId: string, key: string, required: bo
   }
   catch { 
     console.log(`    ➕ Adding boolean '${key}' (required: ${required})`);
-    await db.createBooleanAttribute(databaseId, collectionId, key, required, defaultValue);
+    // Don't pass defaultValue if required is true
+    if (required && defaultValue !== undefined) {
+      await db.createBooleanAttribute(databaseId, collectionId, key, required);
+    } else {
+      await db.createBooleanAttribute(databaseId, collectionId, key, required, defaultValue);
+    }
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 }
@@ -161,21 +181,21 @@ async function main() {
     await ensureIndex("college_players", "points_idx", "key", ["fantasy_points"]);
     await ensureIndex("college_players", "name_search", "fulltext", ["name"]);
 
-    // Sync Rosters collection
-    await ensureCollection("rosters", "Rosters");
-    await ensureStringAttr("rosters", "leagueId", true);
-    await ensureStringAttr("rosters", "userId", true);
-    await ensureStringAttr("rosters", "teamName", true, 128);
-    await ensureIntegerAttr("rosters", "draftPosition", false, 1);
-    await ensureIntegerAttr("rosters", "wins", true, 0, undefined, 0);
-    await ensureIntegerAttr("rosters", "losses", true, 0, undefined, 0);
-    await ensureDoubleAttr("rosters", "pointsFor", true, 0);
-    await ensureDoubleAttr("rosters", "pointsAgainst", true, 0);
-    await ensureStringAttr("rosters", "players", true, 5000, "[]"); // JSON array of player IDs
+    // Sync User Teams collection
+    await ensureCollection("user_teams", "User Teams");
+    await ensureStringAttr("user_teams", "leagueId", true);
+    await ensureStringAttr("user_teams", "userId", true);
+    await ensureStringAttr("user_teams", "teamName", true, 128);
+    await ensureIntegerAttr("user_teams", "draftPosition", false, 1);
+    await ensureIntegerAttr("user_teams", "wins", true, 0, undefined, 0);
+    await ensureIntegerAttr("user_teams", "losses", true, 0, undefined, 0);
+    await ensureDoubleAttr("user_teams", "pointsFor", true, 0);
+    await ensureDoubleAttr("user_teams", "pointsAgainst", true, 0);
+    await ensureStringAttr("user_teams", "players", true, 5000, "[]"); // JSON array of player IDs
     
-    await ensureIndex("rosters", "league_idx", "key", ["leagueId"]);
-    await ensureIndex("rosters", "user_idx", "key", ["userId"]);
-    await ensureIndex("rosters", "league_user_idx", "unique", ["leagueId", "userId"]);
+    await ensureIndex("user_teams", "league_idx", "key", ["leagueId"]);
+    await ensureIndex("user_teams", "user_idx", "key", ["userId"]);
+    await ensureIndex("user_teams", "league_user_idx", "unique", ["leagueId", "userId"]);
 
     // Sync Games collection  
     await ensureCollection("games", "Games");

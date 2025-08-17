@@ -34,21 +34,21 @@ export interface AddPlayerData {
 }
 
 export class RosterRepository extends BaseRepository<Roster> {
-  protected collectionId = 'rosters';
+  protected collectionId = 'user_teams';
   protected cachePrefix = 'roster';
 
   /**
    * Validate roster data using schema enforcer
    */
   protected async validateCreate(data: Partial<Roster>): Promise<void> {
-    const validation = SchemaValidator.validate('rosters', data);
+    const validation = SchemaValidator.validate('user_teams', data);
     if (!validation.success) {
       throw new ValidationError(`Roster validation failed: ${validation.errors?.join(', ')}`);
     }
   }
 
   protected async validateUpdate(id: string, data: Partial<Roster>): Promise<void> {
-    const validation = SchemaValidator.validate('rosters', data);
+    const validation = SchemaValidator.validate('user_teams', data);
     if (!validation.success) {
       throw new ValidationError(`Roster validation failed: ${validation.errors?.join(', ')}`);
     }
@@ -129,7 +129,7 @@ export class RosterRepository extends BaseRepository<Roster> {
     ];
 
     // Transform data for schema compliance (JSON stringify for large arrays)
-    const updateData = SchemaValidator.transform('rosters', {
+    const updateData = SchemaValidator.transform('user_teams', {
       players: JSON.stringify(updatedPlayers),
       updatedAt: new Date().toISOString()
     });
