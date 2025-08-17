@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserGroupIcon, CalendarIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserLeaguesRealtime } from "@/hooks/useUserLeaguesRealtime";
 
 type League = {
   $id: string;
@@ -29,8 +30,12 @@ export default function DashboardPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [leagues, setLeagues] = useState<League[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
+  const [deletedMessage, setDeletedMessage] = useState(false);
+  
+  // Use real-time hook for leagues
+  const userLeaguesRealtime = useUserLeaguesRealtime();
+  const leagues = userLeaguesRealtime.leagues;
   const palette = {
     background: '#FFF4EC',       // off-white
     primary: '#5E2B8A',          // deep purple
@@ -51,22 +56,38 @@ export default function DashboardPage() {
     }
 
     fetchUserLeagues();
+    
+    // Check for deletion message from URL params
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('deleted') === 'true') {
+      setDeletedMessage(true);
+      setTimeout(() => setDeletedMessage(false), 5000);
+      // Remove param from URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
   }, [user, authLoading, router]);
+
+  // Update loading state based on real-time hook
+  useEffect(() => {
+    setLoading(userLeaguesRealtime.loading);
+  }, [userLeaguesRealtime.loading]);
 
   const fetchUserLeagues = async () => {
     try {
+      // Teams are still fetched separately since they're not part of the real-time hook yet
       const response = await fetch('/api/leagues/my-leagues');
       if (!response.ok) {
         throw new Error('Failed to fetch leagues');
       }
       
       const data = await response.json();
-      setLeagues(data.leagues || []);
       setTeams(data.teams || []);
     } catch (error) {
-      console.error('Error fetching leagues:', error);
+      console.error('Error fetching user data:', error);
     } finally {
-      setLoading(false);
+      if (!userLeaguesRealtime.loading) {
+        setLoading(false);
+      }
     }
   };
 
@@ -101,6 +122,32 @@ export default function DashboardPage() {
             </svg>
             Account Settings
           </Link>
+        </div>
+
+        {/* League Deletion Message */}
+        {deletedMessage && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-center gap-2">
+              <div className="text-red-500">⚠️</div>
+              <div>
+                <h4 className="text-red-800 font-semibold">League Deleted</h4>
+                <p className="text-red-600 text-sm">The league you were viewing has been deleted.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Real-time Connection Status */}
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${userLeaguesRealtime.connected ? 'bg-green-400' : 'bg-gray-400'}`}></div>
+            <span className="text-sm" style={{ color: palette.muted }}>
+              {userLeaguesRealtime.connected ? 'Live updates connected' : 'Connecting...'}
+            </span>
+          </div>
+          <p className="text-sm" style={{ color: palette.muted }}>
+            {leagues.length} league{leagues.length !== 1 ? 's' : ''}
+          </p>
         </div>
 
         {/* Quick Actions */}

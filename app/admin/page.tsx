@@ -139,6 +139,23 @@ export default function AdminDashboard() {
               <h3 className="font-semibold text-white">SEC NFL Survey</h3>
               <p className="text-sm text-gray-200 mt-1">Find NFL/graduated SEC players</p>
             </Link>
+            <button 
+              onClick={() => {
+                const id = prompt('Enter League or Roster ID to delete for testing:');
+                const type = prompt('Enter type (league or roster):');
+                if (id && type) {
+                  fetch('/api/debug/test-realtime', { 
+                    method: 'DELETE', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ id, type }) 
+                  }).then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)));
+                }
+              }}
+              className="p-4 bg-gradient-to-r from-red-600 to-red-700 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <h3 className="font-semibold text-white">🧪 Test Real-time</h3>
+              <p className="text-sm text-gray-200 mt-1">Delete league/roster for testing</p>
+            </button>
             <button className="p-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg hover:opacity-90 transition-opacity">
               <h3 className="font-semibold text-white">Launch Beta</h3>
               <p className="text-sm text-gray-200 mt-1">Open to first 100 users</p>

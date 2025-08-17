@@ -8,6 +8,7 @@ import { FiSettings, FiUsers, FiCalendar, FiTrendingUp, FiClipboard, FiAward, Fi
 import { leagueColors } from "@/lib/theme/colors";
 import { useAuth } from "@/hooks/useAuth";
 import { useLeagueMembersRealtime } from "@/hooks/useLeagueMembersRealtime";
+import { useLeagueRealtime } from "@/hooks/useLeagueRealtime";
 import { isUserCommissioner, debugCommissionerMatch } from "@/lib/utils/commissioner";
 import { InviteModal } from "@/components/league/InviteModal";
 
@@ -106,6 +107,9 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
 
   // Hook: live members
   const membersRealtime = useLeagueMembersRealtime(leagueId);
+  
+  // Hook: live league updates and deletion
+  const leagueRealtime = useLeagueRealtime(leagueId, league);
 
   // Load league data when leagueId resolves or user becomes available
   useEffect(() => {
@@ -224,6 +228,25 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       setTeams(membersRealtime.teams as unknown as Team[]);
     }
   }, [membersRealtime.teams]);
+
+  // Handle league real-time updates
+  useEffect(() => {
+    if (leagueRealtime.league && leagueRealtime.league !== league) {
+      console.log('League updated via realtime:', leagueRealtime.league);
+      setLeague(leagueRealtime.league);
+    }
+  }, [leagueRealtime.league]);
+
+  // Handle league deletion
+  useEffect(() => {
+    if (leagueRealtime.deleted) {
+      console.log('League deleted via realtime');
+      // Show message and redirect after delay
+      setTimeout(() => {
+        router.push('/dashboard?deleted=true');
+      }, 3000);
+    }
+  }, [leagueRealtime.deleted, router]);
 
   // When teams update, if we have a user, derive the user's team locally
   useEffect(() => {
@@ -644,6 +667,26 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     </div>
   );
 
+  // Show league deleted message
+  if (leagueRealtime.deleted) {
+    return (
+      <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main }}>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center bg-red-900/20 border border-red-500/30 rounded-lg p-8 max-w-md">
+            <div className="text-red-400 text-6xl mb-4">⚠️</div>
+            <h1 className="text-2xl font-bold text-white mb-4">League Deleted</h1>
+            <p className="text-gray-300 mb-4">
+              This league has been deleted and is no longer available.
+            </p>
+            <p className="text-sm text-gray-400">
+              Redirecting to dashboard in 3 seconds...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main }}>
@@ -651,6 +694,13 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderBottomColor: leagueColors.primary.highlight }}></div>
             <p className="text-lg" style={{ color: leagueColors.text.primary }}>Loading league...</p>
+            {/* Real-time connection status */}
+            <div className="mt-4 flex items-center justify-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${membersRealtime.connected ? 'bg-green-400' : 'bg-gray-400'}`}></div>
+              <span className="text-sm text-gray-400">
+                {membersRealtime.connected ? 'Connected' : 'Connecting...'}
+              </span>
+            </div>
           </div>
         </div>
       </div>
