@@ -1,0 +1,333 @@
+{
+  "draftId": "68a2245d003d9c7a0f70",
+  "totalPicks": 4,
+  "uniquePlayers": 4,
+  "noDuplicates": true,
+  "concurrentResults": [
+    {
+      "slot": 3,
+      "success": true,
+      "player": "LaNorris Sellers"
+    },
+    {
+      "slot": 4,
+      "success": true,
+      "player": "Brady Cook"
+    },
+    {
+      "slot": 5,
+      "success": false,
+      "error": "HTTP 400: Pick order changed - not your turn"
+    },
+    {
+      "slot": 6,
+      "success": false,
+      "error": "HTTP 400: Not your turn to pick"
+    }
+  ],
+  "finalStatus": {
+    "success": true,
+    "draft": {
+      "leagueId": null,
+      "draftName": "Simple Concurrency Test",
+      "numTeams": 8,
+      "rounds": 2,
+      "snake": true,
+      "status": "active",
+      "startedAt": "2025-08-17T18:50:08.096+00:00",
+      "completedAt": null,
+      "config": {
+        "seed": "SIMPLE-TEST-001",
+        "timerPerPickSec": 5,
+        "positionLimits": {
+          "QB": 2,
+          "RB": 4,
+          "WR": 6,
+          "TE": 2,
+          "K": 1
+        }
+      },
+      "$sequence": 3,
+      "$id": "68a2245d003d9c7a0f70",
+      "$createdAt": "2025-08-17T18:50:06.126+00:00",
+      "$updatedAt": "2025-08-17T18:50:08.203+00:00",
+      "$permissions": [],
+      "$databaseId": "college-football-fantasy",
+      "$collectionId": "mock_drafts"
+    },
+    "participants": [
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "userType": "bot",
+        "displayName": "Bot Team 1",
+        "slot": 1,
+        "$id": "68a2245e00096466e6de",
+        "$sequence": 17,
+        "$createdAt": "2025-08-17T18:50:06.267+00:00",
+        "$updatedAt": "2025-08-17T18:50:06.267+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_participants"
+      },
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "userType": "bot",
+        "displayName": "Bot Team 2",
+        "slot": 2,
+        "$id": "68a2245e0012b6c56be0",
+        "$sequence": 18,
+        "$createdAt": "2025-08-17T18:50:06.420+00:00",
+        "$updatedAt": "2025-08-17T18:50:06.420+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_participants"
+      },
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "userType": "bot",
+        "displayName": "Bot Team 3",
+        "slot": 3,
+        "$id": "68a2245e001bb9360f74",
+        "$sequence": 19,
+        "$createdAt": "2025-08-17T18:50:06.566+00:00",
+        "$updatedAt": "2025-08-17T18:50:06.566+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_participants"
+      },
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "userType": "bot",
+        "displayName": "Bot Team 4",
+        "slot": 4,
+        "$id": "68a2245e00244e8a23a6",
+        "$sequence": 20,
+        "$createdAt": "2025-08-17T18:50:06.696+00:00",
+        "$updatedAt": "2025-08-17T18:50:06.696+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_participants"
+      },
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "userType": "bot",
+        "displayName": "Bot Team 5",
+        "slot": 5,
+        "$id": "68a2245e002c5855643f",
+        "$sequence": 21,
+        "$createdAt": "2025-08-17T18:50:06.823+00:00",
+        "$updatedAt": "2025-08-17T18:50:06.823+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_participants"
+      },
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "userType": "bot",
+        "displayName": "Bot Team 6",
+        "slot": 6,
+        "$id": "68a2245e00344cf517dd",
+        "$sequence": 22,
+        "$createdAt": "2025-08-17T18:50:06.996+00:00",
+        "$updatedAt": "2025-08-17T18:50:06.996+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_participants"
+      },
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "userType": "bot",
+        "displayName": "Bot Team 7",
+        "slot": 7,
+        "$id": "68a2245f0000e424f19c",
+        "$sequence": 23,
+        "$createdAt": "2025-08-17T18:50:07.305+00:00",
+        "$updatedAt": "2025-08-17T18:50:07.305+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_participants"
+      },
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "userType": "bot",
+        "displayName": "Bot Team 8",
+        "slot": 8,
+        "$id": "68a2245f001a9cc32aa2",
+        "$sequence": 24,
+        "$createdAt": "2025-08-17T18:50:07.564+00:00",
+        "$updatedAt": "2025-08-17T18:50:07.564+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_participants"
+      }
+    ],
+    "picks": [
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "round": 1,
+        "overall": 1,
+        "slot": 1,
+        "participantId": "68a2245e00096466e6de",
+        "playerId": "689028a9cae48174b2d8",
+        "pickedAt": "2025-08-17T18:50:15.389+00:00",
+        "autopick": false,
+        "$id": "68a2246700185bf94c13",
+        "$sequence": 121,
+        "$createdAt": "2025-08-17T18:50:15.503+00:00",
+        "$updatedAt": "2025-08-17T18:50:15.503+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_picks"
+      },
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "round": 1,
+        "overall": 2,
+        "slot": 2,
+        "participantId": "68a2245e0012b6c56be0",
+        "playerId": "689028a9f347a2d76864",
+        "pickedAt": "2025-08-17T18:50:28.814+00:00",
+        "autopick": false,
+        "$id": "68a224740032e2a1f893",
+        "$sequence": 122,
+        "$createdAt": "2025-08-17T18:50:28.937+00:00",
+        "$updatedAt": "2025-08-17T18:50:28.937+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_picks"
+      },
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "round": 1,
+        "overall": 3,
+        "slot": 3,
+        "participantId": "68a2245e001bb9360f74",
+        "playerId": "68902e83002d834017b4",
+        "pickedAt": "2025-08-17T18:50:41.627+00:00",
+        "autopick": false,
+        "$id": "68a2248100273a93ec0a",
+        "$sequence": 123,
+        "$createdAt": "2025-08-17T18:50:41.773+00:00",
+        "$updatedAt": "2025-08-17T18:50:41.773+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_picks"
+      },
+      {
+        "draftId": "68a2245d003d9c7a0f70",
+        "round": 1,
+        "overall": 4,
+        "slot": 4,
+        "participantId": "68a2245e00244e8a23a6",
+        "playerId": "68902e83e57734aa31c9",
+        "pickedAt": "2025-08-17T18:50:42.530+00:00",
+        "autopick": false,
+        "$id": "68a2248200212629b16c",
+        "$sequence": 124,
+        "$createdAt": "2025-08-17T18:50:42.683+00:00",
+        "$updatedAt": "2025-08-17T18:50:42.683+00:00",
+        "$permissions": [],
+        "$databaseId": "college-football-fantasy",
+        "$collectionId": "mock_draft_picks"
+      }
+    ],
+    "summaryByTeam": [
+      {
+        "slot": 1,
+        "displayName": "Bot Team 1",
+        "players": [
+          {
+            "name": "Cade Carruth",
+            "position": "QB",
+            "team": "Alabama",
+            "overall": 1,
+            "round": 1
+          }
+        ],
+        "positionCounts": {
+          "QB": 1
+        },
+        "totalPlayers": 1
+      },
+      {
+        "slot": 2,
+        "displayName": "Bot Team 2",
+        "players": [
+          {
+            "name": "John Cooper",
+            "position": "QB",
+            "team": "Alabama",
+            "overall": 2,
+            "round": 1
+          }
+        ],
+        "positionCounts": {
+          "QB": 1
+        },
+        "totalPlayers": 1
+      },
+      {
+        "slot": 3,
+        "displayName": "Bot Team 3",
+        "players": [
+          {
+            "name": "LaNorris Sellers",
+            "position": "QB",
+            "team": "South Carolina",
+            "overall": 3,
+            "round": 1
+          }
+        ],
+        "positionCounts": {
+          "QB": 1
+        },
+        "totalPlayers": 1
+      },
+      {
+        "slot": 4,
+        "displayName": "Bot Team 4",
+        "players": [
+          {
+            "name": "Brady Cook",
+            "position": "QB",
+            "team": "Missouri",
+            "overall": 4,
+            "round": 1
+          }
+        ],
+        "positionCounts": {
+          "QB": 1
+        },
+        "totalPlayers": 1
+      },
+      {
+        "slot": 5,
+        "displayName": "Bot Team 5",
+        "players": [],
+        "positionCounts": {},
+        "totalPlayers": 0
+      },
+      {
+        "slot": 6,
+        "displayName": "Bot Team 6",
+        "players": [],
+        "positionCounts": {},
+        "totalPlayers": 0
+      },
+      {
+        "slot": 7,
+        "displayName": "Bot Team 7",
+        "players": [],
+        "positionCounts": {},
+        "totalPlayers": 0
+      },
+      {
+        "slot": 8,
+        "displayName": "Bot Team 8",
+        "players": [],
+        "positionCounts": {},
+        "totalPlayers": 0
+      }
+    ]
+  }
+}

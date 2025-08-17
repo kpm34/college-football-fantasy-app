@@ -76,6 +76,10 @@ export default function RealtimeDraftRoom({ params }: Props) {
     }
   }, [user, draft.picks]);
 
+  // Check if draft is complete
+  const isDraftComplete = draft.league && draft.picks.length >= 
+    (draft.league.draftRounds || 15) * (draft.league.draftOrder?.length || 12);
+
   const loadInitialData = async () => {
     try {
       // Load users
@@ -211,6 +215,26 @@ export default function RealtimeDraftRoom({ params }: Props) {
     );
   }
 
+  const handleProcessRosters = async () => {
+    try {
+      const response = await fetch('/api/draft/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leagueId })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to process rosters');
+      }
+      
+      const result = await response.json();
+      alert(`Rosters processed successfully! ${result.processed} teams updated.`);
+    } catch (error) {
+      console.error('Error processing rosters:', error);
+      alert('Failed to process rosters. Please try again.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -225,15 +249,38 @@ export default function RealtimeDraftRoom({ params }: Props) {
                 <FiWifi className="text-xs" />
                 {draft.connected ? 'Connected' : 'Connecting...'}
               </div>
+              {isDraftComplete && (
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-yellow-600">
+                  <FiStar className="text-xs" />
+                  Draft Complete!
+                </div>
+              )}
             </div>
             
-            {/* Draft Timer */}
-            <DraftTimer
-              timeLimit={draft.league?.settings?.draftTimeLimit || 90}
-              isMyTurn={draft.isMyTurn}
-              onTimeExpired={handleTimeExpired}
-              currentPick={draft.currentPick}
-            />
+            {/* Draft Timer or Completion Actions */}
+            {isDraftComplete ? (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => router.push(`/league/${leagueId}/locker-room`)}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  View My Team
+                </button>
+                <button
+                  onClick={handleProcessRosters}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                >
+                  Process Rosters
+                </button>
+              </div>
+            ) : (
+              <DraftTimer
+                timeLimit={draft.league?.settings?.draftTimeLimit || 90}
+                isMyTurn={draft.isMyTurn}
+                onTimeExpired={handleTimeExpired}
+                currentPick={draft.currentPick}
+              />
+            )}
           </div>
         </div>
       </div>

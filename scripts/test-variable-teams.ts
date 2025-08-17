@@ -85,3 +85,4 @@ async function testTeamCount(numTeams: number) {
   console.log('   npm run mock:human:e2e:12  (12 teams)');
   console.log('   npm run mock:human:e2e:24  (24 teams, fast)');
 })().catch(console.error);
+

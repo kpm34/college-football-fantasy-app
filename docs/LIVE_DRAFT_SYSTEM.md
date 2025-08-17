@@ -326,3 +326,4 @@ scripts/
 **Deployment**: Live at cfbfantasy.app
 
 The Live 8-Human Draft System is fully implemented and ready for immediate use with 2-24 teams. The system has been thoroughly tested and deployed to production.
+

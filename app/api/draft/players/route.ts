@@ -302,9 +302,34 @@ export async function GET(request: NextRequest) {
         byKey.set(key, p);
         continue;
       }
-      // Prefer the one whose team matches our latest known overrides (if available)
-      // Fallback: keep the one with higher projected points
-      const better = (p.projectedPoints || 0) > (existing.projectedPoints || 0) ? p : existing;
+      // Transfer portal preference: known current teams take priority
+      const knownTransfers: Record<string, string> = {
+        'carson beck': 'Miami',
+        'jackson arnold': 'Auburn',
+        'trevor etienne': 'Florida',
+        'gavin sawchuk': 'Florida State',
+        'squirrel white': 'Florida State',
+        'evan stewart': 'Oregon',
+        'nico iamaleava': 'UCLA'
+      };
+      
+      const playerNameLower = (p.name || '').toLowerCase();
+      const preferredTeam = knownTransfers[playerNameLower];
+      
+      let better = existing;
+      if (preferredTeam) {
+        // If we know the correct team, prefer that one
+        if (p.team === preferredTeam) better = p;
+        else if (existing.team === preferredTeam) better = existing;
+      } else {
+        // Fallback: prefer higher projected points, or newer entry if tied
+        if ((p.projectedPoints || 0) > (existing.projectedPoints || 0)) {
+          better = p;
+        } else if ((p.projectedPoints || 0) === (existing.projectedPoints || 0)) {
+          // If tied, prefer the one with more recent season or non-SEC (likely more up to date)
+          better = p; // Default to newer entry
+        }
+      }
       byKey.set(key, better);
     }
     players = Array.from(byKey.values());

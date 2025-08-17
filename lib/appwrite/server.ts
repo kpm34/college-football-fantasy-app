@@ -14,3 +14,4 @@ export function serverAppwrite() {
     users: new Users(client),
   };
 }
+

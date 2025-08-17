@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clean Duplicate Players</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #1a1a1a; color: white; }
+        .container { max-width: 800px; margin: 0 auto; }
+        button { 
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white; 
+            padding: 15px 30px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px;
+            margin: 10px 0;
+            width: 100%;
+        }
+        button:hover { opacity: 0.9; }
+        .result { 
+            background: #333; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 20px 0; 
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        h1 { color: #ff6b6b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Clean Duplicate Players</h1>
+        <p>Found 28 duplicate players including Carson Beck (Georgia/Miami). Click to remove duplicates:</p>
+        
+        <button onclick="cleanDuplicates()">🧹 Remove All Duplicates</button>
+        <button onclick="dryRun()">👀 Preview Changes (Dry Run)</button>
+        
+        <div id="result" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        function showResult(data) {
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function cleanDuplicates() {
+            try {
+                const response = await fetch('/api/admin/dedupe/players', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dryRun: false, limit: 5000 })
+                });
+                const data = await response.json();
+                showResult(data);
+            } catch (error) {
+                showResult({ error: error.message });
+            }
+        }
+
+        async function dryRun() {
+            try {
+                const response = await fetch('/api/admin/dedupe/players', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dryRun: true, limit: 5000 })
+                });
+                const data = await response.json();
+                showResult(data);
+            } catch (error) {
+                showResult({ error: error.message });
+            }
+        }
+    </script>
+</body>
+</html>
