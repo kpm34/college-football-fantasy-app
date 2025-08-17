@@ -18,7 +18,6 @@ export const API_CONFIG = {
   protectedRoutes: [
     '/api/leagues',
     '/api/draft',
-    '/api/auction',
     '/api/auth/user',
     '/api/auth/update-profile',
     '/api/auth/logout',
@@ -38,7 +37,6 @@ export const API_CONFIG = {
     '/api/auth/login': { requests: 5, window: 300 }, // 5 requests per 5 minutes
     '/api/auth/signup': { requests: 3, window: 600 }, // 3 requests per 10 minutes
     '/api/draft': { requests: 60, window: 60 }, // 60 requests per minute
-    '/api/auction': { requests: 120, window: 60 }, // 120 requests per minute
     default: { requests: 100, window: 60 }, // 100 requests per minute default
   },
 

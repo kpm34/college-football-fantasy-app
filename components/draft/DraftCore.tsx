@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { DraftPlayer } from '@/types/projections';
 import { FiSearch, FiFilter, FiTrendingUp, FiStar, FiWifi } from 'react-icons/fi';
 
-export type DraftType = 'snake' | 'auction' | 'mock';
+export type DraftType = 'snake' | 'mock';
 export type Position = 'ALL' | 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF';
 export type Conference = 'ALL' | 'SEC' | 'Big Ten' | 'Big 12' | 'ACC';
 
