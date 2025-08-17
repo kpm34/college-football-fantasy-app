@@ -113,6 +113,7 @@ export const DATA_SOURCES: Record<string, DataSource> = {
     name: 'College Football Data API',
     type: 'external_api',
     endpoint: 'https://api.collegefootballdata.com',
+    apiKey: 'YKG446gILGiO5q+OIgOClYsBO9ztbPfGyBBrz40V1c3LBshdTIbFjHzFcu6iOhGz',
     rateLimit: {
       requests: 1000,
       period: 'hour'
@@ -212,6 +213,29 @@ export const DATA_SOURCES: Record<string, DataSource> = {
     endpoint: '/api/health',
     reliability: 'high',
     updateFrequency: 'realtime'
+  },
+
+  cfbd_enhanced_pipeline: {
+    id: 'cfbd_enhanced_pipeline',
+    name: 'Enhanced CFBD Pipeline with API Integration',
+    type: 'external_api',
+    endpoint: 'https://api.collegefootballdata.com',
+    apiKey: 'YKG446gILGiO5q+OIgOClYsBO9ztbPfGyBBrz40V1c3LBshdTIbFjHzFcu6iOhGz',
+    rateLimit: {
+      requests: 1000,
+      period: 'hour'
+    },
+    reliability: 'high',
+    updateFrequency: 'daily'
+  },
+
+  data_ingestion_orchestrator: {
+    id: 'data_ingestion_orchestrator',
+    name: 'Comprehensive Data Ingestion System',
+    type: 'calculated',
+    endpoint: '/core/data-ingestion/orchestrator',
+    reliability: 'high',
+    updateFrequency: 'daily'
   }
 };
 
@@ -478,6 +502,53 @@ export const SYNC_JOBS: Record<string, SyncJob> = {
       parallelization: true,
       timeout: 60
     }
+  },
+
+  pipeline_activation_enhanced: {
+    id: 'pipeline_activation_enhanced',
+    name: 'Enhanced Pipeline Activation with API Integration',
+    description: 'Comprehensive 4-module pipeline with CFBD and Appwrite API integration',
+    source: 'cfbd_enhanced_pipeline',
+    target: 'projections_collections',
+    transform: 'ingestion_to_projections',
+    schedule: {
+      frequency: 'daily',
+      time: '03:00',
+      dependencies: ['data_ingestion_orchestrator']
+    },
+    errorHandling: {
+      retries: 3,
+      backoffStrategy: 'exponential',
+      failureNotification: true
+    },
+    performance: {
+      batchSize: 500,
+      parallelization: true,
+      timeout: 600
+    }
+  },
+
+  simplified_pipeline_activation: {
+    id: 'simplified_pipeline_activation',
+    name: 'Simplified Pipeline for Existing Data',
+    description: 'Streamlined activation using existing depth chart and player data',
+    source: 'data_ingestion_orchestrator',
+    target: 'projections_collections',
+    transform: 'depth_to_projections',
+    schedule: {
+      frequency: 'manual',
+      dependencies: ['pipeline_activation_enhanced']
+    },
+    errorHandling: {
+      retries: 2,
+      backoffStrategy: 'linear',
+      failureNotification: true
+    },
+    performance: {
+      batchSize: 1000,
+      parallelization: true,
+      timeout: 300
+    }
   }
 };
 
@@ -652,6 +723,35 @@ export const FRONTEND_DATA_FLOWS: Record<string, FrontendDataFlow> = {
         endpoint: 'CLI: eval_proj --weeks RANGE --out PATH',
         affectedCollections: [], // read-only operation
         revalidationNeeded: []
+      }
+    ]
+  },
+
+  pipeline_activation_scripts: {
+    page: '/scripts/activate-pipeline.ts',
+    component: 'EnhancedPipelineActivation',
+    dataRequirements: {
+      collections: ['college_players', 'projections_yearly', 'projections_weekly', 'model_inputs', 'player_depth_charts'],
+      realtime: false,
+      caching: {
+        enabled: false,
+        strategy: 'server'
+      }
+    },
+    userActions: [
+      {
+        action: 'activate_full_pipeline',
+        method: 'POST',
+        endpoint: 'CLI: npx tsx scripts/activate-pipeline.ts',
+        affectedCollections: ['projections_yearly', 'projections_weekly', 'player_depth_charts', 'team_context'],
+        revalidationNeeded: ['/api/draft/players', '/draft/[leagueId]/realtime']
+      },
+      {
+        action: 'activate_simple_pipeline',
+        method: 'POST', 
+        endpoint: 'CLI: npx tsx scripts/activate-pipeline-simple.ts',
+        affectedCollections: ['projections_yearly', 'projections_weekly'],
+        revalidationNeeded: ['/api/draft/players']
       }
     ]
   }

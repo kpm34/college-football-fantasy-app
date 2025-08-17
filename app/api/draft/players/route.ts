@@ -17,11 +17,11 @@ export async function GET(request: NextRequest) {
     const school = searchParams.get('school');
     const search = searchParams.get('search');
     const top200 = searchParams.get('top200') === 'true'; // New: Top 200 players
-    const orderBy = searchParams.get('orderBy') || 'rating'; // New: projection, rating, name
+    const orderBy = searchParams.get('orderBy') || 'projection'; // Default to projection ordering
     const seasonParam = searchParams.get('season');
     const season = seasonParam ? parseInt(seasonParam, 10) : new Date().getFullYear();
     const prevSeason = season - 1;
-    const maxCount = top200 ? 200 : 5000; // Allow up to 5000 players
+    const maxCount = top200 ? 200 : 10000; // Allow up to 10,000 players (all players)
     const requestedLimit = parseInt(searchParams.get('limit') || `${maxCount}`, 10);
     const limit = Math.min(requestedLimit, maxCount);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
@@ -68,16 +68,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Handle ordering based on search type
-    if (top200 || orderBy === 'projection') {
-      // For top 200 or projection ordering, use fantasy_points
-      queries.push(Query.orderDesc('fantasy_points'));
-    } else if (orderBy === 'rating') {
-      // Order by fantasy_points since rating doesn't exist
-      queries.push(Query.orderDesc('fantasy_points'));
-    } else if (orderBy === 'name') {
+    // Always default to projection-based ordering for consistency
+    if (orderBy === 'name') {
       queries.push(Query.orderAsc('name'));
     } else {
-      // Default: deterministic ordering to avoid empty pages
+      // Default: Order by fantasy_points descending (highest projections first)
       queries.push(Query.orderDesc('fantasy_points'));
     }
 

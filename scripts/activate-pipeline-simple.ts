@@ -90,121 +90,53 @@ async function activatePipeline() {
     );
     console.log(`✅ Found ${players.documents.length} draftable players\n`);
     
-    // Step 3: Populate yearly projections
-    console.log('💾 Populating yearly projections...');
-    let yearlyCreated = 0;
-    let yearlyUpdated = 0;
+    // Step 3: Update player projections directly in college_players collection
+    console.log('💾 Updating player fantasy projections...');
+    let updated = 0;
+    let errors = 0;
     
     for (const player of players.documents) {
       const depthInfo = depthIndex.get(`${player.name?.toLowerCase()}|${player.position}`);
       const projection = calculateProjection(player, depthInfo?.rank || 3);
       
       try {
-        // Check if exists
-        const existing = await databases.listDocuments(
+        // Update the player record directly with enhanced projection
+        await databases.updateDocument(
           DATABASE_ID,
-          'projections_yearly',
-          [
-            Query.equal('player_id', player.$id),
-            Query.equal('season', SEASON)
-          ]
+          'college_players',
+          player.$id,
+          {
+            fantasy_points: projection.yearly,
+            projection: projection.yearly, // Keep legacy field for compatibility
+            updated_at: new Date().toISOString()
+          }
         );
-        
-        if (existing.documents.length > 0) {
-          // Update existing
-          await databases.updateDocument(
-            DATABASE_ID,
-            'projections_yearly',
-            existing.documents[0].$id,
-            {
-              fantasy_points_simple: projection.yearly,
-              range_median: projection.yearly,
-              model_version: 'v1.0-activated',
-              updatedAt: new Date().toISOString()
-            }
-          );
-          yearlyUpdated++;
-        } else {
-          // Create new
-          await databases.createDocument(
-            DATABASE_ID,
-            'projections_yearly',
-            ID.unique(),
-            {
-              player_id: player.$id,
-              season: SEASON,
-              position: player.position,
-              model_version: 'v1.0-activated',
-              fantasy_points_simple: projection.yearly,
-              range_median: projection.yearly,
-              range_floor: Math.round(projection.yearly * 0.8),
-              range_ceiling: Math.round(projection.yearly * 1.2),
-              updatedAt: new Date().toISOString()
-            }
-          );
-          yearlyCreated++;
-        }
+        updated++;
       } catch (e: any) {
-        if (e.code !== 409) { // Ignore duplicates
-          console.log(`⚠️ Error for ${player.name}: ${e.message}`);
-        }
+        console.log(`⚠️ Error for ${player.name}: ${e.message}`);
+        errors++;
       }
       
       // Show progress
-      if ((yearlyCreated + yearlyUpdated) % 50 === 0) {
-        console.log(`   Processed ${yearlyCreated + yearlyUpdated} players...`);
+      if (updated % 100 === 0) {
+        console.log(`   Updated ${updated} players...`);
       }
     }
     
-    console.log(`✅ Yearly: Created ${yearlyCreated}, Updated ${yearlyUpdated}\n`);
+    console.log(`✅ Updated: ${updated} players, Errors: ${errors}\n`);
     
-    // Step 4: Populate weekly projections (weeks 1-3)
-    console.log('📅 Populating weekly projections (weeks 1-3)...');
-    let weeklyCreated = 0;
-    
-    for (const player of players.documents.slice(0, 200)) { // Top 200 only for weekly
-      const depthInfo = depthIndex.get(`${player.name?.toLowerCase()}|${player.position}`);
-      const projection = calculateProjection(player, depthInfo?.rank || 3);
-      
-      for (let week = 1; week <= 3; week++) {
-        try {
-          await databases.createDocument(
-            DATABASE_ID,
-            'projections_weekly',
-            ID.unique(),
-            {
-              player_id: player.$id,
-              season: SEASON,
-              week: week,
-              fantasy_points_simple: projection.weekly,
-              updatedAt: new Date().toISOString()
-            }
-          );
-          weeklyCreated++;
-        } catch (e: any) {
-          // Skip duplicates silently
-        }
-      }
-    }
-    
-    console.log(`✅ Weekly: Created ${weeklyCreated} projections\n`);
-    
-    // Step 5: Verify collections
-    console.log('🔍 Verifying collections...');
-    const yearlyCount = await databases.listDocuments(
+    // Step 4: Verify projections were applied
+    console.log('🔍 Verifying projection updates...');
+    const updatedPlayers = await databases.listDocuments(
       DATABASE_ID,
-      'projections_yearly',
-      [Query.limit(1)]
+      'college_players',
+      [Query.orderDesc('fantasy_points'), Query.limit(10)]
     );
     
-    const weeklyCount = await databases.listDocuments(
-      DATABASE_ID,
-      'projections_weekly',
-      [Query.limit(1)]
-    );
-    
-    console.log(`✅ Yearly collection: ${yearlyCount.total} records`);
-    console.log(`✅ Weekly collection: ${weeklyCount.total} records\n`);
+    console.log(`✅ Top 10 projected players:`);
+    updatedPlayers.documents.forEach((player, i) => {
+      console.log(`   ${i + 1}. ${player.name} (${player.position}, ${player.team}) - ${player.fantasy_points} pts`);
+    });
     
     // Final status
     console.log('🎉 PIPELINE ACTIVATED SUCCESSFULLY!');

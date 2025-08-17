@@ -107,7 +107,7 @@ export default function RealtimeDraftRoom({ params }: Props) {
       if (positionFilter !== 'ALL') params.append('position', positionFilter);
       if (conferenceFilter !== 'ALL') params.append('conference', conferenceFilter);
       if (searchQuery) params.append('search', searchQuery);
-      params.append('limit', '200');
+      params.append('limit', '10000'); // Get all available players
       params.append('orderBy', 'projection');
       
       const response = await fetch(`/api/draft/players?${params.toString()}`);
