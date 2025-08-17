@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { client, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite'
 import { type RealtimeResponseEvent } from 'appwrite'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 
 export interface UserLeague {
   $id: string
