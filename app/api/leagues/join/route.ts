@@ -41,10 +41,16 @@ export async function POST(request: NextRequest) {
       COLLECTIONS.LEAGUES,
       leagueId
     );
-    
-    // Check if league is full
-    const currentTeams = league.currentTeams || (league.members?.length || 0);
-    if (currentTeams >= league.maxTeams) {
+
+    // Compute capacity using authoritative roster count (ignore stale league fields)
+    const rosterCountPage = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.ROSTERS,
+      [Query.equal('leagueId', leagueId), Query.limit(1)]
+    );
+    const rosterCount = (rosterCountPage as any).total ?? (rosterCountPage.documents?.length || 0);
+    const maxTeams = (league as any).maxTeams ?? (league as any).max_teams ?? 12;
+    if (rosterCount >= maxTeams) {
       return NextResponse.json({ error: 'League is full' }, { status: 400 });
     }
     
@@ -109,7 +115,14 @@ export async function POST(request: NextRequest) {
     );
     
     // Update league members and team count
-    const updatedMembers = [...(league.members || []), user.$id];
+    // Rebuild members/currentTeams from rosters to keep schema in sync
+    const allRosters = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.ROSTERS,
+      [Query.equal('leagueId', leagueId), Query.limit(1000)]
+    );
+    const updatedMembers = Array.from(new Set((allRosters.documents || []).map((r: any) => r.userId))).filter(Boolean);
+    const currentTeams = (allRosters as any).total ?? updatedMembers.length;
 
     // Only include attributes that actually exist in the leagues collection to avoid
     // Appwrite "Unknown attribute" errors across environments with drifting schemas
@@ -124,12 +137,12 @@ export async function POST(request: NextRequest) {
         updatePayload.members = updatedMembers;
       }
       if (attributes.includes('currentTeams')) {
-        updatePayload.currentTeams = currentTeams + 1;
+        updatePayload.currentTeams = currentTeams;
       }
       // Optionally set status to full when we hit capacity, but only if field exists
-      const nextTeams = currentTeams + 1;
-      if (attributes.includes('status') && typeof league.maxTeams === 'number') {
-        if (nextTeams >= league.maxTeams) {
+      const nextTeams = currentTeams; // already authoritative
+      if (attributes.includes('status') && typeof maxTeams === 'number') {
+        if (nextTeams >= maxTeams) {
           updatePayload.status = 'full';
         } else if (league.status === 'full') {
           updatePayload.status = 'open';
