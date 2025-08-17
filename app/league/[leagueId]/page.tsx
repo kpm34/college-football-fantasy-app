@@ -760,7 +760,19 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              
+              {/* Launch Draft Button - Only show to commissioners when draft date is set */}
+              {isCommissioner && league?.draftDate && (
+                <button
+                  onClick={() => router.push(`/draft/${leagueId}/realtime`)}
+                  className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg animate-pulse"
+                  style={{ backgroundColor: '#22C55E', color: '#FFFFFF' }}
+                >
+                  <FiAward className="text-xl" />
+                  <span className="font-semibold">Launch Draft</span>
+                </button>
+              )}
 
               <button
                 onClick={() => router.push(`/league/${leagueId}/standings`)}

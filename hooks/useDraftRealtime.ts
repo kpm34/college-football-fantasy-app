@@ -147,8 +147,37 @@ export function useDraftRealtime(leagueId: string) {
         const currentPick = updatedPicks.length + 1;
         const currentRound = Math.ceil(currentPick / (prev.league?.draftOrder?.length || 12));
         
-        // Determine who's on the clock next
-        if (prev.league) {
+        // Check if draft is complete
+        const totalRounds = prev.league?.draftRounds || 15;
+        const totalTeams = prev.league?.draftOrder?.length || 12;
+        const totalPicks = totalRounds * totalTeams;
+        
+        if (updatedPicks.length >= totalPicks) {
+          console.log('🏁 Draft completed! Processing final roster assignments...');
+          
+          // Call the draft completion endpoint to save rosters (async, don't wait)
+          setTimeout(async () => {
+            try {
+              const response = await fetch('/api/draft/complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ leagueId })
+              });
+              
+              if (!response.ok) {
+                console.error('Failed to process draft completion:', await response.text());
+              } else {
+                const result = await response.json();
+                console.log('✅ Draft rosters processed:', result);
+              }
+            } catch (error) {
+              console.error('Error calling draft completion endpoint:', error);
+            }
+          }, 1000); // Small delay to ensure all picks are processed
+        }
+        
+        // Determine who's on the clock next (if draft not complete)
+        if (prev.league && updatedPicks.length < totalPicks) {
           const pickIndex = (currentPick - 1) % prev.league.draftOrder.length;
           const isSnakeRound = currentRound % 2 === 0;
           const actualIndex = isSnakeRound 
@@ -172,6 +201,8 @@ export function useDraftRealtime(leagueId: string) {
           picks: updatedPicks,
           currentPick,
           currentRound,
+          onTheClock: null,
+          isMyTurn: false,
         };
       });
     }
@@ -227,6 +258,33 @@ export function useDraftRealtime(leagueId: string) {
           timestamp: new Date().toISOString(),
         }
       );
+
+      // Check if this was the final pick of the draft
+      const totalRounds = state.league.draftRounds || 15;
+      const totalTeams = state.league.draftOrder?.length || 12;
+      const totalPicks = totalRounds * totalTeams;
+
+      if (state.currentPick >= totalPicks) {
+        console.log('🏁 Draft completed! Processing final roster assignments...');
+        
+        // Call the draft completion endpoint to save rosters
+        try {
+          const response = await fetch('/api/draft/complete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ leagueId })
+          });
+          
+          if (!response.ok) {
+            console.error('Failed to process draft completion:', await response.text());
+          } else {
+            const result = await response.json();
+            console.log('✅ Draft rosters processed:', result);
+          }
+        } catch (error) {
+          console.error('Error calling draft completion endpoint:', error);
+        }
+      }
 
       // The realtime subscription will handle updating the state
       return pick;

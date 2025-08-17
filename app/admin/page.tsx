@@ -77,11 +77,48 @@ export default function AdminDashboard() {
               <p className="text-sm text-gray-200 mt-1">Clean Carson Beck dupes</p>
             </button>
             <button
-              onClick={() => fetch('/api/admin/players/retire', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ names: ['Quinn Ewers'], season: 2024 }) }).then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)))}
+              onClick={() => fetch('/api/admin/players/retire', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ names: ['Quinn Ewers', 'Luther Burden III'], season: 2025 }) }).then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)))}
               className="block p-4 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg hover:opacity-90 transition-opacity"
             >
-              <h3 className="font-semibold text-white">📜 Retire Graduated</h3>
-              <p className="text-sm text-gray-200 mt-1">Mark old players inactive</p>
+              <h3 className="font-semibold text-white">📜 Retire NFL Players</h3>
+              <p className="text-sm text-gray-200 mt-1">Quinn Ewers, Luther Burden III</p>
+            </button>
+          </div>
+        </div>
+
+        {/* League Management */}
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 mb-8">
+          <h2 className="text-2xl font-bold text-white mb-6">🏆 League Management</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button 
+              onClick={() => fetch('/api/admin/leagues/sync-members', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ leagueId: '6894db4a0001ad84e4b0' }) }).then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)))}
+              className="block p-4 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <h3 className="font-semibold text-white">🔄 Fix Jawn League</h3>
+              <p className="text-sm text-gray-200 mt-1">Sync all 11 members' navigation access</p>
+            </button>
+            <button
+              onClick={() => window.open('/api/debug/user-leagues', '_blank')}
+              className="block p-4 bg-gradient-to-r from-green-600 to-teal-600 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <h3 className="font-semibold text-white">🔍 Debug User</h3>
+              <p className="text-sm text-gray-200 mt-1">Check current user's league data</p>
+            </button>
+            <button
+              onClick={() => {
+                const leagueId = prompt('Enter League ID to process draft completion:');
+                if (leagueId) {
+                  fetch('/api/draft/complete', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ leagueId }) 
+                  }).then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)));
+                }
+              }}
+              className="block p-4 bg-gradient-to-r from-orange-600 to-red-600 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <h3 className="font-semibold text-white">🏁 Process Draft</h3>
+              <p className="text-sm text-gray-200 mt-1">Save drafted players to rosters</p>
             </button>
           </div>
         </div>

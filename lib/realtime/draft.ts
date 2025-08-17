@@ -30,3 +30,4 @@ export function subscribeToDraft(draftId: string, onEvent: (e: any) => void) {
   ];
   return () => subs.forEach(s => s());
 }
+
