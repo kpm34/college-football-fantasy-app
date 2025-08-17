@@ -242,7 +242,21 @@ Reference capabilities file: `tools/capabilities.json` (stack, env, APIs, comman
 
 ## Recent Updates & Fixes ✅
 
-### August 17, 2025
+### August 17, 2025 (Data Flow Alignment Complete)
+1. **Redundant Algorithm Removal**: Complete cleanup of projection redundancies ✅
+   - **Removed**: `/lib/services/enhanced-projections.service.ts`
+   - **Removed**: `/app/api/projections/route.ts` 
+   - **Removed**: Redundant calculation functions in `/app/api/draft/players/route.ts`
+   - **Result**: Single source of truth for all projections
+
+2. **Pipeline Routing Alignment**: Comprehensive data flow verification ✅
+   - **Created**: `/docs/DATA_FLOW_ALIGNMENT.md` - Single source of truth documentation
+   - **Created**: `/scripts/verify-data-flow-alignment.ts` - Alignment verification script
+   - **Verified**: Database → API → UI consistency (100% aligned)
+   - **Data Flow**: `functions/project-yearly-simple/` → `college_players.fantasy_points` → `/api/draft/players` → UI
+   - **Projection Sources**: Team pace, efficiency, depth charts, usage priors, injury risk, NFL draft capital
+
+### August 17, 2025 (Earlier)
 1. **QB Projection Algorithm Enhancement**: Major fix for depth chart logic ⚡
    - **Problem**: QB projections were too similar (Miller Moss ~300 pts, backups similar)
    - **Solution**: Enhanced depth chart logic with proper multipliers

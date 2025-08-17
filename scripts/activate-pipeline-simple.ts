@@ -97,7 +97,10 @@ async function activatePipeline() {
     
     for (const player of players.documents) {
       const depthInfo = depthIndex.get(`${player.name?.toLowerCase()}|${player.position}`);
-      const projection = calculateProjection(player, depthInfo?.rank || 3);
+      // Default to starter (rank 1) if no depth info, instead of rank 3
+      // This ensures top players get proper projections even without depth chart data
+      const depthRank = depthInfo?.rank || 1;
+      const projection = calculateProjection(player, depthRank);
       
       try {
         // Update the player record directly with enhanced projection
