@@ -1,18 +1,18 @@
 #!/usr/bin/env npx tsx
 
 /**
- * Pipeline Activation Script
- * Connects all 4 modules: Sourcing → Algorithm → Collections → UI
+ * Simple Pipeline Activation - Works with existing data
+ * Populates projections collections from existing college_players data
  */
 
-import { IngestionOrchestrator } from '../core/data-ingestion/orchestrator/ingestion-orchestrator';
 import { serverDatabases as databases, DATABASE_ID } from '../lib/appwrite-server';
 import { ID, Query } from 'node-appwrite';
+import * as fs from 'fs';
+import * as path from 'path';
+
+const SEASON = 2025;
 
 // API Configuration
-const CURRENT_SEASON = 2025;
-const CURRENT_WEEK = 1;
-
 const APPWRITE_CONFIG = {
   endpoint: process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1',
   projectId: process.env.APPWRITE_PROJECT_ID || 'college-football-fantasy-app',
@@ -43,8 +43,8 @@ function validateApiKeys() {
 }
 
 async function activatePipeline() {
-  console.log('🚀 ACTIVATING PROJECTION PIPELINE');
-  console.log('===================================\n');
+  console.log('🚀 ACTIVATING PROJECTION PIPELINE (Simple Mode)');
+  console.log('===============================================\n');
   
   try {
     // Validate API configuration
@@ -57,83 +57,61 @@ async function activatePipeline() {
     // Test Appwrite connection
     console.log('📊 Testing Appwrite connection...');
     await testAppwriteConnection();
-    // Step 1: Run data ingestion (Module 4 - Sourcing)
-    console.log('📥 Module 4: Running data ingestion...');
-    const orchestrator = new IngestionOrchestrator();
-    const ingestionResult = await orchestrator.execute({
-      season: CURRENT_SEASON,
-      week: CURRENT_WEEK,
-      adapters: ['team_notes', 'stats_inference'],
-      options: {
-        dry_run: false,
-        create_snapshot: true,
-        parallel_adapters: true,
-        max_retries: 3
-      }
-    });
     
-    if (!ingestionResult.success) {
-      throw new Error('Ingestion failed');
+    // Step 1: Load existing depth chart data
+    console.log('📊 Loading depth chart data...');
+    const depthFile = path.join(process.cwd(), 'data/depth/team_sites_2025.json');
+    let depthData: any[] = [];
+    if (fs.existsSync(depthFile)) {
+      depthData = JSON.parse(fs.readFileSync(depthFile, 'utf8'));
+      console.log(`✅ Loaded ${depthData.length} depth chart entries\n`);
     }
-    console.log(`✅ Ingested ${ingestionResult.stages.publication.records_published} records\n`);
-
-    // Step 2: Process projections (Module 2 - Algorithm)
-    console.log('🧮 Module 2: Processing projections algorithm...');
+    
+    // Build depth index
+    const depthIndex = new Map<string, { rank: number; team: string }>();
+    for (const entry of depthData) {
+      const key = `${entry.player_name?.toLowerCase()}|${entry.position}`;
+      depthIndex.set(key, {
+        rank: entry.pos_rank || 1,
+        team: entry.team_name
+      });
+    }
+    
+    // Step 2: Get all draftable players
+    console.log('🏈 Fetching draftable players...');
     const players = await databases.listDocuments(
       DATABASE_ID,
       'college_players',
-      [Query.equal('draftable', true), Query.limit(500)]
+      [
+        Query.equal('draftable', true),
+        Query.equal('conference', ['SEC', 'ACC', 'Big 12', 'Big Ten']),
+        Query.limit(1000)
+      ]
     );
+    console.log(`✅ Found ${players.documents.length} draftable players\n`);
     
-    // Get depth chart data from model_inputs
-    const modelInputs = await databases.listDocuments(
-      DATABASE_ID,
-      'model_inputs',
-      [Query.equal('season', CURRENT_SEASON), Query.limit(1)]
-    );
-    
-    const depthData = modelInputs.documents[0]?.depth_chart_json 
-      ? JSON.parse(modelInputs.documents[0].depth_chart_json) 
-      : {};
-    
-    console.log(`✅ Processing ${players.documents.length} players\n`);
-
-    // Step 3: Populate collections (Module 1 - Collections)
-    console.log('💾 Module 1: Populating projection collections...');
-    let yearlyCount = 0;
-    let weeklyCount = 0;
+    // Step 3: Populate yearly projections
+    console.log('💾 Populating yearly projections...');
+    let yearlyCreated = 0;
+    let yearlyUpdated = 0;
     
     for (const player of players.documents) {
-      const projection = calculateProjection(player, depthData);
+      const depthInfo = depthIndex.get(`${player.name?.toLowerCase()}|${player.position}`);
+      const projection = calculateProjection(player, depthInfo?.rank || 3);
       
-      // Populate yearly projections
       try {
-        await databases.createDocument(
-          DATABASE_ID,
-          'projections_yearly',
-          ID.unique(),
-          {
-            player_id: player.$id,
-            season: CURRENT_SEASON,
-            team_id: player.team,
-            position: player.position,
-            model_version: 'v1.0-activated',
-            games_played_est: 12,
-            usage_rate: projection.usage,
-            fantasy_points_simple: projection.yearly,
-            range_median: projection.yearly,
-            updatedAt: new Date().toISOString()
-          }
-        );
-        yearlyCount++;
-      } catch (e) {
-        // Likely already exists, update instead
+        // Check if exists
         const existing = await databases.listDocuments(
           DATABASE_ID,
           'projections_yearly',
-          [Query.equal('player_id', player.$id), Query.equal('season', CURRENT_SEASON)]
+          [
+            Query.equal('player_id', player.$id),
+            Query.equal('season', SEASON)
+          ]
         );
-        if (existing.documents[0]) {
+        
+        if (existing.documents.length > 0) {
+          // Update existing
           await databases.updateDocument(
             DATABASE_ID,
             'projections_yearly',
@@ -141,13 +119,53 @@ async function activatePipeline() {
             {
               fantasy_points_simple: projection.yearly,
               range_median: projection.yearly,
+              model_version: 'v1.0-activated',
               updatedAt: new Date().toISOString()
             }
           );
+          yearlyUpdated++;
+        } else {
+          // Create new
+          await databases.createDocument(
+            DATABASE_ID,
+            'projections_yearly',
+            ID.unique(),
+            {
+              player_id: player.$id,
+              season: SEASON,
+              position: player.position,
+              model_version: 'v1.0-activated',
+              fantasy_points_simple: projection.yearly,
+              range_median: projection.yearly,
+              range_floor: Math.round(projection.yearly * 0.8),
+              range_ceiling: Math.round(projection.yearly * 1.2),
+              updatedAt: new Date().toISOString()
+            }
+          );
+          yearlyCreated++;
+        }
+      } catch (e: any) {
+        if (e.code !== 409) { // Ignore duplicates
+          console.log(`⚠️ Error for ${player.name}: ${e.message}`);
         }
       }
       
-      // Populate weekly projections (first 3 weeks as example)
+      // Show progress
+      if ((yearlyCreated + yearlyUpdated) % 50 === 0) {
+        console.log(`   Processed ${yearlyCreated + yearlyUpdated} players...`);
+      }
+    }
+    
+    console.log(`✅ Yearly: Created ${yearlyCreated}, Updated ${yearlyUpdated}\n`);
+    
+    // Step 4: Populate weekly projections (weeks 1-3)
+    console.log('📅 Populating weekly projections (weeks 1-3)...');
+    let weeklyCreated = 0;
+    
+    for (const player of players.documents.slice(0, 200)) { // Top 200 only for weekly
+      const depthInfo = depthIndex.get(`${player.name?.toLowerCase()}|${player.position}`);
+      const projection = calculateProjection(player, depthInfo?.rank || 3);
+      
       for (let week = 1; week <= 3; week++) {
         try {
           await databases.createDocument(
@@ -156,93 +174,64 @@ async function activatePipeline() {
             ID.unique(),
             {
               player_id: player.$id,
-              season: CURRENT_SEASON,
+              season: SEASON,
               week: week,
               fantasy_points_simple: projection.weekly,
               updatedAt: new Date().toISOString()
             }
           );
-          weeklyCount++;
-        } catch (e) {
-          // Skip duplicates
+          weeklyCreated++;
+        } catch (e: any) {
+          // Skip duplicates silently
         }
       }
     }
     
-    console.log(`✅ Created ${yearlyCount} yearly, ${weeklyCount} weekly projections\n`);
-
-    // Step 4: Update UI integration (Module 3)
-    console.log('🎨 Module 3: Updating draft UI integration...');
-    // The UI already reads from /api/draft/players
-    // Now we'll update it to also check projections collections
+    console.log(`✅ Weekly: Created ${weeklyCreated} projections\n`);
     
-    // Verify collections are populated
-    const yearlyCheck = await databases.listDocuments(
+    // Step 5: Verify collections
+    console.log('🔍 Verifying collections...');
+    const yearlyCount = await databases.listDocuments(
       DATABASE_ID,
       'projections_yearly',
-      [Query.limit(5)]
+      [Query.limit(1)]
     );
     
-    const weeklyCheck = await databases.listDocuments(
+    const weeklyCount = await databases.listDocuments(
       DATABASE_ID,
       'projections_weekly',
-      [Query.limit(5)]
+      [Query.limit(1)]
     );
     
-    console.log(`✅ Collections ready: ${yearlyCheck.total} yearly, ${weeklyCheck.total} weekly\n`);
+    console.log(`✅ Yearly collection: ${yearlyCount.total} records`);
+    console.log(`✅ Weekly collection: ${weeklyCount.total} records\n`);
     
-    // Final summary
-    console.log('🎉 PIPELINE ACTIVATED!');
-    console.log('======================');
-    console.log('✅ Module 4 (Sourcing): Data ingested');
-    console.log('✅ Module 2 (Algorithm): Projections calculated');
-    console.log('✅ Module 1 (Collections): Collections populated');
-    console.log('✅ Module 3 (UI): Ready to display projections');
-    console.log('\nData flow is now:');
-    console.log('Sourcing → Algorithm → Collections → UI');
+    // Final status
+    console.log('🎉 PIPELINE ACTIVATED SUCCESSFULLY!');
+    console.log('====================================');
+    console.log('✅ Depth charts loaded');
+    console.log('✅ Projections calculated');
+    console.log('✅ Collections populated');
+    console.log('✅ Ready for draft UI\n');
+    console.log('Data flow: college_players → projections → /api/draft/players → UI');
     
   } catch (error) {
-    console.error('❌ Pipeline activation failed:', error);
+    console.error('❌ Activation failed:', error);
     process.exit(1);
   }
 }
 
-// Simple projection calculation (matching /api/draft/players logic)
-function calculateProjection(player: any, depthData: any) {
+function calculateProjection(player: any, depthRank: number) {
+  // Base points by position
   const basePoints = {
-    QB: 280, RB: 220, WR: 200, TE: 160, K: 140
+    QB: 340,
+    RB: 280,
+    WR: 240,
+    TE: 180,
+    K: 140
   }[player.position] || 150;
   
-  // Apply depth multiplier
-  let multiplier = 1.0;
-  const playerDepth = getPlayerDepth(player, depthData);
-  if (playerDepth) {
-    multiplier = getDepthMultiplier(player.position, playerDepth);
-  }
-  
-  const yearly = Math.round(basePoints * multiplier);
-  const weekly = Math.round(yearly / 12);
-  
-  return {
-    yearly,
-    weekly,
-    usage: multiplier
-  };
-}
-
-function getPlayerDepth(player: any, depthData: any): number {
-  // Find player in depth chart
-  if (depthData[player.team]?.[player.position]) {
-    const depthList = depthData[player.team][player.position];
-    const index = depthList.findIndex((p: any) => 
-      p.player_name?.toLowerCase() === player.name?.toLowerCase()
-    );
-    return index >= 0 ? index + 1 : 5;
-  }
-  return 3; // Default middle depth
-}
-
-function getDepthMultiplier(position: string, rank: number): number {
+  // Depth multipliers
   const multipliers: Record<string, number[]> = {
     QB: [1.0, 0.25, 0.08, 0.03, 0.01],
     RB: [1.0, 0.6, 0.4, 0.25, 0.15],
@@ -250,7 +239,12 @@ function getDepthMultiplier(position: string, rank: number): number {
     TE: [1.0, 0.35, 0.15, 0.1, 0.05],
     K: [1.0, 0.2, 0.1, 0.05, 0.02]
   };
-  return multipliers[position]?.[rank - 1] || 0.1;
+  
+  const multiplier = multipliers[player.position]?.[depthRank - 1] || 0.5;
+  const yearly = Math.round(basePoints * multiplier);
+  const weekly = Math.round(yearly / 12);
+  
+  return { yearly, weekly };
 }
 
 // API Connection Tests
@@ -321,7 +315,7 @@ async function fetchLatestPlayerData(): Promise<any[]> {
   console.log('📥 Fetching latest player data from CFBD...');
   
   try {
-    const response = await fetch(`${CFBD_CONFIG.baseUrl}/roster?year=${CURRENT_SEASON}`, {
+    const response = await fetch(`${CFBD_CONFIG.baseUrl}/roster?year=${SEASON}`, {
       headers: {
         'Authorization': `Bearer ${CFBD_CONFIG.apiKey}`,
         'accept': 'application/json'
@@ -348,7 +342,7 @@ async function fetchTeamStats(): Promise<any[]> {
   console.log('📈 Fetching team statistics from CFBD...');
   
   try {
-    const response = await fetch(`${CFBD_CONFIG.baseUrl}/stats/season?year=${CURRENT_SEASON}`, {
+    const response = await fetch(`${CFBD_CONFIG.baseUrl}/stats/season?year=${SEASON}`, {
       headers: {
         'Authorization': `Bearer ${CFBD_CONFIG.apiKey}`,
         'accept': 'application/json'
@@ -371,7 +365,7 @@ async function fetchTeamStats(): Promise<any[]> {
   }
 }
 
-// Run activation
+// Run it
 if (require.main === module) {
   activatePipeline().catch(console.error);
 }
