@@ -7,6 +7,7 @@ import { Client, Databases, Query, Models, ID } from 'appwrite';
 import { Client as ServerClient, Databases as ServerDatabases } from 'node-appwrite';
 import { env } from '../config/environment';
 import { AppError, NotFoundError, ValidationError } from '../errors/app-error';
+import { SchemaValidator } from '../validation/schema-enforcer';
 
 // Conditionally import KV only if configured
 let kv: any = null;
@@ -176,19 +177,22 @@ export abstract class BaseRepository<T extends Models.Document> {
   }
 
   /**
-   * Create a new document
+   * Create a new document with schema transformation
    */
   async create(data: Partial<T>, options?: CreateOptions): Promise<T> {
     try {
       // Validate data
       await this.validateCreate(data);
 
+      // Transform data for schema compliance
+      const transformedData = SchemaValidator.transform(this.collectionId, data);
+
       // Create document
       const document = await this.databases.createDocument(
         this.databaseId,
         this.collectionId,
         ID.unique(),
-        data
+        transformedData
       ) as T;
 
       // Invalidate related caches
@@ -207,7 +211,7 @@ export abstract class BaseRepository<T extends Models.Document> {
   }
 
   /**
-   * Update an existing document
+   * Update an existing document with schema transformation
    */
   async update(id: string, data: Partial<T>, options?: UpdateOptions): Promise<T> {
     try {
@@ -224,12 +228,15 @@ export abstract class BaseRepository<T extends Models.Document> {
         updateData = { ...existing, ...data, $id: id };
       }
 
+      // Transform data for schema compliance
+      const transformedData = SchemaValidator.transform(this.collectionId, updateData);
+
       // Update document
       const document = await this.databases.updateDocument(
         this.databaseId,
         this.collectionId,
         id,
-        updateData
+        transformedData
       ) as T;
 
       // Invalidate caches

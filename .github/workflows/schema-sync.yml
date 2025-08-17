@@ -1,94 +1,40 @@
-name: schema-sync
-
+name: CI
 on:
   pull_request:
   push:
     branches: [main]
 
 jobs:
-  check:
+  schema:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      # Install CLIs
-      - name: Install Appwrite CLI
-        run: npm i -g appwrite-cli
-
-      # Non-interactive auth (API key with DB + Collections scopes)
-      - name: Appwrite CLI auth (non-interactive)
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: npx tsx scripts/sync-appwrite-simple.ts
         env:
           APPWRITE_ENDPOINT: ${{ secrets.APPWRITE_ENDPOINT }}
-          APPWRITE_PROJECT_ID: ${{ secrets.APPWRITE_PROJECT_ID }}
-          APPWRITE_API_KEY: ${{ secrets.APPWRITE_API_KEY }}
-        run: |
-          appwrite client --endpoint "$APPWRITE_ENDPOINT" --projectId "$APPWRITE_PROJECT_ID" --key "$APPWRITE_API_KEY"
-
-      # 1) Detect schema drift (someone changed Console)
-      - name: Pull schema
-        run: pnpm schema:pull || npm run schema:pull
-      - name: Fail on schema drift
-        run: git diff --quiet || (echo "Schema drift detected. Commit pulled changes." && exit 1)
-
-      # 2) Ensure types match schema
-      - name: Generate types
-        run: pnpm schema:types || npm run schema:types
-      - name: Fail on stale types
-        run: git diff --quiet || (echo "Type definitions out of date. Commit generated types." && exit 1)
-
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    needs: check
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Install Appwrite CLI
-        run: npm i -g appwrite-cli
-
-      - name: Appwrite CLI auth (non-interactive)
+          APPWRITE_PROJECT_ID: ${{ github.event_name == 'pull_request' && secrets.APPWRITE_PROJECT_ID_PREVIEW || secrets.APPWRITE_PROJECT_ID }}
+          APPWRITE_API_KEY: ${{ github.event_name == 'pull_request' && secrets.APPWRITE_API_KEY_PREVIEW || secrets.APPWRITE_API_KEY }}
+          APPWRITE_DATABASE_ID: ${{ secrets.APPWRITE_DATABASE_ID }}
+      - run: npx tsx scripts/run-migrations.ts
         env:
           APPWRITE_ENDPOINT: ${{ secrets.APPWRITE_ENDPOINT }}
-          APPWRITE_PROJECT_ID: ${{ secrets.APPWRITE_PROJECT_ID }}
-          APPWRITE_API_KEY: ${{ secrets.APPWRITE_API_KEY }}
-        run: |
-          appwrite client --endpoint "$APPWRITE_ENDPOINT" --projectId "$APPWRITE_PROJECT_ID" --key "$APPWRITE_API_KEY"
-
-      - name: Push schema + generate types
-        run: pnpm schema:all || npm run schema:all
-
-      # Update Edge Config with schema digest (so app can verify at runtime)
-      - name: Write schema digest to Edge Config
-        if: ${{ secrets.EDGE_CONFIG_ID && secrets.VERCEL_TEAM_ID && secrets.VERCEL_API_TOKEN }}
-        run: |
-          if [ -f appwrite.config.json ]; then
-            DIGEST=$(sha256sum appwrite.config.json | awk '{print $1}')
-          else
-            DIGEST=$(git ls-files -s | sha256sum | awk '{print $1}')
-          fi
-          curl -X PATCH "https://api.vercel.com/v1/edge-config/${{ secrets.EDGE_CONFIG_ID }}/items?teamId=${{ secrets.VERCEL_TEAM_ID }}" \
-            -H "Authorization: Bearer ${{ secrets.VERCEL_API_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            --data "{\"items\":[{\"operation\":\"upsert\",\"key\":\"SCHEMA_DIGEST\",\"value\":\"$DIGEST\"}]}"
-
-
+          APPWRITE_PROJECT_ID: ${{ github.event_name == 'pull_request' && secrets.APPWRITE_PROJECT_ID_PREVIEW || secrets.APPWRITE_PROJECT_ID }}
+          APPWRITE_API_KEY: ${{ github.event_name == 'pull_request' && secrets.APPWRITE_API_KEY_PREVIEW || secrets.APPWRITE_API_KEY }}
+          APPWRITE_DATABASE_ID: ${{ secrets.APPWRITE_DATABASE_ID }}
+      - run: npx tsx scripts/seed.ts
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          APPWRITE_ENDPOINT: ${{ secrets.APPWRITE_ENDPOINT }}
+          APPWRITE_PROJECT_ID: ${{ secrets.APPWRITE_PROJECT_ID_PREVIEW }}
+          APPWRITE_API_KEY: ${{ secrets.APPWRITE_API_KEY_PREVIEW }}
+          APPWRITE_DATABASE_ID: ${{ secrets.APPWRITE_DATABASE_ID }}
+      - run: npm run test:schema
+        name: Run Schema Contract Tests
+        env:
+          APPWRITE_ENDPOINT: ${{ secrets.APPWRITE_ENDPOINT }}
+          APPWRITE_PROJECT_ID: ${{ github.event_name == 'pull_request' && secrets.APPWRITE_PROJECT_ID_PREVIEW || secrets.APPWRITE_PROJECT_ID }}
+          APPWRITE_API_KEY: ${{ github.event_name == 'pull_request' && secrets.APPWRITE_API_KEY_PREVIEW || secrets.APPWRITE_API_KEY }}
+          APPWRITE_DATABASE_ID: ${{ secrets.APPWRITE_DATABASE_ID }}
