@@ -117,7 +117,7 @@ export default function MockDraftPage() {
     try {
       // Load players from our enhanced draft endpoint with top 200 ordering
       const season = new Date().getFullYear();
-      const response = await fetch(`/api/draft/players?limit=5000&season=${season}&top200=true&orderBy=projection`);
+      const response = await fetch(`/api/draft/players?limit=10000&season=${season}&orderBy=projection`);
       const data = await response.json();
       
       if (data.success && data.players && data.players.length > 0) {
