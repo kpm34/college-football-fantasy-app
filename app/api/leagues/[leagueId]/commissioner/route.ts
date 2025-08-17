@@ -36,8 +36,9 @@ export async function GET(
       params.leagueId
     );
     
-    // Check if user is commissioner
-    if (league.commissioner !== user.$id) {
+    // Check if user is commissioner (support multiple field variants)
+    const commissionerId = (league as any).commissioner || (league as any).commissionerId || (league as any).commissioner_id;
+    if (commissionerId !== user.$id) {
       return NextResponse.json(
         { error: 'Only the commissioner can access these settings' },
         { status: 403 }
@@ -106,7 +107,8 @@ export async function PUT(
       params.leagueId
     );
     
-    if (league.commissioner !== user.$id) {
+    const commissionerId = (league as any).commissioner || (league as any).commissionerId || (league as any).commissioner_id;
+    if (commissionerId !== user.$id) {
       return NextResponse.json(
         { error: 'Only the commissioner can update league settings' },
         { status: 403 }
@@ -114,13 +116,27 @@ export async function PUT(
     }
     
     const updates = await request.json();
-    
-    // Update league with all provided settings
+
+    // Map camelCase fields from UI to snake_case fields used in Appwrite schema
+    const mapped: Record<string, any> = {};
+    if ('name' in updates) mapped.name = updates.name;
+    if ('maxTeams' in updates) mapped.max_teams = Number(updates.maxTeams);
+    if ('pickTimeSeconds' in updates) mapped.pick_time_seconds = Number(updates.pickTimeSeconds);
+    if ('draftDate' in updates) mapped.draft_date = updates.draftDate; // ISO string
+    if ('orderMode' in updates) mapped.order_mode = updates.orderMode;
+    if ('gameMode' in updates) mapped.mode = updates.gameMode; // power4|sec|acc|big12|bigten
+    if ('selectedConference' in updates) mapped.conf = updates.selectedConference;
+    if ('scoringRules' in updates) mapped.scoring_rules = updates.scoringRules; // stringified JSON from UI
+
+    // Fallback: if no mapped keys found, pass original (for backwards compatibility)
+    const payload = Object.keys(mapped).length > 0 ? mapped : updates;
+
+    // Update league with provided settings
     const result = await databases.updateDocument(
       DATABASE_ID,
       COLLECTIONS.LEAGUES,
       params.leagueId,
-      updates
+      payload
     );
     
     return NextResponse.json({ success: true, league: result });
