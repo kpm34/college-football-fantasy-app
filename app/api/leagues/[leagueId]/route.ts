@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Client, Databases, Query } from 'node-appwrite';
-import { client, databases, DATABASE_ID } from '@/lib/appwrite-generated';
+import { Query } from 'node-appwrite';
+import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-generated';
 
-// Initialize Appwrite client (server/admin)
-const client = new Client()
-  .setEndpoint(process.env.APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1")
-  .setProject(process.env.APPWRITE_PROJECT_ID || "college-football-fantasy-app")
-  .setKey(process.env.APPWRITE_API_KEY);
-
-const databases = new Databases(client);
-const databaseId = process.env.APPWRITE_DATABASE_ID;
+const databaseId = DATABASE_ID;
 
 export async function GET(
   request: NextRequest,
@@ -24,7 +17,7 @@ export async function GET(
     // Read league via server key (documentSecurity-safe)
     const league = await databases.getDocument(
       databaseId,
-      'leagues',
+      COLLECTIONS.LEAGUES,
       leagueId
     );
 
@@ -33,7 +26,7 @@ export async function GET(
       try {
         const rosters = await databases.listDocuments(
           databaseId,
-          'rosters',
+          COLLECTIONS.ROSTERS,
           [Query.equal('leagueId', leagueId), Query.equal('userId', userId), Query.limit(1)]
         );
         if (rosters.total === 0 && league.commissioner !== userId) {
@@ -117,7 +110,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'teamId and name required' }, { status: 400 });
     }
 
-    await databases.updateDocument(databaseId, 'teams', teamId, { name, updated_at: new Date().toISOString() });
+    await databases.updateDocument(databaseId, COLLECTIONS.TEAMS, teamId, { name, updated_at: new Date().toISOString() });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating team name:', error);

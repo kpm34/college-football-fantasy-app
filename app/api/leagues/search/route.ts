@@ -1,16 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Client, Databases, Query } from 'node-appwrite';
-import { client, databases, DATABASE_ID } from '@/lib/appwrite-generated';
-import { COLLECTIONS } from '@/core/config/environment';
+import { Query } from 'node-appwrite';
+import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-generated';
 
-// Initialize Appwrite client
-const client = new Client()
-  .setEndpoint(process.env.APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1")
-  .setProject(process.env.APPWRITE_PROJECT_ID || "college-football-fantasy-app")
-  .setKey(process.env.APPWRITE_API_KEY);
-
-const databases = new Databases(client);
-const databaseId = process.env.APPWRITE_DATABASE_ID;
+const databaseId = DATABASE_ID;
 
 export async function GET(request: NextRequest) {
   try {
@@ -53,7 +45,7 @@ export async function GET(request: NextRequest) {
 
       const leagues = await databases.listDocuments(
         databaseId,
-        COLLECTIONS.leagues,
+        COLLECTIONS.LEAGUES,
         paginatedQueries
       );
 
@@ -104,7 +96,7 @@ export async function GET(request: NextRequest) {
       console.warn('Search index not available; falling back to filtered list:', appwriteError?.message || appwriteError);
       const fallback = await databases.listDocuments(
         databaseId,
-        COLLECTIONS.leagues,
+        COLLECTIONS.LEAGUES,
         [
           // Keep visibility constraints consistent with the main path
           ...(includePrivate ? [] : [Query.equal('isPublic', true)]),
