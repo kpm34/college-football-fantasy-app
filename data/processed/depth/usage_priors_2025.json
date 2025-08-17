@@ -1,1 +1,14 @@
-{}
+{
+  "FLA": {
+    "QB": [
+      {
+        "player_name": "DJ Lagway",
+        "snap_share": 0.95
+      },
+      {
+        "player_name": "Harrison Bailey",
+        "snap_share": 0.05
+      }
+    ]
+  }
+}

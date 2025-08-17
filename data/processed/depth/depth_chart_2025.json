@@ -1,1 +1,20 @@
-{}
+{
+  "FLA": {
+    "QB": [
+      {
+        "player_name": "DJ Lagway",
+        "pos_rank": 1,
+        "status": "Healthy",
+        "source": "team_sites",
+        "notes": "Starting QB for 2025 season"
+      },
+      {
+        "player_name": "Harrison Bailey",
+        "pos_rank": 2,
+        "status": "Healthy",
+        "source": "team_sites",
+        "notes": "Backup QB"
+      }
+    ]
+  }
+}

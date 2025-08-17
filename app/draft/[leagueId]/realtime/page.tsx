@@ -7,7 +7,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { DraftTimer } from '@/components/draft/DraftTimer';
 import { DraftRealtimeStatus } from '@/components/draft/DraftRealtimeStatus';
 import { PlayerProjection, DraftPlayer } from '@/types/projections';
-import { ProjectionsService } from '@/lib/services/projections.service';
 import { FiSearch, FiFilter, FiTrendingUp, FiStar, FiWifi } from 'react-icons/fi';
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { Query } from 'appwrite';
@@ -103,12 +102,40 @@ export default function RealtimeDraftRoom({ params }: Props) {
 
   const loadPlayers = async () => {
     try {
-      const { players } = await ProjectionsService.searchPlayers({
-        position: positionFilter === 'ALL' ? undefined : positionFilter,
-        conference: conferenceFilter === 'ALL' ? undefined : conferenceFilter,
-        search: searchQuery,
-        limit: 200
-      });
+      // Use enhanced projections API with depth chart logic
+      const params = new URLSearchParams();
+      if (positionFilter !== 'ALL') params.append('position', positionFilter);
+      if (conferenceFilter !== 'ALL') params.append('conference', conferenceFilter);
+      if (searchQuery) params.append('search', searchQuery);
+      params.append('limit', '200');
+      params.append('orderBy', 'projection');
+      
+      const response = await fetch(`/api/draft/players?${params.toString()}`);
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to load players');
+      }
+      
+      // Transform to expected format
+      const players = data.players.map((p: any) => ({
+        $id: p.id,
+        playerId: p.id,
+        playerName: p.name,
+        position: p.position,
+        team: p.team,
+        conference: p.conference,
+        school: p.team,
+        year: p.year || p.class,
+        projections: {
+          fantasyPoints: p.projectedPoints,
+          confidence: 70,
+          floor: Math.round(p.projectedPoints * 0.7),
+          ceiling: Math.round(p.projectedPoints * 1.3)
+        },
+        ratings: { composite: p.rating || 75 },
+        rankings: { adp: p.adp || 100 }
+      }));
       
       // Mark drafted players based on draft picks
       const draftedPlayerIds = new Set(draft.picks.map(pick => pick.playerId));

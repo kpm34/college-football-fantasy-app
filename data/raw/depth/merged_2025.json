@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "team_id": "FLA",
+    "team_name": "Florida",
+    "player_name": "DJ Lagway",
+    "player_key": "dj lagway",
+    "pos": "QB",
+    "pos_rank": 1,
+    "status": "Healthy",
+    "notes": "Starting QB for 2025 season",
+    "__source": "team_sites",
+    "__mtime": 1755432926669.1033
+  },
+  {
+    "team_id": "FLA",
+    "team_name": "Florida",
+    "player_name": "Harrison Bailey",
+    "player_key": "harrison bailey",
+    "pos": "QB",
+    "pos_rank": 2,
+    "status": "Healthy",
+    "notes": "Backup QB",
+    "__source": "team_sites",
+    "__mtime": 1755432926669.1033
+  }
+]

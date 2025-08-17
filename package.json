@@ -76,7 +76,10 @@
     "restore:user-leagues": "tsx scripts/restore-user-league-relationships.ts",
     "validate:schema": "tsx scripts/validate-schema-compliance.ts",
     "setup:monitoring": "tsx scripts/setup-monitoring.ts",
-    "monitoring:dashboard": "curl -s https://cfbfantasy.app/api/monitoring/dashboard | jq ."
+    "monitoring:dashboard": "curl -s https://cfbfantasy.app/api/monitoring/dashboard | jq .",
+    "demo:glob": "npx tsx scripts/demo-enhanced-glob.ts",
+    "demo:glob:basic": "npx tsx scripts/demo-enhanced-glob.ts --basic",
+    "ingest:run": "npx tsx scripts/run-data-ingestion.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",
