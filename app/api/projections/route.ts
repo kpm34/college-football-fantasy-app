@@ -3,6 +3,11 @@ import { ProjectionsService } from '@/lib/services/projections.service';
 import { Databases, Query, Client } from 'node-appwrite';
 import { env } from '@/core/config/environment';
 
+/**
+ * @deprecated This endpoint is deprecated as of August 17, 2025
+ * Use /api/players/cached instead which has enhanced depth chart logic
+ * This route uses outdated projection calculations without proper depth chart multipliers
+ */
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;

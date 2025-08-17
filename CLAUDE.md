@@ -1,5 +1,5 @@
 # Claude Code Project Context - College Football Fantasy App
-Last Updated: August 16, 2025 (09:25 AM PST)
+Last Updated: August 17, 2025 (12:30 AM PST)
 
 ## Project Overview
 **Name**: College Football Fantasy App  
@@ -241,6 +241,25 @@ Reference capabilities file: `tools/capabilities.json` (stack, env, APIs, comman
 ```
 
 ## Recent Updates & Fixes ✅
+
+### August 17, 2025
+1. **QB Projection Algorithm Enhancement**: Major fix for depth chart logic ⚡
+   - **Problem**: QB projections were too similar (Miller Moss ~300 pts, backups similar)
+   - **Solution**: Enhanced depth chart logic with proper multipliers
+   - **Changes Made**:
+     - Fixed API data source in `/app/api/players/cached/route.ts` to use correct database fields
+     - Updated ordering to use `fantasy_points` instead of `projections.fantasyPoints`
+     - Fixed search field to use `name` instead of `playerName`
+     - Switched to server-side database connection for proper authorization
+     - Applied depth chart multipliers: QB1 gets 100%, QB2 gets 25%, QB3+ gets 5%
+   - **Result**: Miller Moss now shows 333 fantasy points (up from ~300)
+   - **Impact**: Proper fantasy value differentiation between starting and backup QBs in draft interface
+
+2. **Production Deployment**: Live projection fixes deployed ✅
+   - Successfully deployed enhanced projection algorithm to production
+   - Ran projection sync script on production database  
+   - Verified QB rankings now show proper differentiation on live site
+   - Added sync scripts: `scripts/sync-enhanced-projections.js` and `.ts`
 
 ### August 16, 2025
 1. **Join League Feature**: Complete implementation and fixes

@@ -1,6 +1,11 @@
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 
+/**
+ * @deprecated This service is deprecated as of August 17, 2025
+ * Use projections.service.ts with getEnhancedSeasonProjections for consolidated projection logic
+ */
+
 interface TeamContext {
   team: string;
   opponent?: string;
