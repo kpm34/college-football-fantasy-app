@@ -301,7 +301,7 @@ export default function CreateLeaguePage() {
                 required
               />
               {formData.leagueName && (
-                <div className="mt-4 text-[#DAA520] flex items-center">
+                <div className="mt-4 text-[#3A1220] font-semibold flex items-center">
                   <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
@@ -346,7 +346,7 @@ export default function CreateLeaguePage() {
                         Players from one chosen conference. Always start-eligible.
                       </p>
                       <div className="bg-[#DAA520]/10 rounded-lg p-3">
-                        <div className="text-sm text-[#DAA520]">
+                        <div className="text-sm text-[#3A1220] font-medium">
                           <div>• 1 QB • 1 RB • 2 WR • 1 TE • 1 K</div>
                           <div className="mt-1">• Simple scoring • No defense</div>
                         </div>
@@ -380,7 +380,7 @@ export default function CreateLeaguePage() {
                         Players from all Power-4 conferences with strategic eligibility.
                       </p>
                       <div className="bg-[#DAA520]/10 rounded-lg p-3">
-                        <div className="text-sm text-[#DAA520]">
+                        <div className="text-sm text-[#3A1220] font-medium">
                           <div>• 1 QB • 2 RB • 2 WR • 1 FLEX</div>
                           <div className="mt-1">• 1 TE • 1 K • 1 DEF</div>
                         </div>
@@ -464,7 +464,7 @@ export default function CreateLeaguePage() {
                     </div>
                     <p className="text-lg text-[#3A1220] mb-3">Points Per Reception</p>
                     <div className="bg-[#DAA520]/10 rounded-lg p-3">
-                      <p className="text-sm text-[#DAA520]">
+                      <p className="text-sm text-[#3A1220] font-medium">
                         +1 point for each catch
                       </p>
                     </div>
@@ -494,7 +494,7 @@ export default function CreateLeaguePage() {
                     </div>
                     <p className="text-lg text-[#3A1220] mb-3">Traditional Scoring</p>
                     <div className="bg-[#DAA520]/10 rounded-lg p-3">
-                      <p className="text-sm text-[#DAA520]">
+                      <p className="text-sm text-[#3A1220] font-medium">
                         No reception points
                       </p>
                     </div>
