@@ -21,7 +21,7 @@ export async function GET(
 
   const fileMap: Record<string, string> = {
     'data-flow': 'docs/DATA_FLOW.md',
-    'project-map': 'PROJECT_MAP.md',  // Use root PROJECT_MAP.md
+    'project-map': 'docs/PROJECT_MAP.md',
     'system-map': 'docs/SYSTEM_MAP.md',
   }
 

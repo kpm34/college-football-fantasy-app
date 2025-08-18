@@ -96,9 +96,9 @@ export function useDraftStatus(leagueId: string) {
         return;
       }
       
-      // Check if we're within the draft window (15 minutes before to 3 hours after)
+      // Check if we're within the draft window (1 hour before to 3 hours after)
       const draftWindow = {
-        start: draftDate.getTime() - (15 * 60 * 1000), // 15 minutes before
+        start: draftDate.getTime() - (60 * 60 * 1000), // 1 hour before
         end: draftDate.getTime() + (3 * 60 * 60 * 1000) // 3 hours after
       };
       
