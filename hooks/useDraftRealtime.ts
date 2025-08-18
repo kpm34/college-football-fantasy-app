@@ -242,52 +242,19 @@ export function useDraftRealtime(leagueId: string) {
     }
 
     try {
-      const pick = await databases.createDocument(
-        DATABASE_ID,
-        COLLECTIONS.DRAFT_PICKS,
-        'unique()',
-        {
-          leagueId,
-          userId: user.$id,
-          playerId,
-          playerName: playerData.playerName,
-          playerPosition: playerData.position,
-          playerTeam: playerData.team,
-          pickNumber: state.currentPick,
-          round: state.currentRound,
-          timestamp: new Date().toISOString(),
-        }
-      );
-
-      // Check if this was the final pick of the draft
-      const totalRounds = state.league.draftRounds || 15;
-      const totalTeams = state.league.draftOrder?.length || 12;
-      const totalPicks = totalRounds * totalTeams;
-
-      if (state.currentPick >= totalPicks) {
-        console.log('🏁 Draft completed! Processing final roster assignments...');
-        
-        // Call the draft completion endpoint to save rosters
-        try {
-          const response = await fetch('/api/draft/complete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ leagueId })
-          });
-          
-          if (!response.ok) {
-            console.error('Failed to process draft completion:', await response.text());
-          } else {
-            const result = await response.json();
-            console.log('✅ Draft rosters processed:', result);
-          }
-        } catch (error) {
-          console.error('Error calling draft completion endpoint:', error);
-        }
+      const res = await fetch(`/api/drafts/${leagueId}/pick`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playerId, teamId: state.league.myTeamId || state.onTheClock, by: user.$id })
+      });
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error(t || 'Failed to make pick');
       }
+      const json = await res.json();
 
-      // The realtime subscription will handle updating the state
-      return pick;
+      // The realtime subscription (draft_events watcher) keeps UI in sync; server advances state
+      return json;
     } catch (error) {
       console.error('Error making pick:', error);
       throw error;
