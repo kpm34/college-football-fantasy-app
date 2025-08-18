@@ -35,7 +35,7 @@ jobs:
 
       - name: Run E2E Tests
         env:
-          TARGET_URL: ${{ github.event.inputs.target_url || 'https://college-football-fantasy-fw5yhpj6c-kmp34s-projects.vercel.app' }}
+          TARGET_URL: ${{ github.event.inputs.target_url || 'https://cfbfantasy.app' }}
         run: npm run test:e2e:prod
         continue-on-error: true
         id: e2e-test
@@ -87,10 +87,10 @@ jobs:
             npm run test:e2e:prod
             
             # Check API health
-            curl -s https://college-football-fantasy-fw5yhpj6c-kmp34s-projects.vercel.app/api/health
+            curl -s https://cfbfantasy.app/api/health
             
             # Check database consistency
-            curl -s "https://college-football-fantasy-fw5yhpj6c-kmp34s-projects.vercel.app/api/test/e2e?suite=consistency"
+            curl -s "https://cfbfantasy.app/api/test/e2e?suite=consistency"
             \`\`\`
             
             ---
@@ -161,7 +161,7 @@ jobs:
             ## E2E Test Results - ${status}
             
             **Commit**: ${sha.substring(0, 7)}  
-            **Deployment**: https://college-football-fantasy-fw5yhpj6c-kmp34s-projects.vercel.app
+            **Deployment**: https://cfbfantasy.app
             
             ${status === '✅ PASSED' ? 
               '🎉 All end-to-end tests passed! The deployment is ready for use.' : 
@@ -198,7 +198,7 @@ jobs:
 
       - name: Run Tests and Auto-Repair
         env:
-          TARGET_URL: ${{ github.event.inputs.target_url || 'https://college-football-fantasy-fw5yhpj6c-kmp34s-projects.vercel.app' }}
+          TARGET_URL: ${{ github.event.inputs.target_url || 'https://cfbfantasy.app' }}
         run: |
           echo "Running E2E tests with auto-repair..."
           
@@ -207,7 +207,7 @@ jobs:
           
           # Auto-repair member sync issues
           echo "Attempting to sync Jawn League members..."
-          curl -X POST "$TARGET_URL/api/leagues/6894db4a0001ad84e4b0/sync-members" || echo "Sync failed"
+          curl -X POST "$TARGET_URL/api/leagues/6894db4a0001ad84e4b0/sync-members" -H "Content-Type: application/json" || echo "Sync failed"
           
           # Run tests again to verify fixes
           echo "Re-running tests after repairs..."
