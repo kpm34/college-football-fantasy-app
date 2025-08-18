@@ -225,9 +225,9 @@ node scripts/ffmpeg-helpers.js extract-frames video.mp4 frames/ --fps 1
 
 ### Environment Variables for AI Tools
 ```bash
-RUNWAY_API_KEY=your-runway-key-here
+RUNWAY_API_KEY=key_441766a17fd0e0c670f14adfe7d0ebf8b05c0256a20e7d81959ab7cdd85cae14e677111000bfc2226bbe4d0b6b74ee3933bd36d92059f9fd9502222e061def91
 OPENAI_API_KEY=your-openai-key-here
-MESHY_API_KEY=your-meshy-key-here
+MESHY_API_KEY=msy_OWXv86Qrc3ndOinYkM99LkSwlr1dQp0T5yrz
 CRON_SECRET=secure-cron-secret
 ```
 
