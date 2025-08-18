@@ -5,14 +5,14 @@ Last Updated: August 17, 2025 (12:30 AM PST)
 **Name**: College Football Fantasy App  
 **Type**: Full-stack fantasy sports platform for Power 4 conferences
 **Deployment**: Vercel  
-**Current Production URL**: https://college-football-fantasy-fz3de5a3k-kpm34s-projects.vercel.app
+**Current Production URL**: https://cfbfantasy.app
 **Target URLs**: 
-- https://cfbfantasy.app (future)
+- https://cfbfantasy.app ✅ **LIVE**
 - https://www.cfbfantasy.app (future)
 - https://collegefootballfantasy.app
 - https://www.collegefootballfantasy.app
 **Framework**: Next.js 15 with App Router, TypeScript, Tailwind CSS
-**Note**: Awwwards-rig submodule present in vendor/ for future 3D enhancements
+**Note**: Awwwards-rig submodule removed (Aug 18, 2025) - reduced codebase by 39,000+ files
 
 ## Tech Stack
 - **Runtime**: Node.js 18-22

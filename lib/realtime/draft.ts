@@ -1,13 +1,13 @@
 // lib/realtime/draft.ts
 'use client';
-import { Client, Realtime } from 'appwrite';
+import { Client } from 'appwrite';
 
 export function createDraftRealtime() {
   const client = new Client()
     .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
     .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app');
-  const rt = new Realtime(client);
-  return rt;
+  
+  return client;
 }
 
 export function subscribeToDraft(draftId: string, onEvent: (e: any) => void) {
@@ -15,14 +15,14 @@ export function subscribeToDraft(draftId: string, onEvent: (e: any) => void) {
     .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
     .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app');
 
-  const rt = new Realtime(client);
+  // Use client.subscribe method directly (Appwrite v16+ pattern)
   const subs = [
-    rt.subscribe([`databases.*.collections.mock_draft_picks.documents`], (e) => {
+    client.subscribe([`databases.*.collections.mock_draft_picks.documents`], (e) => {
       if (e.events.some(ev => ev.includes('databases')) && e.payload?.draftId === draftId) {
         onEvent({ type: 'pick', data: e.payload });
       }
     }),
-    rt.subscribe([`databases.*.collections.mock_drafts.documents`], (e) => {
+    client.subscribe([`databases.*.collections.mock_drafts.documents`], (e) => {
       if (e.payload?.$id === draftId) {
         onEvent({ type: 'draft', data: e.payload });
       }

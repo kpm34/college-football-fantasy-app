@@ -3,7 +3,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Client, Realtime } from 'appwrite';
+import { Client } from 'appwrite';
 
 type ResultsPayload = {
   draft: any;
@@ -22,12 +22,13 @@ function useRealtime(draftId: string, onEvent: () => void) {
     const client = new Client()
       .setEndpoint(endpoint)
       .setProject(projectId);
-    const rt = new Realtime(client);
+    
+    // Use client.subscribe method directly (Appwrite v16+ pattern)
     const subs = [
-      rt.subscribe([`databases.*.collections.mock_draft_picks.documents`], (e) => {
+      client.subscribe([`databases.*.collections.mock_draft_picks.documents`], (e) => {
         if (e.payload?.draftId === draftId) onEvent();
       }),
-      rt.subscribe([`databases.*.collections.mock_drafts.documents`], (e) => {
+      client.subscribe([`databases.*.collections.mock_drafts.documents`], (e) => {
         if (e.payload?.$id === draftId) onEvent();
       }),
     ];
