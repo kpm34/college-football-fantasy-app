@@ -71,6 +71,11 @@ gh run list --limit 5
 gh run view <run-id> --log-failed
 gh workflow list
 
+// Web search operations (Brave API)
+mcp__brave_search.search("Next.js 15 App Router best practices")
+mcp__brave_search.search("Appwrite authentication troubleshooting")
+mcp__brave_search.search("College Football Data API documentation")
+
 // Memory management
 mcp__memory.store("key", "value")
 mcp__memory.retrieve("key")
@@ -174,6 +179,7 @@ MESHY_API_KEY=[configured]
 FIGMA_ACCESS_TOKEN=your-token-here
 CRON_SECRET=secure-string-here
 GITHUB_PERSONAL_ACCESS_TOKEN=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
+BRAVE_API_KEY=BSAQJHPdhjJ3hPcblDWtVJ8Z1qI6O2E
 ```
 
 ### **MCP Server Status**

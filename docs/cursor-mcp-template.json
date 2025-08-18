@@ -45,7 +45,7 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-brave-search"],
       "env": {
-        "BRAVE_API_KEY": "your-brave-api-key-here"
+        "BRAVE_API_KEY": "BSAQJHPdhjJ3hPcblDWtVJ8Z1qI6O2E"
       }
     },
     "puppeteer": {
@@ -71,8 +71,9 @@
     "usage": [
       "- GitHub: 'Check recent workflow runs', 'Show me workflow failures'",
       "- Appwrite: 'List users', 'Show league data', 'Update collection'", 
+      "- Brave Search: 'Search for Next.js documentation', 'Find API solutions'",
       "- Memory: Context persists across Claude Code sessions",
-      "- Filesystem: Direct project file operations",
+      "- Filesystem: Direct project file operations", 
       "- Git: Repository operations and history"
     ]
   }
