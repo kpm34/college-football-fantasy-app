@@ -167,7 +167,7 @@ export const DraftPicks = z.object({
   rosterId: z.string().min(1).max(50).optional(),
   playerId: z.string().min(1).max(50),
   playerName: z.string().min(1).max(120),
-  position: z.string().min(1).max(10),
+  position: z.enum(['QB', 'RB', 'WR', 'TE', 'K']),
   round: z.number().int().min(1),
   pick: z.number().int().min(1),
   overallPick: z.number().int().min(1),

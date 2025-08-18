@@ -78,6 +78,21 @@ export const POST = withErrorHandler(async (
     throw new ValidationError('Player not found');
   }
 
+  // Simple server-side debounce/lock to avoid duplicate writes on lag spikes
+  try {
+    const { kv } = await import('@vercel/kv');
+    const lockKey = `draft:lock:${leagueId}:${teamId}`;
+    const now = Date.now();
+    const wasSet = await kv.setnx(lockKey, String(now));
+    if (!wasSet) {
+      const existing = Number(await kv.get(lockKey)) || 0;
+      if (now - existing < 200) {
+        return NextResponse.json({ error: 'Duplicate pick prevented' }, { status: 429 });
+      }
+    }
+    await kv.expire(lockKey, 1); // expire quickly
+  } catch {}
+
   // Check if player is already drafted (using repository method)
   const draftedPlayers = await getDraftedPlayers(leagueId);
   if (draftedPlayers.has(playerId)) {

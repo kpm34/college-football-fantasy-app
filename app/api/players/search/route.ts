@@ -28,6 +28,20 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // Hot-path bypass: for very short queries, skip KV and origin lookups
+  if (query.trim().length > 0 && query.trim().length < 2) {
+    return NextResponse.json(
+      { players: [] },
+      {
+        status: 200,
+        headers: {
+          'Cache-Control': 'no-store',
+          'X-Bypass': 'short-query'
+        }
+      }
+    );
+  }
+
   // Check edge cache first (Vercel Edge Cache)
   const cacheKey = `player-search:${JSON.stringify({ query, position, conference, available, leagueId })}`;
   
