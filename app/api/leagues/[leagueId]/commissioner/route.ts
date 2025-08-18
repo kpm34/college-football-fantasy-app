@@ -49,7 +49,7 @@ export async function GET(
     const [rosters, teams] = await Promise.all([
       databases.listDocuments(
         DATABASE_ID,
-        COLLECTIONS.USER_TEAMS,
+        COLLECTIONS.userTeams,
         [Query.equal('leagueId', params.leagueId)]
       ),
       databases.listDocuments(
