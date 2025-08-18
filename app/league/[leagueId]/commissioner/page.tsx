@@ -130,6 +130,15 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
           router.push(`/league/${params.leagueId}`);
           return;
         }
+        if (response.status === 401) {
+          const next = encodeURIComponent(`/league/${params.leagueId}/commissioner`);
+          router.replace(`/login?next=${next}`);
+          return;
+        }
+        try {
+          const err = await response.json();
+          console.error('Commissioner settings load failed:', err);
+        } catch {}
         throw new Error('Failed to load settings');
       }
       
