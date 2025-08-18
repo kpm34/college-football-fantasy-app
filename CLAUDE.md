@@ -150,6 +150,10 @@ EDGE_CONFIG=[configured]
 ODDS_API_KEY=your_key_here
 ROTOWIRE_API_KEY=your_key_here
 
+# ESPN+ Account (for premium content and analysis)
+ESPN_USERNAME=kpm34@pitt.edu
+ESPN_PASSWORD=#Kash2002
+
 # Development
 SEASON_YEAR=2025
 NEXT_DISABLE_FAST_REFRESH=true
