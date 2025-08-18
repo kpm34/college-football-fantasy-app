@@ -20,7 +20,7 @@
     "eval_proj": "npx tsx scripts/eval_proj.ts",
     "dev": "next dev",
     "build": "SKIP_ENV_VALIDATION=true next build",
-    "prebuild": "npx tsx scripts/guards/forbid-test-pages.ts && npx tsx scripts/guards/forbid-legacy-collections.ts && node scripts/generate-icons.js 2>/dev/null || true && npm run validate:env",
+    "prebuild": "npx tsx scripts/guards/forbid-test-pages.ts && npx tsx scripts/guards/forbid-legacy-collections.ts && node scripts/generate-icons.js 2>/dev/null || true && cp -r docs public/ && npm run validate:env",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",

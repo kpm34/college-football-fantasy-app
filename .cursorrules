@@ -109,7 +109,7 @@ ANTHROPIC_API_KEY=[configured]
 
 # AI Development Tools (Optional)
 OPENAI_API_KEY=[set as needed]
-RUNWAY_API_KEY=[set as needed]
+RUNWAY_API_KEY=[configured]
 MESHY_API_KEY=[set as needed]
 FIGMA_ACCESS_TOKEN=[set as needed]
 CRON_SECRET=[required for job polling]
