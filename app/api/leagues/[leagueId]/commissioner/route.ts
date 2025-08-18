@@ -59,9 +59,27 @@ export async function GET(
       ).catch(() => ({ documents: [] }))
     ]);
     
+    // Format league response to ensure camelCase fields
+    const formattedLeague = {
+      ...league,
+      maxTeams: league.maxTeams || 12,
+      pickTimeSeconds: league.pickTimeSeconds || 90,
+      draftDate: league.draftDate,
+      gameMode: league.gameMode || league.mode || 'power4',
+      selectedConference: league.selectedConference || league.conf,
+      seasonStartWeek: league.seasonStartWeek || 1,
+      playoffTeams: league.playoffTeams || 4,
+      playoffStartWeek: league.playoffStartWeek || 13,
+      primaryColor: league.primaryColor || '#8C1818',
+      secondaryColor: league.secondaryColor || '#DAA520',
+      leagueTrophyName: league.leagueTrophyName || 'Championship Trophy',
+      scoringRules: league.scoringRules,
+      isPublic: league.isPublic ?? true
+    };
+
     return NextResponse.json({
       success: true,
-      league,
+      league: formattedLeague,
       members: [...rosters.documents, ...teams.documents]
     });
   } catch (error: any) {

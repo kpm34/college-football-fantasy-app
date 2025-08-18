@@ -1,6 +1,6 @@
 # Data Flow Alignment - Single Source of Truth
 
-**Last Updated:** August 17, 2025  
+**Last Updated:** August 18, 2025  
 **Status:** ✅ Aligned and Verified
 
 ## Overview
@@ -139,7 +139,26 @@ player.projectedPoints === player.fantasy_points (from DB)
 4. **Verify UI:** Check draft interface shows updated projections
 5. **Monitor:** Projection showcase page displays algorithm results
 
+## Recent Fixes (August 18, 2025)
+
+### Commissioner Settings Schema Fix ✅
+
+**Issue:** Commissioner settings were failing to save due to schema mismatch
+- **Root Cause:** API endpoints were sending snake_case field names (`max_teams`, `pick_time_seconds`) but Appwrite database expected camelCase (`maxTeams`, `pickTimeSeconds`)
+- **Service Worker Cache:** Old cached responses with incorrect field names persisted the issue
+
+**Files Fixed:**
+- `/app/api/leagues/[leagueId]/commissioner/route.ts` - Updated field mapping to camelCase
+- `/app/api/leagues/[leagueId]/route.ts` - Fixed response to use `league.maxTeams`
+- `/app/api/leagues/join/route.ts` - Removed `max_teams` fallback
+- `/app/api/leagues/search/route.ts` - Removed `max_teams` fallbacks (4 instances)
+- `/app/league/create/page.tsx` - Removed `max_teams` fallback
+- `/public/sw.js` - Updated cache version to force refresh
+
+**Result:** Commissioner settings now save successfully in production ✅
+
 ---
 
 **Status:** ✅ All routing aligned - single source of truth established  
+**Status:** ✅ Commissioner settings schema alignment completed  
 **Next:** Regular pipeline updates as season data changes
