@@ -131,6 +131,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
           return;
         }
         if (response.status === 401) {
+          console.log('Authentication failed, redirecting to login');
           const next = encodeURIComponent(`/league/${params.leagueId}/commissioner`);
           router.replace(`/login?next=${next}`);
           return;
@@ -315,7 +316,20 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
   if (!league) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="text-gray-600">League not found</div>
+        <div className="text-center">
+          <div className="text-gray-600 mb-4">Unable to load commissioner settings</div>
+          <div className="text-sm text-gray-500">
+            This could be due to authentication issues or insufficient permissions.
+          </div>
+          <div className="mt-4">
+            <button
+              onClick={() => router.push(`/league/${params.leagueId}`)}
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              Back to League
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
