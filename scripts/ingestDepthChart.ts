@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ID, Query } from 'node-appwrite';
-import { assertEnv, databases, DB_ID } from '../src/appwrite';
+import { serverDatabases as databases, DATABASE_ID as DB_ID } from '../lib/appwrite-server';
 
 // Accepts JSON input placed at data/depth/depth_chart_{{season}}.json
 // Shape is flexible; we store as-is under depth_chart_json to allow audits.
@@ -21,7 +21,6 @@ async function upsert(season: number, payload: any): Promise<void> {
 }
 
 async function main() {
-  assertEnv();
   const seasonArg = process.argv.find((a) => a.startsWith('--season='));
   const season = seasonArg ? Number(seasonArg.split('=')[1]) : new Date().getFullYear();
   const file = path.join(process.cwd(), `data/depth/depth_chart_${season}.json`);

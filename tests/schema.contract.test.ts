@@ -7,7 +7,7 @@
 
 import { Client, Databases } from 'node-appwrite';
 import { SCHEMA, type SchemaCollection } from '../schema/schema';
-import { COLLECTIONS } from '../schema/zod-collections';
+import { COLLECTIONS } from '../schema/zod-schema';
 
 describe('Schema Contract Tests', () => {
   let client: Client;
