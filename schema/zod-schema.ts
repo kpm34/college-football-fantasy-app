@@ -183,7 +183,7 @@ export const COLLECTIONS = {
   GAMES: 'games',
   RANKINGS: 'rankings',
   LEAGUES: 'leagues',
-  ROSTERS: 'rosters',
+  USER_TEAMS: 'user_teams',  // Updated from 'rosters'
   LINEUPS: 'lineups',
   AUCTIONS: 'auctions',
   BIDS: 'bids',
@@ -201,7 +201,7 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.GAMES]: Games, 
   [COLLECTIONS.RANKINGS]: Rankings,
   [COLLECTIONS.LEAGUES]: Leagues,
-  [COLLECTIONS.ROSTERS]: Rosters,
+  [COLLECTIONS.USER_TEAMS]: Rosters,  // Updated key to use user_teams
   [COLLECTIONS.LINEUPS]: Lineups,
   [COLLECTIONS.AUCTIONS]: Auctions,
   [COLLECTIONS.BIDS]: Bids,

@@ -8,7 +8,7 @@
 import 'dotenv/config';
 import { Client, Databases } from "node-appwrite";
 // Import from your simplified Zod collections
-import { COLLECTIONS } from "../schema/zod-collections";
+import { COLLECTIONS } from "../schema/zod-schema";
 
 const endpoint = process.env.APPWRITE_ENDPOINT!;
 const project = process.env.APPWRITE_PROJECT_ID!;

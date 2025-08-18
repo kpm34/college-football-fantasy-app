@@ -9,14 +9,13 @@ All database structures, TypeScript types, and validation logic are defined here
 ## 📁 Files Overview
 
 ### Core Schema Files
+- **`zod-schema.ts`** - **SINGLE SOURCE OF TRUTH** - Zod-first schemas, types, and validation
 - **`schema.ts`** - Comprehensive schema definitions with full Appwrite metadata
-- **`zod-schema.ts`** - Zod-first type definitions and validation utilities  
-- **`zod-collections.ts`** - Simplified Zod schemas (your preferred pattern)
 
 ### Validation & Sync
 - **`../core/validation/schema-enforcer.ts`** - Runtime validation and data transformation
 - **`../scripts/sync-appwrite-schema.ts`** - Comprehensive schema sync (from schema.ts)
-- **`../scripts/sync-appwrite-simple.ts`** - Simple schema sync (from zod-collections.ts)
+- **`../scripts/sync-appwrite-simple.ts`** - Simple schema sync (from zod-schema.ts SSOT)
 
 ## 🚀 Quick Commands
 
@@ -27,7 +26,7 @@ npm run schema:validate
 # Sync schema to Appwrite (comprehensive)
 npm run schema:sync-ssot
 
-# Sync schema to Appwrite (simple - from zod-collections.ts)
+# Sync schema to Appwrite (simple - from zod-schema.ts SSOT)
 npx tsx scripts/sync-appwrite-simple.ts
 
 # Traditional Appwrite CLI sync
@@ -76,14 +75,20 @@ The system enforces that all data mutations go through:
 
 ### Method 2: Simple (For Rapid Prototyping)
 
-1. Add to `zod-collections.ts`:
+1. Add to `zod-schema.ts` SSOT:
    ```typescript
    export const MyNewCollection = z.object({
      name: z.string().min(1)
    });
    
    export const COLLECTIONS = {
-     my_new_collection: MyNewCollection
+     ...existing,
+     MY_NEW_COLLECTION: 'my_new_collection'
+   };
+   
+   export const SCHEMA_REGISTRY = {
+     ...existing,
+     [COLLECTIONS.MY_NEW_COLLECTION]: MyNewCollection
    };
    ```
 
