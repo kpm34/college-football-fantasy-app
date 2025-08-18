@@ -16,10 +16,11 @@ async function loadMermaidBlocks(filePath: string): Promise<string[]> {
 
 export default async function Page() {
   const charts = await loadMermaidBlocks('PROJECT_MAP.md')
+  const extra = await loadMermaidBlocks('docs/SYSTEM_MAP.md').catch(() => [])
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Project Map</h1>
-      <MermaidRenderer charts={charts} />
+      <MermaidRenderer charts={[...charts, ...extra]} />
     </div>
   )
 }
