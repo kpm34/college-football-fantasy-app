@@ -159,6 +159,101 @@ export const ActivityLog = z.object({
 });
 
 /**
+ * Draft & Mock Draft Collections (in use but missing from SSOT)
+ */
+export const DraftPicks = z.object({
+  leagueId: z.string().min(1).max(50),
+  teamId: z.string().min(1).max(50),
+  rosterId: z.string().min(1).max(50).optional(),
+  playerId: z.string().min(1).max(50),
+  playerName: z.string().min(1).max(120),
+  position: z.string().min(1).max(10),
+  round: z.number().int().min(1),
+  pick: z.number().int().min(1),
+  overallPick: z.number().int().min(1),
+  timestamp: z.string().optional()
+});
+
+export const MockDrafts = z.object({
+  title: z.string().min(1).max(100).optional(),
+  numTeams: z.number().int().min(2).max(24),
+  status: z.enum(['waiting', 'active', 'complete']).default('waiting'),
+  settings: z.string().max(5000).optional() // JSON settings
+});
+
+export const MockDraftParticipants = z.object({
+  draftId: z.string().min(1).max(50),
+  name: z.string().min(1).max(100),
+  slot: z.number().int().min(1).max(24)
+});
+
+export const MockDraftPicks = z.object({
+  draftId: z.string().min(1).max(50),
+  participantId: z.string().min(1).max(50),
+  playerId: z.string().min(1).max(50),
+  round: z.number().int().min(1),
+  pick: z.number().int().min(1)
+});
+
+/**
+ * Projections & Inputs (present in env and services)
+ */
+export const PlayerProjections = z.object({
+  playerId: z.string().min(1).max(50),
+  season: z.number().int().min(2020).max(2035),
+  week: z.number().int().min(1).max(20).optional(),
+  fantasy_points: z.number().optional(),
+  data: z.string().max(10000).optional() // JSON payload
+});
+
+export const ProjectionsYearly = z.object({
+  playerId: z.string().min(1).max(50),
+  season: z.number().int().min(2020).max(2035),
+  fantasy_points: z.number().optional()
+});
+
+export const ProjectionsWeekly = z.object({
+  playerId: z.string().min(1).max(50),
+  season: z.number().int().min(2020).max(2035),
+  week: z.number().int().min(1).max(20),
+  fantasy_points: z.number().optional()
+});
+
+export const ModelInputs = z.object({
+  season: z.number().int().min(2020).max(2035),
+  depth_chart_json: z.string().optional(),
+  team_pace_json: z.string().optional(),
+  pass_rush_rates_json: z.string().optional(),
+  opponent_grades_by_pos_json: z.string().optional(),
+  injury_reports_json: z.string().optional(),
+  vegas_json: z.string().optional(),
+  manual_overrides_json: z.string().optional()
+});
+
+export const UserCustomProjections = z.object({
+  userId: z.string().min(1).max(50),
+  playerId: z.string().min(1).max(50),
+  season: z.number().int().min(2020).max(2035),
+  week: z.number().int().min(1).max(20).optional(),
+  fantasy_points: z.number().optional(),
+  notes: z.string().max(2000).optional()
+});
+
+/**
+ * Matchups (weekly head-to-head)
+ */
+export const Matchups = z.object({
+  leagueId: z.string().min(1).max(50),
+  week: z.number().int().min(1).max(20),
+  season: z.number().int().min(2020).max(2035),
+  homeRosterId: z.string().min(1).max(50),
+  awayRosterId: z.string().min(1).max(50),
+  homePoints: z.number().optional(),
+  awayPoints: z.number().optional(),
+  status: z.enum(['scheduled', 'active', 'final']).default('scheduled')
+});
+
+/**
  * INFERRED TYPESCRIPT TYPES
  */
 export type CollegePlayer = z.infer<typeof CollegePlayers>;
@@ -190,6 +285,16 @@ export const COLLECTIONS = {
   PLAYER_STATS: 'player_stats',
   USERS: 'users',
   ACTIVITY_LOG: 'activity_log',
+  DRAFT_PICKS: 'draft_picks',
+  MOCK_DRAFTS: 'mock_drafts',
+  MOCK_DRAFT_PICKS: 'mock_draft_picks',
+  MOCK_DRAFT_PARTICIPANTS: 'mock_draft_participants',
+  MATCHUPS: 'matchups',
+  PLAYER_PROJECTIONS: 'player_projections',
+  PROJECTIONS_YEARLY: 'projections_yearly',
+  PROJECTIONS_WEEKLY: 'projections_weekly',
+  MODEL_INPUTS: 'model_inputs',
+  USER_CUSTOM_PROJECTIONS: 'user_custom_projections',
 } as const;
 
 /**
@@ -208,6 +313,16 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.PLAYER_STATS]: PlayerStats,
   [COLLECTIONS.USERS]: Users,
   [COLLECTIONS.ACTIVITY_LOG]: ActivityLog,
+  [COLLECTIONS.DRAFT_PICKS]: DraftPicks,
+  [COLLECTIONS.MOCK_DRAFTS]: MockDrafts,
+  [COLLECTIONS.MOCK_DRAFT_PICKS]: MockDraftPicks,
+  [COLLECTIONS.MOCK_DRAFT_PARTICIPANTS]: MockDraftParticipants,
+  [COLLECTIONS.MATCHUPS]: Matchups,
+  [COLLECTIONS.PLAYER_PROJECTIONS]: PlayerProjections,
+  [COLLECTIONS.PROJECTIONS_YEARLY]: ProjectionsYearly,
+  [COLLECTIONS.PROJECTIONS_WEEKLY]: ProjectionsWeekly,
+  [COLLECTIONS.MODEL_INPUTS]: ModelInputs,
+  [COLLECTIONS.USER_CUSTOM_PROJECTIONS]: UserCustomProjections,
 } as const;
 
 /**
