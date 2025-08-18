@@ -1,4 +1,4 @@
-# Cursor Commands (Active)
+# Cursor Commands (Schema & Env)
 
 - Generate everything from SSOT:
   - npm run generate:all
@@ -12,5 +12,3 @@
 
 Notes:
 - Required attributes cannot have defaults in Appwrite; make optional and default-in-code or always supply values.
-
-See `CURSOR_COMMANDS_BACKUP.md` for the previous command set.
