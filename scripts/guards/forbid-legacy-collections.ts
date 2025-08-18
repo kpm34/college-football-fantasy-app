@@ -20,6 +20,11 @@ const FORBIDDEN_PATTERNS = [
     severity: 'error'
   },
   {
+    pattern: /['"`]matchups['"`]/g,
+    message: 'Use COLLECTIONS.MATCHUPS instead of hardcoded "matchups"',
+    severity: 'error'
+  },
+  {
     pattern: /['"`]draft_picks['"`]/g,
     message: 'Use COLLECTIONS.draftPicks instead of hardcoded "draft_picks"',
     severity: 'error'

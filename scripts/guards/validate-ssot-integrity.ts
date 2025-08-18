@@ -26,7 +26,18 @@ const REQUIRED_COLLECTIONS = [
   'bids',
   'player_stats',
   'users',
-  'activity_log'
+  'activity_log',
+  // Newly enforced
+  'draft_picks',
+  'mock_drafts',
+  'mock_draft_picks',
+  'mock_draft_participants',
+  'matchups',
+  'player_projections',
+  'projections_yearly',
+  'projections_weekly',
+  'model_inputs',
+  'user_custom_projections'
 ];
 
 interface ValidationResult {
