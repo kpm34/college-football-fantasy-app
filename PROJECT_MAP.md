@@ -164,6 +164,46 @@ graph TB
 
 ---
 
+## 🔧 Commissioner Settings Schema Fix Flow
+
+```mermaid
+sequenceDiagram
+    participant UI as Commissioner UI
+    participant API as API Route
+    participant DB as Appwrite Database
+    participant SW as Service Worker
+    
+    Note over UI,DB: August 18, 2025 - Schema Fix Implementation
+    
+    UI->>API: PUT /api/leagues/[id]/commissioner
+    Note over UI,API: Frontend sends camelCase:<br/>maxTeams, pickTimeSeconds
+    
+    API->>API: Field Mapping
+    Note over API: OLD: snake_case (max_teams)<br/>NEW: camelCase (maxTeams)
+    
+    API->>DB: updateDocument(leagues)
+    Note over DB: Database expects camelCase<br/>maxTeams: 12<br/>pickTimeSeconds: 90
+    
+    alt Schema Mismatch (Before Fix)
+        DB-->>API: ❌ Error: Unknown attribute "max_teams"
+        API-->>UI: ❌ Failed to save settings
+    else Schema Aligned (After Fix)
+        DB-->>API: ✅ Document updated successfully
+        API-->>UI: ✅ Settings saved
+    end
+    
+    Note over SW: Service Worker Cache v2<br/>Forces fresh API responses
+    
+    UI->>API: GET /api/leagues/[id]/commissioner
+    API->>API: Format Response
+    Note over API: Ensures camelCase fields<br/>in response object
+    API-->>UI: ✅ Formatted league data
+    
+    Note over UI,DB: Result: Commissioner page loads<br/>and settings save successfully
+```
+
+---
+
 ## 🎯 Key Architecture Principles
 
 ### Single Source of Truth (SSOT)
@@ -228,9 +268,26 @@ npm run build
 ## 📋 Status: ✅ Production Ready
 
 **Architecture**: Fully consolidated, zero fragmentation  
-**Schema**: Single Source of Truth established  
+**Schema**: Single Source of Truth established ✅ **[Updated: Aug 18, 2025]**  
 **Validation**: Build guards + runtime checks active  
 **Performance**: <100ms real-time updates  
 **Scalability**: 2-24 team drafts supported  
+**Commissioner Tools**: Schema alignment completed ✅ **[Fixed: Aug 18, 2025]**
 
 **Ready for**: Advanced features, production deployment, team collaboration
+
+---
+
+## 🔧 Recent Schema Fixes (August 18, 2025)
+
+### Commissioner Settings Schema Alignment ✅
+- **Issue**: Field name mismatch between API and database (snake_case vs camelCase)
+- **Solution**: Updated all commissioner endpoints to use consistent camelCase field mapping
+- **Files Fixed**: `commissioner/route.ts` (GET/PUT), `join/route.ts`, `search/route.ts`, `create/page.tsx`
+- **Cache Update**: Service worker version bumped to force refresh
+- **Result**: Commissioner settings now save successfully in production
+
+### Single Source of Truth Reinforcement
+- **Enhanced**: `docs/DATA_FLOW_ALIGNMENT.md` with schema fix documentation
+- **Memory Updated**: Knowledge graph entities tracking the schema alignment
+- **Deployment**: https://college-football-fantasy-2vx7nulqz-kmp34s-projects.vercel.app ✅
