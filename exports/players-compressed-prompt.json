@@ -1,0 +1,25 @@
+{
+  "format": "gzip+base64",
+  "data": "H4sIAAAAAAAAE62WUWvkNhSF/4rQswckW5Ilv2Vmkk2TltLJQiilLNeWnDHxSIPs2eCE/PfFkNjqrighnneJT+fcc+/VCz6YHnDxgvsOFzglKV8RuaISJ7iyPS5SnuDOV7jAm6v1tyuwPXTDt+0avyb42MJgfIeLf15wo3GBJc1ZmerxsoWDGS+BNmgD3p/6PU7w0Y2Uv9Y4wb2BAy7wRQslHGDEOVvjAt9dbsaD43MyRhK873GBxYriBD+N76E8wYMfD+7wa/IGhlTnQgo2g2/c3qKNc0fjF3HTNy5VE/fPmUukSpWo0p+4X+D5GWzzAIvQ+btknr6hrwLJRGUsF2ng9cUt2hqY5e4+yExlzOYYU3GZ80zlM3MLtjEtum7a9jxcxiI2UyIpraEOcuVagy40HLoJe7/7IHaymK8oeS+vzCJcyUtSAgvK+8X4Q2PQ2ngLXi9gB5IJiyQ648IYQciM/t31z6bxaO2de1wmW02hppEq54SnNVM8CDW0xqJraM1ZFFOVR8xWwKgsIejhC+OHEXs49s6eqc5TG4eKU5XXGZOB4t86aGCPrp1fhhYrNpVZvpFvQq+ZIBnnNBwg3R5tTuY7zDX+evkxLg06Kpumh4jEy1CTK2XKmbv2Tg9oC20o+DNgPoFpLNdVCVVWBeBbaE2JLvUTeL1MsngnCxYdXlzVUpdhrAc95tqV3dk0x7ZEJoCVwMxM/nqqHo1HG+etaZvTLPv2g2z2a6HjG4pLTpUMN9StMa2zaHfqOhNM7c9sqBkdM1xwloGCKpA9oLvmcAzdXrKT4y0leEm1ZnWo+Htj0a5pzbBgSfEVpf87N8epSbgKennrDbqHbt/Yh7CrPsNW02KOtXNd17WgZaB511R78Br97U724Tyq5z9BGDAgXGd5HgTsjxu02Tf+4alZNjnnmU0iklVOGE9F4PbaWHQD1WO3cGJPX76cRKpsdKolpPo/Vjt0V7m+P5NcEVtRta65ECrADmDRfdO2zbJfUEDOZVDgf19/AP3yUcUdDAAA",
+  "instructions": "Decode with: JSON.parse(require('zlib').gunzipSync(Buffer.from(data, 'base64')).toString())",
+  "schema": {
+    "meta": {
+      "ts": "date",
+      "cnt": "count",
+      "src": "source"
+    },
+    "players": [
+      {
+        "id": "short_id",
+        "name": "player_name",
+        "pos": "position",
+        "team": "team_name",
+        "conf": "conference",
+        "pts": "fantasy_points",
+        "ht": "height?",
+        "wt": "weight?",
+        "yr": "year?"
+      }
+    ]
+  }
+}

@@ -1,0 +1,2506 @@
+id,name,position,team,conference,season,cfbd_id,rating,draftable,power_4
+689028a9cae48174b2d8,Cade Carruth,QB,Alabama,SEC,NaN,,,true,true
+689028a9f347a2d76864,John Cooper,QB,Alabama,SEC,NaN,,,true,true
+689028aa2246089296c2,John Gazzaniga,QB,Alabama,SEC,NaN,,,true,true
+689028aa469c09347628,AK Dear,RB,Alabama,SEC,NaN,,,true,true
+689028aa6c0d95875397,Daniel Hill,RB,Alabama,SEC,NaN,,,true,true
+689028aa8f4e10811faf,Cole Adams,WR,Alabama,SEC,NaN,,,true,true
+689028aabee985b0ba42,Germie Bernard,WR,Alabama,SEC,NaN,,,true,true
+689028aae935356ee600,Lotzeir Brooks,WR,Alabama,SEC,NaN,,,true,true
+689028ab1a107052f495,Jalen Hale,WR,Alabama,SEC,NaN,,,true,true
+689028ab3ccf9a418ba4,Aeryn Hampton,WR,Alabama,SEC,NaN,,,true,true
+689028ab6438297f3485,Isaiah Horton,WR,Alabama,SEC,NaN,,,true,true
+689028ab890f74603551,Josh Cuevas,TE,Alabama,SEC,NaN,,,true,true
+689028abb262e1e799eb,Brody Dalton,TE,Alabama,SEC,NaN,,,true,true
+689028abe6673cbac3cb,Kaleb Edwards,TE,Alabama,SEC,NaN,,,true,true
+689028ac296b9559f8db,Jayden Hobson,TE,Alabama,SEC,NaN,,,true,true
+689028ac586336a4ba4e,Tucker Cornelius,K,Alabama,SEC,NaN,,,true,true
+68902ac7bb5d585198c2,Keelon Russell,QB,Alabama,SEC,NaN,,,true,true
+68902ac7ea1a6543a9ac,Ty Simpson,QB,Alabama,SEC,NaN,,,true,true
+68902ac8693f65b1dd4f,Kevin Riley,RB,Alabama,SEC,NaN,,,true,true
+68902ac8917c52f40591,Dre Washington,RB,Alabama,SEC,NaN,,,true,true
+68902ac8be0dffff61bf,Richard Young,RB,Alabama,SEC,NaN,,,true,true
+68902ac97935a05d3772,MJ Chirgwin,WR,Alabama,SEC,NaN,,,true,true
+68902ac9e3d597045261,Ben Jackson,WR,Alabama,SEC,NaN,,,true,true
+68902aca397ded2d8a2d,Rico Scott,WR,Alabama,SEC,NaN,,,true,true
+68902aca5a282fdf5669,Ryan Williams,WR,Alabama,SEC,NaN,,,true,true
+68902acb00cb5f2ce6f6,Peyton Fox,TE,Alabama,SEC,NaN,,,true,true
+68902acb4bddfbf37f48,Lane Whisenhunt,TE,Alabama,SEC,NaN,,,true,true
+68902acb93c6006c15c8,Reid Schuback,K,Alabama,SEC,NaN,,,true,true
+68902acbc32ac0a74199,Conor Talty,K,Alabama,SEC,NaN,,,true,true
+68902e7c07064aee7c6b,Carson Beck,QB,Georgia,SEC,NaN,,,true,true
+68902e7c2d31fa457faa,Gunner Stockton,QB,Georgia,SEC,NaN,,,true,true
+68902e7c53a02eaf334a,Trevor Etienne,RB,Georgia,SEC,NaN,,,true,true
+68902e7c78f65839a810,Andrew Paul,RB,Georgia,SEC,NaN,,,true,true
+68902e7ca7004d214195,Dominic Lovett,WR,Georgia,SEC,NaN,,,true,true
+68902e7ccbf270c0fbcd,Rara Thomas,WR,Georgia,SEC,NaN,,,true,true
+68902e7ceff5a8339b41,Oscar Delp,TE,Georgia,SEC,NaN,,,true,true
+68902e7d1f3bd26af16b,Jared Zirkel,K,Georgia,SEC,NaN,,,true,true
+68902e7d45c391b1bc89,Garrett Nussmeier,QB,LSU,SEC,NaN,,,true,true
+68902e7d6d959dd3a63a,Kaleb Jackson,RB,LSU,SEC,NaN,,,true,true
+68902e7d9498af6b098b,Josh Williams,RB,LSU,SEC,NaN,,,true,true
+68902e7db8941b97295c,Kyren Lacy,WR,LSU,SEC,NaN,,,true,true
+68902e7de23f9bbb76fa,Chris Hilton Jr.,WR,LSU,SEC,NaN,,,true,true
+68902e7e14eacafc1b38,Mason Taylor,TE,LSU,SEC,NaN,,,true,true
+68902e7e3e410188b1f7,Damian Ramos,K,LSU,SEC,NaN,,,true,true
+68902e7e67399e5ac557,Quinn Ewers,QB,Texas,SEC,NaN,,,true,true
+68902e7e86d7e971c9b1,Arch Manning,QB,Texas,SEC,NaN,,,true,true
+68902e7ea9dac8ca12f6,CJ Baxter,RB,Texas,SEC,NaN,,,true,true
+68902e7ecdcf895e6262,Jaydon Blue,RB,Texas,SEC,NaN,,,true,true
+68902e7f0b312c3a38dc,Isaiah Bond,WR,Texas,SEC,NaN,,,true,true
+68902e7f33dccdcf896d,Matthew Golden,WR,Texas,SEC,NaN,,,true,true
+68902e7f5dd11fd55609,Gunnar Helm,TE,Texas,SEC,NaN,,,true,true
+68902e7f8164886749f3,Bert Auburn,K,Texas,SEC,NaN,,,true,true
+68902e7faa90610095a4,Graham Mertz,QB,Florida,SEC,NaN,,,true,true
+68902e7fda3d4d8a68f3,Montrell Johnson Jr.,RB,Florida,SEC,NaN,,,true,true
+68902e800b1ee6e834cb,Trevor Etienne,RB,Florida,SEC,NaN,,,true,true
+68902e80331f63664bb4,Eugene Wilson III,WR,Florida,SEC,NaN,,,true,true
+68902e80582016c9df0f,Kahleil Jackson,WR,Florida,SEC,NaN,,,true,true
+68902e8084d4c67526cf,Arlis Boardingham,TE,Florida,SEC,NaN,,,true,true
+68902e80aa328f1454d3,Trey Smack,K,Florida,SEC,NaN,,,true,true
+68902e80d6fc1f5aac8b,Nico Iamaleava,QB,Tennessee,SEC,NaN,,,true,true
+68902e810736c84cf8ff,Dylan Sampson,RB,Tennessee,SEC,NaN,,,true,true
+68902e812bbcd1383f20,Cameron Seldon,RB,Tennessee,SEC,NaN,,,true,true
+68902e8159dc6814cdc0,Squirrel White,WR,Tennessee,SEC,NaN,,,true,true
+68902e8181a25e92b872,Bru McCoy,WR,Tennessee,SEC,NaN,,,true,true
+68902e81a7d1f81d062d,Jacob Warren,TE,Tennessee,SEC,NaN,,,true,true
+68902e81cdac8fba704d,Charles Campbell,K,Tennessee,SEC,NaN,,,true,true
+68902e8209735fbdfd4b,Brock Vandagriff,QB,Kentucky,SEC,NaN,,,true,true
+68902e822f7311b031fa,Ray Davis,RB,Kentucky,SEC,NaN,,,true,true
+68902e8257231d9920ba,Dane Key,WR,Kentucky,SEC,NaN,,,true,true
+68902e827a678ccc6347,Barion Brown,WR,Kentucky,SEC,NaN,,,true,true
+68902e82a0bd5c46cb3c,Jordan Dingle,TE,Kentucky,SEC,NaN,,,true,true
+68902e82cd1b9a92b289,Alex Raynor,K,Kentucky,SEC,NaN,,,true,true
+68902e83002d834017b4,LaNorris Sellers,QB,South Carolina,SEC,NaN,,,true,true
+68902e832530b2f1de2e,Oscar Adaway III,RB,South Carolina,SEC,NaN,,,true,true
+68902e834d1573a35c41,Nyck Harbor,WR,South Carolina,SEC,NaN,,,true,true
+68902e8374dc32b76fab,Ahmarean Brown,WR,South Carolina,SEC,NaN,,,true,true
+68902e839d019e91a929,Josh Simon,TE,South Carolina,SEC,NaN,,,true,true
+68902e83c20e62a0733a,Mitch Jeter,K,South Carolina,SEC,NaN,,,true,true
+68902e83e57734aa31c9,Brady Cook,QB,Missouri,SEC,NaN,,,true,true
+68902e841b55e65cfa3e,Cody Schrader,RB,Missouri,SEC,NaN,,,true,true
+68902e844b0284fb0104,Luther Burden III,WR,Missouri,SEC,NaN,,,true,true
+68902e84724f84162299,Theo Wease Jr.,WR,Missouri,SEC,NaN,,,true,true
+68902e84a26f7420cddc,Brett Norfleet,TE,Missouri,SEC,NaN,,,true,true
+68902e84cd2847291341,Harrison Mevis,K,Missouri,SEC,NaN,,,true,true
+68902e850533a953b057,Payton Thorne,QB,Auburn,SEC,NaN,,,true,true
+68902e852ae5d6237beb,Jarquez Hunter,RB,Auburn,SEC,NaN,,,true,true
+68902e855a8432932543,Cam Coleman,WR,Auburn,SEC,NaN,,,true,true
+68902e857dbaa88ce637,Caleb Burton III,WR,Auburn,SEC,NaN,,,true,true
+68902e85a227166a56f1,Rivaldo Fairweather,TE,Auburn,SEC,NaN,,,true,true
+68902e85c5a728b50b46,Alex McPherson,K,Auburn,SEC,NaN,,,true,true
+68902e85f0473d077f14,Jaxson Dart,QB,Ole Miss,SEC,NaN,,,true,true
+68902e862254bc276b1d,Quinshon Judkins,RB,Ole Miss,SEC,NaN,,,true,true
+68902e8648fda3b34c3d,Ulysses Bentley IV,RB,Ole Miss,SEC,NaN,,,true,true
+68902e866c4aeaa4c2ac,Tre Harris,WR,Ole Miss,SEC,NaN,,,true,true
+68902e86a642617e4b5c,Jordan Watkins,WR,Ole Miss,SEC,NaN,,,true,true
+68902e86c82b63338224,Caden Prieskorn,TE,Ole Miss,SEC,NaN,,,true,true
+68902e86f18458fdc7c2,Caden Davis,K,Ole Miss,SEC,NaN,,,true,true
+68902e8726ce2a6fdada,Blake Shapen,QB,Mississippi State,SEC,NaN,,,true,true
+68902e874a9f526463c2,Jeffery Pittman,RB,Mississippi State,SEC,NaN,,,true,true
+68902e8770b5c60d70d3,Kelly Akharaiyi,WR,Mississippi State,SEC,NaN,,,true,true
+68902e87985a7a997467,Justin Robinson,WR,Mississippi State,SEC,NaN,,,true,true
+68902e87cd770b93798a,Ryland Goede,TE,Mississippi State,SEC,NaN,,,true,true
+68902e8814626be3de60,Kyle Ferrie,K,Mississippi State,SEC,NaN,,,true,true
+68902e8841d04669f57e,Taylen Green,QB,Arkansas,SEC,NaN,,,true,true
+68902e8895ebbfaecf99,Rashod Dubinion,RB,Arkansas,SEC,NaN,,,true,true
+68902e8928b85bcc37a7,Andrew Armstrong,WR,Arkansas,SEC,NaN,,,true,true
+68902e894ee2f96f20ec,Isaac TeSlaa,WR,Arkansas,SEC,NaN,,,true,true
+68902e8970d09d2da536,Luke Hasz,TE,Arkansas,SEC,NaN,,,true,true
+68902e8995e08e0dad22,Cam Little,K,Arkansas,SEC,NaN,,,true,true
+68902e89be251a38dd28,Nate Johnson,QB,Vanderbilt,SEC,NaN,,,true,true
+68902e89ee091c789447,Sedrick Alexander,RB,Vanderbilt,SEC,NaN,,,true,true
+68902e8a1e9f89300390,Will Sheppard,WR,Vanderbilt,SEC,NaN,,,true,true
+68902e8a455b5546b14d,London Humphreys,WR,Vanderbilt,SEC,NaN,,,true,true
+68902e8a734ea1173c24,Justin Ball,TE,Vanderbilt,SEC,NaN,,,true,true
+68902e8a9778fbcadc37,Jacob Borcila,K,Vanderbilt,SEC,NaN,,,true,true
+68902e8abcfb92c59c3a,Conner Weigman,QB,Texas A&M,SEC,NaN,,,true,true
+68902e8ae4c2509db329,Le'Veon Moss,RB,Texas A&M,SEC,NaN,,,true,true
+68902e8b178042fd6c7a,Evan Stewart,WR,Texas A&M,SEC,NaN,,,true,true
+68902e8b3c5771cab22f,Moose Muhammad III,WR,Texas A&M,SEC,NaN,,,true,true
+68902e8b6cfa0fc9031e,Jake Johnson,TE,Texas A&M,SEC,NaN,,,true,true
+68902e8b916eda4b4bab,Randy Bond,K,Texas A&M,SEC,NaN,,,true,true
+68902e8bb671bf82359c,Jackson Arnold,QB,Oklahoma,SEC,NaN,,,true,true
+68902e8bdcba9534e3d2,Gavin Sawchuk,RB,Oklahoma,SEC,NaN,,,true,true
+68902e8c0d29a18ffbca,Andrel Anthony,WR,Oklahoma,SEC,NaN,,,true,true
+68902e8c3440bb593e99,Nic Anderson,WR,Oklahoma,SEC,NaN,,,true,true
+68902e8c5788c81e7e43,Bauer Sharp,TE,Oklahoma,SEC,NaN,,,true,true
+68902e8c7f20ab6d8433,Zach Schmit,K,Oklahoma,SEC,NaN,,,true,true
+689031ed39bab3dedd31,Peter Knudson,TE,Alabama,SEC,NaN,,,true,true
+689031ed5cff8a99c30d,Danny Lewis Jr.,TE,Alabama,SEC,NaN,,,true,true
+689031ed861d6893d2a4,Jay Lindsey,TE,Alabama,SEC,NaN,,,true,true
+689031edb2c04bb26d37,Jay Loper Jr.,WR,Alabama,SEC,NaN,,,true,true
+689031edd7625caf4f11,Michael Lorino III,RB,Alabama,SEC,NaN,,,true,true
+689031ee0619b068a97c,Austin Mack,QB,Alabama,SEC,NaN,,,true,true
+689031ee29b6df5bf5c2,Jaylen Mbakwe,WR,Alabama,SEC,NaN,,,true,true
+689031ee4d72b0d5fd37,Derek Meadows,WR,Alabama,SEC,NaN,,,true,true
+689031ee70f56577f47f,Jam Miller,RB,Alabama,SEC,NaN,,,true,true
+689031ee97851a1487e8,Cooper Mollison,WR,Alabama,SEC,NaN,,,true,true
+689031eebdb1eef59998,Fredrick Moore,RB,Alabama,SEC,NaN,,,true,true
+689031eee49accdeaadc,Peter Notaro,K,Alabama,SEC,NaN,,,true,true
+689031ef133ed0f27d1d,Marshall Pritchett,TE,Alabama,SEC,NaN,,,true,true
+689031ef7f4bb740565d,Jack Sammarco,TE,Alabama,SEC,NaN,,,true,true
+689031f07e293e944c1f,Jessie Washington III,RB,Alabama,SEC,NaN,,,true,true
+689031f123814b224c23,Liam Badger,K,Georgia,SEC,NaN,,,true,true
+689031f14acfdd641bc4,Ethan Barbour,TE,Georgia,SEC,NaN,,,true,true
+689031f1711a50f54401,Henry Bates,K,Georgia,SEC,NaN,,,true,true
+689031f1979f863fa3cb,Dillon Bell,WR,Georgia,SEC,NaN,,,true,true
+689031f1b8c2da965995,Jeremy Bell,WR,Georgia,SEC,NaN,,,true,true
+689031f1de509e67bfbd,Micah Bell,RB,Georgia,SEC,NaN,,,true,true
+689031f21a3a1c1a1e42,Luke Bennett,WR,Georgia,SEC,NaN,,,true,true
+689031f23d3759808842,Thomas Blackshear,WR,Georgia,SEC,NaN,,,true,true
+689031f262a0c1e3e28e,Walter Blanchard,WR,Georgia,SEC,NaN,,,true,true
+689031f2855ff6a9639b,Chauncey Bowens,RB,Georgia,SEC,NaN,,,true,true
+689031f2a9217fa373de,Zachariah Branch,WR,Georgia,SEC,NaN,,,true,true
+689031f2cbfa378991f5,Danny Curran,WR,Georgia,SEC,NaN,,,true,true
+689031f32e1c02f38d7a,Connor Ferguson,K,Georgia,SEC,NaN,,,true,true
+689031f36c4cf6a7ed6f,Nate Frazier,RB,Georgia,SEC,NaN,,,true,true
+689031f39328e31dc18a,Colter Ginn,QB,Georgia,SEC,NaN,,,true,true
+689031f3bb0e2cf8c57f,Jacob Hardie,RB,Georgia,SEC,NaN,,,true,true
+689031f3eb3835239ecf,Gannon Hearst,RB,Georgia,SEC,NaN,,,true,true
+689031f424acb7a2ea6e,Colton Heinrich,TE,Georgia,SEC,NaN,,,true,true
+689031f449112534b91d,Patrick Hester,TE,Georgia,SEC,NaN,,,true,true
+689031f46f5afa120843,London Humphreys,WR,Georgia,SEC,NaN,,,true,true
+689031f49384cf4736d3,Cooper Johnson,TE,Georgia,SEC,NaN,,,true,true
+689031f4c5a8c15359a5,Cash Jones,RB,Georgia,SEC,NaN,,,true,true
+689031f4ef72f4153da7,David Lalaian,TE,Georgia,SEC,NaN,,,true,true
+689031f521ac8bdae5fa,Lawson Luckie,TE,Georgia,SEC,NaN,,,true,true
+689031f54905388db202,Brandon Mathis,RB,Georgia,SEC,NaN,,,true,true
+689031f56bdc1f8c51ef,Josh McCray,RB,Georgia,SEC,NaN,,,true,true
+689031f592e3a75453d4,Ben McElreath,WR,Georgia,SEC,NaN,,,true,true
+689031f5bd604c24b6f2,Hezekiah Millender,QB,Georgia,SEC,NaN,,,true,true
+689031f5eb24be285a94,Ryan Montgomery,QB,Georgia,SEC,NaN,,,true,true
+689031f623460054d08d,Wade Penn,RB,Georgia,SEC,NaN,,,true,true
+689031f64fc1e8f9381e,Dwight Phillips Jr.,RB,Georgia,SEC,NaN,,,true,true
+689031f677a7b75968d8,Ryan Puglisi,QB,Georgia,SEC,NaN,,,true,true
+689031f69c23f6519ef0,Jaden Reddell,TE,Georgia,SEC,NaN,,,true,true
+689031f6c9d423ec8c0b,Roderick Robinson II,RB,Georgia,SEC,NaN,,,true,true
+689031f6eeee36055bcc,Landon Roldan,WR,Georgia,SEC,NaN,,,true,true
+689031f7217017bc0603,Cole Speer,WR,Georgia,SEC,NaN,,,true,true
+689031f74967fba47402,Jackson St. Clair,WR,Georgia,SEC,NaN,,,true,true
+689031f7949ef02412b0,Talyn Taylor,WR,Georgia,SEC,NaN,,,true,true
+689031f7b5748220fbcf,Will Taylor,WR,Georgia,SEC,NaN,,,true,true
+689031f7dd5ad86aa173,Noah Thomas,WR,Georgia,SEC,NaN,,,true,true
+689031f80f76cbbf1995,Miles Thornton,WR,Georgia,SEC,NaN,,,true,true
+689031f832fbec4733a2,Kavon Townsend,WR,Georgia,SEC,NaN,,,true,true
+689031f857eb1c676d1f,Bo Walker,RB,Georgia,SEC,NaN,,,true,true
+689031f87f551fd15437,Helton,WR,Georgia,SEC,NaN,,,true,true
+689031f8a3652153316a,CJ Wiley,WR,Georgia,SEC,NaN,,,true,true
+689031f8c9cdc474cb61,Elyiss Williams,TE,Georgia,SEC,NaN,,,true,true
+689031f8eddb7caacc50,Peyton Woodring,K,Georgia,SEC,NaN,,,true,true
+689031f91f89b1e3302c,Colbie Young,WR,Georgia,SEC,NaN,,,true,true
+689031f9441eb90c5ec5,Aaron Anderson,WR,LSU,SEC,NaN,,,true,true
+689031f968871998a61d,Nic Anderson,WR,LSU,SEC,NaN,,,true,true
+689031f999959040389f,Harlem Berry,RB,LSU,SEC,NaN,,,true,true
+689031f9bcba5507dc5e,Kylan Billiot,WR,LSU,SEC,NaN,,,true,true
+689031f9e0ffed734e65,Barion Brown,WR,LSU,SEC,NaN,,,true,true
+689031fa130f5c2152cb,Aeron Burrell,K,LSU,SEC,NaN,,,true,true
+689031fa3549bf446241,Reid Chauvin,RB,LSU,SEC,NaN,,,true,true
+689031fa5cdbfac8da87,Aidan Corbello,K,LSU,SEC,NaN,,,true,true
+689031fa81aeb26ab851,Landon Craig,TE,LSU,SEC,NaN,,,true,true
+689031faaf266be107f9,Caden Durham,RB,LSU,SEC,NaN,,,true,true
+689031fad41ad8a620be,Joseph Ebun,RB,LSU,SEC,NaN,,,true,true
+689031fb0f5bb2c524f9,TaRon Francis,WR,LSU,SEC,NaN,,,true,true
+689031fb37128d79dc29,Donovan Green,TE,LSU,SEC,NaN,,,true,true
+689031fb61b23cb830bd,Dez Green,TE,LSU,SEC,NaN,,,true,true
+689031fb85a9075b88b0,Cowinn Helaire,WR,LSU,SEC,NaN,,,true,true
+689031fbae50a2ba9af1,Destyn Hill,WR,LSU,SEC,NaN,,,true,true
+689031fc06ba0e68b004,Colin Hurley,QB,LSU,SEC,NaN,,,true,true
+689031fc546ac7131aca,Juan Johnson,QB,LSU,SEC,NaN,,,true,true
+689031fc7b6719dd44dc,JD LaFleur,TE,LSU,SEC,NaN,,,true,true
+689031fca010d27fe43c,Malachi Lane,RB,LSU,SEC,NaN,,,true,true
+689031fcc4970159ae0c,JT Lindsey,RB,LSU,SEC,NaN,,,true,true
+689031fce9b2dfda6a73,Noah Nash,WR,LSU,SEC,NaN,,,true,true
+689031fd42d30544ca1e,Kyle Parker,WR,LSU,SEC,NaN,,,true,true
+689031fd6b35e2904b43,Tre People,QB,LSU,SEC,NaN,,,true,true
+689031fd90123e15f019,Sean Perret,K,LSU,SEC,NaN,,,true,true
+689031fdb86a59083e58,GiVanni Peterson,TE,LSU,SEC,NaN,,,true,true
+689031fde060da906fb7,Emile Picarella III,QB,LSU,SEC,NaN,,,true,true
+689031fe36074a40350a,Bauer Sharp,TE,LSU,SEC,NaN,,,true,true
+689031fe5b32ad2dc8b0,Isaiah Stone,WR,LSU,SEC,NaN,,,true,true
+689031fe7c1b7293a0f2,Zavion Thomas,WR,LSU,SEC,NaN,,,true,true
+689031fea1ee28deb8da,Michael Van Buren Jr.,QB,LSU,SEC,NaN,,,true,true
+689031fec65bc6212e32,Jelani Watkins,WR,LSU,SEC,NaN,,,true,true
+689031feea5468c4f68d,Phillip Wright III,WR,LSU,SEC,NaN,,,true,true
+689031ff28eee9e957f3,Rett Andersen,WR,Texas,SEC,NaN,,,true,true
+689031ff4c40d1e182fe,Ridge Barker,TE,Texas,SEC,NaN,,,true,true
+689031ff75c587ab5397,Spencer Barnett,K,Texas,SEC,NaN,,,true,true
+689031ffc319d28fe1d5,Ty Boatright,WR,Texas,SEC,NaN,,,true,true
+689031fff3dbef869fe5,Aaron Butler,WR,Texas,SEC,NaN,,,true,true
+68903200231fe745b1d6,Matthew Caldwell,QB,Texas,SEC,NaN,,,true,true
+689032004a2ccd9e003e,Bryce Chambers,WR,Texas,SEC,NaN,,,true,true
+6890320073cea464508c,Christian Clark,RB,Texas,SEC,NaN,,,true,true
+6890320096489391bdee,Luke Dunham,QB,Texas,SEC,NaN,,,true,true
+68903200bcd2cd2b557a,Jack Endries,TE,Texas,SEC,NaN,,,true,true
+68903200e45a3d80a28d,Jaime Ffrench Jr.,WR,Texas,SEC,NaN,,,true,true
+68903201211dcf51a011,Jerrick Gibson,RB,Texas,SEC,NaN,,,true,true
+689032014672e4b19f0d,Karle Lacey Jr.,QB,Texas,SEC,NaN,,,true,true
+68903201740c9816ed65,Parker Livingstone,WR,Texas,SEC,NaN,,,true,true
+68903201a377c88910a9,Kaliq Lockett,WR,Texas,SEC,NaN,,,true,true
+68903201f1f4a132df15,Daylan McCutcheon,WR,Texas,SEC,NaN,,,true,true
+689032022770c4a27781,Hamilton McMartin,WR,Texas,SEC,NaN,,,true,true
+689032025b24ecae725d,Quinn Merritt,WR,Texas,SEC,NaN,,,true,true
+689032028336d82dc37c,DeAndre Moore Jr.,WR,Texas,SEC,NaN,,,true,true
+68903202adc79f289be2,Emmett Mosley V,WR,Texas,SEC,NaN,,,true,true
+68903202d3461cb456ac,Trey Owens,QB,Texas,SEC,NaN,,,true,true
+6890320300a257835b00,Colin Page,RB,Texas,SEC,NaN,,,true,true
+689032032cd5f6002895,Remy Patson,WR,Texas,SEC,NaN,,,true,true
+689032035c8c08bb2021,Hudson Powell,WR,Texas,SEC,NaN,,,true,true
+68903203861fd7332b2d,Will Randle,TE,Texas,SEC,NaN,,,true,true
+68903203ae3d7248967e,Spencer Shannon,TE,Texas,SEC,NaN,,,true,true
+68903203d310dd41b94a,Mason Shipley,K,Texas,SEC,NaN,,,true,true
+68903204077d8ab9fa35,James Simon,RB,Texas,SEC,NaN,,,true,true
+6890320432a368083dbd,Rickey Stewart Jr.,RB,Texas,SEC,NaN,,,true,true
+68903204575a145b9da1,Will Stone,K,Texas,SEC,NaN,,,true,true
+689032047e52ce7177e2,Joe Tatum,QB,Texas,SEC,NaN,,,true,true
+68903204b819fc1968e3,Michael Terry III,WR,Texas,SEC,NaN,,,true,true
+68903204eb8253f0cd7f,Nick Townsend,TE,Texas,SEC,NaN,,,true,true
+689032051eccb3d6c41c,Jordan Washington,TE,Texas,SEC,NaN,,,true,true
+6890320549a341670f9e,Ryan Wingo,WR,Texas,SEC,NaN,,,true,true
+6890320580be648f65bb,Emaree Winston,TE,Texas,SEC,NaN,,,true,true
+68903205b1a4def1a6f8,Quintrevion Wisner,RB,Texas,SEC,NaN,,,true,true
+68903205d69128ea3335,TJ Abrams,WR,Florida,SEC,NaN,,,true,true
+6890320609471b94fc82,Harrison Bailey,QB,Florida,SEC,NaN,,,true,true
+68903206376240de8a94,Jadan Baugh,RB,Florida,SEC,NaN,,,true,true
+68903206622f8dcc741a,Vernell Brown III,WR,Florida,SEC,NaN,,,true,true
+689032068574ccb2897b,Brian Case,RB,Florida,SEC,NaN,,,true,true
+68903206b34663059327,Duke Clark,RB,Florida,SEC,NaN,,,true,true
+68903206d835fc4be23d,KD Daniels,RB,Florida,SEC,NaN,,,true,true
+689032070b563de5a80c,Jaden Edgecombe,WR,Florida,SEC,NaN,,,true,true
+6890320732368369bc8b,Chad Gasper Jr.,RB,Florida,SEC,NaN,,,true,true
+6890320765d608e97b0d,Alex Gonzalez,WR,Florida,SEC,NaN,,,true,true
+6890320795b70c558815,DeBraun Hampton,WR,Florida,SEC,NaN,,,true,true
+68903207b8f33b93dbbd,Hayden Hansen,TE,Florida,SEC,NaN,,,true,true
+68903207ee9556cdecac,Tank Hawkins,WR,Florida,SEC,NaN,,,true,true
+6890320820ac32a0f43a,Scott Isacks,TE,Florida,SEC,NaN,,,true,true
+6890320845e53fbbce08,Amir Jackson,TE,Florida,SEC,NaN,,,true,true
+689032086744e1d847fb,Kobi Jackson,RB,Florida,SEC,NaN,,,true,true
+68903208b3ca9bba46c6,Kelvin Jimenez,RB,Florida,SEC,NaN,,,true,true
+68903208db9588116e55,Micah Jones,TE,Florida,SEC,NaN,,,true,true
+689032090ed8bc2dc23f,Tramell Jones Jr.,QB,Florida,SEC,NaN,,,true,true
+689032093250d1bdd36d,Cameron Kossmann,TE,Florida,SEC,NaN,,,true,true
+689032095aa7d086713a,DJ Lagway,QB,Florida,SEC,NaN,,,true,true
+689032097e23ef8d16ff,Tony Livingston,TE,Florida,SEC,NaN,,,true,true
+68903209a66d7d575fd3,Byron Louis,RB,Florida,SEC,NaN,,,true,true
+68903209cb6779838441,Clay Millen,QB,Florida,SEC,NaN,,,true,true
+68903209f09aea81252a,Aidan Mizell,WR,Florida,SEC,NaN,,,true,true
+6890320a240a0b7b6f93,Naeshaun Montgomery,WR,Florida,SEC,NaN,,,true,true
+6890320a532c0a7e332c,Evan Noel,K,Florida,SEC,NaN,,,true,true
+6890320a797b9aaec98d,Mike Peterson Jr.,WR,Florida,SEC,NaN,,,true,true
+6890320a9e5f402c9237,Brandon Rabasco,K,Florida,SEC,NaN,,,true,true
+6890320ac3addc028156,Cary Rifenberick,WR,Florida,SEC,NaN,,,true,true
+6890320af0031fa22c42,Caleb Rillos,TE,Florida,SEC,NaN,,,true,true
+6890320b20226a4d3ad0,Anthony Rubio,RB,Florida,SEC,NaN,,,true,true
+6890320b7aeba0059bc2,Taylor Spierto,WR,Florida,SEC,NaN,,,true,true
+6890320ba7e1dd03f5da,J. Michael Sturdivant,WR,Florida,SEC,NaN,,,true,true
+6890320bcbcf117ba126,Muizz Tounkara,WR,Florida,SEC,NaN,,,true,true
+6890320bf0eabe408adf,Jackson Wade,WR,Florida,SEC,NaN,,,true,true
+6890320c239d2672ad5e,Aidan Warner,QB,Florida,SEC,NaN,,,true,true
+6890320c4db6ed52d7d7,Treyaun Webb,RB,Florida,SEC,NaN,,,true,true
+6890320c72f32ea0a935,Aaron Williams,QB,Florida,SEC,NaN,,,true,true
+6890320c95a0ae89c9d2,Dallas Wilson,WR,Florida,SEC,NaN,,,true,true
+6890320ce5b4d189cae3,Joey Aguilar,QB,Tennessee,SEC,NaN,,,true,true
+6890320d17b505740680,Justin Baker,RB,Tennessee,SEC,NaN,,,true,true
+6890320d392859010380,Hunter Barnes,RB,Tennessee,SEC,NaN,,,true,true
+6890320d6076826f1065,DeSean Bishop,RB,Tennessee,SEC,NaN,,,true,true
+6890320d829a85a342b9,DaSaahn Brame,TE,Tennessee,SEC,NaN,,,true,true
+6890320da683e24777b3,Chris Brazzell II,WR,Tennessee,SEC,NaN,,,true,true
+6890320dca6376c0c02e,Grady Dangerfield,K,Tennessee,SEC,NaN,,,true,true
+6890320e01c9eaed4f0b,Ethan Davis,TE,Tennessee,SEC,NaN,,,true,true
+6890320e404537c2f630,Joakim Dodson,WR,Tennessee,SEC,NaN,,,true,true
+6890320e65c3ad3fbb4d,Max Gilbert,K,Tennessee,SEC,NaN,,,true,true
+6890320e956f61993220,Deon Hardin,WR,Tennessee,SEC,NaN,,,true,true
+6890320eba9290a89599,Braylon Harmon,WR,Tennessee,SEC,NaN,,,true,true
+6890320ee287e7f87a20,Cole Harrison,TE,Tennessee,SEC,NaN,,,true,true
+6890320f18b77feca3c6,Radarious Jackson,WR,Tennessee,SEC,NaN,,,true,true
+6890320f3c9aebe07b58,Henry Jakobik,WR,Tennessee,SEC,NaN,,,true,true
+6890320f614e4155c18e,Amari Jefferson,WR,Tennessee,SEC,NaN,,,true,true
+6890320f8afffd08f460,Malcolm Kinzer,WR,Tennessee,SEC,NaN,,,true,true
+6890320fb00215c5be75,Miles Kitselman,TE,Tennessee,SEC,NaN,,,true,true
+6890320fd48d01129429,Peyton Lewis,RB,Tennessee,SEC,NaN,,,true,true
+6890321011fe30eccd39,George MacIntyre,QB,Tennessee,SEC,NaN,,,true,true
+689032103779d0e4c97d,Mike Matthews,WR,Tennessee,SEC,NaN,,,true,true
+689032105c8864023241,Seamus Meagher,TE,Tennessee,SEC,NaN,,,true,true
+68903210836280e856f9,Jake Merklinger,QB,Tennessee,SEC,NaN,,,true,true
+68903210a91969262112,Daune Morris,RB,Tennessee,SEC,NaN,,,true,true
+68903210d680df23ec2e,Ben Petermann,WR,Tennessee,SEC,NaN,,,true,true
+6890321107ab5b949aa3,Mason Phillips,QB,Tennessee,SEC,NaN,,,true,true
+68903211391941fb1ec8,Nathan Roberts,WR,Tennessee,SEC,NaN,,,true,true
+689032115e97c3471e07,Travis Smith Jr.,WR,Tennessee,SEC,NaN,,,true,true
+689032118696417808c5,Braylon Staley,WR,Tennessee,SEC,NaN,,,true,true
+68903211a8e9c4e9503e,Star Thomas,RB,Tennessee,SEC,NaN,,,true,true
+68903211d3aa0a1b2b42,Jack Van Dorselaer,TE,Tennessee,SEC,NaN,,,true,true
+6890321209ed6e4dc3ed,Trey Weary,WR,Tennessee,SEC,NaN,,,true,true
+689032122ef875673550,Carson Whitehead,WR,Tennessee,SEC,NaN,,,true,true
+68903212757b4d949f35,Tommy Winton III,WR,Tennessee,SEC,NaN,,,true,true
+689032129c888faa1d82,Beau Allen,QB,Kentucky,SEC,NaN,,,true,true
+68903212cd0e13b6b884,Cutter Boley,QB,Kentucky,SEC,NaN,,,true,true
+68903213017dc346780c,Preston Bowman,WR,Kentucky,SEC,NaN,,,true,true
+68903213332e209b4254,Henry Boyer,TE,Kentucky,SEC,NaN,,,true,true
+689032135beeaf06032a,Elijah Brown,TE,Kentucky,SEC,NaN,,,true,true
+6890321380de626475b1,Zach Calzada,QB,Kentucky,SEC,NaN,,,true,true
+68903213a5feaea73743,Ashton Cozart,WR,Kentucky,SEC,NaN,,,true,true
+68903213ce089e276dc6,Rico Crowder,WR,Kentucky,SEC,NaN,,,true,true
+68903213f05c2b31af4c,Dante Dowdell,RB,Kentucky,SEC,NaN,,,true,true
+689032142246e8b72032,Fred Farrier II,WR,Kentucky,SEC,NaN,,,true,true
+6890321445c2707db8ea,Hardley Gilmore IV,WR,Kentucky,SEC,NaN,,,true,true
+6890321470bed7e52e92,J.J. Hester,WR,Kentucky,SEC,NaN,,,true,true
+68903214962877318f07,Josh Kattus,TE,Kentucky,SEC,NaN,,,true,true
+68903214bb96957e439e,Justin Kattus,TE,Kentucky,SEC,NaN,,,true,true
+68903214ebbe3cd20cd2,Jacob Kauwe,K,Kentucky,SEC,NaN,,,true,true
+689032151e7f4c1e03e3,Cole Lanter,WR,Kentucky,SEC,NaN,,,true,true
+689032154431db508e0e,Kendrick Law,WR,Kentucky,SEC,NaN,,,true,true
+689032156ae462fa5025,Spencer Leadbetter,WR,Kentucky,SEC,NaN,,,true,true
+689032159159933d9c80,Mori Maclin,WR,Kentucky,SEC,NaN,,,true,true
+68903215c5610aec4335,Seth McGowan,RB,Kentucky,SEC,NaN,,,true,true
+68903215e720b3caf77c,Cameron Miller,WR,Kentucky,SEC,NaN,,,true,true
+689032161df9c37c1ee7,DJ Miller,WR,Kentucky,SEC,NaN,,,true,true
+689032164a4ccbdc91d6,Tovani Mizell,RB,Kentucky,SEC,NaN,,,true,true
+68903216764d2e834396,Jack Monday,TE,Kentucky,SEC,NaN,,,true,true
+689032169b208a571fb0,Jason Patterson,RB,Kentucky,SEC,NaN,,,true,true
+68903216becd4b4dfbfe,Montavin Quisenberry,WR,Kentucky,SEC,NaN,,,true,true
+68903216ed2df9a3cd4b,Chy Rivers,RB,Kentucky,SEC,NaN,,,true,true
+689032171b68c310648a,Willie Rodriguez,TE,Kentucky,SEC,NaN,,,true,true
+689032173ff1e21229a6,Stone Saunders,QB,Kentucky,SEC,NaN,,,true,true
+6890321763b2adc065d4,Zach Schreiner,K,Kentucky,SEC,NaN,,,true,true
+689032178a899d2a8997,Quintin Simmons Jr.,WR,Kentucky,SEC,NaN,,,true,true
+68903217b6e0e75cd4ae,Mikkel Skinner,TE,Kentucky,SEC,NaN,,,true,true
+68903217e04e30a9bda3,Troy Stellato,WR,Kentucky,SEC,NaN,,,true,true
+6890321820c990680b60,Brennen Ward,QB,Kentucky,SEC,NaN,,,true,true
+6890321846b9fc3c7d13,David Washington Jr.,WR,Kentucky,SEC,NaN,,,true,true
+689032186ab67820e690,Jamarion Wilcox,RB,Kentucky,SEC,NaN,,,true,true
+68903218e2d363188615,Peyton Argent,K,South Carolina,SEC,NaN,,,true,true
+68903219181d9f444b48,Isaiah Augustave,RB,South Carolina,SEC,NaN,,,true,true
+689032193e996baa93b9,Mazeo Bennett Jr.,WR,South Carolina,SEC,NaN,,,true,true
+68903219647f716d2a23,Jared Brown,WR,South Carolina,SEC,NaN,,,true,true
+6890321986fdbf2eaeea,Maurice Brown II,TE,South Carolina,SEC,NaN,,,true,true
+68903219adde6231cb9d,Malik Clark,WR,South Carolina,SEC,NaN,,,true,true
+68903219de621c225130,Lex Cyrus,WR,South Carolina,SEC,NaN,,,true,true
+6890321a13f058e7ac16,Jordan Dingle,TE,South Carolina,SEC,NaN,,,true,true
+6890321a35606fd01273,Bradley Dunn,RB,South Carolina,SEC,NaN,,,true,true
+6890321a5c65261489a5,Rahsul Faison,RB,South Carolina,SEC,NaN,,,true,true
+6890321a80cdf20f000e,Jimmy Francis,QB,South Carolina,SEC,NaN,,,true,true
+6890321b88d4db778af3,Matt Fuller,RB,South Carolina,SEC,NaN,,,true,true
+6890321c1130e11bce33,Jordon Gidron,WR,South Carolina,SEC,NaN,,,true,true
+6890321c61121719f840,Waynick,RB,South Carolina,SEC,NaN,,,true,true
+6890321c94fd33403aed,Jawarn Howell,RB,South Carolina,SEC,NaN,,,true,true
+6890321cbe35a211f2a9,Brady Hunt,TE,South Carolina,SEC,NaN,,,true,true
+6890321ce1c949f77fba,Vandrevius Jacobs,WR,South Carolina,SEC,NaN,,,true,true
+6890321d1a53ff347ac8,William Joyce,K,South Carolina,SEC,NaN,,,true,true
+6890321d3f28f800d0e4,Max Kelley,K,South Carolina,SEC,NaN,,,true,true
+6890321d657c4a256bb4,Emazon Littlejohn,WR,South Carolina,SEC,NaN,,,true,true
+6890321d9150529967e9,Mason Love,K,South Carolina,SEC,NaN,,,true,true
+6890321dbc1e6848cdd1,Chase McCracken,RB,South Carolina,SEC,NaN,,,true,true
+6890321df372b6f2cd6d,Donovan Murph,WR,South Carolina,SEC,NaN,,,true,true
+6890321e3100c095dc03,Air Noland,QB,South Carolina,SEC,NaN,,,true,true
+6890321e588ef3e87a70,Jackson Repp,WR,South Carolina,SEC,NaN,,,true,true
+6890321e804cb45c8e37,Eriq Rice,WR,South Carolina,SEC,NaN,,,true,true
+6890321ea6055b394b4c,Reno Roehm,TE,South Carolina,SEC,NaN,,,true,true
+6890321eca830e7ea4f3,Brian Rowe Jr.,WR,South Carolina,SEC,NaN,,,true,true
+6890321ef15568d3dae9,Neil Salvage III,RB,South Carolina,SEC,NaN,,,true,true
+6890321f233a6edf5260,Larry Scott,RB,South Carolina,SEC,NaN,,,true,true
+6890321f47c84293d2c9,Jayden Sellers,WR,South Carolina,SEC,NaN,,,true,true
+6890321f9f577f798be1,Michael Smith,TE,South Carolina,SEC,NaN,,,true,true
+6890321fc6b32498d304,Mike Tyler,TE,South Carolina,SEC,NaN,,,true,true
+6890321ff3d25314cd93,Lukas Vozeh,TE,South Carolina,SEC,NaN,,,true,true
+689032202850f35d7bc5,Cutter Woods,QB,South Carolina,SEC,NaN,,,true,true
+689032205127d66352fc,Daniel Blood,WR,Missouri,SEC,NaN,,,true,true
+6890322085c4f656b889,Jayden Bolton,WR,Missouri,SEC,NaN,,,true,true
+68903220aa305f00c608,Vince Brown II,TE,Missouri,SEC,NaN,,,true,true
+68903220ce5de26f5776,Kevin Coleman Jr.,WR,Missouri,SEC,NaN,,,true,true
+68903221002f6f188e38,Blake Craig,K,Missouri,SEC,NaN,,,true,true
+689032212a51423685a2,Marquise Davis,RB,Missouri,SEC,NaN,,,true,true
+68903221511a3468ea81,Anthony Favrow,RB,Missouri,SEC,NaN,,,true,true
+6890322183e3b880b79e,Noah Flaskamp,WR,Missouri,SEC,NaN,,,true,true
+68903221a7cb6de87647,DaMarion Fowlkes,WR,Missouri,SEC,NaN,,,true,true
+68903221cbd54310f1d2,Ahmad Hardy,RB,Missouri,SEC,NaN,,,true,true
+68903221ee3dbea7b876,Jordon Harris,TE,Missouri,SEC,NaN,,,true,true
+689032222167962698a5,Brendon Haygood,RB,Missouri,SEC,NaN,,,true,true
+6890322244e5948e164e,Gavin Hoffman,TE,Missouri,SEC,NaN,,,true,true
+6890322269ba1d4c9805,Sam Horn,QB,Missouri,SEC,NaN,,,true,true
+689032228e432a6e3dbe,Jude James,TE,Missouri,SEC,NaN,,,true,true
+68903222b4448d503462,Tavorus Jones,RB,Missouri,SEC,NaN,,,true,true
+68903222e37794ae6964,Tommy Lock,QB,Missouri,SEC,NaN,,,true,true
+6890322314b7202f3234,Xavier Loyd,WR,Missouri,SEC,NaN,,,true,true
+6890322340e7f25117bd,James Madison II,WR,Missouri,SEC,NaN,,,true,true
+689032236858ba701965,Joshua Manning,WR,Missouri,SEC,NaN,,,true,true
+689032239206b3541d3c,Robert Meyer,K,Missouri,SEC,NaN,,,true,true
+68903223b79b2fae527b,Adam Molitor,TE,Missouri,SEC,NaN,,,true,true
+68903223def9ed325dd3,Logan Muckey,WR,Missouri,SEC,NaN,,,true,true
+6890322434aea50836fd,Donovan Olugbode,WR,Missouri,SEC,NaN,,,true,true
+6890322458fcdebc75c7,Beau Pribula,QB,Missouri,SEC,NaN,,,true,true
+689032247e7bbc6308fb,Jamal Roberts,RB,Missouri,SEC,NaN,,,true,true
+68903224a02755e58d5a,Dakotah Terrell,TE,Missouri,SEC,NaN,,,true,true
+68903224cecf489cd429,Shaun Terry II,WR,Missouri,SEC,NaN,,,true,true
+68903224f06df4327ccc,Matt Zollers,QB,Missouri,SEC,NaN,,,true,true
+6890322523c27c6d3d48,Damari Alston,RB,Auburn,SEC,NaN,,,true,true
+689032254593d2cd0a05,Jackson Arnold,QB,Auburn,SEC,NaN,,,true,true
+689032256e0886504353,Christian Burnette,RB,Auburn,SEC,NaN,,,true,true
+6890322592a9ce9956b1,Bryce Cain,WR,Auburn,SEC,NaN,,,true,true
+68903225b818f3bb4e12,Jeremiah Cobb,RB,Auburn,SEC,NaN,,,true,true
+689032260bf7d2d70cd5,John Colvin,QB,Auburn,SEC,NaN,,,true,true
+6890322636251c4b0640,Ashton Daniels,QB,Auburn,SEC,NaN,,,true,true
+689032265a2d9ad80e62,Hollis Davidson III,TE,Auburn,SEC,NaN,,,true,true
+6890322679dfb54cfb29,Camden Etheredge,TE,Auburn,SEC,NaN,,,true,true
+68903226a2663cf01f83,Horatio Fields,WR,Auburn,SEC,NaN,,,true,true
+68903226c7412c42b89b,Brandon Frazier,TE,Auburn,SEC,NaN,,,true,true
+68903226ed63994d033e,Cole Gamble,RB,Auburn,SEC,NaN,,,true,true
+6890322725070e308955,Ryan Ghea,TE,Auburn,SEC,NaN,,,true,true
+689032274b88cf90cdf6,Connor Gibbs,K,Auburn,SEC,NaN,,,true,true
+689032276ff91b8ddefc,Alvin Henderson,RB,Auburn,SEC,NaN,,,true,true
+689032279c278b9f1714,Preston Howard,TE,Auburn,SEC,NaN,,,true,true
+68903227bdbaed366871,Tate Johnson,TE,Auburn,SEC,NaN,,,true,true
+68903227e4c712927289,Justin Jones,RB,Auburn,SEC,NaN,,,true,true
+6890322814ac195f3c1d,Ron King,WR,Auburn,SEC,NaN,,,true,true
+6890322839b62affd50c,Deuce Knight,QB,Auburn,SEC,NaN,,,true,true
+689032285dd61d7e008b,Omar Mabson II,RB,Auburn,SEC,NaN,,,true,true
+689032287ff2b6b1a94f,Towns McGough,K,Auburn,SEC,NaN,,,true,true
+68903228d19e7cb09763,Eli Morton,TE,Auburn,SEC,NaN,,,true,true
+689032290404455a2bfc,Will Myers,QB,Auburn,SEC,NaN,,,true,true
+689032292bf7d5d9505e,Hunter Ousley,TE,Auburn,SEC,NaN,,,true,true
+6890322955268f67e9f2,Durell Robinson,RB,Auburn,SEC,NaN,,,true,true
+68903229924c183270db,Charley Schwinger,K,Auburn,SEC,NaN,,,true,true
+68903229b8efa5dec927,Malcolm Simmons,WR,Auburn,SEC,NaN,,,true,true
+68903229deb110021ac9,Eric Singleton Jr.,WR,Auburn,SEC,NaN,,,true,true
+6890322a11e2846a8746,Duke Smith,WR,Auburn,SEC,NaN,,,true,true
+6890322a364b065735a6,Erick Smith,WR,Auburn,SEC,NaN,,,true,true
+6890322a5bad4e9e2262,Perry Thompson,WR,Auburn,SEC,NaN,,,true,true
+6890322a81f34b4695dc,Sam Turner,WR,Auburn,SEC,NaN,,,true,true
+6890322aa88785a4d579,Will Upton,WR,Auburn,SEC,NaN,,,true,true
+6890322ad43db7b1d8cd,Austin Acton,RB,Ole Miss,SEC,NaN,,,true,true
+6890322b08c44732d017,Deuce Alexander,WR,Ole Miss,SEC,NaN,,,true,true
+6890322b3212a0479655,Dillon Alfred,WR,Ole Miss,SEC,NaN,,,true,true
+6890322b558148458abc,Mike Baker,K,Ole Miss,SEC,NaN,,,true,true
+6890322b7c6204fb69fb,Levi Blount,WR,Ole Miss,SEC,NaN,,,true,true
+6890322ba24b7e8e2b9c,Hayden Bradley,TE,Ole Miss,SEC,NaN,,,true,true
+6890322bc90d03975417,Trace Bruckler,TE,Ole Miss,SEC,NaN,,,true,true
+6890322bec8872d9b763,Lucas Carneiro,K,Ole Miss,SEC,NaN,,,true,true
+6890322c22f350718b6f,Trinidad Chambliss,QB,Ole Miss,SEC,NaN,,,true,true
+6890322c4b626b6cad32,Caleb Cunningham,WR,Ole Miss,SEC,NaN,,,true,true
+6890322c71962b44ef8f,Dylan Davis,WR,Ole Miss,SEC,NaN,,,true,true
+6890322c969c6275dec0,Logan Diggs,RB,Ole Miss,SEC,NaN,,,true,true
+6890322cbc231776b749,Trey Hall,RB,Ole Miss,SEC,NaN,,,true,true
+6890322ce2b8dd760a9d,George Hamsley,QB,Ole Miss,SEC,NaN,,,true,true
+6890322d136648e064fa,Jack Harper,TE,Ole Miss,SEC,NaN,,,true,true
+6890322d3bbf16c5b1cb,Izaiah Hartrup,WR,Ole Miss,SEC,NaN,,,true,true
+6890322d643682c6a591,Luke Hasz,TE,Ole Miss,SEC,NaN,,,true,true
+6890322d8cf960b8e27f,Shawqi Itraish,QB,Ole Miss,SEC,NaN,,,true,true
+6890322db6ddafe9092b,Sean Judge,TE,Ole Miss,SEC,NaN,,,true,true
+6890322de3335427e8f2,Kewan Lacy,RB,Ole Miss,SEC,NaN,,,true,true
+6890322e140bc2f1e27a,Cayden Lee,WR,Ole Miss,SEC,NaN,,,true,true
+6890322e39a4dbf07217,AJ Maddox,QB,Ole Miss,SEC,NaN,,,true,true
+6890322e5c4b9cf965da,Knight,RB,Ole Miss,SEC,NaN,,,true,true
+6890322e82c6a45c6a50,Caleb Odom,WR,Ole Miss,SEC,NaN,,,true,true
+6890322ea9c9b707214b,Mac Owen,WR,Ole Miss,SEC,NaN,,,true,true
+6890322ed2638d8df781,Ciaran Pedulla,WR,Ole Miss,SEC,NaN,,,true,true
+6890322f03e0ba01d6c9,Joshua Pfeifer,WR,Ole Miss,SEC,NaN,,,true,true
+6890322f29723f44e618,Devin Price,WR,Ole Miss,SEC,NaN,,,true,true
+6890322f557b0ad7fe71,Traylon Ray,WR,Ole Miss,SEC,NaN,,,true,true
+6890322f7e3421dbe8b9,Samari Reed,WR,Ole Miss,SEC,NaN,,,true,true
+6890322fab34025eab1c,Austin Simmons,QB,Ole Miss,SEC,NaN,,,true,true
+6890322fd2d44963315f,Wyatt Smalley,TE,Ole Miss,SEC,NaN,,,true,true
+6890323002b944cd2023,Maealiuaki Smith,QB,Ole Miss,SEC,NaN,,,true,true
+6890323033217af63551,Zhaun Stribling,WR,Ole Miss,SEC,NaN,,,true,true
+689032305b2a231da0cb,Damien Taylor,RB,Ole Miss,SEC,NaN,,,true,true
+6890323080c58c90a655,Domonique Thomas,RB,Ole Miss,SEC,NaN,,,true,true
+68903230a676a1e67b81,Harrison Wallace III,WR,Ole Miss,SEC,NaN,,,true,true
+68903230c95c83c3c472,Winston Watkins,WR,Ole Miss,SEC,NaN,,,true,true
+68903230ed8a06e6630b,Quan Wright,TE,Ole Miss,SEC,NaN,,,true,true
+689032311f6abb7687da,Markus Allen,WR,Mississippi State,SEC,NaN,,,true,true
+689032314e8ee798c47b,Cam Ball,TE,Mississippi State,SEC,NaN,,,true,true
+6890323171bb87b1b044,Davon Booth,RB,Mississippi State,SEC,NaN,,,true,true
+6890323197543260ede3,Fluff Bothwell,RB,Mississippi State,SEC,NaN,,,true,true
+68903231bc1da66f6e6c,Johnnie Daniels,RB,Mississippi State,SEC,NaN,,,true,true
+68903231dd8b97de84f9,Seth Davis,RB,Mississippi State,SEC,NaN,,,true,true
+689032321b75b19de0c8,Anthony Evans III,WR,Mississippi State,SEC,NaN,,,true,true
+689032326e1d668569b0,Xavier Gayten,RB,Mississippi State,SEC,NaN,,,true,true
+689032329fa41e1f59f5,Jaron Glover,WR,Mississippi State,SEC,NaN,,,true,true
+68903232c4e339ed1f65,Gracen Harris,WR,Mississippi State,SEC,NaN,,,true,true
+68903232eb26246a9468,Marlon Hauck,K,Mississippi State,SEC,NaN,,,true,true
+689032331ea081b7392e,Emeka Iloh,TE,Mississippi State,SEC,NaN,,,true,true
+689032334335365afcec,Davian Jackson,WR,Mississippi State,SEC,NaN,,,true,true
+689032336999ef79cac4,Geron Johnson,RB,Mississippi State,SEC,NaN,,,true,true
+689032338d5625976b2b,Ricky Johnson,WR,Mississippi State,SEC,NaN,,,true,true
+68903233b2b174b16c8d,Luke Kromenhoek,QB,Mississippi State,SEC,NaN,,,true,true
+68903233d772a9a939ae,AJ Lewis Jr.,WR,Mississippi State,SEC,NaN,,,true,true
+689032340955e1498fcc,Sanfrisco Magee,WR,Mississippi State,SEC,NaN,,,true,true
+689032342b8b67cf96db,Isaiah Mitchell,WR,Mississippi State,SEC,NaN,,,true,true
+689032345216eef5c342,Jordan Mosley,WR,Mississippi State,SEC,NaN,,,true,true
+689032347d41b1d0b214,Sam Paxton,TE,Mississippi State,SEC,NaN,,,true,true
+68903234a13766b98944,Jessie Primer,WR,Mississippi State,SEC,NaN,,,true,true
+68903234c75c6406a375,Parker Puckett,QB,Mississippi State,SEC,NaN,,,true,true
+689032350c5200a573bf,Max Reese,TE,Mississippi State,SEC,NaN,,,true,true
+6890323565e32662f3a3,Joeseph Skipworth,TE,Mississippi State,SEC,NaN,,,true,true
+689032358d22e15ed685,Kamario Taylor,QB,Mississippi State,SEC,NaN,,,true,true
+68903235b55da87164cf,Brenen Thompson,WR,Mississippi State,SEC,NaN,,,true,true
+68903235d9251559fd4a,Cam Thompson,WR,Mississippi State,SEC,NaN,,,true,true
+68903236070b5663de5e,Seydou Traore,TE,Mississippi State,SEC,NaN,,,true,true
+689032362c8a803eea6e,Sam West,TE,Mississippi State,SEC,NaN,,,true,true
+6890323653f6bd7a4b38,William Wilkinson,K,Mississippi State,SEC,NaN,,,true,true
+689032368383755185b4,Ayden Williams,WR,Mississippi State,SEC,NaN,,,true,true
+68903236ad596c32be3a,Kolin Wilson,RB,Mississippi State,SEC,NaN,,,true,true
+68903236d662ae4bb4ad,Rykar Acebo,WR,Arkansas,SEC,NaN,,,true,true
+689032372235da3abe90,Markeylin Batton,RB,Arkansas,SEC,NaN,,,true,true
+6890323748e7ff9d1dfe,Jeremiah Beck Jr.,TE,Arkansas,SEC,NaN,,,true,true
+68903237724373b7b76e,Mega Blake,WR,Arkansas,SEC,NaN,,,true,true
+689032379a004bd63308,CJ Brown,WR,Arkansas,SEC,NaN,,,true,true
+68903237bf6958b9404a,Jalen Brown,WR,Arkansas,SEC,NaN,,,true,true
+68903237e6500de9850e,Walker Catsavis,WR,Arkansas,SEC,NaN,,,true,true
+68903238192b1d8c337d,Ismael Cisse,WR,Arkansas,SEC,NaN,,,true,true
+689032383e0af2653086,Courtney Crutchfield,WR,Arkansas,SEC,NaN,,,true,true
+68903238745c2dda0d42,Kayden Ferguson,WR,Arkansas,SEC,NaN,,,true,true
+6890323898e1fa52092c,Blake Ford,K,Arkansas,SEC,NaN,,,true,true
+68903238bee4c2dbb4cc,Gavin Garretson,TE,Arkansas,SEC,NaN,,,true,true
+68903238ef565d0f51d1,AJ Green,RB,Arkansas,SEC,NaN,,,true,true
+689032395965838a0d1e,Monte Harrison,WR,Arkansas,SEC,NaN,,,true,true
+689032397c46ffcb15a5,Hutson Hendrix,TE,Arkansas,SEC,NaN,,,true,true
+68903239a08ae7f04010,Rodney Hill,RB,Arkansas,SEC,NaN,,,true,true
+68903239c8dc92557c4e,KJ Jackson,QB,Arkansas,SEC,NaN,,,true,true
+68903239ecc3cc80a63d,Trever Jackson,QB,Arkansas,SEC,NaN,,,true,true
+6890323a18b261c392c8,Andy Jean,WR,Arkansas,SEC,NaN,,,true,true
+6890323a44d0dc7efe2f,Krosse Johnson,WR,Arkansas,SEC,NaN,,,true,true
+6890323a68d8dd82466e,Rohan Jones,TE,Arkansas,SEC,NaN,,,true,true
+6890323a8f979b78f92e,Antonio Jordan,WR,Arkansas,SEC,NaN,,,true,true
+6890323ab430e046c344,Grant Karnes,WR,Arkansas,SEC,NaN,,,true,true
+6890323adabff36fd074,Maddox Lassiter,TE,Arkansas,SEC,NaN,,,true,true
+6890323b07f7d178cd34,Brayson McHenry,QB,Arkansas,SEC,NaN,,,true,true
+6890323b2bf12c833616,Andreas Paaske,TE,Arkansas,SEC,NaN,,,true,true
+6890323b4f8f5acc7e8b,Jace Petty,WR,Arkansas,SEC,NaN,,,true,true
+6890323b78bd35940c16,Jaden Platt,TE,Arkansas,SEC,NaN,,,true,true
+6890323ba738c048109d,Braylen Russell,RB,Arkansas,SEC,NaN,,,true,true
+6890323bccabc66b3a5d,Cam Settles,RB,Arkansas,SEC,NaN,,,true,true
+6890323bf0ec00222e96,Kam Shanks,WR,Arkansas,SEC,NaN,,,true,true
+6890323c1e6d4d729f62,Raylen Sharpe,WR,Arkansas,SEC,NaN,,,true,true
+6890323c47e95f9308eb,Scott Starzyk,K,Arkansas,SEC,NaN,,,true,true
+6890323c6c0e0965b58d,Zach Taylor,WR,Arkansas,SEC,NaN,,,true,true
+6890323c914a64afb51a,Charlie Von Der Meden,K,Arkansas,SEC,NaN,,,true,true
+6890323cb3afb9be1c3a,Mike Washington Jr.,RB,Arkansas,SEC,NaN,,,true,true
+6890323ce183e1a5538f,Grayson Wilson,QB,Arkansas,SEC,NaN,,,true,true
+6890323d1c2b815fa3f4,Emmanuel Adebi,TE,Vanderbilt,SEC,NaN,,,true,true
+6890323d69815d89c55c,Jake Balis,RB,Vanderbilt,SEC,NaN,,,true,true
+6890323d90e744f6b2b9,Kayleb Barnett,WR,Vanderbilt,SEC,NaN,,,true,true
+6890323db944a7a0393d,Boski Barrett,WR,Vanderbilt,SEC,NaN,,,true,true
+6890323ddc385bf5e3d9,Larry Benton III,TE,Vanderbilt,SEC,NaN,,,true,true
+6890323e0c17e056d99f,Blaze Berlowitz,QB,Vanderbilt,SEC,NaN,,,true,true
+6890323e340ad3496369,Tristen Brown,WR,Vanderbilt,SEC,NaN,,,true,true
+6890323e5f6c082f731a,Ryder Brownstein,WR,Vanderbilt,SEC,NaN,,,true,true
+6890323e850f75e5f3be,Ty Burd,WR,Vanderbilt,SEC,NaN,,,true,true
+6890323eba7838d6a022,Brycen Coleman,TE,Vanderbilt,SEC,NaN,,,true,true
+6890323ee1f5f2b7de25,Justin Dewers,K,Vanderbilt,SEC,NaN,,,true,true
+6890323f1c7dfdd8a4cc,Drew Dickey,QB,Vanderbilt,SEC,NaN,,,true,true
+6890323f3ffd8d17db54,Cameran Dickson,TE,Vanderbilt,SEC,NaN,,,true,true
+6890323f618d6f25eda7,Witt Edwards,TE,Vanderbilt,SEC,NaN,,,true,true
+6890323f8cff5371c131,Jack Elliott,QB,Vanderbilt,SEC,NaN,,,true,true
+6890323fb4fa9a94c85c,Gabe Fields,RB,Vanderbilt,SEC,NaN,,,true,true
+6890323fdc51af96c156,Chance Fitzgerald,WR,Vanderbilt,SEC,NaN,,,true,true
+689032400cb196bb5020,Chase Gillespie,RB,Vanderbilt,SEC,NaN,,,true,true
+689032403192b5f06011,Lebron Hill,WR,Vanderbilt,SEC,NaN,,,true,true
+68903240571dac71d5de,Richie Hoskins,WR,Vanderbilt,SEC,NaN,,,true,true
+689032407e7e90c2b6b4,Trent Hudson,WR,Vanderbilt,SEC,NaN,,,true,true
+68903240a64ed41f1674,Wils Jackson,WR,Vanderbilt,SEC,NaN,,,true,true
+68903240ccfc9fdf31f1,Derek Kee,WR,Vanderbilt,SEC,NaN,,,true,true
+68903240f30a1f0c1e72,Jamezell Lassiter,RB,Vanderbilt,SEC,NaN,,,true,true
+6890324124b535941a85,Joseph McVay,WR,Vanderbilt,SEC,NaN,,,true,true
+6890324154ddde3ae845,Whit Muschamp,QB,Vanderbilt,SEC,NaN,,,true,true
+6890324178743dcf52ca,AJ Newberry,RB,Vanderbilt,SEC,NaN,,,true,true
+689032419b05d2f737d4,Diego Pavia,QB,Vanderbilt,SEC,NaN,,,true,true
+68903241c126ab1a12cf,Dominic Rezac,RB,Vanderbilt,SEC,NaN,,,true,true
+68903241e5bf51060f6c,Claiborne Richards,WR,Vanderbilt,SEC,NaN,,,true,true
+6890324216ff276837a4,Tre Richardson,WR,Vanderbilt,SEC,NaN,,,true,true
+6890324240a81d911112,Mason Rohmiller,K,Vanderbilt,SEC,NaN,,,true,true
+6890324271b4c596d866,Elijah Rooney,TE,Vanderbilt,SEC,NaN,,,true,true
+68903242962302c7c454,Junior Sherrill,WR,Vanderbilt,SEC,NaN,,,true,true
+68903242b9cca68e989b,Cole Spence,TE,Vanderbilt,SEC,NaN,,,true,true
+68903242e421e4805109,Hilaire,QB,Vanderbilt,SEC,NaN,,,true,true
+68903243199657881f0b,Eli Stowers,TE,Vanderbilt,SEC,NaN,,,true,true
+689032433b4cb84f4b43,Brock Taylor,K,Vanderbilt,SEC,NaN,,,true,true
+689032436bd8d56a9369,Makhilyn Young,RB,Vanderbilt,SEC,NaN,,,true,true
+6890324390da7a436441,Kiotti Armstrong,TE,Texas A&M,SEC,NaN,,,true,true
+68903243b89236fb4020,Roman,WR,Texas A&M,SEC,NaN,,,true,true
+68903243de07a4441b19,Nate Boerkircher,TE,Texas A&M,SEC,NaN,,,true,true
+68903244354495d2b817,Luke Braden,TE,Texas A&M,SEC,NaN,,,true,true
+689032445a1b45164532,Carter Braugh,TE,Texas A&M,SEC,NaN,,,true,true
+6890324480f6a5a7549e,Blake Buntyn,WR,Texas A&M,SEC,NaN,,,true,true
+68903244ae08cdaf5613,Chase Burton,WR,Texas A&M,SEC,NaN,,,true,true
+68903244d4c9f06735a8,Terry Bussey,WR,Texas A&M,SEC,NaN,,,true,true
+689032450600d7fb8c15,Colton Chmelar,K,Texas A&M,SEC,NaN,,,true,true
+689032453762a7cea7ac,Zachary Clay,TE,Texas A&M,SEC,NaN,,,true,true
+689032455ab2a024a15e,KC Concepcion,WR,Texas A&M,SEC,NaN,,,true,true
+689032457c69cf2328e8,Mario Craver,WR,Texas A&M,SEC,NaN,,,true,true
+68903245a1b133f9e667,Ronnie Crosby III,RB,Texas A&M,SEC,NaN,,,true,true
+68903245c4050027b196,Amari Daniels,RB,Texas A&M,SEC,NaN,,,true,true
+68903245e8bd1f116f52,AJ DiNota,RB,Texas A&M,SEC,NaN,,,true,true
+689032462366317b8c07,Will Hargett,WR,Texas A&M,SEC,NaN,,,true,true
+6890324647d18275605b,Brady Hart,QB,Texas A&M,SEC,NaN,,,true,true
+689032466e09b0b8316c,Kelshaun Johnson,WR,Texas A&M,SEC,NaN,,,true,true
+6890324693d697c25253,Paxton Land,QB,Texas A&M,SEC,NaN,,,true,true
+68903246c8f56a584698,Preston Landis,RB,Texas A&M,SEC,NaN,,,true,true
+68903246f09887020016,Theo Melin Ohrstrom,TE,Texas A&M,SEC,NaN,,,true,true
+6890324724276f063b76,Eli Morcos,QB,Texas A&M,SEC,NaN,,,true,true
+689032474b4ee0489421,Jamarion Morrow,RB,Texas A&M,SEC,NaN,,,true,true
+68903247759c984706f0,Veon Moss,RB,Texas A&M,SEC,NaN,,,true,true
+689032479a30409cc5b0,Jerome Myles,WR,Texas A&M,SEC,NaN,,,true,true
+68903247c137006529be,Amari Niblack,TE,Texas A&M,SEC,NaN,,,true,true
+68903248032ecf71bc6e,TK Norman,WR,Texas A&M,SEC,NaN,,,true,true
+689032482b7f726f0174,Neill,QB,Texas A&M,SEC,NaN,,,true,true
+689032485bcd267cf57c,Rueben Owens II,RB,Texas A&M,SEC,NaN,,,true,true
+689032487e0d9b5e219e,Liam Padron,K,Texas A&M,SEC,NaN,,,true,true
+68903248abafb2695535,Marcel Reed,QB,Texas A&M,SEC,NaN,,,true,true
+68903248d0861da8cfaa,Deondrae Riden Jr.,RB,Texas A&M,SEC,NaN,,,true,true
+689032490144efa7da91,Micah Riley,TE,Texas A&M,SEC,NaN,,,true,true
+68903249273aa469d41d,Johnny Ryder,WR,Texas A&M,SEC,NaN,,,true,true
+689032494a89a5167fd4,EJ Smith,RB,Texas A&M,SEC,NaN,,,true,true
+6890324972bb50f6f8af,Kade Stewart,TE,Texas A&M,SEC,NaN,,,true,true
+689032499dc062db1afd,Ramarian Tillman,RB,Texas A&M,SEC,NaN,,,true,true
+68903249be3e2803894a,Wesley Watson,WR,Texas A&M,SEC,NaN,,,true,true
+68903249e3e95a8d1d43,Izaiah Williams,WR,Texas A&M,SEC,NaN,,,true,true
+6890324a1ceaddb979ac,Jonah Wilson,WR,Texas A&M,SEC,NaN,,,true,true
+6890324a45803cf75756,Jacob Zeno,QB,Texas A&M,SEC,NaN,,,true,true
+6890324a6ca586781157,Jared Zirkel,K,Texas A&M,SEC,NaN,,,true,true
+6890324a90d6ccca10ad,Jovantae Barnes,RB,Oklahoma,SEC,NaN,,,true,true
+6890324ab82d1eab2611,Andy Bass,RB,Oklahoma,SEC,NaN,,,true,true
+6890324ae2e8c2276569,Tory Blaylock,RB,Oklahoma,SEC,NaN,,,true,true
+6890324b1f63a90c488b,Trey Brown,WR,Oklahoma,SEC,NaN,,,true,true
+6890324b413f8b856d50,Deion Burks,WR,Oklahoma,SEC,NaN,,,true,true
+6890324b6cf0c4686b9b,Ivan Carreon,WR,Oklahoma,SEC,NaN,,,true,true
+6890324b91fd340db412,Michael Carter,WR,Oklahoma,SEC,NaN,,,true,true
+6890324c06ce1088a16d,Manny Choice,WR,Oklahoma,SEC,NaN,,,true,true
+6890324c2ed5ab2b5863,KJ Daniels,WR,Oklahoma,SEC,NaN,,,true,true
+6890324c56b328e7de2d,Liam Evans,K,Oklahoma,SEC,NaN,,,true,true
+6890324c808f6126dbb9,Javonnie Gibson,WR,Oklahoma,SEC,NaN,,,true,true
+6890324ca6f270de0dbf,Jayden Gibson,WR,Oklahoma,SEC,NaN,,,true,true
+6890324ccae89d019042,Michael Hawkins Jr.,QB,Oklahoma,SEC,NaN,,,true,true
+6890324d06369450ffae,Kaden Helms,TE,Oklahoma,SEC,NaN,,,true,true
+6890324d357865c3e17d,Will Huggins,TE,Oklahoma,SEC,NaN,,,true,true
+6890324d59db86037924,Jacob Jordan,WR,Oklahoma,SEC,NaN,,,true,true
+6890324d7f18643ae6cd,Jaren Kanak,TE,Oklahoma,SEC,NaN,,,true,true
+6890324da73480224816,Zion Kearney,WR,Oklahoma,SEC,NaN,,,true,true
+6890324df04392b27208,Carson Kent,TE,Oklahoma,SEC,NaN,,,true,true
+6890324e2580f1a2ff89,Keontez Lewis,WR,Oklahoma,SEC,NaN,,,true,true
+6890324e4c5056629996,John Locke Jr.,TE,Oklahoma,SEC,NaN,,,true,true
+6890324e77272d65edcc,Josiah Martin,WR,Oklahoma,SEC,NaN,,,true,true
+6890324e9d3776a15af0,John Mateer,QB,Oklahoma,SEC,NaN,,,true,true
+6890324ebe27dc217d1e,Kade McIntyre,TE,Oklahoma,SEC,NaN,,,true,true
+6890324ee335d0661d82,Major Melson,WR,Oklahoma,SEC,NaN,,,true,true
+6890324f136371398031,Eli Merck,WR,Oklahoma,SEC,NaN,,,true,true
+6890324f39e6ddf0a8d8,Grayson Miller,K,Oklahoma,SEC,NaN,,,true,true
+6890324f60b39906c308,Whitt Newbauer,QB,Oklahoma,SEC,NaN,,,true,true
+6890324f8c03358a1cab,Jett Niu,QB,Oklahoma,SEC,NaN,,,true,true
+6890324fba4c87c9f51d,Jaydn Ott,RB,Oklahoma,SEC,NaN,,,true,true
+6890324fe0e7e4eca39f,Zion Ragins,WR,Oklahoma,SEC,NaN,,,true,true
+689032501180593a57ea,Xavier Robinson,RB,Oklahoma,SEC,NaN,,,true,true
+6890325033ecce01886d,Tate Sandell,K,Oklahoma,SEC,NaN,,,true,true
+689032505a47a3809e0c,Isaiah Sategna,WR,Oklahoma,SEC,NaN,,,true,true
+689032507ea089334809,Gabe Sawchuk,RB,Oklahoma,SEC,NaN,,,true,true
+68903250a54ab8273186,Jakeb Snyder,WR,Oklahoma,SEC,NaN,,,true,true
+68903250ce75525cc3c0,Taylor Tatum,RB,Oklahoma,SEC,NaN,,,true,true
+68903250f1be9ee6037f,Elijah Thomas,WR,Oklahoma,SEC,NaN,,,true,true
+689032511eb0893aeda3,Trynae Washington,TE,Oklahoma,SEC,NaN,,,true,true
+68903251410dda416ffb,Austin Welch,K,Oklahoma,SEC,NaN,,,true,true
+689033f7cb21caed5c4c,Stevie Amar Jr.,TE,Boston College,ACC,NaN,,,true,true
+689033f804a94f728518,Enzo Arjona,QB,Boston College,ACC,NaN,,,true,true
+689033f834992b54b140,Nedrick Boldin Jr.,WR,Boston College,ACC,NaN,,,true,true
+689033f86070a40b655f,Lewis Bond,WR,Boston College,ACC,NaN,,,true,true
+689033f889dc181c4a41,Duke Brennan,WR,Boston College,ACC,NaN,,,true,true
+689033f8b0ef627d2c47,Alex Broome,RB,Boston College,ACC,NaN,,,true,true
+689033f8d3286a5996e2,Kaelan Chudzinski,TE,Boston College,ACC,NaN,,,true,true
+689033f90a4aaa163fb3,Hunter Clark,RB,Boston College,ACC,NaN,,,true,true
+689033f93069e9355644,Brady Clough,TE,Boston College,ACC,NaN,,,true,true
+689033f9616dc8d2cb31,Jake Coniglio,QB,Boston College,ACC,NaN,,,true,true
+689033f996870d1a10e6,Liam Connor,K,Boston College,ACC,NaN,,,true,true
+689033f9c0871b0c2816,Dominic DeSarno,TE,Boston College,ACC,NaN,,,true,true
+689033f9e76fa0e5315f,Mekhi Dodd,RB,Boston College,ACC,NaN,,,true,true
+689033fa1b4c3ee309b0,Bryce Dopson,WR,Boston College,ACC,NaN,,,true,true
+689033fa41e7c88ed494,Danny Edgehille,TE,Boston College,ACC,NaN,,,true,true
+689033fa6b8c91536bb0,Anthony Ferrucci,RB,Boston College,ACC,NaN,,,true,true
+689033fa92a35a51a72f,Semaj Fleming,WR,Boston College,ACC,NaN,,,true,true
+689033fab8181e6df770,Shamus Florio,K,Boston College,ACC,NaN,,,true,true
+689033fae6257c43458f,Jeremiah Franklin,TE,Boston College,ACC,NaN,,,true,true
+689033fb280c3470591e,Will Graves III,WR,Boston College,ACC,NaN,,,true,true
+689033fb7b9f2b62e630,Shane Hanafin,QB,Boston College,ACC,NaN,,,true,true
+689033fbafb155ec9bb4,Reed Harris,WR,Boston College,ACC,NaN,,,true,true
+689033fbdf9ea0b7afde,Grayson James,QB,Boston College,ACC,NaN,,,true,true
+689033fc3c5b8f4c93ba,DJ Johnson,TE,Boston College,ACC,NaN,,,true,true
+689033fc6ba64f8ba17c,Datrell Jones,WR,Boston College,ACC,NaN,,,true,true
+689033fc9ede3e99989f,Michael Landolfi,WR,Boston College,ACC,NaN,,,true,true
+689033fcc9da0e8f53c8,Ty Lockwood,TE,Boston College,ACC,NaN,,,true,true
+689033fcef41197ac76e,Luca Lombardo,K,Boston College,ACC,NaN,,,true,true
+689033fd30ff328f0608,Dylan Lonergan,QB,Boston College,ACC,NaN,,,true,true
+689033fd5967327349df,Tim Longo,WR,Boston College,ACC,NaN,,,true,true
+689033fd8d4cfe9415a3,Cedric Lott Jr.,WR,Boston College,ACC,NaN,,,true,true
+689033fdbc13e7286e7f,Bo MacCormack III,RB,Boston College,ACC,NaN,,,true,true
+689033fdea9b95b9bb68,Jordan McDonald,RB,Boston College,ACC,NaN,,,true,true
+689033fe3621e597009c,Luke McLaughlin,WR,Boston College,ACC,NaN,,,true,true
+689033fe6534fd749faf,Johnathan Montague Jr.,WR,Boston College,ACC,NaN,,,true,true
+689033fe8e3fd2e930f0,Zeke Moore,TE,Boston College,ACC,NaN,,,true,true
+689033feb85bb90c4e89,Dawson Pough,WR,Boston College,ACC,NaN,,,true,true
+689033fef0e0362adb63,Andy Quinn,K,Boston College,ACC,NaN,,,true,true
+689033ff43d2f3cba58a,Shaker Reisig,QB,Boston College,ACC,NaN,,,true,true
+689033ffa19f1a489082,Turbo Richard,RB,Boston College,ACC,NaN,,,true,true
+689033ffd2c9cc90f918,Zach Schnorrbusch,WR,Boston College,ACC,NaN,,,true,true
+689034002e319de785bf,Jaedn Skeete,WR,Boston College,ACC,NaN,,,true,true
+68903400b721f51743b0,Sam Stone,K,Boston College,ACC,NaN,,,true,true
+6890340131e2a1fd8302,VJ Wilkins,WR,Boston College,ACC,NaN,,,true,true
+689034016f08b47eda7c,Ismael Zamor,WR,Boston College,ACC,NaN,,,true,true
+68903401efdb12c1a42a,QuaRon Adams,WR,California,ACC,NaN,,,true,true
+68903402331a24c4d66c,Cole Boscia,WR,California,ACC,NaN,,,true,true
+689034026ffa44235142,Devin Brown,QB,California,ACC,NaN,,,true,true
+68903402b0f2e5f32084,Belay Brummel,QB,California,ACC,NaN,,,true,true
+6890340822213e0f127f,EJ Caminong,QB,California,ACC,NaN,,,true,true
+689034084b70a4c8025a,Taylor Chapman,RB,California,ACC,NaN,,,true,true
+68903408722d14014d4c,Jacob De Jesus,WR,California,ACC,NaN,,,true,true
+68903408d9f291361281,Veal,WR,California,ACC,NaN,,,true,true
+68903409328f021f6b34,Alonzo Esparza,QB,California,ACC,NaN,,,true,true
+68903409599e38cc8789,Kyion Grayes,WR,California,ACC,NaN,,,true,true
+6890340981616064c1f3,Trond Grizzell,WR,California,ACC,NaN,,,true,true
+68903409ba9f0ec45bff,Mark Hamper,WR,California,ACC,NaN,,,true,true
+68903409e917ede4d446,Brandon High Jr.,RB,California,ACC,NaN,,,true,true
+6890340a2c92bb30c95c,Jake Houseworth,TE,California,ACC,NaN,,,true,true
+6890340a58c17974b772,Dominic Ingrassia,QB,California,ACC,NaN,,,true,true
+6890340a9621905846f9,Daz James,WR,California,ACC,NaN,,,true,true
+6890340b703ca53e2ac4,Jeffrey Johnson,TE,California,ACC,NaN,,,true,true
+6890340b97fa13af3d98,LJ Johnson Jr.,RB,California,ACC,NaN,,,true,true
+6890340bbcc8b3226abc,Jordan King,WR,California,ACC,NaN,,,true,true
+6890340be1e3fb30114e,Anthony League,RB,California,ACC,NaN,,,true,true
+6890340c21e869aca3f9,Ben Marshall,TE,California,ACC,NaN,,,true,true
+6890340c5ba2348af462,Chase Meyer,K,California,ACC,NaN,,,true,true
+6890340c7e2b29465fc0,Mason Mini,TE,California,ACC,NaN,,,true,true
+6890340caffe73a6afdb,Landon Morris,TE,California,ACC,NaN,,,true,true
+6890340cd861ec5955ad,Abram Murray,K,California,ACC,NaN,,,true,true
+6890340d0d6f0ca4503f,Jack Olyphant,TE,California,ACC,NaN,,,true,true
+6890340d2fc6f34b9682,Jayden Parker,RB,California,ACC,NaN,,,true,true
+6890340d54f51b696af4,Smith,WR,California,ACC,NaN,,,true,true
+6890340d823e6467a6a6,Erik Peters,K,California,ACC,NaN,,,true,true
+6890340dc41307d084ce,Jaiven Plummer,WR,California,ACC,NaN,,,true,true
+6890340e0f2b11a6fc02,Kendrick Raphael,RB,California,ACC,NaN,,,true,true
+6890340e58665c40e29e,Myles Reber,WR,California,ACC,NaN,,,true,true
+6890340ebbfdb20429e0,Trevor Rogers,WR,California,ACC,NaN,,,true,true
+6890340f058364dc32ba,Keawe Sagapolutele,QB,California,ACC,NaN,,,true,true
+6890340f6123c418ac66,Meyer Swinney,WR,California,ACC,NaN,,,true,true
+6890341012807ddcdf47,Isaac Torres,WR,California,ACC,NaN,,,true,true
+6890341069eafee59ffb,Jamaal Wiley,RB,California,ACC,NaN,,,true,true
+68903410c0a75be78bd6,Keith Adams Jr.,RB,Clemson,ACC,NaN,,,true,true
+68903410ea73fad8504b,Christian Bentancur,TE,Clemson,ACC,NaN,,,true,true
+6890341123dd1c16787d,Logan Brooking,TE,Clemson,ACC,NaN,,,true,true
+689034115e6b0ed73d3b,Chase Byrd,WR,Clemson,ACC,NaN,,,true,true
+68903411f22e23318787,Quinn Castner,K,Clemson,ACC,NaN,,,true,true
+6890341249014c9ab76f,Gideon Davidson,RB,Clemson,ACC,NaN,,,true,true
+6890341295f89e29acec,Chris Denson,QB,Clemson,ACC,NaN,,,true,true
+6890341308fbf7b37385,Sam Earle,WR,Clemson,ACC,NaN,,,true,true
+6890341345166ad50779,David Eziomume,RB,Clemson,ACC,NaN,,,true,true
+689034137683aaf0868e,Parker Fulghum,WR,Clemson,ACC,NaN,,,true,true
+68903413a35031e6e5d0,Jarvis Green,RB,Clemson,ACC,NaN,,,true,true
+68903413ca28150c6938,Robert Gunn III,K,Clemson,ACC,NaN,,,true,true
+68903413f1a10f763332,Nolan Hauser,K,Clemson,ACC,NaN,,,true,true
+689034142b3455112169,Jay Haynes,RB,Clemson,ACC,NaN,,,true,true
+689034145b4ac77efd00,Hunter Helms,QB,Clemson,ACC,NaN,,,true,true
+6890341488982a39c802,Charlie Johnson,TE,Clemson,ACC,NaN,,,true,true
+68903414ad3a604bd6e4,Misun Kelley,WR,Clemson,ACC,NaN,,,true,true
+68903414e79fe91d86d4,Cade Klubnik,QB,Clemson,ACC,NaN,,,true,true
+6890341524012bf446fb,Tristan Martinez,WR,Clemson,ACC,NaN,,,true,true
+689034154e618f7f9cb5,T.J. Moore,WR,Clemson,ACC,NaN,,,true,true
+6890341573de3f640674,Henry,TE,Clemson,ACC,NaN,,,true,true
+689034159c9d015e339b,Trent Pearman,QB,Clemson,ACC,NaN,,,true,true
+68903415beac78515724,Banks Pope,TE,Clemson,ACC,NaN,,,true,true
+68903415e1c05f97ecc4,Juju Preston,WR,Clemson,ACC,NaN,,,true,true
+689034161a3392ed2309,Jack Purkerson,WR,Clemson,ACC,NaN,,,true,true
+689034164bf1feaac9d3,Adam Randall,RB,Clemson,ACC,NaN,,,true,true
+689034167631cf2d7e77,Charlie Reed,K,Clemson,ACC,NaN,,,true,true
+68903416afc4b22b9e39,Clark Sanderson,WR,Clemson,ACC,NaN,,,true,true
+68903416e3d4908e0154,Josh Sapp,TE,Clemson,ACC,NaN,,,true,true
+6890341715168da9818b,Ian Schieffelin,TE,Clemson,ACC,NaN,,,true,true
+689034173f52754429ac,Tristan Smith,WR,Clemson,ACC,NaN,,,true,true
+68903417637ff44dd07e,Peyton Streko,RB,Clemson,ACC,NaN,,,true,true
+689034178cb4b2735ef0,Clay Swinney,WR,Clemson,ACC,NaN,,,true,true
+68903417b52ad3e0dba5,Cade Trotter,QB,Clemson,ACC,NaN,,,true,true
+68903417dd900369cf37,Cole Turner,WR,Clemson,ACC,NaN,,,true,true
+689034180e2b681238be,Christopher Vizzina,QB,Clemson,ACC,NaN,,,true,true
+68903418323bc82da956,Bryant Wesco Jr.,WR,Clemson,ACC,NaN,,,true,true
+689034185dd9c9a13387,Antonio Williams,WR,Clemson,ACC,NaN,,,true,true
+68903418819b541cbc1e,Max Wilson,RB,Clemson,ACC,NaN,,,true,true
+68903418b9c937e38784,Andrel Anthony,WR,Duke,ACC,NaN,,,true,true
+68903418daedac964719,Michael Appel Jr.,QB,Duke,ACC,NaN,,,true,true
+689034190e458e433b72,Cooper Barkate,WR,Duke,ACC,NaN,,,true,true
+6890341939e6caa6be51,Travis Bates,RB,Duke,ACC,NaN,,,true,true
+689034195e39bb0d9fbc,Henry Belin IV,QB,Duke,ACC,NaN,,,true,true
+6890341986bdf5522f72,Tony Boggs,TE,Duke,ACC,NaN,,,true,true
+68903419af63d1b66362,Vance Bolyard,TE,Duke,ACC,NaN,,,true,true
+68903419d58524358478,Sean Brown,WR,Duke,ACC,NaN,,,true,true
+6890341a0470f032978b,Anderson Castle,RB,Duke,ACC,NaN,,,true,true
+6890341a3330fffe89fd,Ryan Degyansky,K,Duke,ACC,NaN,,,true,true
+6890341a57d26709548a,Cole Denson,RB,Duke,ACC,NaN,,,true,true
+6890341a811bd8fb06e9,Brett Elliott,TE,Duke,ACC,NaN,,,true,true
+6890341aa8461f4774f9,Lawrence Gardner,QB,Duke,ACC,NaN,,,true,true
+6890341ae050836644e0,Sahmir Hagans,WR,Duke,ACC,NaN,,,true,true
+6890341b10df461b3807,Jeremiah Hasley,TE,Duke,ACC,NaN,,,true,true
+6890341b381a7c772334,Qeanu Johnson,WR,Duke,ACC,NaN,,,true,true
+6890341b58123079ac11,Peyton Jones,RB,Duke,ACC,NaN,,,true,true
+6890341b8061079d3ad9,Paxon Kettering,WR,Duke,ACC,NaN,,,true,true
+6890341ba1a76ab23d16,Jamien Little,WR,Duke,ACC,NaN,,,true,true
+6890341bc7bcb0d4e93d,Dan Mahan,QB,Duke,ACC,NaN,,,true,true
+6890341c0527d4fd1a6c,Darian Mensah,QB,Duke,ACC,NaN,,,true,true
+6890341c2b9ed705e4d4,Jaquez Moore,RB,Duke,ACC,NaN,,,true,true
+6890341c4e082ac92110,Jayden Moore,WR,Duke,ACC,NaN,,,true,true
+6890341c720360ecd3ad,Todd Pelino,K,Duke,ACC,NaN,,,true,true
+6890341c962b7c933fce,Cosme Salas,K,Duke,ACC,NaN,,,true,true
+6890341cbc754ea86edc,Nate Sheppard,RB,Duke,ACC,NaN,,,true,true
+6890341ceb8abcd3dce6,Kavon Simmons,WR,Duke,ACC,NaN,,,true,true
+6890341d1f4097cadddb,Jaivon Solomon,WR,Duke,ACC,NaN,,,true,true
+6890341d476a51e9647b,Jake Taylor,TE,Duke,ACC,NaN,,,true,true
+6890341d6af79aea10bf,Chase Tyler,WR,Duke,ACC,NaN,,,true,true
+6890341d954442e29b6b,Ashton Zamani,K,Duke,ACC,NaN,,,true,true
+6890341dc12ac7e2d0d8,Gavin Blackwell,WR,Florida State,ACC,NaN,,,true,true
+6890341de8a05427799d,Jayvan Boggs,WR,Florida State,ACC,NaN,,,true,true
+6890341e1ac6a3b98742,Tommy Castellanos,QB,Florida State,ACC,NaN,,,true,true
+6890341e421dae16fa61,Micahi Danzy,WR,Florida State,ACC,NaN,,,true,true
+6890341e6789e59c850c,Kam Davis,RB,Florida State,ACC,NaN,,,true,true
+6890341e8d6aa35a3fb3,Luke Douglas,TE,Florida State,ACC,NaN,,,true,true
+6890341eb4acf21cf6a0,Markeston Douglas,TE,Florida State,ACC,NaN,,,true,true
+6890341edbdb6f009e0f,Camdon Frier,WR,Florida State,ACC,NaN,,,true,true
+6890341f0b28f33939d9,Shaun Gelsey,WR,Florida State,ACC,NaN,,,true,true
+6890341f3210d4756e7e,BJ Gibson,WR,Florida State,ACC,NaN,,,true,true
+6890341f5d711ec921dc,Brock Glenn,QB,Florida State,ACC,NaN,,,true,true
+6890341f8e2cf4f14adb,Michael Grant,QB,Florida State,ACC,NaN,,,true,true
+6890341fb16b498eeffa,Caziah Holmes,RB,Florida State,ACC,NaN,,,true,true
+6890341fd7dc38b92ce6,Jeremiah Johnson,RB,Florida State,ACC,NaN,,,true,true
+68903420092df24ba4ae,Jaylen King,QB,Florida State,ACC,NaN,,,true,true
+689034202e24160227a3,Ousmane Kromah,RB,Florida State,ACC,NaN,,,true,true
+689034205e0646727cdb,Greyson Labiad,TE,Florida State,ACC,NaN,,,true,true
+68903420874c5c1db046,Chase Loftin,TE,Florida State,ACC,NaN,,,true,true
+68903420b062a5a63a27,Jaylin Lucas,RB,Florida State,ACC,NaN,,,true,true
+68903420d8f4d4f44c41,Teriq Mallory,WR,Florida State,ACC,NaN,,,true,true
+689034210aec5c84ed0f,Gavin Markey,TE,Florida State,ACC,NaN,,,true,true
+6890342133787e6209c9,Lawayne McCoy,WR,Florida State,ACC,NaN,,,true,true
+6890342170680feefe39,Elijah Moore,WR,Florida State,ACC,NaN,,,true,true
+68903421974063bd1c14,Zay Parks,RB,Florida State,ACC,NaN,,,true,true
+68903421bd9f0141c5ee,Randy Pittman Jr.,TE,Florida State,ACC,NaN,,,true,true
+68903421e617a7e803e7,Brunno Reus,K,Florida State,ACC,NaN,,,true,true
+6890342214cfdfe08423,Duce Robinson,WR,Florida State,ACC,NaN,,,true,true
+68903422375d97af72f4,Gavin Sawchuk,RB,Florida State,ACC,NaN,,,true,true
+6890342259ca7c46e9a7,Samuel Singleton Jr.,RB,Florida State,ACC,NaN,,,true,true
+689034227f14a89e3883,Kevin Sperry,QB,Florida State,ACC,NaN,,,true,true
+68903422a474162f97ee,Willy Suarez,WR,Florida State,ACC,NaN,,,true,true
+68903422c9fb00ed8965,Landen Thomas,TE,Florida State,ACC,NaN,,,true,true
+68903422f2abf2525168,Jake Weinberg,K,Florida State,ACC,NaN,,,true,true
+68903423203f99fb53b6,Squirrel White,WR,Florida State,ACC,NaN,,,true,true
+689034234935e111d47a,Amaree Williams,TE,Florida State,ACC,NaN,,,true,true
+68903423742155829fd3,Roydell Williams,RB,Florida State,ACC,NaN,,,true,true
+68903423991437069ede,Grady Adamson,QB,Georgia Tech,ACC,NaN,,,true,true
+68903423c1a4ae643e0a,Chad Alexander,RB,Georgia Tech,ACC,NaN,,,true,true
+68903423ece145df78b3,Jordan Allen,WR,Georgia Tech,ACC,NaN,,,true,true
+68903424304db6741c12,Josh Beetham,TE,Georgia Tech,ACC,NaN,,,true,true
+689034245d5f477bfa27,Aidan Birr,K,Georgia Tech,ACC,NaN,,,true,true
+6890342482288a828127,Jamauri Brice,WR,Georgia Tech,ACC,NaN,,,true,true
+68903424a6c3367945a7,J.T. Byrne,TE,Georgia Tech,ACC,NaN,,,true,true
+68903424cb71fc9a80d1,Isiah Canion,WR,Georgia Tech,ACC,NaN,,,true,true
+68903424ed741ac9920d,Chris Elko,WR,Georgia Tech,ACC,NaN,,,true,true
+689034251d4709e95255,Cal Faulkner,WR,Georgia Tech,ACC,NaN,,,true,true
+689034254e1061cfb48c,Debron Gatling,WR,Georgia Tech,ACC,NaN,,,true,true
+6890342574f35d75728c,Daylon Gordon,RB,Georgia Tech,ACC,NaN,,,true,true
+689034259c079b36f66b,Ben Guthrie,QB,Georgia Tech,ACC,NaN,,,true,true
+68903425c21aa57b7e85,Luke Harpring,TE,Georgia Tech,ACC,NaN,,,true,true
+68903425e7f0268439e2,Evan Haynes,WR,Georgia Tech,ACC,NaN,,,true,true
+689034262127d0cb8761,Jamal Haynes,RB,Georgia Tech,ACC,NaN,,,true,true
+68903426468d26a3c5d5,Malachi Hosley,RB,Georgia Tech,ACC,NaN,,,true,true
+689034266c97d147fbb8,Haynes King,QB,Georgia Tech,ACC,NaN,,,true,true
+68903426907baf4982d2,Graham Knowles,QB,Georgia Tech,ACC,NaN,,,true,true
+68903426b52297d155ab,Trelain Maddox,RB,Georgia Tech,ACC,NaN,,,true,true
+68903426dc8112a4590d,Shane Marshall,RB,Georgia Tech,ACC,NaN,,,true,true
+689034270e4cc16650a2,Joseph Moseley,WR,Georgia Tech,ACC,NaN,,,true,true
+689034273032d3e3ef4e,Dean Patterson,WR,Georgia Tech,ACC,NaN,,,true,true
+689034275d808a06db2e,Aaron Philo,QB,Georgia Tech,ACC,NaN,,,true,true
+689034278252bee030c3,J.P. Powell,RB,Georgia Tech,ACC,NaN,,,true,true
+68903427a8d866e0d7cd,Blake Ragsdale,TE,Georgia Tech,ACC,NaN,,,true,true
+68903427d1607498a8c2,Eric Rivers,WR,Georgia Tech,ACC,NaN,,,true,true
+68903428040db990d13e,Kevin Roche Jr.,TE,Georgia Tech,ACC,NaN,,,true,true
+689034282967da1c0590,Connor Roush,TE,Georgia Tech,ACC,NaN,,,true,true
+689034285ad740994952,Malik Rutherford,WR,Georgia Tech,ACC,NaN,,,true,true
+68903428812f08affca5,Brett Seither,TE,Georgia Tech,ACC,NaN,,,true,true
+68903428ad5ba1fc0cb6,Rahkeem Smith,WR,Georgia Tech,ACC,NaN,,,true,true
+68903428d4c3b4c9c2d0,Bailey Stockton,WR,Georgia Tech,ACC,NaN,,,true,true
+6890342904eab3a8cf5b,Zion Taylor,WR,Georgia Tech,ACC,NaN,,,true,true
+689034292dce2d4c2fe7,Deuce Adams,QB,Louisville,ACC,NaN,,,true,true
+6890342955b953ce1181,Eli Adams,WR,Louisville,ACC,NaN,,,true,true
+68903429783ddd00070c,Brady Allen,QB,Louisville,ACC,NaN,,,true,true
+689034299f3e8a741ffc,Hamilton Atkins,TE,Louisville,ACC,NaN,,,true,true
+68903429c3d85bc0f1f4,Chris Bell,WR,Louisville,ACC,NaN,,,true,true
+68903429ee23e0c69320,Shaun Boykins Jr.,WR,Louisville,ACC,NaN,,,true,true
+6890342a1d9cdd65c041,Isaac Brown,RB,Louisville,ACC,NaN,,,true,true
+6890342a4446f73daeb3,Keyjuan Brown,RB,Louisville,ACC,NaN,,,true,true
+6890342a6b1275be94d2,Zac Chapeau,K,Louisville,ACC,NaN,,,true,true
+6890342bbe1856647134,Brock Coffman,WR,Louisville,ACC,NaN,,,true,true
+6890342c2e5a8fa8a601,Dacari Collins,WR,Louisville,ACC,NaN,,,true,true
+6890342c58711fcd317e,Travis Egan,QB,Louisville,ACC,NaN,,,true,true
+6890342cb68fa3a60108,Shammai Gates,RB,Louisville,ACC,NaN,,,true,true
+6890342d1fee4aaa0332,Bobby Golden,WR,Louisville,ACC,NaN,,,true,true
+6890342d8a9217f77319,Carson Hilbert,K,Louisville,ACC,NaN,,,true,true
+6890342e57188b02f443,Grant Houser,TE,Louisville,ACC,NaN,,,true,true
+6890342e89c1079b6150,Kris Hughes,WR,Louisville,ACC,NaN,,,true,true
+6890342f08823b8a3745,TreyShun Hurry,WR,Louisville,ACC,NaN,,,true,true
+689034303310ce423e55,C.J. Jacobsen,TE,Louisville,ACC,NaN,,,true,true
+689034306be85b2abc31,Braxton Jennings,RB,Louisville,ACC,NaN,,,true,true
+6890343099b0eb9b2f86,DeVuan Jones,WR,Louisville,ACC,NaN,,,true,true
+68903430c596d5bb025b,Nick Keller,K,Louisville,ACC,NaN,,,true,true
+68903431081f36998ed3,Jaedon King,WR,Louisville,ACC,NaN,,,true,true
+689034316dd600d851a5,Nate Kurisky,TE,Louisville,ACC,NaN,,,true,true
+68903432e6bc2f835577,Caullin Lacy,WR,Louisville,ACC,NaN,,,true,true
+689034347e08c3e69783,Terrence McWilliams Jr.,WR,Louisville,ACC,NaN,,,true,true
+68903435e5d6052c915e,Antonio Meeks,WR,Louisville,ACC,NaN,,,true,true
+689034364a96f3b26143,Dylan Mesman,TE,Louisville,ACC,NaN,,,true,true
+689034369169333ea1c2,Mason Mims,QB,Louisville,ACC,NaN,,,true,true
+68903436dc738d9b31ff,Davon Mitchell,TE,Louisville,ACC,NaN,,,true,true
+68903437229cb010537e,Miller Moss,QB,Louisville,ACC,NaN,,,true,true
+68903437560568f9658a,Cooper Ranvier,K,Louisville,ACC,NaN,,,true,true
+689034378082a03a7c82,Jaleel Skinner,TE,Louisville,ACC,NaN,,,true,true
+68903437aae614fb97d7,Jacob Stewart,TE,Louisville,ACC,NaN,,,true,true
+68903437d08808451710,Emmanuel Ulinfun,WR,Louisville,ACC,NaN,,,true,true
+68903438087cf2460435,Duke Watson,RB,Louisville,ACC,NaN,,,true,true
+689034382fe8666ff9c7,Jamarice Wilder,RB,Louisville,ACC,NaN,,,true,true
+689034385a3238f8720f,Sam Young,WR,Louisville,ACC,NaN,,,true,true
+6890343880a3f6a6287b,Ryan Zimmerman,QB,Louisville,ACC,NaN,,,true,true
+68903438ac4ed18bc83d,Judd Anderson,QB,Miami,ACC,NaN,,,true,true
+68903438d0f27be287e9,Alex Bauman,TE,Miami,ACC,NaN,,,true,true
+68903439042b64091577,Carson Beck,QB,Miami,ACC,NaN,,,true,true
+689034392748c2b7615c,Joe Borchers,QB,Miami,ACC,NaN,,,true,true
+689034394d36490903d5,Brennan Burton,WR,Miami,ACC,NaN,,,true,true
+68903439784fcc9b3f97,Ny Carr,WR,Miami,ACC,NaN,,,true,true
+68903439a5557665e6a9,Hunter Carver,TE,Miami,ACC,NaN,,,true,true
+68903439cbb688a31639,Jackson Carver,TE,Miami,ACC,NaN,,,true,true
+68903439f0a92013da5d,Andrew Cohen,WR,Miami,ACC,NaN,,,true,true
+6890343a2171616dd4be,CJ Daniels,WR,Miami,ACC,NaN,,,true,true
+6890343a4a0e15271d6e,Carter Davis,K,Miami,ACC,NaN,,,true,true
+6890343a772d8f46e15a,Mark Fletcher Jr.,RB,Miami,ACC,NaN,,,true,true
+6890343aa6c1086528ff,Luka Gilbert,TE,Miami,ACC,NaN,,,true,true
+6890343acdd684c97b96,Luke Hoaglund,RB,Miami,ACC,NaN,,,true,true
+6890343af412c498bb87,Ray Ray Joseph,WR,Miami,ACC,NaN,,,true,true
+6890343b32b989cef112,Elija Lofton,TE,Miami,ACC,NaN,,,true,true
+6890343b636ef6de14db,Kolby Luna,WR,Miami,ACC,NaN,,,true,true
+6890343b871d53bb7091,Riply Luna,QB,Miami,ACC,NaN,,,true,true
+6890343bc3a6bd3c9583,Jordan Lyle,RB,Miami,ACC,NaN,,,true,true
+6890343c25e042ca4924,Joshua Moore,WR,Miami,ACC,NaN,,,true,true
+6890343c773160e208f7,Jack Nickel,TE,Miami,ACC,NaN,,,true,true
+6890343cae058a9280c5,Luke Nickel,QB,Miami,ACC,NaN,,,true,true
+6890343cd60e6d5e257a,Henry Pikus,WR,Miami,ACC,NaN,,,true,true
+6890343d07506ae35386,Girard Pringle Jr.,RB,Miami,ACC,NaN,,,true,true
+6890343d2f90b1a860ff,Dylan Reiman,TE,Miami,ACC,NaN,,,true,true
+6890343d57e0e38f2238,Chance Robinson,WR,Miami,ACC,NaN,,,true,true
+6890343d81e4ba27f6ea,Will Rocha,K,Miami,ACC,NaN,,,true,true
+6890343da84c00871450,Owen Ruskavich,TE,Miami,ACC,NaN,,,true,true
+6890343dd3aa4c265344,Brock Schott,TE,Miami,ACC,NaN,,,true,true
+6890343e09169eee8566,Nikao Smith,QB,Miami,ACC,NaN,,,true,true
+6890343e3109cc609b08,Nick Thomas,WR,Miami,ACC,NaN,,,true,true
+6890343e5c5d0938115a,Malachi Toney,WR,Miami,ACC,NaN,,,true,true
+6890343e82404e1b899d,Joshisa Trader,WR,Miami,ACC,NaN,,,true,true
+6890343eace7aef520c4,Daylyn Upshaw,WR,Miami,ACC,NaN,,,true,true
+6890343ed19d3304d965,Terrell Walden II,RB,Miami,ACC,NaN,,,true,true
+6890343f09e00fe37d6e,Humphrey,RB,Miami,ACC,NaN,,,true,true
+6890343f2e68a93ec42f,Jack Whitehouse,RB,Miami,ACC,NaN,,,true,true
+6890343f5e2b46ea1cd3,Emory Williams,QB,Miami,ACC,NaN,,,true,true
+6890343f88563590ba23,Terrell Anderson,WR,NC State,ACC,NaN,,,true,true
+6890343fb0cb92c9c515,CJ Bailey,QB,NC State,ACC,NaN,,,true,true
+6890343fe156afc79205,Charlie Birtwistle,K,NC State,ACC,NaN,,,true,true
+6890344020296de24f2d,rel Bolder,WR,NC State,ACC,NaN,,,true,true
+689034404660f5cc6c91,Tank Boston,WR,NC State,ACC,NaN,,,true,true
+689034406c318b3fe27f,Cameron Cornthwaite,WR,NC State,ACC,NaN,,,true,true
+689034409567f5d22e5c,Dante Daniels,TE,NC State,ACC,NaN,,,true,true
+68903440bbbc59b29050,Deandre Desinor,RB,NC State,ACC,NaN,,,true,true
+68903440e561f002af67,Sam Dodd,WR,NC State,ACC,NaN,,,true,true
+689034411fd9eff6f3c4,Preston Douglas,TE,NC State,ACC,NaN,,,true,true
+6890344144d7071e82af,Ethan Dowdy,WR,NC State,ACC,NaN,,,true,true
+689034416b5e2d01c51d,Coleson Fields,RB,NC State,ACC,NaN,,,true,true
+6890344191071f2b8d23,Ian Flynt,TE,NC State,ACC,NaN,,,true,true
+68903441bbc00fcded12,Wesley Grimes,WR,NC State,ACC,NaN,,,true,true
+68903441e27fcaa6f9e3,Cody Hardy,TE,NC State,ACC,NaN,,,true,true
+6890344217e91a0bbe11,Teddy Hoffmann,WR,NC State,ACC,NaN,,,true,true
+6890344246ce8196e4cc,Jayden Hollar,WR,NC State,ACC,NaN,,,true,true
+6890344269af0be50292,Keenan Jackson,WR,NC State,ACC,NaN,,,true,true
+689034428d9d85ab948c,Darius Johnson,RB,NC State,ACC,NaN,,,true,true
+68903442b1bfe1366a62,Justin Joly,TE,NC State,ACC,NaN,,,true,true
+68903442d69c36c6ed59,Isiah Jones,RB,NC State,ACC,NaN,,,true,true
+689034430755380ad321,Nick Konieczynski,K,NC State,ACC,NaN,,,true,true
+68903443330841e85ba7,Ashton Locklear,WR,NC State,ACC,NaN,,,true,true
+6890344366e1204669c1,Jonathan Paylor,WR,NC State,ACC,NaN,,,true,true
+689034439977aec1d9a7,Griffin Reimer,TE,NC State,ACC,NaN,,,true,true
+68903443c21b57803714,Ethan Rhodes,QB,NC State,ACC,NaN,,,true,true
+68903443e9c5eeaeeb57,Gus Ritchey,TE,NC State,ACC,NaN,,,true,true
+68903444194cf06eccfc,Noah Rogers,WR,NC State,ACC,NaN,,,true,true
+689034443ff8a62f35e7,Jayden Scott,RB,NC State,ACC,NaN,,,true,true
+68903444670563d62e65,Hollywood Smothers,RB,NC State,ACC,NaN,,,true,true
+6890344492fcbb12fdeb,Lex Thomas,QB,NC State,ACC,NaN,,,true,true
+68903444d2039bebe6fe,Kanoah Vinesett,K,NC State,ACC,NaN,,,true,true
+68903445573d5a16122f,Hudson Wilharm,QB,NC State,ACC,NaN,,,true,true
+6890344599653bb91a14,Cole Wilson,QB,NC State,ACC,NaN,,,true,true
+68903445d7763273dd9e,Will Wilson,QB,NC State,ACC,NaN,,,true,true
+68903446191a7ae0383a,Christian Zachary,WR,NC State,ACC,NaN,,,true,true
+6890344642d5925d8ff1,Bryce Baker,QB,North Carolina,ACC,NaN,,,true,true
+689034466d8b7f8c2c56,Guytano Bartolomeo,K,North Carolina,ACC,NaN,,,true,true
+68903446a498eac27849,Paul Barton,TE,North Carolina,ACC,NaN,,,true,true
+68903446df6a514af441,Paul Billups II,WR,North Carolina,ACC,NaN,,,true,true
+6890344715cf04ef4659,Shanard Clower,WR,North Carolina,ACC,NaN,,,true,true
+689034474a6242274fa3,Connor Cox,TE,North Carolina,ACC,NaN,,,true,true
+689034476efa7f7f2c02,Chris Culliver,WR,North Carolina,ACC,NaN,,,true,true
+689034479e4236592e7e,Shamar Easter,TE,North Carolina,ACC,NaN,,,true,true
+68903447c49916a89d8b,Charleston French,RB,North Carolina,ACC,NaN,,,true,true
+68903447f228f642949e,Davion Gause,RB,North Carolina,ACC,NaN,,,true,true
+6890344828900ef13ee1,Javarius Green,WR,North Carolina,ACC,NaN,,,true,true
+68903448485dea5893d1,Benjamin Hall,RB,North Carolina,ACC,NaN,,,true,true
+6890344875ebc82c683c,Cort Halsey,TE,North Carolina,ACC,NaN,,,true,true
+689034489da363c4bf56,Caleb Hood,RB,North Carolina,ACC,NaN,,,true,true
+68903448c4fea11f3042,Aziah Johnson,WR,North Carolina,ACC,NaN,,,true,true
+68903448ee4f91fc0e3a,Jake Johnson,TE,North Carolina,ACC,NaN,,,true,true
+6890344920fe9e0d21b7,Max Johnson,QB,North Carolina,ACC,NaN,,,true,true
+6890344946e58b7e8176,Demon June,RB,North Carolina,ACC,NaN,,,true,true
+689034497fa8b09126fb,Nathan Leacock,WR,North Carolina,ACC,NaN,,,true,true
+68903449a873b5da4bd7,Gio Lopez,QB,North Carolina,ACC,NaN,,,true,true
+68903449cd2e37a6cf6a,Deems May,TE,North Carolina,ACC,NaN,,,true,true
+6890344a0989f18d4e0e,DJ Mazzone,QB,North Carolina,ACC,NaN,,,true,true
+6890344a3635c06b4e05,Jaylen McGill,RB,North Carolina,ACC,NaN,,,true,true
+6890344a634be4f9a567,Andres Miyares Jr.,QB,North Carolina,ACC,NaN,,,true,true
+6890344a87714c1f0075,Tori Newkirk,QB,North Carolina,ACC,NaN,,,true,true
+6890344aaeaad0de29cd,Jaylon Nichols,RB,North Carolina,ACC,NaN,,,true,true
+6890344ad33f4bdcee0d,Jordan Owens,TE,North Carolina,ACC,NaN,,,true,true
+6890344b02ccf24ea393,Kobe Paysour,WR,North Carolina,ACC,NaN,,,true,true
+6890344b2729b1ee9f88,Jason Robinson Jr.,WR,North Carolina,ACC,NaN,,,true,true
+6890344b4bbc5b588409,Jordan Shipp,WR,North Carolina,ACC,NaN,,,true,true
+6890344b763441ee6f57,Yasir Smith,TE,North Carolina,ACC,NaN,,,true,true
+6890344b9b55c7bee840,Dayton Sneed,WR,North Carolina,ACC,NaN,,,true,true
+6890344bc02e6a68b614,Alex Taylor,WR,North Carolina,ACC,NaN,,,true,true
+6890344be38c2e98bc51,Jo Jo Troupe,RB,North Carolina,ACC,NaN,,,true,true
+6890344c1b65fb59fb35,Madrid Tucker,WR,North Carolina,ACC,NaN,,,true,true
+6890344c3e81f85a1be0,Kenedy Uzoma,WR,North Carolina,ACC,NaN,,,true,true
+6890344c61754425867b,Rece Verhoff,K,North Carolina,ACC,NaN,,,true,true
+6890344c906a7fd87a63,Adrian Wilson,WR,North Carolina,ACC,NaN,,,true,true
+6890344cb6803d3ecba3,Amah Agwu,WR,Pittsburgh,ACC,NaN,,,true,true
+6890344ce6249e665099,Josh Altsman,TE,Pittsburgh,ACC,NaN,,,true,true
+6890344d1da63f50e956,Jaylin Brown,RB,Pittsburgh,ACC,NaN,,,true,true
+6890344d4a8a3eb1185f,Truitt Brown,TE,Pittsburgh,ACC,NaN,,,true,true
+6890344d726225aaf052,Trey Butkowski,K,Pittsburgh,ACC,NaN,,,true,true
+6890344d98a39a70e306,Sam Carpenter,K,Pittsburgh,ACC,NaN,,,true,true
+6890344dbeeb94905a3c,Justin Cook,RB,Pittsburgh,ACC,NaN,,,true,true
+6890344de85f88f1760e,Derrick Davis Jr.,RB,Pittsburgh,ACC,NaN,,,true,true
+6890344e1d65112876e6,El,WR,Pittsburgh,ACC,NaN,,,true,true
+6890344f82d69bb4d4f2,Juelz Goff,RB,Pittsburgh,ACC,NaN,,,true,true
+6890344fbbf3975aca31,Cole Gonzales,QB,Pittsburgh,ACC,NaN,,,true,true
+68903450005ca497e928,Benny Haselrig,WR,Pittsburgh,ACC,NaN,,,true,true
+68903450222f3bca650c,Mason Heintschel,QB,Pittsburgh,ACC,NaN,,,true,true
+689034505d57691d716f,Cataurus Hicks,WR,Pittsburgh,ACC,NaN,,,true,true
+68903450933fd80dd296,Justin Holmes,TE,Pittsburgh,ACC,NaN,,,true,true
+68903450b8be082c76da,Eli Holstein,QB,Pittsburgh,ACC,NaN,,,true,true
+68903450de87d639dc4f,Adam Howanitz,TE,Pittsburgh,ACC,NaN,,,true,true
+689034510ee31b2bd5b5,Max Hunt,TE,Pittsburgh,ACC,NaN,,,true,true
+6890345135326f960157,Beau Jackson,QB,Pittsburgh,ACC,NaN,,,true,true
+689034515c6dd6ba43e8,Kenny Johnson,WR,Pittsburgh,ACC,NaN,,,true,true
+6890345187129a04e027,Tony Kinsler,WR,Pittsburgh,ACC,NaN,,,true,true
+68903451aa5aa5b34d79,Censere Lee,WR,Pittsburgh,ACC,NaN,,,true,true
+68903451dc2e3d5f2ed5,James London,K,Pittsburgh,ACC,NaN,,,true,true
+689034520d703dba78dd,David Lynch,QB,Pittsburgh,ACC,NaN,,,true,true
+6890345231b3e8f28307,Jake Overman,TE,Pittsburgh,ACC,NaN,,,true,true
+689034525aa8168f5c98,Desmond Reid,RB,Pittsburgh,ACC,NaN,,,true,true
+689034527dc85ac464fa,Tyreek Robinson,WR,Pittsburgh,ACC,NaN,,,true,true
+68903452a42855f6ec41,Cam Sapp,WR,Pittsburgh,ACC,NaN,,,true,true
+68903452d3db6f5ccb8c,Jake Sassic,WR,Pittsburgh,ACC,NaN,,,true,true
+68903453084410a4a44a,Caden Smith,WR,Pittsburgh,ACC,NaN,,,true,true
+68903453318af134144f,Synkwan Smith,RB,Pittsburgh,ACC,NaN,,,true,true
+6890345350d623902bb9,Deuce Spann,WR,Pittsburgh,ACC,NaN,,,true,true
+68903453764a9669e128,Malachi Thomas,TE,Pittsburgh,ACC,NaN,,,true,true
+689034539b7cc5cf49d0,Kyrian Turner,RB,Pittsburgh,ACC,NaN,,,true,true
+68903453c2c1a3dd772b,Caleb Williams,RB,Pittsburgh,ACC,NaN,,,true,true
+68903453e58a8feedef0,Jalynn Williams,RB,Pittsburgh,ACC,NaN,,,true,true
+6890345418f7b2874752,Raphael Williams Jr.,WR,Pittsburgh,ACC,NaN,,,true,true
+6890345440e12bcdfd3d,Bryce Yates,WR,Pittsburgh,ACC,NaN,,,true,true
+689034546a91dba3f8a9,Lance Beeghley,WR,SMU,ACC,NaN,,,true,true
+68903454949198a3f712,Romello Brinson,WR,SMU,ACC,NaN,,,true,true
+68903454b64395052a09,Carterrious Brown,WR,SMU,ACC,NaN,,,true,true
+68903454dc9892d3ee5a,Keaton Cheves,WR,SMU,ACC,NaN,,,true,true
+689034550d161c282fb5,Jalen Cooper,WR,SMU,ACC,NaN,,,true,true
+689034553fab5b8d0b80,Stone Eby,TE,SMU,ACC,NaN,,,true,true
+68903455624044f21979,William Fierro,RB,SMU,ACC,NaN,,,true,true
+6890345585eff13379ff,Charlie Fiser,QB,SMU,ACC,NaN,,,true,true
+68903455aab14dc2a742,Dylan Goffney,WR,SMU,ACC,NaN,,,true,true
+68903455d48d6c381647,Dramekco Green,RB,SMU,ACC,NaN,,,true,true
+68903456042521ddfa24,T.J. Harden,RB,SMU,ACC,NaN,,,true,true
+689034562804c5a6f380,Ty Hawkins,QB,SMU,ACC,NaN,,,true,true
+68903456582973919f8d,Zach Hernandez,RB,SMU,ACC,NaN,,,true,true
+689034568035745a234c,Matthew Hibner,TE,SMU,ACC,NaN,,,true,true
+68903456b0eff9b542cf,Case Holleron,WR,SMU,ACC,NaN,,,true,true
+68903456e486bfe04580,Jordan Hudson,WR,SMU,ACC,NaN,,,true,true
+689034571a37243dd487,Kevin Jennings,QB,SMU,ACC,NaN,,,true,true
+689034573b8c8d9e9f74,Chris Johnson Jr.,RB,SMU,ACC,NaN,,,true,true
+6890345764f2019805d8,Sean Kane,TE,SMU,ACC,NaN,,,true,true
+6890345790f95c06952e,Sam Keltner,K,SMU,ACC,NaN,,,true,true
+68903457b45a9cb2d03b,Yamir Knight,WR,SMU,ACC,NaN,,,true,true
+68903457d6b06cf8261a,James Larson,TE,SMU,ACC,NaN,,,true,true
+6890345806424a1299b8,Jaxson Lavender,WR,SMU,ACC,NaN,,,true,true
+6890345828c8468a6c3b,Will Locke,TE,SMU,ACC,NaN,,,true,true
+689034584f46b781d89b,Devon Martin,TE,SMU,ACC,NaN,,,true,true
+689034587d7437f47eed,RJ Maryland,TE,SMU,ACC,NaN,,,true,true
+68903458a65ea50ed87d,Derrick McFall,RB,SMU,ACC,NaN,,,true,true
+68903458cbe01640c637,Adam Moore,TE,SMU,ACC,NaN,,,true,true
+68903458ef157d89a53e,Meyer Pereira,WR,SMU,ACC,NaN,,,true,true
+68903459201a5a707a1c,Cooper Reed,WR,SMU,ACC,NaN,,,true,true
+6890345948063ffed75f,Link Rhodes,WR,SMU,ACC,NaN,,,true,true
+689034596bf5958e2d99,Tripp Riordan,TE,SMU,ACC,NaN,,,true,true
+6890345990ac5f351096,Isaiah Robertson,WR,SMU,ACC,NaN,,,true,true
+68903459c0153ca21fae,Collin Rogers,K,SMU,ACC,NaN,,,true,true
+68903459e7a02951441a,Daylon Singleton,WR,SMU,ACC,NaN,,,true,true
+6890345a18a30a82f83a,Henry Stickler,WR,SMU,ACC,NaN,,,true,true
+6890345a3fa36eeb4582,Miles Uter,TE,SMU,ACC,NaN,,,true,true
+6890345a65f0892083e8,Tyler Van Dyke,QB,SMU,ACC,NaN,,,true,true
+6890345a8bda983135e6,Tuna Altahir,RB,Stanford,ACC,NaN,,,true,true
+6890345ab2894269a094,London Bironas,K,Stanford,ACC,NaN,,,true,true
+6890345ad770603b1dd7,Aiden Black,TE,Stanford,ACC,NaN,,,true,true
+6890345b08741c661269,Benji Blackburn,TE,Stanford,ACC,NaN,,,true,true
+6890345b2c7f86c06e3f,Elijah Brown,QB,Stanford,ACC,NaN,,,true,true
+6890345b52a1a9e1e7a0,Marcus Brown,WR,Stanford,ACC,NaN,,,true,true
+6890345b779363cb1874,Chris Davis Jr.,RB,Stanford,ACC,NaN,,,true,true
+6890345b9b4815bb1347,Brendan Doyle,TE,Stanford,ACC,NaN,,,true,true
+6890345bc0ee1e61592b,Bryce Farrell,WR,Stanford,ACC,NaN,,,true,true
+6890345bf14d1f96932a,Micah Ford,RB,Stanford,ACC,NaN,,,true,true
+6890345c2292fcec5cb8,Zach Giuliano,TE,Stanford,ACC,NaN,,,true,true
+6890345c48889273952b,Ben Gulbranson,QB,Stanford,ACC,NaN,,,true,true
+6890345c6c1bcc99e7d9,JonAnthony Hall,WR,Stanford,ACC,NaN,,,true,true
+6890345c914e389d85d2,Champ Hampton,RB,Stanford,ACC,NaN,,,true,true
+6890345cbe0184683194,Caden High,WR,Stanford,ACC,NaN,,,true,true
+6890345ce3b557d2e762,Chico Holt,TE,Stanford,ACC,NaN,,,true,true
+6890345d1940c0db5c44,Sedrick Irvin,RB,Stanford,ACC,NaN,,,true,true
+6890345d4b1238a63f34,Myles Jackson,QB,Stanford,ACC,NaN,,,true,true
+6890345d7271fc44d60d,Emmet Kenney,K,Stanford,ACC,NaN,,,true,true
+6890345d99d6ea97fdcb,Tyler Kuo,WR,Stanford,ACC,NaN,,,true,true
+6890345dc05b8ae76b85,Myles Libman,WR,Stanford,ACC,NaN,,,true,true
+6890345dec4a81d7c3e6,Charlie Mirer,QB,Stanford,ACC,NaN,,,true,true
+6890345e1dc836d7d642,Jordan Onovughe,WR,Stanford,ACC,NaN,,,true,true
+6890345e45650c9fdac5,David Pantelis,WR,Stanford,ACC,NaN,,,true,true
+6890345e727a3ce7c710,Dylan Rizk,QB,Stanford,ACC,NaN,,,true,true
+6890345e9f108a24537e,Sam Roush,TE,Stanford,ACC,NaN,,,true,true
+6890345ec77a6adaffd6,AJ Seidler,K,Stanford,ACC,NaN,,,true,true
+6890345eec0e3887d666,Cole Tabb,RB,Stanford,ACC,NaN,,,true,true
+6890345f1d773978d9c0,Jason Thompson,WR,Stanford,ACC,NaN,,,true,true
+6890345f41992732191a,Liam Thorpe,WR,Stanford,ACC,NaN,,,true,true
+6890345f69775056f3ae,Owen van Loben Sels,WR,Stanford,ACC,NaN,,,true,true
+6890345f9dae3ff80fdd,Griffin Waiss,TE,Stanford,ACC,NaN,,,true,true
+6890345fc3e1fda87ee6,CJ Williams,WR,Stanford,ACC,NaN,,,true,true
+6890345fead0dd949b85,Reiman Zebert,TE,Stanford,ACC,NaN,,,true,true
+689034601c9eae74d993,Steve Angeli,QB,Syracuse,ACC,NaN,,,true,true
+6890346041a16dfc51ed,Nick Armentano,WR,Syracuse,ACC,NaN,,,true,true
+689034606a72432e80ee,Daunte Bacheyie,TE,Syracuse,ACC,NaN,,,true,true
+689034609a49668ac07f,Rich Belin,QB,Syracuse,ACC,NaN,,,true,true
+68903460c5096ed08db0,Wyatt Bowman,TE,Syracuse,ACC,NaN,,,true,true
+68903460ee0fe1361930,Luke Carney,QB,Syracuse,ACC,NaN,,,true,true
+689034611ef8f57fa1eb,Tyler Chandler,RB,Syracuse,ACC,NaN,,,true,true
+6890346145546f8080fc,David Clement,TE,Syracuse,ACC,NaN,,,true,true
+6890346169b9cca9bfc2,Malachi Coleman,RB,Syracuse,ACC,NaN,,,true,true
+689034619638ae071a1e,Rickie Collins,QB,Syracuse,ACC,NaN,,,true,true
+68903461ba94be3f4fac,Johntay Cook II,WR,Syracuse,ACC,NaN,,,true,true
+68903461e05ffbedb93f,Gabe Daniels,WR,Syracuse,ACC,NaN,,,true,true
+6890346213f1968e2118,Nate Edwards,WR,Syracuse,ACC,NaN,,,true,true
+689034624daed5bb79d5,Joseph Filardi,QB,Syracuse,ACC,NaN,,,true,true
+6890346274a445f87fd5,Darrell Gill Jr.,WR,Syracuse,ACC,NaN,,,true,true
+68903462a0160616e8e8,Ron Haile,WR,Syracuse,ACC,NaN,,,true,true
+68903462c8dc716fe0b2,Jaden Hart,RB,Syracuse,ACC,NaN,,,true,true
+68903462f3cbd9d8c407,Umari Hatcher,WR,Syracuse,ACC,NaN,,,true,true
+68903463290fe17539e1,Tylik Hill,RB,Syracuse,ACC,NaN,,,true,true
+6890346354c96cdd378f,Jaylan Hornsby,WR,Syracuse,ACC,NaN,,,true,true
+689034637d5ebd0e6675,Malachi James,RB,Syracuse,ACC,NaN,,,true,true
+68903463a247ade47d13,Darius Johnson,WR,Syracuse,ACC,NaN,,,true,true
+68903463cd1a449224a3,Julian McFadden,WR,Syracuse,ACC,NaN,,,true,true
+68903463f23918ac95da,Will Nixon,RB,Syracuse,ACC,NaN,,,true,true
+689034642392c3547fd1,Jadyn Oh,K,Syracuse,ACC,NaN,,,true,true
+689034644abaa3ac6942,Emanuel Ross,WR,Syracuse,ACC,NaN,,,true,true
+689034646ff761ba3b76,Simmons,WR,Syracuse,ACC,NaN,,,true,true
+6890346493eb68225d9a,Tyshawn Russell,WR,Syracuse,ACC,NaN,,,true,true
+68903464babf3375853f,Chase Simmons,TE,Syracuse,ACC,NaN,,,true,true
+68903464e13624ea312c,Meer Thomas,WR,Syracuse,ACC,NaN,,,true,true
+68903465114be2e52557,Jamie Tremble,TE,Syracuse,ACC,NaN,,,true,true
+68903465353750786217,Dan Villari,TE,Syracuse,ACC,NaN,,,true,true
+689034655e7528cd7d76,Baker,TE,Syracuse,ACC,NaN,,,true,true
+68903465843dac0fa9ea,Rubin Wasserman,TE,Syracuse,ACC,NaN,,,true,true
+68903465a889c07cc08a,Terrell Wilfong,WR,Syracuse,ACC,NaN,,,true,true
+68903465d5a8f8107583,Darien Williams,WR,Syracuse,ACC,NaN,,,true,true
+689034660a094c522c1e,Jakhari Williams,QB,Syracuse,ACC,NaN,,,true,true
+689034662e819c7d4af6,Yasin Willis,RB,Syracuse,ACC,NaN,,,true,true
+6890346650de714105c4,Tripp Woody,K,Syracuse,ACC,NaN,,,true,true
+689034668920809da90d,Josiah Abdullah,WR,Virginia,ACC,NaN,,,true,true
+68903466ad2d194a7a29,Will Bettridge,K,Virginia,ACC,NaN,,,true,true
+68903466e608369e1218,Grady Brosterhous,QB,Virginia,ACC,NaN,,,true,true
+6890346716e3720b9c02,Xavier Brown,RB,Virginia,ACC,NaN,,,true,true
+6890346749aabd6f4a01,Vadin Bruot,K,Virginia,ACC,NaN,,,true,true
+689034676a242cc836e5,TyLyric Coleman,WR,Virginia,ACC,NaN,,,true,true
+6890346797354e61aa55,Kameron Courtney,WR,Virginia,ACC,NaN,,,true,true
+68903467be36fb238ec1,Xay Davis,RB,Virginia,ACC,NaN,,,true,true
+68903467e501c0abbcf1,Jorge Diaz Nicolas,K,Virginia,ACC,NaN,,,true,true
+68903468177deee240ea,Jahmal Edrine,WR,Virginia,ACC,NaN,,,true,true
+6890346842393e9e92e2,Sage Ennis,TE,Virginia,ACC,NaN,,,true,true
+689034686e7db438604f,Owen Gardner,RB,Virginia,ACC,NaN,,,true,true
+6890346893b733c76da3,Cole Geer,QB,Virginia,ACC,NaN,,,true,true
+68903468ba58869ac91a,Andre Greene Jr.,WR,Virginia,ACC,NaN,,,true,true
+689034690124ddc53255,Trell Harris,WR,Virginia,ACC,NaN,,,true,true
+6890346925eb10f7509d,Suderian Harrison,WR,Virginia,ACC,NaN,,,true,true
+6890346955f8d5aa2f0b,Bjorn Jurgensen,QB,Virginia,ACC,NaN,,,true,true
+689034697a7ede24e394,Daniel Kaelin,QB,Virginia,ACC,NaN,,,true,true
+68903469a06c50320faf,TeKai Kirby,TE,Virginia,ACC,NaN,,,true,true
+68903469c5d288305c2b,Trevor Ladd,WR,Virginia,ACC,NaN,,,true,true
+68903469ee9696d35bea,Davis Lane Jr.,RB,Virginia,ACC,NaN,,,true,true
+6890346a1dd4d5845d37,Boone Lourd,QB,Virginia,ACC,NaN,,,true,true
+6890346a497b384395b9,Chandler Morris,QB,Virginia,ACC,NaN,,,true,true
+6890346a7841d6f7c098,Short,WR,Virginia,ACC,NaN,,,true,true
+6890346aa18a8dbf28fc,Henry Omohundro,TE,Virginia,ACC,NaN,,,true,true
+6890346acb02519667ef,Isaiah Robinson,WR,Virginia,ACC,NaN,,,true,true
+6890346af2b6ae1d1a11,John Rogers,TE,Virginia,ACC,NaN,,,true,true
+6890346b268171aad191,Hayden Rollison,TE,Virginia,ACC,NaN,,,true,true
+6890346b4d59364e4539,Cam Ross,WR,Virginia,ACC,NaN,,,true,true
+6890346b7433f073d381,Mari Taylor,RB,Virginia,ACC,NaN,,,true,true
+6890346b96f3ee20d5fb,Jayden Thomas,WR,Virginia,ACC,NaN,,,true,true
+6890346bbbe26710e0f2,Willem Thurber,TE,Virginia,ACC,NaN,,,true,true
+6890346be0bc447e55b6,Dakota Twitty,TE,Virginia,ACC,NaN,,,true,true
+6890346c0f2a6dc40796,Noah Vaughn,RB,Virginia,ACC,NaN,,,true,true
+6890346c3cdeebaf0150,Walker Wallace,TE,Virginia,ACC,NaN,,,true,true
+6890346c6394cbb901d1,Triston Ward,WR,Virginia,ACC,NaN,,,true,true
+6890346c920535df5068,Harrison Waylee,RB,Virginia,ACC,NaN,,,true,true
+6890346cc025da590c82,Eli Wood,WR,Virginia,ACC,NaN,,,true,true
+6890346d00671bacfb57,Justin Zames,TE,Virginia,ACC,NaN,,,true,true
+6890346d35eddf686481,Jason Abbey,TE,Virginia Tech,ACC,NaN,,,true,true
+6890346d5d438c401aa9,Keylen Adams,WR,Virginia Tech,ACC,NaN,,,true,true
+6890346d83e215bbc69a,Devin Alves,WR,Virginia Tech,ACC,NaN,,,true,true
+6890346da9ba87e78fa3,Braydon Bennett,RB,Virginia Tech,ACC,NaN,,,true,true
+6890346dcb1217200565,L.J. Booker,WR,Virginia Tech,ACC,NaN,,,true,true
+6890346e019f82d8a722,A.J. Brand,QB,Virginia Tech,ACC,NaN,,,true,true
+6890346e277945425bb2,John Buetow,RB,Virginia Tech,ACC,NaN,,,true,true
+6890346e585885b01859,Jeremiah Coney,RB,Virginia Tech,ACC,NaN,,,true,true
+6890346e805b0c17ce92,Aiden Daugherty,K,Virginia Tech,ACC,NaN,,,true,true
+6890346eb012a1a2a9f7,Kyron Drones,QB,Virginia Tech,ACC,NaN,,,true,true
+6890346edf584ad33287,Benji Gosnell,TE,Virginia Tech,ACC,NaN,,,true,true
+6890346f0fbaa85d36fc,Ayden Greene,WR,Virginia Tech,ACC,NaN,,,true,true
+6890346f3614d174fb35,Donavon Greene,WR,Virginia Tech,ACC,NaN,,,true,true
+6890346f659bdce025bf,Israel Hairston,WR,Virginia Tech,ACC,NaN,,,true,true
+6890346f8d1e59cb2486,Ricous Hairston,TE,Virginia Tech,ACC,NaN,,,true,true
+6890346fae6d2840b9e4,Marcellous Hawkins,RB,Virginia Tech,ACC,NaN,,,true,true
+6890346fd6ab24decd6e,Takye Heath,WR,Virginia Tech,ACC,NaN,,,true,true
+6890347008f5334dda61,Joey Hobbs,WR,Virginia Tech,ACC,NaN,,,true,true
+6890347039858a0222ca,Tucker Holloway,WR,Virginia Tech,ACC,NaN,,,true,true
+689034705b59f4588815,John Love,K,Virginia Tech,ACC,NaN,,,true,true
+6890347081fa0d062ab3,Kyle Lowe,K,Virginia Tech,ACC,NaN,,,true,true
+68903470b88d4adfac9d,Tyler Mason,RB,Virginia Tech,ACC,NaN,,,true,true
+68903470dea554e89448,Micah Matthews,WR,Virginia Tech,ACC,NaN,,,true,true
+689034710e0981c2cd8a,Connor,WR,Virginia Tech,ACC,NaN,,,true,true
+689034713250e369255f,Jeffrey Overton Jr.,RB,Virginia Tech,ACC,NaN,,,true,true
+6890347155ca33e3ab98,Shamarius Peterkin,WR,Virginia Tech,ACC,NaN,,,true,true
+689034717994d3aea971,P.J. Prioleau,RB,Virginia Tech,ACC,NaN,,,true,true
+689034719d6b66f80e5f,Garret Rangel,QB,Virginia Tech,ACC,NaN,,,true,true
+68903471cf21bb1d3b09,Cole Reemsnyder,TE,Virginia Tech,ACC,NaN,,,true,true
+689034720f69006c2efe,Kelden Ryan,QB,Virginia Tech,ACC,NaN,,,true,true
+689034723a2e8a1aff5a,Harrison Saint Germain,TE,Virginia Tech,ACC,NaN,,,true,true
+6890347272d12ea9f5e1,Cameron Seldon,WR,Virginia Tech,ACC,NaN,,,true,true
+68903472997bfd44ef3b,Cameron Sparks,WR,Virginia Tech,ACC,NaN,,,true,true
+68903472c8580a5b698b,Isaiah Spencer,WR,Virginia Tech,ACC,NaN,,,true,true
+68903473096bb2c8ec89,Terion Stewart,RB,Virginia Tech,ACC,NaN,,,true,true
+6890347332802e2256fd,Luke Stuewe,WR,Virginia Tech,ACC,NaN,,,true,true
+689034735cb4cec9663e,William Watson III,QB,Virginia Tech,ACC,NaN,,,true,true
+689034738182a01d4637,Chanz Wiggins,WR,Virginia Tech,ACC,NaN,,,true,true
+68903473aa67d413becc,Zeke Wimbush,TE,Virginia Tech,ACC,NaN,,,true,true
+68903473d3242e86ed43,Mason Andrade,RB,Wake Forest,ACC,NaN,,,true,true
+68903474045ab749190a,Robby Ashford,QB,Wake Forest,ACC,NaN,,,true,true
+6890347427454a214792,Chris Barnes,WR,Wake Forest,ACC,NaN,,,true,true
+689034744dc840bc1541,Sterling Berkhalter,WR,Wake Forest,ACC,NaN,,,true,true
+6890347473d4c65b98e6,Karate Brenson,WR,Wake Forest,ACC,NaN,,,true,true
+6890347499af93b77f71,Connor Calvert,K,Wake Forest,ACC,NaN,,,true,true
+68903474be6e736db094,Caleb Carlson,K,Wake Forest,ACC,NaN,,,true,true
+68903474e3296c8b1ea0,Tate Carney,RB,Wake Forest,ACC,NaN,,,true,true
+689034751be1ae655186,Kevin Check,TE,Wake Forest,ACC,NaN,,,true,true
+689034754248b8d4980d,Demond Claiborne,RB,Wake Forest,ACC,NaN,,,true,true
+689034756713696b8350,Ty Clark III,RB,Wake Forest,ACC,NaN,,,true,true
+689034758da17e3ec94f,Jamario Clements,RB,Wake Forest,ACC,NaN,,,true,true
+68903476204218c40ca7,Dominic Deluca,TE,Wake Forest,ACC,NaN,,,true,true
+689034766544125c4b97,Matthew Dennis,K,Wake Forest,ACC,NaN,,,true,true
+68903476898832065dc5,David Egbe,RB,Wake Forest,ACC,NaN,,,true,true
+68903476ae0fa1b0dd43,Eni Falayi,TE,Wake Forest,ACC,NaN,,,true,true
+68903476e51980610c99,Jack Foley,WR,Wake Forest,ACC,NaN,,,true,true
+68903477149118d1b06c,Ben Grice,WR,Wake Forest,ACC,NaN,,,true,true
+689034773d36185e1a27,Ryan Henley,RB,Wake Forest,ACC,NaN,,,true,true
+6890347760f1f080be37,Carlos Hernandez,WR,Wake Forest,ACC,NaN,,,true,true
+6890347787d7568ae931,Zeek Jackson,WR,Wake Forest,ACC,NaN,,,true,true
+68903477b2c6355232d4,Billy Johnson,QB,Wake Forest,ACC,NaN,,,true,true
+68903477db23c735ea40,Kamrean Johnson,TE,Wake Forest,ACC,NaN,,,true,true
+68903478159f6d6b0381,Bryce Kania,WR,Wake Forest,ACC,NaN,,,true,true
+6890347840828e6fd7c3,Harry Lodge,TE,Wake Forest,ACC,NaN,,,true,true
+689034786dd0097a98d4,Will Loerzel,TE,Wake Forest,ACC,NaN,,,true,true
+689034789710ee87e522,Matthew Lusardi,TE,Wake Forest,ACC,NaN,,,true,true
+68903478c05019e04806,Micah Mays Jr.,WR,Wake Forest,ACC,NaN,,,true,true
+68903478ed23d0950d0e,Jeremiah Melvin,WR,Wake Forest,ACC,NaN,,,true,true
+689034791f8e1e39e137,Brien,WR,Wake Forest,ACC,NaN,,,true,true
+68903479494c4cfc716f,Elijiah Oehlke,QB,Wake Forest,ACC,NaN,,,true,true
+689034796da0e95d350f,Drew Pickett,RB,Wake Forest,ACC,NaN,,,true,true
+689034799315c6108ad3,Steele Pizzella,QB,Wake Forest,ACC,NaN,,,true,true
+68903479c8b344271f5c,Deshawn Purdie,QB,Wake Forest,ACC,NaN,,,true,true
+6890347a02574b70cfaa,Sawyer Racanelli,WR,Wake Forest,ACC,NaN,,,true,true
+6890347a2827dc89b4e4,EJ Reid,WR,Wake Forest,ACC,NaN,,,true,true
+6890347a53a093bb27ec,Jamar Searcy,RB,Wake Forest,ACC,NaN,,,true,true
+6890347a75a9158e242e,Wesley Stroebel,WR,Wake Forest,ACC,NaN,,,true,true
+6890347a9cd777d6a0ec,Kalil Townes,RB,Wake Forest,ACC,NaN,,,true,true
+6890347acd1d48444566,Ian VerSteeg,WR,Wake Forest,ACC,NaN,,,true,true
+6890347b070ed3204c1d,Reginald Vick Jr.,WR,Wake Forest,ACC,NaN,,,true,true
+6890347b2f265d912044,Charlie Wingfield,TE,Wake Forest,ACC,NaN,,,true,true
+689039fcd900312c14e9,Ryan Fitzgerald,QB,Iowa,Big Ten,NaN,,,true,true
+689039fd264592926368,Mark Gronowski,QB,Iowa,Big Ten,NaN,,,true,true
+689039fd556209f05dec,Jeremy Hecklinski,QB,Iowa,Big Ten,NaN,,,true,true
+689039fd8d24cf5cc939,Jackson Stratton,QB,Iowa,Big Ten,NaN,,,true,true
+689039fdc630684d35ce,Jimmy Sullivan,QB,Iowa,Big Ten,NaN,,,true,true
+689039fde924fd51e1f4,Brevin Doll,RB,Iowa,Big Ten,NaN,,,true,true
+689039fe293786c03b82,Braeden Jackson,RB,Iowa,Big Ten,NaN,,,true,true
+689039fe59de38790082,Nathan McNeil,RB,Iowa,Big Ten,NaN,,,true,true
+689039fe90dcee26cbb1,Kamari Moulton,RB,Iowa,Big Ten,NaN,,,true,true
+689039fec8f1abd5597d,Jazion Patterson,RB,Iowa,Big Ten,NaN,,,true,true
+689039ff0061a7fcbc0d,Terrell Washington Jr.,RB,Iowa,Big Ten,NaN,,,true,true
+689039ff292465cc7121,Xavier Williams,RB,Iowa,Big Ten,NaN,,,true,true
+68903a0035d6bb0bd280,Jarriett Buie,WR,Iowa,Big Ten,NaN,,,true,true
+68903a008453765da0b0,Alex Eichmann,WR,Iowa,Big Ten,NaN,,,true,true
+68903a00f02953879e2a,Jacob Gill,WR,Iowa,Big Ten,NaN,,,true,true
+68903a013c958c91a98d,Dayton Howard,WR,Iowa,Big Ten,NaN,,,true,true
+68903a016afac1d9b8f3,Jackson Naeve,WR,Iowa,Big Ten,NaN,,,true,true
+68903a01926f1bdc1394,KJ Parker,WR,Iowa,Big Ten,NaN,,,true,true
+68903a01bacdbfa4b501,Apollo Payne,WR,Iowa,Big Ten,NaN,,,true,true
+68903a0206909be4e996,Sam Phillips,WR,Iowa,Big Ten,NaN,,,true,true
+68903a023a11bb70686e,Terrence Smith,WR,Iowa,Big Ten,NaN,,,true,true
+68903a0264c1044f0d6e,Reece Vander Zee,WR,Iowa,Big Ten,NaN,,,true,true
+68903a0296188d283549,Kaden Wetjen,WR,Iowa,Big Ten,NaN,,,true,true
+68903a02bcd43b95cc14,Michael Burt,TE,Iowa,Big Ten,NaN,,,true,true
+68903a02e9749de540ab,Eli Johnson,TE,Iowa,Big Ten,NaN,,,true,true
+68903a031cf00e81cc3a,Hayden Large,TE,Iowa,Big Ten,NaN,,,true,true
+68903a0343dd260e600b,Thomas Meyer,TE,Iowa,Big Ten,NaN,,,true,true
+68903a03693cd2dc317d,Zach Ortwerth,TE,Iowa,Big Ten,NaN,,,true,true
+68903a039525ce5ceec6,Addison Ostrenga,TE,Iowa,Big Ten,NaN,,,true,true
+68903a03c2910348e23f,DJ Vonnahme,TE,Iowa,Big Ten,NaN,,,true,true
+68903a03f31eb6176c71,Caden Buhr,K,Iowa,Big Ten,NaN,,,true,true
+68903a042132136603bd,Drew Stevens,K,Iowa,Big Ten,NaN,,,true,true
+68903a04458d8876e874,Luke Altmyer,QB,Illinois,Big Ten,NaN,,,true,true
+68903a046670013e3ebb,Carson Boyd,QB,Illinois,Big Ten,NaN,,,true,true
+68903a048830a7c7c453,Ethan Hampton,QB,Illinois,Big Ten,NaN,,,true,true
+68903a04ab2ec85a38c5,Jershaun Newton,QB,Illinois,Big Ten,NaN,,,true,true
+68903a04d950fb3ba256,Trey Petty,QB,Illinois,Big Ten,NaN,,,true,true
+68903a0515eafcf727fa,Aaron Ball,RB,Illinois,Big Ten,NaN,,,true,true
+68903a053ab6d4442947,Kaden Feagin,RB,Illinois,Big Ten,NaN,,,true,true
+68903a05692b45253d08,Aidan Laughery,RB,Illinois,Big Ten,NaN,,,true,true
+68903a058edd914ee217,Ca'lil Valentine,RB,Illinois,Big Ten,NaN,,,true,true
+68903a05b2fbf3f0e6f0,Cedric Wyche II,RB,Illinois,Big Ten,NaN,,,true,true
+68903a05d86902136730,Michael Bartolotta,WR,Illinois,Big Ten,NaN,,,true,true
+68903a061143b97f0712,Hank Beatty,WR,Illinois,Big Ten,NaN,,,true,true
+68903a06373e7f31503c,Justin Bowick,WR,Illinois,Big Ten,NaN,,,true,true
+68903a065a0c4f064a25,Alexander Capka-Jones,WR,Illinois,Big Ten,NaN,,,true,true
+68903a06865b8066c03e,Collin Dixon,WR,Illinois,Big Ten,NaN,,,true,true
+68903a06a89e4c182e20,Malik Elzy,WR,Illinois,Big Ten,NaN,,,true,true
+68903a06cc401c2b960e,Tysean Griffin,WR,Illinois,Big Ten,NaN,,,true,true
+68903a06f06711adcf4b,Ashton Hollins,WR,Illinois,Big Ten,NaN,,,true,true
+68903a071f52ca96327e,Karson Kaiser,WR,Illinois,Big Ten,NaN,,,true,true
+68903a07432a059b834c,Tyler McClure,WR,Illinois,Big Ten,NaN,,,true,true
+68903a076a14abefbd0f,Mario Sanders II,WR,Illinois,Big Ten,NaN,,,true,true
+68903a078d7f87cd9b68,Brayden Trimble,WR,Illinois,Big Ten,NaN,,,true,true
+68903a07ae86bf1b6ddc,Christian Abney,TE,Illinois,Big Ten,NaN,,,true,true
+68903a07d2d911e19d09,Jordan Anderson,TE,Illinois,Big Ten,NaN,,,true,true
+68903a081395db5dac9c,Tanner Arkin,TE,Illinois,Big Ten,NaN,,,true,true
+68903a0841dda0d778c9,Logan Farrell,TE,Illinois,Big Ten,NaN,,,true,true
+68903a08632a5abe9975,Jake Furtney,TE,Illinois,Big Ten,NaN,,,true,true
+68903a089730cb95873d,Cole Rusk,TE,Illinois,Big Ten,NaN,,,true,true
+68903a08bc7813cc7dab,Grant Smith,TE,Illinois,Big Ten,NaN,,,true,true
+68903a08dfc355534c25,Davin Stoffel,TE,Illinois,Big Ten,NaN,,,true,true
+68903a0921e19bc55083,Tanner Hollinger,TE,Illinois,Big Ten,NaN,,,true,true
+68903a094e3c3520c19a,David Olano,K,Illinois,Big Ten,NaN,,,true,true
+68903a0972f445f8df05,Lucas Osada,K,Illinois,Big Ten,NaN,,,true,true
+68903a0999929b1d0547,Jadyn Davis,QB,Michigan,Big Ten,NaN,,,true,true
+68903a09c079b9f7c427,Jake Garcia,QB,Michigan,Big Ten,NaN,,,true,true
+68903a09e880f344961e,Chase Herbstreit,QB,Michigan,Big Ten,NaN,,,true,true
+68903a0a1625d8a9a995,Mikey Keene,QB,Michigan,Big Ten,NaN,,,true,true
+68903a0a3982a8eebce8,Bryce Underwood,QB,Michigan,Big Ten,NaN,,,true,true
+68903a0a5f2e387a4923,Davis Warren,QB,Michigan,Big Ten,NaN,,,true,true
+68903a0a8aa6b5bffa09,Justice Haynes,RB,Michigan,Big Ten,NaN,,,true,true
+68903a0ab47afc530d0d,C.J. Hester,RB,Michigan,Big Ten,NaN,,,true,true
+68903a0af179b1b9bf4b,Donovan Johnson,RB,Michigan,Big Ten,NaN,,,true,true
+68903a0b1fb0543163c8,Micah Ka'apana,RB,Michigan,Big Ten,NaN,,,true,true
+68903a0b422f44755ab7,Bryson Kudzdal,RB,Michigan,Big Ten,NaN,,,true,true
+68903a0b69cce0466fa1,Jasper Parker,RB,Michigan,Big Ten,NaN,,,true,true
+68903a0b9264500e69c9,Tomas O'Meara,RB,Michigan,Big Ten,NaN,,,true,true
+68903a0bbeddf803e5b7,Jordan Marshall,RB,Michigan,Big Ten,NaN,,,true,true
+68903a0be4d72568a2fb,John Volker,RB,Michigan,Big Ten,NaN,,,true,true
+68903a0c1424901daacc,Kendrick Bell,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0c441766f4c00f,Jamar Browder,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0c6a6f9792d567,C.J. Charleston,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0c922a462fd77b,Logan Forbes,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0cba043637f0a9,Channing Goodwin,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0ce0f09a7d99b6,Andrew Marsh,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0d0f2d98a28705,Donaven McCulley,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0d332c892c60d0,Frederick Moore,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0d5ec464eb3ebe,Semaj Morgan,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0d80b3626927eb,Peyton O'Leary,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0da9b909549c1a,Kaleb Schlecht,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0dd4b9cbffca0d,Anthony Simpson,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0e057213c1cd78,I'Marion Stewart,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0e2a3c986685f4,Joe Taylor,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0e4eb543f90436,Jacob Washington,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0e732bc52b3f4c,Bryce Wilcox,WR,Michigan,Big Ten,NaN,,,true,true
+68903a0e978d444babee,Max Bredeson,TE,Michigan,Big Ten,NaN,,,true,true
+68903a0ebdb6fc708213,Hogan Hansen,TE,Michigan,Big Ten,NaN,,,true,true
+68903a0ee4ef6a258573,Marlin Klein,TE,Michigan,Big Ten,NaN,,,true,true
+68903a0f1637dc65a48a,Zack Marshall,TE,Michigan,Big Ten,NaN,,,true,true
+68903a0f39443ad7685e,Eli Owens,TE,Michigan,Big Ten,NaN,,,true,true
+68903a0f653860aa0186,Brady Prieskorn,TE,Michigan,Big Ten,NaN,,,true,true
+68903a0f8caedf0a4fbf,Crandall Quinn,TE,Michigan,Big Ten,NaN,,,true,true
+68903a0fb058f17d1778,Deakon Tonielli,TE,Michigan,Big Ten,NaN,,,true,true
+68903a0fd998e850d46f,Jalen Hoffman,TE,Michigan,Big Ten,NaN,,,true,true
+68903a100d2278c9238a,Stuart Blake,K,Michigan,Big Ten,NaN,,,true,true
+68903a102f4160ab97e3,Beckham Sunderland,K,Michigan,Big Ten,NaN,,,true,true
+68903a105f1233cbc58d,Dominic Zvada,K,Michigan,Big Ten,NaN,,,true,true
+68903a10842805ff6d46,Jacob Bell,QB,Indiana,Big Ten,NaN,,,true,true
+68903a10b2bec257d758,Fernando Mendoza,QB,Indiana,Big Ten,NaN,,,true,true
+68903a10d699eefc1d14,Grant Wilson,QB,Indiana,Big Ten,NaN,,,true,true
+68903a11173df23a6b4c,Lee Beebe Jr.,RB,Indiana,Big Ten,NaN,,,true,true
+68903a1171bdf940bc74,Kaelon Black,RB,Indiana,Big Ten,NaN,,,true,true
+68903a11a9aadc6c6ef5,Sean Cuono,RB,Indiana,Big Ten,NaN,,,true,true
+68903a11d1afe2180707,Roman Hemby,RB,Indiana,Big Ten,NaN,,,true,true
+68903a12033ac1ea331f,Kyler Kropp,RB,Indiana,Big Ten,NaN,,,true,true
+68903a1226818650f36b,Solomon Vanhorse,RB,Indiana,Big Ten,NaN,,,true,true
+68903a124fa230e1b529,Charlie Becker,WR,Indiana,Big Ten,NaN,,,true,true
+68903a127a1f08a99ac8,Lebron Bond,WR,Indiana,Big Ten,NaN,,,true,true
+68903a12a32436ecfd80,Jonathan Brady,WR,Indiana,Big Ten,NaN,,,true,true
+68903a12c42d20b86537,Omar Cooper Jr.,WR,Indiana,Big Ten,NaN,,,true,true
+68903a12e79a41e5f0ea,Makai Jackson,WR,Indiana,Big Ten,NaN,,,true,true
+68903a13198f8d0d09ae,Camden Jordan,WR,Indiana,Big Ten,NaN,,,true,true
+68903a135312b9969952,Cade Kaiser,WR,Indiana,Big Ten,NaN,,,true,true
+68903a1377568cff1941,Myles Kendrick,WR,Indiana,Big Ten,NaN,,,true,true
+68903a13a4aa3b27ca9e,Tyler Morris,WR,Indiana,Big Ten,NaN,,,true,true
+68903a13d3f8c773ef7d,Jackson Wasserstrom,WR,Indiana,Big Ten,NaN,,,true,true
+68903a1407c4ed602159,E.J. Williams Jr.,WR,Indiana,Big Ten,NaN,,,true,true
+68903a142cf4d21adbad,Andrew Barker,TE,Indiana,Big Ten,NaN,,,true,true
+68903a14526ec84d931d,James Bomba,TE,Indiana,Big Ten,NaN,,,true,true
+68903a1480e79f72b354,Riley Nowakowski,TE,Indiana,Big Ten,NaN,,,true,true
+68903a14aa00b2f250e6,Blake Thiry,TE,Indiana,Big Ten,NaN,,,true,true
+68903a14cfde2fb95327,Holden Staes,TE,Indiana,Big Ten,NaN,,,true,true
+68903a150c6f062e2db5,Oludabe Baker,K,Indiana,Big Ten,NaN,,,true,true
+68903a15336528b5177c,Brendan Franke,K,Indiana,Big Ten,NaN,,,true,true
+68903a155959f5f6aa07,Josh Placzek,K,Indiana,Big Ten,NaN,,,true,true
+68903a157caaa4c2f700,Nico Radicic,K,Indiana,Big Ten,NaN,,,true,true
+68903a15a2e2a182571a,Bryce Taylor,K,Indiana,Big Ten,NaN,,,true,true
+68903fbd81cb3b9e88fc,Drew Allar,QB,Penn State,Big Ten,NaN,,,true,true
+68903fbdafe50324042a,Ethan Grunkemeyer,QB,Penn State,Big Ten,NaN,,,true,true
+68903fbddf8a96dd4029,Bekkem Kritza,QB,Penn State,Big Ten,NaN,,,true,true
+68903fbe12d2df46717f,Jack Lambert,QB,Penn State,Big Ten,NaN,,,true,true
+68903fbe3947fd98b83b,Jaxon Smolik,QB,Penn State,Big Ten,NaN,,,true,true
+68903fbe7162164220e1,Kaytron Allen,RB,Penn State,Big Ten,NaN,,,true,true
+68903fbe93eda4bc463f,Jabree Coleman,RB,Penn State,Big Ten,NaN,,,true,true
+68903fbec009b8c1c443,Amiel Davis,RB,Penn State,Big Ten,NaN,,,true,true
+68903fbef16f7b954178,Tikey Hayes,RB,Penn State,Big Ten,NaN,,,true,true
+68903fbf235f9d90b743,Tyler Holzworth,RB,Penn State,Big Ten,NaN,,,true,true
+68903fbf47bfc713d37a,Quinton Martin Jr.,RB,Penn State,Big Ten,NaN,,,true,true
+68903fbf6f2ba8d74a27,Nicholas Singleton,RB,Penn State,Big Ten,NaN,,,true,true
+68903fbf9f7c5cb0c6bb,Corey Smith,RB,Penn State,Big Ten,NaN,,,true,true
+68903fbfc274af17caf3,Ethan Black,WR,Penn State,Big Ten,NaN,,,true,true
+68903fbfeff83f31ddc6,Josiah Brown,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc022f353ce84f5,Liam Clifford,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc0451aa627d9ee,Logan Cunningham,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc0678c80d31296,Tyseer Denmark,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc08ecd947b8f12,Aaron Enterline,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc0b5278e407c24,Jeff Exinor Jr.,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc0dcf3f9340c33,Peter Gonzalez,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc10d6e6409de84,Koby Howard,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc136f01c345d95,Kyron Hudson,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc165f6ecbff0a8,Anthony Ivey,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc19caa21f389d5,Matt Outten,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc1c3f3e02aec9b,Trebor Pena,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc1e7d8a2bf0aad,Devonte Ross,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc218f2e8170236,Lyriq Samuel,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc2588374fc827a,Kaden Saunders,WR,Penn State,Big Ten,NaN,,,true,true
+68903fc28a82a938878f,Khalil Dinkins,TE,Penn State,Big Ten,NaN,,,true,true
+68903fc2d49dd377f054,Finn Furmanek,TE,Penn State,Big Ten,NaN,,,true,true
+68903fc315f5712ce3a9,Matt Henderson,TE,Penn State,Big Ten,NaN,,,true,true
+68903fc36f5e76566c69,Andrew Rappleyea,TE,Penn State,Big Ten,NaN,,,true,true
+68903fc39e9d01ae0c89,Luke Reynolds,TE,Penn State,Big Ten,NaN,,,true,true
+68903fc3d9c12ff1f537,Joey Schlaffer,TE,Penn State,Big Ten,NaN,,,true,true
+68903fc40f07c51e464d,Brian Kortovich,TE,Penn State,Big Ten,NaN,,,true,true
+68903fc4352fbfe9577c,Ryan Barker,K,Penn State,Big Ten,NaN,,,true,true
+68903fc45a7f8fda6ca9,Matthew Parker,K,Penn State,Big Ten,NaN,,,true,true
+68903fc47f64a0501323,Lincoln Kienholz,QB,Ohio State,Big Ten,NaN,,,true,true
+68903fc4b879a3cd3057,Mason Maggs,QB,Ohio State,Big Ten,NaN,,,true,true
+68903fc4db87db4fe544,Julian Sayin,QB,Ohio State,Big Ten,NaN,,,true,true
+68903fc5184de7efa980,Tavien St. Clair,QB,Ohio State,Big Ten,NaN,,,true,true
+68903fc55b4fef5e4419,Sam Dixon,RB,Ohio State,Big Ten,NaN,,,true,true
+68903fc59afa4603dcba,C.J. Donaldson,RB,Ohio State,Big Ten,NaN,,,true,true
+68903fc5e4a7784f7655,Bo Jackson,RB,Ohio State,Big Ten,NaN,,,true,true
+68903fc61a72f21192f1,James Peoples,RB,Ohio State,Big Ten,NaN,,,true,true
+68903fc65c1322c4fd3c,Isaiah West,RB,Ohio State,Big Ten,NaN,,,true,true
+68903fc68dc694e7d183,David Adolph,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc6b520cbff974a,Nolan Baudo,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc6e23c7efb9f47,Phillip Bell,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc7170a0acdc00e,Mylan Graham,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc74a40d07999d0,Brandon Inniss,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc7834ee74d6448,De'Zie Jones,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc7e47e91f156c2,Shawn Lodge,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc813d8126f54aa,Bodpegn Miller,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc85efbc9e0797c,Quincy Porter,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc88fe34abbcacd,Bryson Rodgers,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc8e1e56a680473,Jeremiah Smith,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc91c3baa671ebb,Carnell Tate,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc95acccff4c811,Dorian Williams,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc97fd3376b790c,Damarion Witten,WR,Ohio State,Big Ten,NaN,,,true,true
+68903fc9a85accfa1384,Bennett Christian,TE,Ohio State,Big Ten,NaN,,,true,true
+68903fc9df08b5afb16e,Will Kacmarek,TE,Ohio State,Big Ten,NaN,,,true,true
+68903fca1bc2cbce0c30,Max Klare,TE,Ohio State,Big Ten,NaN,,,true,true
+68903fca5381df7b5842,Maxence LeBlanc,TE,Ohio State,Big Ten,NaN,,,true,true
+68903fca89c0ba08396f,Nate Roberts,TE,Ohio State,Big Ten,NaN,,,true,true
+68903fcac07e8918f993,Jelani Thurman,TE,Ohio State,Big Ten,NaN,,,true,true
+68903fcae90a0662645c,Jayden Fielding,K,Ohio State,Big Ten,NaN,,,true,true
+68903fcb1d6ad0fc2965,Ryan Boe,QB,Northwestern,Big Ten,NaN,,,true,true
+68903fcb3ed2f6083f9d,Gavin Frakes,QB,Northwestern,Big Ten,NaN,,,true,true
+68903fcb680512c08c88,Preston Stone,QB,Northwestern,Big Ten,NaN,,,true,true
+68903fcb90598c4a3eb6,Marcus Romain,QB,Northwestern,Big Ten,NaN,,,true,true
+68903fcbc0b8bc8e8b36,Sean Winton,QB,Northwestern,Big Ten,NaN,,,true,true
+68903fcbe4a8a182589a,Daniel Anderson,RB,Northwestern,Big Ten,NaN,,,true,true
+68903fcc2c4832d7f341,Joseph Himon II,RB,Northwestern,Big Ten,NaN,,,true,true
+68903fcc595d0cd0b9fd,Aidan Hubbard,RB,Northwestern,Big Ten,NaN,,,true,true
+68903fcc84d775810454,Ronny Johnson,RB,Northwestern,Big Ten,NaN,,,true,true
+68903fccb9191db13e30,Caleb Komolafe,RB,Northwestern,Big Ten,NaN,,,true,true
+68903fcce78fe4aacc16,Albert Kunciks III,RB,Northwestern,Big Ten,NaN,,,true,true
+68903fcd24cf5eeefbb1,Cam Porter,RB,Northwestern,Big Ten,NaN,,,true,true
+68903fcd58b2dd40b3ea,Dashun Reeder,RB,Northwestern,Big Ten,NaN,,,true,true
+68903fcd7caeefa39c86,Ricky Ahumaraeze,WR,Northwestern,Big Ten,NaN,,,true,true
+68903fcdab4a2851021e,Braden Bluiett,WR,Northwestern,Big Ten,NaN,,,true,true
+68903fcde64534d85c34,Frank Covey IV,WR,Northwestern,Big Ten,NaN,,,true,true
+68903fce37a4603390bc,Tate Crane,WR,Northwestern,Big Ten,NaN,,,true,true
+68903fce79bff490253d,Hayden Eligon II,WR,Northwestern,Big Ten,NaN,,,true,true
+68903fcea842fc52e6b1,Chase Farrell,WR,Northwestern,Big Ten,NaN,,,true,true
+68903fced31b3acc1996,Carson Grove,WR,Northwestern,Big Ten,NaN,,,true,true
+68903fcf0f644df83949,Brennan Saxe,WR,Northwestern,Big Ten,NaN,,,true,true
+68903fcf4af19486f815,Drew Wagner,WR,Northwestern,Big Ten,NaN,,,true,true
+68903fcfa79725a33147,Griffin Wilde,WR,Northwestern,Big Ten,NaN,,,true,true
+68903fd0330ef31d7f41,Lawson Albright,TE,Northwestern,Big Ten,NaN,,,true,true
+68903fd0b2ee5dd8cc13,Tyler Kielmeyer,TE,Northwestern,Big Ten,NaN,,,true,true
+68903fd143be97d16944,Noah LaPorte,TE,Northwestern,Big Ten,NaN,,,true,true
+68903fd1a54f2e61cdb8,Alex Lines,TE,Northwestern,Big Ten,NaN,,,true,true
+68903fd1e3bfe5122503,Camp Magee,TE,Northwestern,Big Ten,NaN,,,true,true
+68903fd2141318845ab7,Chris Petrucci,TE,Northwestern,Big Ten,NaN,,,true,true
+68903fd33610634d2433,Robby Preckel,TE,Northwestern,Big Ten,NaN,,,true,true
+68903fd37dd18894e697,Patrick Schaller,TE,Northwestern,Big Ten,NaN,,,true,true
+68903fd3c7119a083017,Blake Van Buren,TE,Northwestern,Big Ten,NaN,,,true,true
+68903fd442f74e4f5f9a,Henry Helms,K,Northwestern,Big Ten,NaN,,,true,true
+68903fd47b5d65baf452,Jack Olsen,K,Northwestern,Big Ten,NaN,,,true,true
+68903fd4b305e92759ab,Jackson Hamilton,QB,Maryland,Big Ten,NaN,,,true,true
+68903fd524b6c7c7aa59,Roman Jensen,QB,Maryland,Big Ten,NaN,,,true,true
+68903fd5cb2fc5fc1e0d,Justyn Martin,QB,Maryland,Big Ten,NaN,,,true,true
+68903fd6597e5a9dc900,Khristian Martin,QB,Maryland,Big Ten,NaN,,,true,true
+68903fd6ddd545fbb6fb,Malik Washington,QB,Maryland,Big Ten,NaN,,,true,true
+68903fd723e00ddfc0f0,Bud Coombs,RB,Maryland,Big Ten,NaN,,,true,true
+68903fd74fcb718f9099,Iverson Howard,RB,Maryland,Big Ten,NaN,,,true,true
+68903fd77e75652913e8,Eli Mason,RB,Maryland,Big Ten,NaN,,,true,true
+68903fd7c22fcce99e56,Josiah McLaurin,RB,Maryland,Big Ten,NaN,,,true,true
+68903fd836d3680884c0,Nolan Ray,RB,Maryland,Big Ten,NaN,,,true,true
+68903fd8a1d76d5d3699,Colin Reynolds,RB,Maryland,Big Ten,NaN,,,true,true
+68903fd91a158bba225c,DeJuan Williams,RB,Maryland,Big Ten,NaN,,,true,true
+68903fd95593e4413328,Justin DeVaughn,WR,Maryland,Big Ten,NaN,,,true,true
+68903fd9782dced70f3c,Jalil Farooq,WR,Maryland,Big Ten,NaN,,,true,true
+68903fd9af18627a5940,Shaleak Knotts,WR,Maryland,Big Ten,NaN,,,true,true
+68903fd9dbbd12b7db00,Ryan Manning,WR,Maryland,Big Ten,NaN,,,true,true
+68903fda1bd8e149da68,Jahmari Powell‑Wonson,WR,Maryland,Big Ten,NaN,,,true,true
+68903fda4b7babd2f3fa,Jordan Scott,WR,Maryland,Big Ten,NaN,,,true,true
+68903fda88cc2db3435e,Emerson Smith,WR,Maryland,Big Ten,NaN,,,true,true
+68903fdac2bd6a0f8a7d,Zymear Smith,WR,Maryland,Big Ten,NaN,,,true,true
+68903fdb85c73c920e2a,Octavian Smith Jr.,WR,Maryland,Big Ten,NaN,,,true,true
+68903fdc184918559d6b,Kaleb Webb,WR,Maryland,Big Ten,NaN,,,true,true
+68903fdc9bfb62998ba6,Mekhai White,WR,Maryland,Big Ten,NaN,,,true,true
+68903fdccc5670347dde,Sean Williams,WR,Maryland,Big Ten,NaN,,,true,true
+68903fdd7a166acfb51d,Dorian Fleming,TE,Maryland,Big Ten,NaN,,,true,true
+68903fdf8a27ec78ecd5,Leon Haughton Jr.,TE,Maryland,Big Ten,NaN,,,true,true
+68903fdfd53668abe845,Thomas McCluskey,TE,Maryland,Big Ten,NaN,,,true,true
+68903fe09ec86104b880,AJ Szymanski,TE,Maryland,Big Ten,NaN,,,true,true
+68903fe0e684340c4c9f,JT Taggart,TE,Maryland,Big Ten,NaN,,,true,true
+68903fe158b6dd8d75ff,Ryan Capriotti,K,Maryland,Big Ten,NaN,,,true,true
+68903fe1d7b61faf8d1f,Gavin Marshall,K,Maryland,Big Ten,NaN,,,true,true
+68903fe265c539085dc1,Sean O'Haire,K,Maryland,Big Ten,NaN,,,true,true
+6890418f3d4223e3fe29,Ryder Hayes,QB,Oregon,Big Ten,NaN,,,true,true
+6890418f60f39f22d67b,Luke Moga,QB,Oregon,Big Ten,NaN,,,true,true
+6890418f90d1c52c3688,Dante Moore,QB,Oregon,Big Ten,NaN,,,true,true
+6890418fb59648b67539,Austin Novosad,QB,Oregon,Big Ten,NaN,,,true,true
+6890418fe3434cd29319,Akili Smith Jr.,QB,Oregon,Big Ten,NaN,,,true,true
+689041901373c3fb0671,Brock Thomas,QB,Oregon,Big Ten,NaN,,,true,true
+6890419038d3a645b839,Jay Harris,RB,Oregon,Big Ten,NaN,,,true,true
+6890419069861791ca5c,Dierre Hill Jr.,RB,Oregon,Big Ten,NaN,,,true,true
+689041908f89dce83c30,Makhi Hughes,RB,Oregon,Big Ten,NaN,,,true,true
+68904190b4d959ab425d,Jayden Limar,RB,Oregon,Big Ten,NaN,,,true,true
+68904190d700a6be7a5a,Da'Juan Riggs,RB,Oregon,Big Ten,NaN,,,true,true
+689041910c0ab37a54da,Noah Whittington,RB,Oregon,Big Ten,NaN,,,true,true
+68904191326deafce667,Darrian Anderson,WR,Oregon,Big Ten,NaN,,,true,true
+689041916160d483f972,Malik Benson,WR,Oregon,Big Ten,NaN,,,true,true
+689041918fc0f68c2d54,Brady Bidwell,WR,Oregon,Big Ten,NaN,,,true,true
+68904191ba4d42c14137,Gary Bryant Jr.,WR,Oregon,Big Ten,NaN,,,true,true
+68904191dee30d82723e,Dillon Gresham,WR,Oregon,Big Ten,NaN,,,true,true
+689041921b0ec8f27f6b,Justius Lowe,WR,Oregon,Big Ten,NaN,,,true,true
+689041924314efcb3b51,Jeremiah McClellan,WR,Oregon,Big Ten,NaN,,,true,true
+689041926e1999c58f57,Dakorien Moore,WR,Oregon,Big Ten,NaN,,,true,true
+689041929993e2943f92,Cooper Perry,WR,Oregon,Big Ten,NaN,,,true,true
+68904192cfd8aba06c2a,Jack Ressler,WR,Oregon,Big Ten,NaN,,,true,true
+689041930f6c35c178de,Kyler Kasper,WR,Oregon,Big Ten,NaN,,,true,true
+68904193318f203ba4e6,Evan Stewart,WR,Oregon,Big Ten,NaN,,,true,true
+689041935c90be66502c,Kade Caton,TE,Oregon,Big Ten,NaN,,,true,true
+6890419380d1e61d9bd9,Zach Grace,TE,Oregon,Big Ten,NaN,,,true,true
+68904193a48269989a23,Jamari Johnson,TE,Oregon,Big Ten,NaN,,,true,true
+68904193c90e600dc53d,Vander Ploog,TE,Oregon,Big Ten,NaN,,,true,true
+68904193ea8e193a0779,A.J. Pugliano,TE,Oregon,Big Ten,NaN,,,true,true
+689041941bcd4fea1021,Kenyon Sadiq,TE,Oregon,Big Ten,NaN,,,true,true
+689041944325834d8445,Roger Saleapaga,TE,Oregon,Big Ten,NaN,,,true,true
+6890419463bc8503c14c,Andrew Boyle,K,Oregon,Big Ten,NaN,,,true,true
+6890419489efa2a83c3e,Gage Hurych,K,Oregon,Big Ten,NaN,,,true,true
+68904194b75422ddbef2,Atticus Sappington,K,Oregon,Big Ten,NaN,,,true,true
+68904194dee3fc1c8c1e,Dash Beierly,QB,Washington,Big Ten,NaN,,,true,true
+689041950f5daa6f40a3,Kai Horton,QB,Washington,Big Ten,NaN,,,true,true
+689041953b873b2abdbb,Shea Kuykendall,QB,Washington,Big Ten,NaN,,,true,true
+689041955cf47c7968a8,Treston McMillan,QB,Washington,Big Ten,NaN,,,true,true
+68904195851ac55a4796,Demond Williams Jr.,QB,Washington,Big Ten,NaN,,,true,true
+68904195aa7c0ee6d6b9,Quaid Carr,RB,Washington,Big Ten,NaN,,,true,true
+68904195cea93c2ea060,Jonah Coleman,RB,Washington,Big Ten,NaN,,,true,true
+68904196041c048b9ef6,Julian McMahan,RB,Washington,Big Ten,NaN,,,true,true
+689041962670b24ee33b,Adam Mohammed,RB,Washington,Big Ten,NaN,,,true,true
+689041966808490577e6,Ryken Moon,RB,Washington,Big Ten,NaN,,,true,true
+689041968b16326d6182,Cian McKelvey,RB,Washington,Big Ten,NaN,,,true,true
+68904196b85863e36a07,Beck Walker,RB,Washington,Big Ten,NaN,,,true,true
+68904196e5e53949acd4,Jordan Washington,RB,Washington,Big Ten,NaN,,,true,true
+6890419720cb0bba1f4e,Jace Burton,WR,Washington,Big Ten,NaN,,,true,true
+68904197444f9ad36d6c,Deji Ajose,WR,Washington,Big Ten,NaN,,,true,true
+689041976b8186728223,Omari Evans,WR,Washington,Big Ten,NaN,,,true,true
+689041978d0a4f2e76bd,Luke Gayton,WR,Washington,Big Ten,NaN,,,true,true
+68904197b4b06e2b973f,Kevin Green Jr.,WR,Washington,Big Ten,NaN,,,true,true
+68904197df1d3a374ce2,Audric Harris,WR,Washington,Big Ten,NaN,,,true,true
+689041981295724f904d,Marcus Harris,WR,Washington,Big Ten,NaN,,,true,true
+689041989680f46c30b2,Chris Lawson,WR,Washington,Big Ten,NaN,,,true,true
+68904198d2dd51df3a33,Luke Luchini,WR,Washington,Big Ten,NaN,,,true,true
+68904199044749cf521e,Dezmen Roebuck,WR,Washington,Big Ten,NaN,,,true,true
+6890419929fb051826fa,Justice Williams,WR,Washington,Big Ten,NaN,,,true,true
+6890419953a61939863c,Rashid Williams,WR,Washington,Big Ten,NaN,,,true,true
+6890419977e450d88278,Charlie Crowell,TE,Washington,Big Ten,NaN,,,true,true
+689041999b37c0f76d57,Kade Eldridge,TE,Washington,Big Ten,NaN,,,true,true
+68904199c6f841a9d109,Quentin Moore,TE,Washington,Big Ten,NaN,,,true,true
+68904199ee07315b4e66,Baron Naone,TE,Washington,Big Ten,NaN,,,true,true
+6890419a217a02287a26,Ryan Otton,TE,Washington,Big Ten,NaN,,,true,true
+6890419a43b61935df82,Austin Simmons,TE,Washington,Big Ten,NaN,,,true,true
+6890419a72120476fc27,Walker Lyons,TE,Washington,Big Ten,NaN,,,true,true
+6890419a941be8a4399c,Grady Gross,K,Washington,Big Ten,NaN,,,true,true
+6890419ab72dc3587d5f,Ethan Moszczulski,K,Washington,Big Ten,NaN,,,true,true
+6890419adcef7796f9d8,Billy Edwards Jr.,QB,Wisconsin,Big Ten,NaN,,,true,true
+6890419b0a7b4d237d0d,Carter Smith,QB,Wisconsin,Big Ten,NaN,,,true,true
+6890419b32713622e86f,Hunter Simmons,QB,Wisconsin,Big Ten,NaN,,,true,true
+6890419b581573adc65e,Danny O'Neill,QB,Wisconsin,Big Ten,NaN,,,true,true
+6890419b7de4482650ec,Grover Bortolotti,RB,Wisconsin,Big Ten,NaN,,,true,true
+6890419ba2da7435352b,Harrison Bortolotti,RB,Wisconsin,Big Ten,NaN,,,true,true
+6890419bc5452dd6cd56,Darrion Dupree,RB,Wisconsin,Big Ten,NaN,,,true,true
+6890419be67e62102a6c,Gideon Ituka,RB,Wisconsin,Big Ten,NaN,,,true,true
+6890419c1a35c80a41fc,Dilin Jones,RB,Wisconsin,Big Ten,NaN,,,true,true
+6890419c49de4547cb87,Mason Lane,RB,Wisconsin,Big Ten,NaN,,,true,true
+6890419c792286ed7d33,Cade Yacamelli,RB,Wisconsin,Big Ten,NaN,,,true,true
+6890419c9984c950830a,Vinny Anthony II,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419cd536f5478439,Kyan Berry‑Johnson,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419d0622ee5be427,Chris Brooks Jr.,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419d2b99d87ebd02,Dekel Crowdus,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419d590b7df0a416,Tyrell Henry,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419d7b8ec15ac8eb,Eugene Hilton Jr.,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419d9e7c528f6fbf,Joseph Griffin Jr.,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419dc3963674b27f,Trech Kekahuna,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419dee0e6b7d93de,Mason Kelley,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419e1b2ce4886cb0,Ben Lemirand,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419e48c876265c95,Langdon Nordgaard,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419e6d8589d1441f,Davion Thomas-Kumpula,WR,Wisconsin,Big Ten,NaN,,,true,true
+6890419e9229bf1f4949,Jackson Acker,TE,Wisconsin,Big Ten,NaN,,,true,true
+6890419eb70eb6898dc5,Tucker Ashcraft,TE,Wisconsin,Big Ten,NaN,,,true,true
+6890419ee2e878a54fbc,Emmett Bork,TE,Wisconsin,Big Ten,NaN,,,true,true
+6890419f198d472d4837,Nizyj Davis,TE,Wisconsin,Big Ten,NaN,,,true,true
+6890419f44cde4acb0ea,Lance Mason,TE,Wisconsin,Big Ten,NaN,,,true,true
+6890419f6a96820e5661,Jackson McGohan,TE,Wisconsin,Big Ten,NaN,,,true,true
+6890419f8eea67c07bf3,JT Seagreaves,TE,Wisconsin,Big Ten,NaN,,,true,true
+6890419fb25ff46c2997,Grant Stec,TE,Wisconsin,Big Ten,NaN,,,true,true
+6890419fea6b76337dc9,Gavin Lahm,K,Wisconsin,Big Ten,NaN,,,true,true
+689041a01a50c97eab52,Nathanial Vakos,K,Wisconsin,Big Ten,NaN,,,true,true
+689041a03fc8b7164d6a,Jackson Kollock,QB,Minnesota,Big Ten,NaN,,,true,true
+689041a0649511e80aa1,Drake Lindsey,QB,Minnesota,Big Ten,NaN,,,true,true
+689041a08958f5ee7334,Emmett Morehead,QB,Minnesota,Big Ten,NaN,,,true,true
+689041a0ae5f65e9861b,Max Shikenjanski,QB,Minnesota,Big Ten,NaN,,,true,true
+689041a0d344e26a304a,Dylan Wittke,QB,Minnesota,Big Ten,NaN,,,true,true
+689041a10a5e6c7b0e3b,Tre Berry,RB,Minnesota,Big Ten,NaN,,,true,true
+689041a13125a8f8ddda,Johann Cardenas,RB,Minnesota,Big Ten,NaN,,,true,true
+689041a1585a1963053e,Cam Davis,RB,Minnesota,Big Ten,NaN,,,true,true
+689041a17cb17b7ef2d3,Xavier Ford,RB,Minnesota,Big Ten,NaN,,,true,true
+689041a1ae2c1415dc9b,Fame Ijéboi,RB,Minnesota,Big Ten,NaN,,,true,true
+689041a1d539836fb365,Darius Taylor,RB,Minnesota,Big Ten,NaN,,,true,true
+689041a2013442768543,A.J. Turner,RB,Minnesota,Big Ten,NaN,,,true,true
+689041a22dc8a97a1606,Grant Washington,RB,Minnesota,Big Ten,NaN,,,true,true
+689041a25e5414dd3b69,Le'Meke Brockington,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a27fb951624dbf,Drew Biber,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a2a25b0139e373,Malachi Coleman,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a2caefaa7a00a8,Cristian Driver,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a2f165660cad9f,Donielle Hayes,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a322ef2abaf1a9,Kenric Lanier II,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a34904b9394031,Logan Loya,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a36a80c66af4c2,Legend Lyons,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a392b72a6055c7,Bradley Martino,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a3b97ede6a95bd,Quentin Redding,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a3d92db1111be8,Jalen Smith,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a41cc04e6a4ecd,Javon Tracy,WR,Minnesota,Big Ten,NaN,,,true,true
+689041a446f495e6abf2,Jameson Geers,TE,Minnesota,Big Ten,NaN,,,true,true
+689041a46af531d3c1bc,Jack DiSano,TE,Minnesota,Big Ten,NaN,,,true,true
+689041a496578081064d,Julian Johnson,TE,Minnesota,Big Ten,NaN,,,true,true
+689041a4bbfc78a9b3dc,Sam Peters,TE,Minnesota,Big Ten,NaN,,,true,true
+689041a4ecbe35c77d6a,Jacob Simpson,TE,Minnesota,Big Ten,NaN,,,true,true
+689041a51b1dbe870066,Pierce Walsh,TE,Minnesota,Big Ten,NaN,,,true,true
+689041a53df4a8252bc2,Brady Denaburg,K,Minnesota,Big Ten,NaN,,,true,true
+689041a55f138673d392,Sam Henson,K,Minnesota,Big Ten,NaN,,,true,true
+689041a58638c0c04d3e,Daniel Jackson,K,Minnesota,Big Ten,NaN,,,true,true
+689041a5b33d6d3504c8,David Kemp,K,Minnesota,Big Ten,NaN,,,true,true
+689041a5d2aa887b7296,Dylan Gebbia,QB,USC,Big Ten,NaN,,,true,true
+689041a605e4cf12d253,Sam Huard,QB,USC,Big Ten,NaN,,,true,true
+689041a63228019df61e,Husan Longstreet,QB,USC,Big Ten,NaN,,,true,true
+689041a658829ee23297,Jayden Maiava,QB,USC,Big Ten,NaN,,,true,true
+689041a67c415c6ab531,Gage Roy,QB,USC,Big Ten,NaN,,,true,true
+689041a69ddc1cd4b9cf,Harry Dalton III,RB,USC,Big Ten,NaN,,,true,true
+689041a6bea87263a784,Bryan Jackson,RB,USC,Big Ten,NaN,,,true,true
+689041a6e10dcd7157a2,Waymond Jordan,RB,USC,Big Ten,NaN,,,true,true
+689041a70cef6755378f,King Miller,RB,USC,Big Ten,NaN,,,true,true
+689041a73cedd22c8d60,Eli Sanders,RB,USC,Big Ten,NaN,,,true,true
+689041a7613de54094b2,Riley Wormley,RB,USC,Big Ten,NaN,,,true,true
+689041a78678fbce4f6e,Asante Das,WR,USC,Big Ten,NaN,,,true,true
+689041a7b7ee21b7e99a,Jay Fair,WR,USC,Big Ten,NaN,,,true,true
+689041a7d811e8a2d4d5,Collin Fasse,WR,USC,Big Ten,NaN,,,true,true
+689041a8134f11ce428b,Romero Ison,WR,USC,Big Ten,NaN,,,true,true
+689041a83971e40e5f01,Xavier Jordan,WR,USC,Big Ten,NaN,,,true,true
+689041a8659138700ef8,Brady Jung,WR,USC,Big Ten,NaN,,,true,true
+689041a888fb3f2ececf,Ja'Kobi Lane,WR,USC,Big Ten,NaN,,,true,true
+689041a8b3f38bc9e824,Makai Lemon,WR,USC,Big Ten,NaN,,,true,true
+689041a8dc634d14f52e,Cameron Sermons,WR,USC,Big Ten,NaN,,,true,true
+689041a90e0934ff5a7f,Corey Simms,WR,USC,Big Ten,NaN,,,true,true
+689041a93ca711f0fd08,Prince Strachan,WR,USC,Big Ten,NaN,,,true,true
+689041a95d21478e164d,Jaden Richardson,WR,USC,Big Ten,NaN,,,true,true
+689041a98cd2b507431e,Corey Nerhus,WR,USC,Big Ten,NaN,,,true,true
+689041a9afec57c08c0f,Zacharyus Williams,WR,USC,Big Ten,NaN,,,true,true
+689041a9d54683d9e2f8,Donovan Wood,WR,USC,Big Ten,NaN,,,true,true
+689041aa0a68f1c5251e,Josiah Zamora,WR,USC,Big Ten,NaN,,,true,true
+689041aa2e0b71ac661f,Seth Zamora,WR,USC,Big Ten,NaN,,,true,true
+689041aa5aacedfea126,Walker Lyons,TE,USC,Big Ten,NaN,,,true,true
+689041aa8ec0a73b64fa,Walter Matthews,TE,USC,Big Ten,NaN,,,true,true
+689041aab3b169f484c5,Lake McRee,TE,USC,Big Ten,NaN,,,true,true
+689041aadd439d8d9fa3,Fisher Melton,TE,USC,Big Ten,NaN,,,true,true
+689041ab0eb3a1a7c07f,Taniela Tupou,TE,USC,Big Ten,NaN,,,true,true
+689041ab34bab3c06d4a,Caden Chittenden,K,USC,Big Ten,NaN,,,true,true
+689041ab5b6c2ebc786f,Pierce Clarkson,QB,UCLA,Big Ten,NaN,,,true,true
+689041ab826efda9ddc2,Luke Duncan,QB,UCLA,Big Ten,NaN,,,true,true
+689041aba7b7046c69b8,Karson Gordon,QB,UCLA,Big Ten,NaN,,,true,true
+689041abd82ded9ab39a,Colton Gumino,QB,UCLA,Big Ten,NaN,,,true,true
+689041ac090afbbdd03c,Henry Hasselbeck,QB,UCLA,Big Ten,NaN,,,true,true
+689041ac29a412671819,Nico Iamaleava,QB,UCLA,Big Ten,NaN,,,true,true
+689041ac50424fb114cf,Jalen Berger,RB,UCLA,Big Ten,NaN,,,true,true
+689041acdaf780064f48,Isaiah Carlson,RB,UCLA,Big Ten,NaN,,,true,true
+689041adc5071839b3fe,Karson Cox,RB,UCLA,Big Ten,NaN,,,true,true
+689041ae42fe876f4cf7,Anthony Frias II,RB,UCLA,Big Ten,NaN,,,true,true
+689041aed3836f726924,Jaivian Thomas,RB,UCLA,Big Ten,NaN,,,true,true
+689041af09957fac3739,Anthony Woods,RB,UCLA,Big Ten,NaN,,,true,true
+689041af39ceeffd6c8e,Jace Brown,WR,UCLA,Big Ten,NaN,,,true,true
+689041af6a1a1b40356c,Rico Flores Jr.,WR,UCLA,Big Ten,NaN,,,true,true
+689041af961d491272aa,Kwazi Gilmer,WR,UCLA,Big Ten,NaN,,,true,true
+689041afc44fef45817c,Mikey Matthews,WR,UCLA,Big Ten,NaN,,,true,true
+689041aff07a9e4bf010,Titus Mokiao‑Atimalala,WR,UCLA,Big Ten,NaN,,,true,true
+689041b02d14d3d1e9dc,Shane Rosenthal,WR,UCLA,Big Ten,NaN,,,true,true
+689041b055ba51db2453,Jalen Saint Paul,WR,UCLA,Big Ten,NaN,,,true,true
+689041b076191ebd7404,Carter Shaw,WR,UCLA,Big Ten,NaN,,,true,true
+689041b0a3992738ed59,Russell Weir,WR,UCLA,Big Ten,NaN,,,true,true
+689041b0da033748a720,Noah Fox‑Flores,TE,UCLA,Big Ten,NaN,,,true,true
+689041b1270bcab731ba,Hudson Habermehl,TE,UCLA,Big Ten,NaN,,,true,true
+689041b14ed420a5071f,Jack Pedersen,TE,UCLA,Big Ten,NaN,,,true,true
+689041b1756d52276a4e,Dylan Sims,TE,UCLA,Big Ten,NaN,,,true,true
+689041b1a03ab72a5f47,Mateen Bhagahani,K,UCLA,Big Ten,NaN,,,true,true
+689041b1be92c8f1349e,Cash Peterman,K,UCLA,Big Ten,NaN,,,true,true
+68904a885d5ecde2f43c,Cooper Alexander,TE,Iowa State,Big 12,NaN,,,true,true
+68904a888512486cb891,Wyatt Archer,WR,Iowa State,Big 12,NaN,,,true,true
+68904a88b78583f1c261,Rocco Becht,QB,Iowa State,Big 12,NaN,,,true,true
+68904a88dc35a2fa40a6,Vince Benetti,TE,Iowa State,Big 12,NaN,,,true,true
+68904a8913b0f31a4fd7,Jack Bjorn,TE,Iowa State,Big 12,NaN,,,true,true
+68904a89407af773b5ec,Kai Black,TE,Iowa State,Big 12,NaN,,,true,true
+68904a896895f90d5759,Wyatt Bohm,QB,Iowa State,Big 12,NaN,,,true,true
+68904a8992f4bcfa2315,Benjamin Brahmer,TE,Iowa State,Big 12,NaN,,,true,true
+68904a89b507768d773e,Karon Brookins,WR,Iowa State,Big 12,NaN,,,true,true
+68904a89d91aa31f2ce2,Carson Brown,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8a09214c2bee05,Gabe Burkle,TE,Iowa State,Big 12,NaN,,,true,true
+68904a8a2c74862921d4,Major Cantrell,QB,Iowa State,Big 12,NaN,,,true,true
+68904a8a5e4fc41988a4,Ty Claiborne,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8a880ae753387c,Brett Eskildsen,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8aaefccacd7d64,Aiden Flora,RB,Iowa State,Big 12,NaN,,,true,true
+68904a8ad44cf987a67b,Jace T. Gilbert,K,Iowa State,Big 12,NaN,,,true,true
+68904a8b0d5290cb7304,Eli Green,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8b3379cbb7f00c,Carson Hansen,RB,Iowa State,Big 12,NaN,,,true,true
+68904a8b55954e9539dd,Cash Hayden,TE,Iowa State,Big 12,NaN,,,true,true
+68904a8b8017a2be966b,Daniel Jackson,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8ba580b5e518a6,Jayden Jackson,RB,Iowa State,Big 12,NaN,,,true,true
+68904a8bd1b526178272,Kyle Konrardy,K,Iowa State,Big 12,NaN,,,true,true
+68904a8c00db77fe0c0d,Dylan Lee,RB,Iowa State,Big 12,NaN,,,true,true
+68904a8c25a9fee0e001,Dyllan Malone,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8c4eca60e8d704,Alex Manske,QB,Iowa State,Big 12,NaN,,,true,true
+68904a8c7361387241ed,Easton Miller,RB,Iowa State,Big 12,NaN,,,true,true
+68904a8c9897efc0ee00,Connor Moberly,QB,Iowa State,Big 12,NaN,,,true,true
+68904a8cbc8412dc6660,Tyler Moore,TE,Iowa State,Big 12,NaN,,,true,true
+68904a8ce1ba5c31575a,Dominic Overby,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8d1183eb57eda3,Michael Parkes,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8d3ffe089c0d3c,Ryver Peppers,RB,Iowa State,Big 12,NaN,,,true,true
+68904a8d64d4efdbb200,AJ Petersen,RB,Iowa State,Big 12,NaN,,,true,true
+68904a8d8bb0809c01e3,Carson Robbins,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8db37ed552ff2b,Zay Robinson,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8dd99a0a4d7c64,Keaton Roskop,TE,Iowa State,Big 12,NaN,,,true,true
+68904a8e12e29c01a2f2,Abu Sama III,RB,Iowa State,Big 12,NaN,,,true,true
+68904a8e3798c43c0383,Chase Smith,K,Iowa State,Big 12,NaN,,,true,true
+68904a8e62d3a46fc8d1,Chase Sowell,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8e8e484723a9a1,Xavier Townsend,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8eb9d4a67a90e0,Jonathan Vande Walle,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8eed06e9c38368,Tripp Walsh,TE,Iowa State,Big 12,NaN,,,true,true
+68904a8f1ea0e8e8fafa,Sam Zelenovich,WR,Iowa State,Big 12,NaN,,,true,true
+68904a8f8a02bbf884ef,Harvey Broussard III,WR,Houston,Big 12,NaN,,,true,true
+68904a8fd1d809446c00,Marion Burnette,RB,Houston,Big 12,NaN,,,true,true
+68904a9012475f7e8534,DJ Butler,RB,Houston,Big 12,NaN,,,true,true
+68904a903dbfc64e8022,Dylan Caddle,WR,Houston,Big 12,NaN,,,true,true
+68904a90608c3d7b7e62,Austin Carlisle,QB,Houston,Big 12,NaN,,,true,true
+68904a90868f8157a50c,Zeon Chriss,QB,Houston,Big 12,NaN,,,true,true
+68904a90b3c568833c60,Dean Connors,RB,Houston,Big 12,NaN,,,true,true
+68904a90d7a551d59172,Zaylen Cormier,WR,Houston,Big 12,NaN,,,true,true
+68904a9105259d7c8aa7,Aaron Davis,RB,Houston,Big 12,NaN,,,true,true
+68904a9131aba032a56a,Jonathan Dimas,K,Houston,Big 12,NaN,,,true,true
+68904a9157c0b1295a25,Brock Foster,TE,Houston,Big 12,NaN,,,true,true
+68904a917f8b05a45b66,Traville Frederick Jr.,TE,Houston,Big 12,NaN,,,true,true
+68904a91a50861fd1a5b,Anthony Gangi Jr.,WR,Houston,Big 12,NaN,,,true,true
+68904a91d1b1049b06b5,Dylan Gayton,WR,Houston,Big 12,NaN,,,true,true
+68904a9202a94625e75b,Wyatt Herbel,TE,Houston,Big 12,NaN,,,true,true
+68904a9225c93531049a,Stephon Johnson,WR,Houston,Big 12,NaN,,,true,true
+68904a924b15920de1a9,Tanner Koziol,TE,Houston,Big 12,NaN,,,true,true
+68904a92703fec58c3b3,Jaquise Martin,WR,Houston,Big 12,NaN,,,true,true
+68904a92934fbea0836b,Luke McGary,TE,Houston,Big 12,NaN,,,true,true
+68904a92b90279f1410f,Mekhi Mews,WR,Houston,Big 12,NaN,,,true,true
+68904a92dc4dbef920be,Samuel Padgitt,WR,Houston,Big 12,NaN,,,true,true
+68904a931f8318f49b35,Steve Polk,RB,Houston,Big 12,NaN,,,true,true
+68904a934b533d48a4e1,JayShon Ridgle,RB,Houston,Big 12,NaN,,,true,true
+68904a936f97ed8bb82c,Ethan Sanchez,K,Houston,Big 12,NaN,,,true,true
+68904a93b0e5d1d0c765,Shaun Sanford II,RB,Houston,Big 12,NaN,,,true,true
+68904a93d1899fd6964a,Marquis Shoulders,WR,Houston,Big 12,NaN,,,true,true
+68904a9403be039a0f21,Zane Smith,RB,Houston,Big 12,NaN,,,true,true
+68904a9430426d826d67,Stacy Sneed,RB,Houston,Big 12,NaN,,,true,true
+68904a9459c47281154e,Jake Sock,QB,Houston,Big 12,NaN,,,true,true
+68904a948174147d8d76,Jeffrey Strozier Jr.,WR,Houston,Big 12,NaN,,,true,true
+68904a94a64fb9ffd6b5,Hunter Teichman,WR,Houston,Big 12,NaN,,,true,true
+68904a94d253005fb5c1,Amare Thomas,WR,Houston,Big 12,NaN,,,true,true
+68904a950207ba825d38,Kaleb Thomas,TE,Houston,Big 12,NaN,,,true,true
+68904a9529e8e44b24a3,Jacory Thurman,TE,Houston,Big 12,NaN,,,true,true
+68904a954d868c96c259,Nehemiah Warmate,RB,Houston,Big 12,NaN,,,true,true
+68904a95730c06e68289,Conner Weigman,QB,Houston,Big 12,NaN,,,true,true
+68904a9593e9f88a9db0,Indiana Wijay,QB,Houston,Big 12,NaN,,,true,true
+68904a95c3d817a3a42c,Devan Williams,WR,Houston,Big 12,NaN,,,true,true
+68904a95e782176a56a2,Zac Yoakam,K,Houston,Big 12,NaN,,,true,true
+68904a96249a5be56e78,Jayden York,TE,Houston,Big 12,NaN,,,true,true
+68904a964744d2439494,Koby Young,WR,Houston,Big 12,NaN,,,true,true
+68904a9672f9ad71add2,Colton Allen,QB,Colorado,Big 12,NaN,,,true,true
+68904a969a596d993826,Elliot Arnold,K,Colorado,Big 12,NaN,,,true,true
+68904a96bcbeb4415684,Zach Atkins,TE,Colorado,Big 12,NaN,,,true,true
+68904a96ea8b3605f9fe,Tagert Bardin,WR,Colorado,Big 12,NaN,,,true,true
+68904a971aa6483e7e15,Titus Bautista,RB,Colorado,Big 12,NaN,,,true,true
+68904a973f433cf6fcaa,Sincere Brown,WR,Colorado,Big 12,NaN,,,true,true
+68904a9764f2f02093dc,Buck Buchanan,K,Colorado,Big 12,NaN,,,true,true
+68904a97929cb102ae57,Ronald Coleman,WR,Colorado,Big 12,NaN,,,true,true
+68904a98216ceef07565,Zayne DeSouza,TE,Colorado,Big 12,NaN,,,true,true
+68904a9870f0f13f26e5,Quanell Farrakhan Jr.,WR,Colorado,Big 12,NaN,,,true,true
+68904a989f67609f389a,Quentin Gibson,WR,Colorado,Big 12,NaN,,,true,true
+68904a98c4feb3b7c9d7,Isaiah Hardge,WR,Colorado,Big 12,NaN,,,true,true
+68904a98ed89cebd6535,Dallan Hayden,RB,Colorado,Big 12,NaN,,,true,true
+68904a991dd7c2b02521,Jack Hestera,WR,Colorado,Big 12,NaN,,,true,true
+68904a9949a902f2a4f1,Brady Kopetz,TE,Colorado,Big 12,NaN,,,true,true
+68904a997134eb11dc3a,Corbin Laisure,TE,Colorado,Big 12,NaN,,,true,true
+68904a999445d32b54b5,Julian Lewis,QB,Colorado,Big 12,NaN,,,true,true
+68904a99bcb397eda2c4,Gavin Marsh,WR,Colorado,Big 12,NaN,,,true,true
+68904a99e01b0201c8bc,Alejandro Mata,K,Colorado,Big 12,NaN,,,true,true
+68904a9a0e75094db0f4,Kaleb Mathis,WR,Colorado,Big 12,NaN,,,true,true
+68904a9a35397bd61444,Kam Mikell,WR,Colorado,Big 12,NaN,,,true,true
+68904a9a5932ba6c5d08,lon Miller,WR,Colorado,Big 12,NaN,,,true,true
+68904a9a79da07b4ab98,Omarion Miller,WR,Colorado,Big 12,NaN,,,true,true
+68904a9a9fb38b23cdc0,Charlie Offerdahl,RB,Colorado,Big 12,NaN,,,true,true
+68904a9ac6508bb19d3e,Dominiq Ponder,QB,Colorado,Big 12,NaN,,,true,true
+68904a9b0151976234de,Simeon Price,RB,Colorado,Big 12,NaN,,,true,true
+68904a9b241ef0a62117,Kaidon Salter,QB,Colorado,Big 12,NaN,,,true,true
+68904a9b5b328a0ecec2,Christian Sarem,RB,Colorado,Big 12,NaN,,,true,true
+68904a9b7f676e548df4,ell Smalls,TE,Colorado,Big 12,NaN,,,true,true
+68904a9ba3c44acc4751,Ryan Staub,QB,Colorado,Big 12,NaN,,,true,true
+68904a9bcda2a4a2681a,Alexander Stoyanovich,K,Colorado,Big 12,NaN,,,true,true
+68904a9c0b6e9cb77bf4,DeKalon Taylor,RB,Colorado,Big 12,NaN,,,true,true
+68904a9c2c75971e5c0f,Terrell Timmons Jr.,WR,Colorado,Big 12,NaN,,,true,true
+68904a9c55576b3a3043,Micah Welch,RB,Colorado,Big 12,NaN,,,true,true
+68904a9c79fceec0cd8a,Carson Westbrook,WR,Colorado,Big 12,NaN,,,true,true
+68904a9c9d6cc75b94a5,Charlie Williams,TE,Colorado,Big 12,NaN,,,true,true
+68904a9cc36ff0c54a9f,Hykeem Williams,WR,Colorado,Big 12,NaN,,,true,true
+68904a9ce81bae3b6a0b,Cyrus Allen,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9d238fee879837,Dakarai Anderson,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9d498455a2400b,Nash Biglin,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9d75f5b89efe72,Taizaun Burns,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9d98bd64bffb7a,Jakorion Caffey,RB,Cincinnati,Big 12,NaN,,,true,true
+68904a9db980f4c5eeaf,Jeff Caldwell,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9de57395069108,Manny Covey,RB,Cincinnati,Big 12,NaN,,,true,true
+68904a9e19a74d508e45,Kellen Davis,TE,Cincinnati,Big 12,NaN,,,true,true
+68904a9e5d0d7e5fb302,Caleb Goodie,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9e80f37d21b319,Gavin Grover,TE,Cincinnati,Big 12,NaN,,,true,true
+68904a9ea6896868dfac,Patrick Gurd,TE,Cincinnati,Big 12,NaN,,,true,true
+68904a9ed34b92aeb8f3,Barry Jackson Jr.,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9f06b937340a83,Noah Jennings,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9f36afbf9e8f78,Isaiah Johnson,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9f5d247f153f0a,Zion Johnson,RB,Cincinnati,Big 12,NaN,,,true,true
+68904a9f824886686ecd,Elijah Jones,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9fa680f492c498,Samaj Jones,QB,Cincinnati,Big 12,NaN,,,true,true
+68904a9fcdaebab95d52,Zane Kinsey,WR,Cincinnati,Big 12,NaN,,,true,true
+68904a9ff165ac4abca4,Zebulin Kinsey,QB,Cincinnati,Big 12,NaN,,,true,true
+68904aa0229a77704855,Will Kocher,QB,Cincinnati,Big 12,NaN,,,true,true
+68904aa04cd10b4192b1,Giyahni Kontosis,WR,Cincinnati,Big 12,NaN,,,true,true
+68904aa0715fa14110b4,Max Lemasters,K,Cincinnati,Big 12,NaN,,,true,true
+68904aa094263edb11c7,Brady Lichtenberg,QB,Cincinnati,Big 12,NaN,,,true,true
+68904aa0bb05926fb201,Evan Pryor,RB,Cincinnati,Big 12,NaN,,,true,true
+68904aa0e0d4880aebc6,Joe Royer,TE,Cincinnati,Big 12,NaN,,,true,true
+68904aa112e61c2f9652,Stephen Rusnak,K,Cincinnati,Big 12,NaN,,,true,true
+68904aa13793b41693a8,Maurri Smith,TE,Cincinnati,Big 12,NaN,,,true,true
+68904aa15f12dc3024ec,Brendan Sorsby,QB,Cincinnati,Big 12,NaN,,,true,true
+68904aa186befde82d12,Tawee Walker,RB,Cincinnati,Big 12,NaN,,,true,true
+68904aa1ab0090903cc2,Lyviel Waters,TE,Cincinnati,Big 12,NaN,,,true,true
+68904aa1d7b3c3be20ca,Chance Williams,RB,Cincinnati,Big 12,NaN,,,true,true
+68904aa206d748e8392f,DaMari Witherspoon,TE,Cincinnati,Big 12,NaN,,,true,true
+68904aa22c7145284a9c,Kale Woodburn,WR,Cincinnati,Big 12,NaN,,,true,true
+68904aa253dd6be65a61,Devyn Zahursky,TE,Cincinnati,Big 12,NaN,,,true,true
+68904aa27ac9dc0f688c,Bear Bachmeier,QB,BYU,Big 12,NaN,,,true,true
+68904aa29f8a64f4807b,Tiger Bachmeier,WR,BYU,Big 12,NaN,,,true,true
+68904aa2c5adc49f1749,Treyson Bourguet,QB,BYU,Big 12,NaN,,,true,true
+68904aa2ec356bb093c0,Cole Clement,TE,BYU,Big 12,NaN,,,true,true
+68904aa31be2bed0cb09,Jovesa Damuni,RB,BYU,Big 12,NaN,,,true,true
+68904aa348ff010004f8,Matthias Dunn,K,BYU,Big 12,NaN,,,true,true
+68904aa3710c5ac813b0,Ethan Erickson,TE,BYU,Big 12,NaN,,,true,true
+68904aa39a4024b6c9fc,Will Ferrin,K,BYU,Big 12,NaN,,,true,true
+68904aa3bb61868b999a,Lucky Finau,RB,BYU,Big 12,NaN,,,true,true
+68904aa3ddabd86a29ef,Reggie Frischknecht,WR,BYU,Big 12,NaN,,,true,true
+68904aa40e8934546d87,Emerson Geilman,QB,BYU,Big 12,NaN,,,true,true
+68904aa43064b8540b7b,Cody Hagen,WR,BYU,Big 12,NaN,,,true,true
+68904aa469b5265da5a9,Pokaiaua Haunga,RB,BYU,Big 12,NaN,,,true,true
+68904aa4969f508e5318,McCae Hillstead,QB,BYU,Big 12,NaN,,,true,true
+68904aa4ba90654f066d,Tucker Kelleher,TE,BYU,Big 12,NaN,,,true,true
+68904aa4dae2d401e407,Kila Keone,WR,BYU,Big 12,NaN,,,true,true
+68904aa50b72de66b39b,Parker Kingston,WR,BYU,Big 12,NaN,,,true,true
+68904aa537e10850a97b,LJ Martin,RB,BYU,Big 12,NaN,,,true,true
+68904aa55f6e0514e691,Dominique McKenzie,WR,BYU,Big 12,NaN,,,true,true
+68904aa58a960021b927,Charles Miska,RB,BYU,Big 12,NaN,,,true,true
+68904aa5b213a15cd6a8,Sione Moa,RB,BYU,Big 12,NaN,,,true,true
+68904aa5da75d058f5d3,Noah Moeaki,TE,BYU,Big 12,NaN,,,true,true
+68904aa6148d0d448e03,Tei Nacua,WR,BYU,Big 12,NaN,,,true,true
+68904aa639a1b3edbb5a,Enoch Nawahine,RB,BYU,Big 12,NaN,,,true,true
+68904aa662f9867433b6,Keayen Nead,TE,BYU,Big 12,NaN,,,true,true
+68904aa686593250c707,Jacob Nye,TE,BYU,Big 12,NaN,,,true,true
+68904aa6ae2306d3003f,Anthony Olsen,TE,BYU,Big 12,NaN,,,true,true
+68904aa6d911b189f1db,Logan Payne,RB,BYU,Big 12,NaN,,,true,true
+68904aa70aba443986e9,Jojo Phillips,WR,BYU,Big 12,NaN,,,true,true
+68904aa730bd9c54848c,Rowan Reay,WR,BYU,Big 12,NaN,,,true,true
+68904aa76234f3b816f4,Preston Rex,RB,BYU,Big 12,NaN,,,true,true
+68904aa787956d07d891,Chase Roberts,WR,BYU,Big 12,NaN,,,true,true
+68904aa7ad12fddf61c5,Trey Roberts,WR,BYU,Big 12,NaN,,,true,true
+68904aa7da48f22a2c20,Carsen Ryan,TE,BYU,Big 12,NaN,,,true,true
+68904aa80ab621d16fe2,Fuller Shurtz,K,BYU,Big 12,NaN,,,true,true
+68904aa82fe8c7e5aaac,Lamason Waller III,WR,BYU,Big 12,NaN,,,true,true
+68904aa856b3be68271d,Ethan Wood,TE,BYU,Big 12,NaN,,,true,true
+68904aa87b0fc1d425d2,Will Zundel,TE,BYU,Big 12,NaN,,,true,true
+68904aa8a0225b118c25,Sawyer Anderson,QB,Arizona,Big 12,NaN,,,true,true
+68904aa8ce7995a3235b,Cameron Barmore,TE,Arizona,Big 12,NaN,,,true,true
+68904aa8f0eeb979c0d7,Mason Bray,QB,Arizona,Big 12,NaN,,,true,true
+68904aa91e57626bddcc,Scotty Brennan,WR,Arizona,Big 12,NaN,,,true,true
+68904aa9417c090cbcc5,Keyan Burnett,TE,Arizona,Big 12,NaN,,,true,true
+68904aa9702b7815b6c8,Quincy Craig,RB,Arizona,Big 12,NaN,,,true,true
+68904aa9967210e04c04,Noah Fifita,QB,Arizona,Big 12,NaN,,,true,true
+68904aa9ba3114f3dcba,Kellan Ford,TE,Arizona,Big 12,NaN,,,true,true
+68904aa9e18ba0093229,John Hart,TE,Arizona,Big 12,NaN,,,true,true
+68904aaa0feaedd1ca41,Luke Haugo,QB,Arizona,Big 12,NaN,,,true,true
+68904aaa33653d1c0dcf,Rex Haynes,WR,Arizona,Big 12,NaN,,,true,true
+68904aaa583d57765709,Chris Hunter,WR,Arizona,Big 12,NaN,,,true,true
+68904aaa7ee0716a768f,Kris Hutson,WR,Arizona,Big 12,NaN,,,true,true
+68904aaabd079358fd2a,Devin Hyatt,WR,Arizona,Big 12,NaN,,,true,true
+68904aaae3ac29d65f2e,Landon Kelsey,WR,Arizona,Big 12,NaN,,,true,true
+68904aab1c6896eb2592,Braedyn Locke,QB,Arizona,Big 12,NaN,,,true,true
+68904aab5221bb291872,Kayden Luke,TE,Arizona,Big 12,NaN,,,true,true
+68904aab771afb13338b,Ismail Mahdi,RB,Arizona,Big 12,NaN,,,true,true
+68904aab9d13f962f611,Jordan McCord III,WR,Arizona,Big 12,NaN,,,true,true
+68904aabc5d89c64b092,Isaiah Mizell,WR,Arizona,Big 12,NaN,,,true,true
+68904aabeaad508838fd,Tyler Mustain,TE,Arizona,Big 12,NaN,,,true,true
+68904aac1a7e7b8fb4f1,Sam Olson,TE,Arizona,Big 12,NaN,,,true,true
+68904aac3f155caae3db,Jeremiah Patterson,WR,Arizona,Big 12,NaN,,,true,true
+68904aac62a39ba6f7a0,Brandon Phelps,WR,Arizona,Big 12,NaN,,,true,true
+68904aac87ad86397e03,Tyler Powell,TE,Arizona,Big 12,NaN,,,true,true
+68904aaca8ffae8680ba,Tyler Prasuhn,K,Arizona,Big 12,NaN,,,true,true
+68904aacd504b42cecd6,Chase Randall,TE,Arizona,Big 12,NaN,,,true,true
+68904aad05094a0d595d,Kedrick Reescano,RB,Arizona,Big 12,NaN,,,true,true
+68904aad2a03e8f303d2,Gio Richardson,WR,Arizona,Big 12,NaN,,,true,true
+68904aad55b0318f9809,Medina,K,Arizona,Big 12,NaN,,,true,true
+68904aad79715bb2c803,Tre Spivey III,WR,Arizona,Big 12,NaN,,,true,true
+68904aada027b10d38b4,Ian Wagner,K,Arizona,Big 12,NaN,,,true,true
+68904aadc67a2d0b2938,Cornelius Warren III,RB,Arizona,Big 12,NaN,,,true,true
+68904aae00b68817a504,Javin Whatley,WR,Arizona,Big 12,NaN,,,true,true
+68904aae25d71d1f3daa,Anthony Wilhite,RB,Arizona,Big 12,NaN,,,true,true
+68904aae46c8833c610c,Luke Wysong,WR,Arizona,Big 12,NaN,,,true,true
+68904aae73f8d1889518,Wesley Yarbrough,RB,Arizona,Big 12,NaN,,,true,true
+68904aaea45c233609c0,Chance Ables,WR,Arizona State,Big 12,NaN,,,true,true
+68904aaecbed6a546028,Khamari Anderson,TE,Arizona State,Big 12,NaN,,,true,true
+68904aaf015882ebbaf6,Coleson Arends,TE,Arizona State,Big 12,NaN,,,true,true
+68904aaf2355afc45903,Coben Bourguet,WR,Arizona State,Big 12,NaN,,,true,true
+68904aaf48a04454d500,Kyson Brown,RB,Arizona State,Big 12,NaN,,,true,true
+68904aaf6b72f9a3745d,Raleek Brown,RB,Arizona State,Big 12,NaN,,,true,true
+68904aaf910b7ad0b4be,Jason Brown Jr.,RB,Arizona State,Big 12,NaN,,,true,true
+68904aafb2bfec918da6,Cory Butler Jr.,WR,Arizona State,Big 12,NaN,,,true,true
+68904aafd4b1e924bbb5,Tommy Christakos,K,Arizona State,Big 12,NaN,,,true,true
+68904ab00ca5611898fc,Cameron Dyer,QB,Arizona State,Big 12,NaN,,,true,true
+68904ab032ea36fdbaf8,Derek Eusebio,WR,Arizona State,Big 12,NaN,,,true,true
+68904ab058a2acc32864,Jayden Fortier,TE,Arizona State,Big 12,NaN,,,true,true
+68904ab07ff572366d5c,James Giggey,TE,Arizona State,Big 12,NaN,,,true,true
+68904ab0ab9c369c80f6,Jesus Gomez,K,Arizona State,Big 12,NaN,,,true,true
+68904ab0d134f35494b4,Jaren Hamilton,WR,Arizona State,Big 12,NaN,,,true,true
+68904ab0f3d17f10a053,Cameron Harpole,TE,Arizona State,Big 12,NaN,,,true,true
+68904ab124798fdc8bd4,Harry Hassmann,WR,Arizona State,Big 12,NaN,,,true,true
+68904ab14b50121d09b9,Christian Hunt,QB,Arizona State,Big 12,NaN,,,true,true
+68904ab16c092ca62476,AJ Ia,TE,Arizona State,Big 12,NaN,,,true,true
+68904ab1909cfbd68216,Noble Johnson,WR,Arizona State,Big 12,NaN,,,true,true
+68904ab1bcf563d6a68e,Carston Kieffer,K,Arizona State,Big 12,NaN,,,true,true
+68904ab205d515d1cb95,Akim Lanieux,WR,Arizona State,Big 12,NaN,,,true,true
+68904ab2637d28e9d44f,Sam Leavitt,QB,Arizona State,Big 12,NaN,,,true,true
+68904ab2a4e63c3a8937,Malik McClain,WR,Arizona State,Big 12,NaN,,,true,true
+68904ab2d132def34a3a,Chamon Metayer,TE,Arizona State,Big 12,NaN,,,true,true
+68904ab30d63c73d6475,Jalen Moss,WR,Arizona State,Big 12,NaN,,,true,true
+68904ab333bb83dc1cb9,Uriah Neloms,WR,Arizona State,Big 12,NaN,,,true,true
+68904ab3584cfe21e51d,Grayson Rigdon,RB,Arizona State,Big 12,NaN,,,true,true
+68904ab385dc409c79a0,Demarius Robinson,RB,Arizona State,Big 12,NaN,,,true,true
+68904ab3aa1394a6c866,Zechariah Sample,WR,Arizona State,Big 12,NaN,,,true,true
+68904ab3ccb8d8933f25,Jeff Sims,QB,Arizona State,Big 12,NaN,,,true,true
+68904ab3f2c7f8f9eeaa,Michael Tollefson,QB,Arizona State,Big 12,NaN,,,true,true
+68904ab4275c53628867,Jordyn Tyson,WR,Arizona State,Big 12,NaN,,,true,true
+68904ab455e5de3a3e39,Kanye Udoh,RB,Arizona State,Big 12,NaN,,,true,true
+68904ab47c6edf6ad473,Rhett Armstrong,K,Baylor,Big 12,NaN,,,true,true
+68904ab4a9f45ba3df72,Hayden Arnold,K,Baylor,Big 12,NaN,,,true,true
+68904ab4ce92c944a141,Jackson Baird,WR,Baylor,Big 12,NaN,,,true,true
+68904ab502a4001ad5df,Nate Bennett,QB,Baylor,Big 12,NaN,,,true,true
+68904ab52d504fc0ace4,Louis Brown IV,WR,Baylor,Big 12,NaN,,,true,true
+68904ab55508ae1f5b42,Josh Cameron,WR,Baylor,Big 12,NaN,,,true,true
+68904ab57af534451d9f,Chase Collier,WR,Baylor,Big 12,NaN,,,true,true
+68904ab5a70ac5c008e2,Brody Day,WR,Baylor,Big 12,NaN,,,true,true
+68904ab5cb002607e39f,Joseph Dodds,RB,Baylor,Big 12,NaN,,,true,true
+68904ab5ef489e4157a6,Mason Dossett,WR,Baylor,Big 12,NaN,,,true,true
+68904ab620769aaff5b6,Daniel Edeni,WR,Baylor,Big 12,NaN,,,true,true
+68904ab64485ddc7f1f9,Wilson Eseme III,RB,Baylor,Big 12,NaN,,,true,true
+68904ab66bf10100ffaa,Edward Griffin,QB,Baylor,Big 12,NaN,,,true,true
+68904ab6b29e09fa64b9,Joseph Hagman,RB,Baylor,Big 12,NaN,,,true,true
+68904ab6db2d4cbd99da,Ashtyn Hawkins,WR,Baylor,Big 12,NaN,,,true,true
+68904ab71517890b00cd,Connor Hawkins,K,Baylor,Big 12,NaN,,,true,true
+68904ab74558c7cca3b3,Kelsey Johnson,TE,Baylor,Big 12,NaN,,,true,true
+68904ab76b2668a48826,Michael Johnson Jr.,WR,Baylor,Big 12,NaN,,,true,true
+68904ab79559b1133a3f,Ashton Jones,WR,Baylor,Big 12,NaN,,,true,true
+68904ab7cd00de16af6a,Tyler Kirkwood,WR,Baylor,Big 12,NaN,,,true,true
+68904ab88039ffb34c42,Matthew Klopfenstein,TE,Baylor,Big 12,NaN,,,true,true
+68904ab8beb6b3f153cf,Caden Knighten,RB,Baylor,Big 12,NaN,,,true,true
+68904ab8ec313df2531e,Cody Mladenka,TE,Baylor,Big 12,NaN,,,true,true
+68904ab9245c8536f835,Dawson Pendergrass,RB,Baylor,Big 12,NaN,,,true,true
+68904ab94a98f7239805,Hawkins Polley,TE,Baylor,Big 12,NaN,,,true,true
+68904ab96ec541acec2c,Jadon Porter,WR,Baylor,Big 12,NaN,,,true,true
+68904ab9962a4eea3515,Kobe Prentice,WR,Baylor,Big 12,NaN,,,true,true
+68904ab9b9886b6353e4,Sawyer Robertson,QB,Baylor,Big 12,NaN,,,true,true
+68904ab9dec6df66be49,Ryne Shackelford,WR,Baylor,Big 12,NaN,,,true,true
+68904aba18b5a1e2ac43,Cade Tessier,QB,Baylor,Big 12,NaN,,,true,true
+68904aba3d2e1428fbee,Michael Trigg,TE,Baylor,Big 12,NaN,,,true,true
+68904aba61152bb555c1,Michael Turner,RB,Baylor,Big 12,NaN,,,true,true
+68904aba89dd8386f9ab,Bryson Washington,RB,Baylor,Big 12,NaN,,,true,true
+68904abab7a1c45beb36,Jacorey Watson,WR,Baylor,Big 12,NaN,,,true,true
+68904abae1414361959a,Seth Weller,WR,Baylor,Big 12,NaN,,,true,true
+68904abb1302fc4982e3,Walker White,QB,Baylor,Big 12,NaN,,,true,true
+68904abb3a171802e99d,Brody Wilhelm,TE,Baylor,Big 12,NaN,,,true,true
+68904abb631d59b6a97e,Taz Williams Jr.,WR,Baylor,Big 12,NaN,,,true,true
+68904abb8f34ac2bfdec,Kole Wilson,WR,Baylor,Big 12,NaN,,,true,true
+68904b9930150212daca,Ryan Browne,QB,Purdue,Big Ten,NaN,,,true,true
+68904b996063b660059c,Evans Chuba,QB,Purdue,Big Ten,NaN,,,true,true
+68904b99aa1cdb5a0a22,Bennett Meredith,QB,Purdue,Big Ten,NaN,,,true,true
+68904b99de23243f9b62,Garyt Odom,QB,Purdue,Big Ten,NaN,,,true,true
+68904b9a2f5618b3350b,Malachi Singleton,QB,Purdue,Big Ten,NaN,,,true,true
+68904b9a72d4c79a25e1,Antonio Harris,RB,Purdue,Big Ten,NaN,,,true,true
+68904b9a9bc8e863900a,Carter Holsworth,RB,Purdue,Big Ten,NaN,,,true,true
+68904b9ac4a5856264a1,Addai Lewellen,RB,Purdue,Big Ten,NaN,,,true,true
+68904b9aecc8d9696018,Jaron Thomas,RB,Purdue,Big Ten,NaN,,,true,true
+68904b9b21484352bcf5,Malachi Thomas,RB,Purdue,Big Ten,NaN,,,true,true
+68904b9b488228f54539,Devin Mockobee,RB,Purdue,Big Ten,NaN,,,true,true
+68904b9b774ff5d794f9,Jaheim Merriweather,RB,Purdue,Big Ten,NaN,,,true,true
+68904b9ba03a98cbf422,Andrew Adkison,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9bc6d666087115,Arhmad Branch,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9c04a6572adc80,Nolan Buckman,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9c602bc7bc8f02,Jalil Hall,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9c8fc237453508,Tra'Mar Harris,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9cc634cb4fc14e,EJ Horton Jr.,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9cec7e6cac488d,Michael Jackson III,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9d31069eb76f99,Chauncey Magwood,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9d8f3912f4e8f2,Corey Smith,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9dd95162be1c91,De'Nylon Morrissette,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9e1ab7b7e812c7,AJ Richardson,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9e8b138f2117d8,Quinn Rosenkranz,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9ecfa186fed859,Charles Ross,WR,Purdue,Big Ten,NaN,,,true,true
+68904b9f0d39da66d2dc,George Burhenn,TE,Purdue,Big Ten,NaN,,,true,true
+68904b9f4cf04bb23466,Christian Earls,TE,Purdue,Big Ten,NaN,,,true,true
+68904b9f8ed2713c4478,Jon Grimmett,TE,Purdue,Big Ten,NaN,,,true,true
+68904b9fc7c305f95e30,Luke Klare,TE,Purdue,Big Ten,NaN,,,true,true
+68904b9fefa1ca86a698,Christian Moore,TE,Purdue,Big Ten,NaN,,,true,true
+68904ba02bd230486cbf,Luca Puccinelli,TE,Purdue,Big Ten,NaN,,,true,true
+68904ba05bf296e44b22,Rico Walker,TE,Purdue,Big Ten,NaN,,,true,true
+68904ba0998e2a90d701,Spencer Porath,K,Purdue,Big Ten,NaN,,,true,true
+68904ba0f351fa7967d2,Jack Weter,K,Purdue,Big Ten,NaN,,,true,true
+68904ba138f5faadd678,Austin Albericci,QB,Rutgers,Big Ten,NaN,,,true,true
+68904ba1646274ca82b4,Sean Ashenfelder,QB,Rutgers,Big Ten,NaN,,,true,true
+68904ba18c163c86931e,Athan Kaliakmanis,QB,Rutgers,Big Ten,NaN,,,true,true
+68904ba1b68c67d22576,John Langan,QB,Rutgers,Big Ten,NaN,,,true,true
+68904ba1de8d17fc5050,Gavin Rupp,QB,Rutgers,Big Ten,NaN,,,true,true
+68904ba21501eb52d2f7,AJ Surace,QB,Rutgers,Big Ten,NaN,,,true,true
+68904ba24378ad6aea2f,Noah Vedral,QB,Rutgers,Big Ten,NaN,,,true,true
+68904ba2696bd0fb2a28,Jashon Benjamin,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba28deb37ad71d8,Samuel Brown,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba2b2c4f9e4feb8,CJ Campbell Jr.,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba2dda39df9ac21,Parker Day,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba3142a1f704082,Edd Guerrier,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba338e865bc6fd9,Terrell Mitchell,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba363af6904ddb1,Piotr Partyla,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba38efa80972b88,Antwan Raymond,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba3ccb6ef85b329,Al-Shadee Salaam,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba4048fc1809e79,Gabe Winowich,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba42f27b3e83aea,Jamier Wright-Collins,RB,Rutgers,Big Ten,NaN,,,true,true
+68904ba472f657233809,Vernon Allen III,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba5cd6a014eeea5,Ben Black,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba6940a375d1ec2,Dylan Braithwaite,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba6c722ccb743a1,Naseim Brantley,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba7058f2172de62,Sage Clawges,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba7394e429b6428,Aron Cruickshank,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba772c23778ac14,Sah'nye Degraffenreidt,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba7b2f53736d16b,Christian Dremel,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba7e4809c37d672,Brayden Fox,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba943ba126a953b,Jourdin Houston,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba9a284dc9e0a82,JaQuae Jackson,WR,Rutgers,Big Ten,NaN,,,true,true
+68904ba9d6ae4399c1dc,Shameen Jones,WR,Rutgers,Big Ten,NaN,,,true,true
+68904baa358648c01be8,Dino Kalikmanis,WR,Rutgers,Big Ten,NaN,,,true,true
+68904baa636768abd8e6,Famah Toure,WR,Rutgers,Big Ten,NaN,,,true,true
+68904baaac5bc234a22b,Isaiah Washington,WR,Rutgers,Big Ten,NaN,,,true,true
+68904baadbabdefdbba8,Josh Youngblood,WR,Rutgers,Big Ten,NaN,,,true,true
+68904bab15da0694cb66,Matt Alaimo,TE,Rutgers,Big Ten,NaN,,,true,true
+68904bab45e97877e7a2,Logan Blake,TE,Rutgers,Big Ten,NaN,,,true,true
+68904bab8c2f94b2f85f,Shawn Bowman,TE,Rutgers,Big Ten,NaN,,,true,true
+68904babb2bb536c1a8d,KJ Duff,TE,Rutgers,Big Ten,NaN,,,true,true
+68904babd94a441b2870,Mike Higgins,TE,Rutgers,Big Ten,NaN,,,true,true
+68904bac13a4e0be65c7,Victor Konopka,TE,Rutgers,Big Ten,NaN,,,true,true
+68904bac72936f1bd215,Tahjay Moore,TE,Rutgers,Big Ten,NaN,,,true,true
+68904bacd25b93818698,Brandon Myers,TE,Rutgers,Big Ten,NaN,,,true,true
+68904bad15e26242f914,Ben Rothhaar,TE,Rutgers,Big Ten,NaN,,,true,true
+68904bad535a4d38d072,Colin Weber,TE,Rutgers,Big Ten,NaN,,,true,true
+68904bad8c0ac9e360d5,David Broncati,K,Rutgers,Big Ten,NaN,,,true,true
+68904badcaec38dbe619,Justin Davidovicz,K,Rutgers,Big Ten,NaN,,,true,true
+68904bae009fbb69534d,Gavin Haggerty,K,Rutgers,Big Ten,NaN,,,true,true
+68904bae2bc4a72a19fa,Jai Patel,K,Rutgers,Big Ten,NaN,,,true,true
+68904bae5802fa53eda8,Aidan Chiles,QB,Michigan State,Big Ten,NaN,,,true,true
+68904bae84af120e13d9,Leo Hannan,QB,Michigan State,Big Ten,NaN,,,true,true
+68904baede343284b7c0,Ryland Jessee,QB,Michigan State,Big Ten,NaN,,,true,true
+68904baf0f3037ec77db,Alessio Milivojevic,QB,Michigan State,Big Ten,NaN,,,true,true
+68904baf42ba429198f5,Jace Clarizio,RB,Michigan State,Big Ten,NaN,,,true,true
+68904baf6e5da2583569,Makhi Frazier,RB,Michigan State,Big Ten,NaN,,,true,true
+68904baf9a4cf409ad25,Zion Gist,RB,Michigan State,Big Ten,NaN,,,true,true
+68904bafca99567ecee6,Jaxon McCaig,RB,Michigan State,Big Ten,NaN,,,true,true
+68904bb00188ae286aa0,Darrin Jones Jr.,RB,Michigan State,Big Ten,NaN,,,true,true
+68904bb027e969b71b5f,Elijah Tau-Tolliver,RB,Michigan State,Big Ten,NaN,,,true,true
+68904bb0e8e1260f620b,Chris Williams,RB,Michigan State,Big Ten,NaN,,,true,true
+68904bb1237c82a5a4a3,Evan Boyd,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb14e4906cac13b,Alante Brown,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb1808d019dca1b,Rodney Bullard Jr.,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb1c14371750199,Grant Calcagno,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb25ffc2f8b0ae5,Atticus Carridine,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb2907b89f8fcca,Braylon Collier,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb2d00ca300c9ae,Shawn Foster,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb30c877e9dccf7,Nick Hardy,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb337427412dec9,Omari Kelly,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb378ee92977e46,Charles Taplin,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb39f2425e22124,Bryson Williams,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb3c78345f2d280,Jack Yanachik,WR,Michigan State,Big Ten,NaN,,,true,true
+68904bb3f17687f6a249,Charlie Baker,TE,Michigan State,Big Ten,NaN,,,true,true
+68904bb4258c9128b9ba,Michael Masunas,TE,Michigan State,Big Ten,NaN,,,true,true
+68904bb44eac110413a7,Wyatt Hook,TE,Michigan State,Big Ten,NaN,,,true,true
+68904bb473878ab00dcc,Brennan Parachek,TE,Michigan State,Big Ten,NaN,,,true,true
+68904bb494561b7847da,Kai Rios,TE,Michigan State,Big Ten,NaN,,,true,true
+68904bb4bc686274181b,Jayden Savoury,TE,Michigan State,Big Ten,NaN,,,true,true
+68904bb4e39aab8be408,Jack Velling,TE,Michigan State,Big Ten,NaN,,,true,true
+68904bb5164a32956a9a,Tarik Ahmetbasic,K,Michigan State,Big Ten,NaN,,,true,true
+68904bb538a49174eb69,Martin Connington,K,Michigan State,Big Ten,NaN,,,true,true
+68904bb55dbeecc4d06b,Blake Sislo,K,Michigan State,Big Ten,NaN,,,true,true
+68904bb5814da56af210,Marcos Davila,QB,Nebraska,Big Ten,NaN,,,true,true
+68904bb5a75f168cd266,Jaylynn Gramstad,QB,Nebraska,Big Ten,NaN,,,true,true
+68904bb5d5ed998bfd68,TJ Lateef,QB,Nebraska,Big Ten,NaN,,,true,true
+68904bb64a8afbe09196,Luke Longval,QB,Nebraska,Big Ten,NaN,,,true,true
+68904bb68592583140d0,Dylan Raiola,QB,Nebraska,Big Ten,NaN,,,true,true
+68904bb6bc9d303f1791,Bode Soukup,QB,Nebraska,Big Ten,NaN,,,true,true
+68904bb808178a2a90de,Conor Booth,RB,Nebraska,Big Ten,NaN,,,true,true
+68904bb84f67d4fe48f5,Izaac Dickey,RB,Nebraska,Big Ten,NaN,,,true,true
+68904bb8868c948f306f,Vincent Genantone,RB,Nebraska,Big Ten,NaN,,,true,true
+68904bb8ef202ac4df5f,Kenneth Williams,RB,Nebraska,Big Ten,NaN,,,true,true
+68904bb9342533baca48,Jamarion Parker,RB,Nebraska,Big Ten,NaN,,,true,true
+68904bb976d3a92936ab,Isaiah Mozee,RB,Nebraska,Big Ten,NaN,,,true,true
+68904bb9a0cee1e2675b,Mekhi Nelson,RB,Nebraska,Big Ten,NaN,,,true,true
+68904bb9d73e34524aa6,Emmett Johnson,RB,Nebraska,Big Ten,NaN,,,true,true
+68904bba117c9f8776d0,Kwinten Ives,RB,Nebraska,Big Ten,NaN,,,true,true
+68904bba4224daed1cc4,Jacory Barney Jr.,WR,Nebraska,Big Ten,NaN,,,true,true
+68904bba6f4b4353d6bd,Demitrius Bell,WR,Nebraska,Big Ten,NaN,,,true,true
+68904bba9ea1893ba56d,Janiran Bonner,WR,Nebraska,Big Ten,NaN,,,true,true
+68904bbac62a80a54c3a,Jackson Carpenter,WR,Nebraska,Big Ten,NaN,,,true,true
+68904bbaf2aab0579595,Quinn Clark,WR,Nebraska,Big Ten,NaN,,,true,true
+68904bbb2cf16f08d96e,Keelan Smith,WR,Nebraska,Big Ten,NaN,,,true,true
+68904bbb5a46789ba53e,DJ Singleton,WR,Nebraska,Big Ten,NaN,,,true,true
+68904bbb97f84e417079,Nyziah Hunter,WR,Nebraska,Big Ten,NaN,,,true,true
+68904bbbbd9efb4c05df,Roman Mangini,WR,Nebraska,Big Ten,NaN,,,true,true
+68904bbbe30f21ccf467,Hayes Miller,WR,Nebraska,Big Ten,NaN,,,true,true
+68904bbc1f2a00486990,Mac Markway,TE,Nebraska,Big Ten,NaN,,,true,true
+68904bbc7a20ef76aa97,Carter Nelson,TE,Nebraska,Big Ten,NaN,,,true,true
+68904bbca5399dd55a0f,Eric Ingwerson,TE,Nebraska,Big Ten,NaN,,,true,true
+68904bbcdbeea477baf8,Danny King,TE,Nebraska,Big Ten,NaN,,,true,true
+68904bbd15c593548b4f,Luke Lindenmeyer,TE,Nebraska,Big Ten,NaN,,,true,true
+68904bbd57ccc0bc87a2,Heinrich Haarberg,TE,Nebraska,Big Ten,NaN,,,true,true
+68904bbd8183d1529cbf,John Hohl,K,Nebraska,Big Ten,NaN,,,true,true
+68904bbda42bd244235b,Tristan Alvano,K,Nebraska,Big Ten,NaN,,,true,true
+68904bbdc8d1360f1146,Kyle Cunanan,K,Nebraska,Big Ten,NaN,,,true,true
+68904e2974f896b6535a,Cole Ballard,QB,Kansas,Big 12,NaN,,,true,true
+68904e299d06fb0defb6,Carson Bruhn,TE,Kansas,Big 12,NaN,,,true,true
+68904e29c27850011bba,Bryson Canty,WR,Kansas,Big 12,NaN,,,true,true
+68904e29ebcba8abfb36,Bryce Cohoon,WR,Kansas,Big 12,NaN,,,true,true
+68904e2a222cc688027c,Donald Collier,WR,Kansas,Big 12,NaN,,,true,true
+68904e2a4a0529a8675a,Quinton Conley,TE,Kansas,Big 12,NaN,,,true,true
+68904e2a7246ec9681cf,Jackson Cook,WR,Kansas,Big 12,NaN,,,true,true
+68904e2aa28910381b6c,Leyton Cure,TE,Kansas,Big 12,NaN,,,true,true
+68904e2ad4ae77ed13c1,Jalon Daniels,QB,Kansas,Big 12,NaN,,,true,true
+68904e2b045461adc6f9,Jaidyn Doss,WR,Kansas,Big 12,NaN,,,true,true
+68904e2b83aca55436bd,Doug Emilien,WR,Kansas,Big 12,NaN,,,true,true
+68904e2bb0a9ed7803bb,Boden Groen,TE,Kansas,Big 12,NaN,,,true,true
+68904e2bdc0a8a121a15,Jaden Hamm,TE,Kansas,Big 12,NaN,,,true,true
+68904e2c16d029e300fb,DeShawn Hanika,TE,Kansas,Big 12,NaN,,,true,true
+68904e2c553aa30f582a,Bryson Hayes,WR,Kansas,Big 12,NaN,,,true,true
+68904e2c80eacc8f857d,Emmanuel Henderson Jr.,WR,Kansas,Big 12,NaN,,,true,true
+68904e2cad495052ba0a,Daniel Hishaw Jr.,RB,Kansas,Big 12,NaN,,,true,true
+68904e2cdb6e08681e52,Conlee Hovey,TE,Kansas,Big 12,NaN,,,true,true
+68904e2d0ecad4c91e35,Micah Johnson,RB,Kansas,Big 12,NaN,,,true,true
+68904e2d367d4611e476,John Kelly,RB,Kansas,Big 12,NaN,,,true,true
+68904e2d5dbcf31675d4,Keaton Kubecka,WR,Kansas,Big 12,NaN,,,true,true
+68904e2d88b6dd011e31,Laith Marjan,K,Kansas,Big 12,NaN,,,true,true
+68904e2db094ca76921a,Isaiah Marshall,QB,Kansas,Big 12,NaN,,,true,true
+68904e2ddae8b090dc5d,David McComb,QB,Kansas,Big 12,NaN,,,true,true
+68904e2e114508477be7,Mack Moeller,WR,Kansas,Big 12,NaN,,,true,true
+68904e2e4358362320f1,Isreal Moses V,WR,Kansas,Big 12,NaN,,,true,true
+68904e2e70ac3a858d77,Tate Nagy,WR,Kansas,Big 12,NaN,,,true,true
+68904e2ea0280f0ae165,Jaden Nickens,WR,Kansas,Big 12,NaN,,,true,true
+68904e2ed770d4c2d47d,Mikey Pauley,QB,Kansas,Big 12,NaN,,,true,true
+68904e2f12a57e624528,Cam Pickett,WR,Kansas,Big 12,NaN,,,true,true
+68904e2f3a78cd5a3052,Jack Schneider,RB,Kansas,Big 12,NaN,,,true,true
+68904e2f63186138e1e0,Harry Stewart III,RB,Kansas,Big 12,NaN,,,true,true
+68904e2f8aa66c9ff24a,Johnny Thompson Jr.,RB,Kansas,Big 12,NaN,,,true,true
+68904e2fadaf2b37c92b,Justin Thurman,RB,Kansas,Big 12,NaN,,,true,true
+68904e2fdae527b0d583,Levi Wentz,WR,Kansas,Big 12,NaN,,,true,true
+68904e30141903f56df6,Leshon Williams,RB,Kansas,Big 12,NaN,,,true,true
+68904e303daa99f861ee,Will Anciaux,TE,Kansas State,Big 12,NaN,,,true,true
+68904e306a83409ee2b1,Blake Barnett,QB,Kansas State,Big 12,NaN,,,true,true
+68904e309bf222990082,Callen Barta,WR,Kansas State,Big 12,NaN,,,true,true
+68904e30d1616abd4cfb,Jerand Bradley,WR,Kansas State,Big 12,NaN,,,true,true
+68904e310c8dd00f17ae,Jayce Brown,WR,Kansas State,Big 12,NaN,,,true,true
+68904e3153fbec27daf8,Linkon Cure,TE,Kansas State,Big 12,NaN,,,true,true
+68904e319038001a5991,Jemyri Davis,WR,Kansas State,Big 12,NaN,,,true,true
+68904e31c089bdf1fd4e,Dillon Duff,QB,Kansas State,Big 12,NaN,,,true,true
+68904e31f1d76795a3e9,Dylan Edwards,RB,Kansas State,Big 12,NaN,,,true,true
+68904e32422eaea868e9,Monterrio Elston Jr.,RB,Kansas State,Big 12,NaN,,,true,true
+68904e3270a00344cebc,Garrett Harstad,WR,Kansas State,Big 12,NaN,,,true,true
+68904e32a32e84c31ade,Hudson Hutcheson,QB,Kansas State,Big 12,NaN,,,true,true
+68904e32d689940422e7,Joe Jackson,RB,Kansas State,Big 12,NaN,,,true,true
+68904e330db217a6251e,Avery Johnson,QB,Kansas State,Big 12,NaN,,,true,true
+68904e3332b359d103c7,Jacob Knuth,QB,Kansas State,Big 12,NaN,,,true,true
+68904e336b662496bf5a,Isaac Koch,WR,Kansas State,Big 12,NaN,,,true,true
+68904e33946b6aff6df2,Sterling Lockett,WR,Kansas State,Big 12,NaN,,,true,true
+68904e33b86e289e7084,Brayden Loftin,TE,Kansas State,Big 12,NaN,,,true,true
+68904e33db5261c3007a,Antonio Martin Jr.,RB,Kansas State,Big 12,NaN,,,true,true
+68904e340e109f359c50,Caleb Medford,WR,Kansas State,Big 12,NaN,,,true,true
+68904e3442b49811c2f2,Andrew Metzger,TE,Kansas State,Big 12,NaN,,,true,true
+68904e34720f5d03f1aa,Adonis Moise,WR,Kansas State,Big 12,NaN,,,true,true
+68904e34a0e93a9d781e,Bryce Noernberg,WR,Kansas State,Big 12,NaN,,,true,true
+68904e34c60a33f34f99,Garrett Oakley,TE,Kansas State,Big 12,NaN,,,true,true
+68904e34ef24c8c543cf,Larry Porter IV,WR,Kansas State,Big 12,NaN,,,true,true
+68904e35214fdaeb9a77,JB Price,RB,Kansas State,Big 12,NaN,,,true,true
+68904e354943ccf4939f,DeVon Rice,RB,Kansas State,Big 12,NaN,,,true,true
+68904e358d5cb02bf536,Luis Rodriguez,K,Kansas State,Big 12,NaN,,,true,true
+68904e3619941697f00f,Leyton Simmering,K,Kansas State,Big 12,NaN,,,true,true
+68904e3644671488dcb7,Demps,WR,Kansas State,Big 12,NaN,,,true,true
+68904e36a1eaf051f1b7,Justin Stephens,WR,Kansas State,Big 12,NaN,,,true,true
+68904e36cdee3939aae6,Will Swanson,TE,Kansas State,Big 12,NaN,,,true,true
+68904e3708f269012d2c,Jaron Tibbs,WR,Kansas State,Big 12,NaN,,,true,true
+68904e373bcd20d193f5,Ben Wheeler,WR,Kansas State,Big 12,NaN,,,true,true
+68904e376998931e0a18,Cam Abshire,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e37a0e3593430c3,Hendrix,RB,Oklahoma State,Big 12,NaN,,,true,true
+68904e37cddf3cd92c98,Banks Bowen,QB,Oklahoma State,Big 12,NaN,,,true,true
+68904e380d0e370b16b3,Freddie Brock IV,RB,Oklahoma State,Big 12,NaN,,,true,true
+68904e3833c83bacb42f,Grayson Brousseau,TE,Oklahoma State,Big 12,NaN,,,true,true
+68904e385fc1f6b69248,Royal Capell,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e388f931fc71f82,Terrill Davis,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e38cb2b6160ff89,DJ Dugar Jr.,RB,Oklahoma State,Big 12,NaN,,,true,true
+68904e3900afe79757be,Rodney Fields Jr.,RB,Oklahoma State,Big 12,NaN,,,true,true
+68904e3928db416b300f,Christian Fitzpatrick,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e39543c369b50ed,Zane Flores,QB,Oklahoma State,Big 12,NaN,,,true,true
+68904e397bb402acd439,Josh Ford,TE,Oklahoma State,Big 12,NaN,,,true,true
+68904e39a8b795e1deaa,Gavin Freeman,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e39de93d055e7d5,Griffiths,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3a227cbf03bdbb,Oscar Hammond,TE,Oklahoma State,Big 12,NaN,,,true,true
+68904e3a478153719de8,Camron Heard,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3a6f55ea69a723,Hauss Hejny,QB,Oklahoma State,Big 12,NaN,,,true,true
+68904e3aa23aa3b59f7e,Kalib Hicks,RB,Oklahoma State,Big 12,NaN,,,true,true
+68904e3acf1eae7bdf52,Trent Howland,RB,Oklahoma State,Big 12,NaN,,,true,true
+68904e3b0cdaa85f754f,Sam Jackson V,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3b38a338d95208,Jaylen Lloyd,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3b60ce15b94fc7,Wain Lofton,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3b9adb268a0907,Matrail Lopez,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3bc1ec43369804,Will Monney,TE,Oklahoma State,Big 12,NaN,,,true,true
+68904e3bf3235a92dc0b,Gabe Panikowski,K,Oklahoma State,Big 12,NaN,,,true,true
+68904e3c2e525f6c6bac,Jaden Perez,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3c5a92834fe310,Kam Powell,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3c83d6805fff31,Shamar Rigby,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3caa918797eab0,Mason Schubert,QB,Oklahoma State,Big 12,NaN,,,true,true
+68904e3cd3067c056cd3,Talyn Shettron,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3d02d5005e4571,King,WR,Oklahoma State,Big 12,NaN,,,true,true
+68904e3d2d927534c5d3,Kason Shrum,K,Oklahoma State,Big 12,NaN,,,true,true
+68904e3d58b01d551b07,Quinton Stewart,TE,Oklahoma State,Big 12,NaN,,,true,true
+68904e3d87d28fe01dc0,Sesi Vailahi,RB,Oklahoma State,Big 12,NaN,,,true,true
+68904e3db73bca77bdee,Jordan Vyborny,TE,Oklahoma State,Big 12,NaN,,,true,true
+68904e3de8499bc7bee4,Logan Ward,K,Oklahoma State,Big 12,NaN,,,true,true
+68904e3e250bf4c066e6,Jordyn Bailey,WR,TCU,Big 12,NaN,,,true,true
+68904e3e5872f6b2a723,Gekyle Baker,WR,TCU,Big 12,NaN,,,true,true
+68904e3e7e1a7be4862e,Kevorian Barnes,RB,TCU,Big 12,NaN,,,true,true
+68904e3ea4e8d158461f,Trent Battle,RB,TCU,Big 12,NaN,,,true,true
+68904e3ed325b6930cd6,Sam Bisesi,K,TCU,Big 12,NaN,,,true,true
+68904e3f025b33052b32,Derrick Carroll,RB,TCU,Big 12,NaN,,,true,true
+68904e3f2af364c3c4f3,Parker Clark,WR,TCU,Big 12,NaN,,,true,true
+68904e3f536fc72b9491,Keagan Cunningham,WR,TCU,Big 12,NaN,,,true,true
+68904e3f83144e5b65c0,Chase Curtis,TE,TCU,Big 12,NaN,,,true,true
+68904e3fb504f681613b,Jon Denman,RB,TCU,Big 12,NaN,,,true,true
+68904e3fe4484b02a7e1,Jordan Dwyer,WR,TCU,Big 12,NaN,,,true,true
+68904e40183a6339371f,Franklin Estrada II,RB,TCU,Big 12,NaN,,,true,true
+68904e4040aea485082f,Major Everhart,WR,TCU,Big 12,NaN,,,true,true
+68904e407b1de6364a67,Dozie Ezukanma,WR,TCU,Big 12,NaN,,,true,true
+68904e409e08ceb358ca,Fletcher Fierro,WR,TCU,Big 12,NaN,,,true,true
+68904e40cae6e28b98c8,Jacobe Hayes,WR,TCU,Big 12,NaN,,,true,true
+68904e412edd39edd757,Josh Hoover,QB,TCU,Big 12,NaN,,,true,true
+68904e416e5a18fb0dfd,Braylon James,WR,TCU,Big 12,NaN,,,true,true
+68904e419914e9aec527,Dane Jones,WR,TCU,Big 12,NaN,,,true,true
+68904e41e3bc8667a41d,Lafayette Kaiuway,TE,TCU,Big 12,NaN,,,true,true
+68904e4238d8f79a84a3,Kyle Lemmermann,K,TCU,Big 12,NaN,,,true,true
+68904e42723338723404,Joseph Manjack IV,WR,TCU,Big 12,NaN,,,true,true
+68904e42b01ec85f260a,Eric McAlister,WR,TCU,Big 12,NaN,,,true,true
+68904e4313b3af5b1ed9,Nate McCashland,K,TCU,Big 12,NaN,,,true,true
+68904e435c72cf4d9fc9,Nate Palmer,RB,TCU,Big 12,NaN,,,true,true
+68904e43bea66e5a62a8,Jeremy Payne,RB,TCU,Big 12,NaN,,,true,true
+68904e43f0d56eb8c594,Mason Peterson,TE,TCU,Big 12,NaN,,,true,true
+68904e442fdb71136f5b,Morreun Pimpton,TE,TCU,Big 12,NaN,,,true,true
+68904e4453d5409855ab,Joe Pitchford,RB,TCU,Big 12,NaN,,,true,true
+68904e449188a4939e4c,Jacob Porter,QB,TCU,Big 12,NaN,,,true,true
+68904e44cb70a0fdfc02,David Potter,QB,TCU,Big 12,NaN,,,true,true
+68904e44f3f1827aacf1,DJ Rogers,TE,TCU,Big 12,NaN,,,true,true
+68904e453287f6e582cf,Adam Schobel,QB,TCU,Big 12,NaN,,,true,true
+68904e455f2205f3dd76,Ken Seals,QB,TCU,Big 12,NaN,,,true,true
+68904e458d74616a28ac,Terry Shelton,WR,TCU,Big 12,NaN,,,true,true
+68904e45c6ddc34c03e4,Ed Small,WR,TCU,Big 12,NaN,,,true,true
+68904e4603d9637b07e5,Roy Alexander,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e46276f1cd443ca,Upton Bellenfant,K,Texas Tech,Big 12,NaN,,,true,true
+68904e4676eaf14bc532,Terrance Carter Jr.,TE,Texas Tech,Big 12,NaN,,,true,true
+68904e46a930959bbc63,Michael Dever,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e46d2e06b8c8e69,Cameron Dickey,RB,Texas Tech,Big 12,NaN,,,true,true
+68904e47121f6295a9a6,Caleb Douglas,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e473d7cd52f84d8,Coy Eakin,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e47697a15cca59f,Jack Esparza,TE,Texas Tech,Big 12,NaN,,,true,true
+68904e4798461891792e,Tristian Gentry,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e47bdc4e2ef28a0,Mitch Griffis,QB,Texas Tech,Big 12,NaN,,,true,true
+68904e47ed05a9790073,Will Hammond,QB,Texas Tech,Big 12,NaN,,,true,true
+68904e481f3c2210857c,Stone Harrington,K,Texas Tech,Big 12,NaN,,,true,true
+68904e48437d5afd470d,Preztynn Harrison,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e486eb1ef476bc8,Adam Hill,RB,Texas Tech,Big 12,NaN,,,true,true
+68904e48a582e16c2991,Micah Hudson,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e48d47ebf776f63,Trey Jackson,TE,Texas Tech,Big 12,NaN,,,true,true
+68904e490da981fb5c8e,Bryson Jones,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e493f5c263912cc,Lloyd Jones III,QB,Texas Tech,Big 12,NaN,,,true,true
+68904e49672d776e29d7,Quinten Joyner,RB,Texas Tech,Big 12,NaN,,,true,true
+68904e4987d534302ee5,Jason Llewellyn,TE,Texas Tech,Big 12,NaN,,,true,true
+68904e49b16e03fa31b1,Johncarlos Miller II,TE,Texas Tech,Big 12,NaN,,,true,true
+68904e49dab7d1d33d9a,Price Morgan,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e4a273eede4ca2a,Behren Morton,QB,Texas Tech,Big 12,NaN,,,true,true
+68904e4a5cbea802bafa,Holden Phillips,QB,Texas Tech,Big 12,NaN,,,true,true
+68904e4a810c3c063d81,Sean Robinson,TE,Texas Tech,Big 12,NaN,,,true,true
+68904e4ab0a41bc2e83a,Leyton Stone,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e4adff9139fd29a,Tyson Turner,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e4b108aad0db459,Kelby Valsin,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e4b3948c41f4cdb,Reggie Virgil,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e4b5e7deb49266d,T.J. West,WR,Texas Tech,Big 12,NaN,,,true,true
+68904e4b82744eec2f15,Haydon Wiginton,WR,Texas Tech,Big 12,NaN,,,true,true
+68904eee8d578ca0cb8d,Kenny Minchey,QB,Notre Dame,Independent,NaN,,,false,false
+68904eeeb8856adff1cf,CJ Carr,QB,Notre Dame,Independent,NaN,,,false,false
+68904eef039ffbc7d520,Anthony Rezac,QB,Notre Dame,Independent,NaN,,,false,false
+68904eef27d743e1fa47,Steve Angeli,QB,Notre Dame,Independent,NaN,,,false,false
+68904eef4a6220038048,Gi'Bran Payne,RB,Notre Dame,Independent,NaN,,,true,false
+68904eef7965fb36871d,Jeremiyah Love,RB,Notre Dame,Independent,NaN,,,false,false
+68904eefaa93e8c68ca2,Aneyas Williams,RB,Notre Dame,Independent,NaN,,,false,false
+68904eefd4f68b1ce667,Kedren Young,RB,Notre Dame,Independent,NaN,,,false,false
+68904ef0064a841dedd5,Devyn Ford,RB,Notre Dame,Independent,NaN,,,true,false
+68904ef02b1ebcb46c8d,Justin Fisher,RB,Notre Dame,Independent,NaN,,,true,false
+68904ef04c72faa41e66,Jadarian Price,RB,Notre Dame,Independent,NaN,,,true,false
+68904ef082dbbdcc4f68,Dylan Devezin,RB,Notre Dame,Independent,NaN,,,true,false
+68904ef0ab10dae598bb,Jake Tafelski,RB,Notre Dame,Independent,NaN,,,true,false
+68904ef0dc83c7e124c7,Deion Colzie,WR,Notre Dame,Independent,NaN,,,true,false
+68904ef1101950031a83,Jaden Greathouse,WR,Notre Dame,Independent,NaN,,,false,false
+68904ef137bb7200ad81,Jayden Harrison,WR,Notre Dame,Independent,NaN,,,true,false
+68904ef15f903b06aff9,Beaux Collins,WR,Notre Dame,Independent,NaN,,,true,false
+68904ef192f50bac6c93,Jordan Faison,WR,Notre Dame,Independent,NaN,,,false,false
+68904ef1b8857d419d90,Kris Mitchell,WR,Notre Dame,Independent,NaN,,,true,false
+68904ef1e72aae7829b0,KK Smith,WR,Notre Dame,Independent,NaN,,,false,false
+68904ef2183dbd6b78c2,Micah Gilbert,WR,Notre Dame,Independent,NaN,,,false,false
+68904ef24c7cec8c4b74,Cam Williams,WR,Notre Dame,Independent,NaN,,,false,false
+68904ef27868a58e78db,Logan Saldate,WR,Notre Dame,Independent,NaN,,,false,false
+68904ef29e107e6c8842,Tyler Buchner,WR,Notre Dame,Independent,NaN,,,true,false
+68904ef2cd0cef412014,Matt Jeffery,WR,Notre Dame,Independent,NaN,,,false,false
+68904ef2f2d94fc4a0a0,Xavier Southall,WR,Notre Dame,Independent,NaN,,,false,false
+68904ef324a8f7aba471,Jack Polian,WR,Notre Dame,Independent,NaN,,,true,false
+68904ef34c4d4db0aa12,Leo Scheidler,WR,Notre Dame,Independent,NaN,,,true,false
+68904ef36f5281b7d090,Jayden Thomas,WR,Notre Dame,Independent,NaN,,,true,false
+68904ef394ee378f1474,Alex Whitman,WR,Notre Dame,Independent,NaN,,,false,false
+68904ef3c72a16571d97,Eli Raridon,TE,Notre Dame,Independent,NaN,,,true,false
+68904ef3ed4afe678bdd,Davis Sherwood,TE,Notre Dame,Independent,NaN,,,true,false
+68904ef426e684078fd9,Andrew Yanoshak,TE,Notre Dame,Independent,NaN,,,true,false
+68904ef45d1e0043150f,Henry Garrity,TE,Notre Dame,Independent,NaN,,,false,false
+68904ef48b9d12d5cb64,Kevin Bauman,TE,Notre Dame,Independent,NaN,,,true,false
+68904ef4b1d5cae4d9e5,Jack Larsen,TE,Notre Dame,Independent,NaN,,,false,false
+68904ef4d7200cc9d27b,Cooper Flanagan,TE,Notre Dame,Independent,NaN,,,false,false
+68904ef5167ca40200da,Mitchell Evans,TE,Notre Dame,Independent,NaN,,,true,false
+68904ef53c716c5cc988,Charlie Selna,TE,Notre Dame,Independent,NaN,,,true,false
+689050a478c6436e0e88,KJ Jefferson,QB,UCF,Big 12,NaN,,,true,true
+689050a4b3e28113b639,Dylan Rizk,QB,UCF,Big 12,NaN,,,false,true
+689050a4e12827c77fc0,Jacurri Brown,QB,UCF,Big 12,NaN,,,false,true
+689050a51418e7cc6d8a,EJ Colson,QB,UCF,Big 12,NaN,,,false,true
+689050a53ab6da44f2ea,Riley Trujillo,QB,UCF,Big 12,NaN,,,false,true
+689050a5663912126d37,Brock Hansel,QB,UCF,Big 12,NaN,,,false,true
+689050a5a16ce58b1faa,Johnny Richardson,RB,UCF,Big 12,NaN,,,true,true
+689050a5cebb94715eeb,R.J. Harvey,RB,UCF,Big 12,NaN,,,true,true
+689050a5f2a7916b7bd3,Peny Boone,RB,UCF,Big 12,NaN,,,true,true
+689050a625af7f8dffc9,Kam Ingram,RB,UCF,Big 12,NaN,,,true,true
+689050a64b5ae19643b7,Stacy Gage,RB,UCF,Big 12,NaN,,,false,true
+689050a66bd6fb778773,Myles Montgomery,RB,UCF,Big 12,NaN,,,true,true
+689050a69bb4f41dfd11,Preston Foreman,RB,UCF,Big 12,NaN,,,false,true
+689050a6c58acbb61965,Tyler Wrenn,RB,UCF,Big 12,NaN,,,false,true
+689050a7087938a4edb7,Kobe Hudson,WR,UCF,Big 12,NaN,,,true,true
+689050a72f21e80119fc,Chauncey Magwood,WR,UCF,Big 12,NaN,,,true,true
+689050a75a1aa0a61adf,Bredell Richardson,WR,UCF,Big 12,NaN,,,false,true
+689050a7899d9093faaf,Ja'Varrius Johnson,WR,UCF,Big 12,NaN,,,true,true
+689050a7acb04763ef8a,Tyree Patterson,WR,UCF,Big 12,NaN,,,false,true
+689050a7da3a3163a5c2,Jacoby Jones,WR,UCF,Big 12,NaN,,,true,true
+689050a80d3e51ee71cb,Jarrad Baker,WR,UCF,Big 12,NaN,,,true,true
+689050a82ec9c8c68b3e,Trent Whittemore,WR,UCF,Big 12,NaN,,,true,true
+689050a853f5c8e6543b,Kason Stokes,WR,UCF,Big 12,NaN,,,false,true
+689050a885e76f8ab8f0,Jordyn Bridgewater,WR,UCF,Big 12,NaN,,,false,true
+689050a8aa282d1d17c7,Carson Hinshaw,WR,UCF,Big 12,NaN,,,false,true
+689050a8d843f7597b00,Dwartney Wortham,WR,UCF,Big 12,NaN,,,false,true
+689050a911423923fc51,Caleb Rollerson,WR,UCF,Big 12,NaN,,,false,true
+689050a938c5f5f0c9ce,Randy Pittman,TE,UCF,Big 12,NaN,,,false,true
+689050a958bb42b27e2c,Kylan Fox,TE,UCF,Big 12,NaN,,,false,true
+689050a98a629294caaf,Evan Morris,TE,UCF,Big 12,NaN,,,true,true
+689050a9b7cbe8e23a37,Reece Adkins,TE,UCF,Big 12,NaN,,,true,true
+689050a9e77909e9af5d,Thomas Wadsworth,TE,UCF,Big 12,NaN,,,false,true
+689050aa17f1e6b1595f,Jordan Davis,TE,UCF,Big 12,NaN,,,true,true
