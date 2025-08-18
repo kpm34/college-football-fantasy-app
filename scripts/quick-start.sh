@@ -78,7 +78,7 @@ echo -e "  ${BLUE}npm run dev${NC}                    # Start development"
 echo -e "  ${BLUE}vercel dev${NC}                     # Start with Vercel environment"
 
 echo -e "\n${CYAN}For help:${NC}"
-echo -e "  • Read CLAUDE_TOOLBOX.md for complete reference"
+echo -e "  • Read TOOLBOX_CLAUDE.md or TOOLBOX_CURSOR.md for complete reference"
 echo -e "  • Read QUICK_START.md for setup instructions" 
 echo -e "  • Check DEV_TOOLS.md for all available tools"
 

@@ -352,7 +352,7 @@ tar -czf claude-toolbox-export.tar.gz \
   global-packages.txt \
   vscode-extensions.txt \
   CLAUDE.md \
-  CLAUDE_TOOLBOX.md \
+  TOOLBOX_CLAUDE.md \
   scripts/claude-cli.js \
   scripts/figma-sync.js \
   figma.config.json
@@ -399,7 +399,8 @@ From your laptop's project directory, copy these files to your desktop:
 1. `.env.local` (contains all API keys)
 2. `.env.production.local` (production environment)
 3. `CLAUDE.md` (project context)
-4. `CLAUDE_TOOLBOX.md` (this toolbox reference)
+4. `TOOLBOX_CLAUDE.md` (MCP integration guide)
+5. `TOOLBOX_CURSOR.md` (Cursor AI environment guide)
 5. `figma.config.json` (if using Figma)
 6. `scripts/claude-cli.js` (Claude CLI tool)
 7. `scripts/figma-sync.js` (Figma sync tool)
