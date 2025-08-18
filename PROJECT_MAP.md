@@ -2,7 +2,8 @@
 
 **Single Source of Truth**: `schema/zod-schema.ts`  
 **Canonical Configs**: `lib/appwrite.ts` + `lib/appwrite-server.ts`  
-**Status**: ✅ Fully Consolidated Architecture (August 2025)
+**Status**: ✅ Fully Consolidated Architecture (August 2025)  
+**Latest**: 🔐 OAuth Authentication + 📊 Enhanced Talent Projections + 🚪 Desktop Logout
 
 ---
 
@@ -25,8 +26,8 @@ graph TD
     
     %% Data & Scripts
     ROOT --> SCRIPTS[📜 scripts/<br/>Migrations, Sync<br/>Validation Guards]
-    ROOT --> DATA[💾 data/<br/>Static Data<br/>CSV/JSON Sources]
-    ROOT --> FUNCTIONS[⚡ functions/<br/>Appwrite Functions<br/>Serverless Code]
+    ROOT --> DATA[💾 data/<br/>EA Ratings, Mock Drafts<br/>Depth Charts, CSV/JSON]
+    ROOT --> FUNCTIONS[⚡ functions/<br/>Unified Talent Projections<br/>Serverless Code]
     
     %% Documentation & Deployment
     ROOT --> DOCS[📚 docs/<br/>Documentation<br/>Project Memory]
@@ -56,6 +57,15 @@ graph TB
     subgraph "🌐 External APIs"
         CFBD[🏈 College Football<br/>Data API<br/>Players, Games, Rankings]
         ESPN[📺 ESPN API<br/>Live Scores<br/>Game Updates]
+        OAUTH[🔐 OAuth Providers<br/>Google, Apple<br/>Environment-Controlled]
+    end
+    
+    %% Talent Data Sources  
+    subgraph "📊 Talent Intelligence"
+        EA_DATA[🎮 EA Sports Ratings<br/>Overall, Speed, Acceleration<br/>data/ea/ratings_2025.csv]
+        MOCK_DATA[📋 Mock Draft Data<br/>NFL Draft Projections<br/>data/mockdraft/2025.csv]
+        DEPTH_DATA[📈 Depth Charts<br/>Position Rankings<br/>data/processed/depth/]
+        ESPN_PLUS[📰 ESPN+ Analysis<br/>Expert Sentiment<br/>kpm34@pitt.edu Auth]
     end
     
     %% Single Source of Truth
