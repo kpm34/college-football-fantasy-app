@@ -281,6 +281,17 @@ vercel logs --follow
   - `TOOLING_SUMMARY.md` – MCP/Appwrite tooling setup summary
 - If MCP is not active, prompt the user to configure `~/.cursor/mcp.json` with Appwrite and Vercel servers (see sections below).
 
+## 📣 Change Reporting Protocol (MANDATORY)
+- Before making ANY change (code, schema, docs, CI), summarize the proposed change and its impact:
+  - Scope: files and directories to be edited
+  - Affected features/pages and API routes
+  - Collections and attributes involved (from `schema/zod-schema.ts`)
+  - Data migrations or backfills required (if any)
+  - Env/Secrets/CI implications
+- After edits: list exactly what changed and why; link to relevant sections in `PROJECT_MAP.md` and `docs/DATA_FLOW.md`.
+- When schema-related: never add defaults to required attributes. Either make optional and default-in-code, or always supply value at write time.
+- Keep SSOT synced: if behavior or shape changes, update `schema/zod-schema.ts`, `PROJECT_MAP.md`, and `docs/DATA_FLOW.md` in the same PR.
+
 ## 🧰 MCP & AI Tooling
 - Configure MCP in `~/.cursor/mcp.json` so Cursor/Claude can operate our stack:
   - Appwrite server (users/projects) via `uvx mcp-server-appwrite --users`
