@@ -7,7 +7,7 @@
 | Tool | Status | Purpose | Location | API Key Required |
 |------|--------|---------|-----------|-------------------|
 | **Claude API** | ✅ Active | Code generation, review, analysis | `/lib/claude.ts` | ✅ Configured |
-| **OpenAI Direct** | ⚠️ Credits needed | Text, images, embeddings, chat | `/lib/openai.ts` | ✅ Configured |
+| **OpenAI Direct** | Active | Text, images, embeddings, chat | `/lib/openai.ts` | ✅ Configured |
 | **Runway AI** | ✅ Active | Video generation | `/lib/runway.ts` (app), `toolbox/packages/clients/src/runway.ts` (global) | ✅ Configured |
 | **Meshy AI** | ✅ Active | 3D model generation | `/vendor/awwwards-rig/src/lib/meshy.ts` (app), `toolbox/packages/clients/src/meshy.ts` (global) | ✅ Configured |
 | **Job Polling** | ✅ Active | Async AI job management | `/api/cron/poll-jobs` | N/A |
