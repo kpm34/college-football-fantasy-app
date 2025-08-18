@@ -3,6 +3,34 @@
 ## Overview
 Complete documentation of all API routes, their functions, required permissions, and database operations.
 
+## Feature → Routes → Collections (Quick Map)
+
+| Feature | Routes/Pages | Collections (SSOT) | Key required fields (from `schema/zod-schema.ts`) |
+|---|---|---|---|
+| Auth: Signup | POST `/api/auth/signup` | `users` | users: `email` (Appwrite account handles password) |
+| Auth: Login/Logout/User/Profile | POST `/api/auth/login`, POST `/api/auth/logout`, GET `/api/auth/user`, PUT `/api/auth/update-profile` | `users` | update-profile: `name` optional |
+| Create League | POST `/api/leagues/create`, `app/league/create` | `leagues`, `user_teams` | leagues: `name`, `commissioner`, `season`, `maxTeams`, `draftType`, `gameMode`; user_teams: `leagueId`, `userId`, `teamName` |
+| League Details | GET `/api/leagues/[leagueId]` | `leagues`, `user_teams`, `users` | n/a (read) |
+| My Leagues | GET `/api/leagues/my-leagues` | `leagues`, `user_teams` | n/a (read) |
+| Invite/Is Commissioner/Search | POST `/api/leagues/invite`, GET `/api/leagues/is-commissioner/[leagueId]`, GET `/api/leagues/search` | `leagues` (+ email service), `activity_log` (optional) | n/a (read/side-effects) |
+| Locker Room | GET `/api/leagues/[leagueId]/locker-room` | `leagues`, `user_teams` (aka rosters), `college_players`, `users` | n/a (read) |
+| Roster Detail | GET `/api/rosters/[rosterId]` | `user_teams`, `college_players` | n/a (read) |
+| Update Lineup | PUT `/api/rosters/[rosterId]/lineup` | `user_teams` (lineup/players JSON) | user_teams: `rosterId` path; body players array |
+| Draft Status | GET `/api/draft/[leagueId]/status` | `leagues`, `draft_picks`, `user_teams` | n/a (read) |
+| Draft Pick | POST `/api/draft/[leagueId]/pick`, `app/draft/[leagueId]` | `draft_picks`, `user_teams`, `activity_log` | draft_picks: `leagueId`, `teamId`, `playerId` |
+| Players (Enhanced) | GET `/api/players/cached` | `college_players` | players: `name`, `position`, `team`, `conference` |
+| Projections | GET `/api/projections` | `projections_yearly`, `projections_weekly` (db mode), `college_players` (calc mode) | projections docs per collection |
+| Games | GET `/api/games`, `/api/games/week/[week]`, `/api/games/eligible` | `games` | games: `week`, `season`, `season_type`, `home_team`, `away_team`, `start_date` |
+| Rankings | GET `/api/rankings`, `/api/rankings/week/[week]` | `rankings` | rankings: `week`, `season`, `poll_type`, `team`, `rank` |
+| Conferences | GET `/api/sec`, `/api/acc`, `/api/big12`, `/api/bigten` | `teams` | teams: `name`, `abbreviation`, `conference` |
+| Weekly Scoring | POST `/api/cron/weekly-scoring` | `games`, `player_stats`, updates `lineups`, updates `user_teams` | lineups: `rosterId`, `week`, `season`; player_stats minimal set |
+| Admin: Dedupe/Refresh/Retire | POST `/api/admin/dedupe/players`, `/api/admin/players/refresh`, `/api/admin/players/retire` | `college_players` | varies per route; primary key fields: `name`, `team`, `position` |
+| Scraper | GET `/api/scraper` | `games`, `rankings`, `teams` | n/a (write from external) |
+
+Notes:
+- Where legacy docs mention `rosters`, the SSOT collection id is `user_teams`.
+- Appwrite constraint: required attributes cannot have default values; use optional + default-in-code or always provide values when writing.
+
 ## Authentication Routes
 
 ### POST `/api/auth/signup`
