@@ -1,0 +1,23 @@
+{
+  "stack": {
+    "framework": "nextjs",
+    "language": "typescript",
+    "backend": "appwrite",
+    "deployment": "vercel"
+  },
+  "env": {
+    "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
+    "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
+    "APPWRITE_DATABASE_ID": "college-football-fantasy"
+  },
+  "mcp": {
+    "servers": {
+      "appwrite": {
+        "command": "uvx",
+        "args": ["mcp-server-appwrite", "--users"],
+        "secrets": ["APPWRITE_API_KEY"]
+      }
+    },
+    "notes": "Provide APPWRITE_API_KEY via shell env; do not commit secrets."
+  }
+}

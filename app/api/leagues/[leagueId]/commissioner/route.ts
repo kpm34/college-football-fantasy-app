@@ -138,7 +138,12 @@ export async function PUT(
     // Map and sanitize: allow only known fields; ignore others (e.g., selectedConference in power4 mode)
     const mapped: Record<string, any> = {};
     const setIfPresent = (key: string, value: any) => {
-      if (value !== undefined && value !== null && value !== '') mapped[key] = value;
+      if (value !== undefined && value !== null) {
+        // Allow empty strings for certain fields like scoringRules (which could be "{}")
+        if (key === 'scoringRules' || value !== '') {
+          mapped[key] = value;
+        }
+      }
     };
     setIfPresent('name', updates.name);
     if ('maxTeams' in updates) setIfPresent('maxTeams', Number(updates.maxTeams));

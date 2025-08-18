@@ -202,7 +202,7 @@ Available MCP tools for Claude Code:
 - Jupyter notebook execution
 
 ### MCP Server Setup (Dev-time Automation)
-Configure MCP servers in `~/.cursor/mcp.json` so Cursor/Claude can operate our stack [[memory:6191194]]. Example:
+Configure MCP servers in `~/.cursor/mcp.json` so Cursor/Claude can operate our stack [[memory:6191194]]. Minimal Appwrite config:
 
 ```json
 {
@@ -213,21 +213,16 @@ Configure MCP servers in `~/.cursor/mcp.json` so Cursor/Claude can operate our s
       "env": {
         "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
         "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
-        "APPWRITE_API_KEY": "<SECRET>"
-      }
-    },
-    "vercel": {
-      "command": "npx",
-      "args": ["mcp-server-vercel"],
-      "env": {
-        "VERCEL_TOKEN": "<SECRET>"
+        "APPWRITE_DATABASE_ID": "college-football-fantasy"
       }
     }
   }
 }
 ```
 
-Reference capabilities file: `tools/capabilities.json` (stack, env, APIs, commands, MCP servers).
+Provide `APPWRITE_API_KEY` via your shell environment instead of hardcoding in this file or in `~/.cursor/mcp.json`.
+
+Reference capabilities file: `toolbox/capabilities.json` (stack, env, APIs, commands, MCP servers).
 
 ## Vercel Configuration
 ```json

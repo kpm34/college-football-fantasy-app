@@ -276,7 +276,7 @@ vercel logs --follow
 - Always load these at session start so tools and capabilities are known:
   - `CLAUDE_TOOLBOX.md` – Complete toolbox and dev environment reference
   - `CLAUDE.md` – Project context and architecture
-  - `tools/capabilities.json` – Machine-readable capabilities (stack, env, APIs, MCP)
+  - `toolbox/capabilities.json` – Machine-readable capabilities (stack, env, APIs, MCP)
   - `docs/MCP_CONFIG.json` – Comprehensive MCP server configuration
   - `TOOLING_SUMMARY.md` – MCP/Appwrite tooling setup summary
 - If MCP is not active, prompt the user to configure `~/.cursor/mcp.json` with Appwrite and Vercel servers (see sections below).
@@ -286,6 +286,52 @@ vercel logs --follow
   - Appwrite server (users/projects) via `uvx mcp-server-appwrite --users`
   - Vercel CLI server (`VERCEL_TOKEN` required)
 - Keep this file and `CLAUDE.md`, `DATA_FLOW.md`, `docs/API_ROUTES.md`, and `docs/PROJECT_MAP.md` in sync so every AI session knows the system model.
+
+## Appwrite MCP (Cursor/Claude) — Setup and Usage
+
+### Quick setup
+1. Install uv (if not already): see `https://docs.astral.sh/uv/` (uvx is included).
+2. Create or update `~/.cursor/mcp.json` with an Appwrite server entry:
+```json
+{
+  "mcpServers": {
+    "appwrite": {
+      "command": "uvx",
+      "args": ["mcp-server-appwrite", "--users"],
+      "env": {
+        "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
+        "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
+        "APPWRITE_DATABASE_ID": "college-football-fantasy",
+        "APPWRITE_API_KEY": "set-in-local-env"
+      }
+    }
+  }
+}
+```
+- Do not commit keys. Prefer setting `APPWRITE_API_KEY` as an OS env var and leave the value as `"set-in-local-env"` or omit the `env` block entirely to inherit from your shell.
+- Reference example (no secrets) lives in `docs/MCP_CONFIG.json`.
+
+### What you can ask the assistant to do (via Appwrite MCP)
+- List users/sessions, create users, update names/emails, enable/disable MFA, issue JWTs.
+- Rotate sessions or invalidate tokens for a user.
+- Review user activity logs and memberships.
+- Validate account targets (email/SMS/push) and manage messaging targets.
+
+Examples:
+- “List the last 10 users and show their email verification status.”
+- “Create a new test user with email X and temporary password Y, then issue a JWT.”
+- “Disable MFA for user U, regenerate recovery codes, and fetch them.”
+- “Delete all active sessions for user U.”
+
+### Guardrails
+- Never write secrets into the repo. Keep keys in your local `~/.cursor/mcp.json` or shell env.
+- For data writes in production, the assistant will summarize the change before executing and prefer least-privilege actions.
+- Use Node runtime + Appwrite SDK for app logic; Appwrite MCP is for dev-time admin ops only.
+
+### Troubleshooting
+- If the Appwrite server doesn’t appear in tools: re-open Cursor, then check `~/.cursor/mcp.json` formatting.
+- Verify connectivity: `curl https://nyc.cloud.appwrite.io/v1/health`
+- Rotate any leaked API key immediately in Appwrite Console and update your local MCP config.
 
 ## 🔌 SDK vs API vs CLI vs MCP (Usage)
 - SDK: Use server-side (Node runtime) for type-safe Appwrite operations inside API routes/repos. Avoid in Edge.
