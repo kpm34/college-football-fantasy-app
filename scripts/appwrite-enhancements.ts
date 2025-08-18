@@ -61,9 +61,9 @@ async function createDatabaseIndexes() {
         { key: 'isPublic_status', type: 'key', attributes: ['isPublic', 'status'] }
       ]
     },
-    // Rosters indexes
+    // User Teams indexes
     {
-      collection: COLLECTIONS.ROSTERS,
+      collection: COLLECTIONS.USER_TEAMS,
       indexes: [
         { key: 'leagueId', type: 'key', attributes: ['leagueId'] },
         { key: 'userId', type: 'key', attributes: ['userId'] },
@@ -413,21 +413,21 @@ async function setupDatabaseRelationships() {
     // Create relationships between collections
     const relationships = [
       {
-        collection: COLLECTIONS.ROSTERS,
+        collection: COLLECTIONS.USER_TEAMS,
         attribute: 'league',
         relatedCollection: COLLECTIONS.LEAGUES,
         type: 'manyToOne',
         twoWay: true,
-        key: 'rosters',
+        key: 'user_teams',
         onDelete: 'cascade'
       },
       {
-        collection: COLLECTIONS.ROSTERS,
+        collection: COLLECTIONS.USER_TEAMS,
         attribute: 'owner',
         relatedCollection: COLLECTIONS.USERS,
         type: 'manyToOne',
         twoWay: true,
-        key: 'rosters',
+        key: 'user_teams',
         onDelete: 'setNull'
       },
       {
@@ -442,7 +442,7 @@ async function setupDatabaseRelationships() {
       {
         collection: COLLECTIONS.DRAFT_PICKS,
         attribute: 'roster',
-        relatedCollection: COLLECTIONS.ROSTERS,
+        relatedCollection: COLLECTIONS.USER_TEAMS,
         type: 'manyToOne',
         twoWay: true,
         key: 'draftPicks',
@@ -493,7 +493,7 @@ async function optimizeCollections() {
   try {
     // Enable document security for sensitive collections
     const collectionsToSecure = [
-      { id: COLLECTIONS.ROSTERS, name: 'Rosters' },
+      { id: COLLECTIONS.USER_TEAMS, name: 'User Teams' },
       { id: COLLECTIONS.LEAGUES, name: 'Leagues' },
       { id: COLLECTIONS.USERS, name: 'Users' }
     ];

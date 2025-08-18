@@ -177,7 +177,7 @@ export function generateMockRoster(overrides: Partial<MockRoster> = {}): MockRos
     $updatedAt: overrides.$updatedAt || faker.date.recent().toISOString(),
     $permissions: ['read("any")', 'write("role:user")'],
     $databaseId: 'test-database',
-    $collectionId: 'rosters',
+    $collectionId: 'user_teams',
     
     leagueId: overrides.leagueId || faker.string.uuid(),
     userId: overrides.userId || faker.string.uuid(),
@@ -235,8 +235,8 @@ export function generateMockDataset() {
   const players = Array.from({ length: 100 }, () => generateMockPlayer());
   const games = Array.from({ length: 50 }, () => generateMockGame());
   
-  // Generate rosters for leagues
-  const rosters = leagues.flatMap(league => 
+  // Generate user teams for leagues
+  const userTeams = leagues.flatMap(league => 
     Array.from({ length: league.currentTeams }, (_, index) => 
       generateMockRoster({
         leagueId: league.$id,
@@ -249,8 +249,8 @@ export function generateMockDataset() {
     leagues,
     players,
     games,
-    rosters,
-    total: leagues.length + players.length + games.length + rosters.length
+    userTeams,
+    total: leagues.length + players.length + games.length + userTeams.length
   };
 }
 

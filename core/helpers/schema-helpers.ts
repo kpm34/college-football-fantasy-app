@@ -541,7 +541,7 @@ export class SchemaHelper {
     }
 
     // Check for missing indexes on high-usage collections
-    const highUsageCollections = ['college_players', 'rosters', 'games', 'leagues'];
+    const highUsageCollections = ['college_players', 'user_teams', 'games', 'leagues'];
     for (const collectionId of highUsageCollections) {
       const indexes = IndexHelper.getCollectionIndexes(collectionId);
       if (indexes.length === 0) {

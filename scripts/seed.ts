@@ -196,7 +196,7 @@ async function seed(): Promise<void> {
     // Clear existing data (preview only!)
     console.log('\n🗑️  Clearing existing data...');
     await clearCollection('games');
-    await clearCollection('rosters');
+    await clearCollection('user_teams');
     await clearCollection('leagues');
     await clearCollection('college_players');
     await clearCollection('teams');

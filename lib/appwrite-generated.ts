@@ -77,8 +77,8 @@ export const COLLECTION_METADATA = {
     indexCount: 4,
     requiredAttributes: ['name', 'commissioner', 'season', 'maxTeams', 'draftType', 'gameMode', 'status'],
   },
-  rosters: {
-    id: 'rosters',
+  user_teams: {
+    id: 'user_teams',
     name: 'Rosters',
     description: 'Fantasy team rosters within leagues',
     attributeCount: 13,

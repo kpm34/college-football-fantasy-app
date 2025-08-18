@@ -979,7 +979,7 @@ export const COLLECTIONS = {
   GAMES: 'games' as const,
   RANKINGS: 'rankings' as const,
   LEAGUES: 'leagues' as const,
-  ROSTERS: 'rosters' as const,
+  ROSTERS: 'user_teams' as const,
   LINEUPS: 'lineups' as const,
   AUCTIONS: 'auctions' as const,
   BIDS: 'bids' as const,
