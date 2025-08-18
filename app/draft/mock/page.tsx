@@ -70,16 +70,6 @@ interface Player {
 export default function MockDraftPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  
-  // Redirect to canonical mock draft room
-  useEffect(() => {
-    if (authLoading) return;
-    // Expect a draftId in the hash or query in future; for now redirect home
-    const hash = (typeof window !== 'undefined') ? (window.location.hash || '').replace('#','') : '';
-    router.replace(hash ? `/mock-draft/${hash}` : '/');
-  }, [authLoading, router]);
-
-  return null;
 
   // Player filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -92,6 +82,30 @@ export default function MockDraftPage() {
   // Player data
   const [players, setPlayers] = useState<Player[]>([]);
   const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
+
+  // Mock draft states
+  const [mockDraftStarted, setMockDraftStarted] = useState(false);
+  const [showSettings, setShowSettings] = useState(true);
+  const [draftStarted, setDraftStarted] = useState(false);
+  const [draftInitializing, setDraftInitializing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [draftedPlayers, setDraftedPlayers] = useState<Set<string>>(new Set());
+  const [myMockPicks, setMyMockPicks] = useState<Player[]>([]);
+  const [myRoster, setMyRoster] = useState<Player[]>([]);
+  const [allPicks, setAllPicks] = useState<Record<number, { player: Player; team: number }>>({});
+  const [currentPick, setCurrentPick] = useState(1);
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [timeRemaining, setTimeRemaining] = useState(0);
+  const [draftOrder, setDraftOrder] = useState<string[]>([]);
+  
+  // Mock draft settings
+  const [settings, setSettings] = useState<MockDraftSettings>({
+    draftType: 'snake',
+    numTeams: 12,
+    userPosition: 1,
+    timerSeconds: 90,
+    rounds: 15
+  });
 
   
 
@@ -312,6 +326,67 @@ export default function MockDraftPage() {
     initializeDraftOrder();
   };
 
+  const handleStartMockDraft = async () => {
+    try {
+      setDraftInitializing(true);
+      
+      // Create a new mock draft via API
+      const response = await fetch('/api/mock-draft/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          draftName: `Mock Draft ${new Date().toLocaleDateString()}`,
+          rounds: settings.rounds,
+          timerPerPickSec: settings.timerSeconds,
+          numTeams: settings.numTeams
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (data.success && data.draftId) {
+        // Navigate to the new mock draft room
+        router.push(`/mock-draft/${data.draftId}`);
+      } else {
+        // Fallback to local mock draft
+        console.log('Using local mock draft mode');
+        setMockDraftStarted(true);
+        setDraftInitializing(false);
+        await loadPlayers();
+      }
+    } catch (error) {
+      console.error('Error creating mock draft:', error);
+      // Fallback to local mock draft
+      setMockDraftStarted(true);
+      setDraftInitializing(false);
+      await loadPlayers();
+    }
+  };
+
+  const handleMockDraftPlayer = (player: Player) => {
+    if (!player) return;
+    
+    // Add to drafted players
+    setDraftedPlayers(prev => new Set(prev).add(player.id));
+    
+    // Add to my picks if it's my turn
+    const teamIndex = getCurrentTeam() - 1;
+    const isMyPick = teamIndex === settings.userPosition - 1;
+    
+    if (isMyPick) {
+      setMyMockPicks(prev => [...prev, player]);
+    }
+    
+    // Move to next pick
+    setCurrentPick(prev => prev + 1);
+    setSelectedPlayer(null);
+    
+    // Reset timer
+    setTimeRemaining(settings.timerSeconds);
+  };
+
   const initializeDraftOrder = () => {
     const teams = Array.from({length: settings.numTeams}, (_, i) => `Team ${i + 1}`);
     teams[settings.userPosition - 1] = "Your Team";
@@ -408,6 +483,13 @@ export default function MockDraftPage() {
     
     return () => clearInterval(timer);
   }, [draftStarted, timeRemaining]);
+
+  // Load players on mount
+  useEffect(() => {
+    if (!authLoading) {
+      loadPlayers();
+    }
+  }, [authLoading]);
 
   if (loading || authLoading || draftInitializing) {
     return <CFPLoadingScreen isLoading={true} minDuration={1000} />;
