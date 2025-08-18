@@ -96,7 +96,20 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
       if (!containerRef.current) return
       try {
         const { default: mermaid } = await import('mermaid')
-        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: 'default', flowchart: { htmlLabels: true } })
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: 'loose',
+          theme: 'dark',
+          flowchart: { htmlLabels: true },
+          themeVariables: {
+            background: '#1f2937', // gray-800 (lighter than pure black for readability)
+            primaryTextColor: '#e5e7eb', // gray-200
+            secondaryTextColor: '#d1d5db', // gray-300
+            lineColor: '#9ca3af', // gray-400
+            nodeBorder: '#e5e7eb',
+            fontSize: '12px'
+          }
+        })
         if (!isMounted || !containerRef.current) return
         const nodes = Array.from(containerRef.current.querySelectorAll<HTMLElement>('[data-mermaid]'))
         for (const [index, el] of nodes.entries()) {
@@ -109,7 +122,7 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
             if (host) {
               host.style.display = 'block'
               host.style.overflow = 'hidden'
-              host.style.background = '#111827' // gray-900 for contrast
+              host.style.background = '#1f2937' // gray-800 for better contrast vs text
               host.style.borderRadius = '0.5rem'
               host.style.padding = '0.5rem'
               const dispose = setupPanZoom(host)
