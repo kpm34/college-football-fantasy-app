@@ -225,8 +225,11 @@ export const PlayerProjections = z.object({
   playerId: z.string().min(1).max(50),
   season: z.number().int().min(2020).max(2035),
   week: z.number().int().min(1).max(20).optional(),
+  version: z.number().int().min(1).default(1),
+  points: z.number().optional(),
+  components: z.string().max(10000).optional(), // JSON payload with base, multipliers, etc.
   fantasy_points: z.number().optional(),
-  data: z.string().max(10000).optional() // JSON payload
+  data: z.string().max(10000).optional() // legacy JSON payload
 });
 
 export const ProjectionsYearly = z.object({
@@ -260,6 +263,23 @@ export const UserCustomProjections = z.object({
   week: z.number().int().min(1).max(20).optional(),
   fantasy_points: z.number().optional(),
   notes: z.string().max(2000).optional()
+});
+
+/**
+ * Projection Run Records (versioning/reproducibility)
+ */
+export const ProjectionRuns = z.object({
+  runId: z.string().min(1).max(64),
+  version: z.number().int().min(1),
+  scope: z.enum(['season', 'week']),
+  season: z.number().int().min(2020).max(2035),
+  week: z.number().int().min(1).max(20).optional(),
+  sources: z.string().max(20000).optional(), // JSON: checksums/urls/timestamps
+  weights: z.string().max(10000).optional(),
+  metrics: z.string().max(10000).optional(), // JSON: MAE/MAPE
+  status: z.enum(['running', 'success', 'failed']).default('running'),
+  startedAt: z.date(),
+  finishedAt: z.date().optional(),
 });
 
 /**
@@ -320,6 +340,7 @@ export const COLLECTIONS = {
   USER_CUSTOM_PROJECTIONS: 'user_custom_projections',
   DRAFT_EVENTS: 'draft_events',
   DRAFT_STATES: 'draft_states',
+  PROJECTION_RUNS: 'projection_runs',
 } as const;
 
 /**
@@ -350,6 +371,7 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.USER_CUSTOM_PROJECTIONS]: UserCustomProjections,
   [COLLECTIONS.DRAFT_EVENTS]: DraftEvents,
   [COLLECTIONS.DRAFT_STATES]: DraftStates,
+  [COLLECTIONS.PROJECTION_RUNS]: ProjectionRuns,
 } as const;
 
 /**
