@@ -53,8 +53,8 @@
       "indexes": []
     },
     {
-      "$id": "rosters",
-      "name": "Rosters",
+      "$id": "user_teams",
+      "name": "User Teams",
       "enabled": true,
       "documentSecurity": false,
       "attributes": [],

@@ -285,65 +285,81 @@ export default function AdminDashboard() {
                 <div className="space-y-8">
                   {showDiagram.title === 'Project Map' ? (
                     <>
-                      <div>
-                        <h4 className="text-lg font-semibold text-white mb-4">System Architecture</h4>
-                        <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                      <div className="mb-8">
+                        <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">📁 Repository Structure</h4>
+                        <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
                           <MermaidRenderer charts={charts.slice(0, 1)} />
                         </div>
                       </div>
                       {charts.length > 1 && (
-                        <div>
-                          <h4 className="text-lg font-semibold text-white mb-4">Database Schema</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                        <div className="mb-8">
+                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔄 Functionality & Data Flow</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[500px] [&_svg]:h-auto [&_svg]:mx-auto">
                             <MermaidRenderer charts={charts.slice(1, 2)} />
+                          </div>
+                        </div>
+                      )}
+                      {charts.length > 2 && (
+                        <div className="mb-8">
+                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔧 Commissioner Settings Schema Fix Flow</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
+                            <MermaidRenderer charts={charts.slice(2, 3)} />
+                          </div>
+                        </div>
+                      )}
+                      {charts.length > 3 && (
+                        <div className="mb-8">
+                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🎮 Complete Admin Operations Flow</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
+                            <MermaidRenderer charts={charts.slice(3, 4)} />
                           </div>
                         </div>
                       )}
                     </>
                   ) : showDiagram.title === 'Data Flow' ? (
                     <>
-                      <div>
-                        <h4 className="text-lg font-semibold text-white mb-4">Authentication Flow</h4>
-                        <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                      <div className="mb-8">
+                        <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔐 Authentication Flow</h4>
+                        <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
                           <MermaidRenderer charts={charts.slice(0, 1)} />
                         </div>
                       </div>
                       {charts.length > 1 && (
-                        <div>
-                          <h4 className="text-lg font-semibold text-white mb-4">League Management Flow</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                        <div className="mb-8">
+                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🏟️ League Management Flow</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
                             <MermaidRenderer charts={charts.slice(1, 2)} />
                           </div>
                         </div>
                       )}
                       {charts.length > 2 && (
-                        <div>
-                          <h4 className="text-lg font-semibold text-white mb-4">Draft Flow (Real-time)</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                        <div className="mb-8">
+                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">📋 Draft Flow (Real-time)</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
                             <MermaidRenderer charts={charts.slice(2, 3)} />
                           </div>
                         </div>
                       )}
                       {charts.length > 3 && (
-                        <div>
-                          <h4 className="text-lg font-semibold text-white mb-4">Player Data Pipeline</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                        <div className="mb-8">
+                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">📊 Player Data Pipeline</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
                             <MermaidRenderer charts={charts.slice(3, 4)} />
                           </div>
                         </div>
                       )}
                       {charts.length > 4 && (
-                        <div>
-                          <h4 className="text-lg font-semibold text-white mb-4">Projections System</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                        <div className="mb-8">
+                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🎯 Projections System</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
                             <MermaidRenderer charts={charts.slice(4, 5)} />
                           </div>
                         </div>
                       )}
                       {charts.length > 5 && (
-                        <div>
-                          <h4 className="text-lg font-semibold text-white mb-4">Search & Filter Flow</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                        <div className="mb-8">
+                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔍 Search & Filter Flow</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
                             <MermaidRenderer charts={charts.slice(5, 6)} />
                           </div>
                         </div>
