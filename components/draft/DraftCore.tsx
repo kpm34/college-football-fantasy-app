@@ -8,12 +8,14 @@ import { FiSearch, FiFilter, FiTrendingUp, FiStar, FiWifi } from 'react-icons/fi
 export type DraftType = 'snake' | 'mock';
 export type Position = 'ALL' | 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF';
 export type Conference = 'ALL' | 'SEC' | 'Big Ten' | 'Big 12' | 'ACC';
+export type TeamFilter = 'ALL' | string;
 
 export interface DraftCoreState {
   players: DraftPlayer[];
   searchQuery: string;
   positionFilter: Position;
   conferenceFilter: Conference;
+  teamFilter: TeamFilter;
   selectedPlayer: DraftPlayer | null;
   activeTab: 'available' | 'myteam' | 'board';
   loading: boolean;
@@ -49,6 +51,7 @@ export default function DraftCore({
     searchQuery: '',
     positionFilter: 'ALL',
     conferenceFilter: 'ALL',
+    teamFilter: 'ALL',
     selectedPlayer: null,
     activeTab: 'available',
     loading: true,
@@ -59,12 +62,15 @@ export default function DraftCore({
   const loadPlayers = useCallback(async () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
-      
-      const response = await fetch(`/api/draft/players?leagueId=${leagueId}&draftType=${draftType}`);
+      const params = new URLSearchParams({ leagueId, draftType });
+      if (state.positionFilter && state.positionFilter !== 'ALL') params.set('position', state.positionFilter);
+      if (state.conferenceFilter && state.conferenceFilter !== 'ALL') params.set('conference', state.conferenceFilter);
+      if (state.teamFilter && state.teamFilter !== 'ALL') params.set('team', state.teamFilter);
+      params.set('orderBy', 'projection');
+      const response = await fetch(`/api/draft/players?${params.toString()}`);
       if (!response.ok) {
         throw new Error(`Failed to load players: ${response.status}`);
       }
-      
       const data = await response.json();
       setState(prev => ({ 
         ...prev, 
@@ -79,7 +85,7 @@ export default function DraftCore({
         error: error instanceof Error ? error.message : 'Failed to load players' 
       }));
     }
-  }, [leagueId, draftType]);
+  }, [leagueId, draftType, state.positionFilter, state.conferenceFilter, state.teamFilter]);
 
   // Initialize players on component mount
   useEffect(() => {
@@ -93,6 +99,9 @@ export default function DraftCore({
     !draftedPlayers.some(drafted => drafted.id === player.id)
   );
 
+  // Derive unique teams for team filter
+  const uniqueTeams = Array.from(new Set(state.players.map(p => p.team).filter(Boolean))).sort((a, b) => (a || '').localeCompare(b || ''));
+
   // Apply search and position filters
   const filteredPlayers = availablePlayers.filter(player => {
     const matchesSearch = state.searchQuery === '' || 
@@ -104,8 +113,10 @@ export default function DraftCore({
       
     const matchesConference = state.conferenceFilter === 'ALL' || 
       player.conference === state.conferenceFilter;
+
+    const matchesTeam = state.teamFilter === 'ALL' || player.team === state.teamFilter;
       
-    return matchesSearch && matchesPosition && matchesConference;
+    return matchesSearch && matchesPosition && matchesConference && matchesTeam;
   });
 
   // Sort players by projected points (descending)
@@ -131,7 +142,8 @@ export default function DraftCore({
       ...prev,
       searchQuery: '',
       positionFilter: 'ALL',
-      conferenceFilter: 'ALL'
+      conferenceFilter: 'ALL',
+      teamFilter: 'ALL'
     }));
   };
 
@@ -188,6 +200,20 @@ export default function DraftCore({
             >
               {CONFERENCES.map(conf => (
                 <option key={conf} value={conf}>{conf}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Team Filter */}
+          <div className="flex items-center gap-2">
+            <select
+              value={state.teamFilter}
+              onChange={(e) => setState(prev => ({ ...prev, teamFilter: (e.target.value || 'ALL') as TeamFilter }))}
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="ALL">ALL Teams</option>
+              {uniqueTeams.map(team => (
+                <option key={team} value={team || ''}>{team}</option>
               ))}
             </select>
           </div>
@@ -367,6 +393,7 @@ export function useDraftCore(initialState?: Partial<DraftCoreState>) {
     searchQuery: '',
     positionFilter: 'ALL',
     conferenceFilter: 'ALL', 
+    teamFilter: 'ALL',
     selectedPlayer: null,
     activeTab: 'available',
     loading: false,
