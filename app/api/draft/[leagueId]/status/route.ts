@@ -46,7 +46,7 @@ export const GET = withErrorHandler(async (
 
   const draftPicks = await databases.listDocuments(
     env.server.appwrite.databaseId,
-    'draft_picks',
+    env.client.collections.draftPicks,
     [
       Query.equal('leagueId', [leagueId]),
       Query.orderDesc('overallPick'),
