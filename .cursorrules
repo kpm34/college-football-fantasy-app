@@ -213,7 +213,15 @@ SKIP_ENV_VALIDATION=true npm run build
 5. **Loading states** for all async operations
 6. **Error messages** that are helpful, not technical
 
-## 📊 Database Collections
+## 📊 Database Collections & Schema Management
+
+### Single Source of Truth (SSOT)
+- **Schema Definition**: `schema/zod-schema.ts` - THE canonical source
+- **Auto-Generated Types**: `types/generated.ts` - Generated from SSOT
+- **Collection Config**: `lib/appwrite-generated.ts` - Generated from SSOT
+- **Environment Template**: `.env.template.generated` - Generated from SSOT
+
+### Collections
 - `leagues` - Fantasy leagues
 - `rosters` - Team rosters (was teams)
 - `college_players` - Player database
@@ -223,6 +231,21 @@ SKIP_ENV_VALIDATION=true npm run build
 - `auctions` - Auction drafts
 - `bids` - Auction bid history
 - `lineups` - Weekly lineups
+
+### Schema Workflow
+```bash
+# 1. Edit the SSOT (ONLY place to make schema changes)
+vim schema/zod-schema.ts
+
+# 2. Generate everything automatically
+npm run generate:all
+
+# 3. Sync to Appwrite
+npx tsx scripts/sync-appwrite-simple.ts
+
+# 4. Deploy with confidence
+vercel --prod
+```
 
 ## 🔍 Quick Debugging
 ```bash
@@ -268,17 +291,18 @@ vercel logs --follow
 
 ## 📚 Useful Links
 - [Vercel Dashboard](https://vercel.com/kpm34s-projects)
-- [Appwrite Console](https://cloud.appwrite.io)
+- [Appwrite Console](https://nyc.cloud.appwrite.io)
 - [CFBD API Docs](https://collegefootballdata.com)
 - [Next.js 15 Docs](https://nextjs.org/docs)
 
 ## 🧭 AI Session Bootstrap (Claude Code + Cursor)
 - Always load these at session start so tools and capabilities are known:
-  - `CLAUDE_TOOLBOX.md` – Complete toolbox and dev environment reference
+  - `TOOLBOX_CLAUDE.md` – MCP integration guide for Claude Code
+  - `TOOLBOX_CURSOR.md` – Development environment guide for Cursor AI
+  - `CURSOR_COMMANDS.md` – Quick command reference
   - `CLAUDE.md` – Project context and architecture
-  - `toolbox/capabilities.json` – Machine-readable capabilities (stack, env, APIs, MCP)
+  - `schema/zod-schema.ts` – Single Source of Truth for all schemas
   - `docs/MCP_CONFIG.json` – Comprehensive MCP server configuration
-  - `TOOLING_SUMMARY.md` – MCP/Appwrite tooling setup summary
 - If MCP is not active, prompt the user to configure `~/.cursor/mcp.json` with Appwrite and Vercel servers (see sections below).
 
 ## 📣 Change Reporting Protocol (MANDATORY)
