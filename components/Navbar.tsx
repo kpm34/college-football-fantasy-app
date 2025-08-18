@@ -422,6 +422,18 @@ function UserMenu({
   user: any;
   loading: boolean;
 }) {
+  const router = useRouter();
+  const { logout } = useAuth();
+  
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/");
+    } catch (e) {
+      console.error("Logout failed", e);
+    }
+  };
+
   if (loading) {
     return (
       <div className="text-sm px-3 py-1.5 rounded-md bg-white/10 text-white/50">
@@ -432,12 +444,21 @@ function UserMenu({
   
   if (user) {
     return (
-      <Link 
-        href="/account/settings" 
-        className="text-sm px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-white/90 hover:text-white transition-colors"
-      >
-        {user.name || user.email}
-      </Link>
+      <div className="flex items-center gap-2">
+        <Link 
+          href="/account/settings" 
+          className="text-sm px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-white/90 hover:text-white transition-colors"
+        >
+          {user.name || user.email}
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="text-sm px-3 py-1.5 rounded-md bg-red-600/80 hover:bg-red-600 text-white transition-colors"
+          title="Logout"
+        >
+          Logout
+        </button>
+      </div>
     );
   }
   

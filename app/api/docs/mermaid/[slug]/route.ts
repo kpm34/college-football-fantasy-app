@@ -4,7 +4,8 @@ import path from 'node:path'
 
 function extractMermaidBlocks(markdown: string): string[] {
   const blocks: string[] = []
-  const regex = /```mermaid\n([\s\S]*?)```/g
+  // Support optional attributes after mermaid and both LF and CRLF newlines
+  const regex = /```mermaid[^\n]*\r?\n([\s\S]*?)```/g
   let match: RegExpExecArray | null
   while ((match = regex.exec(markdown))) {
     blocks.push(match[1].trim())
@@ -20,7 +21,8 @@ export async function GET(
 
   const fileMap: Record<string, string> = {
     'data-flow': 'docs/DATA_FLOW.md',
-    'project-map': 'PROJECT_MAP.md',
+    'project-map': 'docs/PROJECT_MAP.md',
+    'system-map': 'docs/SYSTEM_MAP.md',
   }
 
   const rel = fileMap[slug]
@@ -28,21 +30,27 @@ export async function GET(
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
 
-  try {
-    const absolutePath = path.join(process.cwd(), rel)
-    const [content, stat] = await Promise.all([
-      fs.readFile(absolutePath, 'utf8'),
-      fs.stat(absolutePath),
-    ])
+  // Try primary path; on failure or zero charts, fall back to common alternates
+  const candidates = [rel]
+  if (slug === 'project-map') candidates.push('PROJECT_MAP.md')
 
-    const charts = extractMermaidBlocks(content)
-    return NextResponse.json({ charts, updatedAt: stat.mtime.toISOString() })
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error?.message || 'Failed to load mermaid content' },
-      { status: 500 }
-    )
+  for (const candidate of candidates) {
+    try {
+      const absolutePath = path.join(process.cwd(), candidate)
+      const [content, stat] = await Promise.all([
+        fs.readFile(absolutePath, 'utf8'),
+        fs.stat(absolutePath),
+      ])
+      const charts = extractMermaidBlocks(content)
+      if (charts.length > 0) {
+        return NextResponse.json({ charts, updatedAt: stat.mtime.toISOString(), source: candidate })
+      }
+    } catch {}
   }
+
+  return NextResponse.json({ charts: [], error: 'No diagrams found', tried: candidates }, { status: 200 })
 }
+
+export const runtime = 'nodejs'
 
 

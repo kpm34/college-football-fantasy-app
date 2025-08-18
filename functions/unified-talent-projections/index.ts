@@ -169,6 +169,38 @@ async function loadMockDraftData(season: number): Promise<Map<string, any>> {
 }
 
 /**
+ * Load depth chart data from JSON
+ */
+async function loadDepthChartData(season: number): Promise<Map<string, number>> {
+  const depthMap = new Map<string, number>();
+  const filePath = path.join(process.cwd(), `data/processed/depth/depth_chart_${season}.json`);
+  
+  if (!fs.existsSync(filePath)) {
+    console.warn(`Depth chart file not found: ${filePath}`);
+    return depthMap;
+  }
+  
+  try {
+    const depthData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    
+    for (const [team, positions] of Object.entries(depthData)) {
+      for (const [position, players] of Object.entries(positions as any)) {
+        for (const player of players as any[]) {
+          const key = `${player.player_name?.toLowerCase()}|${team.toLowerCase()}`;
+          depthMap.set(key, player.pos_rank || 1);
+        }
+      }
+    }
+    
+    console.log(`Loaded ${depthMap.size} depth chart entries for ${season}`);
+    return depthMap;
+  } catch (error) {
+    console.warn(`Error loading depth chart data:`, error);
+    return depthMap;
+  }
+}
+
+/**
  * Calculate comprehensive talent multiplier based on all factors
  */
 function calculateTalentMultiplier(talent: TalentProfile, pos: Position): number {
@@ -387,9 +419,10 @@ async function buildTalentProfiles(
 ): Promise<EnhancedPlayerContext[]> {
   
   console.log('Loading external talent data...');
-  const [eaData, draftData] = await Promise.all([
+  const [eaData, draftData, depthChartData] = await Promise.all([
     loadEAData(season),
-    loadMockDraftData(season)
+    loadMockDraftData(season),
+    loadDepthChartData(season)
   ]);
   
   console.log('Loading college players from database...');
@@ -401,7 +434,8 @@ async function buildTalentProfiles(
       Query.greaterThan('fantasy_points', 0),
       Query.equal('draftable', true),
       Query.equal('position', ['QB', 'RB', 'WR', 'TE']),
-      Query.limit(50) // Test with 50 players first
+      Query.equal('team', 'Louisville'), // Focus on Louisville players for testing
+      Query.limit(20) // Test with Louisville players specifically
     ]
   );
   
@@ -449,14 +483,14 @@ async function buildTalentProfiles(
       // Estimate usage rate from current fantasy points (higher points = higher usage)
       const baseUsageRate = Math.min(0.8, Math.max(0.1, (p.fantasy_points || 100) / 400));
       
-      // Get depth rank from database or estimate from fantasy points
-      const depthRank = p.depth_rank || estimateDepthRank(p.fantasy_points, posKey);
+      // Look up actual depth rank from loaded data or estimate from fantasy points
+      const playerKey = `${playerName.toLowerCase()}|${teamId.toLowerCase()}`;
+      const depthRank = depthChartData.get(playerKey) || p.depth_rank || estimateDepthRank(p.fantasy_points, posKey);
       
       // Analyze surrounding talent for this team/position
       const surroundingTalent = await analyzeSurroundingTalent(databases, dbId, teamId, posKey, eaData);
       
-      // Look up talent data using player name and team
-      const playerKey = `${playerName.toLowerCase()}|${teamId.toLowerCase()}`;
+      // Look up talent data using player name and team (use same playerKey)
       const eaRating = eaData.get(playerKey) || eaData.get(playerName.toLowerCase());
       const draftData_player = draftData.get(playerKey) || draftData.get(playerName.toLowerCase());
       const espnAnalysis = await getESPNPlusAnalysis(playerName, teamId, posKey);
@@ -747,18 +781,14 @@ async function updatePlayerProjections(
   const points = score(stat);
   
   try {
-    // Update college_players table
+    // Update college_players table with just the essential projections
     await databases.updateDocument(
       dbId,
       'college_players',
       ctx.playerId,
       {
         fantasy_points: points,
-        statline_simple_json: JSON.stringify(stat),
-        talent_multiplier: Number(ctx.talentMultiplier.toFixed(3)),
-        ea_overall: ctx.talent.ea_overall || null,
-        draft_capital_score: ctx.talent.draft_capital_score || null,
-        supporting_cast_rating: ctx.talent.supporting_cast_rating || null
+        eligible: true
       }
     );
     

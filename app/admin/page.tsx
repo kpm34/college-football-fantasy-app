@@ -37,6 +37,25 @@ export default function AdminDashboard() {
     );
   }
 
+  // Local helper: fetch markdown and extract mermaid blocks on client
+  const loadFromMarkdown = async (paths: string[]): Promise<string[]> => {
+    const regex = /```mermaid[^\n]*\n([\s\S]*?)```/g
+    for (const p of paths) {
+      try {
+        const res = await fetch(p, { cache: 'no-store' })
+        if (!res.ok) continue
+        const text = await res.text()
+        const blocks: string[] = []
+        let m: RegExpExecArray | null
+        while ((m = regex.exec(text))) {
+          blocks.push((m[1] || '').trim())
+        }
+        if (blocks.length > 0) return blocks
+      } catch {}
+    }
+    return []
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="container mx-auto px-4 py-8">
@@ -46,8 +65,20 @@ export default function AdminDashboard() {
           <button
             onClick={async () => {
               setShowDiagram({ slug: 'project-map', title: 'Project Map' })
+              // Try client-side extraction first to avoid any API issues
+              const local = await loadFromMarkdown(['/docs/PROJECT_MAP.md', '/PROJECT_MAP.md'])
+              if (local.length > 0) {
+                setCharts(local)
+                setLastUpdated('')
+                return
+              }
+              // Fallback to API
               const res = await fetch('/api/docs/mermaid/project-map')
               const data = await res.json()
+              if (!Array.isArray(data.charts) || data.charts.length === 0) {
+                console.warn('Mermaid project-map API returned:', data)
+                alert(`Project Map: ${data.error || 'no diagrams'}\nSource tried: ${Array.isArray(data.tried) ? data.tried.join(', ') : data.source || 'n/a'}`)
+              }
               setCharts(data.charts || [])
               setLastUpdated(data.updatedAt || '')
             }}
@@ -59,8 +90,20 @@ export default function AdminDashboard() {
           <button
             onClick={async () => {
               setShowDiagram({ slug: 'data-flow', title: 'Data Flow' })
+              // Try client-side extraction first
+              const local = await loadFromMarkdown(['/docs/DATA_FLOW.md'])
+              if (local.length > 0) {
+                setCharts(local)
+                setLastUpdated('')
+                return
+              }
+              // Fallback to API
               const res = await fetch('/api/docs/mermaid/data-flow')
               const data = await res.json()
+              if (!Array.isArray(data.charts) || data.charts.length === 0) {
+                console.warn('Mermaid data-flow API returned:', data)
+                alert(`Data Flow: ${data.error || 'no diagrams'}\nSource tried: ${Array.isArray(data.tried) ? data.tried.join(', ') : data.source || 'n/a'}`)
+              }
               setCharts(data.charts || [])
               setLastUpdated(data.updatedAt || '')
             }}

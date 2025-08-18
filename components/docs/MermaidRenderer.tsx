@@ -113,7 +113,11 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
         if (!isMounted || !containerRef.current) return
         const nodes = Array.from(containerRef.current.querySelectorAll<HTMLElement>('[data-mermaid]'))
         for (const [index, el] of nodes.entries()) {
-          const code = el.getAttribute('data-mermaid-code') || ''
+          const raw = el.getAttribute('data-mermaid-code') || ''
+          // Light sanitization: escape characters that commonly break parsing in labels
+          const code = raw
+            .replaceAll('|', '&#124;')
+            .replaceAll('&', '&amp;')
           try {
             const { svg } = await mermaid.render(`mermaid-${index}-${Date.now()}`, code)
             // Wrap in a pan/zoom host for interactivity
@@ -130,10 +134,9 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
             }
           } catch (error) {
             console.error('Mermaid render failed:', error)
-            el.innerHTML = `<pre style="white-space:pre-wrap;word-break:break-word;">${code
-              .replace(/&/g, '&amp;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')}</pre>`
+            // Do not show raw code; present a compact error placeholder instead
+            const message = (error as any)?.message ? String((error as any).message).slice(0, 140) : 'Unknown error'
+            el.innerHTML = `<div style="padding:0.75rem;border:1px dashed rgba(255,255,255,0.2);border-radius:0.5rem;color:#d1d5db;background:#111827">Diagram failed to render. ${message}</div>`
           }
         }
       } catch (error) {
