@@ -37,24 +37,7 @@ export default function AdminDashboard() {
     );
   }
 
-  // Local helper: fetch markdown and extract mermaid blocks on client
-  const loadFromMarkdown = async (paths: string[]): Promise<string[]> => {
-    const regex = /```mermaid[^\n]*\n([\s\S]*?)```/g
-    for (const p of paths) {
-      try {
-        const res = await fetch(p, { cache: 'no-store' })
-        if (!res.ok) continue
-        const text = await res.text()
-        const blocks: string[] = []
-        let m: RegExpExecArray | null
-        while ((m = regex.exec(text))) {
-          blocks.push((m[1] || '').trim())
-        }
-        if (blocks.length > 0) return blocks
-      } catch {}
-    }
-    return []
-  }
+  // Unify: always load via API route for consistent behavior
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
@@ -65,14 +48,6 @@ export default function AdminDashboard() {
           <button
             onClick={async () => {
               setShowDiagram({ slug: 'project-map', title: 'Project Map' })
-              // Try client-side extraction first to avoid any API issues
-              const local = await loadFromMarkdown(['/docs/PROJECT_MAP.md', '/PROJECT_MAP.md'])
-              if (local.length > 0) {
-                setCharts(local)
-                setLastUpdated('')
-                return
-              }
-              // Fallback to API
               const res = await fetch('/api/docs/mermaid/project-map')
               const data = await res.json()
               if (!Array.isArray(data.charts) || data.charts.length === 0) {
@@ -90,14 +65,6 @@ export default function AdminDashboard() {
           <button
             onClick={async () => {
               setShowDiagram({ slug: 'data-flow', title: 'Data Flow' })
-              // Try client-side extraction first
-              const local = await loadFromMarkdown(['/docs/DATA_FLOW.md'])
-              if (local.length > 0) {
-                setCharts(local)
-                setLastUpdated('')
-                return
-              }
-              // Fallback to API
               const res = await fetch('/api/docs/mermaid/data-flow')
               const data = await res.json()
               if (!Array.isArray(data.charts) || data.charts.length === 0) {
@@ -304,7 +271,7 @@ export default function AdminDashboard() {
 
       {showDiagram && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
-          <div className="w-full max-w-5xl bg-gray-900 text-white rounded-xl border border-white/20 shadow-2xl overflow-hidden">
+          <div className="w-full max-w-7xl bg-gray-900 text-white rounded-xl border border-white/20 shadow-2xl overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-gray-800 to-gray-700">
               <div>
                 <h3 className="text-xl font-semibold">{showDiagram.title} (Mermaid)</h3>
@@ -312,11 +279,81 @@ export default function AdminDashboard() {
               </div>
               <button onClick={() => setShowDiagram(null)} className="px-3 py-1.5 rounded-md bg-white text-gray-900 font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/80" aria-label="Close diagram">Close</button>
             </div>
-            <div className="max-h-[70vh] overflow-auto p-6 bg-gray-950">
+            <div className="max-h-[80vh] overflow-auto p-6 bg-gray-950">
               {/* High-contrast container for readability */}
               {charts.length > 0 ? (
-                <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
-                  <MermaidRenderer charts={charts} />
+                <div className="space-y-8">
+                  {showDiagram.title === 'Project Map' ? (
+                    <>
+                      <div>
+                        <h4 className="text-lg font-semibold text-white mb-4">System Architecture</h4>
+                        <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                          <MermaidRenderer charts={charts.slice(0, 1)} />
+                        </div>
+                      </div>
+                      {charts.length > 1 && (
+                        <div>
+                          <h4 className="text-lg font-semibold text-white mb-4">Database Schema</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                            <MermaidRenderer charts={charts.slice(1, 2)} />
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : showDiagram.title === 'Data Flow' ? (
+                    <>
+                      <div>
+                        <h4 className="text-lg font-semibold text-white mb-4">Authentication Flow</h4>
+                        <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                          <MermaidRenderer charts={charts.slice(0, 1)} />
+                        </div>
+                      </div>
+                      {charts.length > 1 && (
+                        <div>
+                          <h4 className="text-lg font-semibold text-white mb-4">League Management Flow</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                            <MermaidRenderer charts={charts.slice(1, 2)} />
+                          </div>
+                        </div>
+                      )}
+                      {charts.length > 2 && (
+                        <div>
+                          <h4 className="text-lg font-semibold text-white mb-4">Draft Flow (Real-time)</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                            <MermaidRenderer charts={charts.slice(2, 3)} />
+                          </div>
+                        </div>
+                      )}
+                      {charts.length > 3 && (
+                        <div>
+                          <h4 className="text-lg font-semibold text-white mb-4">Player Data Pipeline</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                            <MermaidRenderer charts={charts.slice(3, 4)} />
+                          </div>
+                        </div>
+                      )}
+                      {charts.length > 4 && (
+                        <div>
+                          <h4 className="text-lg font-semibold text-white mb-4">Projections System</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                            <MermaidRenderer charts={charts.slice(4, 5)} />
+                          </div>
+                        </div>
+                      )}
+                      {charts.length > 5 && (
+                        <div>
+                          <h4 className="text-lg font-semibold text-white mb-4">Search & Filter Flow</h4>
+                          <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                            <MermaidRenderer charts={charts.slice(5, 6)} />
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                      <MermaidRenderer charts={charts} />
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="text-gray-200">No diagrams found.</div>
