@@ -33,6 +33,7 @@ export const COLLECTIONS = {
   // Backwards-compatible UPPERCASE aliases
   LEAGUES: ENV_COLLECTIONS.leagues,
   ROSTERS: ENV_COLLECTIONS.userTeams,
+  USER_TEAMS: ENV_COLLECTIONS.userTeams,
   PLAYERS: ENV_COLLECTIONS.players,
   TEAMS: ENV_COLLECTIONS.teams,
   GAMES: ENV_COLLECTIONS.games,
