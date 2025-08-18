@@ -104,11 +104,7 @@ export default function DraftRoom({ params }: Props) {
     }
 
     try {
-      await draft.makePick(player.$id || player.id, {
-        playerName: player.playerName || player.name,
-        position: player.position,
-        team: player.team,
-      });
+      await draft.makePick({ playerId: player.$id || player.playerId });
       
       setSelectedPlayer(null);
     } catch (error) {
@@ -232,13 +228,21 @@ export default function DraftRoom({ params }: Props) {
             onPlayerDraft={handleDraftPlayer}
             myPicks={myPicks}
             draftedPlayers={draft.picks.map(pick => ({
-              id: pick.playerId,
               $id: pick.playerId,
-              name: pick.playerName,
+              playerId: pick.playerId,
               playerName: pick.playerName,
               position: pick.playerPosition,
               team: pick.playerTeam,
-              projectedPoints: 0,
+              conference: '',
+              school: '',
+              year: 'JR',
+              prevYearStats: { gamesPlayed: 0, fantasyPoints: 0 },
+              ratings: { composite: 0 },
+              projections: { gamesPlayed: 0, fantasyPoints: 0, confidence: 0 },
+              rankings: { overall: 0, position: 0, adp: 0, tier: 0 },
+              sources: { espn: false, ncaa: false, spPlus: false, mockDrafts: [], socialMediaBuzz: 0, articles: [] },
+              risk: { injuryHistory: [], suspensions: [], riskScore: 0 },
+              updatedAt: new Date().toISOString(),
               isDrafted: true,
               draftedBy: pick.userId,
               draftPosition: pick.pickNumber
@@ -250,7 +254,7 @@ export default function DraftRoom({ params }: Props) {
           <div className="w-96 bg-white border-l border-gray-200 p-6 overflow-y-auto">
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold">{selectedPlayer.playerName || selectedPlayer.name}</h2>
+                <h2 className="text-2xl font-bold">{selectedPlayer.playerName}</h2>
                 <p className="text-gray-600">{selectedPlayer.position} • {selectedPlayer.team}</p>
               </div>
 
@@ -276,10 +280,7 @@ export default function DraftRoom({ params }: Props) {
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Fantasy Points</span>
-                    <span className="font-bold">
-                      {selectedPlayer.projectedPoints?.toFixed(1) || 
-                       selectedPlayer.projections?.fantasyPoints?.toFixed(1) || '0.0'}
-                    </span>
+                    <span className="font-bold">{selectedPlayer.projections?.fantasyPoints?.toFixed(1) || '0.0'}</span>
                   </div>
                 </div>
               </div>

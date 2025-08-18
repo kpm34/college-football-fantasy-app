@@ -236,7 +236,7 @@ export function useDraftRealtime(leagueId: string) {
   }, []);
 
   // Make a draft pick
-  const makePick = async (playerId: string, playerData: any) => {
+  const makePick = async (playerId: string) => {
     if (!state.isMyTurn || !user || !state.league) {
       throw new Error('Not your turn to pick');
     }
@@ -245,7 +245,7 @@ export function useDraftRealtime(leagueId: string) {
       const res = await fetch(`/api/drafts/${leagueId}/pick`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId, teamId: state.league.myTeamId || state.onTheClock, by: user.$id })
+        body: JSON.stringify({ playerId, teamId: (state as any).league?.myTeamId || state.onTheClock, by: user.$id })
       });
       if (!res.ok) {
         const t = await res.text();

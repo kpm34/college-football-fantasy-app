@@ -68,7 +68,6 @@ export async function POST(request: NextRequest) {
       runId,
       {
         status: 'success',
-        metrics: JSON.stringify({ mae: 0, mape: 0 }),
         finishedAt: new Date().toISOString(),
       }
     );

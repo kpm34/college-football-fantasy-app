@@ -48,8 +48,8 @@ export function useDraftCoreLive(leagueId: string): DraftCore {
       // no-op; realtime hook self-refreshes. Expose for parity
     },
     makePick: async (args) => {
-      const { playerId, ...rest } = args as any;
-      await live.makePick(playerId, rest);
+      const { playerId } = args as any;
+      await live.makePick(playerId);
     },
   };
 

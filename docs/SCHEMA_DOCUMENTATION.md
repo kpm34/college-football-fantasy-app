@@ -1,8 +1,8 @@
 # Schema Documentation
 
 **Generated from SSOT**: `schema/zod-schema.ts`  
-**Generated at**: 2025-08-18T00:30:09.351Z  
-**Collections**: 12
+**Generated at**: 2025-08-18T23:47:14.216Z  
+**Collections**: 26
 
 This documentation is automatically generated from the Single Source of Truth schema.
 
@@ -22,6 +22,20 @@ This documentation is automatically generated from the Single Source of Truth sc
 - [player_stats](#playerstats)
 - [users](#users)
 - [activity_log](#activitylog)
+- [draft_picks](#draftpicks)
+- [mock_drafts](#mockdrafts)
+- [mock_draft_picks](#mockdraftpicks)
+- [mock_draft_participants](#mockdraftparticipants)
+- [matchups](#matchups)
+- [player_projections](#playerprojections)
+- [projections_yearly](#projectionsyearly)
+- [projections_weekly](#projectionsweekly)
+- [model_inputs](#modelinputs)
+- [user_custom_projections](#usercustomprojections)
+- [draft_events](#draftevents)
+- [draft_states](#draftstates)
+- [league_memberships](#leaguememberships)
+- [projection_runs](#projectionruns)
 
 ---
 
@@ -246,7 +260,7 @@ This documentation is automatically generated from the Single Source of Truth sc
 | `playerId` | string | ✅ | min: 1, max: 50 |
 | `bidderId` | string | ✅ | min: 1, max: 50 |
 | `amount` | number | ✅ | min: 1, max: 1000 |
-| `timestamp` | date | ✅ | default: "2025-08-18T00:30:09.350Z" |
+| `timestamp` | date | ✅ | default: "2025-08-18T23:47:14.215Z" |
 
 ### Relationships
 
@@ -270,7 +284,7 @@ This documentation is automatically generated from the Single Source of Truth sc
 | `season` | number | ✅ | integer, min: 2020, max: 2030 |
 | `stats` | string | ✅ | max: 2000 |
 | `fantasy_points` | number | ✅ | default: 0 |
-| `updated` | date | ✅ | default: "2025-08-18T00:30:09.351Z" |
+| `updated` | date | ✅ | default: "2025-08-18T23:47:14.216Z" |
 
 ### Relationships
 
@@ -292,7 +306,7 @@ This documentation is automatically generated from the Single Source of Truth sc
 | `name` | string | ❌ | min: 1, max: 100 |
 | `emailVerification` | boolean | ✅ | default: false |
 | `preferences` | string | ❌ | max: 2000 |
-| `created` | date | ✅ | default: "2025-08-18T00:30:09.351Z" |
+| `created` | date | ✅ | default: "2025-08-18T23:47:14.216Z" |
 | `lastLogin` | date | ❌ | - |
 
 ---
@@ -309,7 +323,7 @@ This documentation is automatically generated from the Single Source of Truth sc
 | `userId` | string | ❌ | max: 50 |
 | `action` | string | ✅ | min: 1, max: 100 |
 | `details` | string | ❌ | max: 1000 |
-| `timestamp` | date | ✅ | default: "2025-08-18T00:30:09.351Z" |
+| `timestamp` | date | ✅ | default: "2025-08-18T23:47:14.216Z" |
 | `ip_address` | string | ❌ | max: 45 |
 | `user_agent` | string | ❌ | max: 500 |
 
@@ -319,20 +333,317 @@ This documentation is automatically generated from the Single Source of Truth sc
 
 ---
 
+## draft_picks
+
+**Key**: `DRAFT_PICKS`  
+**Fields**: 10
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `leagueId` | string | ✅ | min: 1, max: 50 |
+| `teamId` | string | ✅ | min: 1, max: 50 |
+| `rosterId` | string | ❌ | min: 1, max: 50 |
+| `playerId` | string | ✅ | min: 1, max: 50 |
+| `playerName` | string | ✅ | min: 1, max: 120 |
+| `position` | enum: QB | RB | WR | TE | K | ✅ | - |
+| `round` | number | ✅ | integer, min: 1 |
+| `pick` | number | ✅ | integer, min: 1 |
+| `overallPick` | number | ✅ | integer, min: 1 |
+| `timestamp` | string | ❌ | - |
+
+### Relationships
+
+- leagueId → leagues
+- teamId → teams
+- rosterId → user_teams
+- playerId → college_players
+
+---
+
+## mock_drafts
+
+**Key**: `MOCK_DRAFTS`  
+**Fields**: 4
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `title` | string | ❌ | min: 1, max: 100 |
+| `numTeams` | number | ✅ | integer, min: 2, max: 24 |
+| `status` | enum: waiting | active | complete | ✅ | default: "waiting" |
+| `settings` | string | ❌ | max: 5000 |
+
+---
+
+## mock_draft_picks
+
+**Key**: `MOCK_DRAFT_PICKS`  
+**Fields**: 5
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `draftId` | string | ✅ | min: 1, max: 50 |
+| `participantId` | string | ✅ | min: 1, max: 50 |
+| `playerId` | string | ✅ | min: 1, max: 50 |
+| `round` | number | ✅ | integer, min: 1 |
+| `pick` | number | ✅ | integer, min: 1 |
+
+### Relationships
+
+- playerId → college_players
+
+---
+
+## mock_draft_participants
+
+**Key**: `MOCK_DRAFT_PARTICIPANTS`  
+**Fields**: 3
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `draftId` | string | ✅ | min: 1, max: 50 |
+| `name` | string | ✅ | min: 1, max: 100 |
+| `slot` | number | ✅ | integer, min: 1, max: 24 |
+
+---
+
+## matchups
+
+**Key**: `MATCHUPS`  
+**Fields**: 8
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `leagueId` | string | ✅ | min: 1, max: 50 |
+| `week` | number | ✅ | integer, min: 1, max: 20 |
+| `season` | number | ✅ | integer, min: 2020, max: 2035 |
+| `homeRosterId` | string | ✅ | min: 1, max: 50 |
+| `awayRosterId` | string | ✅ | min: 1, max: 50 |
+| `homePoints` | number | ❌ | - |
+| `awayPoints` | number | ❌ | - |
+| `status` | enum: scheduled | active | final | ✅ | default: "scheduled" |
+
+### Relationships
+
+- leagueId → leagues
+
+---
+
+## player_projections
+
+**Key**: `PLAYER_PROJECTIONS`  
+**Fields**: 8
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `playerId` | string | ✅ | min: 1, max: 50 |
+| `season` | number | ✅ | integer, min: 2020, max: 2035 |
+| `week` | number | ❌ | integer, min: 1, max: 20 |
+| `version` | number | ✅ | integer, min: 1, default: 1 |
+| `points` | number | ❌ | - |
+| `components` | string | ❌ | max: 10000 |
+| `fantasy_points` | number | ❌ | - |
+| `data` | string | ❌ | max: 10000 |
+
+### Relationships
+
+- playerId → college_players
+
+---
+
+## projections_yearly
+
+**Key**: `PROJECTIONS_YEARLY`  
+**Fields**: 3
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `playerId` | string | ✅ | min: 1, max: 50 |
+| `season` | number | ✅ | integer, min: 2020, max: 2035 |
+| `fantasy_points` | number | ❌ | - |
+
+### Relationships
+
+- playerId → college_players
+
+---
+
+## projections_weekly
+
+**Key**: `PROJECTIONS_WEEKLY`  
+**Fields**: 4
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `playerId` | string | ✅ | min: 1, max: 50 |
+| `season` | number | ✅ | integer, min: 2020, max: 2035 |
+| `week` | number | ✅ | integer, min: 1, max: 20 |
+| `fantasy_points` | number | ❌ | - |
+
+### Relationships
+
+- playerId → college_players
+
+---
+
+## model_inputs
+
+**Key**: `MODEL_INPUTS`  
+**Fields**: 8
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `season` | number | ✅ | integer, min: 2020, max: 2035 |
+| `depth_chart_json` | string | ❌ | - |
+| `team_pace_json` | string | ❌ | - |
+| `pass_rush_rates_json` | string | ❌ | - |
+| `opponent_grades_by_pos_json` | string | ❌ | - |
+| `injury_reports_json` | string | ❌ | - |
+| `vegas_json` | string | ❌ | - |
+| `manual_overrides_json` | string | ❌ | - |
+
+---
+
+## user_custom_projections
+
+**Key**: `USER_CUSTOM_PROJECTIONS`  
+**Fields**: 6
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `userId` | string | ✅ | min: 1, max: 50 |
+| `playerId` | string | ✅ | min: 1, max: 50 |
+| `season` | number | ✅ | integer, min: 2020, max: 2035 |
+| `week` | number | ❌ | integer, min: 1, max: 20 |
+| `fantasy_points` | number | ❌ | - |
+| `notes` | string | ❌ | max: 2000 |
+
+### Relationships
+
+- userId → users
+- playerId → college_players
+
+---
+
+## draft_events
+
+**Key**: `DRAFT_EVENTS`  
+**Fields**: 8
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `draftId` | string | ✅ | min: 1, max: 50 |
+| `ts` | date | ✅ | - |
+| `type` | enum: pick | autopick | undo | pause | resume | ✅ | - |
+| `teamId` | string | ✅ | min: 1, max: 50 |
+| `playerId` | string | ❌ | min: 1, max: 50 |
+| `round` | number | ✅ | integer, min: 1 |
+| `overall` | number | ✅ | integer, min: 1 |
+| `by` | string | ❌ | min: 1, max: 50 |
+
+### Relationships
+
+- teamId → teams
+- playerId → college_players
+
+---
+
+## draft_states
+
+**Key**: `DRAFT_STATES`  
+**Fields**: 6
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `draftId` | string | ✅ | min: 1, max: 50 |
+| `onClockTeamId` | string | ✅ | min: 1, max: 50 |
+| `deadlineAt` | date | ✅ | - |
+| `round` | number | ✅ | integer, min: 1 |
+| `pickIndex` | number | ✅ | integer, min: 1 |
+| `status` | enum: active | paused | complete | ✅ | default: "active" |
+
+---
+
+## league_memberships
+
+**Key**: `LEAGUE_MEMBERSHIPS`  
+**Fields**: 3
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `leagueId` | string | ✅ | min: 1, max: 50 |
+| `userId` | string | ✅ | min: 1, max: 50 |
+| `role` | enum: commissioner | member | viewer | ✅ | default: "member" |
+
+### Relationships
+
+- leagueId → leagues
+- userId → users
+
+---
+
+## projection_runs
+
+**Key**: `PROJECTION_RUNS`  
+**Fields**: 11
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `runId` | string | ✅ | min: 1, max: 64 |
+| `version` | number | ✅ | integer, min: 1 |
+| `scope` | enum: season | week | ✅ | - |
+| `season` | number | ✅ | integer, min: 2020, max: 2035 |
+| `week` | number | ❌ | integer, min: 1, max: 20 |
+| `sources` | string | ❌ | max: 20000 |
+| `weights` | string | ❌ | max: 10000 |
+| `metrics` | string | ❌ | max: 10000 |
+| `status` | enum: running | success | failed | ✅ | default: "running" |
+| `startedAt` | date | ✅ | - |
+| `finishedAt` | date | ❌ | - |
+
+---
+
 ## Schema Statistics
 
-- **Total Collections**: 12
-- **Total Fields**: 111
-- **Total Relationships**: 12
-- **Required Fields**: 68
-- **Optional Fields**: 43
+- **Total Collections**: 26
+- **Total Fields**: 198
+- **Total Relationships**: 27
+- **Required Fields**: 125
+- **Optional Fields**: 73
 
 ### Field Type Distribution
 
-- **string**: 54 fields
-- **number**: 34 fields
-- **enum**: 10 fields
-- **date**: 8 fields
+- **string**: 97 fields
+- **number**: 66 fields
+- **enum**: 18 fields
+- **date**: 12 fields
 - **boolean**: 5 fields
 
 ---
