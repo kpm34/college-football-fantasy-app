@@ -395,6 +395,13 @@ Add to `~/.cursor/mcp.json` for Claude/Cursor GitHub access:
         "APPWRITE_DATABASE_ID": "college-football-fantasy",
         "APPWRITE_API_KEY": "set-in-local-env"
       }
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "BSAQJHPdhjJ3hPcblDWtVJ8Z1qI6O2E"
+      }
     }
   }
 }
@@ -410,6 +417,19 @@ When assisting with GitHub issues:
    - `.github/workflows/schema-sync.yml` - Database schema sync
    - `.github/workflows/post-deploy-smoke.yml` - Smoke tests
    - `.github/workflows/projection-updater-SECURE.yml` - Data updates
+
+### Web Search Capabilities (Brave API)
+With Brave Search MCP server enabled, AI assistants can:
+- **Real-time web search**: Current events, documentation, error solutions
+- **API research**: Find API documentation and examples  
+- **Technology lookup**: Latest framework versions, best practices
+- **Troubleshooting**: Search for specific error messages and solutions
+- **Industry updates**: College football news, fantasy sports trends
+
+Usage examples:
+- "Search for Next.js 15 App Router best practices"
+- "Find the latest College Football API documentation"
+- "Look up solutions for Appwrite authentication errors"
 
 ### Workflow Debugging Checklist
 - ✅ URLs updated to use `https://cfbfantasy.app` (not old Vercel URLs)

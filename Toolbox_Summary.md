@@ -184,7 +184,7 @@ GITHUB_PERSONAL_ACCESS_TOKEN=github_pat_11BUCLSEI0whdpCQjuSEFT_r7OYQe39cbhtKNuy0
 | Filesystem | ✅ Active | Project file operations | Path: project root |
 | Git | ✅ Active | Repository operations | Repo path configured |
 | GitHub | ✅ Active | GitHub API operations | Token configured in .env.local |
-| Brave Search | ⚠️ Key needed | Web search capabilities | Need BRAVE_API_KEY |
+| Brave Search | ✅ Active | Web search capabilities | API key configured in .env.local |
 | Puppeteer | ✅ Active | Browser automation | No auth needed |
 
 ### **File Structure Overview**
