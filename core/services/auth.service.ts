@@ -41,17 +41,15 @@ export class AuthService {
       if (jwt) {
         (this.client as Client).setJWT(jwt);
       } else if (request) {
-        const sessionCookie = request.cookies.get('appwrite-session')?.value;
-        if (sessionCookie) {
-          try {
-            // Parse the session cookie to get the secret
-            const sessionData = JSON.parse(sessionCookie);
-            if (sessionData.secret) {
-              (this.client as Client).setSession(sessionData.secret);
-            }
-          } catch {
-            // If parsing fails, try using it as a direct JWT
-            (this.client as Client).setJWT(sessionCookie);
+        const sessionSecret = request.cookies.get('appwrite-session')?.value;
+        if (sessionSecret) {
+          const webClient = this.client as Client;
+          // Prefer Appwrite session secret; fallback to JWT if setSession is unavailable
+          const anyClient = webClient as unknown as { setSession?: (s: string) => void };
+          if (typeof anyClient.setSession === 'function') {
+            anyClient.setSession(sessionSecret);
+          } else {
+            webClient.setJWT(sessionSecret);
           }
         }
       }

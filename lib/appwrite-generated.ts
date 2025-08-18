@@ -30,7 +30,7 @@ export const COLLECTIONS = {
   LINEUPS: 'lineups',
   AUCTIONS: 'auctions',
   BIDS: 'bids',
-  PLAYER_STATS: 'player_stats', // TODO: Use env.client.collections.playerStats
+  PLAYER_STATS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_STATS || 'player_stats', // Legacy hardcoded fallback
   USERS: 'users',
   ACTIVITY_LOG: 'activity_log',
 } as const;
@@ -110,7 +110,7 @@ export const COLLECTION_METADATA = {
     requiredAttributes: ['auctionId', 'playerId', 'teamId', 'amount', 'timestamp'],
   },
   player_stats: {
-    id: 'player_stats', // TODO: Use env.client.collections.playerStats
+    id: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_STATS || 'player_stats', // Legacy hardcoded fallback
     name: 'Player Stats',
     description: 'Game-by-game player statistics',
     attributeCount: 8,

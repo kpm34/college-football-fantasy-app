@@ -16,5 +16,104 @@
         "notes": "Backup QB"
       }
     ]
+  },
+  "LOUISVILLE": {
+    "QB": [
+      {
+        "player_name": "Miller Moss",
+        "pos_rank": 1,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "USC transfer, starting QB for 2025"
+      },
+      {
+        "player_name": "Brady Allen",
+        "pos_rank": 2,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Finished spring strong, clear backup"
+      },
+      {
+        "player_name": "Travis Egan",
+        "pos_rank": 3,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Third string QB"
+      },
+      {
+        "player_name": "Deuce Adams",
+        "pos_rank": 4,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Freshman depth"
+      }
+    ],
+    "RB": [
+      {
+        "player_name": "Isaac Brown",
+        "pos_rank": 1,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "1000+ yard rusher as freshman, starter"
+      },
+      {
+        "player_name": "Duke Watson",
+        "pos_rank": 2,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Explosive back, part of duo"
+      },
+      {
+        "player_name": "Keyjuan Brown",
+        "pos_rank": 3,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Committee back"
+      },
+      {
+        "player_name": "Shammai Gates",
+        "pos_rank": 4,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Freshman depth"
+      }
+    ],
+    "WR": [
+      {
+        "player_name": "Chris Bell",
+        "pos_rank": 1,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Top returning WR, 2026 draft prospect"
+      },
+      {
+        "player_name": "Caullin Lacy",
+        "pos_rank": 2,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Coming back from redshirt, deadly duo"
+      },
+      {
+        "player_name": "Antonio Meeks",
+        "pos_rank": 3,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Had great spring, power conference adjusted"
+      },
+      {
+        "player_name": "Dacari Collins",
+        "pos_rank": 4,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Quality addition to roster"
+      },
+      {
+        "player_name": "TreyShun Hurry",
+        "pos_rank": 5,
+        "status": "Healthy",
+        "source": "web_search",
+        "notes": "Quality addition to roster"
+      }
+    ]
   }
 }
