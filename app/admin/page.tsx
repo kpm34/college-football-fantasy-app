@@ -123,26 +123,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Architecture Diagrams */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">🗺️ Architecture Diagrams</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Link
-              href="/documentation/project-map"
-              className="block p-4 bg-indigo-600/20 rounded-lg hover:bg-indigo-600/30 transition-colors"
-            >
-              <h3 className="text-lg font-semibold text-white">📘 Project Map (Mermaid)</h3>
-              <p className="text-sm text-gray-300 mt-1">Repo structure and systems overview</p>
-            </Link>
-            <Link
-              href="/documentation/data-flow"
-              className="block p-4 bg-teal-600/20 rounded-lg hover:bg-teal-600/30 transition-colors"
-            >
-              <h3 className="text-lg font-semibold text-white">🔄 Data Flow (Mermaid)</h3>
-              <p className="text-sm text-gray-300 mt-1">Auth, league, draft, and pipelines</p>
-            </Link>
-          </div>
-        </div>
+
 
         {/* Database Management */}
         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 mb-8">
@@ -280,7 +261,10 @@ export default function AdminDashboard() {
               <button onClick={() => setShowDiagram(null)} className="px-3 py-1.5 rounded-md bg-white text-gray-900 font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/80" aria-label="Close diagram">Close</button>
             </div>
             <div className="max-h-[80vh] overflow-auto p-6 bg-gray-950">
-              {/* High-contrast container for readability */}
+              {/* Debug: Show chart count */}
+              {charts.length === 0 && (
+                <div className="text-yellow-400 mb-4">⚠️ No charts loaded. Trying to fetch...</div>
+              )}
               {charts.length > 0 ? (
                 <div className="space-y-8">
                   {showDiagram.title === 'Project Map' ? (
@@ -288,14 +272,14 @@ export default function AdminDashboard() {
                       <div className="mb-8">
                         <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">📁 Repository Structure</h4>
                         <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
-                          <MermaidRenderer charts={charts.slice(0, 1)} />
+                          {charts[0] ? <MermaidRenderer charts={[charts[0]]} /> : <div className="text-gray-400">Loading diagram...</div>}
                         </div>
                       </div>
                       {charts.length > 1 && (
                         <div className="mb-8">
                           <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔄 Functionality & Data Flow</h4>
                           <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[500px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            <MermaidRenderer charts={charts.slice(1, 2)} />
+                            {charts[1] ? <MermaidRenderer charts={[charts[1]]} /> : <div className="text-gray-400">Loading diagram...</div>}
                           </div>
                         </div>
                       )}
@@ -303,7 +287,7 @@ export default function AdminDashboard() {
                         <div className="mb-8">
                           <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔧 Commissioner Settings Schema Fix Flow</h4>
                           <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            <MermaidRenderer charts={charts.slice(2, 3)} />
+                            {charts[2] ? <MermaidRenderer charts={[charts[2]]} /> : <div className="text-gray-400">Loading diagram...</div>}
                           </div>
                         </div>
                       )}
@@ -311,7 +295,7 @@ export default function AdminDashboard() {
                         <div className="mb-8">
                           <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🎮 Complete Admin Operations Flow</h4>
                           <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            <MermaidRenderer charts={charts.slice(3, 4)} />
+                            {charts[3] ? <MermaidRenderer charts={[charts[3]]} /> : <div className="text-gray-400">Loading diagram...</div>}
                           </div>
                         </div>
                       )}
@@ -321,14 +305,14 @@ export default function AdminDashboard() {
                       <div className="mb-8">
                         <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔐 Authentication Flow</h4>
                         <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
-                          <MermaidRenderer charts={charts.slice(0, 1)} />
+                          {charts[0] ? <MermaidRenderer charts={[charts[0]]} /> : <div className="text-gray-400">Loading diagram...</div>}
                         </div>
                       </div>
                       {charts.length > 1 && (
                         <div className="mb-8">
                           <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🏟️ League Management Flow</h4>
                           <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            <MermaidRenderer charts={charts.slice(1, 2)} />
+                            {charts[1] ? <MermaidRenderer charts={[charts[1]]} /> : <div className="text-gray-400">Loading diagram...</div>}
                           </div>
                         </div>
                       )}
@@ -336,7 +320,7 @@ export default function AdminDashboard() {
                         <div className="mb-8">
                           <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">📋 Draft Flow (Real-time)</h4>
                           <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            <MermaidRenderer charts={charts.slice(2, 3)} />
+                            {charts[2] ? <MermaidRenderer charts={[charts[2]]} /> : <div className="text-gray-400">Loading diagram...</div>}
                           </div>
                         </div>
                       )}
@@ -344,7 +328,7 @@ export default function AdminDashboard() {
                         <div className="mb-8">
                           <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">📊 Player Data Pipeline</h4>
                           <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            <MermaidRenderer charts={charts.slice(3, 4)} />
+                            {charts[3] ? <MermaidRenderer charts={[charts[3]]} /> : <div className="text-gray-400">Loading diagram...</div>}
                           </div>
                         </div>
                       )}
@@ -352,7 +336,7 @@ export default function AdminDashboard() {
                         <div className="mb-8">
                           <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🎯 Projections System</h4>
                           <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            <MermaidRenderer charts={charts.slice(4, 5)} />
+                            {charts[4] ? <MermaidRenderer charts={[charts[4]]} /> : <div className="text-gray-400">Loading diagram...</div>}
                           </div>
                         </div>
                       )}
@@ -360,7 +344,7 @@ export default function AdminDashboard() {
                         <div className="mb-8">
                           <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔍 Search & Filter Flow</h4>
                           <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            <MermaidRenderer charts={charts.slice(5, 6)} />
+                            {charts[5] ? <MermaidRenderer charts={[charts[5]]} /> : <div className="text-gray-400">Loading diagram...</div>}
                           </div>
                         </div>
                       )}
