@@ -10,6 +10,7 @@
 ## 📁 Repository Structure
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px'}}}%%
 graph TD
     ROOT[college-football-fantasy-app]
     
@@ -52,6 +53,7 @@ graph TD
 ## 🔄 Functionality & Data Flow
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px'}}}%%
 graph TB
     %% External Data Sources
     subgraph ExtAPIs[External APIs]
@@ -178,6 +180,7 @@ graph TB
 ## 🔧 Commissioner Settings Schema Fix Flow
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px'}}}%%
 sequenceDiagram
     participant UI as Commissioner UI
     participant API as API Route
