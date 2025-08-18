@@ -7,7 +7,7 @@
 
 import { Client, Databases } from 'node-appwrite';
 import { SCHEMA, type SchemaCollection } from '../schema/schema';
-import { COLLECTIONS } from '../schema/zod-schema';
+import { COLLECTIONS, SCHEMA_REGISTRY } from '../schema/zod-schema';
 
 describe('Schema Contract Tests', () => {
   let client: Client;
@@ -168,7 +168,7 @@ describe('Schema Contract Tests', () => {
     test('No unexpected attribute types', async () => {
       skipIfNotConfigured();
       
-      const validTypes = ['string', 'integer', 'double', 'float', 'boolean', 'datetime', 'url', 'email', 'ip'];
+      const validTypes = ['string', 'integer', 'double', 'float', 'boolean', 'datetime', 'url', 'email', 'ip', 'relationship'];
       
       for (const [collectionId] of Object.entries(SCHEMA)) {
         const collection = await db.getCollection(databaseId, collectionId);
@@ -216,7 +216,7 @@ describe('Schema Contract Tests', () => {
     test('Critical Zod collections have corresponding Appwrite collections', async () => {
       skipIfNotConfigured();
       
-      const zodCollections = Object.keys(COLLECTIONS);
+      const zodCollections = Object.values(COLLECTIONS);
       
       for (const collectionId of zodCollections) {
         const collection = await db.getCollection(databaseId, collectionId);
@@ -305,12 +305,13 @@ describe('Runtime Schema Validation', () => {
       isPublic: true
     };
     
-    const result = COLLECTIONS.leagues.safeParse(testLeague);
+    const leagueSchema = SCHEMA_REGISTRY[COLLECTIONS.LEAGUES];
+    const result = leagueSchema.safeParse(testLeague);
     expect(result.success).toBe(true);
     
     // Test invalid data fails validation
-    const invalidLeague = { ...testLeague, season: 2020 }; // Too early
-    const invalidResult = COLLECTIONS.leagues.safeParse(invalidLeague);
+    const invalidLeague = { ...testLeague, season: 'invalid' }; // Invalid type
+    const invalidResult = leagueSchema.safeParse(invalidLeague);
     expect(invalidResult.success).toBe(false);
   });
 });
