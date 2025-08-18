@@ -16,7 +16,8 @@ Quick example config:
         "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
         "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
         "APPWRITE_DATABASE_ID": "college-football-fantasy"
-      }
+      },
+      "envFile": "/Users/kashyapmaheshwari/college-football-fantasy-app/.env.local"
     }
   }
 }

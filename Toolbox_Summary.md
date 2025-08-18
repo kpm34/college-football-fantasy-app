@@ -34,14 +34,15 @@
 |----------|----------------|--------|
 | **CLI Tools** | Vercel, GitHub, pnpm, Turbo, Act | ✅ All configured |
 | **Testing** | Playwright, Lighthouse CI, ESLint, Prettier | ✅ Ready |
-| **MCP Servers** | Appwrite, Memory, Git, GitHub, Filesystem, Brave, Puppeteer | ✅ 7 servers configured |
+| **MCP Servers** | Appwrite, Memory, Git, GitHub, Filesystem, Fetch, Shell | ✅ 7 servers configured |
 | **Deployment** | Vercel (primary), Netlify, Railway | ✅ Vercel authenticated |
+| **New Toolbox Tools** | MCP Tools Client, Vercel Tools Client | ✅ Programmatic access |
 
 ## 🧱 Global Toolbox (Local Monorepo)
 
 - Location: `toolbox/`
 - Packages:
-  - `packages/clients` – provider-agnostic clients (Appwrite, OpenAI Responses, Anthropic Messages, Meshy, Runway)
+  - `packages/clients` – provider-agnostic clients (Claude, OpenAI, Meshy, Runway, MCP Tools, Vercel Tools)
   - `packages/agent` – Task DSL, planner, executor
   - `packages/cli` – `toolbox` CLI (`integrate`, `agent plan|execute`, `ensure appwrite`, `doctor`)
 - Build: `cd toolbox && pnpm install && pnpm -w build`
@@ -79,6 +80,18 @@ mcp__brave_search.search("College Football Data API documentation")
 // Memory management
 mcp__memory.store("key", "value")
 mcp__memory.retrieve("key")
+
+// NEW: Programmatic MCP access via toolbox
+import { mcpTools } from 'toolbox/packages/clients';
+await mcpTools.listAppwriteCollections();
+await mcpTools.listAppwriteDocuments('leagues', 25);
+await mcpTools.createAppwriteDocument('players', playerData);
+
+// NEW: Programmatic Vercel access via toolbox
+import { vercelTools } from 'toolbox/packages/clients';
+await vercelTools.deploy({ production: true });
+await vercelTools.listDeployments();
+await vercelTools.pullEnvironmentVariables();
 ```
 
 ### **For Cursor AI (Command-Based)**
