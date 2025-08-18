@@ -192,6 +192,12 @@ NEXT_DISABLE_FAST_REFRESH=true
 - `auctions` - Auction draft data
 - `bids` - Auction bid history
 
+### Schema Guardrails
+- Appwrite does not allow default values on required attributes. Choose one:
+  - Optional attribute with defaults set in code/migrations; or
+  - Required attribute with value always provided by the app.
+- Enforce this in schema generators and migrations to avoid deployment failures.
+
 ## MCP (Model Context Protocol) Tools
 Available MCP tools for Claude Code:
 - File system operations (Read, Write, Edit, MultiEdit)

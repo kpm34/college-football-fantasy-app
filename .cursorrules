@@ -333,6 +333,12 @@ Examples:
 - Verify connectivity: `curl https://nyc.cloud.appwrite.io/v1/health`
 - Rotate any leaked API key immediately in Appwrite Console and update your local MCP config.
 
+## Appwrite Schema Rules
+- Required attributes cannot have default values in Appwrite. If you need a default:
+  - Make the attribute optional (required=false) and set the default in API code or via migrations; or
+  - Keep it required=true and always supply the value at creation/update time.
+- Avoid combining `required=true` with `default` in collection definitions; Appwrite will reject it during schema sync/creation.
+
 ## 🔌 SDK vs API vs CLI vs MCP (Usage)
 - SDK: Use server-side (Node runtime) for type-safe Appwrite operations inside API routes/repos. Avoid in Edge.
 - API: Use raw HTTP `fetch` for Edge functions or minimal footprint; handle auth manually (Appwrite cookie header).
