@@ -300,10 +300,10 @@ vercel logs --follow
 
 ## 🧭 AI Session Bootstrap (Claude Code + Cursor)
 - Always load these at session start so tools and capabilities are known:
-  - `TOOLBOX_CLAUDE.md` – MCP integration guide for Claude Code
-  - `TOOLBOX_CURSOR.md` – Development environment guide for Cursor AI
-  - `CURSOR_COMMANDS.md` – Quick command reference
-  - `CLAUDE.md` – Project context and architecture
+  - `toolbox/TOOLBOX_CLAUDE.md` – MCP integration guide for Claude Code
+  - `toolbox/TOOLBOX_CURSOR.md` – Development environment guide for Cursor AI
+  - `toolbox/CURSOR_COMMANDS.md` – Quick command reference
+  - `CLAUDE.md` – Project context and architecture (stays in root)
   - `schema/zod-schema.ts` – Single Source of Truth for all schemas
   - `docs/MCP_CONFIG.json` – Comprehensive MCP server configuration
 - If MCP is not active, prompt the user to configure `~/.cursor/mcp.json` with Appwrite and Vercel servers (see sections below).
