@@ -196,6 +196,29 @@ export const MockDraftPicks = z.object({
 });
 
 /**
+ * Draft Event Log & Persisted State (for recovery)
+ */
+export const DraftEvents = z.object({
+  draftId: z.string().min(1).max(50),
+  ts: z.date(),
+  type: z.enum(['pick', 'autopick', 'undo', 'pause', 'resume']),
+  teamId: z.string().min(1).max(50),
+  playerId: z.string().min(1).max(50).optional(),
+  round: z.number().int().min(1),
+  overall: z.number().int().min(1),
+  by: z.string().min(1).max(50).optional(),
+});
+
+export const DraftStates = z.object({
+  draftId: z.string().min(1).max(50),
+  onClockTeamId: z.string().min(1).max(50),
+  deadlineAt: z.date(),
+  round: z.number().int().min(1),
+  pickIndex: z.number().int().min(1),
+  status: z.enum(['active', 'paused', 'complete']).default('active'),
+});
+
+/**
  * Projections & Inputs (present in env and services)
  */
 export const PlayerProjections = z.object({
@@ -295,6 +318,8 @@ export const COLLECTIONS = {
   PROJECTIONS_WEEKLY: 'projections_weekly',
   MODEL_INPUTS: 'model_inputs',
   USER_CUSTOM_PROJECTIONS: 'user_custom_projections',
+  DRAFT_EVENTS: 'draft_events',
+  DRAFT_STATES: 'draft_states',
 } as const;
 
 /**
@@ -323,6 +348,8 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.PROJECTIONS_WEEKLY]: ProjectionsWeekly,
   [COLLECTIONS.MODEL_INPUTS]: ModelInputs,
   [COLLECTIONS.USER_CUSTOM_PROJECTIONS]: UserCustomProjections,
+  [COLLECTIONS.DRAFT_EVENTS]: DraftEvents,
+  [COLLECTIONS.DRAFT_STATES]: DraftStates,
 } as const;
 
 /**

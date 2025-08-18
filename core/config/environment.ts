@@ -59,6 +59,8 @@ export class EnvironmentConfig {
       
       // Draft collections
       draftPicks: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS || 'draft_picks',
+      draftEvents: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_EVENTS || 'draft_events',
+      draftStates: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_STATES || 'draft_states',
       auctions: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_AUCTIONS || 'auctions',
       bids: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_BIDS || 'bids',
       
