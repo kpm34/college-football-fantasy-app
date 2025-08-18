@@ -11,6 +11,7 @@ import { useLeagueMembersRealtime } from "@/hooks/useLeagueMembersRealtime";
 import { useLeagueRealtime } from "@/hooks/useLeagueRealtime";
 import { isUserCommissioner, debugCommissionerMatch } from "@/lib/utils/commissioner";
 import { InviteModal } from "@/components/league/InviteModal";
+import { DraftButton } from "@/components/league/DraftButton";
 
 interface League {
   $id: string;
@@ -22,6 +23,7 @@ interface League {
   maxTeams: number;
   teams?: number;
   draftDate: string;
+  draftStartedAt?: string;
   status: string;
   inviteCode: string;
   gameMode?: string;
@@ -183,6 +185,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           maxTeams: l.maxTeams || 12,
           teams: l.members?.length || 0,
           draftDate: l.draftDate || '',
+          draftStartedAt: (l as any).draftStartedAt || undefined,
           status: l.status || 'ACTIVE',
           inviteCode: '',
           gameMode: l.mode,
@@ -846,10 +849,18 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                   <p className="font-semibold">
                     {league?.draftDate ? new Date(league.draftDate).toLocaleDateString() : 'Not scheduled'}
                   </p>
+                  {league?.draftDate && new Date(league.draftDate).getTime() - new Date().getTime() < 24 * 60 * 60 * 1000 && new Date(league.draftDate).getTime() > new Date().getTime() && (
+                    <p className="text-xs text-orange-400 mt-1">Draft starts soon!</p>
+                  )}
                 </div>
                 <div>
                   <p className="text-sm" style={{ color: leagueColors.text.muted }}>Status</p>
-                  <p className="font-semibold capitalize">{league?.status || 'Pre-Draft'}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold capitalize">{league?.status || 'Pre-Draft'}</p>
+                    {league?.status === 'drafting' && (
+                      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -857,17 +868,12 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             {/* Quick Actions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               
-              {/* Launch Draft Button - Only show to commissioners when draft date is set */}
-              {isCommissioner && league?.draftDate && (
-                <button
-                  onClick={() => router.push(`/draft/${leagueId}/realtime`)}
-                  className="p-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg animate-pulse"
-                  style={{ backgroundColor: '#22C55E', color: '#FFFFFF' }}
-                >
-                  <FiAward className="text-xl" />
-                  <span className="font-semibold">Launch Draft</span>
-                </button>
-              )}
+              {/* Draft Button - Shows for all members based on draft timing */}
+              <DraftButton 
+                league={league}
+                isCommissioner={isCommissioner}
+                isMember={!!userTeam}
+              />
 
               <button
                 onClick={() => router.push(`/league/${leagueId}/standings`)}
