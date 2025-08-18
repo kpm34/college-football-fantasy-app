@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases } from '@/lib/appwrite-server';
 import { DATABASE_ID } from '@/lib/appwrite';
 import { Query } from 'node-appwrite';
-import { pollMeshyJob } from '@/vendor/awwwards-rig/src/lib/meshy';
+// import { pollMeshyJob } from '@/vendor/awwwards-rig/src/lib/meshy'; // Removed with vendor directory
 import { pollRunwayJob } from '@/lib/runway';
 
 export const runtime = 'nodejs';
@@ -135,8 +135,9 @@ async function pollSingleJob(provider: keyof typeof JOB_COLLECTIONS, job: any) {
   // Poll the appropriate provider
   switch (provider) {
     case 'meshy':
-      pollResult = await pollMeshyJob(providerId);
-      break;
+      // pollResult = await pollMeshyJob(providerId); // Removed with vendor directory
+      console.log('Meshy polling disabled - vendor directory removed');
+      return null;
     case 'runway':
       pollResult = await pollRunwayJob(providerId);
       break;
