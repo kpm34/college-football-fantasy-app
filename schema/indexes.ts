@@ -27,6 +27,61 @@ export interface IndexProfile {
  * PERFORMANCE-OPTIMIZED INDEX DEFINITIONS
  */
 export const INDEX_SCHEMA: Record<string, IndexProfile> = {
+  draft_events: {
+    collectionId: 'draft_events',
+    description: 'Canonical draft event log',
+    commonQueries: [
+      'Events by draft sorted by time desc',
+      'Event by overall pick number'
+    ],
+    compoundIndexes: [
+      { key: 'draft_ts_idx', type: 'key', attributes: ['draftId', 'ts'], orders: ['ASC', 'DESC'], description: 'Events by draft ordered by time desc', queryPatterns: ['draftId = ? ORDER BY ts DESC'], estimatedUsage: 'high' },
+      { key: 'draft_overall_idx', type: 'key', attributes: ['draftId', 'overall'], orders: ['ASC', 'ASC'], description: 'Lookup by overall pick', queryPatterns: ['draftId = ? AND overall = ?'], estimatedUsage: 'medium' }
+    ],
+    singleIndexes: []
+  },
+  draft_states: {
+    collectionId: 'draft_states',
+    description: 'Persisted draft state snapshot',
+    commonQueries: ['Get current state by draftId'],
+    compoundIndexes: [],
+    singleIndexes: [
+      { key: 'draft_unique_idx', type: 'unique', attributes: ['draftId'], description: 'One state per draft', queryPatterns: ['draftId = ?'], estimatedUsage: 'high' }
+    ]
+  },
+  projection_runs: {
+    collectionId: 'projection_runs',
+    description: 'Projection run metadata and metrics',
+    commonQueries: ['Latest run by version', 'Runs by season/week'],
+    compoundIndexes: [
+      { key: 'season_week_idx', type: 'key', attributes: ['season', 'week'], description: 'Runs by season/week', queryPatterns: ['season = ? AND week = ?'], estimatedUsage: 'medium' }
+    ],
+    singleIndexes: [
+      { key: 'run_unique_idx', type: 'unique', attributes: ['runId'], description: 'Unique run id', queryPatterns: ['runId = ?'], estimatedUsage: 'low' },
+      { key: 'version_idx', type: 'key', attributes: ['version'], description: 'Runs by version', queryPatterns: ['version = ?'], estimatedUsage: 'low' }
+    ]
+  },
+  player_projections: {
+    collectionId: 'player_projections',
+    description: 'Versioned player projections',
+    commonQueries: ['Projections by version and week', 'Player projection history'],
+    compoundIndexes: [
+      { key: 'season_week_version_idx', type: 'key', attributes: ['season', 'week', 'version'], description: 'Batch retrieval by version/week', queryPatterns: ['season = ? AND week = ? AND version = ?'], estimatedUsage: 'high' },
+      { key: 'player_season_week_version_idx', type: 'key', attributes: ['playerId', 'season', 'week', 'version'], description: 'Single player versioned history', queryPatterns: ['playerId = ? AND season = ? AND week = ? AND version = ?'], estimatedUsage: 'medium' }
+    ],
+    singleIndexes: []
+  },
+  league_memberships: {
+    collectionId: 'league_memberships',
+    description: 'User memberships with roles',
+    commonQueries: ['Members in league', 'User memberships'],
+    compoundIndexes: [
+      { key: 'league_user_idx', type: 'key', attributes: ['leagueId', 'userId'], description: 'Lookup user in league', queryPatterns: ['leagueId = ? AND userId = ?'], estimatedUsage: 'high' }
+    ],
+    singleIndexes: [
+      { key: 'user_idx', type: 'key', attributes: ['userId'], description: 'User membership scan', queryPatterns: ['userId = ?'], estimatedUsage: 'high' }
+    ]
+  },
   // College Players - Heavy query load
   college_players: {
     collectionId: 'college_players',

@@ -266,6 +266,15 @@ export const UserCustomProjections = z.object({
 });
 
 /**
+ * League Memberships (normalized user membership with role)
+ */
+export const LeagueMemberships = z.object({
+  leagueId: z.string().min(1).max(50),
+  userId: z.string().min(1).max(50),
+  role: z.enum(['commissioner', 'member', 'viewer']).default('member'),
+});
+
+/**
  * Projection Run Records (versioning/reproducibility)
  */
 export const ProjectionRuns = z.object({
@@ -340,6 +349,7 @@ export const COLLECTIONS = {
   USER_CUSTOM_PROJECTIONS: 'user_custom_projections',
   DRAFT_EVENTS: 'draft_events',
   DRAFT_STATES: 'draft_states',
+  LEAGUE_MEMBERSHIPS: 'league_memberships',
   PROJECTION_RUNS: 'projection_runs',
 } as const;
 
@@ -371,6 +381,7 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.USER_CUSTOM_PROJECTIONS]: UserCustomProjections,
   [COLLECTIONS.DRAFT_EVENTS]: DraftEvents,
   [COLLECTIONS.DRAFT_STATES]: DraftStates,
+  [COLLECTIONS.LEAGUE_MEMBERSHIPS]: LeagueMemberships,
   [COLLECTIONS.PROJECTION_RUNS]: ProjectionRuns,
 } as const;
 
