@@ -150,33 +150,19 @@ jobs:
         continue-on-error: true
         id: post-deploy-test
 
-      - name: Comment on Commit
+      - name: Report Test Results
         if: always()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const sha = context.sha;
-            const status = '${{ steps.post-deploy-test.outcome }}' === 'success' ? '✅ PASSED' : '❌ FAILED';
-            const body = `
-            ## E2E Test Results - ${status}
-            
-            **Commit**: ${sha.substring(0, 7)}  
-            **Deployment**: https://cfbfantasy.app
-            
-            ${status === '✅ PASSED' ? 
-              '🎉 All end-to-end tests passed! The deployment is ready for use.' : 
-              '⚠️ Some E2E tests failed. Please review the test output and fix any issues.'
-            }
-            
-            [View full test results](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-            `;
-            
-            await github.rest.repos.createCommitComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: sha,
-              body
-            });
+        run: |
+          if [ "${{ steps.post-deploy-test.outcome }}" = "success" ]; then
+            echo "✅ E2E Test Results: PASSED"
+            echo "🎉 All end-to-end tests passed! The deployment is ready for use."
+            echo "📍 Deployment: https://cfbfantasy.app"
+          else
+            echo "❌ E2E Test Results: FAILED"
+            echo "⚠️ Some E2E tests failed. Please review the test output and fix any issues."
+            echo "📍 Deployment: https://cfbfantasy.app"
+            echo "🔗 View full results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          fi
 
   manual-repair:
     runs-on: ubuntu-latest

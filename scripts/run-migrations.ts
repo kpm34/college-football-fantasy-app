@@ -103,8 +103,8 @@ const migrations: Migration[] = [
       }
       
       try {
-        // Add compound index for rosters
-        await db.createIndex(databaseId, 'rosters', 'league_standings_idx', 'key', ['leagueId', 'wins'], ['ASC', 'DESC']);
+        // Add compound index for user_teams (rosters)
+        await db.createIndex(databaseId, 'user_teams', 'league_standings_idx', 'key', ['leagueId', 'wins'], ['ASC', 'DESC']);
         
         console.log('  ✅ Added roster standings index');
       } catch (error: any) {
