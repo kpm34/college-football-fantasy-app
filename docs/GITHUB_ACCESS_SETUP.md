@@ -31,6 +31,12 @@ Copy `docs/cursor-mcp-template.json` to `~/.cursor/mcp.json`:
 cp docs/cursor-mcp-template.json ~/.cursor/mcp.json
 ```
 
+### 4. Brave Search Integration ✅
+Web search capabilities are now active with API key:
+- **API Key**: `BSAQJHPdhjJ3hPcblDWtVJ8Z1qI6O2E` (configured)
+- **Capabilities**: Real-time web search, documentation lookup, error solutions
+- **Usage**: "Search for Next.js best practices", "Find API documentation"
+
 ## Repository Information
 - **Owner**: `kpm34`
 - **Repo**: `college-football-fantasy-app`
@@ -62,6 +68,15 @@ cp docs/cursor-mcp-template.json ~/.cursor/mcp.json
 "Create a GitHub issue for the workflow failure"
 "List open pull requests"
 "Check the status of the latest deployment"
+```
+
+### Web Search & Research
+```
+"Search for Next.js 15 App Router best practices"
+"Find the latest Appwrite SDK documentation"
+"Look up solutions for Vercel deployment errors"
+"Research college football fantasy scoring systems"
+"Find API documentation for College Football Data"
 ```
 
 ## Troubleshooting
@@ -99,8 +114,9 @@ gh run list --limit 3
 
 # MCP access (in Claude Code)
 "List recent GitHub workflow runs"
-"Check the status of CI workflows" 
+"Check the status of CI workflows"
+"Search for Next.js documentation" # Test Brave search
 ```
 
 ---
-✅ **Setup Complete**: All future AI sessions will have full GitHub access for workflow debugging and repository operations.
+✅ **Setup Complete**: All future AI sessions will have full GitHub access for workflow debugging, repository operations, and real-time web search capabilities.

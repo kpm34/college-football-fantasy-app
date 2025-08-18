@@ -53,7 +53,7 @@
         "@modelcontextprotocol/server-brave-search"
       ],
       "env": {
-        "BRAVE_API_KEY": "your-brave-api-key-here"
+        "BRAVE_API_KEY": "BSAQJHPdhjJ3hPcblDWtVJ8Z1qI6O2E"
       }
     },
     "puppeteer": {

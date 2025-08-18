@@ -267,6 +267,32 @@ Add to `~/.cursor/mcp.json`:
 - Repo: `college-football-fantasy-app` 
 - Main workflows: `e2e-tests.yml`, `schema-sync.yml`, `post-deploy-smoke.yml`
 
+**Brave Search Integration**:
+Configure Brave Search MCP server for real-time web search capabilities:
+```json
+{
+  "brave-search": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+    "env": {
+      "BRAVE_API_KEY": "BSAQJHPdhjJ3hPcblDWtVJ8Z1qI6O2E"
+    }
+  }
+}
+```
+
+**AI Assistant Search Capabilities**:
+- Research latest documentation and best practices
+- Find solutions for specific errors and issues
+- Get real-time industry updates and trends
+- Lookup API documentation and examples
+
+Usage examples:
+- "Search for Next.js 15 App Router authentication patterns"
+- "Find the latest Appwrite SDK documentation" 
+- "Look up solutions for Vercel deployment errors"
+- "Research college football fantasy scoring systems"
+
 ## Vercel Configuration
 ```json
 {
