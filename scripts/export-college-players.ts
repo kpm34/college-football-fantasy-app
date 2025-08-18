@@ -4,14 +4,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { Query, Client, Databases } from 'node-appwrite';
 
-function getDatabases(): { databases: Databases; dbId: string } {
+function getDatabases(): { databases: Databases; dbId: string; playersCollection: string } {
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_ENDPOINT!)
     .setProject(process.env.APPWRITE_PROJECT_ID!)
     .setKey(process.env.APPWRITE_API_KEY!);
   const databases = new Databases(client);
   const dbId = process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'college-football-fantasy';
-  return { databases, dbId };
+  const playersCollection = process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYERS || 'college_players';
+  return { databases, dbId, playersCollection };
 }
 
 interface PlayerRow {
@@ -36,16 +37,25 @@ function toCsv(rows: PlayerRow[]): string {
   return [headers.join(','), ...rows.map(r => headers.map(h => escape((r as any)[h])).join(','))].join('\n');
 }
 
+async function hasAttribute(databases: Databases, dbId: string, collectionId: string, key: string): Promise<boolean> {
+  try {
+    const collection: any = await databases.getCollection(dbId, collectionId);
+    const attrs = Array.isArray(collection?.attributes) ? collection.attributes : [];
+    return attrs.some((a: any) => a?.key === key);
+  } catch {
+    return false;
+  }
+}
+
 async function fetchAllPlayers(season: number): Promise<PlayerRow[]> {
-  const { databases, dbId } = getDatabases();
+  const { databases, dbId, playersCollection } = getDatabases();
   const rows: PlayerRow[] = [];
   let offset = 0; const pageSize = 200;
+  const canFilterSeason = await hasAttribute(databases, dbId, playersCollection, 'season');
   while (true) {
-    const page = await databases.listDocuments(dbId, 'college_players', [
-      Query.equal('season', season),
-      Query.limit(pageSize),
-      Query.offset(offset)
-    ]);
+    const q: any[] = [Query.limit(pageSize), Query.offset(offset)];
+    if (canFilterSeason) q.unshift(Query.equal('season', season));
+    const page = await databases.listDocuments(dbId, playersCollection, q);
     const docs: any[] = page.documents || [];
     if (docs.length === 0) break;
     for (const d of docs) {
@@ -74,9 +84,11 @@ async function main() {
   const outDir = path.join(process.cwd(), 'exports');
   fs.mkdirSync(outDir, { recursive: true });
   const rows = await fetchAllPlayers(season);
-  fs.writeFileSync(path.join(outDir, `college_players_${season}.json`), JSON.stringify(rows, null, 2));
-  fs.writeFileSync(path.join(outDir, `college_players_${season}.csv`), toCsv(rows));
-  console.log(`✅ Exported ${rows.length} players to exports/college_players_${season}.{json,csv}`);
+  const jsonName = `college_players_${season}.json`;
+  const csvName = `college_players_${season}.csv`;
+  fs.writeFileSync(path.join(outDir, jsonName), JSON.stringify(rows, null, 2));
+  fs.writeFileSync(path.join(outDir, csvName), toCsv(rows));
+  console.log(`✅ Exported ${rows.length} players to exports/${jsonName} and exports/${csvName}`);
 }
 
 main().catch((e) => { console.error('❌ Export failed:', e); process.exit(1); });
