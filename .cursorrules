@@ -357,6 +357,67 @@ Examples:
   - Use Node runtime for Appwrite SDK usage
   - Use Edge/runtime `fetch` for light endpoints without SDK
 
+## 🐙 GitHub Access & Workflow Management
+### GitHub CLI & Token Setup
+```bash
+# Set GitHub token for CLI access (add to shell profile)
+export GH_TOKEN="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"
+
+# Verify authentication
+gh auth status
+
+# Common workflow commands
+gh run list --limit 5           # List recent workflow runs
+gh run view <run-id>            # View workflow details  
+gh run view <run-id> --log-failed # View failed step logs
+gh workflow list                # List all workflows
+gh workflow run <workflow-name> # Trigger manual workflow
+```
+
+### GitHub MCP Configuration
+Add to `~/.cursor/mcp.json` for Claude/Cursor GitHub access:
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["mcp-server-github"],
+      "env": {
+        "GITHUB_TOKEN": "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"
+      }
+    },
+    "appwrite": {
+      "command": "uvx", 
+      "args": ["mcp-server-appwrite", "--users"],
+      "env": {
+        "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
+        "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
+        "APPWRITE_DATABASE_ID": "college-football-fantasy",
+        "APPWRITE_API_KEY": "set-in-local-env"
+      }
+    }
+  }
+}
+```
+
+### AI Assistant GitHub Workflow Instructions
+When assisting with GitHub issues:
+1. **Always check workflow status first**: Use `gh run list` to see recent runs
+2. **Get detailed error logs**: Use `gh run view <id> --log-failed` for failures  
+3. **Reference current token**: Use token from `.env.local` file: `GITHUB_PERSONAL_ACCESS_TOKEN`
+4. **Common workflow files**:
+   - `.github/workflows/e2e-tests.yml` - End-to-end testing
+   - `.github/workflows/schema-sync.yml` - Database schema sync
+   - `.github/workflows/post-deploy-smoke.yml` - Smoke tests
+   - `.github/workflows/projection-updater-SECURE.yml` - Data updates
+
+### Workflow Debugging Checklist
+- ✅ URLs updated to use `https://cfbfantasy.app` (not old Vercel URLs)
+- ✅ Collection names match current schema (`user_teams` not `rosters`)  
+- ✅ GitHub token has sufficient permissions
+- ✅ Environment secrets properly configured in GitHub
+- ✅ No hardcoded API keys or sensitive data in workflow files
+
 ## 🔗 Key API Routes (Core)
 - `POST /api/leagues/create` → Creates league; normalizes UI fields:
   - Maps `leagueName` → `name`

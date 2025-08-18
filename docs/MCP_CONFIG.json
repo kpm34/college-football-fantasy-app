@@ -41,7 +41,10 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-github"
-      ]
+      ],
+      "env": {
+        "GITHUB_TOKEN": "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"
+      }
     },
     "brave-search": {
       "command": "npx",
