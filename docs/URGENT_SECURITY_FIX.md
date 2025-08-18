@@ -20,7 +20,7 @@ node scripts/rotate-appwrite-key.js
 ```
 
 **Manual Steps:**
-1. Log into [Appwrite Console](https://cloud.appwrite.io)
+1. Log into [Appwrite Console](https://nyc.cloud.appwrite.io)
 2. Navigate to your project → Settings → API Keys
 3. **DELETE** the exposed key
 4. Create a NEW API key with same permissions

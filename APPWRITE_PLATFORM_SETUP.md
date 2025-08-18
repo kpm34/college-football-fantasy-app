@@ -3,7 +3,7 @@
 ## Steps to Fix "Invalid Origin" Error
 
 1. **Go to Appwrite Console**
-   - URL: https://cloud.appwrite.io/console/project-college-football-fantasy-app/platforms
+   - URL: https://nyc.cloud.appwrite.io/console/project-college-football-fantasy-app/platforms
    - Or navigate: Console → Your Project → Platforms
 
 2. **Add Web Platform**

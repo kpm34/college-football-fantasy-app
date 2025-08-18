@@ -6,7 +6,7 @@
 - **Purpose**: Server-side Appwrite operations (database read/write)
 - **Where to get**: Appwrite Console → Your Project → Settings → API Keys
 - **How to create**:
-  1. Go to https://cloud.appwrite.io
+  1. Go to https://nyc.cloud.appwrite.io
   2. Open your project (college-football-fantasy-app)
   3. Navigate to Settings → API Keys
   4. Create a new API key with these scopes:
