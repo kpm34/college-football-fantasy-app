@@ -54,71 +54,71 @@ graph TD
 ```mermaid
 graph TB
     %% External Data Sources
-    subgraph "🌐 External APIs"
-        CFBD[🏈 College Football<br/>Data API<br/>Players, Games, Rankings]
-        ESPN[📺 ESPN API<br/>Live Scores<br/>Game Updates]
-        OAUTH[🔐 OAuth Providers<br/>Google, Apple<br/>Environment-Controlled]
-        ROTOWIRE[📰 Rotowire API<br/>Injury Reports<br/>Depth Charts]
+    subgraph ExtAPIs[External APIs]
+        CFBD[College Football<br/>Data API<br/>Players, Games, Rankings]
+        ESPN[ESPN API<br/>Live Scores<br/>Game Updates]
+        OAUTH[OAuth Providers<br/>Google, Apple<br/>Environment-Controlled]
+        ROTOWIRE[Rotowire API<br/>Injury Reports<br/>Depth Charts]
     end
     
     %% Talent Data Sources  
-    subgraph "📊 Talent Intelligence"
-        EA_DATA[🎮 EA Sports Ratings<br/>Overall, Speed, Acceleration<br/>data/ea/ratings_2025.csv]
-        MOCK_DATA[📋 Mock Draft Data<br/>NFL Draft Projections<br/>data/mockdraft/2025.csv]
-        DEPTH_DATA[📈 Depth Charts<br/>Position Rankings<br/>data/processed/depth/]
-        ESPN_PLUS[📰 ESPN+ Analysis<br/>Expert Sentiment<br/>kpm34@pitt.edu Auth]
+    subgraph TalentIntel[Talent Intelligence]
+        EA_DATA[EA Sports Ratings<br/>Overall, Speed, Acceleration<br/>data/ea/ratings_2025.csv]
+        MOCK_DATA[Mock Draft Data<br/>NFL Draft Projections<br/>data/mockdraft/2025.csv]
+        DEPTH_DATA[Depth Charts<br/>Position Rankings<br/>data/processed/depth/]
+        ESPN_PLUS[ESPN+ Analysis<br/>Expert Sentiment<br/>kpm34@pitt.edu Auth]
     end
     
     %% Single Source of Truth
-    subgraph "🎯 Schema SSOT"
-        SSOT_SCHEMA[📋 schema/zod-schema.ts<br/>🔥 SINGLE SOURCE OF TRUTH<br/>Collections, Types, Validation]
-        COLLECTIONS[📚 COLLECTIONS Registry<br/>user_teams, leagues<br/>college_players, games]
-        TYPES[🔧 TypeScript Types<br/>Auto-generated<br/>from Zod schemas]
-        VALIDATION[✅ Validation Functions<br/>validateData()<br/>Runtime checks]
+    subgraph SchemaSSOT[Schema SSOT]
+        SSOT_SCHEMA[schema/zod-schema.ts<br/>SINGLE SOURCE OF TRUTH<br/>Collections, Types, Validation]
+        COLLECTIONS[COLLECTIONS Registry<br/>user_teams, leagues<br/>college_players, games]
+        TYPES[TypeScript Types<br/>Auto-generated<br/>from Zod schemas]
+        VALIDATION[Validation Functions<br/>validateData()<br/>Runtime checks]
     end
     
     %% Database Layer
-    subgraph "🗄️ Appwrite Database (NYC)"
-        subgraph "Core Collections"
-            PLAYERS[(👥 college_players<br/>Name, Position, Team<br/>Fantasy Points)]
-            TEAMS[(🏫 teams<br/>School, Conference<br/>Colors, Logos)]
-            GAMES[(🎯 games<br/>Scores, Eligibility<br/>Week, Status)]
-            RANKINGS[(🏆 rankings<br/>AP Top 25<br/>Weekly)]
+    subgraph AppwriteDB[Appwrite Database NYC]
+        subgraph CoreColls[Core Collections]
+            PLAYERS[(college_players<br/>Name, Position, Team<br/>Fantasy Points)]
+            TEAMS[(teams<br/>School, Conference<br/>Colors, Logos)]
+            GAMES[(games<br/>Scores, Eligibility<br/>Week, Status)]
+            RANKINGS[(rankings<br/>AP Top 25<br/>Weekly)]
         end
         
-        subgraph "Fantasy Collections"  
-            LEAGUES[(🏟️ leagues<br/>Commissioner<br/>Settings, Status)]
-            USER_TEAMS[(👥 user_teams<br/>Team Rosters<br/>Wins, Points)]
-            LINEUPS[(📋 lineups<br/>Starting Players<br/>Weekly Sets)]
+        subgraph FantasyColls[Fantasy Collections]  
+            LEAGUES[(leagues<br/>Commissioner<br/>Settings, Status)]
+            USER_TEAMS[(user_teams<br/>Team Rosters<br/>Wins, Points)]
+            LINEUPS[(lineups<br/>Starting Players<br/>Weekly Sets)]
         end
         
-        subgraph "Draft System"
-            MOCK_DRAFTS[(🎯 mock_drafts<br/>Live Human Draft<br/>2-24 Teams)]
-            MOCK_PICKS[(✅ mock_draft_picks<br/>Draft Selections<br/>Snake Algorithm)]
-            DRAFT_PICKS[(📋 draft_picks<br/>League Drafts<br/>Real-time)]
+        subgraph DraftSys[Draft System]
+            MOCK_DRAFTS[(mock_drafts<br/>Live Human Draft<br/>2-24 Teams)]
+            MOCK_PICKS[(mock_draft_picks<br/>Draft Selections<br/>Snake Algorithm)]
+            DRAFT_PICKS[(draft_picks<br/>League Drafts<br/>Real-time)]
         end
     end
     
     %% Application Layer
-    subgraph "⚡ Next.js API Routes"
-        API_PLAYERS[👥 /api/draft/players<br/>Cached Player Lists<br/>Fantasy Projections]
-        API_LEAGUES[🏟️ /api/leagues/*<br/>Create, Join, Manage<br/>Commissioner Tools]
-        API_MOCK[🎯 /api/mock-draft/*<br/>Live Human Draft<br/>Turn Management]
-        API_DRAFT[📋 /api/draft/*<br/>Real Draft System<br/>Pick Management]
+    subgraph APIRoutes[Next.js API Routes]
+        API_PLAYERS[/api/draft/players<br/>Cached Player Lists<br/>Fantasy Projections]
+        API_LEAGUES[/api/leagues/*<br/>Create, Join, Manage<br/>Commissioner Tools]
+        API_MOCK[/api/mock-draft/*<br/>Live Human Draft<br/>Turn Management]
+        API_DRAFT[/api/draft/*<br/>Real Draft System<br/>Pick Management]
     end
     
     %% Frontend Layer
-    subgraph "💻 Frontend Pages"
-        MOCK_DRAFT_UI[🎯 /mock-draft/[id]<br/>Live Draft Room<br/>Real-time Picks]
-        DRAFT_UI[📋 /draft/[leagueId]<br/>League Draft<br/>Timer & Autopick]
-        LEAGUE_UI[🏟️ /league/*<br/>Management Pages<br/>Commissioner Tools]
-        RESULTS_UI[📊 Results & Export<br/>JSON/CSV Download<br/>Team Summaries]
+    subgraph FrontendPages[Frontend Pages]
+        MOCK_DRAFT_UI[/mock-draft/id<br/>Live Draft Room<br/>Real-time Picks]
+        DRAFT_UI[/draft/leagueId<br/>League Draft<br/>Timer and Autopick]
+        LEAGUE_UI[/league/*<br/>Management Pages<br/>Commissioner Tools]
+        RESULTS_UI[Results and Export<br/>JSON/CSV Download<br/>Team Summaries]
     end
     
     %% Realtime System
-    subgraph "🔌 Real-time Updates"
-        REALTIME[⚡ Appwrite Realtime<br/>Live Subscriptions<br/>Event Broadcasting]
-        WEBSOCKETS[🔗 WebSocket Channels<br/>Draft Picks, League Updates<br/>Turn Changes]
+    subgraph RealtimeUpdates[Real-time Updates]
+        REALTIME[Appwrite Realtime<br/>Live Subscriptions<br/>Event Broadcasting]
+        WEBSOCKETS[WebSocket Channels<br/>Draft Picks, League Updates<br/>Turn Changes]
     end
     
     %% Data Flow Connections
@@ -261,13 +261,13 @@ sequenceDiagram
 
 ```mermaid
 graph LR
-    subgraph "User Management"
+    subgraph UserMgmt["User Management"]
         LOGIN[Login/Signup] --> AUTH[Auth Service]
         AUTH --> SESSION[Session Cookie]
         SESSION --> USER_PROFILE[User Profile]
     end
     
-    subgraph "League Lifecycle"
+    subgraph LeagueLife["League Lifecycle"]
         CREATE[Create League] --> SETTINGS[Configure Settings]
         SETTINGS --> INVITE[Invite Players]
         INVITE --> JOIN[Players Join]
@@ -278,20 +278,20 @@ graph LR
         PLAYOFFS --> COMPLETE[Season Complete]
     end
     
-    subgraph "Commissioner Tools"
+    subgraph CommTools["Commissioner Tools"]
         COMM_AUTH[Verify Commissioner] --> COMM_SETTINGS[Update Settings]
         COMM_AUTH --> COMM_DRAFT[Control Draft]
         COMM_AUTH --> COMM_SCORING[Adjust Scoring]
         COMM_AUTH --> COMM_TRADES[Approve Trades]
     end
     
-    subgraph "Data Sync Operations"
+    subgraph DataSync["Data Sync Operations"]
         SYNC_PLAYERS[Sync Players] --> DEDUPE[Remove Duplicates]
         SYNC_GAMES[Sync Games] --> RANKINGS_UPDATE[Update Rankings]
         SYNC_STATS[Sync Stats] --> PROJECTIONS[Calculate Projections]
     end
     
-    subgraph "Weekly Operations"
+    subgraph WeeklyOps["Weekly Operations"]
         LINEUPS[Set Lineups] --> GAMES_PLAY[Games Played]
         GAMES_PLAY --> SCORING_CALC[Calculate Scoring]
         SCORING_CALC --> STANDINGS[Update Standings]

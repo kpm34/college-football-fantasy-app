@@ -30,7 +30,7 @@
       "collections": {
         "auctions": "Auction draft data",
         "bids": "Auction bid history",
-        "rosters": "Drafted players",
+        "user_teams": "Drafted players",
         "games": "Game data and scores",
         "leagues": "Fantasy leagues",
         "lineups": "Weekly matchups",

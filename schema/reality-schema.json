@@ -999,7 +999,7 @@
           "array": false
         },
         {
-          "key": "rosters",
+          "key": "user_teams",
           "type": "relationship",
           "required": false,
           "array": false
@@ -1203,9 +1203,9 @@
       "attributeCount": 31,
       "status": "active"
     },
-    "rosters": {
-      "id": "rosters",
-      "name": "Rosters",
+    "user_teams": {
+      "id": "user_teams",
+      "name": "User Teams",
       "documentSecurity": true,
       "attributes": [
         {
@@ -1638,7 +1638,7 @@
           "array": true
         },
         {
-          "key": "rosters",
+          "key": "user_teams",
           "type": "relationship",
           "required": false,
           "array": false
