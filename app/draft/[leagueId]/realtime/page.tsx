@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useDraftRealtime } from '@/hooks/useDraftRealtime';
+import { useDraftCoreLive } from '@/lib/draft/core';
 import { useAuth } from '@/hooks/useAuth';
 import { DraftTimer } from '@/components/draft/DraftTimer';
 import { DraftRealtimeStatus } from '@/components/draft/DraftRealtimeStatus';
@@ -22,7 +22,7 @@ export default function RealtimeDraftRoom({ params }: Props) {
   const [leagueId, setLeagueId] = useState<string>('');
   
   // Realtime draft state
-  const draft = useDraftRealtime(leagueId);
+  const draft = useDraftCoreLive(leagueId);
   
   // User data
   const [users, setUsers] = useState<Record<string, any>>({});

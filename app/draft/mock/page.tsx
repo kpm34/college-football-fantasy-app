@@ -70,40 +70,16 @@ interface Player {
 export default function MockDraftPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  const [mockDraftStarted, setMockDraftStarted] = useState(false);
-  const [myMockPicks, setMyMockPicks] = useState<DraftPlayer[]>([]);
-  const [selectedPlayer, setSelectedPlayer] = useState<DraftPlayer | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [showSettings, setShowSettings] = useState(true);
   
-  // Mock draft handlers
-  const handleStartMockDraft = () => {
-    setMockDraftStarted(true);
-    setShowSettings(false);
-  };
-  
-  const handleMockDraftPlayer = (player: DraftPlayer) => {
-    setMyMockPicks(prev => [...prev, player]);
-    setSelectedPlayer(null);
-  };
-  
-  // Draft settings
-  const [settings, setSettings] = useState<MockDraftSettings>({
-    draftType: 'snake',
-    numTeams: 12,
-    pickTimeSeconds: 90,
-    scoringType: 'PPR',
-    rosterSize: 16,
-    userPosition: 1
-  });
+  // Redirect to canonical mock draft room
+  useEffect(() => {
+    if (authLoading) return;
+    // Expect a draftId in the hash or query in future; for now redirect home
+    const hash = (typeof window !== 'undefined') ? (window.location.hash || '').replace('#','') : '';
+    router.replace(hash ? `/mock-draft/${hash}` : '/');
+  }, [authLoading, router]);
 
-  // Draft state
-  const [currentPick, setCurrentPick] = useState(1);
-  const [timeRemaining, setTimeRemaining] = useState(settings.pickTimeSeconds);
-  const [draftOrder, setDraftOrder] = useState<string[]>([]);
-  const [draftedPlayers, setDraftedPlayers] = useState<Set<string>>(new Set());
-  const [myRoster, setMyRoster] = useState<Player[]>([]);
-  const [allPicks, setAllPicks] = useState<{[pick: number]: {player: Player, team: number}}>({}); 
+  return null;
 
   // Player filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -117,13 +93,7 @@ export default function MockDraftPage() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/login');
-    } else if (user) {
-      loadPlayers();
-    }
-  }, [user, authLoading, router]);
+  
 
   const loadPlayers = async () => {
     try {
