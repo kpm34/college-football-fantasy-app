@@ -495,8 +495,8 @@ npm install @anthropic-ai/sdk openai @runwayml/sdk meshyai elevenlabs
 cat >> .env.local << EOF
 CLAUDE_API_KEY=your-key
 OPENAI_API_KEY=your-key
-RUNWAY_API_KEY=your-key
-MESHY_API_KEY=your-key
+RUNWAY_API_KEY=key_441766a17fd0e0c670f14adfe7d0ebf8b05c0256a20e7d81959ab7cdd85cae14e677111000bfc2226bbe4d0b6b74ee3933bd36d92059f9fd9502222e061def91
+MESHY_API_KEY=msy_OWXv86Qrc3ndOinYkM99LkSwlr1dQp0T5yrz
 ROTOWIRE_API_KEY=your-key
 ESPN_USERNAME=your-username
 ESPN_PASSWORD=your-password
