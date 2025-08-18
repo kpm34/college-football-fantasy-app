@@ -49,7 +49,8 @@ npm run lint
 
 ## 📖 Essential Reading
 
-1. **[CLAUDE_TOOLBOX.md](./CLAUDE_TOOLBOX.md)** - Complete developer environment reference
+1. **[TOOLBOX_CLAUDE.md](./TOOLBOX_CLAUDE.md)** - MCP integration for Claude Code
+2. **[TOOLBOX_CURSOR.md](./TOOLBOX_CURSOR.md)** - Development environment for Cursor AI
 2. **[CLAUDE.md](./CLAUDE.md)** - Project context and configuration
 3. **[DEV_TOOLS.md](./DEV_TOOLS.md)** - All installed developer tools
 

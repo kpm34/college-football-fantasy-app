@@ -47,7 +47,8 @@ fi
 echo "📄 Copying configuration files..."
 FILES_TO_COPY=(
   "CLAUDE.md"
-  "CLAUDE_TOOLBOX.md"
+  "TOOLBOX_CLAUDE.md"
+  "TOOLBOX_CURSOR.md"
   "CLAUDE_DESKTOP_SETUP.md"
   "DATA_FLOW.md"
   "DEV_TOOLS.md"
@@ -283,7 +284,8 @@ For detailed step-by-step instructions, see `CLAUDE_DESKTOP_SETUP.md`
 ## Important Files
 
 - **CLAUDE_DESKTOP_SETUP.md** - Complete setup guide
-- **CLAUDE_TOOLBOX.md** - Full toolbox reference
+- **TOOLBOX_CLAUDE.md** - MCP integration guide
+- **TOOLBOX_CURSOR.md** - Cursor AI environment guide
 - **CLAUDE.md** - Project context
 - **quick-install.sh** - Automated installation script
 - **verify-setup.sh** - Setup verification script
