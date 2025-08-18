@@ -65,7 +65,6 @@ export async function GET(
         currentTeams: league.members?.length || 0,
         members: league.members || [],
         status: league.status,
-        commissionerId: league.commissioner || league.commissionerId,
         commissioner: league.commissioner,
         lineupProfileId: league.lineup_profile_id,
         scoringProfileId: league.scoring_profile_id,

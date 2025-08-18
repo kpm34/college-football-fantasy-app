@@ -34,7 +34,8 @@ export async function GET(
       leagueId
     );
 
-    const isComm = Boolean(league?.commissionerId && user?.$id && league.commissionerId === user.$id);
+    // Check commissioner using the actual database field name: 'commissioner'
+    const isComm = Boolean(league?.commissioner && user?.$id && league.commissioner === user.$id);
     return NextResponse.json({ isCommissioner: isComm });
   } catch (error) {
     console.error('is-commissioner error:', error);
