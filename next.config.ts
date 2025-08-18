@@ -17,6 +17,13 @@ const nextConfig: NextConfig = {
     // your project has type errors.
     ignoreBuildErrors: true,
   },
+  redirects: async () => [
+    {
+      source: '/docs/:path*',
+      destination: '/documentation/:path*',
+      permanent: true,
+    },
+  ],
   headers: async () => [
     {
       source: '/sw.js',
