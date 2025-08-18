@@ -1,6 +1,6 @@
 {
-  "projectId": "college-football-fantasy",
-  "databaseId": "default",
+  "projectId": "college-football-fantasy-app",
+  "databaseId": "college-football-fantasy",
   "collections": [
     {
       "$id": "users",
