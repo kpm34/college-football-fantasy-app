@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { env } from '@/core/config/environment';
-import { ID, Client, Databases } from 'node-appwrite';
+import { ID } from 'node-appwrite';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: draftId } = await params;
@@ -43,17 +43,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     // Persist event and update state in Appwrite
-    const client = new Client()
-      .setEndpoint(env.server.appwrite.endpoint)
-      .setProject(env.server.appwrite.projectId)
-      .setKey(env.server.appwrite.apiKey);
-    const databases = new Databases(client);
-
     const overall = state.overall ?? (state.round - 1) * state.totalTeams + state.pickIndex;
 
     await databases.createDocument(
-      env.server.appwrite.databaseId,
-      env.client.collections.draftEvents,
+      DATABASE_ID,
+      COLLECTIONS.DRAFT_EVENTS,
       ID.unique(),
       {
         draftId,
@@ -81,8 +75,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     // Persist state mirror
     await databases.createDocument(
-      env.server.appwrite.databaseId,
-      env.client.collections.draftStates,
+      DATABASE_ID,
+      COLLECTIONS.DRAFT_STATES,
       ID.unique(),
       {
         draftId,
