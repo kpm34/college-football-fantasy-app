@@ -82,7 +82,7 @@ function JoinLeagueContent() {
         const selected: League = {
           $id: leagueDoc.$id,
           name: leagueDoc.name,
-          owner: leagueDoc.commissioner || leagueDoc.commissionerId || 'Commissioner',
+          owner: leagueDoc.commissioner || (leagueDoc as any).commissioner_id || leagueDoc.commissionerId || 'Commissioner',
           teams: teamsCount,
           maxTeams: leagueDoc.maxTeams || 12,
           draftType: (leagueDoc.draftType || 'snake') as 'snake' | 'auction',

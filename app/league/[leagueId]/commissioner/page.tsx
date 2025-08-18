@@ -136,7 +136,10 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       const data = await response.json();
       const league = data.league;
       
-      setLeague(league);
+      setLeague({
+        ...league,
+        commissionerId: league.commissioner || (league as any).commissioner_id || league.commissionerId
+      });
       setMembers(data.members || []);
       
       // Initialize form with league data

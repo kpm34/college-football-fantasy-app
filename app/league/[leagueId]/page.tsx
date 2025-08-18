@@ -176,6 +176,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           $id: l.id,
           name: l.name,
           commissioner: l.commissioner, // Always use the primary field
+          commissionerId: l.commissioner || (l as any).commissioner_id || (l as any).commissionerId,
           commissionerName,
           season: l.seasonStartWeek ? new Date().getFullYear() : (l.season || new Date().getFullYear()),
           scoringType: 'PPR',
