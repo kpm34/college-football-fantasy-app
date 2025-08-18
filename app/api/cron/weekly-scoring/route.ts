@@ -183,7 +183,7 @@ async function calculateTeamScore(teamId: string, week: number, seasonYear: numb
     // Get team's roster for this week
     const rosterResponse = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.ROSTERS,
+      COLLECTIONS.USER_TEAMS,
       [Query.equal('team_id', teamId)]
     );
 

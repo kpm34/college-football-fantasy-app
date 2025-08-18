@@ -1,5 +1,5 @@
-const CACHE_NAME = 'cfb-fantasy-v1';
-const DYNAMIC_CACHE = 'cfb-fantasy-dynamic-v1';
+const CACHE_NAME = 'cfb-fantasy-v2';
+const DYNAMIC_CACHE = 'cfb-fantasy-dynamic-v2';
 
 // Assets to cache immediately
 const STATIC_ASSETS = [
@@ -46,7 +46,7 @@ self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests
+  // Skip non-GET requests (don't cache PUT/POST/DELETE)
   if (request.method !== 'GET') return;
 
   // Handle API requests - network first, cache fallback

@@ -15,7 +15,7 @@ export async function POST(
     // Get all rosters for this league
     const rosters = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.ROSTERS,
+      COLLECTIONS.USER_TEAMS,
       [Query.equal('leagueId', leagueId), Query.limit(100)]
     );
 

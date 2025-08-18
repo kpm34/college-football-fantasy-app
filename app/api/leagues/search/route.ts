@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
       // Capacity-derived open/closed
       const docs = leagues.documents as any[];
       const filteredByCapacity = docs.filter((league: any) => {
-        const maxTeams = league.maxTeams ?? league.max_teams ?? 12;
+        const maxTeams = league.maxTeams ?? 12;
         const currentTeams = league.currentTeams ?? league.members?.length ?? 0;
         const isFull = currentTeams >= maxTeams;
         return includeClosed ? true : !isFull;
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         leagues: paged.map((league: any) => {
-          const maxTeams = league.maxTeams ?? league.max_teams ?? 12;
+          const maxTeams = league.maxTeams ?? 12;
           const currentTeams = league.currentTeams ?? league.members?.length ?? 0;
           const isFull = currentTeams >= maxTeams;
           const computedStatus = isFull ? 'closed' : 'open';
@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
         const matchesName = term ? String(doc.name || '').toLowerCase().includes(term) : true;
         const matchesMode = mode ? String(doc.mode || '').toLowerCase() === mode.toLowerCase() : true;
         // Capacity-derived open/closed
-        const maxTeams = doc.maxTeams ?? doc.max_teams ?? 12;
+        const maxTeams = doc.maxTeams ?? 12;
         const currentTeams = doc.currentTeams ?? doc.members?.length ?? 0;
         const isFull = currentTeams >= maxTeams;
         const passesCapacity = includeClosed ? true : !isFull;
@@ -122,7 +122,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         leagues: filtered.slice(0, limit).map((league: any) => {
-          const maxTeams = league.maxTeams ?? league.max_teams ?? 12;
+          const maxTeams = league.maxTeams ?? 12;
           const currentTeams = league.currentTeams ?? league.members?.length ?? 0;
           const hasPassword = Boolean(league.password);
           const isPrivate = (league.isPublic === false) || hasPassword;

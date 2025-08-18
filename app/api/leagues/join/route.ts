@@ -45,11 +45,11 @@ export async function POST(request: NextRequest) {
     // Compute capacity using authoritative roster count (ignore stale league fields)
     const rosterCountPage = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.ROSTERS,
+      COLLECTIONS.USER_TEAMS,
       [Query.equal('leagueId', leagueId), Query.limit(1)]
     );
     const rosterCount = (rosterCountPage as any).total ?? (rosterCountPage.documents?.length || 0);
-    const maxTeams = (league as any).maxTeams ?? (league as any).max_teams ?? 12;
+    const maxTeams = (league as any).maxTeams ?? 12;
     if (rosterCount >= maxTeams) {
       return NextResponse.json({ error: 'League is full' }, { status: 400 });
     }
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     // Check if user is already in the league
     const existingRosters = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.ROSTERS,
+      COLLECTIONS.USER_TEAMS,
       [
         Query.equal('leagueId', leagueId),
         Query.equal('userId', user.$id)
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
     // Only include fields that exist in the collection
     // Abbreviation is optional and may not exist in schema
     try {
-      const rostersCollection = await databases.getCollection(DATABASE_ID, COLLECTIONS.ROSTERS);
+      const rostersCollection = await databases.getCollection(DATABASE_ID, COLLECTIONS.USER_TEAMS);
       const hasAbbreviation = Array.isArray((rostersCollection as any).attributes) && (rostersCollection as any).attributes.some((a: any) => a.key === 'abbreviation');
       if (hasAbbreviation) {
         rosterData.abbreviation = (teamName || user.name || 'TEAM').substring(0, 3).toUpperCase();
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     
     const roster = await databases.createDocument(
       DATABASE_ID,
-      COLLECTIONS.ROSTERS,
+      COLLECTIONS.USER_TEAMS,
       ID.unique(),
       rosterData
     );
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
     // Rebuild members/currentTeams from rosters to keep schema in sync
     const allRosters = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.ROSTERS,
+      COLLECTIONS.USER_TEAMS,
       [Query.equal('leagueId', leagueId), Query.limit(1000)]
     );
     const updatedMembers = Array.from(new Set((allRosters.documents || []).map((r: any) => r.userId))).filter(Boolean);

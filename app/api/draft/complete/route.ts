@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
         // Find the user's roster record
         const rostersResponse = await databases.listDocuments(
           DATABASE_ID,
-          COLLECTIONS.ROSTERS,
+          COLLECTIONS.USER_TEAMS,
           [
             Query.equal('leagueId', leagueId),
             Query.equal('userId', userId),
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
         // Update the roster with the drafted players
         await databases.updateDocument(
           DATABASE_ID,
-          COLLECTIONS.ROSTERS,
+          COLLECTIONS.USER_TEAMS,
           roster.$id,
           {
             // Store player IDs as JSON string for compatibility with existing system

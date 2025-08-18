@@ -49,7 +49,7 @@ export async function GET(
     const [rosters, teams] = await Promise.all([
       databases.listDocuments(
         DATABASE_ID,
-        COLLECTIONS.ROSTERS,
+        COLLECTIONS.USER_TEAMS,
         [Query.equal('leagueId', params.leagueId)]
       ),
       databases.listDocuments(
@@ -123,22 +123,22 @@ export async function PUT(
       if (value !== undefined && value !== null && value !== '') mapped[key] = value;
     };
     setIfPresent('name', updates.name);
-    if ('maxTeams' in updates) setIfPresent('max_teams', Number(updates.maxTeams));
-    if ('pickTimeSeconds' in updates) setIfPresent('pick_time_seconds', Number(updates.pickTimeSeconds));
-    if ('draftDate' in updates) setIfPresent('draft_date', updates.draftDate); // ISO string
-    if ('orderMode' in updates) setIfPresent('order_mode', updates.orderMode);
-    if ('gameMode' in updates) setIfPresent('mode', updates.gameMode); // power4|sec|acc|big12|bigten
+    if ('maxTeams' in updates) setIfPresent('maxTeams', Number(updates.maxTeams));
+    if ('pickTimeSeconds' in updates) setIfPresent('pickTimeSeconds', Number(updates.pickTimeSeconds));
+    if ('draftDate' in updates) setIfPresent('draftDate', updates.draftDate); // ISO string
+    if ('orderMode' in updates) setIfPresent('orderMode', updates.orderMode);
+    if ('gameMode' in updates) setIfPresent('gameMode', updates.gameMode); // power4|sec|acc|big12|bigten
     if (updates.gameMode === 'conference' && 'selectedConference' in updates) {
-      setIfPresent('conf', updates.selectedConference);
+      setIfPresent('selectedConference', updates.selectedConference);
     }
-    if ('scoringRules' in updates) setIfPresent('scoring_rules', updates.scoringRules); // stringified JSON from UI
-    if ('seasonStartWeek' in updates) setIfPresent('season_start_week', Number(updates.seasonStartWeek));
-    if ('playoffTeams' in updates) setIfPresent('playoff_teams', Number(updates.playoffTeams));
-    if ('playoffStartWeek' in updates) setIfPresent('playoff_start_week', Number(updates.playoffStartWeek));
-    if ('primaryColor' in updates) setIfPresent('primary_color', updates.primaryColor);
-    if ('secondaryColor' in updates) setIfPresent('secondary_color', updates.secondaryColor);
-    if ('leagueTrophyName' in updates) setIfPresent('league_trophy_name', updates.leagueTrophyName);
-    if ('draftType' in updates) setIfPresent('draft_type', updates.draftType);
+    if ('scoringRules' in updates) setIfPresent('scoringRules', updates.scoringRules); // stringified JSON from UI
+    if ('seasonStartWeek' in updates) setIfPresent('seasonStartWeek', Number(updates.seasonStartWeek));
+    if ('playoffTeams' in updates) setIfPresent('playoffTeams', Number(updates.playoffTeams));
+    if ('playoffStartWeek' in updates) setIfPresent('playoffStartWeek', Number(updates.playoffStartWeek));
+    if ('primaryColor' in updates) setIfPresent('primaryColor', updates.primaryColor);
+    if ('secondaryColor' in updates) setIfPresent('secondaryColor', updates.secondaryColor);
+    if ('leagueTrophyName' in updates) setIfPresent('leagueTrophyName', updates.leagueTrophyName);
+    if ('draftType' in updates) setIfPresent('draftType', updates.draftType);
 
     // Fallback: if no mapped keys found, pass original (for backwards compatibility)
     const payload = Object.keys(mapped).length > 0 ? mapped : updates;

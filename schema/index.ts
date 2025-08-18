@@ -38,7 +38,7 @@ export const Collections = {
   GAMES: 'games',
   RANKINGS: 'rankings',
   LEAGUES: 'leagues',
-  ROSTERS: 'user_teams',
+  USER_TEAMS: 'user_teams',
   LINEUPS: 'lineups',
   AUCTIONS: 'auctions',
   BIDS: 'bids',
