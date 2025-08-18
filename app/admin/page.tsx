@@ -50,7 +50,7 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <button
               onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/project-map')
+                const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
                 const data = await res.json()
                 setDebugInfo({ endpoint: 'project-map-repo', response: data, status: res.status })
                 setShowDiagram({ slug: 'project-map', title: '📁 Repository Structure' })
@@ -65,7 +65,7 @@ export default function AdminDashboard() {
             
             <button
               onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/project-map')
+                const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
                 const data = await res.json()
                 setDebugInfo({ endpoint: 'project-map-dataflow', response: data, status: res.status })
                 setShowDiagram({ slug: 'project-map', title: '🔄 Functionality & Data Flow' })
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
 
             <button
               onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/project-map')
+                const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
                 const data = await res.json()
                 setDebugInfo({ endpoint: 'project-map-schema', response: data, status: res.status })
                 setShowDiagram({ slug: 'project-map', title: '🔧 Commissioner Schema Fix' })
@@ -95,7 +95,7 @@ export default function AdminDashboard() {
 
             <button
               onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/project-map')
+                const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
                 const data = await res.json()
                 setDebugInfo({ endpoint: 'project-map-admin', response: data, status: res.status })
                 setShowDiagram({ slug: 'project-map', title: '🎮 Admin Operations Flow' })
@@ -111,7 +111,7 @@ export default function AdminDashboard() {
             <button
               onClick={async () => {
                 setShowDiagram({ slug: 'data-flow', title: '📊 Complete Data Flow' })
-                const res = await fetch('/api/docs/mermaid/data-flow')
+                const res = await fetch('/api/docs/mermaid/data-flow', { cache: 'no-store' })
                 const data = await res.json()
                 setDebugInfo({ endpoint: 'data-flow', response: data, status: res.status })
                 setCharts(data.charts || [])
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
 
             <button
               onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/project-map')
+                const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
                 const data = await res.json()
                 setDebugInfo({ endpoint: 'project-map-all', response: data, status: res.status })
                 setShowDiagram({ slug: 'project-map', title: '🗺️ Complete Project Map' })
