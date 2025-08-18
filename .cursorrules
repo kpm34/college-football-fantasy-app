@@ -215,8 +215,11 @@ SKIP_ENV_VALIDATION=true npm run build
 
 ## 📊 Database Collections & Schema Management
 
-### Single Source of Truth (SSOT)
+### Single Source of Truth (SSOT) File Locations
 - **Schema Definition**: `schema/zod-schema.ts` - THE canonical source
+- **SSOT Guards**: `scripts/guards/validate-ssot-integrity.ts`, `scripts/guards/detect-schema-drift.ts`
+- **SSOT Scripts**: `scripts/validate-ssot-schema.ts`, `scripts/sync-appwrite-from-ssot.ts`, `scripts/test-ssot-workflow.ts`
+- **SSOT Documentation**: `SINGLE_SOURCE_OF_TRUTH.md`, `SCHEMA-GUARDRAILS.md`, `SCHEMA-IMPLEMENTATION.md`
 - **Auto-Generated Types**: `types/generated.ts` - Generated from SSOT
 - **Collection Config**: `lib/appwrite-generated.ts` - Generated from SSOT
 - **Environment Template**: `.env.template.generated` - Generated from SSOT
