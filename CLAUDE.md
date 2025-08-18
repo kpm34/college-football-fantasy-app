@@ -224,6 +224,49 @@ Provide `APPWRITE_API_KEY` via your shell environment instead of hardcoding in t
 
 Reference capabilities file: `toolbox/capabilities.json` (stack, env, APIs, commands, MCP servers).
 
+### GitHub Workflow Access
+For Claude Code and future AI sessions to access GitHub workflows and logs:
+
+**GitHub CLI Setup** (for immediate access):
+```bash
+# Set token in current session
+export GH_TOKEN="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"
+
+# Common commands for workflow debugging
+gh run list --limit 5                    # List recent workflow runs
+gh run view <run-id>                      # View workflow details
+gh run view <run-id> --log-failed         # View failed step logs  
+gh workflow list                          # List all workflows
+gh workflow run <workflow-name>           # Trigger manual workflow
+```
+
+**Permanent Setup** (add to shell profile):
+Add to `~/.zshrc` or `~/.bashrc`:
+```bash
+export GH_TOKEN="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"
+```
+
+**GitHub MCP Server** (for Claude/Cursor integration):
+Add to `~/.cursor/mcp.json`:
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["mcp-server-github"], 
+      "env": {
+        "GITHUB_TOKEN": "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"
+      }
+    }
+  }
+}
+```
+
+**Repository Info**:
+- Owner: `kpm34`
+- Repo: `college-football-fantasy-app` 
+- Main workflows: `e2e-tests.yml`, `schema-sync.yml`, `post-deploy-smoke.yml`
+
 ## Vercel Configuration
 ```json
 {

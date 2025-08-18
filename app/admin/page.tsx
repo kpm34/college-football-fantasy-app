@@ -40,13 +40,13 @@ export default function AdminDashboard() {
         {/* Quick Diagram Links (always visible at top) */}
         <div className="mb-10 flex flex-wrap gap-3">
           <Link
-            href="/docs/project-map"
+            href="/documentation/project-map"
             className="px-4 py-2 rounded-lg bg-indigo-600/70 hover:bg-indigo-600 text-white transition-colors"
           >
             📘 View Project Map (Mermaid)
           </Link>
           <Link
-            href="/docs/data-flow"
+            href="/documentation/data-flow"
             className="px-4 py-2 rounded-lg bg-teal-600/70 hover:bg-teal-600 text-white transition-colors"
           >
             🔄 View Data Flow (Mermaid)
@@ -100,14 +100,14 @@ export default function AdminDashboard() {
           <h2 className="text-2xl font-bold text-white mb-6">🗺️ Architecture Diagrams</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link
-              href="/docs/project-map"
+              href="/documentation/project-map"
               className="block p-4 bg-indigo-600/20 rounded-lg hover:bg-indigo-600/30 transition-colors"
             >
               <h3 className="text-lg font-semibold text-white">📘 Project Map (Mermaid)</h3>
               <p className="text-sm text-gray-300 mt-1">Repo structure and systems overview</p>
             </Link>
             <Link
-              href="/docs/data-flow"
+              href="/documentation/data-flow"
               className="block p-4 bg-teal-600/20 rounded-lg hover:bg-teal-600/30 transition-colors"
             >
               <h3 className="text-lg font-semibold text-white">🔄 Data Flow (Mermaid)</h3>
