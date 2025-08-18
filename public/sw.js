@@ -1,5 +1,5 @@
-const CACHE_NAME = 'cfb-fantasy-v2';
-const DYNAMIC_CACHE = 'cfb-fantasy-dynamic-v2';
+const CACHE_NAME = 'cfb-fantasy-v3';
+const DYNAMIC_CACHE = 'cfb-fantasy-dynamic-v3';
 
 // Assets to cache immediately
 const STATIC_ASSETS = [

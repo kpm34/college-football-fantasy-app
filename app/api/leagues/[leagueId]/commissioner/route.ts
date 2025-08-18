@@ -157,9 +157,12 @@ export async function PUT(
     if ('secondaryColor' in updates) setIfPresent('secondaryColor', updates.secondaryColor);
     if ('leagueTrophyName' in updates) setIfPresent('leagueTrophyName', updates.leagueTrophyName);
     if ('draftType' in updates) setIfPresent('draftType', updates.draftType);
+    if ('isPublic' in updates) setIfPresent('isPublic', Boolean(updates.isPublic));
 
     // Fallback: if no mapped keys found, pass original (for backwards compatibility)
     const payload = Object.keys(mapped).length > 0 ? mapped : updates;
+
+    console.log('Commissioner settings update payload:', JSON.stringify(payload, null, 2));
 
     // Update league with provided settings
     const result = await databases.updateDocument(
