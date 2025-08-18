@@ -197,6 +197,36 @@ export const SCHEMA: Record<string, SchemaCollection> = {
     }
   },
 
+  // User Teams (Rosters) - Fantasy team rosters within leagues  
+  user_teams: {
+    id: 'user_teams',
+    name: 'User Teams',
+    description: 'Fantasy team rosters within leagues',
+    attributes: [
+      { key: 'leagueId', type: 'string', size: 255, required: true, description: 'League document ID' },
+      { key: 'userId', type: 'string', size: 255, required: true, description: 'Team owner user ID' },
+      { key: 'teamName', type: 'string', size: 128, required: true, description: 'Fantasy team name' },
+      { key: 'draftPosition', type: 'integer', description: 'Draft order position' },
+      { key: 'wins', type: 'integer', default: 0, required: true, description: 'Season wins' },
+      { key: 'losses', type: 'integer', default: 0, required: true, description: 'Season losses' },
+      { key: 'pointsFor', type: 'double', default: 0, required: true, description: 'Total points scored' },
+      { key: 'pointsAgainst', type: 'double', default: 0, required: true, description: 'Total points allowed' },
+      { key: 'players', type: 'string', size: 5000, required: true, description: 'Roster player IDs JSON array' }
+    ],
+    indexes: [
+      { key: 'league_idx', type: 'key', attributes: ['leagueId'], description: 'League rosters' },
+      { key: 'user_idx', type: 'key', attributes: ['userId'], description: 'User teams' },
+      { key: 'league_user_idx', type: 'unique', attributes: ['leagueId', 'userId'], description: 'One team per user per league' }
+    ],
+    permissions: {
+      read: ['any'],
+      write: ['role:user'],
+      create: ['role:user'],
+      update: ['role:user'],
+      delete: ['role:user']
+    }
+  },
+
   // Fantasy League Management
   leagues: {
     id: 'leagues',
@@ -794,7 +824,7 @@ export const REQUIRED_COLLECTIONS: SchemaCollectionNames[] = [
   'teams', 
   'games',
   'leagues',
-  'rosters',
+  'user_teams',
   'users'
 ];
 
