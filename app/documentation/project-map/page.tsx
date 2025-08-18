@@ -19,9 +19,8 @@ async function loadMermaidBlocks(filePath: string): Promise<string[]> {
 }
 
 export default async function Page() {
-  // Try filesystem first; if empty (e.g., on certain serverless builds), use API fallback
-  let charts = (await loadMermaidBlocks('docs/PROJECT_MAP.md'))
-    .concat(await loadMermaidBlocks('PROJECT_MAP.md'))
+  // Load from the single source PROJECT_MAP.md in root
+  let charts = await loadMermaidBlocks('PROJECT_MAP.md')
   let extra = await loadMermaidBlocks('docs/SYSTEM_MAP.md')
   if (charts.length === 0) {
     try {

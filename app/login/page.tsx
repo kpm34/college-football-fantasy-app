@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { client } from '@/lib/appwrite-generated';
+import { client } from '@/lib/appwrite';
 
 export default function LoginPage() {
   return (

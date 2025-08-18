@@ -16,6 +16,9 @@ export const storage = new Storage(client);
 export const functions = new Functions(client);
 export { client };
 
+// Alternative export for compatibility with appwrite-generated imports
+export { client as default };
+
 // Legacy configuration object for compatibility
 export const APPWRITE_CONFIG = {
   endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1',

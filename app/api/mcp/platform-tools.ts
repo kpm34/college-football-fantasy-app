@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Client, Databases, Teams, Functions, Storage, Users } from 'appwrite';
-import { client, databases, DATABASE_ID } from '@/lib/appwrite-generated';
+import { client, databases, DATABASE_ID } from '@/lib/appwrite-server';
 
 // ========== APPWRITE TOOLS ==========
 export function registerAppwriteTools(server: any) {

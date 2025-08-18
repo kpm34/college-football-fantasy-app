@@ -13,7 +13,7 @@
 export * from './schema';
 
 // Export generated configurations
-export { COLLECTIONS, databases, DATABASE_ID } from '../lib/appwrite-generated';
+export { COLLECTIONS, databases, DATABASE_ID } from '@/lib/appwrite-server';
 export type * from '../types/generated';
 
 // Re-export commonly used items for convenience
