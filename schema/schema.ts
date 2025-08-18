@@ -14,7 +14,7 @@
 export const SCHEMA_VERSION = '1.0.0';
 
 // Base attribute types
-export type AttributeType = 'string' | 'integer' | 'double' | 'boolean' | 'datetime' | 'url' | 'ip' | 'email';
+export type AttributeType = 'string' | 'integer' | 'double' | 'float' | 'boolean' | 'datetime' | 'url' | 'ip' | 'email' | 'relationship';
 
 export interface SchemaAttribute {
   key: string;
@@ -170,7 +170,7 @@ export const SCHEMA: Record<string, SchemaCollection> = {
 
   rankings: {
     id: 'rankings',
-    name: 'Rankings',
+    name: 'AP Rankings',
     description: 'AP Top 25 and other poll rankings',
     attributes: [
       { key: 'week', type: 'integer', required: true, description: 'Poll week' },
@@ -207,10 +207,10 @@ export const SCHEMA: Record<string, SchemaCollection> = {
       { key: 'userId', type: 'string', size: 255, required: true, description: 'Team owner user ID' },
       { key: 'teamName', type: 'string', size: 128, required: true, description: 'Fantasy team name' },
       { key: 'draftPosition', type: 'integer', description: 'Draft order position' },
-      { key: 'wins', type: 'integer', default: 0, required: true, description: 'Season wins' },
-      { key: 'losses', type: 'integer', default: 0, required: true, description: 'Season losses' },
-      { key: 'pointsFor', type: 'double', default: 0, required: true, description: 'Total points scored' },
-      { key: 'pointsAgainst', type: 'double', default: 0, required: true, description: 'Total points allowed' },
+      { key: 'wins', type: 'integer', default: 0, description: 'Season wins' },
+      { key: 'losses', type: 'integer', default: 0, description: 'Season losses' },
+      { key: 'pointsFor', type: 'double', default: 0, description: 'Total points scored' },
+      { key: 'pointsAgainst', type: 'double', default: 0, description: 'Total points allowed' },
       { key: 'players', type: 'string', size: 5000, required: true, description: 'Roster player IDs JSON array' }
     ],
     indexes: [
@@ -236,11 +236,11 @@ export const SCHEMA: Record<string, SchemaCollection> = {
       { key: 'name', type: 'string', size: 100, required: true, description: 'League name' },
       { key: 'commissioner', type: 'string', size: 50, required: true, description: 'Commissioner user ID' },
       { key: 'season', type: 'integer', required: true, description: 'League season year' },
-      { key: 'maxTeams', type: 'integer', required: true, default: 12, description: 'Maximum teams allowed' },
+      { key: 'maxTeams', type: 'integer', default: 12, description: 'Maximum teams allowed' },
       { key: 'currentTeams', type: 'integer', default: 0, description: 'Current number of teams' },
       { key: 'draftType', type: 'string', size: 20, required: true, description: 'snake, auction, keeper' },
       { key: 'gameMode', type: 'string', size: 20, required: true, description: 'standard, ppr, superflex' },
-      { key: 'status', type: 'string', size: 20, required: true, default: 'recruiting', description: 'recruiting, drafting, active, completed' },
+      { key: 'status', type: 'string', size: 20, default: 'recruiting', description: 'recruiting, drafting, active, completed' },
       { key: 'isPublic', type: 'boolean', default: false, description: 'Public league (searchable)' },
       { key: 'pickTimeSeconds', type: 'integer', default: 90, description: 'Draft pick time limit' },
       { key: 'scoringRules', type: 'string', size: 5000, description: 'Scoring configuration JSON' },
@@ -291,6 +291,93 @@ export const SCHEMA: Record<string, SchemaCollection> = {
     }
   },
 
+  matchups: {
+    id: 'matchups',
+    name: 'Matchups',
+    description: 'Head-to-head weekly fantasy matchups',
+    attributes: [
+      { key: 'leagueId', type: 'string', size: 50, required: true, description: 'League document ID' },
+      { key: 'week', type: 'integer', required: true, description: 'Week number' },
+      { key: 'season', type: 'integer', required: true, description: 'Season year' },
+      { key: 'team1Id', type: 'string', size: 50, required: true, description: 'First team roster ID' },
+      { key: 'team2Id', type: 'string', size: 50, required: true, description: 'Second team roster ID' },
+      { key: 'team1Score', type: 'double', default: 0, description: 'First team total score' },
+      { key: 'team2Score', type: 'double', default: 0, description: 'Second team total score' },
+      { key: 'winnerId', type: 'string', size: 50, description: 'Winning team roster ID' },
+      { key: 'completed', type: 'boolean', default: false, description: 'Matchup scoring completed' },
+      { key: 'playoffMatchup', type: 'boolean', default: false, description: 'Is playoff/championship matchup' }
+    ],
+    indexes: [
+      { key: 'matchup_league', type: 'key', attributes: ['leagueId'], description: 'League matchups' },
+      { key: 'matchup_week', type: 'key', attributes: ['week', 'season'], description: 'Weekly matchups' },
+      { key: 'matchup_teams', type: 'key', attributes: ['team1Id'], description: 'Team matchup history' },
+      { key: 'matchup_completed', type: 'key', attributes: ['completed'], description: 'Completed matchups' }
+    ],
+    permissions: {
+      read: ['any'],
+      write: ['role:admin'],
+      create: ['role:admin'],
+      update: ['role:admin'],
+      delete: ['role:admin']
+    }
+  },
+
+  drafts: {
+    id: 'drafts',
+    name: 'drafts',
+    description: 'Snake draft sessions',
+    attributes: [
+      { key: 'leagueId', type: 'string', size: 100, required: true, description: 'League document ID' },
+      { key: 'status', type: 'string', size: 100, required: true, description: 'Draft status (pending, active, completed)' },
+      { key: 'currentRound', type: 'integer', description: 'Current draft round' },
+      { key: 'currentPick', type: 'integer', description: 'Current pick number' },
+      { key: 'maxRounds', type: 'integer', description: 'Maximum draft rounds' },
+      { key: 'draftOrder', type: 'string', size: 100, description: 'Team draft order JSON' },
+      { key: 'startTime', type: 'datetime', description: 'Draft start time' },
+      { key: 'endTime', type: 'datetime', description: 'Draft end time' }
+    ],
+    indexes: [
+      { key: 'draft_league', type: 'key', attributes: ['leagueId'], description: 'League drafts' },
+      { key: 'draft_status', type: 'key', attributes: ['status'], description: 'Draft status filter' }
+    ],
+    permissions: {
+      read: ['any'],
+      write: ['role:admin'],
+      create: ['role:admin'],
+      update: ['role:admin'],
+      delete: ['role:admin']
+    }
+  },
+
+  draft_picks: {
+    id: 'draft_picks',
+    name: 'draft_picks',
+    description: 'Individual draft picks and selections',
+    attributes: [
+      { key: 'leagueId', type: 'string', size: 100, required: true, description: 'League document ID' },
+      { key: 'userId', type: 'string', size: 100, required: true, description: 'Drafting user ID' },
+      { key: 'playerId', type: 'string', size: 100, required: true, description: 'Selected player ID' },
+      { key: 'round', type: 'integer', required: true, description: 'Draft round number' },
+      { key: 'pick', type: 'integer', required: true, description: 'Pick number within round' },
+      { key: 'timestamp', type: 'datetime', required: true, description: 'When pick was made' },
+      { key: 'league', type: 'relationship', description: 'Relationship to leagues collection' },
+      { key: 'player', type: 'relationship', description: 'Relationship to college_players collection' }
+    ],
+    indexes: [
+      { key: 'leagueId', type: 'key', attributes: ['leagueId'], description: 'League draft picks' },
+      { key: 'playerId', type: 'key', attributes: ['playerId'], description: 'Player draft history' },
+      { key: 'round', type: 'key', attributes: ['round'], description: 'Round-based picks' },
+      { key: 'leagueId_round_pick', type: 'key', attributes: ['leagueId', 'round', 'pick'], description: 'Unique pick identification' }
+    ],
+    permissions: {
+      read: ['any'],
+      write: ['role:user'],
+      create: ['role:user'],
+      update: ['role:admin'],
+      delete: ['role:admin']
+    }
+  },
+
   // Auction Draft System
   auctions: {
     id: 'auctions',
@@ -298,7 +385,7 @@ export const SCHEMA: Record<string, SchemaCollection> = {
     description: 'Auction draft sessions',
     attributes: [
       { key: 'leagueId', type: 'string', size: 50, required: true, description: 'League document ID' },
-      { key: 'status', type: 'string', size: 20, required: true, default: 'pending', description: 'pending, active, paused, completed' },
+      { key: 'status', type: 'string', size: 20, default: 'pending', description: 'pending, active, paused, completed' },
       { key: 'currentNomination', type: 'string', size: 50, description: 'Current player being auctioned' },
       { key: 'nominatingTeam', type: 'string', size: 50, description: 'Team that nominated player' },
       { key: 'currentBid', type: 'double', default: 1, description: 'Current highest bid amount' },
@@ -379,7 +466,7 @@ export const SCHEMA: Record<string, SchemaCollection> = {
   // Enhanced Projections Support
   model_inputs: {
     id: 'model_inputs',
-    name: 'Model Inputs',
+    name: 'model_inputs',
     description: 'Projection model inputs including depth charts and team data',
     attributes: [
       { key: 'season', type: 'integer', required: true, description: 'Season year' },
@@ -442,7 +529,7 @@ export const SCHEMA: Record<string, SchemaCollection> = {
   // System and Logging
   activity_log: {
     id: 'activity_log',
-    name: 'Activity Log', 
+    name: 'activity_log', 
     description: 'System activity and audit trail',
     attributes: [
       { key: 'userId', type: 'string', size: 50, description: 'Acting user ID' },
