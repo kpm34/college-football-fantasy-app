@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { Client, Databases, ID } from 'node-appwrite';
-import { env } from '@/core/config/environment';
+import { ID } from 'node-appwrite';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
 const BodySchema = z.object({
   version: z.number().int().min(1),
@@ -17,19 +17,13 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const input = BodySchema.parse(body);
 
-    const client = new Client()
-      .setEndpoint(env.server.appwrite.endpoint)
-      .setProject(env.server.appwrite.projectId)
-      .setKey(env.server.appwrite.apiKey);
-    const databases = new Databases(client);
-
     const runId = ID.unique();
     const startedAt = new Date().toISOString();
 
     // Create projection_runs record (running)
     await databases.createDocument(
-      env.server.appwrite.databaseId,
-      env.client.collections.projectionRuns || 'projection_runs',
+      DATABASE_ID,
+      COLLECTIONS.PROJECTION_RUNS,
       runId,
       {
         runId,
@@ -53,8 +47,8 @@ export async function POST(request: NextRequest) {
 
     for (const p of demoPlayers) {
       await databases.createDocument(
-        env.server.appwrite.databaseId,
-        env.client.collections.playerProjections || 'player_projections',
+        DATABASE_ID,
+        COLLECTIONS.PLAYER_PROJECTIONS,
         ID.unique(),
         {
           playerId: p.playerId,
@@ -69,8 +63,8 @@ export async function POST(request: NextRequest) {
 
     // Finish run with metrics
     await databases.updateDocument(
-      env.server.appwrite.databaseId,
-      env.client.collections.projectionRuns || 'projection_runs',
+      DATABASE_ID,
+      COLLECTIONS.PROJECTION_RUNS,
       runId,
       {
         status: 'success',
