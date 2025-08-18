@@ -8,7 +8,7 @@
  * their leagues in the dashboard or sidebar navigation.
  */
 
-import { databases, DATABASE_ID, COLLECTIONS } from '../lib/appwrite-generated';
+import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { ID, Query } from 'node-appwrite';
 
 interface League {

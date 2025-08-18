@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Query } from 'node-appwrite';
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-generated';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
 /**
  * Sync league members array with actual rosters in database
