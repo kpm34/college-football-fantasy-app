@@ -84,7 +84,7 @@ export function useLeagueMembersRealtime(leagueId: string) {
     if (!leagueId) return
 
     try {
-      const channel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.ROSTERS}.documents`
+      const channel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.USER_TEAMS}.documents`
       console.log('Subscribing to channel:', channel)
       const unsubscribe = client.subscribe(channel, (event: RealtimeResponseEvent<any>) => {
         setConnected(true)

@@ -26,7 +26,7 @@ export async function GET(
       try {
         const rosters = await databases.listDocuments(
           databaseId,
-          COLLECTIONS.ROSTERS,
+          COLLECTIONS.USER_TEAMS,
           [Query.equal('leagueId', leagueId), Query.equal('userId', userId), Query.limit(1)]
         );
         if (rosters.total === 0 && league.commissioner !== userId) {
@@ -61,7 +61,7 @@ export async function GET(
         name: league.name,
         mode: league.mode,
         conf: league.conf,
-        maxTeams: league.max_teams,
+        maxTeams: league.maxTeams,
         currentTeams: league.members?.length || 0,
         members: league.members || [],
         status: league.status,

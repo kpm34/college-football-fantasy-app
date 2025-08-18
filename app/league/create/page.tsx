@@ -789,7 +789,7 @@ export default function CreateLeaguePage() {
                     </div>
                     <div>
                       <span className="text-[#2D0E17] font-medium">Teams:</span>
-                      <div className="text-[#3A1220] font-semibold">{createdLeague.maxTeams || createdLeague.max_teams}</div>
+                      <div className="text-[#3A1220] font-semibold">{createdLeague.maxTeams}</div>
                     </div>
                     <div>
                       <span className="text-[#2D0E17] font-medium">Status:</span>

@@ -69,7 +69,7 @@ export function useUserLeaguesRealtime() {
     try {
       // Subscribe to league changes
       const leaguesChannel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.LEAGUES}.documents`
-      const rostersChannel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.ROSTERS}.documents`
+      const rostersChannel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.USER_TEAMS}.documents`
       
       console.log('Subscribing to user leagues realtime channels')
       

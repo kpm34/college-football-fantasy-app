@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     // Get all rosters for this league
     const rostersResponse = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.ROSTERS,
+      COLLECTIONS.USER_TEAMS,
       [
         Query.equal('leagueId', leagueId),
         Query.limit(100)
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
         try {
           await databases.updateDocument(
             DATABASE_ID,
-            COLLECTIONS.ROSTERS,
+            COLLECTIONS.USER_TEAMS,
             roster.$id,
             {
               // Refresh the roster record with current data (only valid fields)
