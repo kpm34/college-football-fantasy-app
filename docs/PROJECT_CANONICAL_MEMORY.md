@@ -16,16 +16,19 @@ Single source for vision, integrations, and implementation status. Older plannin
 - CFBD + ESPN for data feeds
 - Sentry, GitHub Actions CI
 
-## Implementation Status
-- Draft: Mock draft live; real draft WIP (timer + realtime)
-- Leagues: Create/Join stable; permissions via server APIs
-- Projections: Service in place; accuracy tuning pending
-- Schema sync: CLI + CI + runtime guard; webhook drift alerts endpoint ready
+## Implementation Status ✅ AUGUST 2025 CONSOLIDATION COMPLETE
+- Draft: Mock draft live; real draft complete (timer + realtime)
+- Leagues: Create/Join stable; permissions via server APIs  
+- Projections: Service in place; accuracy tuning complete
+- **Schema SSOT**: ✅ Single Source of Truth established (`schema/zod-schema.ts`)
+- **Architecture**: ✅ Fragmented configs removed, build guards active
+- **Collections**: ✅ `rosters` → `user_teams` migration complete
 - UI: Locker room consolidated; light gradient theme aligned
 
 ## Canonical References
-- Project Map: `docs/PROJECT_MAP.md`
-- Data Flow: `docs/DATA_FLOW.md`
+- **Project Map**: `/PROJECT_MAP.md` (📍 ROOT LEVEL - Consolidated)
+- **Schema SSOT**: `/schema/zod-schema.ts` (🎯 Single Source of Truth)
+- Data Flow: Included in PROJECT_MAP.md
 - API Routes: `docs/API_ROUTES.md`
 - Project Summary: `docs/PROJECT_SUMMARY.md`
 - Page Audit: `docs/PAGE_AUDIT_REPORT.md`
