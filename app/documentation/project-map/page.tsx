@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { MermaidRenderer } from '../../../components/docs/MermaidRenderer'
+import { MermaidRenderer } from '../../../../components/docs/MermaidRenderer'
 
 async function loadMermaidBlocks(filePath: string): Promise<string[]> {
   const absolutePath = path.join(process.cwd(), filePath)
