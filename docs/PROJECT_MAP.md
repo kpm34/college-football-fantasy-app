@@ -106,7 +106,7 @@ graph TB
         API_PLAYERS[/api/draft/players<br/>Cached Player Lists<br/>Fantasy Projections]
         API_LEAGUES[/api/leagues/*<br/>Create, Join, Manage<br/>Commissioner Tools]
         API_MOCK[/api/mock-draft/*<br/>Live Human Draft<br/>Turn Management]
-        API_DRAFT[/api/draft/*<br/>Real Draft System<br/>Pick Management]
+        API_DRAFT[/api/drafts/*<br/>Real Draft System<br/>Pick/Autopick/Pause]
     end
     
     %% Frontend Layer
