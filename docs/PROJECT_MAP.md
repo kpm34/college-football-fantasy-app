@@ -1,6 +1,17 @@
-## College Football Fantasy App – Project Map and Data Flow
+## ⚠️ DEPRECATED - See Root PROJECT_MAP.md
 
-This document is a high-signal map of the codebase: where things live, what they do, and how data flows through the system. Use this as your primary index to find files fast.
+**This file is deprecated**. The consolidated project map is now at:
+**📍 `/PROJECT_MAP.md` (root level)**
+
+The new map includes:
+- 📁 Repository structure diagram
+- 🔄 Data flow architecture  
+- 🎯 Single Source of Truth documentation
+- ✅ Current consolidated status
+
+---
+
+## Legacy Content (Archived Below)
 
 ### Tech Overview
 - **Frontend**: Next.js 15 App Router (TypeScript, Tailwind)
@@ -24,11 +35,16 @@ This document is a high-signal map of the codebase: where things live, what they
   - UI components organized by feature (`draft/`, `auction/`, `league/`, `ui/`, etc.).
   - Examples: `components/draft/DraftBoard.tsx`, `components/auction/AuctionBoard.tsx`.
 
+- `schema/`
+  - **SINGLE SOURCE OF TRUTH** for all database schemas, types, and validation
+  - `schema/zod-schema.ts`: Canonical schema definitions, collection registry, validation utilities
+  - `schema/README.md`: Schema management documentation and workflows
+
 - `core/`
   - Domain-level configuration, errors, and services.
-  - `core/config/environment.ts`: Central env + collection map. Single source of truth.
-  - `core/services/auth.service.ts`: Central auth/session service (client + server modes).
-  - `core/errors/`: Typed error utilities.
+  - `core/config/environment.ts`: Environment configuration (references schema SSOT)
+  - `core/services/auth.service.ts`: Central auth/session service (client + server modes)
+  - `core/errors/`: Typed error utilities
 
 - `lib/`
   - Appwrite clients, typed API clients, feature services, utilities.
@@ -67,22 +83,25 @@ This document is a high-signal map of the codebase: where things live, what they
 
 ---
 
-## Core Configuration and Collections
+## Single Source of Truth (SSOT) Architecture
 
-- `core/config/environment.ts`
-  - Centralizes server/client env and collection names.
-  - Exposes `env.client.collections` used by `lib/appwrite.ts` as `COLLECTIONS`.
+- `schema/zod-schema.ts` - **THE CANONICAL SOURCE**
+  - All collection names, schemas, and validation rules
+  - Exports `COLLECTIONS`, `SCHEMA_REGISTRY`, `validateData()` 
+  - Generates TypeScript types automatically via Zod inference
 
-- `lib/appwrite.ts`
-  - Browser Appwrite client; exports `databases`, `storage`, `functions`, `avatars`.
-  - Exports constants: `DATABASE_ID`, `COLLECTIONS`, `REALTIME_CHANNELS`.
+- `lib/appwrite.ts` - Frontend Client
+  - Browser Appwrite client; exports `databases`, `storage`, `functions`, `avatars`
+  - Imports `COLLECTIONS` and `DATABASE_ID` from schema SSOT
+  - Exports realtime channel helpers
 
-- `lib/appwrite-server.ts`
-  - Server Appwrite client (with API key). Exports `serverDatabases`, `serverUsers`, etc.
+- `lib/appwrite-server.ts` - Server Client  
+  - Server Appwrite client (with API key); exports `serverDatabases`, `serverUsers`, etc.
+  - Re-exports constants from `lib/appwrite.ts` for consistency
 
-Key collections (from env):
+Key collections (from SSOT):
 - Leagues: `leagues`
-- Rosters: `rosters`
+- User Teams: `user_teams` (formerly rosters)  
 - Players: `college_players`
 - Teams: `teams`
 - Games: `games`
@@ -237,7 +256,7 @@ flowchart LR
 
 - Create League
   - API: `app/api/leagues/create/route.ts`
-  - Data: `leagues`, `rosters` (commissioner team), `users`
+  - Data: `leagues`, `user_teams` (commissioner team), `users`
 
 - Join League via Invite
   - Pages: `app/invite/[leagueId]/*`, `app/league/join/*`
@@ -246,7 +265,7 @@ flowchart LR
 - Draft
   - UI: `components/draft/*`, page under `app/draft/[leagueId]`
   - Realtime: `hooks/useDraftRealtime.ts`
-  - Persistence: `draft_picks`, updates to `rosters`
+  - Persistence: `draft_picks`, updates to `user_teams`
 
 - Auction
   - UI: `components/auction/*`, page under `app/auction/[leagueId]`
@@ -264,14 +283,15 @@ flowchart LR
 
 - Scoring
   - Jobs: `appwrite-functions/weekly-scoring/`
-  - Data: `player_stats`, `lineups`, `rosters`, `games`
+  - Data: `player_stats`, `lineups`, `user_teams`, `games`
 
 ---
 
 ## How to Find Things Quickly
 
-- Auth/session: `core/services/auth.service.ts` (single source of truth)
-- Environment/collection names: `core/config/environment.ts`
+- **Schema/Collections**: `schema/zod-schema.ts` (**SINGLE SOURCE OF TRUTH**)
+- Auth/session: `core/services/auth.service.ts`
+- Environment config: `core/config/environment.ts`
 - Appwrite client (browser): `lib/appwrite.ts`
 - Appwrite client (server): `lib/appwrite-server.ts`
 - Draft realtime logic: `hooks/useDraftRealtime.ts`
