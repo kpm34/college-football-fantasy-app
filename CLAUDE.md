@@ -228,6 +228,11 @@ Configure MCP servers in `~/.cursor/mcp.json` so Cursor/Claude can operate our s
 
 Provide `APPWRITE_API_KEY` via your shell environment instead of hardcoding in this file or in `~/.cursor/mcp.json`.
 
+### Change Reporting Protocol (MANDATORY)
+- Before changes: summarize scope, affected routes/pages, impacted collections/attributes, and any migration/backfill.
+- After changes: enumerate edited files and confirm SSOT updates where applicable (`schema/zod-schema.ts`, `PROJECT_MAP.md`, `docs/DATA_FLOW.md`).
+- Schema guardrail: required attributes cannot have default values; make optional and default in code, or always supply value.
+
 Reference capabilities file: `toolbox/capabilities.json` (stack, env, APIs, commands, MCP servers).
 
 ### GitHub Workflow Access

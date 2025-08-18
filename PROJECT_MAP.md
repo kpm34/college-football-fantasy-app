@@ -252,6 +252,28 @@ npx tsx scripts/validate-ssot-schema.ts
 npx tsx scripts/sync-appwrite-simple.ts
 ```
 
+---
+
+## 🔍 Feature → Routes → Collections → Required Fields
+
+| Feature | Routes/Pages | Collections | Key Required Fields (from SSOT) |
+|---|---|---|---|
+| Create League | `POST /api/leagues/create`, `app/league/create` | `leagues`, `user_teams`, `users` | leagues: `name`, `commissioner`, `season`, `maxTeams`, `draftType`, `gameMode` |
+| Join League | `POST /api/leagues/join`, `app/league/join` | `leagues`, `user_teams`, `users`, `activity_log` | user_teams: `leagueId`, `userId`, `teamName` |
+| League Settings | `PUT /api/leagues/[id]/commissioner`, `app/league/[id]/commissioner` | `leagues` | ensure camelCase fields; no defaults on required |
+| Draft – Make Pick | `POST /api/draft/[leagueId]/pick`, `app/draft/[leagueId]` | `draft_picks`, `user_teams` | draft_picks: `leagueId`, `teamId`, `playerId` |
+| Draft – Status | `GET /api/draft/[leagueId]/status` | `draft_picks`, `user_teams`, `leagues` | n/a |
+| Mock Draft | `/api/mock-draft/*`, `app/mock-draft/[id]` | `mock_drafts`, `mock_draft_picks`, `mock_draft_participants` | mock_draft_picks: `draftId`, `participantId`, `playerId` |
+| Auctions | `/api/auction/*`, `app/auction/[leagueId]` | `auctions`, `bids` | bids: `auctionId`, `playerId`, `bidderId`, `amount` |
+| Players & Projections | `/api/draft/players`, `/api/projections` | `college_players`, `projections_yearly`, `projections_weekly`, `model_inputs` | players: `name`, `position`, `team`, `conference` |
+| Games & Rankings | `/api/games*`, `/api/rankings*` | `games`, `rankings` | games: `week`, `season`, `season_type`, `home_team`, `away_team`, `start_date` |
+| Lineups/Scoring | jobs + `/api/cron/weekly-scoring` | `lineups`, `player_stats`, `user_teams`, `games` | lineups: `rosterId`, `week`, `season` |
+
+Notes:
+- Sources of truth for required fields: `schema/zod-schema.ts`.
+- For Appwrite constraints, avoid defaults on required attributes; use optional + default-in-code or always provide values.
+- If any of the above changes, update this table and the SSOT in the same PR.
+
 ### Build Guards
 ```bash
 # Automatic on build (prevents schema drift)
