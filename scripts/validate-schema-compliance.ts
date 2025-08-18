@@ -123,7 +123,7 @@ async function validateCompliance() {
       players: JSON.stringify(['player1', 'player2'])  // Correct JSON string
     };
     
-    const rosterValidation = SchemaValidator.validate('rosters', sampleRoster);
+    const rosterValidation = SchemaValidator.validate('user_teams', sampleRoster);
     if (rosterValidation.success) {
       console.log('  ✅ Roster validation - Sample data valid');
     } else {

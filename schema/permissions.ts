@@ -60,8 +60,8 @@ export const PERMISSIONS_SCHEMA: Record<string, CollectionPermissions> = {
   },
 
   // Team Rosters
-  rosters: {
-    collectionId: 'rosters',
+  user_teams: {
+    collectionId: 'user_teams',
     description: 'Fantasy team rosters within leagues',
     ownershipField: 'userId',
     membershipField: 'leagueId',

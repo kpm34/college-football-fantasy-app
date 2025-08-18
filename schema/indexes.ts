@@ -165,9 +165,9 @@ export const INDEX_SCHEMA: Record<string, IndexProfile> = {
     ]
   },
 
-  // Rosters - League standings and team management
-  rosters: {
-    collectionId: 'rosters',
+  // User Teams - League standings and team management
+  user_teams: {
+    collectionId: 'user_teams',
     description: 'Fantasy team rosters and standings',
     commonQueries: [
       'Get league standings (wins/losses)',

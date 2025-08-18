@@ -116,11 +116,11 @@ describe('Schema Contract Tests', () => {
       expect(['double', 'float']).toContain(pointsAttr?.type);
     });
 
-    test('Rosters collection matches SSOT', async () => {
+    test('User Teams collection matches SSOT', async () => {
       skipIfNotConfigured();
       
-      const collection = await db.getCollection(databaseId, 'rosters');
-      expect(collection.name).toBe('Rosters');
+      const collection = await db.getCollection(databaseId, 'user_teams');
+      expect(collection.name).toBe('User Teams');
       
       const attributes = collection.attributes;
       const attrKeys = attributes.map((attr: any) => attr.key);
@@ -241,11 +241,11 @@ describe('Schema Contract Tests', () => {
       expect(indexAttributes).toContain('conference');
       expect(indexAttributes).toContain('fantasy_points');
       
-      const rostersIndexes = await db.listIndexes(databaseId, 'rosters');
-      const rosterIndexAttributes = rostersIndexes.indexes.flatMap((idx: any) => idx.attributes);
+      const userTeamsIndexes = await db.listIndexes(databaseId, 'user_teams');
+      const userTeamIndexAttributes = userTeamsIndexes.indexes.flatMap((idx: any) => idx.attributes);
       
-      // Should be able to query rosters by league efficiently
-      expect(rosterIndexAttributes).toContain('leagueId');
+      // Should be able to query user teams by league efficiently
+      expect(userTeamIndexAttributes).toContain('leagueId');
     });
   });
 
@@ -260,8 +260,8 @@ describe('Schema Contract Tests', () => {
       expect(nameAttr?.size).toBeGreaterThan(0);
       expect(nameAttr?.size).toBeLessThan(1000); // Not unlimited
       
-      const rosters = await db.getCollection(databaseId, 'rosters');
-      const playersAttr = rosters.attributes.find((attr: any) => attr.key === 'players');
+      const userTeams = await db.getCollection(databaseId, 'user_teams');
+      const playersAttr = userTeams.attributes.find((attr: any) => attr.key === 'players');
       
       // Players field should be large for JSON storage
       expect(playersAttr?.size).toBeGreaterThan(1000);

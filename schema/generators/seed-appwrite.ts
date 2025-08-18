@@ -167,7 +167,7 @@ export async function seedAppwriteSchema(): Promise<void> {
     // Create collections in dependency order
     const collectionOrder = [
       'users', 'teams', 'college_players', 'games', 'rankings', 'player_stats',
-      'leagues', 'rosters', 'lineups', 'auctions', 'bids', 'activity_log'
+      'leagues', 'user_teams', 'lineups', 'auctions', 'bids', 'activity_log'
     ];
     
     for (const collectionId of collectionOrder) {

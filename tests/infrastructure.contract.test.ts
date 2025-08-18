@@ -86,7 +86,7 @@ describe('Infrastructure Contract Tests', () => {
       skipIfNotConfigured();
       
       // Test collections with ownership fields
-      const ownershipCollections = ['rosters', 'lineups', 'users'];
+      const ownershipCollections = ['user_teams', 'lineups', 'users'];
       
       for (const collectionId of ownershipCollections) {
         if (PERMISSIONS_SCHEMA[collectionId]) {
@@ -146,14 +146,14 @@ describe('Infrastructure Contract Tests', () => {
     test('League standings indexes perform efficiently', async () => {
       skipIfNotConfigured();
       
-      const rostersIndexes = await db.listIndexes(databaseId, 'rosters');
-      const indexKeys = rostersIndexes.indexes.map((idx: any) => idx.key);
+      const userTeamsIndexes = await db.listIndexes(databaseId, 'user_teams');
+      const indexKeys = userTeamsIndexes.indexes.map((idx: any) => idx.key);
       
       // Must have league standings index
       expect(indexKeys).toContain('league_standings_idx');
       
       // Verify compound index for standings queries
-      const standingsIndex = rostersIndexes.indexes.find((idx: any) => idx.key === 'league_standings_idx');
+      const standingsIndex = userTeamsIndexes.indexes.find((idx: any) => idx.key === 'league_standings_idx');
       if (standingsIndex) {
         expect(standingsIndex.attributes).toContain('leagueId');
         expect(standingsIndex.attributes).toContain('wins');

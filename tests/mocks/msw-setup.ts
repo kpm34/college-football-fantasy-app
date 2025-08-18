@@ -34,7 +34,7 @@ const appwriteMocks = [
           documents: Array.from({ length: Math.min(limit, 5) }, () => generateMockLeague())
         }));
         
-      case 'rosters':
+      case 'user_teams':
         return res(ctx.json({
           total: 12,
           documents: Array.from({ length: Math.min(limit, 12) }, () => generateMockRoster())
@@ -62,7 +62,7 @@ const appwriteMocks = [
       case 'leagues':
         return res(ctx.json(generateMockLeague({ $id: documentId as string })));
         
-      case 'rosters':
+      case 'user_teams':
         return res(ctx.json(generateMockRoster({ $id: documentId as string })));
         
       default:
@@ -83,10 +83,10 @@ const appwriteMocks = [
           $updatedAt: new Date().toISOString()
         })));
         
-      case 'rosters':
+      case 'user_teams':
         return res(ctx.json(generateMockRoster({ 
           ...req.body as any,
-          $id: 'new-roster-id',
+          $id: 'new-user-team-id',
           $createdAt: new Date().toISOString(),
           $updatedAt: new Date().toISOString()
         })));

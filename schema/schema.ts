@@ -263,39 +263,6 @@ export const SCHEMA: Record<string, SchemaCollection> = {
     }
   },
 
-  rosters: {
-    id: 'rosters',
-    name: 'Rosters',
-    description: 'Fantasy team rosters within leagues',
-    attributes: [
-      { key: 'leagueId', type: 'string', size: 50, required: true, description: 'League document ID' },
-      { key: 'userId', type: 'string', size: 50, required: true, description: 'Team owner user ID' },
-      { key: 'teamName', type: 'string', size: 100, required: true, description: 'Fantasy team name' },
-      { key: 'abbreviation', type: 'string', size: 10, description: 'Team abbreviation' },
-      { key: 'draftPosition', type: 'integer', description: 'Draft order position' },
-      { key: 'wins', type: 'integer', default: 0, description: 'Season wins' },
-      { key: 'losses', type: 'integer', default: 0, description: 'Season losses' },
-      { key: 'ties', type: 'integer', default: 0, description: 'Season ties' },
-      { key: 'pointsFor', type: 'double', default: 0, description: 'Total points scored' },
-      { key: 'pointsAgainst', type: 'double', default: 0, description: 'Total points allowed' },
-      { key: 'players', type: 'string', size: 5000, description: 'Roster player IDs JSON array' },
-      { key: 'lineup', type: 'string', size: 5000, description: 'Active lineup JSON' },
-      { key: 'bench', type: 'string', size: 5000, description: 'Bench players JSON' }
-    ],
-    indexes: [
-      { key: 'roster_league', type: 'key', attributes: ['leagueId'], description: 'League rosters' },
-      { key: 'roster_user', type: 'key', attributes: ['userId'], description: 'User teams' },
-      { key: 'roster_league_user', type: 'unique', attributes: ['leagueId', 'userId'], description: 'One team per user per league' },
-      { key: 'roster_standings', type: 'key', attributes: ['wins'], orders: ['DESC'], description: 'League standings' }
-    ],
-    permissions: {
-      read: ['any'],
-      write: ['role:user'],
-      create: ['role:user'],
-      update: ['role:user'],
-      delete: ['role:user']
-    }
-  },
 
   lineups: {
     id: 'lineups', 
