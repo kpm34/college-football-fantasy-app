@@ -54,6 +54,12 @@ export async function GET(
       );
     } catch {}
 
+    const etag = `W/"${(league as any).$updatedAt || (league as any).updated_at || league.$id}-${(league as any).members?.length || 0}"`;
+    const ifNoneMatch = request.headers.get('if-none-match') || '';
+    if (ifNoneMatch && ifNoneMatch === etag) {
+      return new NextResponse(null, { status: 304, headers: { ETag: etag } });
+    }
+
     return NextResponse.json({
       success: true,
       league: {
@@ -86,7 +92,7 @@ export async function GET(
           kickerRules: JSON.parse(scoringProfile.kicker_rules)
         } : null
       }
-    });
+    }, { headers: { ETag: etag } });
 
   } catch (appwriteError: any) {
     console.error('League API error:', appwriteError);
