@@ -29,7 +29,7 @@ Copy these EXACT variable names. The user must provide values for [brackets]:
 
 ```env
 # For .env.local (root directory)
-NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
+NEXT_PUBLIC_APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
 NEXT_PUBLIC_APPWRITE_PROJECT_ID=[user-must-provide]
 NEXT_PUBLIC_APPWRITE_DATABASE_ID=college-football-fantasy
 APPWRITE_API_KEY=[user-must-provide]
@@ -98,7 +98,7 @@ After initial deployment, add environment variables:
 ```bash
 # Add each variable one by one
 vercel env add NEXT_PUBLIC_APPWRITE_ENDPOINT production
-# When prompted, enter: https://cloud.appwrite.io/v1
+# When prompted, enter: https://nyc.cloud.appwrite.io/v1
 
 vercel env add NEXT_PUBLIC_APPWRITE_PROJECT_ID production
 # When prompted, user must provide their Appwrite project ID
