@@ -107,7 +107,7 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
             secondaryTextColor: '#d1d5db', // gray-300
             lineColor: '#9ca3af', // gray-400
             nodeBorder: '#e5e7eb',
-            fontSize: '12px'
+            fontSize: '16px'
           }
         })
         if (!isMounted || !containerRef.current) return
@@ -155,9 +155,9 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
   }, [charts])
 
   return (
-    <div ref={containerRef} className="space-y-8 text-sm leading-6">
+    <div ref={containerRef} className="space-y-8">
       {charts.map((code, idx) => (
-        <div key={idx} data-mermaid data-mermaid-code={code} />
+        <div key={idx} data-mermaid data-mermaid-code={code} className="min-h-[200px]" />
       ))}
     </div>
   )

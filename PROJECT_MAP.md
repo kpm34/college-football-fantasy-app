@@ -58,6 +58,7 @@ graph TB
         CFBD[🏈 College Football<br/>Data API<br/>Players, Games, Rankings]
         ESPN[📺 ESPN API<br/>Live Scores<br/>Game Updates]
         OAUTH[🔐 OAuth Providers<br/>Google, Apple<br/>Environment-Controlled]
+        ROTOWIRE[📰 Rotowire API<br/>Injury Reports<br/>Depth Charts]
     end
     
     %% Talent Data Sources  
@@ -240,14 +241,63 @@ sequenceDiagram
 
 ## 🚀 Common Operations
 
-| Operation | Entry Point | Data Flow |
-|-----------|-------------|-----------|
-| **Create League** | `app/api/leagues/create` | `leagues` + `user_teams` collections |
-| **Join League** | `app/api/leagues/join` | Update `leagues`, create `user_teams` |
-| **Start Mock Draft** | `app/api/mock-draft/start` | Create `mock_drafts` + `mock_draft_participants` |
-| **Make Draft Pick** | `app/api/mock-draft/pick` | Create `mock_draft_picks`, real-time broadcast |
-| **Get Players** | `app/api/draft/players` | Query `college_players`, apply fantasy projections |
-| **Validate Schema** | `scripts/validate-ssot-schema.ts` | Compare SSOT ↔ Appwrite database |
+| Operation | Entry Point | Data Flow | Required Fields |
+|-----------|-------------|-----------|-----------------|
+| **Create League** | `POST /api/leagues/create` | `leagues` + `user_teams` collections | name, maxTeams, gameMode, draftType |
+| **Join League** | `POST /api/leagues/join` | Update `leagues`, create `user_teams` | leagueId, teamName, password(if private) |
+| **Commissioner Update** | `PATCH /api/leagues/[id]/update-settings` | Update `leagues` collection | Various settings (commissioner only) |
+| **User Login** | `POST /api/auth/login` | Appwrite Auth → Session Cookie | email, password |
+| **User Signup** | `POST /api/auth/signup` | Create user → Auto-login | email, password, name |
+| **OAuth Login** | `GET /api/auth/oauth/[provider]` | OAuth flow → Session sync | Environment flags required |
+| **Start Mock Draft** | `POST /api/mock-draft/start` | Create `mock_drafts` + participants | draftId, numTeams |
+| **Make Draft Pick** | `POST /api/draft/[id]/pick` | Create `draft_picks`, update roster | leagueId, playerId |
+| **Get Players** | `GET /api/draft/players` | Query `college_players` + projections | Filters: position, conference, team |
+| **Weekly Scoring** | `POST /api/cron/weekly-scoring` | Update `player_stats` + `lineups` | Automated cron job |
+| **Validate Schema** | `scripts/validate-ssot-schema.ts` | Compare SSOT ↔ Appwrite database | Build-time validation |
+
+---
+
+## 🎮 Complete Admin Operations Flow
+
+```mermaid
+graph LR
+    subgraph "User Management"
+        LOGIN[Login/Signup] --> AUTH[Auth Service]
+        AUTH --> SESSION[Session Cookie]
+        SESSION --> USER_PROFILE[User Profile]
+    end
+    
+    subgraph "League Lifecycle"
+        CREATE[Create League] --> SETTINGS[Configure Settings]
+        SETTINGS --> INVITE[Invite Players]
+        INVITE --> JOIN[Players Join]
+        JOIN --> DRAFT_SETUP[Setup Draft]
+        DRAFT_SETUP --> DRAFT_LIVE[Live Draft]
+        DRAFT_LIVE --> SEASON[Season Active]
+        SEASON --> PLAYOFFS[Playoffs]
+        PLAYOFFS --> COMPLETE[Season Complete]
+    end
+    
+    subgraph "Commissioner Tools"
+        COMM_AUTH[Verify Commissioner] --> COMM_SETTINGS[Update Settings]
+        COMM_AUTH --> COMM_DRAFT[Control Draft]
+        COMM_AUTH --> COMM_SCORING[Adjust Scoring]
+        COMM_AUTH --> COMM_TRADES[Approve Trades]
+    end
+    
+    subgraph "Data Sync Operations"
+        SYNC_PLAYERS[Sync Players] --> DEDUPE[Remove Duplicates]
+        SYNC_GAMES[Sync Games] --> RANKINGS_UPDATE[Update Rankings]
+        SYNC_STATS[Sync Stats] --> PROJECTIONS[Calculate Projections]
+    end
+    
+    subgraph "Weekly Operations"
+        LINEUPS[Set Lineups] --> GAMES_PLAY[Games Played]
+        GAMES_PLAY --> SCORING_CALC[Calculate Scoring]
+        SCORING_CALC --> STANDINGS[Update Standings]
+        STANDINGS --> WAIVERS[Process Waivers]
+    end
+```
 
 ---
 
