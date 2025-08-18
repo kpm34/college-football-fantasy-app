@@ -9,8 +9,11 @@ erDiagram
   LEAGUES ||--o{ DRAFT_PICKS : "picks"
   LEAGUES ||--o{ AUCTIONS : "sessions"
   AUCTIONS ||--o{ BIDS : "bids"
+  LEAGUES ||--o{ LEAGUE_MEMBERSHIPS : "members"
   GAMES ||--o{ PLAYER_STATS : "stats"
   USER_TEAMS ||--o{ LINEUPS : "weekly"
+  DRAFTS ||--o{ DRAFT_EVENTS : "events"
+  DRAFTS ||--|| DRAFT_STATES : "state"
 ```
 
 ## Collections (from SSOT: `schema/zod-schema.ts`)
