@@ -52,20 +52,35 @@ echo "rankings" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_RANKINGS produc
 echo "rankings" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_RANKINGS preview  
 echo "rankings" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_RANKINGS development
 
+echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_USER_TEAMS=user_teams"
+echo "user_teams" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_USER_TEAMS production
+echo "user_teams" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_USER_TEAMS preview  
+echo "user_teams" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_USER_TEAMS development
+
 echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUES=leagues"
 echo "leagues" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUES production
 echo "leagues" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUES preview  
 echo "leagues" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUES development
 
-echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_ROSTERS=rosters"
-echo "rosters" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_ROSTERS production
-echo "rosters" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_ROSTERS preview  
-echo "rosters" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_ROSTERS development
-
 echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_LINEUPS=lineups"
 echo "lineups" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_LINEUPS production
 echo "lineups" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_LINEUPS preview  
 echo "lineups" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_LINEUPS development
+
+echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_MATCHUPS=matchups"
+echo "matchups" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_MATCHUPS production
+echo "matchups" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_MATCHUPS preview  
+echo "matchups" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_MATCHUPS development
+
+echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFTS=drafts"
+echo "drafts" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFTS production
+echo "drafts" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFTS preview  
+echo "drafts" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFTS development
+
+echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS=draft_picks"
+echo "draft_picks" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS production
+echo "draft_picks" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS preview  
+echo "draft_picks" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS development
 
 echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_AUCTIONS=auctions"
 echo "auctions" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_AUCTIONS production
@@ -82,6 +97,11 @@ echo "player_stats" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_STAT
 echo "player_stats" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_STATS preview  
 echo "player_stats" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_STATS development
 
+echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_INPUTS=model_inputs"
+echo "model_inputs" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_INPUTS production
+echo "model_inputs" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_INPUTS preview  
+echo "model_inputs" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_INPUTS development
+
 echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_USERS=users"
 echo "users" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_USERS production
 echo "users" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_USERS preview  
@@ -92,20 +112,54 @@ echo "activity_log" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_ACTIVITY_LO
 echo "activity_log" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_ACTIVITY_LOG preview  
 echo "activity_log" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_ACTIVITY_LOG development
 
+echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_DEPTH_CHARTS=player_depth_charts"
+echo "player_depth_charts" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_DEPTH_CHARTS production
+echo "player_depth_charts" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_DEPTH_CHARTS preview  
+echo "player_depth_charts" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_DEPTH_CHARTS development
+
+echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_TEAM_CONTEXT=team_context"
+echo "team_context" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_TEAM_CONTEXT production
+echo "team_context" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_TEAM_CONTEXT preview  
+echo "team_context" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_TEAM_CONTEXT development
+
+echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_INGESTION_LOG=ingestion_log"
+echo "ingestion_log" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_INGESTION_LOG production
+echo "ingestion_log" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_INGESTION_LOG preview  
+echo "ingestion_log" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_INGESTION_LOG development
+
+echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_MANUAL_OVERRIDES=manual_overrides"
+echo "manual_overrides" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_MANUAL_OVERRIDES production
+echo "manual_overrides" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_MANUAL_OVERRIDES preview  
+echo "manual_overrides" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_MANUAL_OVERRIDES development
+
+echo "Setting NEXT_PUBLIC_APPWRITE_COLLECTION_DATA_SOURCE_REGISTRY=data_source_registry"
+echo "data_source_registry" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DATA_SOURCE_REGISTRY production
+echo "data_source_registry" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DATA_SOURCE_REGISTRY preview  
+echo "data_source_registry" | vercel env add NEXT_PUBLIC_APPWRITE_COLLECTION_DATA_SOURCE_REGISTRY development
+
 echo "✅ Vercel environment variables updated successfully!"
 echo "📋 Variables set:"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_COLLEGE_PLAYERS=college_players"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_TEAMS=teams"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_GAMES=games"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_RANKINGS=rankings"
+echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_USER_TEAMS=user_teams"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUES=leagues"
-echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_ROSTERS=rosters"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_LINEUPS=lineups"
+echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_MATCHUPS=matchups"
+echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFTS=drafts"
+echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS=draft_picks"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_AUCTIONS=auctions"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_BIDS=bids"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_STATS=player_stats"
+echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_INPUTS=model_inputs"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_USERS=users"
 echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_ACTIVITY_LOG=activity_log"
+echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_DEPTH_CHARTS=player_depth_charts"
+echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_TEAM_CONTEXT=team_context"
+echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_INGESTION_LOG=ingestion_log"
+echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_MANUAL_OVERRIDES=manual_overrides"
+echo "  NEXT_PUBLIC_APPWRITE_COLLECTION_DATA_SOURCE_REGISTRY=data_source_registry"
 
 echo ""
 echo "💡 Next steps:"

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { Client, Account } from 'node-appwrite';
+import { Account } from 'node-appwrite';
+import { getServerClient } from '@/lib/appwrite-server';
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,12 +14,7 @@ export async function GET(request: NextRequest) {
     }
     
     // Initialize server-side Appwrite client
-    const client = new Client()
-      .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
-      .setProject(process.env.APPWRITE_PROJECT_ID || 'college-football-fantasy-app')
-      .setKey(process.env.APPWRITE_API_KEY!);
-    
-    const account = new Account(client);
+    const account = new Account(getServerClient());
     
     try {
       // Create session from OAuth

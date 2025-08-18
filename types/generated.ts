@@ -23,34 +23,42 @@ export interface CollegePlayers {
   name: string;
   /** Playing position (QB, RB, WR, etc.) */
   position: string;
-  /** Team abbreviation */
+  /** Full team name (e.g., Alabama) */
   team: string;
   /** Conference (SEC, ACC, Big 12, Big Ten) */
   conference: string;
-  /** Jersey number */
-  jerseyNumber: number | undefined;
+  /** Is Power 4 conference member */
+  power_4: boolean | undefined;
+  /** Jersey number as string */
+  jersey: string | undefined;
   /** Height (e.g., 6-2) */
   height: string | undefined;
-  /** Weight in pounds */
-  weight: number | undefined;
+  /** Weight (string format from API) */
+  weight: string | undefined;
   /** Academic year (FR, SO, JR, SR) */
   year: string | undefined;
-  /** Fantasy eligibility status */
-  eligible: boolean | undefined;
-  /** Current season fantasy points */
+  /** Available for fantasy draft */
+  draftable: boolean | undefined;
+  /** Enhanced fantasy points with depth chart logic */
   fantasy_points: number | undefined;
-  /** Total season points */
-  season_fantasy_points: number | undefined;
-  /** Position on depth chart */
-  depth_chart_order: number | undefined;
-  /** Last projection calculation */
-  last_projection_update: Date | string | undefined;
-  /** CFBD API player ID */
-  external_id: string | undefined;
-  /** Player headshot URL */
-  image_url: string | undefined;
-  /** Season statistics JSON */
-  stats: string | undefined;
+  /** Legacy projection field */
+  projection: number | undefined;
+  /** Projected rushing yards */
+  rushing_projection: number | undefined;
+  /** Projected receiving yards */
+  receiving_projection: number | undefined;
+  /** Projected total touchdowns */
+  td_projection: number | undefined;
+  /** Projected interceptions */
+  int_projection: number | undefined;
+  /** Projected field goals */
+  field_goals_projection: number | undefined;
+  /** Projected extra points */
+  extra_points_projection: number | undefined;
+  /** Record creation timestamp */
+  created_at: string | undefined;
+  /** Last update timestamp */
+  updated_at: string | undefined;
 }
 
 /**
@@ -61,28 +69,22 @@ export interface CreateCollegePlayers {
   name: string;
   /** Playing position (QB, RB, WR, etc.) */
   position: string;
-  /** Team abbreviation */
+  /** Full team name (e.g., Alabama) */
   team: string;
   /** Conference (SEC, ACC, Big 12, Big Ten) */
   conference: string;
-  /** Jersey number */
-  jerseyNumber: number | undefined;
+  /** Jersey number as string */
+  jersey: string | undefined;
   /** Height (e.g., 6-2) */
   height: string | undefined;
-  /** Weight in pounds */
-  weight: number | undefined;
+  /** Weight (string format from API) */
+  weight: string | undefined;
   /** Academic year (FR, SO, JR, SR) */
   year: string | undefined;
-  /** Position on depth chart */
-  depth_chart_order: number | undefined;
-  /** Last projection calculation */
-  last_projection_update: Date | string | undefined;
-  /** CFBD API player ID */
-  external_id: string | undefined;
-  /** Player headshot URL */
-  image_url: string | undefined;
-  /** Season statistics JSON */
-  stats: string | undefined;
+  /** Record creation timestamp */
+  created_at: string | undefined;
+  /** Last update timestamp */
+  updated_at: string | undefined;
 }
 
 /**
@@ -93,34 +95,42 @@ export interface UpdateCollegePlayers {
   name?: string | undefined;
   /** Playing position (QB, RB, WR, etc.) */
   position?: string | undefined;
-  /** Team abbreviation */
+  /** Full team name (e.g., Alabama) */
   team?: string | undefined;
   /** Conference (SEC, ACC, Big 12, Big Ten) */
   conference?: string | undefined;
-  /** Jersey number */
-  jerseyNumber?: number | undefined;
+  /** Is Power 4 conference member */
+  power_4?: boolean | undefined;
+  /** Jersey number as string */
+  jersey?: string | undefined;
   /** Height (e.g., 6-2) */
   height?: string | undefined;
-  /** Weight in pounds */
-  weight?: number | undefined;
+  /** Weight (string format from API) */
+  weight?: string | undefined;
   /** Academic year (FR, SO, JR, SR) */
   year?: string | undefined;
-  /** Fantasy eligibility status */
-  eligible?: boolean | undefined;
-  /** Current season fantasy points */
+  /** Available for fantasy draft */
+  draftable?: boolean | undefined;
+  /** Enhanced fantasy points with depth chart logic */
   fantasy_points?: number | undefined;
-  /** Total season points */
-  season_fantasy_points?: number | undefined;
-  /** Position on depth chart */
-  depth_chart_order?: number | undefined;
-  /** Last projection calculation */
-  last_projection_update?: Date | string | undefined;
-  /** CFBD API player ID */
-  external_id?: string | undefined;
-  /** Player headshot URL */
-  image_url?: string | undefined;
-  /** Season statistics JSON */
-  stats?: string | undefined;
+  /** Legacy projection field */
+  projection?: number | undefined;
+  /** Projected rushing yards */
+  rushing_projection?: number | undefined;
+  /** Projected receiving yards */
+  receiving_projection?: number | undefined;
+  /** Projected total touchdowns */
+  td_projection?: number | undefined;
+  /** Projected interceptions */
+  int_projection?: number | undefined;
+  /** Projected field goals */
+  field_goals_projection?: number | undefined;
+  /** Projected extra points */
+  extra_points_projection?: number | undefined;
+  /** Record creation timestamp */
+  created_at?: string | undefined;
+  /** Last update timestamp */
+  updated_at?: string | undefined;
 }
 
 /**
@@ -339,7 +349,7 @@ export interface Rankings {
 }
 
 /**
- * Data required to create a new rankings
+ * Data required to create a new ap rankings
  */
 export interface CreateRankings {
   /** Poll week */
@@ -359,7 +369,7 @@ export interface CreateRankings {
 }
 
 /**
- * Data for updating a rankings
+ * Data for updating a ap rankings
  */
 export interface UpdateRankings {
   /** Poll week */
@@ -376,6 +386,77 @@ export interface UpdateRankings {
   points?: number | undefined;
   /** Number of first place votes */
   first_place_votes?: number | undefined;
+}
+
+/**
+ * Fantasy team rosters within leagues
+ */
+export interface UserTeams {
+  $id: string;
+  $collectionId: string;
+  $databaseId: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+
+  /** League document ID */
+  leagueId: string;
+  /** Team owner user ID */
+  userId: string;
+  /** Fantasy team name */
+  teamName: string;
+  /** Draft order position */
+  draftPosition: number | undefined;
+  /** Season wins */
+  wins: number | undefined;
+  /** Season losses */
+  losses: number | undefined;
+  /** Total points scored */
+  pointsFor: number | undefined;
+  /** Total points allowed */
+  pointsAgainst: number | undefined;
+  /** Roster player IDs JSON array */
+  players: string;
+}
+
+/**
+ * Data required to create a new user teams
+ */
+export interface CreateUserTeams {
+  /** League document ID */
+  leagueId: string;
+  /** Team owner user ID */
+  userId: string;
+  /** Fantasy team name */
+  teamName: string;
+  /** Draft order position */
+  draftPosition: number | undefined;
+  /** Roster player IDs JSON array */
+  players: string;
+}
+
+/**
+ * Data for updating a user teams
+ */
+export interface UpdateUserTeams {
+  /** League document ID */
+  leagueId?: string | undefined;
+  /** Team owner user ID */
+  userId?: string | undefined;
+  /** Fantasy team name */
+  teamName?: string | undefined;
+  /** Draft order position */
+  draftPosition?: number | undefined;
+  /** Season wins */
+  wins?: number | undefined;
+  /** Season losses */
+  losses?: number | undefined;
+  /** Total points scored */
+  pointsFor?: number | undefined;
+  /** Total points allowed */
+  pointsAgainst?: number | undefined;
+  /** Roster player IDs JSON array */
+  players?: string | undefined;
 }
 
 /**
@@ -396,7 +477,7 @@ export interface Leagues {
   /** League season year */
   season: number;
   /** Maximum teams allowed */
-  maxTeams: number;
+  maxTeams: number | undefined;
   /** Current number of teams */
   currentTeams: number | undefined;
   /** snake, auction, keeper */
@@ -404,7 +485,7 @@ export interface Leagues {
   /** standard, ppr, superflex */
   gameMode: string;
   /** recruiting, drafting, active, completed */
-  status: string;
+  status: string | undefined;
   /** Public league (searchable) */
   isPublic: boolean | undefined;
   /** Draft pick time limit */
@@ -429,14 +510,10 @@ export interface CreateLeagues {
   commissioner: string;
   /** League season year */
   season: number;
-  /** Maximum teams allowed */
-  maxTeams: number;
   /** snake, auction, keeper */
   draftType: string;
   /** standard, ppr, superflex */
   gameMode: string;
-  /** recruiting, drafting, active, completed */
-  status: string;
   /** Scoring configuration JSON */
   scoringRules: string | undefined;
   /** Scheduled draft date */
@@ -479,99 +556,6 @@ export interface UpdateLeagues {
   draftStartedAt?: Date | string | undefined;
   /** Additional league settings JSON */
   settings?: string | undefined;
-}
-
-/**
- * Fantasy team rosters within leagues
- */
-export interface Rosters {
-  $id: string;
-  $collectionId: string;
-  $databaseId: string;
-  $createdAt: string;
-  $updatedAt: string;
-  $permissions: string[];
-
-  /** League document ID */
-  leagueId: string;
-  /** Team owner user ID */
-  userId: string;
-  /** Fantasy team name */
-  teamName: string;
-  /** Team abbreviation */
-  abbreviation: string | undefined;
-  /** Draft order position */
-  draftPosition: number | undefined;
-  /** Season wins */
-  wins: number | undefined;
-  /** Season losses */
-  losses: number | undefined;
-  /** Season ties */
-  ties: number | undefined;
-  /** Total points scored */
-  pointsFor: number | undefined;
-  /** Total points allowed */
-  pointsAgainst: number | undefined;
-  /** Roster player IDs JSON array */
-  players: string | undefined;
-  /** Active lineup JSON */
-  lineup: string | undefined;
-  /** Bench players JSON */
-  bench: string | undefined;
-}
-
-/**
- * Data required to create a new rosters
- */
-export interface CreateRosters {
-  /** League document ID */
-  leagueId: string;
-  /** Team owner user ID */
-  userId: string;
-  /** Fantasy team name */
-  teamName: string;
-  /** Team abbreviation */
-  abbreviation: string | undefined;
-  /** Draft order position */
-  draftPosition: number | undefined;
-  /** Roster player IDs JSON array */
-  players: string | undefined;
-  /** Active lineup JSON */
-  lineup: string | undefined;
-  /** Bench players JSON */
-  bench: string | undefined;
-}
-
-/**
- * Data for updating a rosters
- */
-export interface UpdateRosters {
-  /** League document ID */
-  leagueId?: string | undefined;
-  /** Team owner user ID */
-  userId?: string | undefined;
-  /** Fantasy team name */
-  teamName?: string | undefined;
-  /** Team abbreviation */
-  abbreviation?: string | undefined;
-  /** Draft order position */
-  draftPosition?: number | undefined;
-  /** Season wins */
-  wins?: number | undefined;
-  /** Season losses */
-  losses?: number | undefined;
-  /** Season ties */
-  ties?: number | undefined;
-  /** Total points scored */
-  pointsFor?: number | undefined;
-  /** Total points allowed */
-  pointsAgainst?: number | undefined;
-  /** Roster player IDs JSON array */
-  players?: string | undefined;
-  /** Active lineup JSON */
-  lineup?: string | undefined;
-  /** Bench players JSON */
-  bench?: string | undefined;
 }
 
 /**
@@ -638,6 +622,229 @@ export interface UpdateLineups {
 }
 
 /**
+ * Head-to-head weekly fantasy matchups
+ */
+export interface Matchups {
+  $id: string;
+  $collectionId: string;
+  $databaseId: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+
+  /** League document ID */
+  leagueId: string;
+  /** Week number */
+  week: number;
+  /** Season year */
+  season: number;
+  /** First team roster ID */
+  team1Id: string;
+  /** Second team roster ID */
+  team2Id: string;
+  /** First team total score */
+  team1Score: number | undefined;
+  /** Second team total score */
+  team2Score: number | undefined;
+  /** Winning team roster ID */
+  winnerId: string | undefined;
+  /** Matchup scoring completed */
+  completed: boolean | undefined;
+  /** Is playoff/championship matchup */
+  playoffMatchup: boolean | undefined;
+}
+
+/**
+ * Data required to create a new matchups
+ */
+export interface CreateMatchups {
+  /** League document ID */
+  leagueId: string;
+  /** Week number */
+  week: number;
+  /** Season year */
+  season: number;
+  /** First team roster ID */
+  team1Id: string;
+  /** Second team roster ID */
+  team2Id: string;
+  /** Winning team roster ID */
+  winnerId: string | undefined;
+}
+
+/**
+ * Data for updating a matchups
+ */
+export interface UpdateMatchups {
+  /** League document ID */
+  leagueId?: string | undefined;
+  /** Week number */
+  week?: number | undefined;
+  /** Season year */
+  season?: number | undefined;
+  /** First team roster ID */
+  team1Id?: string | undefined;
+  /** Second team roster ID */
+  team2Id?: string | undefined;
+  /** First team total score */
+  team1Score?: number | undefined;
+  /** Second team total score */
+  team2Score?: number | undefined;
+  /** Winning team roster ID */
+  winnerId?: string | undefined;
+  /** Matchup scoring completed */
+  completed?: boolean | undefined;
+  /** Is playoff/championship matchup */
+  playoffMatchup?: boolean | undefined;
+}
+
+/**
+ * Snake draft sessions
+ */
+export interface Drafts {
+  $id: string;
+  $collectionId: string;
+  $databaseId: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+
+  /** League document ID */
+  leagueId: string;
+  /** Draft status (pending, active, completed) */
+  status: string;
+  /** Current draft round */
+  currentRound: number | undefined;
+  /** Current pick number */
+  currentPick: number | undefined;
+  /** Maximum draft rounds */
+  maxRounds: number | undefined;
+  /** Team draft order JSON */
+  draftOrder: string | undefined;
+  /** Draft start time */
+  startTime: Date | string | undefined;
+  /** Draft end time */
+  endTime: Date | string | undefined;
+}
+
+/**
+ * Data required to create a new drafts
+ */
+export interface CreateDrafts {
+  /** League document ID */
+  leagueId: string;
+  /** Draft status (pending, active, completed) */
+  status: string;
+  /** Current draft round */
+  currentRound: number | undefined;
+  /** Current pick number */
+  currentPick: number | undefined;
+  /** Maximum draft rounds */
+  maxRounds: number | undefined;
+  /** Team draft order JSON */
+  draftOrder: string | undefined;
+  /** Draft start time */
+  startTime: Date | string | undefined;
+  /** Draft end time */
+  endTime: Date | string | undefined;
+}
+
+/**
+ * Data for updating a drafts
+ */
+export interface UpdateDrafts {
+  /** League document ID */
+  leagueId?: string | undefined;
+  /** Draft status (pending, active, completed) */
+  status?: string | undefined;
+  /** Current draft round */
+  currentRound?: number | undefined;
+  /** Current pick number */
+  currentPick?: number | undefined;
+  /** Maximum draft rounds */
+  maxRounds?: number | undefined;
+  /** Team draft order JSON */
+  draftOrder?: string | undefined;
+  /** Draft start time */
+  startTime?: Date | string | undefined;
+  /** Draft end time */
+  endTime?: Date | string | undefined;
+}
+
+/**
+ * Individual draft picks and selections
+ */
+export interface DraftPicks {
+  $id: string;
+  $collectionId: string;
+  $databaseId: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+
+  /** League document ID */
+  leagueId: string;
+  /** Drafting user ID */
+  userId: string;
+  /** Selected player ID */
+  playerId: string;
+  /** Draft round number */
+  round: number;
+  /** Pick number within round */
+  pick: number;
+  /** When pick was made */
+  timestamp: Date | string;
+  /** Relationship to leagues collection */
+  league: any | undefined;
+  /** Relationship to college_players collection */
+  player: any | undefined;
+}
+
+/**
+ * Data required to create a new draft_picks
+ */
+export interface CreateDraftPicks {
+  /** League document ID */
+  leagueId: string;
+  /** Drafting user ID */
+  userId: string;
+  /** Selected player ID */
+  playerId: string;
+  /** Draft round number */
+  round: number;
+  /** Pick number within round */
+  pick: number;
+  /** When pick was made */
+  timestamp: Date | string;
+  /** Relationship to leagues collection */
+  league: any | undefined;
+  /** Relationship to college_players collection */
+  player: any | undefined;
+}
+
+/**
+ * Data for updating a draft_picks
+ */
+export interface UpdateDraftPicks {
+  /** League document ID */
+  leagueId?: string | undefined;
+  /** Drafting user ID */
+  userId?: string | undefined;
+  /** Selected player ID */
+  playerId?: string | undefined;
+  /** Draft round number */
+  round?: number | undefined;
+  /** Pick number within round */
+  pick?: number | undefined;
+  /** When pick was made */
+  timestamp?: Date | string | undefined;
+  /** Relationship to leagues collection */
+  league?: any | undefined;
+  /** Relationship to college_players collection */
+  player?: any | undefined;
+}
+
+/**
  * Auction draft sessions
  */
 export interface Auctions {
@@ -651,7 +858,7 @@ export interface Auctions {
   /** League document ID */
   leagueId: string;
   /** pending, active, paused, completed */
-  status: string;
+  status: string | undefined;
   /** Current player being auctioned */
   currentNomination: string | undefined;
   /** Team that nominated player */
@@ -672,8 +879,6 @@ export interface Auctions {
 export interface CreateAuctions {
   /** League document ID */
   leagueId: string;
-  /** pending, active, paused, completed */
-  status: string;
   /** Current player being auctioned */
   currentNomination: string | undefined;
   /** Team that nominated player */
@@ -837,6 +1042,115 @@ export interface UpdatePlayerStats {
 }
 
 /**
+ * Projection model inputs including depth charts and team data
+ */
+export interface ModelInputs {
+  $id: string;
+  $collectionId: string;
+  $databaseId: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+
+  /** Season year */
+  season: number;
+  /** Week number (null for season-long data) */
+  week: number | undefined;
+  /** Legacy depth chart format */
+  depth_chart: string | undefined;
+  /** Team pace data JSON */
+  team_pace: string | undefined;
+  /** Team pass rate data JSON */
+  pass_rate: string | undefined;
+  /** Team rush rate data JSON */
+  rush_rate: string | undefined;
+  /** Enhanced depth chart data JSON */
+  depth_chart_json: string | undefined;
+  /** Player usage priors JSON */
+  usage_priors_json: string | undefined;
+  /** Team efficiency ratings JSON */
+  team_efficiency_json: string | undefined;
+  /** Team pace estimates JSON */
+  pace_estimates_json: string | undefined;
+  /** Opponent grades by position JSON */
+  opponent_grades_by_pos_json: string | undefined;
+  /** Manual projection overrides JSON */
+  manual_overrides_json: string | undefined;
+  /** EA Sports player ratings JSON */
+  ea_ratings_json: string | undefined;
+  /** NFL draft capital projections JSON */
+  nfl_draft_capital_json: string | undefined;
+}
+
+/**
+ * Data required to create a new model_inputs
+ */
+export interface CreateModelInputs {
+  /** Season year */
+  season: number;
+  /** Week number (null for season-long data) */
+  week: number | undefined;
+  /** Legacy depth chart format */
+  depth_chart: string | undefined;
+  /** Team pace data JSON */
+  team_pace: string | undefined;
+  /** Team pass rate data JSON */
+  pass_rate: string | undefined;
+  /** Team rush rate data JSON */
+  rush_rate: string | undefined;
+  /** Enhanced depth chart data JSON */
+  depth_chart_json: string | undefined;
+  /** Player usage priors JSON */
+  usage_priors_json: string | undefined;
+  /** Team efficiency ratings JSON */
+  team_efficiency_json: string | undefined;
+  /** Team pace estimates JSON */
+  pace_estimates_json: string | undefined;
+  /** Opponent grades by position JSON */
+  opponent_grades_by_pos_json: string | undefined;
+  /** Manual projection overrides JSON */
+  manual_overrides_json: string | undefined;
+  /** EA Sports player ratings JSON */
+  ea_ratings_json: string | undefined;
+  /** NFL draft capital projections JSON */
+  nfl_draft_capital_json: string | undefined;
+}
+
+/**
+ * Data for updating a model_inputs
+ */
+export interface UpdateModelInputs {
+  /** Season year */
+  season?: number | undefined;
+  /** Week number (null for season-long data) */
+  week?: number | undefined;
+  /** Legacy depth chart format */
+  depth_chart?: string | undefined;
+  /** Team pace data JSON */
+  team_pace?: string | undefined;
+  /** Team pass rate data JSON */
+  pass_rate?: string | undefined;
+  /** Team rush rate data JSON */
+  rush_rate?: string | undefined;
+  /** Enhanced depth chart data JSON */
+  depth_chart_json?: string | undefined;
+  /** Player usage priors JSON */
+  usage_priors_json?: string | undefined;
+  /** Team efficiency ratings JSON */
+  team_efficiency_json?: string | undefined;
+  /** Team pace estimates JSON */
+  pace_estimates_json?: string | undefined;
+  /** Opponent grades by position JSON */
+  opponent_grades_by_pos_json?: string | undefined;
+  /** Manual projection overrides JSON */
+  manual_overrides_json?: string | undefined;
+  /** EA Sports player ratings JSON */
+  ea_ratings_json?: string | undefined;
+  /** NFL draft capital projections JSON */
+  nfl_draft_capital_json?: string | undefined;
+}
+
+/**
  * Application users
  */
 export interface Users {
@@ -931,7 +1245,7 @@ export interface ActivityLog {
 }
 
 /**
- * Data required to create a new activity log
+ * Data required to create a new activity_log
  */
 export interface CreateActivityLog {
   /** Acting user ID */
@@ -951,7 +1265,7 @@ export interface CreateActivityLog {
 }
 
 /**
- * Data for updating a activity log
+ * Data for updating a activity_log
  */
 export interface UpdateActivityLog {
   /** Acting user ID */
@@ -971,6 +1285,837 @@ export interface UpdateActivityLog {
 }
 
 /**
+ * Weekly depth chart positions and starter probabilities
+ */
+export interface PlayerDepthCharts {
+  $id: string;
+  $collectionId: string;
+  $databaseId: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+
+  /** Reference to college_players.$id */
+  player_id: string;
+  /** Team identifier */
+  team_id: string;
+  /** Player position (QB, RB, WR, TE, K) */
+  position: string;
+  /** Season year */
+  season: number;
+  /** Week number */
+  week: number;
+  /** Depth position (1=starter, 2=backup, etc.) */
+  depth_chart_rank: number;
+  /** Probability of starting (0.0-1.0) */
+  starter_prob: number;
+  /** Projected snap share percentage */
+  snap_share_proj: number | undefined;
+  /** OUT, QUESTIONABLE, or ACTIVE */
+  injury_status: string;
+  /** Injury detail note */
+  injury_note: string | undefined;
+  /** Injury status timestamp */
+  injury_as_of: Date | string;
+  /** Injury data source */
+  injury_source: string;
+  /** 1-week snap percentage */
+  usage_1w_snap_pct: number | undefined;
+  /** 4-week snap percentage EMA */
+  usage_4w_snap_pct: number | undefined;
+  /** 1-week route percentage */
+  usage_1w_route_pct: number | undefined;
+  /** 4-week route percentage EMA */
+  usage_4w_route_pct: number | undefined;
+  /** 1-week carry share */
+  usage_1w_carry_share: number | undefined;
+  /** 4-week carry share EMA */
+  usage_4w_carry_share: number | undefined;
+  /** 1-week target share */
+  usage_1w_target_share: number | undefined;
+  /** 4-week target share EMA */
+  usage_4w_target_share: number | undefined;
+  /** Previous season target share */
+  prior_season_target_share: number | undefined;
+  /** Previous season carry share */
+  prior_season_carry_share: number | undefined;
+  /** Previous season yards share */
+  prior_season_yards_share: number | undefined;
+  /** Previous season TD share */
+  prior_season_td_share: number | undefined;
+  /** Data freshness timestamp */
+  as_of: Date | string;
+  /** Primary data source */
+  source: string;
+  /** Data confidence score (0.0-1.0) */
+  confidence: number;
+  /** JSON array of provenance records */
+  provenance_trail: string | undefined;
+  /** JSON array of manual overrides */
+  manual_overrides: string | undefined;
+  /** Record creation timestamp */
+  created_at: Date | string;
+  /** Last update timestamp */
+  updated_at: Date | string;
+}
+
+/**
+ * Data required to create a new player depth charts
+ */
+export interface CreatePlayerDepthCharts {
+  /** Reference to college_players.$id */
+  player_id: string;
+  /** Team identifier */
+  team_id: string;
+  /** Player position (QB, RB, WR, TE, K) */
+  position: string;
+  /** Season year */
+  season: number;
+  /** Week number */
+  week: number;
+  /** Depth position (1=starter, 2=backup, etc.) */
+  depth_chart_rank: number;
+  /** Probability of starting (0.0-1.0) */
+  starter_prob: number;
+  /** OUT, QUESTIONABLE, or ACTIVE */
+  injury_status: string;
+  /** Injury detail note */
+  injury_note: string | undefined;
+  /** Injury status timestamp */
+  injury_as_of: Date | string;
+  /** Injury data source */
+  injury_source: string;
+  /** Data freshness timestamp */
+  as_of: Date | string;
+  /** Primary data source */
+  source: string;
+  /** Data confidence score (0.0-1.0) */
+  confidence: number;
+  /** JSON array of provenance records */
+  provenance_trail: string | undefined;
+  /** JSON array of manual overrides */
+  manual_overrides: string | undefined;
+  /** Record creation timestamp */
+  created_at: Date | string;
+  /** Last update timestamp */
+  updated_at: Date | string;
+}
+
+/**
+ * Data for updating a player depth charts
+ */
+export interface UpdatePlayerDepthCharts {
+  /** Reference to college_players.$id */
+  player_id?: string | undefined;
+  /** Team identifier */
+  team_id?: string | undefined;
+  /** Player position (QB, RB, WR, TE, K) */
+  position?: string | undefined;
+  /** Season year */
+  season?: number | undefined;
+  /** Week number */
+  week?: number | undefined;
+  /** Depth position (1=starter, 2=backup, etc.) */
+  depth_chart_rank?: number | undefined;
+  /** Probability of starting (0.0-1.0) */
+  starter_prob?: number | undefined;
+  /** Projected snap share percentage */
+  snap_share_proj?: number | undefined;
+  /** OUT, QUESTIONABLE, or ACTIVE */
+  injury_status?: string | undefined;
+  /** Injury detail note */
+  injury_note?: string | undefined;
+  /** Injury status timestamp */
+  injury_as_of?: Date | string | undefined;
+  /** Injury data source */
+  injury_source?: string | undefined;
+  /** 1-week snap percentage */
+  usage_1w_snap_pct?: number | undefined;
+  /** 4-week snap percentage EMA */
+  usage_4w_snap_pct?: number | undefined;
+  /** 1-week route percentage */
+  usage_1w_route_pct?: number | undefined;
+  /** 4-week route percentage EMA */
+  usage_4w_route_pct?: number | undefined;
+  /** 1-week carry share */
+  usage_1w_carry_share?: number | undefined;
+  /** 4-week carry share EMA */
+  usage_4w_carry_share?: number | undefined;
+  /** 1-week target share */
+  usage_1w_target_share?: number | undefined;
+  /** 4-week target share EMA */
+  usage_4w_target_share?: number | undefined;
+  /** Previous season target share */
+  prior_season_target_share?: number | undefined;
+  /** Previous season carry share */
+  prior_season_carry_share?: number | undefined;
+  /** Previous season yards share */
+  prior_season_yards_share?: number | undefined;
+  /** Previous season TD share */
+  prior_season_td_share?: number | undefined;
+  /** Data freshness timestamp */
+  as_of?: Date | string | undefined;
+  /** Primary data source */
+  source?: string | undefined;
+  /** Data confidence score (0.0-1.0) */
+  confidence?: number | undefined;
+  /** JSON array of provenance records */
+  provenance_trail?: string | undefined;
+  /** JSON array of manual overrides */
+  manual_overrides?: string | undefined;
+  /** Record creation timestamp */
+  created_at?: Date | string | undefined;
+  /** Last update timestamp */
+  updated_at?: Date | string | undefined;
+}
+
+/**
+ * Weekly team pace, play-calling, and opponent strength data
+ */
+export interface TeamContext {
+  $id: string;
+  $collectionId: string;
+  $databaseId: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+
+  /** Team identifier */
+  team_id: string;
+  /** Opponent team identifier */
+  opponent_team_id: string | undefined;
+  /** Season year */
+  season: number;
+  /** Week number */
+  week: number;
+  /** Projected plays per game */
+  estimated_plays_per_game: number;
+  /** Actual plays (post-game only) */
+  actual_plays_per_game: number | undefined;
+  /** National pace ranking (1-130) */
+  pace_rank: number | undefined;
+  /** Average seconds between plays */
+  seconds_per_play: number | undefined;
+  /** Overall run rate (0.0-1.0) */
+  run_rate: number;
+  /** Overall pass rate (0.0-1.0) */
+  pass_rate: number;
+  /** Red zone run rate */
+  red_zone_run_rate: number | undefined;
+  /** Red zone pass rate */
+  red_zone_pass_rate: number | undefined;
+  /** First down run rate */
+  first_down_run_rate: number | undefined;
+  /** Opp defense rank vs QB (1-130) */
+  opponent_def_rank_vs_qb: number | undefined;
+  /** Opp defense rank vs RB (1-130) */
+  opponent_def_rank_vs_rb: number | undefined;
+  /** Opp defense rank vs WR (1-130) */
+  opponent_def_rank_vs_wr: number | undefined;
+  /** Opp defense rank vs TE (1-130) */
+  opponent_def_rank_vs_te: number | undefined;
+  /** Overall defensive ranking */
+  opponent_total_def_rank: number | undefined;
+  /** Vegas implied team total */
+  estimated_team_total: number | undefined;
+  /** Point spread (positive = favored) */
+  spread: number | undefined;
+  /** Game total over/under */
+  over_under: number | undefined;
+  /** HOME or AWAY */
+  home_away: string | undefined;
+  /** Game temperature (Fahrenheit) */
+  temperature: number | undefined;
+  /** Wind speed in MPH */
+  wind_mph: number | undefined;
+  /** Rain/Snow conditions */
+  precipitation: string | undefined;
+  /** Indoor/dome game */
+  is_dome: boolean | undefined;
+  /** Data freshness timestamp */
+  as_of: Date | string;
+  /** Primary data source */
+  source: string;
+  /** Data confidence score */
+  confidence: number;
+  /** Record creation timestamp */
+  created_at: Date | string;
+  /** Last update timestamp */
+  updated_at: Date | string;
+}
+
+/**
+ * Data required to create a new team context
+ */
+export interface CreateTeamContext {
+  /** Team identifier */
+  team_id: string;
+  /** Opponent team identifier */
+  opponent_team_id: string | undefined;
+  /** Season year */
+  season: number;
+  /** Week number */
+  week: number;
+  /** Projected plays per game */
+  estimated_plays_per_game: number;
+  /** Actual plays (post-game only) */
+  actual_plays_per_game: number | undefined;
+  /** National pace ranking (1-130) */
+  pace_rank: number | undefined;
+  /** Average seconds between plays */
+  seconds_per_play: number | undefined;
+  /** Overall run rate (0.0-1.0) */
+  run_rate: number;
+  /** Overall pass rate (0.0-1.0) */
+  pass_rate: number;
+  /** Opp defense rank vs QB (1-130) */
+  opponent_def_rank_vs_qb: number | undefined;
+  /** Opp defense rank vs RB (1-130) */
+  opponent_def_rank_vs_rb: number | undefined;
+  /** Opp defense rank vs WR (1-130) */
+  opponent_def_rank_vs_wr: number | undefined;
+  /** Opp defense rank vs TE (1-130) */
+  opponent_def_rank_vs_te: number | undefined;
+  /** Overall defensive ranking */
+  opponent_total_def_rank: number | undefined;
+  /** Vegas implied team total */
+  estimated_team_total: number | undefined;
+  /** Point spread (positive = favored) */
+  spread: number | undefined;
+  /** Game total over/under */
+  over_under: number | undefined;
+  /** HOME or AWAY */
+  home_away: string | undefined;
+  /** Game temperature (Fahrenheit) */
+  temperature: number | undefined;
+  /** Wind speed in MPH */
+  wind_mph: number | undefined;
+  /** Rain/Snow conditions */
+  precipitation: string | undefined;
+  /** Data freshness timestamp */
+  as_of: Date | string;
+  /** Primary data source */
+  source: string;
+  /** Data confidence score */
+  confidence: number;
+  /** Record creation timestamp */
+  created_at: Date | string;
+  /** Last update timestamp */
+  updated_at: Date | string;
+}
+
+/**
+ * Data for updating a team context
+ */
+export interface UpdateTeamContext {
+  /** Team identifier */
+  team_id?: string | undefined;
+  /** Opponent team identifier */
+  opponent_team_id?: string | undefined;
+  /** Season year */
+  season?: number | undefined;
+  /** Week number */
+  week?: number | undefined;
+  /** Projected plays per game */
+  estimated_plays_per_game?: number | undefined;
+  /** Actual plays (post-game only) */
+  actual_plays_per_game?: number | undefined;
+  /** National pace ranking (1-130) */
+  pace_rank?: number | undefined;
+  /** Average seconds between plays */
+  seconds_per_play?: number | undefined;
+  /** Overall run rate (0.0-1.0) */
+  run_rate?: number | undefined;
+  /** Overall pass rate (0.0-1.0) */
+  pass_rate?: number | undefined;
+  /** Red zone run rate */
+  red_zone_run_rate?: number | undefined;
+  /** Red zone pass rate */
+  red_zone_pass_rate?: number | undefined;
+  /** First down run rate */
+  first_down_run_rate?: number | undefined;
+  /** Opp defense rank vs QB (1-130) */
+  opponent_def_rank_vs_qb?: number | undefined;
+  /** Opp defense rank vs RB (1-130) */
+  opponent_def_rank_vs_rb?: number | undefined;
+  /** Opp defense rank vs WR (1-130) */
+  opponent_def_rank_vs_wr?: number | undefined;
+  /** Opp defense rank vs TE (1-130) */
+  opponent_def_rank_vs_te?: number | undefined;
+  /** Overall defensive ranking */
+  opponent_total_def_rank?: number | undefined;
+  /** Vegas implied team total */
+  estimated_team_total?: number | undefined;
+  /** Point spread (positive = favored) */
+  spread?: number | undefined;
+  /** Game total over/under */
+  over_under?: number | undefined;
+  /** HOME or AWAY */
+  home_away?: string | undefined;
+  /** Game temperature (Fahrenheit) */
+  temperature?: number | undefined;
+  /** Wind speed in MPH */
+  wind_mph?: number | undefined;
+  /** Rain/Snow conditions */
+  precipitation?: string | undefined;
+  /** Indoor/dome game */
+  is_dome?: boolean | undefined;
+  /** Data freshness timestamp */
+  as_of?: Date | string | undefined;
+  /** Primary data source */
+  source?: string | undefined;
+  /** Data confidence score */
+  confidence?: number | undefined;
+  /** Record creation timestamp */
+  created_at?: Date | string | undefined;
+  /** Last update timestamp */
+  updated_at?: Date | string | undefined;
+}
+
+/**
+ * Data pipeline execution and change tracking
+ */
+export interface IngestionLog {
+  $id: string;
+  $collectionId: string;
+  $databaseId: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+
+  /** Unique run identifier */
+  run_id: string;
+  /** Target season */
+  season: number;
+  /** Target week */
+  week: number;
+  /** Adapter that generated data */
+  adapter: string;
+  /** Data source identifier */
+  source: string;
+  /** SUCCESS, FAILED, or PARTIAL */
+  status: string;
+  /** Execution start time */
+  started_at: Date | string;
+  /** Execution completion time */
+  completed_at: Date | string | undefined;
+  /** Execution duration in milliseconds */
+  duration_ms: number | undefined;
+  /** Total records processed */
+  records_processed: number | undefined;
+  /** New records created */
+  records_created: number | undefined;
+  /** Existing records updated */
+  records_updated: number | undefined;
+  /** Records that failed processing */
+  records_failed: number | undefined;
+  /** Data conflicts resolved */
+  conflicts_resolved: number | undefined;
+  /** Depth chart position changes */
+  depth_chart_changes: number | undefined;
+  /** Injury status changes */
+  injury_status_changes: number | undefined;
+  /** Starter probability changes */
+  starter_prob_changes: number | undefined;
+  /** Error details if failed */
+  error_message: string | undefined;
+  /** Error stack trace */
+  error_stack: string | undefined;
+  /** Number of warnings generated */
+  warning_count: number | undefined;
+  /** JSON array of warning messages */
+  warnings: string | undefined;
+  /** JSON summary of changes made */
+  change_summary: string | undefined;
+  /** Detailed diff log */
+  diff_log: string | undefined;
+  /** Path to data snapshot */
+  snapshot_path: string | undefined;
+}
+
+/**
+ * Data required to create a new ingestion log
+ */
+export interface CreateIngestionLog {
+  /** Unique run identifier */
+  run_id: string;
+  /** Target season */
+  season: number;
+  /** Target week */
+  week: number;
+  /** Adapter that generated data */
+  adapter: string;
+  /** Data source identifier */
+  source: string;
+  /** SUCCESS, FAILED, or PARTIAL */
+  status: string;
+  /** Execution start time */
+  started_at: Date | string;
+  /** Execution completion time */
+  completed_at: Date | string | undefined;
+  /** Execution duration in milliseconds */
+  duration_ms: number | undefined;
+  /** Error details if failed */
+  error_message: string | undefined;
+  /** Error stack trace */
+  error_stack: string | undefined;
+  /** JSON array of warning messages */
+  warnings: string | undefined;
+  /** JSON summary of changes made */
+  change_summary: string | undefined;
+  /** Detailed diff log */
+  diff_log: string | undefined;
+  /** Path to data snapshot */
+  snapshot_path: string | undefined;
+}
+
+/**
+ * Data for updating a ingestion log
+ */
+export interface UpdateIngestionLog {
+  /** Unique run identifier */
+  run_id?: string | undefined;
+  /** Target season */
+  season?: number | undefined;
+  /** Target week */
+  week?: number | undefined;
+  /** Adapter that generated data */
+  adapter?: string | undefined;
+  /** Data source identifier */
+  source?: string | undefined;
+  /** SUCCESS, FAILED, or PARTIAL */
+  status?: string | undefined;
+  /** Execution start time */
+  started_at?: Date | string | undefined;
+  /** Execution completion time */
+  completed_at?: Date | string | undefined;
+  /** Execution duration in milliseconds */
+  duration_ms?: number | undefined;
+  /** Total records processed */
+  records_processed?: number | undefined;
+  /** New records created */
+  records_created?: number | undefined;
+  /** Existing records updated */
+  records_updated?: number | undefined;
+  /** Records that failed processing */
+  records_failed?: number | undefined;
+  /** Data conflicts resolved */
+  conflicts_resolved?: number | undefined;
+  /** Depth chart position changes */
+  depth_chart_changes?: number | undefined;
+  /** Injury status changes */
+  injury_status_changes?: number | undefined;
+  /** Starter probability changes */
+  starter_prob_changes?: number | undefined;
+  /** Error details if failed */
+  error_message?: string | undefined;
+  /** Error stack trace */
+  error_stack?: string | undefined;
+  /** Number of warnings generated */
+  warning_count?: number | undefined;
+  /** JSON array of warning messages */
+  warnings?: string | undefined;
+  /** JSON summary of changes made */
+  change_summary?: string | undefined;
+  /** Detailed diff log */
+  diff_log?: string | undefined;
+  /** Path to data snapshot */
+  snapshot_path?: string | undefined;
+}
+
+/**
+ * Admin manual overrides for data corrections
+ */
+export interface ManualOverrides {
+  $id: string;
+  $collectionId: string;
+  $databaseId: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+
+  /** Target player ID */
+  player_id: string;
+  /** Season year */
+  season: number;
+  /** Week number (0 = season-long) */
+  week: number;
+  /** Field being overridden */
+  field_name: string;
+  /** JSON-encoded override value */
+  override_value: string;
+  /** Original value before override */
+  original_value: string | undefined;
+  /** Original data source */
+  original_source: string | undefined;
+  /** Admin who made override */
+  admin_user_id: string;
+  /** Reason for override */
+  reason: string;
+  /** Override priority (higher wins) */
+  priority: number | undefined;
+  /** Override is currently active */
+  is_active: boolean | undefined;
+  /** When override takes effect */
+  effective_from: Date | string;
+  /** When override expires (null = permanent) */
+  expires_at: Date | string | undefined;
+  /** Override creation time */
+  created_at: Date | string;
+  /** When override was deactivated */
+  deactivated_at: Date | string | undefined;
+  /** Admin who deactivated override */
+  deactivated_by: string | undefined;
+  /** PENDING, VALIDATED, REJECTED */
+  validation_status: string | undefined;
+  /** Admin who validated override */
+  validated_by: string | undefined;
+  /** Validation notes */
+  validation_notes: string | undefined;
+}
+
+/**
+ * Data required to create a new manual overrides
+ */
+export interface CreateManualOverrides {
+  /** Target player ID */
+  player_id: string;
+  /** Season year */
+  season: number;
+  /** Week number (0 = season-long) */
+  week: number;
+  /** Field being overridden */
+  field_name: string;
+  /** JSON-encoded override value */
+  override_value: string;
+  /** Original value before override */
+  original_value: string | undefined;
+  /** Original data source */
+  original_source: string | undefined;
+  /** Admin who made override */
+  admin_user_id: string;
+  /** Reason for override */
+  reason: string;
+  /** When override takes effect */
+  effective_from: Date | string;
+  /** When override expires (null = permanent) */
+  expires_at: Date | string | undefined;
+  /** Override creation time */
+  created_at: Date | string;
+  /** When override was deactivated */
+  deactivated_at: Date | string | undefined;
+  /** Admin who deactivated override */
+  deactivated_by: string | undefined;
+  /** Admin who validated override */
+  validated_by: string | undefined;
+  /** Validation notes */
+  validation_notes: string | undefined;
+}
+
+/**
+ * Data for updating a manual overrides
+ */
+export interface UpdateManualOverrides {
+  /** Target player ID */
+  player_id?: string | undefined;
+  /** Season year */
+  season?: number | undefined;
+  /** Week number (0 = season-long) */
+  week?: number | undefined;
+  /** Field being overridden */
+  field_name?: string | undefined;
+  /** JSON-encoded override value */
+  override_value?: string | undefined;
+  /** Original value before override */
+  original_value?: string | undefined;
+  /** Original data source */
+  original_source?: string | undefined;
+  /** Admin who made override */
+  admin_user_id?: string | undefined;
+  /** Reason for override */
+  reason?: string | undefined;
+  /** Override priority (higher wins) */
+  priority?: number | undefined;
+  /** Override is currently active */
+  is_active?: boolean | undefined;
+  /** When override takes effect */
+  effective_from?: Date | string | undefined;
+  /** When override expires (null = permanent) */
+  expires_at?: Date | string | undefined;
+  /** Override creation time */
+  created_at?: Date | string | undefined;
+  /** When override was deactivated */
+  deactivated_at?: Date | string | undefined;
+  /** Admin who deactivated override */
+  deactivated_by?: string | undefined;
+  /** PENDING, VALIDATED, REJECTED */
+  validation_status?: string | undefined;
+  /** Admin who validated override */
+  validated_by?: string | undefined;
+  /** Validation notes */
+  validation_notes?: string | undefined;
+}
+
+/**
+ * External data source configuration and health monitoring
+ */
+export interface DataSourceRegistry {
+  $id: string;
+  $collectionId: string;
+  $databaseId: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $permissions: string[];
+
+  /** Unique source identifier */
+  source_id: string;
+  /** Human-readable source name */
+  source_name: string;
+  /** team_notes, vendor, stats, manual */
+  source_type: string;
+  /** Adapter class name */
+  adapter_class: string;
+  /** Base API URL */
+  base_url: string | undefined;
+  /** API key, OAuth, etc. */
+  auth_type: string | undefined;
+  /** Requests per hour limit */
+  rate_limit_per_hour: number | undefined;
+  /** Request timeout */
+  timeout_seconds: number | undefined;
+  /** Retry attempts on failure */
+  retry_attempts: number | undefined;
+  /** Reliability score (0.0-1.0) */
+  reliability_score: number | undefined;
+  /** Expected data freshness */
+  data_freshness_hours: number | undefined;
+  /** JSON array of covered teams */
+  coverage_teams: string | undefined;
+  /** JSON array of covered positions */
+  coverage_positions: string | undefined;
+  /** Source is currently active */
+  is_active: boolean | undefined;
+  /** Last successful data fetch */
+  last_success_at: Date | string | undefined;
+  /** Last failure timestamp */
+  last_failure_at: Date | string | undefined;
+  /** Consecutive failure count */
+  consecutive_failures: number | undefined;
+  /** Failures before deactivation */
+  failure_threshold: number | undefined;
+  /** Total requests made */
+  total_requests: number | undefined;
+  /** Successful requests */
+  successful_requests: number | undefined;
+  /** Average response time */
+  avg_response_time_ms: number | undefined;
+  /** Duration of last request */
+  last_request_duration_ms: number | undefined;
+  /** Source registration time */
+  created_at: Date | string;
+  /** Last configuration update */
+  updated_at: Date | string;
+  /** Admin who registered source */
+  created_by: string;
+  /** Administrative notes */
+  notes: string | undefined;
+}
+
+/**
+ * Data required to create a new data source registry
+ */
+export interface CreateDataSourceRegistry {
+  /** Unique source identifier */
+  source_id: string;
+  /** Human-readable source name */
+  source_name: string;
+  /** team_notes, vendor, stats, manual */
+  source_type: string;
+  /** Adapter class name */
+  adapter_class: string;
+  /** Base API URL */
+  base_url: string | undefined;
+  /** API key, OAuth, etc. */
+  auth_type: string | undefined;
+  /** JSON array of covered teams */
+  coverage_teams: string | undefined;
+  /** JSON array of covered positions */
+  coverage_positions: string | undefined;
+  /** Last successful data fetch */
+  last_success_at: Date | string | undefined;
+  /** Last failure timestamp */
+  last_failure_at: Date | string | undefined;
+  /** Duration of last request */
+  last_request_duration_ms: number | undefined;
+  /** Source registration time */
+  created_at: Date | string;
+  /** Last configuration update */
+  updated_at: Date | string;
+  /** Admin who registered source */
+  created_by: string;
+  /** Administrative notes */
+  notes: string | undefined;
+}
+
+/**
+ * Data for updating a data source registry
+ */
+export interface UpdateDataSourceRegistry {
+  /** Unique source identifier */
+  source_id?: string | undefined;
+  /** Human-readable source name */
+  source_name?: string | undefined;
+  /** team_notes, vendor, stats, manual */
+  source_type?: string | undefined;
+  /** Adapter class name */
+  adapter_class?: string | undefined;
+  /** Base API URL */
+  base_url?: string | undefined;
+  /** API key, OAuth, etc. */
+  auth_type?: string | undefined;
+  /** Requests per hour limit */
+  rate_limit_per_hour?: number | undefined;
+  /** Request timeout */
+  timeout_seconds?: number | undefined;
+  /** Retry attempts on failure */
+  retry_attempts?: number | undefined;
+  /** Reliability score (0.0-1.0) */
+  reliability_score?: number | undefined;
+  /** Expected data freshness */
+  data_freshness_hours?: number | undefined;
+  /** JSON array of covered teams */
+  coverage_teams?: string | undefined;
+  /** JSON array of covered positions */
+  coverage_positions?: string | undefined;
+  /** Source is currently active */
+  is_active?: boolean | undefined;
+  /** Last successful data fetch */
+  last_success_at?: Date | string | undefined;
+  /** Last failure timestamp */
+  last_failure_at?: Date | string | undefined;
+  /** Consecutive failure count */
+  consecutive_failures?: number | undefined;
+  /** Failures before deactivation */
+  failure_threshold?: number | undefined;
+  /** Total requests made */
+  total_requests?: number | undefined;
+  /** Successful requests */
+  successful_requests?: number | undefined;
+  /** Average response time */
+  avg_response_time_ms?: number | undefined;
+  /** Duration of last request */
+  last_request_duration_ms?: number | undefined;
+  /** Source registration time */
+  created_at?: Date | string | undefined;
+  /** Last configuration update */
+  updated_at?: Date | string | undefined;
+  /** Admin who registered source */
+  created_by?: string | undefined;
+  /** Administrative notes */
+  notes?: string | undefined;
+}
+
+/**
  * Collection name constants
  */
 export const COLLECTIONS = {
@@ -978,14 +2123,23 @@ export const COLLECTIONS = {
   TEAMS: 'teams' as const,
   GAMES: 'games' as const,
   RANKINGS: 'rankings' as const,
-  LEAGUES: 'leagues' as const,
   USER_TEAMS: 'user_teams' as const,
+  LEAGUES: 'leagues' as const,
   LINEUPS: 'lineups' as const,
+  MATCHUPS: 'matchups' as const,
+  DRAFTS: 'drafts' as const,
+  DRAFT_PICKS: 'draft_picks' as const,
   AUCTIONS: 'auctions' as const,
   BIDS: 'bids' as const,
   PLAYER_STATS: 'player_stats' as const,
+  MODEL_INPUTS: 'model_inputs' as const,
   USERS: 'users' as const,
   ACTIVITY_LOG: 'activity_log' as const,
+  PLAYER_DEPTH_CHARTS: 'player_depth_charts' as const,
+  TEAM_CONTEXT: 'team_context' as const,
+  INGESTION_LOG: 'ingestion_log' as const,
+  MANUAL_OVERRIDES: 'manual_overrides' as const,
+  DATA_SOURCE_REGISTRY: 'data_source_registry' as const,
 } as const;
 
 /**
