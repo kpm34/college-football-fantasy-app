@@ -15,12 +15,13 @@ This guide standardizes how to configure and use Appwrite via MCP in Cursor/Clau
         "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
         "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
         "APPWRITE_DATABASE_ID": "college-football-fantasy"
-      }
+      },
+      "envFile": "/Users/kashyapmaheshwari/college-football-fantasy-app/.env.local"
     }
   }
 }
 ```
-- Provide `APPWRITE_API_KEY` via your shell environment. Do not store secrets in files.
+- `APPWRITE_API_KEY` is automatically loaded from `.env.local` file. No manual environment setup needed.
 
 ## What the tool can do
 - Users: create, read, update, delete; issue JWTs; manage sessions; MFA setup and recovery codes.
