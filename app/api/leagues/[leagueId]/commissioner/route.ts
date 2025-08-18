@@ -169,6 +169,19 @@ export async function PUT(
 
     console.log('Commissioner settings update payload:', JSON.stringify(payload, null, 2));
 
+    // Validate scoring rules JSON if present
+    if (payload.scoringRules) {
+      try {
+        JSON.parse(payload.scoringRules);
+      } catch (jsonError) {
+        console.error('Invalid scoring rules JSON:', payload.scoringRules);
+        return NextResponse.json(
+          { error: 'Invalid scoring rules format' },
+          { status: 400 }
+        );
+      }
+    }
+
     // Update league with provided settings
     const result = await databases.updateDocument(
       DATABASE_ID,
@@ -179,10 +192,32 @@ export async function PUT(
     
     return NextResponse.json({ success: true, league: result });
   } catch (error: any) {
-    console.error('Update commissioner settings error:', error);
+    console.error('Update commissioner settings error:', {
+      message: error.message,
+      code: error.code,
+      type: error.type,
+      stack: error.stack,
+      leagueId: params.leagueId
+    });
+    
+    // Return more specific error messages based on error type
+    if (error.code === 401 || error.code === 403) {
+      return NextResponse.json(
+        { error: 'Authentication failed or insufficient permissions' },
+        { status: 401 }
+      );
+    }
+    
+    if (error.code === 400) {
+      return NextResponse.json(
+        { error: 'Invalid data provided: ' + (error.message || 'Unknown validation error') },
+        { status: 400 }
+      );
+    }
+    
     return NextResponse.json(
       { error: error.message || 'Failed to update commissioner settings' },
-      { status: error.code === 401 ? 401 : 500 }
+      { status: 500 }
     );
   }
 }
