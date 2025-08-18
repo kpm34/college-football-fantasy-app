@@ -5,19 +5,26 @@
 ### 1. Authentication Flow
 ```mermaid
 graph LR
-    A[Client] --> B[API Route]
-    B --> C[AuthService]
-    C --> D[Appwrite Auth]
-    D --> E[Session Cookie]
-    E --> A
-    C --> F[User Collection]
+    A[Login Page] --> B{Auth Method}
+    B -->|Email/Password| C[API Route]
+    B -->|OAuth| D[OAuth Provider]
+    C --> E[AuthService]
+    D --> F[OAuth Callback]
+    F --> E
+    E --> G[Appwrite Auth]
+    G --> H[Session Cookie]
+    H --> I[Desktop/Mobile Logout]
+    I --> J[Clear Session]
+    E --> K[User Collection]
 ```
 
 **Key Points:**
-- All auth operations go through centralized `AuthService`
-- Sessions stored in secure `appwrite-session` cookies
-- OAuth providers: Google, Apple
-- User profiles synced to Appwrite
+- **Multi-modal Authentication**: Email/password + OAuth (Google, Apple)
+- **OAuth Integration**: Environment-controlled OAuth buttons on login page
+- **Desktop Navigation**: Logout button in header next to user name
+- **Mobile Navigation**: Logout button in drawer menu
+- **Session Management**: Secure `appwrite-session` cookies with proper cleanup
+- **User Sync**: Profiles automatically synced to Appwrite on authentication
 
 ### 2. League Management Flow
 ```mermaid
@@ -77,20 +84,31 @@ graph TD
 ### 5. Projections System
 ```mermaid
 graph LR
-    A[Player Data] --> B[Projection Engine]
-    B --> C[Base Projection]
-    C --> D[Adjustments]
-    D --> E[Final Projection]
-    E --> F[Store in DB]
-    F --> G[Mock Draft UI]
+    A[Player Data] --> B[Talent Sources]
+    B --> C[EA Ratings CSV]
+    B --> D[Mock Draft Data]
+    B --> E[Depth Charts JSON]
+    B --> F[Previous Stats]
+    C --> G[Unified Projection Engine]
+    D --> G
+    E --> G
+    F --> G
+    G --> H[Talent Multiplier]
+    H --> I[Base Projection]
+    I --> J[Final Fantasy Points]
+    J --> K[Store in DB]
+    K --> L[Draft Interface]
 ```
 
-**Calculation Factors:**
-- EA rating (60-99 scale)
-- Previous season stats
-- Depth chart position
-- Strength of schedule
-- Conference multipliers
+**Enhanced Calculation Factors:**
+- **EA Sports Ratings** (15% weight): Overall, speed, acceleration from real game data
+- **NFL Draft Capital** (20% weight): Mock draft position converted to 0-1 score
+- **Previous Performance** (25% weight): Fantasy points per game from prior season
+- **Supporting Cast** (15% weight): Average EA rating of skill position teammates
+- **Offensive Line** (10% weight): O-line grades for QB/RB protection
+- **Expert Sentiment** (10% weight): ESPN+ article analysis with OpenAI
+- **Depth Chart Position**: Multipliers (QB1=1.0x, QB2=0.25x, QB3+=0.05x)
+- **Talent Range**: Final multipliers span 0.95x to 1.44x instead of identical projections
 
 ### 6. Search & Filter Flow
 ```mermaid
