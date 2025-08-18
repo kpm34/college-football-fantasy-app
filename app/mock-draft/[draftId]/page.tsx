@@ -1,7 +1,7 @@
 // app/draft/[draftId]/page.tsx
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { subscribeToDraft } from '@/lib/realtime/draft';
+import { useDraftCoreMock } from '@/lib/draft/core';
 import Link from 'next/link';
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
@@ -26,8 +26,6 @@ type ResultsResp = { draft: any; participants: any[]; picks: any[] };
 
 export default function DraftPage({ params }: { params: { draftId: string } }) {
   const draftId = params.draftId;
-  const [results, setResults] = useState<ResultsResp | null>(null);
-  const [turn, setTurn] = useState<TurnResp['turn'] | null>(null);
   const [me, setMe] = useState<{ participantId?: string; slot?: number }>({});
   const [players, setPlayers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -52,19 +50,10 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
     }
   }
 
-  async function refreshAll() {
-    try {
-      const r = await api<ResultsResp>(`/api/mock-draft/results/${draftId}`);
-      setResults(r);
-      const t = await api<TurnResp>(`/api/mock-draft/turn/${draftId}`);
-      if (t.ok) setTurn(t.turn!);
-    } catch (e: any) {
-      console.error('Failed to refresh:', e);
-    }
-  }
+  const draftCore = useDraftCoreMock(draftId);
 
   useEffect(() => {
-    refreshAll();
+    draftCore.refresh();
     // Load available players from your existing endpoint
     fetch('/api/draft/players')
       .then(res => res.json())
@@ -72,12 +61,11 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
       .catch(() => setPlayers([]));
     
     // Subscribe to realtime updates
-    unsubRef.current = subscribeToDraft(draftId, () => refreshAll());
+    // Realtime handled in draft core mock
     
     // Poll for turn updates
     const poll = setInterval(() => {
-      api<TurnResp>(`/api/mock-draft/turn/${draftId}`)
-        .then(t => t.ok && setTurn(t.turn!))
+      draftCore.refresh()
         .catch(() => {});
     }, 3000);
     
@@ -87,12 +75,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
     };
   }, [draftId]);
 
-  const secondsLeft = useMemo(() => {
-    if (!turn) return null;
-    const now = Date.now();
-    const deadline = new Date(turn.deadlineAt).getTime();
-    return Math.max(0, Math.floor((deadline - now) / 1000));
-  }, [turn?.deadlineAt]);
+  const secondsLeft = useMemo(() => null, []);
 
   // Recompute seconds left every second
   useEffect(() => {
@@ -110,16 +93,10 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
 
   async function draftPlayer(playerId: string) {
     if (!me.participantId) return alert('Join first');
-    if (!turn || turn.participantId !== me.participantId) return alert('Not your turn');
     
     try {
       setLoading(true);
-      await api('/api/mock-draft/pick', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ draftId, participantId: me.participantId, playerId })
-      });
-      await refreshAll();
+      await draftCore.makePick({ playerId, participantId: me.participantId });
     } catch (e: any) {
       alert('Failed to draft player: ' + e.message);
     } finally {
@@ -128,7 +105,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
   }
 
   // Filter out already drafted players
-  const pickedPlayerIds = new Set(results?.picks?.map(p => p.playerId) || []);
+  const pickedPlayerIds = new Set(draftCore.picks?.map((p: any) => p.playerId) || []);
   const availablePlayers = players.filter(p => !pickedPlayerIds.has(p.id || p.$id));
 
   return (
