@@ -167,7 +167,7 @@ export class StatsInferenceAdapter extends BaseAdapter<StatsInferenceRecord> {
 
       const response = await databases.listDocuments(
         DATABASE_ID,
-        COLLECTIONS.PLAYER_STATS || 'player_stats',
+        COLLECTIONS.playerStats,
         queries
       );
 
@@ -432,7 +432,7 @@ export class StatsInferenceAdapter extends BaseAdapter<StatsInferenceRecord> {
 
       const response = await databases.listDocuments(
         DATABASE_ID,
-        COLLECTIONS.PLAYER_STATS || 'player_stats',
+        COLLECTIONS.playerStats,
         queries
       );
 

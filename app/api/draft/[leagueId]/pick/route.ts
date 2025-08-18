@@ -121,7 +121,7 @@ export const POST = withErrorHandler(async (
 
   const draftPick = await databases.createDocument(
     env.server.appwrite.databaseId,
-    'draft_picks',
+    env.client.collections.draftPicks,
     ID.unique(),
     {
       leagueId,
