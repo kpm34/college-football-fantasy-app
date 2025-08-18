@@ -21,9 +21,16 @@ __pycache__/
 .DS_Store
 
 # Documentation
-*.md
-!README.md
-docs/
+# Allow markdown and docs for in-app documentation pages
+# *.md
+# !README.md
+# docs/
+
+# Explicitly include component docs
+!components/docs/**
+!app/documentation/**
+!docs/DATA_FLOW.md
+!docs/PROJECT_MAP.md
 
 # Git
 .git/
