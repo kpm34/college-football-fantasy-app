@@ -82,6 +82,42 @@ function getUsageRate(pos: Position, pri: any): number {
   return pri.snap_share ?? 1.0;
 }
 
+function getDepthChartMultiplier(pos: Position, posRank: number): number {
+  // Apply position-specific depth chart multipliers
+  if (pos === 'QB') {
+    // QBs have the steepest dropoff
+    if (posRank === 1) return 1.0;  // Starter gets full usage
+    if (posRank === 2) return 0.25; // Backup gets 25%
+    return 0.05; // 3rd string and below get 5%
+  }
+  
+  if (pos === 'RB') {
+    // RBs have more gradual dropoff due to rotation
+    if (posRank === 1) return 1.0;  // RB1
+    if (posRank === 2) return 0.65; // RB2 gets good carries
+    if (posRank === 3) return 0.35; // RB3 in rotation
+    return 0.15; // Deep depth
+  }
+  
+  if (pos === 'WR') {
+    // WRs have moderate dropoff, multiple can be fantasy relevant
+    if (posRank === 1) return 1.0;  // WR1
+    if (posRank === 2) return 0.85; // WR2 still very relevant
+    if (posRank === 3) return 0.60; // WR3 decent usage
+    if (posRank === 4) return 0.35; // WR4 situational
+    return 0.15; // WR5+
+  }
+  
+  if (pos === 'TE') {
+    // TEs similar to WRs but steeper dropoff
+    if (posRank === 1) return 1.0;  // TE1
+    if (posRank === 2) return 0.50; // TE2 gets some usage
+    return 0.20; // TE3+
+  }
+  
+  return 1.0; // Default fallback
+}
+
 async function main() {
   assertServerEnv();
   const seasonArg = process.argv.find((a) => a.startsWith('--season='));
@@ -126,8 +162,13 @@ async function main() {
       const priArr = (usagePriors?.[teamId] as any)?.[posKey] as any[] | undefined;
       for (const p of arr) {
         const pri = priArr?.find((x) => (x.player_name || '').trim().toLowerCase() === (p.player_name || '').trim().toLowerCase());
-        const usage_rate = getUsageRate(posKey, pri);
+        let usage_rate = getUsageRate(posKey, pri);
         if (usage_rate < 0.05) continue;
+        
+        // Apply depth chart multipliers to usage rate based on pos_rank
+        const depthMultiplier = getDepthChartMultiplier(posKey, p.pos_rank || 1);
+        usage_rate = usage_rate * depthMultiplier;
+        
         const effScalar = oppScalarFromOffZ(offZ);
         const injKey = findEAKey(ea, p.player_name, teamId, posKey);
         const injNorm = injKey && ea[injKey]?.inj?.norm ? Number(ea[injKey].inj.norm) : 0.5;
@@ -153,6 +194,7 @@ async function main() {
       statline_simple_json: JSON.stringify(stat),
       fantasy_points_simple: Number(points.toFixed(1)),
       position: c.pos,
+      model_version: 'v2_depth_fixed'
     });
     results.push({ key: `${c.player_name}|${c.teamId}|${c.pos}`, points: Number(points.toFixed(1)) });
   }
@@ -236,7 +278,7 @@ async function upsertYearly(databases: Databases, dbId: string, playerId: string
     const id = existing.documents[0].$id as string;
     await databases.updateDocument(dbId, 'projections_yearly', id, data);
   } else {
-    await databases.createDocument(dbId, 'projections_yearly', ID.unique(), { player_id: playerId, season, position: data.position, ...data });
+    await databases.createDocument(dbId, 'projections_yearly', ID.unique(), { player_id: playerId, season, ...data });
   }
 }
 

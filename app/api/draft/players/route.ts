@@ -267,20 +267,72 @@ export async function GET(request: NextRequest) {
         draftable: player.draftable !== false,
         rating: rating,
         // Comprehensive projections from database
-        projections: {
-          season: {
-            total: fantasyPoints,
-            passing: player.passing_projection || 0,
-            rushing: player.rushing_projection || 0,
-            receiving: player.receiving_projection || 0,
-            touchdowns: player.td_projection || 0,
-            fieldGoals: player.field_goals_projection || 0,
-            extraPoints: player.extra_points_projection || 0
-          },
-          perGame: {
-            points: (fantasyPoints / 12).toFixed(1)
+        projections: (() => {
+          // Parse statline from projection pipeline if available
+          let statline: any = {};
+          try {
+            if (player.statline_simple_json) {
+              statline = JSON.parse(player.statline_simple_json);
+            }
+          } catch {}
+          
+          // If no detailed statline, generate reasonable estimates based on position and points
+          if (!statline.pass_yards && !statline.rush_yards && !statline.rec_yards && fantasyPoints > 0) {
+            if (position === 'QB') {
+              const passYards = Math.round(fantasyPoints * 6.25); // ~250 pass yards per 40 pts
+              const passTDs = Math.round(fantasyPoints / 20); // ~1 TD per 20 pts
+              const rushYards = Math.round(fantasyPoints * 0.5); // Some rushing yards
+              statline = {
+                pass_yards: passYards,
+                pass_tds: passTDs,
+                rush_yards: rushYards,
+                rush_tds: Math.round(passTDs * 0.2),
+                rec_yards: 0,
+                rec_tds: 0,
+                receptions: 0
+              };
+            } else if (position === 'RB') {
+              const rushYards = Math.round(fantasyPoints * 5); // ~100 rush yards per 20 pts
+              const rushTDs = Math.round(fantasyPoints / 30); // ~1 TD per 30 pts
+              statline = {
+                pass_yards: 0,
+                pass_tds: 0,
+                rush_yards: rushYards,
+                rush_tds: rushTDs,
+                rec_yards: Math.round(fantasyPoints * 2),
+                rec_tds: Math.round(rushTDs * 0.3),
+                receptions: Math.round(fantasyPoints / 8)
+              };
+            } else if (position === 'WR' || position === 'TE') {
+              const recYards = Math.round(fantasyPoints * 4); // ~80 rec yards per 20 pts
+              const receptions = Math.round(fantasyPoints / 3); // ~6-7 catches per 20 pts
+              statline = {
+                pass_yards: 0,
+                pass_tds: 0,
+                rush_yards: position === 'WR' ? Math.round(fantasyPoints * 0.2) : 0,
+                rush_tds: 0,
+                rec_yards: recYards,
+                rec_tds: Math.round(fantasyPoints / 35),
+                receptions: receptions
+              };
+            }
           }
-        },
+          
+          return {
+            season: {
+              total: fantasyPoints,
+              passing: statline.pass_yards || 0,
+              rushing: statline.rush_yards || 0,
+              receiving: statline.rec_yards || 0,
+              touchdowns: (statline.pass_tds || 0) + (statline.rush_tds || 0) + (statline.rec_tds || 0),
+              fieldGoals: 0,
+              extraPoints: 0
+            },
+            perGame: {
+              points: (fantasyPoints / 12).toFixed(1)
+            }
+          };
+        })(),
         // Additional stats for better context
         prevSeasonStats: {
           games: player.games_played || 0,
