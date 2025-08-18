@@ -2,14 +2,36 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function AdminDashboard() {
+  const { user, loading } = useAuth();
   const [subscriptions, setSubscriptions] = useState({
     appwrite: { status: 'Pro', features: 'Unlimited functions, 100GB storage, priority support' },
     vercel: { status: 'Pro', features: 'Advanced analytics, unlimited functions, team collaboration' },
     claude: { status: 'Pro', features: 'Deep reasoning, 5x usage, priority access' },
     gpt: { status: 'Max', features: 'Long context, vision capabilities, fastest response' },
   });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center">
+        <div className="text-white/80">Loading…</div>
+      </div>
+    );
+  }
+
+  if (!user || (user.email || '').toLowerCase() !== 'kashpm2002@gmail.com') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center">
+        <div className="text-center text-white/90">
+          <div className="text-2xl font-bold mb-2">Unauthorized</div>
+          <div className="text-white/70 mb-6">This dashboard is restricted to administrators.</div>
+          <Link href="/" className="text-blue-300 hover:text-blue-200 underline">Return Home</Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
@@ -62,13 +84,6 @@ export default function AdminDashboard() {
         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 mb-8">
           <h2 className="text-2xl font-bold text-white mb-6">🗄️ Database Management</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <button 
-              onClick={() => fetch('/api/admin/players/refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ season: 2025 }) }).then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)))}
-              className="block p-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg hover:opacity-90 transition-opacity"
-            >
-              <h3 className="font-semibold text-white">🔄 Refresh Players</h3>
-              <p className="text-sm text-gray-200 mt-1">Update with 2025 CFBD data</p>
-            </button>
             <button
               onClick={() => fetch('/api/admin/dedupe/players', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ dryRun: false, limit: 5000 }) }).then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)))}
               className="block p-4 bg-gradient-to-r from-red-600 to-pink-600 rounded-lg hover:opacity-90 transition-opacity"
@@ -131,14 +146,7 @@ export default function AdminDashboard() {
               <h3 className="font-semibold text-white">Sync Status</h3>
               <p className="text-sm text-gray-200 mt-1">Vercel-Appwrite Health</p>
             </Link>
-            <Link href="/admin/cache-status" className="block p-4 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg hover:opacity-90 transition-opacity">
-              <h3 className="font-semibold text-white">Cache Status</h3>
-              <p className="text-sm text-gray-200 mt-1">Vercel KV Statistics</p>
-            </Link>
-            <Link href="/admin/sec-survey" className="block p-4 bg-gradient-to-r from-red-600 to-rose-700 rounded-lg hover:opacity-90 transition-opacity">
-              <h3 className="font-semibold text-white">SEC NFL Survey</h3>
-              <p className="text-sm text-gray-200 mt-1">Find NFL/graduated SEC players</p>
-            </Link>
+            {/* Removed non-existent cache status and SEC survey per request */}
             <button 
               onClick={() => {
                 const id = prompt('Enter League or Roster ID to delete for testing:');
@@ -156,10 +164,7 @@ export default function AdminDashboard() {
               <h3 className="font-semibold text-white">🧪 Test Real-time</h3>
               <p className="text-sm text-gray-200 mt-1">Delete league/roster for testing</p>
             </button>
-            <button className="p-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg hover:opacity-90 transition-opacity">
-              <h3 className="font-semibold text-white">Launch Beta</h3>
-              <p className="text-sm text-gray-200 mt-1">Open to first 100 users</p>
-            </button>
+            {/* Removed Launch Beta placeholder */}
           </div>
         </div>
 
