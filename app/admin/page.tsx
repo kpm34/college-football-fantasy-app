@@ -2,10 +2,14 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { MermaidRenderer } from '@/components/docs/MermaidRenderer'
 import { useAuth } from '@/hooks/useAuth';
 
 export default function AdminDashboard() {
   const { user, loading } = useAuth();
+  const [showDiagram, setShowDiagram] = useState<null | { slug: 'data-flow' | 'project-map'; title: string }>(null)
+  const [charts, setCharts] = useState<string[]>([])
+  const [lastUpdated, setLastUpdated] = useState<string>('')
   const [subscriptions, setSubscriptions] = useState({
     appwrite: { status: 'Pro', features: 'Unlimited functions, 100GB storage, priority support' },
     vercel: { status: 'Pro', features: 'Advanced analytics, unlimited functions, team collaboration' },
@@ -39,18 +43,32 @@ export default function AdminDashboard() {
         <h1 className="text-4xl font-bold text-white mb-6">Admin Dashboard - Product Vision 2025</h1>
         {/* Quick Diagram Links (always visible at top) */}
         <div className="mb-10 flex flex-wrap gap-3">
-          <Link
-            href="/documentation/project-map"
-            className="px-4 py-2 rounded-lg bg-indigo-600/70 hover:bg-indigo-600 text-white transition-colors"
+          <button
+            onClick={async () => {
+              setShowDiagram({ slug: 'project-map', title: 'Project Map' })
+              const res = await fetch('/api/docs/mermaid/project-map')
+              const data = await res.json()
+              setCharts(data.charts || [])
+              setLastUpdated(data.updatedAt || '')
+            }}
+            className="px-4 py-2 rounded-lg bg-indigo-500 text-white transition-colors hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-white/80"
+            aria-label="View Project Map diagrams"
           >
-            📘 View Project Map (Mermaid)
-          </Link>
-          <Link
-            href="/documentation/data-flow"
-            className="px-4 py-2 rounded-lg bg-teal-600/70 hover:bg-teal-600 text-white transition-colors"
+            📘 View Project Map (Inline)
+          </button>
+          <button
+            onClick={async () => {
+              setShowDiagram({ slug: 'data-flow', title: 'Data Flow' })
+              const res = await fetch('/api/docs/mermaid/data-flow')
+              const data = await res.json()
+              setCharts(data.charts || [])
+              setLastUpdated(data.updatedAt || '')
+            }}
+            className="px-4 py-2 rounded-lg bg-teal-500 text-white transition-colors hover:bg-teal-400 focus:outline-none focus:ring-2 focus:ring-white/80"
+            aria-label="View Data Flow diagrams"
           >
-            🔄 View Data Flow (Mermaid)
-          </Link>
+            🔄 View Data Flow (Inline)
+          </button>
         </div>
         
         {/* Premium Subscriptions Status */}
@@ -240,6 +258,30 @@ export default function AdminDashboard() {
           </Link>
         </div>
       </div>
+
+      {showDiagram && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
+          <div className="w-full max-w-5xl bg-gray-900 text-white rounded-xl border border-white/20 shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-gray-800 to-gray-700">
+              <div>
+                <h3 className="text-xl font-semibold">{showDiagram.title} (Mermaid)</h3>
+                {lastUpdated && <p className="text-xs text-gray-300">Last updated: {new Date(lastUpdated).toLocaleString()}</p>}
+              </div>
+              <button onClick={() => setShowDiagram(null)} className="px-3 py-1.5 rounded-md bg-white text-gray-900 font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/80" aria-label="Close diagram">Close</button>
+            </div>
+            <div className="max-h-[70vh] overflow-auto p-6 bg-black">
+              {/* High-contrast container for readability */}
+              {charts.length > 0 ? (
+                <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
+                  <MermaidRenderer charts={charts} />
+                </div>
+              ) : (
+                <div className="text-gray-200">No diagrams found.</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
