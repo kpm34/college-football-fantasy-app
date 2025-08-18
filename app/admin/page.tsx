@@ -36,7 +36,22 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-white mb-8">Admin Dashboard - Product Vision 2025</h1>
+        <h1 className="text-4xl font-bold text-white mb-6">Admin Dashboard - Product Vision 2025</h1>
+        {/* Quick Diagram Links (always visible at top) */}
+        <div className="mb-10 flex flex-wrap gap-3">
+          <Link
+            href="/docs/project-map"
+            className="px-4 py-2 rounded-lg bg-indigo-600/70 hover:bg-indigo-600 text-white transition-colors"
+          >
+            📘 View Project Map (Mermaid)
+          </Link>
+          <Link
+            href="/docs/data-flow"
+            className="px-4 py-2 rounded-lg bg-teal-600/70 hover:bg-teal-600 text-white transition-colors"
+          >
+            🔄 View Data Flow (Mermaid)
+          </Link>
+        </div>
         
         {/* Premium Subscriptions Status */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
