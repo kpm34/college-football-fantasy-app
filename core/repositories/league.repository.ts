@@ -192,7 +192,7 @@ export class LeagueRepository extends BaseRepository<League> {
     };
 
     // Schema validation for roster data
-    const rosterValidation = SchemaValidator.validate('rosters', cleanRosterData);
+    const rosterValidation = SchemaValidator.validate('user_teams', cleanRosterData);
     if (!rosterValidation.success) {
       throw new ValidationError(`Roster creation failed schema validation: ${rosterValidation.errors?.join(', ')}`);
     }
