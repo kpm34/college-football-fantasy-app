@@ -21,7 +21,7 @@ export async function GET(
 
   const fileMap: Record<string, string> = {
     'data-flow': 'docs/DATA_FLOW.md',
-    'project-map': 'docs/PROJECT_MAP.md',
+    'project-map': 'PROJECT_MAP.md',  // Use root PROJECT_MAP.md
     'system-map': 'docs/SYSTEM_MAP.md',
   }
 
@@ -30,9 +30,8 @@ export async function GET(
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
 
-  // Try primary path; on failure or zero charts, fall back to common alternates
+  // No fallback needed since we're using the correct file directly
   const candidates = [rel]
-  if (slug === 'project-map') candidates.push('PROJECT_MAP.md')
 
   for (const candidate of candidates) {
     try {
@@ -43,7 +42,16 @@ export async function GET(
       ])
       const charts = extractMermaidBlocks(content)
       if (charts.length > 0) {
-        return NextResponse.json({ charts, updatedAt: stat.mtime.toISOString(), source: candidate })
+        return NextResponse.json(
+          { charts, updatedAt: stat.mtime.toISOString(), source: candidate },
+          { 
+            headers: {
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache',
+              'Expires': '0'
+            }
+          }
+        )
       }
     } catch {}
   }

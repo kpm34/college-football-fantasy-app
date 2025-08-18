@@ -11,33 +11,33 @@
 
 ```mermaid
 graph TD
-    ROOT[🏠 college-football-fantasy-app]
+    ROOT[college-football-fantasy-app]
     
     %% Core Application
-    ROOT --> APP[📱 app/<br/>Next.js 15 App Router<br/>Pages & API Routes]
-    ROOT --> COMPONENTS[🧩 components/<br/>React Components<br/>UI Library]
-    ROOT --> SCHEMA[📋 schema/<br/>🎯 SINGLE SOURCE OF TRUTH<br/>zod-schema.ts]
+    ROOT --> APP[app/<br/>Next.js 15 App Router<br/>Pages and API Routes]
+    ROOT --> COMPONENTS[components/<br/>React Components<br/>UI Library]
+    ROOT --> SCHEMA[schema/<br/>SINGLE SOURCE OF TRUTH<br/>zod-schema.ts]
     
-    %% Configuration & Services  
-    ROOT --> LIB[⚙️ lib/<br/>Appwrite Clients<br/>Services & Utils]
-    ROOT --> CORE[🔧 core/<br/>Config, Auth<br/>Domain Logic]
-    ROOT --> HOOKS[🪝 hooks/<br/>React Hooks<br/>Realtime Logic]
-    ROOT --> TYPES[📝 types/<br/>TypeScript Types<br/>Shared Interfaces]
+    %% Configuration and Services  
+    ROOT --> LIB[lib/<br/>Appwrite Clients<br/>Services and Utils]
+    ROOT --> CORE[core/<br/>Config, Auth<br/>Domain Logic]
+    ROOT --> HOOKS[hooks/<br/>React Hooks<br/>Realtime Logic]
+    ROOT --> TYPES[types/<br/>TypeScript Types<br/>Shared Interfaces]
     
-    %% Data & Scripts
-    ROOT --> SCRIPTS[📜 scripts/<br/>Migrations, Sync<br/>Validation Guards]
-    ROOT --> DATA[💾 data/<br/>EA Ratings, Mock Drafts<br/>Depth Charts, CSV/JSON]
-    ROOT --> FUNCTIONS[⚡ functions/<br/>Unified Talent Projections<br/>Serverless Code]
+    %% Data and Scripts
+    ROOT --> SCRIPTS[scripts/<br/>Migrations, Sync<br/>Validation Guards]
+    ROOT --> DATA[data/<br/>EA Ratings, Mock Drafts<br/>Depth Charts, CSV/JSON]
+    ROOT --> FUNCTIONS[functions/<br/>Unified Talent Projections<br/>Serverless Code]
     
-    %% Documentation & Deployment
-    ROOT --> DOCS[📚 docs/<br/>Documentation<br/>Project Memory]
-    ROOT --> VENDOR[📦 vendor/<br/>Submodules<br/>3D Assets]
+    %% Documentation and Deployment
+    ROOT --> DOCS[docs/<br/>Documentation<br/>Project Memory]
+    ROOT --> VENDOR[vendor/<br/>Submodules<br/>3D Assets]
     
     %% Key Files Detail
-    SCHEMA --> SSOT[🎯 zod-schema.ts<br/>Collections, Types<br/>Validation Rules]
-    LIB --> FRONTEND[🌐 appwrite.ts<br/>Frontend Client<br/>Session Auth]
-    LIB --> BACKEND[🔧 appwrite-server.ts<br/>Server Client<br/>API Key Auth]
-    SCRIPTS --> GUARDS[🛡️ guards/<br/>Build Validation<br/>Schema Drift Prevention]
+    SCHEMA --> SSOT[zod-schema.ts<br/>Collections, Types<br/>Validation Rules]
+    LIB --> FRONTEND[appwrite.ts<br/>Frontend Client<br/>Session Auth]
+    LIB --> BACKEND[appwrite-server.ts<br/>Server Client<br/>API Key Auth]
+    SCRIPTS --> GUARDS[guards/<br/>Build Validation<br/>Schema Drift Prevention]
     
     %% Styling
     style SCHEMA fill:#fff2cc,stroke:#d6b656,stroke-width:4px,color:#000000
@@ -123,14 +123,14 @@ graph TB
     
     %% Data Flow Connections
     
-    %% External → SSOT → Database
+    %% External to SSOT to Database
     CFBD -->|Daily Sync| SSOT_SCHEMA
     ESPN -->|Live Updates| SSOT_SCHEMA
     SSOT_SCHEMA --> COLLECTIONS
     SSOT_SCHEMA --> TYPES
     SSOT_SCHEMA --> VALIDATION
     
-    %% SSOT → Database Schema
+    %% SSOT to Database Schema
     COLLECTIONS --> PLAYERS
     COLLECTIONS --> TEAMS
     COLLECTIONS --> GAMES
@@ -138,13 +138,13 @@ graph TB
     COLLECTIONS --> USER_TEAMS
     COLLECTIONS --> MOCK_DRAFTS
     
-    %% Database → API Routes
+    %% Database to API Routes
     PLAYERS --> API_PLAYERS
     LEAGUES --> API_LEAGUES
     MOCK_DRAFTS --> API_MOCK
     DRAFT_PICKS --> API_DRAFT
     
-    %% API → Frontend
+    %% API to Frontend
     API_PLAYERS --> DRAFT_UI
     API_LEAGUES --> LEAGUE_UI
     API_MOCK --> MOCK_DRAFT_UI
