@@ -14,7 +14,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (!set) {
       const existing = Number(await kv.get(lockKey)) || 0;
       if (now - existing < 3000) {
-        return NextResponse.json({ error: 'Draft is locked. Try again.' }, { status: 429 });
+        return NextResponse.json({ error: 'Another pick in progress' }, { status: 409 });
       }
     }
     await kv.expire(lockKey, 3);
