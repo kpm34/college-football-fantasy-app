@@ -269,7 +269,7 @@ export default function AdminDashboard() {
               </div>
               <button onClick={() => setShowDiagram(null)} className="px-3 py-1.5 rounded-md bg-white text-gray-900 font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/80" aria-label="Close diagram">Close</button>
             </div>
-            <div className="max-h-[70vh] overflow-auto p-6 bg-black">
+            <div className="max-h-[70vh] overflow-auto p-6 bg-gray-950">
               {/* High-contrast container for readability */}
               {charts.length > 0 ? (
                 <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
