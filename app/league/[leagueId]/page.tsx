@@ -15,9 +15,8 @@ import { InviteModal } from "@/components/league/InviteModal";
 interface League {
   $id: string;
   name: string;
-  commissioner: string;
-  commissionerId: string;
-  commissionerEmail?: string;
+  commissioner: string; // User ID of commissioner
+  commissionerName?: string; // Commissioner display name
   season: number;
   scoringType: string;
   maxTeams: number;
@@ -158,12 +157,26 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       } else {
         const data = await res.json();
         const l = data.league;
+        
+        // Get commissioner name if we have commissioner ID
+        let commissionerName = 'Unknown Commissioner';
+        if (l.commissioner) {
+          try {
+            const nameRes = await fetch(`/api/users/${l.commissioner}/name`, { cache: 'no-store' });
+            if (nameRes.ok) {
+              const nameData = await nameRes.json();
+              commissionerName = nameData.name;
+            }
+          } catch (error) {
+            console.error('Failed to fetch commissioner name:', error);
+          }
+        }
+        
         mapped = {
           $id: l.id,
           name: l.name,
-          commissioner: l.commissioner || l.commissionerId || l.userId,
-          commissionerId: l.commissioner || l.commissionerId || l.userId,
-          commissionerEmail: l.commissionerEmail,
+          commissioner: l.commissioner, // Always use the primary field
+          commissionerName,
           season: l.seasonStartWeek ? new Date().getFullYear() : (l.season || new Date().getFullYear()),
           scoringType: 'PPR',
           maxTeams: l.maxTeams || 12,
@@ -317,7 +330,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               <tr key={team.$id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                 <td className="py-4 px-6">
                   <span className="font-semibold">{team.name}</span>
-                  {team.userId === league?.commissionerId && (
+                  {team.userId === league?.commissioner && (
                     <span className="ml-2 text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Commissioner</span>
                   )}
                 </td>
@@ -812,9 +825,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                 <div>
                   <p className="text-sm" style={{ color: leagueColors.text.muted }}>Commissioner</p>
                   <p className="font-semibold">
-                    {teams.find(t => t.userId === league?.commissioner)?.userName || 
-                     teams.find(t => t.userId === league?.commissionerId)?.userName || 
-                     league?.commissioner}
+                    {league?.commissionerName || 'Loading...'}
                   </p>
                 </div>
                 <div>
