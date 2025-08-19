@@ -187,7 +187,8 @@ export async function PUT(
       'name', 'maxTeams', 'isPublic', 'draftDate', 'pickTimeSeconds',
       'orderMode', 'gameMode', 'selectedConference', 'scoringRules',
       'draftType', 'seasonStartWeek', 'playoffTeams', 'playoffStartWeek',
-      'waiverType', 'waiverBudget'
+      'waiverType', 'waiverBudget', 'primaryColor', 'secondaryColor',
+      'leagueTrophyName', 'scoringType', 'tradeDeadline', 'rosterSize'
     ]);
     const leagueKeys = new Set(Object.keys(league as any));
     const safePayload: Record<string, any> = {};
@@ -196,6 +197,8 @@ export async function PUT(
         safePayload[k] = v;
       }
     }
+
+    console.log('Updating league with payload:', JSON.stringify(safePayload, null, 2));
 
     // Update league with filtered settings
     const result = await databases.updateDocument(

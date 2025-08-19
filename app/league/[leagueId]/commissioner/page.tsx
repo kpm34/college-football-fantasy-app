@@ -223,19 +223,22 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       const response = await fetch(`/api/leagues/${params.leagueId}/commissioner`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ draftDate: draftDateTime, pickTimeSeconds })
       });
       
+      const result = await response.json();
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to update draft settings');
+        throw new Error(result.error || 'Failed to update draft settings');
       }
       
+      console.log('Draft settings saved:', result);
       setSavedMessage('Draft settings saved!');
       setTimeout(() => setSavedMessage(''), 3000);
-    } catch (error) {
+      setTimeout(() => loadSettings(), 1000);
+    } catch (error: any) {
       console.error('Error saving draft settings:', error);
-      alert('Failed to save draft settings');
+      alert(`Failed to save draft settings: ${error.message}`);
     } finally {
       setSaving(false);
     }
@@ -248,19 +251,22 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       const response = await fetch(`/api/leagues/${params.leagueId}/commissioner`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ scoringRules: JSON.stringify(scoringRules) })
       });
       
+      const result = await response.json();
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to save scoring rules');
+        throw new Error(result.error || 'Failed to save scoring rules');
       }
       
+      console.log('Scoring rules saved:', result);
       setSavedMessage('Scoring rules saved!');
       setTimeout(() => setSavedMessage(''), 3000);
-    } catch (error) {
+      setTimeout(() => loadSettings(), 1000);
+    } catch (error: any) {
       console.error('Error saving scoring rules:', error);
-      alert('Failed to save scoring rules');
+      alert(`Failed to save scoring rules: ${error.message}`);
     } finally {
       setSaving(false);
     }
@@ -292,22 +298,33 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       }
       updates.pickTimeSeconds = pickTimeSeconds;
       
+      console.log('Saving settings with updates:', updates);
+      
       const response = await fetch(`/api/leagues/${params.leagueId}/commissioner`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include', // Ensure cookies are sent
         body: JSON.stringify(updates)
       });
       
+      const result = await response.json();
+      
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to save settings');
+        console.error('Save failed:', result);
+        throw new Error(result.error || 'Failed to save settings');
       }
       
+      console.log('Settings saved successfully:', result);
       setSavedMessage('All settings saved successfully!');
       setTimeout(() => setSavedMessage(''), 3000);
-    } catch (error) {
+      
+      // Reload settings to confirm they were saved
+      setTimeout(() => loadSettings(), 1000);
+    } catch (error: any) {
       console.error('Error saving settings:', error);
-      alert('Failed to save settings');
+      alert(`Failed to save settings: ${error.message}`);
     } finally {
       setSaving(false);
     }

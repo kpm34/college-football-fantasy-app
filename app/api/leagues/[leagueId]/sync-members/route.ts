@@ -12,6 +12,13 @@ export async function POST(
   try {
     const { leagueId } = params;
 
+    // Get the league first to check maxTeams
+    const league = await databases.getDocument(
+      DATABASE_ID,
+      COLLECTIONS.LEAGUES,
+      leagueId
+    );
+
     // Get all rosters for this league
     const rosters = await databases.listDocuments(
       DATABASE_ID,
@@ -19,34 +26,44 @@ export async function POST(
       [Query.equal('leagueId', leagueId), Query.limit(100)]
     );
 
-    // Extract user IDs from rosters
-    const memberIds = rosters.documents.map((roster: any) => roster.userId);
-    const currentTeams = memberIds.length;
+    // Extract user IDs from rosters (actual count)
+    const memberIds = rosters.documents.map((roster: any) => roster.userId).filter(Boolean);
+    const actualTeamCount = rosters.total || rosters.documents.length;
+    const maxTeams = (league as any).maxTeams || 12;
 
-    console.log(`Syncing league ${leagueId}: Found ${currentTeams} rosters`);
-    console.log('Member IDs:', memberIds);
+    console.log(`Syncing league ${leagueId}: Found ${actualTeamCount} rosters`);
+    console.log(`Max teams: ${maxTeams}, Current stored: ${(league as any).currentTeams}`);
 
-    // Update league with correct member data
+    // Determine correct status based on actual count
+    const newStatus = actualTeamCount >= maxTeams ? 'full' : 'open';
+
+    // Update league with correct member data and status
     const updatedLeague = await databases.updateDocument(
       DATABASE_ID,
       COLLECTIONS.LEAGUES,
       leagueId,
       {
         members: memberIds,
-        currentTeams: currentTeams
+        currentTeams: actualTeamCount,
+        status: newStatus
       }
     );
 
     return NextResponse.json({
       success: true,
-      message: `Synced ${currentTeams} members`,
+      message: `Synced ${actualTeamCount} members, status: ${newStatus}`,
       before: {
-        members: updatedLeague.members?.length || 0
+        members: (league as any).members?.length || 0,
+        currentTeams: (league as any).currentTeams,
+        status: (league as any).status
       },
       after: {
-        members: currentTeams,
-        memberIds: memberIds
-      }
+        members: actualTeamCount,
+        currentTeams: actualTeamCount,
+        status: newStatus,
+        maxTeams: maxTeams
+      },
+      wasFixed: (league as any).currentTeams !== actualTeamCount
     });
 
   } catch (error: any) {
