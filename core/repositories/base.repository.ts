@@ -196,12 +196,11 @@ export abstract class BaseRepository<T extends Models.Document> {
 
       // Create document with retry on rare duplicate-ID collisions
       let lastError: any | null = null;
+      const generateRandomId = (): string => randomUUID().replace(/-/g, '').slice(0, 20);
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
-          // Use SDK unique ID on first attempt; fallback to UUID on rare collision
-          const idToUse = attempt === 0
-            ? (this.isServer ? ServerID : ClientID).unique()
-            : randomUUID().replace(/-/g, '').slice(0, 36);
+          // Always provide a pre-generated random ID to avoid any ambiguity around 'unique()' token handling
+          const idToUse = generateRandomId();
 
           console.log(`[Repository] create ${this.collectionId} attempt=${attempt + 1} id=${idToUse}`);
 
