@@ -14,9 +14,7 @@ interface InviteModalProps {
 export function InviteModal({ isOpen, onClose, leagueId, leagueName }: InviteModalProps) {
   const [inviteLinks, setInviteLinks] = useState<{
     direct: string;
-    withCode: string | null;
   } | null>(null);
-  const [inviteCode, setInviteCode] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
   const [email, setEmail] = useState('');
@@ -36,7 +34,6 @@ export function InviteModal({ isOpen, onClose, leagueId, leagueName }: InviteMod
       
       if (response.ok && data.success) {
         setInviteLinks(data.links);
-        setInviteCode(data.league.inviteCode || '');
       }
     } catch (error) {
       console.error('Failed to fetch invite links:', error);
@@ -111,27 +108,6 @@ export function InviteModal({ isOpen, onClose, leagueId, leagueName }: InviteMod
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Invite Code */}
-            {inviteCode && (
-              <div className="bg-[#5E2B8A]/10 rounded-lg p-4">
-                <h3 className="text-lg font-semibold text-[#5E2B8A] mb-2">
-                  League Invite Code
-                </h3>
-                <div className="flex items-center justify-between bg-white rounded-lg p-3">
-                  <span className="text-2xl font-mono font-bold text-[#5E2B8A]">
-                    {inviteCode}
-                  </span>
-                  <button
-                    onClick={() => copyToClipboard(inviteCode, 'code')}
-                    className="flex items-center gap-2 px-3 py-1 bg-[#5E2B8A] text-white rounded-lg hover:bg-[#8A5EAA] transition-colors"
-                  >
-                    {copiedLink === 'code' ? <Check size={16} /> : <Copy size={16} />}
-                    Copy
-                  </button>
-                </div>
-              </div>
-            )}
-
             {/* Direct Link */}
             {inviteLinks?.direct && (
               <div>
@@ -196,7 +172,6 @@ export function InviteModal({ isOpen, onClose, leagueId, leagueName }: InviteMod
             <div className="text-sm text-gray-600 space-y-1">
               <p className="font-semibold">How to invite players:</p>
               <ul className="list-disc list-inside space-y-1">
-                <li>Share the invite code for quick access</li>
                 <li>Send the direct link via text or social media</li>
                 <li>Email invites directly from here</li>
               </ul>

@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     const user = await userRes.json();
     
     // Parse request body
-    const { leagueId, password, teamName, inviteCode } = await request.json();
+    const { leagueId, password, teamName } = await request.json();
     
     if (!leagueId) {
       return NextResponse.json({ error: 'League ID is required' }, { status: 400 });
@@ -72,13 +72,11 @@ export async function POST(request: NextRequest) {
     const isPrivate = league.isPublic === false || !!league.password;
     
     if (isPrivate) {
-      // Check invite code first
-      if (inviteCode && league.inviteCode && inviteCode === league.inviteCode) {
-        // Valid invite code, proceed
-      } else if (password && league.password && password === league.password) {
+      // Check password for private leagues
+      if (password && league.password && password === league.password) {
         // Valid password, proceed
       } else {
-        return NextResponse.json({ error: 'Invalid password or invite code' }, { status: 403 });
+        return NextResponse.json({ error: 'Invalid password' }, { status: 403 });
       }
     }
     
