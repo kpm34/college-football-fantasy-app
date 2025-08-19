@@ -182,12 +182,26 @@ export async function PUT(
       }
     }
 
-    // Update league with provided settings
+    // Filter payload to only attributes that exist on the document (or are known safe)
+    const knownSafeKeys = new Set([
+      'name', 'maxTeams', 'isPublic', 'draftDate', 'pickTimeSeconds',
+      'orderMode', 'gameMode', 'selectedConference', 'scoringRules',
+      'primaryColor', 'secondaryColor', 'leagueTrophyName', 'draftType'
+    ]);
+    const leagueKeys = new Set(Object.keys(league as any));
+    const safePayload: Record<string, any> = {};
+    for (const [k, v] of Object.entries(payload)) {
+      if (knownSafeKeys.has(k) || leagueKeys.has(k)) {
+        safePayload[k] = v;
+      }
+    }
+
+    // Update league with filtered settings
     const result = await databases.updateDocument(
       DATABASE_ID,
       COLLECTIONS.LEAGUES,
       params.leagueId,
-      payload
+      safePayload
     );
     
     return NextResponse.json({ success: true, league: result });
