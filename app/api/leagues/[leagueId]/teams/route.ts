@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, serverUsers, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
 
 export const runtime = 'nodejs';
@@ -29,21 +29,37 @@ export async function GET(
       [Query.equal('leagueId', leagueId)]
     );
 
-    const teams = rostersResponse.documents.map((r: any) => ({
-      $id: r.$id,
-      leagueId: r.leagueId,
-      userId: r.userId || r.owner || '',
-      name: r.teamName || r.name || 'Team',
-      userName: r.userName,
-      email: r.email,
-      wins: r.wins ?? 0,
-      losses: r.losses ?? 0,
-      ties: r.ties ?? 0,
-      points: r.points ?? r.pointsFor ?? 0,
-      pointsFor: r.pointsFor ?? r.points ?? 0,
-      pointsAgainst: r.pointsAgainst ?? 0,
-      players: r.players
+    // Resolve display names via Appwrite Auth Users to avoid relying on deprecated users collection
+    const uniqueUserIds = Array.from(new Set((rostersResponse.documents || []).map((d: any) => d.userId || d.owner).filter(Boolean)));
+    const idToName = new Map<string, string>();
+    await Promise.all(uniqueUserIds.map(async (uid) => {
+      try {
+        const u: any = await serverUsers.get(uid as string);
+        idToName.set(uid as string, u.name || u.email || 'Unknown');
+      } catch {
+        idToName.set(uid as string, 'Unknown');
+      }
     }));
+
+    const teams = rostersResponse.documents.map((r: any) => {
+      const ownerId = r.userId || r.owner || '';
+      const managerName = idToName.get(ownerId) || r.userName || 'Unknown';
+      return {
+        $id: r.$id,
+        leagueId: r.leagueId,
+        userId: ownerId,
+        name: r.teamName || r.name || 'Team',
+        userName: managerName,
+        email: r.email,
+        wins: r.wins ?? 0,
+        losses: r.losses ?? 0,
+        ties: r.ties ?? 0,
+        points: r.points ?? r.pointsFor ?? 0,
+        pointsFor: r.pointsFor ?? r.points ?? 0,
+        pointsAgainst: r.pointsAgainst ?? 0,
+        players: r.players
+      };
+    });
 
     // Check if user is authenticated to get their team
     let userTeam = null;
