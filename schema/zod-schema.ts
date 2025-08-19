@@ -77,11 +77,15 @@ export const Leagues = z.object({
   currentTeams: z.number().int().min(0).max(32).default(0),
   draftType: z.enum(['snake', 'auction']),
   gameMode: z.enum(['power4', 'sec', 'acc', 'big12', 'bigten']),
+  selectedConference: z.string().max(50).optional(),
   status: z.enum(['open', 'full', 'drafting', 'active', 'complete']).default('open'),
   isPublic: z.boolean().default(true),
   pickTimeSeconds: z.number().int().min(30).max(600).default(90),
   scoringRules: z.string().max(2000).optional(), // JSON string
   draftDate: z.date().optional(),
+  seasonStartWeek: z.number().int().min(1).max(20).optional(),
+  playoffTeams: z.number().int().min(0).max(20).optional(),
+  playoffStartWeek: z.number().int().min(1).max(20).optional(),
   password: z.string().max(50).optional()
 });
 
