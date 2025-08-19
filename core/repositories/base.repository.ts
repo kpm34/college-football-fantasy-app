@@ -195,11 +195,12 @@ export abstract class BaseRepository<T extends Models.Document> {
 
       // Create document with retry on rare duplicate-ID collisions
       let lastError: any | null = null;
+      let idToUse: string = ''; // Move declaration outside try block
+      
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
           // Generate a unique ID - use timestamp + random for extra uniqueness
           const ID = this.isServer ? ServerID : ClientID;
-          let idToUse: string;
           
           if (attempt === 0) {
             // First attempt: use Appwrite's ID.unique()
