@@ -198,9 +198,9 @@ export abstract class BaseRepository<T extends Models.Document> {
       let lastError: any | null = null;
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
-          // Force literal 'unique()' for the first attempt to guarantee server-generated ID
+          // Use SDK unique ID on first attempt; fallback to UUID on rare collision
           const idToUse = attempt === 0
-            ? 'unique()'
+            ? (this.isServer ? ServerID : ClientID).unique()
             : randomUUID().replace(/-/g, '').slice(0, 36);
 
           console.log(`[Repository] create ${this.collectionId} attempt=${attempt + 1} id=${idToUse}`);
