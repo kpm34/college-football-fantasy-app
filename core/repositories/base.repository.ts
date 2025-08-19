@@ -198,9 +198,12 @@ export abstract class BaseRepository<T extends Models.Document> {
       let lastError: any | null = null;
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
+          // Force literal 'unique()' for the first attempt to guarantee server-generated ID
           const idToUse = attempt === 0
-            ? (this.isServer ? ServerID : ClientID).unique()
+            ? 'unique()'
             : randomUUID().replace(/-/g, '').slice(0, 36);
+
+          console.log(`[Repository] create ${this.collectionId} attempt=${attempt + 1} id=${idToUse}`);
 
           const document = await this.databases.createDocument(
             this.databaseId,
