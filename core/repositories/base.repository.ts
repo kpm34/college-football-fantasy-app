@@ -5,7 +5,6 @@
 
 import { Client, Databases, Query, Models, ID as ClientID } from 'appwrite';
 import { Client as ServerClient, Databases as ServerDatabases, ID as ServerID } from 'node-appwrite';
-import { randomUUID } from 'crypto';
 import { env } from '../config/environment';
 import { AppError, NotFoundError, ValidationError } from '../errors/app-error';
 import { SchemaValidator } from '../validation/schema-enforcer';
@@ -196,11 +195,11 @@ export abstract class BaseRepository<T extends Models.Document> {
 
       // Create document with retry on rare duplicate-ID collisions
       let lastError: any | null = null;
-      const generateRandomId = (): string => randomUUID().replace(/-/g, '').slice(0, 20);
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
-          // Always provide a pre-generated random ID to avoid any ambiguity around 'unique()' token handling
-          const idToUse = generateRandomId();
+          // Use Appwrite's ID.unique() for guaranteed unique IDs
+          const ID = this.isServer ? ServerID : ClientID;
+          const idToUse = ID.unique();
 
           console.log(`[Repository] create ${this.collectionId} attempt=${attempt + 1} id=${idToUse}`);
 
