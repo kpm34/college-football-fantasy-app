@@ -1,0 +1,9 @@
+{
+  "name": "import-players",
+  "version": "1.0.0",
+  "description": "Import college players to database",
+  "main": "index.js",
+  "dependencies": {
+    "node-appwrite": "^14.0.0"
+  }
+}
