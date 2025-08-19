@@ -21,8 +21,8 @@ export async function POST(req: Request) {
       Query.limit(100)
     ]);
 
-    // Check if user is already in the draft
-    const already = parts.documents.find(p => p.userId === userId);
+    // Check if user is already in the draft by name
+    const already = parts.documents.find(p => p.name === displayName || p.name === userId);
     if (already) {
       return NextResponse.json({ 
         ok: true, 
@@ -31,11 +31,11 @@ export async function POST(req: Request) {
       });
     }
 
-    // Find an open human slot
-    const open = parts.documents.find(p => p.userType === 'human' && !p.userId);
+    // Find an open slot (slots without a real name)
+    const open = parts.documents.find(p => p.name.startsWith('Bot Team') || p.name.startsWith('Team '));
     if (!open) {
       return NextResponse.json(
-        { ok: false, error: 'No open human slots' }, 
+        { ok: false, error: 'No open slots available' }, 
         { status: 409 }
       );
     }
@@ -46,8 +46,7 @@ export async function POST(req: Request) {
       'mock_draft_participants', 
       open.$id, 
       {
-        userId, 
-        displayName: displayName || open.displayName
+        name: displayName || `User ${userId.slice(0, 8)}`
       }
     );
     

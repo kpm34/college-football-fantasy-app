@@ -704,6 +704,235 @@ const SCHEDULE_DATA: WeekSchedule[] = [
         line: 'TCU -3.5'
       }
     ]
+  },
+  {
+    week: 2,
+    startDate: '2025-09-05',
+    endDate: '2025-09-06',
+    games: [
+      // Friday, September 5, 2025
+      {
+        id: 'james-madison-louisville-w2',
+        week: 2,
+        date: '2025-09-05',
+        time: '7:00 PM',
+        homeTeam: 'Louisville',
+        awayTeam: 'James Madison',
+        homeConference: 'ACC',
+        awayConference: 'Sun Belt',
+        tv: 'ESPN',
+        location: 'L&N Federal Credit Union Stadium, Louisville, KY'
+      },
+      {
+        id: 'western-illinois-northwestern-w2',
+        week: 2,
+        date: '2025-09-05',
+        time: '7:30 PM',
+        homeTeam: 'Northwestern',
+        awayTeam: 'Western Illinois',
+        homeConference: 'Big Ten',
+        awayConference: 'Missouri Valley',
+        tv: 'BTN',
+        location: 'Martin Stadium, Evanston, IL'
+      },
+      {
+        id: 'northern-illinois-maryland-w2',
+        week: 2,
+        date: '2025-09-05',
+        time: '7:30 PM',
+        homeTeam: 'Maryland',
+        awayTeam: 'Northern Illinois',
+        homeConference: 'Big Ten',
+        awayConference: 'MAC',
+        tv: 'BTN',
+        location: 'SECU Stadium, College Park, MD'
+      },
+      {
+        id: 'eastern-washington-boise-state-w2',
+        week: 2,
+        date: '2025-09-05',
+        time: '9:00 PM',
+        homeTeam: 'Boise State',
+        awayTeam: 'Eastern Washington',
+        homeConference: 'Mountain West',
+        awayConference: 'Big Sky',
+        tv: 'FS1',
+        location: 'Albertsons Stadium, Boise, ID'
+      },
+
+      // Saturday, September 6, 2025
+      {
+        id: 'texas-san-jose-state-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'Texas',
+        awayTeam: 'San Jose State',
+        homeConference: 'SEC',
+        awayConference: 'Mountain West',
+        tv: 'FOX',
+        location: 'DKR-Texas Memorial Stadium, Austin, TX'
+      },
+      {
+        id: 'florida-international-penn-state-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'Penn State',
+        awayTeam: 'Florida International',
+        homeConference: 'Big Ten',
+        awayConference: 'Conference USA',
+        tv: 'BTN',
+        location: 'Beaver Stadium, University Park, PA'
+      },
+      {
+        id: 'illinois-duke-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'Duke',
+        awayTeam: 'Illinois',
+        homeConference: 'ACC',
+        awayConference: 'Big Ten',
+        tv: 'ACC Network',
+        location: 'Wallace Wade Stadium, Durham, NC',
+        line: 'ILL -2.5'
+      },
+      {
+        id: 'baylor-smu-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'SMU',
+        awayTeam: 'Baylor',
+        homeConference: 'ACC',
+        awayConference: 'Big 12',
+        tv: 'The CW Network',
+        location: 'Gerald J. Ford Stadium, Dallas, TX',
+        line: 'SMU -3'
+      },
+      {
+        id: 'kennesaw-state-indiana-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'Indiana',
+        awayTeam: 'Kennesaw State',
+        homeConference: 'Big Ten',
+        awayConference: 'Conference USA',
+        tv: 'FS1',
+        location: 'Memorial Stadium (Bloomington, IN), Bloomington, IN'
+      },
+      {
+        id: 'iowa-iowa-state-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'Iowa State',
+        awayTeam: 'Iowa',
+        homeConference: 'Big 12',
+        awayConference: 'Big Ten',
+        tv: 'FOX',
+        location: 'Jack Trice Stadium, Ames, IA',
+        line: 'ISU -2.5'
+      },
+      {
+        id: 'kent-state-texas-tech-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'Texas Tech',
+        awayTeam: 'Kent State',
+        homeConference: 'Big 12',
+        awayConference: 'MAC',
+        tv: 'TNT/HBO Max',
+        location: 'Jones AT&T Stadium, Lubbock, TX'
+      },
+      {
+        id: 'northwestern-state-minnesota-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'Minnesota',
+        awayTeam: 'Northwestern State',
+        homeConference: 'Big Ten',
+        awayConference: 'Southland',
+        tv: 'BTN',
+        location: 'Huntington Bank Stadium, Minneapolis, MN'
+      },
+      {
+        id: 'virginia-nc-state-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'NC State',
+        awayTeam: 'Virginia',
+        homeConference: 'ACC',
+        awayConference: 'ACC',
+        tv: 'ESPN2',
+        location: 'Carter-Finley Stadium, Raleigh, NC'
+      },
+      {
+        id: 'central-michigan-pittsburgh-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'Pittsburgh',
+        awayTeam: 'Central Michigan',
+        homeConference: 'ACC',
+        awayConference: 'MAC',
+        tv: 'ESPN2',
+        location: 'Acrisure Stadium, Pittsburgh, PA'
+      },
+      {
+        id: 'uconn-syracuse-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'Syracuse',
+        awayTeam: 'UConn',
+        homeConference: 'ACC',
+        awayConference: 'Independent',
+        tv: 'ESPN',
+        location: 'JMA Wireless Dome, Syracuse, NY'
+      },
+      {
+        id: 'east-texas-am-florida-state-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:00 PM',
+        homeTeam: 'Florida State',
+        awayTeam: 'East Texas A&M',
+        homeConference: 'ACC',
+        awayConference: 'Southland',
+        tv: 'ACC Network',
+        location: 'Doak Campbell Stadium, Tallahassee, FL'
+      },
+      {
+        id: 'utah-state-texas-am-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '12:45 PM',
+        homeTeam: 'Texas A&M',
+        awayTeam: 'Utah State',
+        homeConference: 'SEC',
+        awayConference: 'Mountain West',
+        tv: 'SEC Network',
+        location: 'Kyle Field, College Station, TX'
+      },
+      {
+        id: 'western-carolina-wake-forest-w2',
+        week: 2,
+        date: '2025-09-06',
+        time: '2:00 PM',
+        homeTeam: 'Wake Forest',
+        awayTeam: 'Western Carolina',
+        homeConference: 'ACC',
+        awayConference: 'Southern',
+        tv: 'ESPN',
+        location: 'Allegacy Federal Credit Union Stadium, Winston-Salem, NC'
+      }
+    ]
   }
   // Additional weeks to be added as more screenshots are provided
 ];

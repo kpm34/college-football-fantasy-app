@@ -7,6 +7,7 @@ import { ID, Query } from 'node-appwrite';
 import { DraftConfig, MockDraft, DraftParticipant, DraftPick, Player, TeamNeeds, TurnState, UserType } from './types';
 import { loadEligiblePlayers, filterAvailablePlayers } from './playerPool';
 import { getBestAvailablePlayer, getBotStrategy, calculateTeamNeeds } from './ranker';
+import { COLLECTIONS } from '@/schema/zod-schema';
 
 /**
  * Generate a random seed if none provided
@@ -30,18 +31,18 @@ export async function createDraft(
     // Generate seed if not provided
     const seed = config.seed || generateSeed();
     
-    // Create the mock draft document
+    // Create the mock draft document with correct schema
     const draft = await databases.createDocument(
       DATABASE_ID,
-      'mock_drafts',
+      COLLECTIONS.MOCK_DRAFTS,
       ID.unique(),
       {
-        draftName,
+        title: draftName, // Use 'title' instead of 'draftName'
         numTeams,
-        rounds: config.rounds,
-        snake: config.snake,
-        status: 'pending',
-        config: JSON.stringify({
+        status: 'waiting', // Use valid enum value
+        settings: JSON.stringify({ // Use 'settings' instead of 'config'
+          rounds: config.rounds,
+          snake: config.snake,
           seed,
           timerPerPickSec: config.timerPerPickSec,
           positionLimits: config.positionLimits,
@@ -63,14 +64,13 @@ export async function createDraft(
     for (const p of participantsToCreate) {
       const participant = await databases.createDocument(
         DATABASE_ID,
-        'mock_draft_participants',
+        COLLECTIONS.MOCK_DRAFT_PARTICIPANTS,
         ID.unique(),
         {
           draftId: draft.$id,
-          userType: p.userType,
-          displayName: p.displayName,
-          slot: p.slot,
-          userId: p.userId || null
+          name: p.displayName, // Use 'name' instead of 'displayName'
+          slot: p.slot
+          // Remove userType and userId as they're not in the schema
         }
       );
       
@@ -81,9 +81,15 @@ export async function createDraft(
     
     return draft.$id;
     
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Failed to create draft:', error);
-    throw new Error('Failed to create draft');
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      type: error.type,
+      response: error.response
+    });
+    throw new Error(`Failed to create draft: ${error.message}`);
   }
 }
 
@@ -118,13 +124,13 @@ export async function startDraft(draftId: string): Promise<void> {
     console.log(`🚀 Starting draft: ${draftId}`);
     
     // Get draft details
-    const draft = await databases.getDocument(DATABASE_ID, 'mock_drafts', draftId);
+    const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId);
     const config = draft.config ? JSON.parse(draft.config) : {};
     
     // Update status to active
     await databases.updateDocument(
       DATABASE_ID,
-      'mock_drafts',
+      COLLECTIONS.MOCK_DRAFTS,
       draftId,
       {
         status: 'active',
@@ -275,7 +281,7 @@ export async function startDraft(draftId: string): Promise<void> {
     // Update draft status to complete
     await databases.updateDocument(
       DATABASE_ID,
-      'mock_drafts',
+      COLLECTIONS.MOCK_DRAFTS,
       draftId,
       {
         status: 'complete',
@@ -298,12 +304,12 @@ export async function startDraft(draftId: string): Promise<void> {
     
     // Update draft status to failed
     try {
-      const draft = await databases.getDocument(DATABASE_ID, 'mock_drafts', draftId);
+      const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId);
       const config = draft.config ? JSON.parse(draft.config) : {};
       
       await databases.updateDocument(
         DATABASE_ID,
-        'mock_drafts',
+        COLLECTIONS.MOCK_DRAFTS,
         draftId,
         {
           status: 'failed',
@@ -327,7 +333,7 @@ export async function startDraft(draftId: string): Promise<void> {
 export async function getDraftResults(draftId: string): Promise<any> {
   try {
     // Get draft
-    const draft = await databases.getDocument(DATABASE_ID, 'mock_drafts', draftId);
+    const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId);
     // Parse config if it exists
     if (draft.config && typeof draft.config === 'string') {
       draft.config = JSON.parse(draft.config);
@@ -410,8 +416,8 @@ function computeSlotFor(overall: number, numTeams: number): { round: number; slo
 }
 
 async function getDraftDoc(draftId: string) {
-  const d = await databases.getDocument(DATABASE_ID, 'mock_drafts', draftId);
-  const cfg = typeof d.config === 'string' ? JSON.parse(d.config) : d.config || {};
+  const d = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId);
+  const cfg = typeof d.settings === 'string' ? JSON.parse(d.settings) : d.settings || {};
   return { d, cfg };
 }
 
@@ -516,14 +522,14 @@ export async function applyPick(draftId: string, participantId: string, playerId
 
   // Update lastPickAt
   const nextCfg = { ...cfg, lastPickAt: now.toISOString() };
-  await databases.updateDocument(DATABASE_ID, 'mock_drafts', draftId, {
+  await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
     config: JSON.stringify(nextCfg),
   });
 
   // If final pick, flip status
   const totalPicks = (d.rounds ?? 15) * (d.numTeams ?? 8);
   if (turn.overall >= totalPicks) {
-    await databases.updateDocument(DATABASE_ID, 'mock_drafts', draftId, {
+    await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
       status: 'complete',
       completedAt: now.toISOString(),
       config: JSON.stringify(nextCfg),
@@ -540,9 +546,10 @@ export async function autopickIfExpired(draftId: string, nowIso?: string) {
   const deadline = new Date(turn.deadlineAt);
   if (now <= deadline) return null;
 
-  // Check participant type
+  // Check if it's a bot (bot names start with "Bot Team")
   const part = await databases.getDocument(DATABASE_ID, 'mock_draft_participants', turn.participantId);
-  if (part.userType !== 'human') return null;
+  const isBotParticipant = (part as any).name?.startsWith('Bot Team');
+  if (isBotParticipant) return null; // Bots don't autopick
 
   const playerId = await selectBestAvailablePlayer(draftId, cfg.seed);
   await databases.createDocument(DATABASE_ID, 'mock_draft_picks', ID.unique(), {
@@ -558,14 +565,14 @@ export async function autopickIfExpired(draftId: string, nowIso?: string) {
 
   const metrics = { autopicksCount: (cfg?.metrics?.autopicksCount ?? 0) + 1 };
   const nextCfg = { ...cfg, lastPickAt: now.toISOString(), metrics: { ...(cfg.metrics || {}), ...metrics } };
-  await databases.updateDocument(DATABASE_ID, 'mock_drafts', draftId, {
+  await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
     config: JSON.stringify(nextCfg),
   });
 
   // If final pick, complete
   const totalPicks = (d.rounds ?? 15) * (d.numTeams ?? 8);
   if (turn.overall >= totalPicks) {
-    await databases.updateDocument(DATABASE_ID, 'mock_drafts', draftId, {
+    await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
       status: 'complete',
       completedAt: now.toISOString(),
       config: JSON.stringify(nextCfg),
