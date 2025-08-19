@@ -197,9 +197,19 @@ export abstract class BaseRepository<T extends Models.Document> {
       let lastError: any | null = null;
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
-          // Use Appwrite's ID.unique() for guaranteed unique IDs
+          // Generate a unique ID - use timestamp + random for extra uniqueness
           const ID = this.isServer ? ServerID : ClientID;
-          const idToUse = ID.unique();
+          let idToUse: string;
+          
+          if (attempt === 0) {
+            // First attempt: use Appwrite's ID.unique()
+            idToUse = ID.unique();
+          } else {
+            // Retry attempts: use timestamp + random string to ensure uniqueness
+            const timestamp = Date.now().toString(36);
+            const random = Math.random().toString(36).substring(2, 15);
+            idToUse = `${timestamp}_${random}`;
+          }
 
           console.log(`[Repository] create ${this.collectionId} attempt=${attempt + 1} id=${idToUse}`);
 
@@ -223,11 +233,23 @@ export abstract class BaseRepository<T extends Models.Document> {
           lastError = err;
           const message = String(err?.message || '');
           const isDuplicateId = message.includes('requested ID already exists') || message.includes('already exists');
+          
+          console.error(`[Repository] create ${this.collectionId} attempt=${attempt + 1} failed:`, {
+            error: message,
+            code: err.code,
+            type: err.type,
+            idUsed: idToUse
+          });
+          
           // Retry only on duplicate ID errors; otherwise throw immediately
           if (!isDuplicateId) {
             throw err;
           }
-          // Continue to next attempt with a brand-new UUID
+          
+          // Wait a bit before retry to avoid race conditions
+          if (attempt < 2) {
+            await new Promise(resolve => setTimeout(resolve, 100 * (attempt + 1)));
+          }
         }
       }
 
