@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import { serverDatabases, DATABASE_ID } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
+import { COLLECTIONS } from '@/schema/zod-schema';
 
 export async function POST(req: Request) {
   try {
@@ -15,14 +16,14 @@ export async function POST(req: Request) {
     }
 
     // Get all participants for this draft
-    const parts = await serverDatabases.listDocuments(DATABASE_ID, 'mock_draft_participants', [
+    const parts = await serverDatabases.listDocuments(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PARTICIPANTS, [
       Query.equal('draftId', draftId),
       Query.orderAsc('slot'),
       Query.limit(100)
     ]);
 
-    // Check if user is already in the draft by name
-    const already = parts.documents.find(p => p.name === displayName || p.name === userId);
+    // Check if user is already in the draft (using displayName)
+    const already = parts.documents.find(p => p.displayName === displayName);
     if (already) {
       return NextResponse.json({ 
         ok: true, 
@@ -31,8 +32,8 @@ export async function POST(req: Request) {
       });
     }
 
-    // Find an open slot (slots without a real name)
-    const open = parts.documents.find(p => p.name.startsWith('Bot Team') || p.name.startsWith('Team '));
+    // Find an open bot slot to claim
+    const open = parts.documents.find(p => p.userType === 'bot');
     if (!open) {
       return NextResponse.json(
         { ok: false, error: 'No open slots available' }, 
@@ -40,13 +41,14 @@ export async function POST(req: Request) {
       );
     }
 
-    // Claim the slot
+    // Claim the slot by converting bot to human
     const upd = await serverDatabases.updateDocument(
       DATABASE_ID, 
-      'mock_draft_participants', 
+      COLLECTIONS.MOCK_DRAFT_PARTICIPANTS, 
       open.$id, 
       {
-        name: displayName || `User ${userId.slice(0, 8)}`
+        userType: 'human',
+        displayName: displayName || `User ${userId.slice(0, 8)}`
       }
     );
     
