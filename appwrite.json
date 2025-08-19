@@ -1,26 +1,80 @@
 {
-  "projectId": "college-football-fantasy-app",
-  "projectName": "College Football Fantasy App",
-  "functions": [
-    {
-      "$id": "import-players",
-      "name": "Import Players",
-      "runtime": "node-18.0",
-      "execute": [
-        "any"
-      ],
-      "events": [],
-      "schedule": "",
-      "timeout": 900,
-      "enabled": true,
-      "logging": true,
-      "entrypoint": "index.js",
-      "commands": "npm install",
-      "path": "functions/import-players",
-      "vars": {
-        "DATABASE_ID": "college-football-fantasy",
-        "COLLECTION_ID": "college_players"
-      }
-    }
-  ]
+    "projectId": "college-football-fantasy-app",
+    "endpoint": "https://nyc.cloud.appwrite.io/v1",
+    "projectName": "college-football-fantasy-app",
+    "settings": {
+        "services": {
+            "account": true,
+            "avatars": true,
+            "databases": true,
+            "locale": true,
+            "health": true,
+            "storage": true,
+            "teams": true,
+            "users": true,
+            "sites": true,
+            "functions": true,
+            "graphql": true,
+            "messaging": true
+        },
+        "auth": {
+            "methods": {
+                "jwt": true,
+                "phone": true,
+                "invites": true,
+                "anonymous": true,
+                "email-otp": true,
+                "magic-url": true,
+                "email-password": true
+            },
+            "security": {
+                "duration": 31536000,
+                "limit": 0,
+                "sessionsLimit": 10,
+                "passwordHistory": 0,
+                "passwordDictionary": false,
+                "personalDataCheck": false,
+                "sessionAlerts": false,
+                "mockNumbers": []
+            }
+        }
+    },
+    "functions": [
+        {
+            "$id": "import-players",
+            "execute": [
+                "any"
+            ],
+            "name": "Import Players",
+            "enabled": true,
+            "logging": true,
+            "runtime": "node-18.0",
+            "scopes": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 900,
+            "entrypoint": "index.js",
+            "commands": "npm install",
+            "specification": "s-1vcpu-512mb",
+            "path": "functions/Import Players"
+        }
+    ],
+    "sites": [
+        {
+            "$id": "68a32a79001d65af90a3",
+            "name": "college-football-fantasy-app",
+            "enabled": true,
+            "logging": true,
+            "framework": "nextjs",
+            "timeout": 30,
+            "installCommand": "npm install",
+            "buildCommand": "npm run build",
+            "outputDirectory": "./.next",
+            "specification": "s-1vcpu-512mb",
+            "buildRuntime": "node-22",
+            "adapter": "",
+            "fallbackFile": "",
+            "path": "sites/college-football-fantasy-app"
+        }
+    ]
 }

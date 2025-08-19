@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-// Load the full backup data
-const backupPath = path.join(process.cwd(), 'exports/college_players_2025.json');
+// Load the cleaned backup data (verified against 2025 rosters)
+const backupPath = path.join(process.cwd(), 'exports/college_players_2025_cleaned.json');
 const backupData = JSON.parse(fs.readFileSync(backupPath, 'utf-8'));
 
 console.log(`Preparing ${backupData.length} players for Appwrite Function...`);
