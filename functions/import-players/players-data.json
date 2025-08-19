@@ -1,5 +1,5995 @@
 [
   {
+    "id": "689028a9cae48174b2d8",
+    "name": "Cade Carruth",
+    "position": "QB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028a9f347a2d76864",
+    "name": "John Cooper",
+    "position": "QB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028aa2246089296c2",
+    "name": "John Gazzaniga",
+    "position": "QB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028aa6c0d95875397",
+    "name": "Daniel Hill",
+    "position": "RB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028aa8f4e10811faf",
+    "name": "Cole Adams",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028aabee985b0ba42",
+    "name": "Germie Bernard",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028aae935356ee600",
+    "name": "Lotzeir Brooks",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028ab1a107052f495",
+    "name": "Jalen Hale",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028ab3ccf9a418ba4",
+    "name": "Aeryn Hampton",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028ab6438297f3485",
+    "name": "Isaiah Horton",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028ab890f74603551",
+    "name": "Josh Cuevas",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028abb262e1e799eb",
+    "name": "Brody Dalton",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028abe6673cbac3cb",
+    "name": "Kaleb Edwards",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028ac296b9559f8db",
+    "name": "Jayden Hobson",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689028ac586336a4ba4e",
+    "name": "Tucker Cornelius",
+    "position": "K",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902ac7bb5d585198c2",
+    "name": "Keelon Russell",
+    "position": "QB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902ac7ea1a6543a9ac",
+    "name": "Ty Simpson",
+    "position": "QB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902ac8693f65b1dd4f",
+    "name": "Kevin Riley",
+    "position": "RB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902ac8917c52f40591",
+    "name": "Dre Washington",
+    "position": "RB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902ac8be0dffff61bf",
+    "name": "Richard Young",
+    "position": "RB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902ac9e3d597045261",
+    "name": "Ben Jackson",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902aca397ded2d8a2d",
+    "name": "Rico Scott",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902aca5a282fdf5669",
+    "name": "Ryan Williams",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902acb00cb5f2ce6f6",
+    "name": "Peyton Fox",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902acb4bddfbf37f48",
+    "name": "Lane Whisenhunt",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902acb93c6006c15c8",
+    "name": "Reid Schuback",
+    "position": "K",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902acbc32ac0a74199",
+    "name": "Conor Talty",
+    "position": "K",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e7c07064aee7c6b",
+    "name": "Carson Beck",
+    "position": "QB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e7c2d31fa457faa",
+    "name": "Gunner Stockton",
+    "position": "QB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e7ceff5a8339b41",
+    "name": "Oscar Delp",
+    "position": "TE",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e7d1f3bd26af16b",
+    "name": "Jared Zirkel",
+    "position": "K",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e7d45c391b1bc89",
+    "name": "Garrett Nussmeier",
+    "position": "QB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e7d6d959dd3a63a",
+    "name": "Kaleb Jackson",
+    "position": "RB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e7de23f9bbb76fa",
+    "name": "Chris Hilton Jr.",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e7e3e410188b1f7",
+    "name": "Damian Ramos",
+    "position": "K",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e7e86d7e971c9b1",
+    "name": "Arch Manning",
+    "position": "QB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e80331f63664bb4",
+    "name": "Eugene Wilson III",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e80582016c9df0f",
+    "name": "Kahleil Jackson",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e80aa328f1454d3",
+    "name": "Trey Smack",
+    "position": "K",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e80d6fc1f5aac8b",
+    "name": "Nico Iamaleava",
+    "position": "QB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8159dc6814cdc0",
+    "name": "Squirrel White",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8257231d9920ba",
+    "name": "Dane Key",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e827a678ccc6347",
+    "name": "Barion Brown",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e82a0bd5c46cb3c",
+    "name": "Jordan Dingle",
+    "position": "TE",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e83002d834017b4",
+    "name": "LaNorris Sellers",
+    "position": "QB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e832530b2f1de2e",
+    "name": "Oscar Adaway III",
+    "position": "RB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e834d1573a35c41",
+    "name": "Nyck Harbor",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e84a26f7420cddc",
+    "name": "Brett Norfleet",
+    "position": "TE",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e855a8432932543",
+    "name": "Cam Coleman",
+    "position": "WR",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e85c5a728b50b46",
+    "name": "Alex McPherson",
+    "position": "K",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8726ce2a6fdada",
+    "name": "Blake Shapen",
+    "position": "QB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8814626be3de60",
+    "name": "Kyle Ferrie",
+    "position": "K",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8841d04669f57e",
+    "name": "Taylen Green",
+    "position": "QB",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8970d09d2da536",
+    "name": "Luke Hasz",
+    "position": "TE",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e89ee091c789447",
+    "name": "Sedrick Alexander",
+    "position": "RB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8a455b5546b14d",
+    "name": "London Humphreys",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8abcfb92c59c3a",
+    "name": "Conner Weigman",
+    "position": "QB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8ae4c2509db329",
+    "name": "Le'Veon Moss",
+    "position": "RB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8b178042fd6c7a",
+    "name": "Evan Stewart",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8b6cfa0fc9031e",
+    "name": "Jake Johnson",
+    "position": "TE",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8b916eda4b4bab",
+    "name": "Randy Bond",
+    "position": "K",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8bb671bf82359c",
+    "name": "Jackson Arnold",
+    "position": "QB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8bdcba9534e3d2",
+    "name": "Gavin Sawchuk",
+    "position": "RB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8c0d29a18ffbca",
+    "name": "Andrel Anthony",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8c3440bb593e99",
+    "name": "Nic Anderson",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68902e8c5788c81e7e43",
+    "name": "Bauer Sharp",
+    "position": "TE",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ed39bab3dedd31",
+    "name": "Peter Knudson",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ed5cff8a99c30d",
+    "name": "Danny Lewis Jr.",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ed861d6893d2a4",
+    "name": "Jay Lindsey",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031edb2c04bb26d37",
+    "name": "Jay Loper Jr.",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031edd7625caf4f11",
+    "name": "Michael Lorino III",
+    "position": "RB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ee0619b068a97c",
+    "name": "Austin Mack",
+    "position": "QB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ee29b6df5bf5c2",
+    "name": "Jaylen Mbakwe",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ee4d72b0d5fd37",
+    "name": "Derek Meadows",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ee70f56577f47f",
+    "name": "Jam Miller",
+    "position": "RB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ee97851a1487e8",
+    "name": "Cooper Mollison",
+    "position": "WR",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031eebdb1eef59998",
+    "name": "Fredrick Moore",
+    "position": "RB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031eee49accdeaadc",
+    "name": "Peter Notaro",
+    "position": "K",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ef133ed0f27d1d",
+    "name": "Marshall Pritchett",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ef7f4bb740565d",
+    "name": "Jack Sammarco",
+    "position": "TE",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f07e293e944c1f",
+    "name": "Jessie Washington III",
+    "position": "RB",
+    "team": "Alabama",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f123814b224c23",
+    "name": "Liam Badger",
+    "position": "K",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f14acfdd641bc4",
+    "name": "Ethan Barbour",
+    "position": "TE",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f1711a50f54401",
+    "name": "Henry Bates",
+    "position": "K",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f1979f863fa3cb",
+    "name": "Dillon Bell",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f1b8c2da965995",
+    "name": "Jeremy Bell",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f1de509e67bfbd",
+    "name": "Micah Bell",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f21a3a1c1a1e42",
+    "name": "Luke Bennett",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f23d3759808842",
+    "name": "Thomas Blackshear",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f262a0c1e3e28e",
+    "name": "Walter Blanchard",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f2855ff6a9639b",
+    "name": "Chauncey Bowens",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f2a9217fa373de",
+    "name": "Zachariah Branch",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f2cbfa378991f5",
+    "name": "Danny Curran",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f32e1c02f38d7a",
+    "name": "Connor Ferguson",
+    "position": "K",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f36c4cf6a7ed6f",
+    "name": "Nate Frazier",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f39328e31dc18a",
+    "name": "Colter Ginn",
+    "position": "QB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f3bb0e2cf8c57f",
+    "name": "Jacob Hardie",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f3eb3835239ecf",
+    "name": "Gannon Hearst",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f424acb7a2ea6e",
+    "name": "Colton Heinrich",
+    "position": "TE",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f449112534b91d",
+    "name": "Patrick Hester",
+    "position": "TE",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f46f5afa120843",
+    "name": "London Humphreys",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f49384cf4736d3",
+    "name": "Cooper Johnson",
+    "position": "TE",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f4c5a8c15359a5",
+    "name": "Cash Jones",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f4ef72f4153da7",
+    "name": "David Lalaian",
+    "position": "TE",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f521ac8bdae5fa",
+    "name": "Lawson Luckie",
+    "position": "TE",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f54905388db202",
+    "name": "Brandon Mathis",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f56bdc1f8c51ef",
+    "name": "Josh McCray",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f592e3a75453d4",
+    "name": "Ben McElreath",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f5bd604c24b6f2",
+    "name": "Hezekiah Millender",
+    "position": "QB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f5eb24be285a94",
+    "name": "Ryan Montgomery",
+    "position": "QB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f623460054d08d",
+    "name": "Wade Penn",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f64fc1e8f9381e",
+    "name": "Dwight Phillips Jr.",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f677a7b75968d8",
+    "name": "Ryan Puglisi",
+    "position": "QB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f69c23f6519ef0",
+    "name": "Jaden Reddell",
+    "position": "TE",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f6c9d423ec8c0b",
+    "name": "Roderick Robinson II",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f6eeee36055bcc",
+    "name": "Landon Roldan",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f7217017bc0603",
+    "name": "Cole Speer",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f74967fba47402",
+    "name": "Jackson St. Clair",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f7949ef02412b0",
+    "name": "Talyn Taylor",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f7b5748220fbcf",
+    "name": "Will Taylor",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f7dd5ad86aa173",
+    "name": "Noah Thomas",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f80f76cbbf1995",
+    "name": "Miles Thornton",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f832fbec4733a2",
+    "name": "Kavon Townsend",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f857eb1c676d1f",
+    "name": "Bo Walker",
+    "position": "RB",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f8c9cdc474cb61",
+    "name": "Elyiss Williams",
+    "position": "TE",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f8eddb7caacc50",
+    "name": "Peyton Woodring",
+    "position": "K",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f91f89b1e3302c",
+    "name": "Colbie Young",
+    "position": "WR",
+    "team": "Georgia",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f9441eb90c5ec5",
+    "name": "Aaron Anderson",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f968871998a61d",
+    "name": "Nic Anderson",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f999959040389f",
+    "name": "Harlem Berry",
+    "position": "RB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f9bcba5507dc5e",
+    "name": "Kylan Billiot",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031f9e0ffed734e65",
+    "name": "Barion Brown",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fa130f5c2152cb",
+    "name": "Aeron Burrell",
+    "position": "K",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fa3549bf446241",
+    "name": "Reid Chauvin",
+    "position": "RB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fa5cdbfac8da87",
+    "name": "Aidan Corbello",
+    "position": "K",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fa81aeb26ab851",
+    "name": "Landon Craig",
+    "position": "TE",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031faaf266be107f9",
+    "name": "Caden Durham",
+    "position": "RB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fad41ad8a620be",
+    "name": "Joseph Ebun",
+    "position": "RB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fb0f5bb2c524f9",
+    "name": "TaRon Francis",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fb37128d79dc29",
+    "name": "Donovan Green",
+    "position": "TE",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fb85a9075b88b0",
+    "name": "Cowinn Helaire",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fbae50a2ba9af1",
+    "name": "Destyn Hill",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fc06ba0e68b004",
+    "name": "Colin Hurley",
+    "position": "QB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fca010d27fe43c",
+    "name": "Malachi Lane",
+    "position": "RB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fce9b2dfda6a73",
+    "name": "Noah Nash",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fd42d30544ca1e",
+    "name": "Kyle Parker",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fd6b35e2904b43",
+    "name": "Tre People",
+    "position": "QB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fd90123e15f019",
+    "name": "Sean Perret",
+    "position": "K",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fdb86a59083e58",
+    "name": "GiVanni Peterson",
+    "position": "TE",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fde060da906fb7",
+    "name": "Emile Picarella III",
+    "position": "QB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fe36074a40350a",
+    "name": "Bauer Sharp",
+    "position": "TE",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fe5b32ad2dc8b0",
+    "name": "Isaiah Stone",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fe7c1b7293a0f2",
+    "name": "Zavion Thomas",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fea1ee28deb8da",
+    "name": "Michael Van Buren Jr.",
+    "position": "QB",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fec65bc6212e32",
+    "name": "Jelani Watkins",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031feea5468c4f68d",
+    "name": "Phillip Wright III",
+    "position": "WR",
+    "team": "LSU",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ff28eee9e957f3",
+    "name": "Rett Andersen",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ff4c40d1e182fe",
+    "name": "Ridge Barker",
+    "position": "TE",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ff75c587ab5397",
+    "name": "Spencer Barnett",
+    "position": "K",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031ffc319d28fe1d5",
+    "name": "Ty Boatright",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689031fff3dbef869fe5",
+    "name": "Aaron Butler",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903200231fe745b1d6",
+    "name": "Matthew Caldwell",
+    "position": "QB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032004a2ccd9e003e",
+    "name": "Bryce Chambers",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320073cea464508c",
+    "name": "Christian Clark",
+    "position": "RB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320096489391bdee",
+    "name": "Luke Dunham",
+    "position": "QB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903200bcd2cd2b557a",
+    "name": "Jack Endries",
+    "position": "TE",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903200e45a3d80a28d",
+    "name": "Jaime Ffrench Jr.",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903201211dcf51a011",
+    "name": "Jerrick Gibson",
+    "position": "RB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032014672e4b19f0d",
+    "name": "Karle Lacey Jr.",
+    "position": "QB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903201740c9816ed65",
+    "name": "Parker Livingstone",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903201a377c88910a9",
+    "name": "Kaliq Lockett",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903201f1f4a132df15",
+    "name": "Daylan McCutcheon",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032022770c4a27781",
+    "name": "Hamilton McMartin",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032025b24ecae725d",
+    "name": "Quinn Merritt",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032028336d82dc37c",
+    "name": "DeAndre Moore Jr.",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903202adc79f289be2",
+    "name": "Emmett Mosley V",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903202d3461cb456ac",
+    "name": "Trey Owens",
+    "position": "QB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320300a257835b00",
+    "name": "Colin Page",
+    "position": "RB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032032cd5f6002895",
+    "name": "Remy Patson",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032035c8c08bb2021",
+    "name": "Hudson Powell",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903203861fd7332b2d",
+    "name": "Will Randle",
+    "position": "TE",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903203ae3d7248967e",
+    "name": "Spencer Shannon",
+    "position": "TE",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903203d310dd41b94a",
+    "name": "Mason Shipley",
+    "position": "K",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903204077d8ab9fa35",
+    "name": "James Simon",
+    "position": "RB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320432a368083dbd",
+    "name": "Rickey Stewart Jr.",
+    "position": "RB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903204575a145b9da1",
+    "name": "Will Stone",
+    "position": "K",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032047e52ce7177e2",
+    "name": "Joe Tatum",
+    "position": "QB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903204b819fc1968e3",
+    "name": "Michael Terry III",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903204eb8253f0cd7f",
+    "name": "Nick Townsend",
+    "position": "TE",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032051eccb3d6c41c",
+    "name": "Jordan Washington",
+    "position": "TE",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320549a341670f9e",
+    "name": "Ryan Wingo",
+    "position": "WR",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320580be648f65bb",
+    "name": "Emaree Winston",
+    "position": "TE",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903205b1a4def1a6f8",
+    "name": "Quintrevion Wisner",
+    "position": "RB",
+    "team": "Texas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320609471b94fc82",
+    "name": "Harrison Bailey",
+    "position": "QB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903206376240de8a94",
+    "name": "Jadan Baugh",
+    "position": "RB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903206622f8dcc741a",
+    "name": "Vernell Brown III",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032068574ccb2897b",
+    "name": "Brian Case",
+    "position": "RB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903206b34663059327",
+    "name": "Duke Clark",
+    "position": "RB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032070b563de5a80c",
+    "name": "Jaden Edgecombe",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320732368369bc8b",
+    "name": "Chad Gasper Jr.",
+    "position": "RB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320765d608e97b0d",
+    "name": "Alex Gonzalez",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320795b70c558815",
+    "name": "DeBraun Hampton",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903207b8f33b93dbbd",
+    "name": "Hayden Hansen",
+    "position": "TE",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903207ee9556cdecac",
+    "name": "Tank Hawkins",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320820ac32a0f43a",
+    "name": "Scott Isacks",
+    "position": "TE",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320845e53fbbce08",
+    "name": "Amir Jackson",
+    "position": "TE",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903208b3ca9bba46c6",
+    "name": "Kelvin Jimenez",
+    "position": "RB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903208db9588116e55",
+    "name": "Micah Jones",
+    "position": "TE",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032090ed8bc2dc23f",
+    "name": "Tramell Jones Jr.",
+    "position": "QB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032093250d1bdd36d",
+    "name": "Cameron Kossmann",
+    "position": "TE",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032097e23ef8d16ff",
+    "name": "Tony Livingston",
+    "position": "TE",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903209a66d7d575fd3",
+    "name": "Byron Louis",
+    "position": "RB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903209cb6779838441",
+    "name": "Clay Millen",
+    "position": "QB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903209f09aea81252a",
+    "name": "Aidan Mizell",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320a240a0b7b6f93",
+    "name": "Naeshaun Montgomery",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320a532c0a7e332c",
+    "name": "Evan Noel",
+    "position": "K",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320a797b9aaec98d",
+    "name": "Mike Peterson Jr.",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320a9e5f402c9237",
+    "name": "Brandon Rabasco",
+    "position": "K",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320ac3addc028156",
+    "name": "Cary Rifenberick",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320af0031fa22c42",
+    "name": "Caleb Rillos",
+    "position": "TE",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320b20226a4d3ad0",
+    "name": "Anthony Rubio",
+    "position": "RB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320b7aeba0059bc2",
+    "name": "Taylor Spierto",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320bcbcf117ba126",
+    "name": "Muizz Tounkara",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320bf0eabe408adf",
+    "name": "Jackson Wade",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320c239d2672ad5e",
+    "name": "Aidan Warner",
+    "position": "QB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320c4db6ed52d7d7",
+    "name": "Treyaun Webb",
+    "position": "RB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320c72f32ea0a935",
+    "name": "Aaron Williams",
+    "position": "QB",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320c95a0ae89c9d2",
+    "name": "Dallas Wilson",
+    "position": "WR",
+    "team": "Florida",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320ce5b4d189cae3",
+    "name": "Joey Aguilar",
+    "position": "QB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320d17b505740680",
+    "name": "Justin Baker",
+    "position": "RB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320d392859010380",
+    "name": "Hunter Barnes",
+    "position": "RB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320d6076826f1065",
+    "name": "DeSean Bishop",
+    "position": "RB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320d829a85a342b9",
+    "name": "DaSaahn Brame",
+    "position": "TE",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320da683e24777b3",
+    "name": "Chris Brazzell II",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320dca6376c0c02e",
+    "name": "Grady Dangerfield",
+    "position": "K",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320e01c9eaed4f0b",
+    "name": "Ethan Davis",
+    "position": "TE",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320e404537c2f630",
+    "name": "Joakim Dodson",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320e65c3ad3fbb4d",
+    "name": "Max Gilbert",
+    "position": "K",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320e956f61993220",
+    "name": "Deon Hardin",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320eba9290a89599",
+    "name": "Braylon Harmon",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320ee287e7f87a20",
+    "name": "Cole Harrison",
+    "position": "TE",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320f18b77feca3c6",
+    "name": "Radarious Jackson",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320f614e4155c18e",
+    "name": "Amari Jefferson",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320f8afffd08f460",
+    "name": "Malcolm Kinzer",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320fb00215c5be75",
+    "name": "Miles Kitselman",
+    "position": "TE",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890320fd48d01129429",
+    "name": "Peyton Lewis",
+    "position": "RB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321011fe30eccd39",
+    "name": "George MacIntyre",
+    "position": "QB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032103779d0e4c97d",
+    "name": "Mike Matthews",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032105c8864023241",
+    "name": "Seamus Meagher",
+    "position": "TE",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903210836280e856f9",
+    "name": "Jake Merklinger",
+    "position": "QB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903210a91969262112",
+    "name": "Daune Morris",
+    "position": "RB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903210d680df23ec2e",
+    "name": "Ben Petermann",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321107ab5b949aa3",
+    "name": "Mason Phillips",
+    "position": "QB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903211391941fb1ec8",
+    "name": "Nathan Roberts",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032115e97c3471e07",
+    "name": "Travis Smith Jr.",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032118696417808c5",
+    "name": "Braylon Staley",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903211a8e9c4e9503e",
+    "name": "Star Thomas",
+    "position": "RB",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903211d3aa0a1b2b42",
+    "name": "Jack Van Dorselaer",
+    "position": "TE",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321209ed6e4dc3ed",
+    "name": "Trey Weary",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032122ef875673550",
+    "name": "Carson Whitehead",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903212757b4d949f35",
+    "name": "Tommy Winton III",
+    "position": "WR",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032129c888faa1d82",
+    "name": "Beau Allen",
+    "position": "QB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903212cd0e13b6b884",
+    "name": "Cutter Boley",
+    "position": "QB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903213017dc346780c",
+    "name": "Preston Bowman",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903213332e209b4254",
+    "name": "Henry Boyer",
+    "position": "TE",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032135beeaf06032a",
+    "name": "Elijah Brown",
+    "position": "TE",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321380de626475b1",
+    "name": "Zach Calzada",
+    "position": "QB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903213a5feaea73743",
+    "name": "Ashton Cozart",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903213ce089e276dc6",
+    "name": "Rico Crowder",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903213f05c2b31af4c",
+    "name": "Dante Dowdell",
+    "position": "RB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032142246e8b72032",
+    "name": "Fred Farrier II",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321445c2707db8ea",
+    "name": "Hardley Gilmore IV",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903214962877318f07",
+    "name": "Josh Kattus",
+    "position": "TE",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903214bb96957e439e",
+    "name": "Justin Kattus",
+    "position": "TE",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903214ebbe3cd20cd2",
+    "name": "Jacob Kauwe",
+    "position": "K",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032151e7f4c1e03e3",
+    "name": "Cole Lanter",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032154431db508e0e",
+    "name": "Kendrick Law",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032156ae462fa5025",
+    "name": "Spencer Leadbetter",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903215c5610aec4335",
+    "name": "Seth McGowan",
+    "position": "RB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903215e720b3caf77c",
+    "name": "Cameron Miller",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032164a4ccbdc91d6",
+    "name": "Tovani Mizell",
+    "position": "RB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903216764d2e834396",
+    "name": "Jack Monday",
+    "position": "TE",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032169b208a571fb0",
+    "name": "Jason Patterson",
+    "position": "RB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903216becd4b4dfbfe",
+    "name": "Montavin Quisenberry",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903216ed2df9a3cd4b",
+    "name": "Chy Rivers",
+    "position": "RB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032171b68c310648a",
+    "name": "Willie Rodriguez",
+    "position": "TE",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032173ff1e21229a6",
+    "name": "Stone Saunders",
+    "position": "QB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321763b2adc065d4",
+    "name": "Zach Schreiner",
+    "position": "K",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032178a899d2a8997",
+    "name": "Quintin Simmons Jr.",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903217b6e0e75cd4ae",
+    "name": "Mikkel Skinner",
+    "position": "TE",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903217e04e30a9bda3",
+    "name": "Troy Stellato",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321820c990680b60",
+    "name": "Brennen Ward",
+    "position": "QB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321846b9fc3c7d13",
+    "name": "David Washington Jr.",
+    "position": "WR",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032186ab67820e690",
+    "name": "Jamarion Wilcox",
+    "position": "RB",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903218e2d363188615",
+    "name": "Peyton Argent",
+    "position": "K",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903219181d9f444b48",
+    "name": "Isaiah Augustave",
+    "position": "RB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032193e996baa93b9",
+    "name": "Mazeo Bennett Jr.",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903219647f716d2a23",
+    "name": "Jared Brown",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321986fdbf2eaeea",
+    "name": "Maurice Brown II",
+    "position": "TE",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903219adde6231cb9d",
+    "name": "Malik Clark",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903219de621c225130",
+    "name": "Lex Cyrus",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321a13f058e7ac16",
+    "name": "Jordan Dingle",
+    "position": "TE",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321a35606fd01273",
+    "name": "Bradley Dunn",
+    "position": "RB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321a5c65261489a5",
+    "name": "Rahsul Faison",
+    "position": "RB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321a80cdf20f000e",
+    "name": "Jimmy Francis",
+    "position": "QB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321b88d4db778af3",
+    "name": "Matt Fuller",
+    "position": "RB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321c1130e11bce33",
+    "name": "Jordon Gidron",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321c94fd33403aed",
+    "name": "Jawarn Howell",
+    "position": "RB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321cbe35a211f2a9",
+    "name": "Brady Hunt",
+    "position": "TE",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321ce1c949f77fba",
+    "name": "Vandrevius Jacobs",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321d1a53ff347ac8",
+    "name": "William Joyce",
+    "position": "K",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321d3f28f800d0e4",
+    "name": "Max Kelley",
+    "position": "K",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321d657c4a256bb4",
+    "name": "Emazon Littlejohn",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321d9150529967e9",
+    "name": "Mason Love",
+    "position": "K",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321dbc1e6848cdd1",
+    "name": "Chase McCracken",
+    "position": "RB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321df372b6f2cd6d",
+    "name": "Donovan Murph",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321e3100c095dc03",
+    "name": "Air Noland",
+    "position": "QB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321e588ef3e87a70",
+    "name": "Jackson Repp",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321e804cb45c8e37",
+    "name": "Eriq Rice",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321ea6055b394b4c",
+    "name": "Reno Roehm",
+    "position": "TE",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321eca830e7ea4f3",
+    "name": "Brian Rowe Jr.",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321ef15568d3dae9",
+    "name": "Neil Salvage III",
+    "position": "RB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321f233a6edf5260",
+    "name": "Larry Scott",
+    "position": "RB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321f47c84293d2c9",
+    "name": "Jayden Sellers",
+    "position": "WR",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321f9f577f798be1",
+    "name": "Michael Smith",
+    "position": "TE",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321fc6b32498d304",
+    "name": "Mike Tyler",
+    "position": "TE",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890321ff3d25314cd93",
+    "name": "Lukas Vozeh",
+    "position": "TE",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032202850f35d7bc5",
+    "name": "Cutter Woods",
+    "position": "QB",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032205127d66352fc",
+    "name": "Daniel Blood",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322085c4f656b889",
+    "name": "Jayden Bolton",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903220aa305f00c608",
+    "name": "Vince Brown II",
+    "position": "TE",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903220ce5de26f5776",
+    "name": "Kevin Coleman Jr.",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903221002f6f188e38",
+    "name": "Blake Craig",
+    "position": "K",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032212a51423685a2",
+    "name": "Marquise Davis",
+    "position": "RB",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903221511a3468ea81",
+    "name": "Anthony Favrow",
+    "position": "RB",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322183e3b880b79e",
+    "name": "Noah Flaskamp",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903221a7cb6de87647",
+    "name": "DaMarion Fowlkes",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903221cbd54310f1d2",
+    "name": "Ahmad Hardy",
+    "position": "RB",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903221ee3dbea7b876",
+    "name": "Jordon Harris",
+    "position": "TE",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032222167962698a5",
+    "name": "Brendon Haygood",
+    "position": "RB",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322244e5948e164e",
+    "name": "Gavin Hoffman",
+    "position": "TE",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322269ba1d4c9805",
+    "name": "Sam Horn",
+    "position": "QB",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032228e432a6e3dbe",
+    "name": "Jude James",
+    "position": "TE",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903222b4448d503462",
+    "name": "Tavorus Jones",
+    "position": "RB",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903222e37794ae6964",
+    "name": "Tommy Lock",
+    "position": "QB",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322314b7202f3234",
+    "name": "Xavier Loyd",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322340e7f25117bd",
+    "name": "James Madison II",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032236858ba701965",
+    "name": "Joshua Manning",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032239206b3541d3c",
+    "name": "Robert Meyer",
+    "position": "K",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903223b79b2fae527b",
+    "name": "Adam Molitor",
+    "position": "TE",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903223def9ed325dd3",
+    "name": "Logan Muckey",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322434aea50836fd",
+    "name": "Donovan Olugbode",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322458fcdebc75c7",
+    "name": "Beau Pribula",
+    "position": "QB",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032247e7bbc6308fb",
+    "name": "Jamal Roberts",
+    "position": "RB",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903224a02755e58d5a",
+    "name": "Dakotah Terrell",
+    "position": "TE",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903224cecf489cd429",
+    "name": "Shaun Terry II",
+    "position": "WR",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903224f06df4327ccc",
+    "name": "Matt Zollers",
+    "position": "QB",
+    "team": "Missouri",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322523c27c6d3d48",
+    "name": "Damari Alston",
+    "position": "RB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032254593d2cd0a05",
+    "name": "Jackson Arnold",
+    "position": "QB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032256e0886504353",
+    "name": "Christian Burnette",
+    "position": "RB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322592a9ce9956b1",
+    "name": "Bryce Cain",
+    "position": "WR",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903225b818f3bb4e12",
+    "name": "Jeremiah Cobb",
+    "position": "RB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032260bf7d2d70cd5",
+    "name": "John Colvin",
+    "position": "QB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322636251c4b0640",
+    "name": "Ashton Daniels",
+    "position": "QB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032265a2d9ad80e62",
+    "name": "Hollis Davidson III",
+    "position": "TE",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322679dfb54cfb29",
+    "name": "Camden Etheredge",
+    "position": "TE",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903226a2663cf01f83",
+    "name": "Horatio Fields",
+    "position": "WR",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903226c7412c42b89b",
+    "name": "Brandon Frazier",
+    "position": "TE",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903226ed63994d033e",
+    "name": "Cole Gamble",
+    "position": "RB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322725070e308955",
+    "name": "Ryan Ghea",
+    "position": "TE",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032274b88cf90cdf6",
+    "name": "Connor Gibbs",
+    "position": "K",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032276ff91b8ddefc",
+    "name": "Alvin Henderson",
+    "position": "RB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032279c278b9f1714",
+    "name": "Preston Howard",
+    "position": "TE",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903227bdbaed366871",
+    "name": "Tate Johnson",
+    "position": "TE",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903227e4c712927289",
+    "name": "Justin Jones",
+    "position": "RB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322839b62affd50c",
+    "name": "Deuce Knight",
+    "position": "QB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032285dd61d7e008b",
+    "name": "Omar Mabson II",
+    "position": "RB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032287ff2b6b1a94f",
+    "name": "Towns McGough",
+    "position": "K",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903228d19e7cb09763",
+    "name": "Eli Morton",
+    "position": "TE",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032290404455a2bfc",
+    "name": "Will Myers",
+    "position": "QB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032292bf7d5d9505e",
+    "name": "Hunter Ousley",
+    "position": "TE",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322955268f67e9f2",
+    "name": "Durell Robinson",
+    "position": "RB",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903229924c183270db",
+    "name": "Charley Schwinger",
+    "position": "K",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903229b8efa5dec927",
+    "name": "Malcolm Simmons",
+    "position": "WR",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903229deb110021ac9",
+    "name": "Eric Singleton Jr.",
+    "position": "WR",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322a11e2846a8746",
+    "name": "Duke Smith",
+    "position": "WR",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322a364b065735a6",
+    "name": "Erick Smith",
+    "position": "WR",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322a5bad4e9e2262",
+    "name": "Perry Thompson",
+    "position": "WR",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322a81f34b4695dc",
+    "name": "Sam Turner",
+    "position": "WR",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322aa88785a4d579",
+    "name": "Will Upton",
+    "position": "WR",
+    "team": "Auburn",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322ad43db7b1d8cd",
+    "name": "Austin Acton",
+    "position": "RB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322b08c44732d017",
+    "name": "Deuce Alexander",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322b3212a0479655",
+    "name": "Dillon Alfred",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322b558148458abc",
+    "name": "Mike Baker",
+    "position": "K",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322b7c6204fb69fb",
+    "name": "Levi Blount",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322ba24b7e8e2b9c",
+    "name": "Hayden Bradley",
+    "position": "TE",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322bc90d03975417",
+    "name": "Trace Bruckler",
+    "position": "TE",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322bec8872d9b763",
+    "name": "Lucas Carneiro",
+    "position": "K",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322c22f350718b6f",
+    "name": "Trinidad Chambliss",
+    "position": "QB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322c4b626b6cad32",
+    "name": "Caleb Cunningham",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322c71962b44ef8f",
+    "name": "Dylan Davis",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322c969c6275dec0",
+    "name": "Logan Diggs",
+    "position": "RB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322cbc231776b749",
+    "name": "Trey Hall",
+    "position": "RB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322ce2b8dd760a9d",
+    "name": "George Hamsley",
+    "position": "QB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322d136648e064fa",
+    "name": "Jack Harper",
+    "position": "TE",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322d3bbf16c5b1cb",
+    "name": "Izaiah Hartrup",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322d643682c6a591",
+    "name": "Luke Hasz",
+    "position": "TE",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322d8cf960b8e27f",
+    "name": "Shawqi Itraish",
+    "position": "QB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322db6ddafe9092b",
+    "name": "Sean Judge",
+    "position": "TE",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322de3335427e8f2",
+    "name": "Kewan Lacy",
+    "position": "RB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322e140bc2f1e27a",
+    "name": "Cayden Lee",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322e82c6a45c6a50",
+    "name": "Caleb Odom",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322ea9c9b707214b",
+    "name": "Mac Owen",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322ed2638d8df781",
+    "name": "Ciaran Pedulla",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322f03e0ba01d6c9",
+    "name": "Joshua Pfeifer",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322f29723f44e618",
+    "name": "Devin Price",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322f557b0ad7fe71",
+    "name": "Traylon Ray",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322f7e3421dbe8b9",
+    "name": "Samari Reed",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322fab34025eab1c",
+    "name": "Austin Simmons",
+    "position": "QB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890322fd2d44963315f",
+    "name": "Wyatt Smalley",
+    "position": "TE",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323002b944cd2023",
+    "name": "Maealiuaki Smith",
+    "position": "QB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032305b2a231da0cb",
+    "name": "Damien Taylor",
+    "position": "RB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323080c58c90a655",
+    "name": "Domonique Thomas",
+    "position": "RB",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903230a676a1e67b81",
+    "name": "Harrison Wallace III",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903230c95c83c3c472",
+    "name": "Winston Watkins",
+    "position": "WR",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032311f6abb7687da",
+    "name": "Markus Allen",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032314e8ee798c47b",
+    "name": "Cam Ball",
+    "position": "TE",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323171bb87b1b044",
+    "name": "Davon Booth",
+    "position": "RB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323197543260ede3",
+    "name": "Fluff Bothwell",
+    "position": "RB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903231bc1da66f6e6c",
+    "name": "Johnnie Daniels",
+    "position": "RB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903231dd8b97de84f9",
+    "name": "Seth Davis",
+    "position": "RB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032321b75b19de0c8",
+    "name": "Anthony Evans III",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032326e1d668569b0",
+    "name": "Xavier Gayten",
+    "position": "RB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032329fa41e1f59f5",
+    "name": "Jaron Glover",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903232c4e339ed1f65",
+    "name": "Gracen Harris",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903232eb26246a9468",
+    "name": "Marlon Hauck",
+    "position": "K",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032331ea081b7392e",
+    "name": "Emeka Iloh",
+    "position": "TE",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032334335365afcec",
+    "name": "Davian Jackson",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032336999ef79cac4",
+    "name": "Geron Johnson",
+    "position": "RB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032338d5625976b2b",
+    "name": "Ricky Johnson",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903233b2b174b16c8d",
+    "name": "Luke Kromenhoek",
+    "position": "QB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032340955e1498fcc",
+    "name": "Sanfrisco Magee",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032342b8b67cf96db",
+    "name": "Isaiah Mitchell",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032345216eef5c342",
+    "name": "Jordan Mosley",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032347d41b1d0b214",
+    "name": "Sam Paxton",
+    "position": "TE",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903234a13766b98944",
+    "name": "Jessie Primer",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903234c75c6406a375",
+    "name": "Parker Puckett",
+    "position": "QB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032350c5200a573bf",
+    "name": "Max Reese",
+    "position": "TE",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323565e32662f3a3",
+    "name": "Joeseph Skipworth",
+    "position": "TE",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032358d22e15ed685",
+    "name": "Kamario Taylor",
+    "position": "QB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903235b55da87164cf",
+    "name": "Brenen Thompson",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903235d9251559fd4a",
+    "name": "Cam Thompson",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903236070b5663de5e",
+    "name": "Seydou Traore",
+    "position": "TE",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032362c8a803eea6e",
+    "name": "Sam West",
+    "position": "TE",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323653f6bd7a4b38",
+    "name": "William Wilkinson",
+    "position": "K",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032368383755185b4",
+    "name": "Ayden Williams",
+    "position": "WR",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903236ad596c32be3a",
+    "name": "Kolin Wilson",
+    "position": "RB",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903236d662ae4bb4ad",
+    "name": "Rykar Acebo",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032372235da3abe90",
+    "name": "Markeylin Batton",
+    "position": "RB",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323748e7ff9d1dfe",
+    "name": "Jeremiah Beck Jr.",
+    "position": "TE",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903237bf6958b9404a",
+    "name": "Jalen Brown",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903237e6500de9850e",
+    "name": "Walker Catsavis",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903238192b1d8c337d",
+    "name": "Ismael Cisse",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032383e0af2653086",
+    "name": "Courtney Crutchfield",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323898e1fa52092c",
+    "name": "Blake Ford",
+    "position": "K",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903238bee4c2dbb4cc",
+    "name": "Gavin Garretson",
+    "position": "TE",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032395965838a0d1e",
+    "name": "Monte Harrison",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032397c46ffcb15a5",
+    "name": "Hutson Hendrix",
+    "position": "TE",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903239a08ae7f04010",
+    "name": "Rodney Hill",
+    "position": "RB",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903239ecc3cc80a63d",
+    "name": "Trever Jackson",
+    "position": "QB",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323a18b261c392c8",
+    "name": "Andy Jean",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323a44d0dc7efe2f",
+    "name": "Krosse Johnson",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323a68d8dd82466e",
+    "name": "Rohan Jones",
+    "position": "TE",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323a8f979b78f92e",
+    "name": "Antonio Jordan",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323ab430e046c344",
+    "name": "Grant Karnes",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323adabff36fd074",
+    "name": "Maddox Lassiter",
+    "position": "TE",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323b07f7d178cd34",
+    "name": "Brayson McHenry",
+    "position": "QB",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323b2bf12c833616",
+    "name": "Andreas Paaske",
+    "position": "TE",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323b4f8f5acc7e8b",
+    "name": "Jace Petty",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323b78bd35940c16",
+    "name": "Jaden Platt",
+    "position": "TE",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323ba738c048109d",
+    "name": "Braylen Russell",
+    "position": "RB",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323bccabc66b3a5d",
+    "name": "Cam Settles",
+    "position": "RB",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323bf0ec00222e96",
+    "name": "Kam Shanks",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323c1e6d4d729f62",
+    "name": "Raylen Sharpe",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323c47e95f9308eb",
+    "name": "Scott Starzyk",
+    "position": "K",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323c6c0e0965b58d",
+    "name": "Zach Taylor",
+    "position": "WR",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323c914a64afb51a",
+    "name": "Charlie Von Der Meden",
+    "position": "K",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323cb3afb9be1c3a",
+    "name": "Mike Washington Jr.",
+    "position": "RB",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323ce183e1a5538f",
+    "name": "Grayson Wilson",
+    "position": "QB",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323d1c2b815fa3f4",
+    "name": "Emmanuel Adebi",
+    "position": "TE",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323d69815d89c55c",
+    "name": "Jake Balis",
+    "position": "RB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323d90e744f6b2b9",
+    "name": "Kayleb Barnett",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323db944a7a0393d",
+    "name": "Boski Barrett",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323ddc385bf5e3d9",
+    "name": "Larry Benton III",
+    "position": "TE",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323e0c17e056d99f",
+    "name": "Blaze Berlowitz",
+    "position": "QB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323e340ad3496369",
+    "name": "Tristen Brown",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323e5f6c082f731a",
+    "name": "Ryder Brownstein",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323e850f75e5f3be",
+    "name": "Ty Burd",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323eba7838d6a022",
+    "name": "Brycen Coleman",
+    "position": "TE",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323ee1f5f2b7de25",
+    "name": "Justin Dewers",
+    "position": "K",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323f1c7dfdd8a4cc",
+    "name": "Drew Dickey",
+    "position": "QB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323f3ffd8d17db54",
+    "name": "Cameran Dickson",
+    "position": "TE",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323f618d6f25eda7",
+    "name": "Witt Edwards",
+    "position": "TE",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323f8cff5371c131",
+    "name": "Jack Elliott",
+    "position": "QB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323fb4fa9a94c85c",
+    "name": "Gabe Fields",
+    "position": "RB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890323fdc51af96c156",
+    "name": "Chance Fitzgerald",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032400cb196bb5020",
+    "name": "Chase Gillespie",
+    "position": "RB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032403192b5f06011",
+    "name": "Lebron Hill",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903240571dac71d5de",
+    "name": "Richie Hoskins",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032407e7e90c2b6b4",
+    "name": "Trent Hudson",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903240a64ed41f1674",
+    "name": "Wils Jackson",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903240ccfc9fdf31f1",
+    "name": "Derek Kee",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903240f30a1f0c1e72",
+    "name": "Jamezell Lassiter",
+    "position": "RB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324124b535941a85",
+    "name": "Joseph McVay",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324154ddde3ae845",
+    "name": "Whit Muschamp",
+    "position": "QB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032419b05d2f737d4",
+    "name": "Diego Pavia",
+    "position": "QB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903241c126ab1a12cf",
+    "name": "Dominic Rezac",
+    "position": "RB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903241e5bf51060f6c",
+    "name": "Claiborne Richards",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324216ff276837a4",
+    "name": "Tre Richardson",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324240a81d911112",
+    "name": "Mason Rohmiller",
+    "position": "K",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324271b4c596d866",
+    "name": "Elijah Rooney",
+    "position": "TE",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903242962302c7c454",
+    "name": "Junior Sherrill",
+    "position": "WR",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903242b9cca68e989b",
+    "name": "Cole Spence",
+    "position": "TE",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903243199657881f0b",
+    "name": "Eli Stowers",
+    "position": "TE",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032433b4cb84f4b43",
+    "name": "Brock Taylor",
+    "position": "K",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032436bd8d56a9369",
+    "name": "Makhilyn Young",
+    "position": "RB",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324390da7a436441",
+    "name": "Kiotti Armstrong",
+    "position": "TE",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903243de07a4441b19",
+    "name": "Nate Boerkircher",
+    "position": "TE",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903244354495d2b817",
+    "name": "Luke Braden",
+    "position": "TE",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032445a1b45164532",
+    "name": "Carter Braugh",
+    "position": "TE",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324480f6a5a7549e",
+    "name": "Blake Buntyn",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903244ae08cdaf5613",
+    "name": "Chase Burton",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903244d4c9f06735a8",
+    "name": "Terry Bussey",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032450600d7fb8c15",
+    "name": "Colton Chmelar",
+    "position": "K",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032453762a7cea7ac",
+    "name": "Zachary Clay",
+    "position": "TE",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032457c69cf2328e8",
+    "name": "Mario Craver",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903245a1b133f9e667",
+    "name": "Ronnie Crosby III",
+    "position": "RB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903245c4050027b196",
+    "name": "Amari Daniels",
+    "position": "RB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032462366317b8c07",
+    "name": "Will Hargett",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324647d18275605b",
+    "name": "Brady Hart",
+    "position": "QB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032466e09b0b8316c",
+    "name": "Kelshaun Johnson",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324693d697c25253",
+    "name": "Paxton Land",
+    "position": "QB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903246c8f56a584698",
+    "name": "Preston Landis",
+    "position": "RB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903246f09887020016",
+    "name": "Theo Melin Ohrstrom",
+    "position": "TE",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324724276f063b76",
+    "name": "Eli Morcos",
+    "position": "QB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032474b4ee0489421",
+    "name": "Jamarion Morrow",
+    "position": "RB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032479a30409cc5b0",
+    "name": "Jerome Myles",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903247c137006529be",
+    "name": "Amari Niblack",
+    "position": "TE",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032485bcd267cf57c",
+    "name": "Rueben Owens II",
+    "position": "RB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032487e0d9b5e219e",
+    "name": "Liam Padron",
+    "position": "K",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903248abafb2695535",
+    "name": "Marcel Reed",
+    "position": "QB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903248d0861da8cfaa",
+    "name": "Deondrae Riden Jr.",
+    "position": "RB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032490144efa7da91",
+    "name": "Micah Riley",
+    "position": "TE",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903249273aa469d41d",
+    "name": "Johnny Ryder",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324972bb50f6f8af",
+    "name": "Kade Stewart",
+    "position": "TE",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032499dc062db1afd",
+    "name": "Ramarian Tillman",
+    "position": "RB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903249be3e2803894a",
+    "name": "Wesley Watson",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903249e3e95a8d1d43",
+    "name": "Izaiah Williams",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324a1ceaddb979ac",
+    "name": "Jonah Wilson",
+    "position": "WR",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324a45803cf75756",
+    "name": "Jacob Zeno",
+    "position": "QB",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324a6ca586781157",
+    "name": "Jared Zirkel",
+    "position": "K",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324a90d6ccca10ad",
+    "name": "Jovantae Barnes",
+    "position": "RB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324ab82d1eab2611",
+    "name": "Andy Bass",
+    "position": "RB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324ae2e8c2276569",
+    "name": "Tory Blaylock",
+    "position": "RB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324b1f63a90c488b",
+    "name": "Trey Brown",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324b413f8b856d50",
+    "name": "Deion Burks",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324b6cf0c4686b9b",
+    "name": "Ivan Carreon",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324c06ce1088a16d",
+    "name": "Manny Choice",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324c56b328e7de2d",
+    "name": "Liam Evans",
+    "position": "K",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324c808f6126dbb9",
+    "name": "Javonnie Gibson",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324ca6f270de0dbf",
+    "name": "Jayden Gibson",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324ccae89d019042",
+    "name": "Michael Hawkins Jr.",
+    "position": "QB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324d06369450ffae",
+    "name": "Kaden Helms",
+    "position": "TE",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324d357865c3e17d",
+    "name": "Will Huggins",
+    "position": "TE",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324d59db86037924",
+    "name": "Jacob Jordan",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324d7f18643ae6cd",
+    "name": "Jaren Kanak",
+    "position": "TE",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324da73480224816",
+    "name": "Zion Kearney",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324df04392b27208",
+    "name": "Carson Kent",
+    "position": "TE",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324e2580f1a2ff89",
+    "name": "Keontez Lewis",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324e4c5056629996",
+    "name": "John Locke Jr.",
+    "position": "TE",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324e77272d65edcc",
+    "name": "Josiah Martin",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324e9d3776a15af0",
+    "name": "John Mateer",
+    "position": "QB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324ebe27dc217d1e",
+    "name": "Kade McIntyre",
+    "position": "TE",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324ee335d0661d82",
+    "name": "Major Melson",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324f136371398031",
+    "name": "Eli Merck",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324f39e6ddf0a8d8",
+    "name": "Grayson Miller",
+    "position": "K",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324f60b39906c308",
+    "name": "Whitt Newbauer",
+    "position": "QB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324f8c03358a1cab",
+    "name": "Jett Niu",
+    "position": "QB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324fba4c87c9f51d",
+    "name": "Jaydn Ott",
+    "position": "RB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890324fe0e7e4eca39f",
+    "name": "Zion Ragins",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032501180593a57ea",
+    "name": "Xavier Robinson",
+    "position": "RB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "6890325033ecce01886d",
+    "name": "Tate Sandell",
+    "position": "K",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032505a47a3809e0c",
+    "name": "Isaiah Sategna",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032507ea089334809",
+    "name": "Gabe Sawchuk",
+    "position": "RB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903250a54ab8273186",
+    "name": "Jakeb Snyder",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903250ce75525cc3c0",
+    "name": "Taylor Tatum",
+    "position": "RB",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903250f1be9ee6037f",
+    "name": "Elijah Thomas",
+    "position": "WR",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "689032511eb0893aeda3",
+    "name": "Trynae Washington",
+    "position": "TE",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
+    "id": "68903251410dda416ffb",
+    "name": "Austin Welch",
+    "position": "K",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "season": null,
+    "draftable": true,
+    "power_4": true
+  },
+  {
     "id": "689033f7cb21caed5c4c",
     "name": "Stevie Amar Jr.",
     "position": "TE",
@@ -230,16 +6220,6 @@
     "power_4": true
   },
   {
-    "id": "689033fc3c5b8f4c93ba",
-    "name": "DJ Johnson",
-    "position": "TE",
-    "team": "Boston College",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689033fc6ba64f8ba17c",
     "name": "Datrell Jones",
     "position": "WR",
@@ -430,16 +6410,6 @@
     "power_4": true
   },
   {
-    "id": "6890340131e2a1fd8302",
-    "name": "VJ Wilkins",
-    "position": "WR",
-    "team": "Boston College",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689034016f08b47eda7c",
     "name": "Ismael Zamor",
     "position": "WR",
@@ -490,38 +6460,8 @@
     "power_4": true
   },
   {
-    "id": "6890340822213e0f127f",
-    "name": "EJ Caminong",
-    "position": "QB",
-    "team": "California",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689034084b70a4c8025a",
-    "name": "Taylor Chapman",
-    "position": "RB",
-    "team": "California",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903408722d14014d4c",
     "name": "Jacob De Jesus",
-    "position": "WR",
-    "team": "California",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903408d9f291361281",
-    "name": "Veal",
     "position": "WR",
     "team": "California",
     "conference": "ACC",
@@ -620,16 +6560,6 @@
     "power_4": true
   },
   {
-    "id": "6890340b97fa13af3d98",
-    "name": "LJ Johnson Jr.",
-    "position": "RB",
-    "team": "California",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890340bbcc8b3226abc",
     "name": "Jordan King",
     "position": "WR",
@@ -720,16 +6650,6 @@
     "power_4": true
   },
   {
-    "id": "6890340d54f51b696af4",
-    "name": "Smith",
-    "position": "WR",
-    "team": "California",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890340d823e6467a6a6",
     "name": "Erik Peters",
     "position": "K",
@@ -773,16 +6693,6 @@
     "id": "6890340ebbfdb20429e0",
     "name": "Trevor Rogers",
     "position": "WR",
-    "team": "California",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890340f058364dc32ba",
-    "name": "Keawe Sagapolutele",
-    "position": "QB",
     "team": "California",
     "conference": "ACC",
     "season": null,
@@ -1003,26 +6913,6 @@
     "id": "6890341524012bf446fb",
     "name": "Tristan Martinez",
     "position": "WR",
-    "team": "Clemson",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689034154e618f7f9cb5",
-    "name": "T.J. Moore",
-    "position": "WR",
-    "team": "Clemson",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890341573de3f640674",
-    "name": "Henry",
-    "position": "TE",
     "team": "Clemson",
     "conference": "ACC",
     "season": null,
@@ -1273,16 +7163,6 @@
     "id": "68903419af63d1b66362",
     "name": "Vance Bolyard",
     "position": "TE",
-    "team": "Duke",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903419d58524358478",
-    "name": "Sean Brown",
-    "position": "WR",
     "team": "Duke",
     "conference": "ACC",
     "season": null,
@@ -1592,26 +7472,6 @@
   {
     "id": "6890341edbdb6f009e0f",
     "name": "Camdon Frier",
-    "position": "WR",
-    "team": "Florida State",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890341f0b28f33939d9",
-    "name": "Shaun Gelsey",
-    "position": "WR",
-    "team": "Florida State",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890341f3210d4756e7e",
-    "name": "BJ Gibson",
     "position": "WR",
     "team": "Florida State",
     "conference": "ACC",
@@ -1940,16 +7800,6 @@
     "power_4": true
   },
   {
-    "id": "68903424a6c3367945a7",
-    "name": "J.T. Byrne",
-    "position": "TE",
-    "team": "Georgia Tech",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903424cb71fc9a80d1",
     "name": "Isiah Canion",
     "position": "WR",
@@ -2113,16 +7963,6 @@
     "id": "689034275d808a06db2e",
     "name": "Aaron Philo",
     "position": "QB",
-    "team": "Georgia Tech",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689034278252bee030c3",
-    "name": "J.P. Powell",
-    "position": "RB",
     "team": "Georgia Tech",
     "conference": "ACC",
     "season": null,
@@ -2393,16 +8233,6 @@
     "id": "6890342f08823b8a3745",
     "name": "TreyShun Hurry",
     "position": "WR",
-    "team": "Louisville",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689034303310ce423e55",
-    "name": "C.J. Jacobsen",
-    "position": "TE",
     "team": "Louisville",
     "conference": "ACC",
     "season": null,
@@ -2700,16 +8530,6 @@
     "power_4": true
   },
   {
-    "id": "6890343a2171616dd4be",
-    "name": "CJ Daniels",
-    "position": "WR",
-    "team": "Miami",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890343a4a0e15271d6e",
     "name": "Carter Davis",
     "position": "K",
@@ -2960,16 +8780,6 @@
     "power_4": true
   },
   {
-    "id": "6890343f09e00fe37d6e",
-    "name": "Humphrey",
-    "position": "RB",
-    "team": "Miami",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890343f2e68a93ec42f",
     "name": "Jack Whitehouse",
     "position": "RB",
@@ -3000,29 +8810,9 @@
     "power_4": true
   },
   {
-    "id": "6890343fb0cb92c9c515",
-    "name": "CJ Bailey",
-    "position": "QB",
-    "team": "NC State",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890343fe156afc79205",
     "name": "Charlie Birtwistle",
     "position": "K",
-    "team": "NC State",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890344020296de24f2d",
-    "name": "rel Bolder",
-    "position": "WR",
     "team": "NC State",
     "conference": "ACC",
     "season": null,
@@ -3560,16 +9350,6 @@
     "power_4": true
   },
   {
-    "id": "6890344a0989f18d4e0e",
-    "name": "DJ Mazzone",
-    "position": "QB",
-    "team": "North Carolina",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890344a3635c06b4e05",
     "name": "Jaylen McGill",
     "position": "RB",
@@ -3582,16 +9362,6 @@
   {
     "id": "6890344a634be4f9a567",
     "name": "Andres Miyares Jr.",
-    "position": "QB",
-    "team": "North Carolina",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890344a87714c1f0075",
-    "name": "Tori Newkirk",
     "position": "QB",
     "team": "North Carolina",
     "conference": "ACC",
@@ -3803,16 +9573,6 @@
     "id": "6890344de85f88f1760e",
     "name": "Derrick Davis Jr.",
     "position": "RB",
-    "team": "Pittsburgh",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890344e1d65112876e6",
-    "name": "El",
-    "position": "WR",
     "team": "Pittsburgh",
     "conference": "ACC",
     "season": null,
@@ -4060,16 +9820,6 @@
     "power_4": true
   },
   {
-    "id": "689034539b7cc5cf49d0",
-    "name": "Kyrian Turner",
-    "position": "RB",
-    "team": "Pittsburgh",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903453c2c1a3dd772b",
     "name": "Caleb Williams",
     "position": "RB",
@@ -4210,16 +9960,6 @@
     "power_4": true
   },
   {
-    "id": "68903456042521ddfa24",
-    "name": "T.J. Harden",
-    "position": "RB",
-    "team": "SMU",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689034562804c5a6f380",
     "name": "Ty Hawkins",
     "position": "QB",
@@ -4352,16 +10092,6 @@
   {
     "id": "689034584f46b781d89b",
     "name": "Devon Martin",
-    "position": "TE",
-    "team": "SMU",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689034587d7437f47eed",
-    "name": "RJ Maryland",
     "position": "TE",
     "team": "SMU",
     "conference": "ACC",
@@ -4750,16 +10480,6 @@
     "power_4": true
   },
   {
-    "id": "6890345ec77a6adaffd6",
-    "name": "AJ Seidler",
-    "position": "K",
-    "team": "Stanford",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890345eec0e3887d666",
     "name": "Cole Tabb",
     "position": "RB",
@@ -4803,16 +10523,6 @@
     "id": "6890345f9dae3ff80fdd",
     "name": "Griffin Waiss",
     "position": "TE",
-    "team": "Stanford",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890345fc3e1fda87ee6",
-    "name": "CJ Williams",
-    "position": "WR",
     "team": "Stanford",
     "conference": "ACC",
     "season": null,
@@ -4980,16 +10690,6 @@
     "power_4": true
   },
   {
-    "id": "68903462a0160616e8e8",
-    "name": "Ron Haile",
-    "position": "WR",
-    "team": "Syracuse",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903462c8dc716fe0b2",
     "name": "Jaden Hart",
     "position": "RB",
@@ -5090,16 +10790,6 @@
     "power_4": true
   },
   {
-    "id": "689034646ff761ba3b76",
-    "name": "Simmons",
-    "position": "WR",
-    "team": "Syracuse",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890346493eb68225d9a",
     "name": "Tyshawn Russell",
     "position": "WR",
@@ -5120,16 +10810,6 @@
     "power_4": true
   },
   {
-    "id": "68903464e13624ea312c",
-    "name": "Meer Thomas",
-    "position": "WR",
-    "team": "Syracuse",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903465114be2e52557",
     "name": "Jamie Tremble",
     "position": "TE",
@@ -5142,16 +10822,6 @@
   {
     "id": "68903465353750786217",
     "name": "Dan Villari",
-    "position": "TE",
-    "team": "Syracuse",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689034655e7528cd7d76",
-    "name": "Baker",
     "position": "TE",
     "team": "Syracuse",
     "conference": "ACC",
@@ -5450,16 +11120,6 @@
     "power_4": true
   },
   {
-    "id": "6890346a7841d6f7c098",
-    "name": "Short",
-    "position": "WR",
-    "team": "Virginia",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890346aa18a8dbf28fc",
     "name": "Henry Omohundro",
     "position": "TE",
@@ -5503,16 +11163,6 @@
     "id": "6890346b4d59364e4539",
     "name": "Cam Ross",
     "position": "WR",
-    "team": "Virginia",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890346b7433f073d381",
-    "name": "Mari Taylor",
-    "position": "RB",
     "team": "Virginia",
     "conference": "ACC",
     "season": null,
@@ -5650,26 +11300,6 @@
     "power_4": true
   },
   {
-    "id": "6890346dcb1217200565",
-    "name": "L.J. Booker",
-    "position": "WR",
-    "team": "Virginia Tech",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890346e019f82d8a722",
-    "name": "A.J. Brand",
-    "position": "QB",
-    "team": "Virginia Tech",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890346e277945425bb2",
     "name": "John Buetow",
     "position": "RB",
@@ -5743,16 +11373,6 @@
     "id": "6890346f659bdce025bf",
     "name": "Israel Hairston",
     "position": "WR",
-    "team": "Virginia Tech",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890346f8d1e59cb2486",
-    "name": "Ricous Hairston",
-    "position": "TE",
     "team": "Virginia Tech",
     "conference": "ACC",
     "season": null,
@@ -5840,16 +11460,6 @@
     "power_4": true
   },
   {
-    "id": "689034710e0981c2cd8a",
-    "name": "Connor",
-    "position": "WR",
-    "team": "Virginia Tech",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689034713250e369255f",
     "name": "Jeffrey Overton Jr.",
     "position": "RB",
@@ -5863,16 +11473,6 @@
     "id": "6890347155ca33e3ab98",
     "name": "Shamarius Peterkin",
     "position": "WR",
-    "team": "Virginia Tech",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689034717994d3aea971",
-    "name": "P.J. Prioleau",
-    "position": "RB",
     "team": "Virginia Tech",
     "conference": "ACC",
     "season": null,
@@ -6290,16 +11890,6 @@
     "power_4": true
   },
   {
-    "id": "689034791f8e1e39e137",
-    "name": "Brien",
-    "position": "WR",
-    "team": "Wake Forest",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903479494c4cfc716f",
     "name": "Elijiah Oehlke",
     "position": "QB",
@@ -6342,16 +11932,6 @@
   {
     "id": "6890347a02574b70cfaa",
     "name": "Sawyer Racanelli",
-    "position": "WR",
-    "team": "Wake Forest",
-    "conference": "ACC",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890347a2827dc89b4e4",
-    "name": "EJ Reid",
     "position": "WR",
     "team": "Wake Forest",
     "conference": "ACC",
@@ -6510,16 +12090,6 @@
     "power_4": true
   },
   {
-    "id": "689039fec8f1abd5597d",
-    "name": "Jazion Patterson",
-    "position": "RB",
-    "team": "Iowa",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689039ff0061a7fcbc0d",
     "name": "Terrell Washington Jr.",
     "position": "RB",
@@ -6582,16 +12152,6 @@
   {
     "id": "68903a016afac1d9b8f3",
     "name": "Jackson Naeve",
-    "position": "WR",
-    "team": "Iowa",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903a01926f1bdc1394",
-    "name": "KJ Parker",
     "position": "WR",
     "team": "Iowa",
     "conference": "Big Ten",
@@ -6702,16 +12262,6 @@
   {
     "id": "68903a039525ce5ceec6",
     "name": "Addison Ostrenga",
-    "position": "TE",
-    "team": "Iowa",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903a03c2910348e23f",
-    "name": "DJ Vonnahme",
     "position": "TE",
     "team": "Iowa",
     "conference": "Big Ten",
@@ -6900,16 +12450,6 @@
     "power_4": true
   },
   {
-    "id": "68903a06cc401c2b960e",
-    "name": "Tysean Griffin",
-    "position": "WR",
-    "team": "Illinois",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903a06f06711adcf4b",
     "name": "Ashton Hollins",
     "position": "WR",
@@ -7030,16 +12570,6 @@
     "power_4": true
   },
   {
-    "id": "68903a08dfc355534c25",
-    "name": "Davin Stoffel",
-    "position": "TE",
-    "team": "Illinois",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903a0921e19bc55083",
     "name": "Tanner Hollinger",
     "position": "TE",
@@ -7140,16 +12670,6 @@
     "power_4": true
   },
   {
-    "id": "68903a0ab47afc530d0d",
-    "name": "C.J. Hester",
-    "position": "RB",
-    "team": "Michigan",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903a0af179b1b9bf4b",
     "name": "Donovan Johnson",
     "position": "RB",
@@ -7162,16 +12682,6 @@
   {
     "id": "68903a0b1fb0543163c8",
     "name": "Micah Ka'apana",
-    "position": "RB",
-    "team": "Michigan",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903a0b422f44755ab7",
-    "name": "Bryson Kudzdal",
     "position": "RB",
     "team": "Michigan",
     "conference": "Big Ten",
@@ -7240,16 +12750,6 @@
     "power_4": true
   },
   {
-    "id": "68903a0c6a6f9792d567",
-    "name": "C.J. Charleston",
-    "position": "WR",
-    "team": "Michigan",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903a0c922a462fd77b",
     "name": "Logan Forbes",
     "position": "WR",
@@ -7290,16 +12790,6 @@
     "power_4": true
   },
   {
-    "id": "68903a0d332c892c60d0",
-    "name": "Frederick Moore",
-    "position": "WR",
-    "team": "Michigan",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903a0d5ec464eb3ebe",
     "name": "Semaj Morgan",
     "position": "WR",
@@ -7332,16 +12822,6 @@
   {
     "id": "68903a0dd4b9cbffca0d",
     "name": "Anthony Simpson",
-    "position": "WR",
-    "team": "Michigan",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903a0e057213c1cd78",
-    "name": "I'Marion Stewart",
     "position": "WR",
     "team": "Michigan",
     "conference": "Big Ten",
@@ -7452,16 +12932,6 @@
   {
     "id": "68903a0fb058f17d1778",
     "name": "Deakon Tonielli",
-    "position": "TE",
-    "team": "Michigan",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903a0fd998e850d46f",
-    "name": "Jalen Hoffman",
     "position": "TE",
     "team": "Michigan",
     "conference": "Big Ten",
@@ -7690,28 +13160,8 @@
     "power_4": true
   },
   {
-    "id": "68903a1407c4ed602159",
-    "name": "E.J. Williams Jr.",
-    "position": "WR",
-    "team": "Indiana",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903a142cf4d21adbad",
     "name": "Andrew Barker",
-    "position": "TE",
-    "team": "Indiana",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903a14526ec84d931d",
-    "name": "James Bomba",
     "position": "TE",
     "team": "Indiana",
     "conference": "Big Ten",
@@ -7950,16 +13400,6 @@
     "power_4": true
   },
   {
-    "id": "68903fc022f353ce84f5",
-    "name": "Liam Clifford",
-    "position": "WR",
-    "team": "Penn State",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903fc0451aa627d9ee",
     "name": "Logan Cunningham",
     "position": "WR",
@@ -7982,16 +13422,6 @@
   {
     "id": "68903fc08ecd947b8f12",
     "name": "Aaron Enterline",
-    "position": "WR",
-    "team": "Penn State",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903fc0b5278e407c24",
-    "name": "Jeff Exinor Jr.",
     "position": "WR",
     "team": "Penn State",
     "conference": "Big Ten",
@@ -8070,16 +13500,6 @@
     "power_4": true
   },
   {
-    "id": "68903fc218f2e8170236",
-    "name": "Lyriq Samuel",
-    "position": "WR",
-    "team": "Penn State",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903fc2588374fc827a",
     "name": "Kaden Saunders",
     "position": "WR",
@@ -8132,16 +13552,6 @@
   {
     "id": "68903fc39e9d01ae0c89",
     "name": "Luke Reynolds",
-    "position": "TE",
-    "team": "Penn State",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903fc3d9c12ff1f537",
-    "name": "Joey Schlaffer",
     "position": "TE",
     "team": "Penn State",
     "conference": "Big Ten",
@@ -8222,16 +13632,6 @@
   {
     "id": "68903fc55b4fef5e4419",
     "name": "Sam Dixon",
-    "position": "RB",
-    "team": "Ohio State",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903fc59afa4603dcba",
-    "name": "C.J. Donaldson",
     "position": "RB",
     "team": "Ohio State",
     "conference": "Big Ten",
@@ -8550,16 +13950,6 @@
     "power_4": true
   },
   {
-    "id": "68903fcc595d0cd0b9fd",
-    "name": "Aidan Hubbard",
-    "position": "RB",
-    "team": "Northwestern",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903fcc84d775810454",
     "name": "Ronny Johnson",
     "position": "RB",
@@ -8572,16 +13962,6 @@
   {
     "id": "68903fccb9191db13e30",
     "name": "Caleb Komolafe",
-    "position": "RB",
-    "team": "Northwestern",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903fcce78fe4aacc16",
-    "name": "Albert Kunciks III",
     "position": "RB",
     "team": "Northwestern",
     "conference": "Big Ten",
@@ -8612,16 +13992,6 @@
   {
     "id": "68903fcd7caeefa39c86",
     "name": "Ricky Ahumaraeze",
-    "position": "WR",
-    "team": "Northwestern",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903fcdab4a2851021e",
-    "name": "Braden Bluiett",
     "position": "WR",
     "team": "Northwestern",
     "conference": "Big Ten",
@@ -8700,16 +14070,6 @@
     "power_4": true
   },
   {
-    "id": "68903fcfa79725a33147",
-    "name": "Griffin Wilde",
-    "position": "WR",
-    "team": "Northwestern",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903fd0330ef31d7f41",
     "name": "Lawson Albright",
     "position": "TE",
@@ -8742,16 +14102,6 @@
   {
     "id": "68903fd1a54f2e61cdb8",
     "name": "Alex Lines",
-    "position": "TE",
-    "team": "Northwestern",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903fd1e3bfe5122503",
-    "name": "Camp Magee",
     "position": "TE",
     "team": "Northwestern",
     "conference": "Big Ten",
@@ -8920,16 +14270,6 @@
     "power_4": true
   },
   {
-    "id": "68903fd8a1d76d5d3699",
-    "name": "Colin Reynolds",
-    "position": "RB",
-    "team": "Maryland",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903fd91a158bba225c",
     "name": "DeJuan Williams",
     "position": "RB",
@@ -8972,16 +14312,6 @@
   {
     "id": "68903fd9dbbd12b7db00",
     "name": "Ryan Manning",
-    "position": "WR",
-    "team": "Maryland",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903fda1bd8e149da68",
-    "name": "Jahmari Powell\u2011Wonson",
     "position": "WR",
     "team": "Maryland",
     "conference": "Big Ten",
@@ -9090,38 +14420,8 @@
     "power_4": true
   },
   {
-    "id": "68903fe09ec86104b880",
-    "name": "AJ Szymanski",
-    "position": "TE",
-    "team": "Maryland",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903fe0e684340c4c9f",
-    "name": "JT Taggart",
-    "position": "TE",
-    "team": "Maryland",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68903fe158b6dd8d75ff",
     "name": "Ryan Capriotti",
-    "position": "K",
-    "team": "Maryland",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68903fe1d7b61faf8d1f",
-    "name": "Gavin Marshall",
     "position": "K",
     "team": "Maryland",
     "conference": "Big Ten",
@@ -9232,16 +14532,6 @@
   {
     "id": "68904190b4d959ab425d",
     "name": "Jayden Limar",
-    "position": "RB",
-    "team": "Oregon",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904190d700a6be7a5a",
-    "name": "Da'Juan Riggs",
     "position": "RB",
     "team": "Oregon",
     "conference": "Big Ten",
@@ -9420,16 +14710,6 @@
     "power_4": true
   },
   {
-    "id": "68904193ea8e193a0779",
-    "name": "A.J. Pugliano",
-    "position": "TE",
-    "team": "Oregon",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689041941bcd4fea1021",
     "name": "Kenyon Sadiq",
     "position": "TE",
@@ -9492,16 +14772,6 @@
   {
     "id": "689041950f5daa6f40a3",
     "name": "Kai Horton",
-    "position": "QB",
-    "team": "Washington",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689041953b873b2abdbb",
-    "name": "Shea Kuykendall",
     "position": "QB",
     "team": "Washington",
     "conference": "Big Ten",
@@ -9770,16 +15040,6 @@
     "power_4": true
   },
   {
-    "id": "6890419a217a02287a26",
-    "name": "Ryan Otton",
-    "position": "TE",
-    "team": "Washington",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890419a43b61935df82",
     "name": "Austin Simmons",
     "position": "TE",
@@ -9810,16 +15070,6 @@
     "power_4": true
   },
   {
-    "id": "6890419ab72dc3587d5f",
-    "name": "Ethan Moszczulski",
-    "position": "K",
-    "team": "Washington",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890419adcef7796f9d8",
     "name": "Billy Edwards Jr.",
     "position": "QB",
@@ -9842,16 +15092,6 @@
   {
     "id": "6890419b32713622e86f",
     "name": "Hunter Simmons",
-    "position": "QB",
-    "team": "Wisconsin",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890419b581573adc65e",
-    "name": "Danny O'Neill",
     "position": "QB",
     "team": "Wisconsin",
     "conference": "Big Ten",
@@ -9940,16 +15180,6 @@
     "power_4": true
   },
   {
-    "id": "6890419cd536f5478439",
-    "name": "Kyan Berry\u2011Johnson",
-    "position": "WR",
-    "team": "Wisconsin",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890419d0622ee5be427",
     "name": "Chris Brooks Jr.",
     "position": "WR",
@@ -9982,16 +15212,6 @@
   {
     "id": "6890419d7b8ec15ac8eb",
     "name": "Eugene Hilton Jr.",
-    "position": "WR",
-    "team": "Wisconsin",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890419d9e7c528f6fbf",
-    "name": "Joseph Griffin Jr.",
     "position": "WR",
     "team": "Wisconsin",
     "conference": "Big Ten",
@@ -10080,16 +15300,6 @@
     "power_4": true
   },
   {
-    "id": "6890419f198d472d4837",
-    "name": "Nizyj Davis",
-    "position": "TE",
-    "team": "Wisconsin",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "6890419f44cde4acb0ea",
     "name": "Lance Mason",
     "position": "TE",
@@ -10102,16 +15312,6 @@
   {
     "id": "6890419f6a96820e5661",
     "name": "Jackson McGohan",
-    "position": "TE",
-    "team": "Wisconsin",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "6890419f8eea67c07bf3",
-    "name": "JT Seagreaves",
     "position": "TE",
     "team": "Wisconsin",
     "conference": "Big Ten",
@@ -10210,16 +15410,6 @@
     "power_4": true
   },
   {
-    "id": "689041a13125a8f8ddda",
-    "name": "Johann Cardenas",
-    "position": "RB",
-    "team": "Minnesota",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689041a1585a1963053e",
     "name": "Cam Davis",
     "position": "RB",
@@ -10240,28 +15430,8 @@
     "power_4": true
   },
   {
-    "id": "689041a1ae2c1415dc9b",
-    "name": "Fame Ij\u00e9boi",
-    "position": "RB",
-    "team": "Minnesota",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689041a1d539836fb365",
     "name": "Darius Taylor",
-    "position": "RB",
-    "team": "Minnesota",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689041a2013442768543",
-    "name": "A.J. Turner",
     "position": "RB",
     "team": "Minnesota",
     "conference": "Big Ten",
@@ -10282,16 +15452,6 @@
   {
     "id": "689041a25e5414dd3b69",
     "name": "Le'Meke Brockington",
-    "position": "WR",
-    "team": "Minnesota",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689041a27fb951624dbf",
-    "name": "Drew Biber",
     "position": "WR",
     "team": "Minnesota",
     "conference": "Big Ten",
@@ -10750,16 +15910,6 @@
     "power_4": true
   },
   {
-    "id": "689041a9d54683d9e2f8",
-    "name": "Donovan Wood",
-    "position": "WR",
-    "team": "USC",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689041aa0a68f1c5251e",
     "name": "Josiah Zamora",
     "position": "WR",
@@ -11000,16 +16150,6 @@
     "power_4": true
   },
   {
-    "id": "689041aff07a9e4bf010",
-    "name": "Titus Mokiao\u2011Atimalala",
-    "position": "WR",
-    "team": "UCLA",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689041b02d14d3d1e9dc",
     "name": "Shane Rosenthal",
     "position": "WR",
@@ -11050,16 +16190,6 @@
     "power_4": true
   },
   {
-    "id": "689041b0da033748a720",
-    "name": "Noah Fox\u2011Flores",
-    "position": "TE",
-    "team": "UCLA",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689041b1270bcab731ba",
     "name": "Hudson Habermehl",
     "position": "TE",
@@ -11083,16 +16213,6 @@
     "id": "689041b1756d52276a4e",
     "name": "Dylan Sims",
     "position": "TE",
-    "team": "UCLA",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689041b1a03ab72a5f47",
-    "name": "Mateen Bhagahani",
-    "position": "K",
     "team": "UCLA",
     "conference": "Big Ten",
     "season": null,
@@ -11420,16 +16540,6 @@
     "power_4": true
   },
   {
-    "id": "68904a8d64d4efdbb200",
-    "name": "AJ Petersen",
-    "position": "RB",
-    "team": "Iowa State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904a8d8bb0809c01e3",
     "name": "Carson Robbins",
     "position": "WR",
@@ -11533,26 +16643,6 @@
     "id": "68904a8f8a02bbf884ef",
     "name": "Harvey Broussard III",
     "position": "WR",
-    "team": "Houston",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904a8fd1d809446c00",
-    "name": "Marion Burnette",
-    "position": "RB",
-    "team": "Houston",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904a9012475f7e8534",
-    "name": "DJ Butler",
-    "position": "RB",
     "team": "Houston",
     "conference": "Big 12",
     "season": null,
@@ -11770,16 +16860,6 @@
     "power_4": true
   },
   {
-    "id": "68904a93b0e5d1d0c765",
-    "name": "Shaun Sanford II",
-    "position": "RB",
-    "team": "Houston",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904a93d1899fd6964a",
     "name": "Marquis Shoulders",
     "position": "WR",
@@ -11813,16 +16893,6 @@
     "id": "68904a9459c47281154e",
     "name": "Jake Sock",
     "position": "QB",
-    "team": "Houston",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904a948174147d8d76",
-    "name": "Jeffrey Strozier Jr.",
-    "position": "WR",
     "team": "Houston",
     "conference": "Big 12",
     "season": null,
@@ -12150,29 +17220,9 @@
     "power_4": true
   },
   {
-    "id": "68904a9a5932ba6c5d08",
-    "name": "lon Miller",
-    "position": "WR",
-    "team": "Colorado",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904a9a79da07b4ab98",
     "name": "Omarion Miller",
     "position": "WR",
-    "team": "Colorado",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904a9a9fb38b23cdc0",
-    "name": "Charlie Offerdahl",
-    "position": "RB",
     "team": "Colorado",
     "conference": "Big 12",
     "season": null,
@@ -12213,16 +17263,6 @@
     "id": "68904a9b5b328a0ecec2",
     "name": "Christian Sarem",
     "position": "RB",
-    "team": "Colorado",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904a9b7f676e548df4",
-    "name": "ell Smalls",
-    "position": "TE",
     "team": "Colorado",
     "conference": "Big 12",
     "season": null,
@@ -12342,26 +17382,6 @@
   {
     "id": "68904a9d75f5b89efe72",
     "name": "Taizaun Burns",
-    "position": "WR",
-    "team": "Cincinnati",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904a9d98bd64bffb7a",
-    "name": "Jakorion Caffey",
-    "position": "RB",
-    "team": "Cincinnati",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904a9db980f4c5eeaf",
-    "name": "Jeff Caldwell",
     "position": "WR",
     "team": "Cincinnati",
     "conference": "Big 12",
@@ -12563,16 +17583,6 @@
     "id": "68904aa112e61c2f9652",
     "name": "Stephen Rusnak",
     "position": "K",
-    "team": "Cincinnati",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904aa13793b41693a8",
-    "name": "Maurri Smith",
-    "position": "TE",
     "team": "Cincinnati",
     "conference": "Big 12",
     "season": null,
@@ -12813,16 +17823,6 @@
     "id": "68904aa50b72de66b39b",
     "name": "Parker Kingston",
     "position": "WR",
-    "team": "BYU",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904aa537e10850a97b",
-    "name": "LJ Martin",
-    "position": "RB",
     "team": "BYU",
     "conference": "Big 12",
     "season": null,
@@ -13090,16 +18090,6 @@
     "power_4": true
   },
   {
-    "id": "68904aa9967210e04c04",
-    "name": "Noah Fifita",
-    "position": "QB",
-    "team": "Arizona",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904aa9ba3114f3dcba",
     "name": "Kellan Ford",
     "position": "TE",
@@ -13313,16 +18303,6 @@
     "id": "68904aad2a03e8f303d2",
     "name": "Gio Richardson",
     "position": "WR",
-    "team": "Arizona",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904aad55b0318f9809",
-    "name": "Medina",
-    "position": "K",
     "team": "Arizona",
     "conference": "Big 12",
     "season": null,
@@ -13580,29 +18560,9 @@
     "power_4": true
   },
   {
-    "id": "68904ab16c092ca62476",
-    "name": "AJ Ia",
-    "position": "TE",
-    "team": "Arizona State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904ab1909cfbd68216",
     "name": "Noble Johnson",
     "position": "WR",
-    "team": "Arizona State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ab1bcf563d6a68e",
-    "name": "Carston Kieffer",
-    "position": "K",
     "team": "Arizona State",
     "conference": "Big 12",
     "season": null,
@@ -13693,16 +18653,6 @@
     "id": "68904ab3aa1394a6c866",
     "name": "Zechariah Sample",
     "position": "WR",
-    "team": "Arizona State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ab3ccb8d8933f25",
-    "name": "Jeff Sims",
-    "position": "QB",
     "team": "Arizona State",
     "conference": "Big 12",
     "season": null,
@@ -13853,16 +18803,6 @@
     "id": "68904ab64485ddc7f1f9",
     "name": "Wilson Eseme III",
     "position": "RB",
-    "team": "Baylor",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ab66bf10100ffaa",
-    "name": "Edward Griffin",
-    "position": "QB",
     "team": "Baylor",
     "conference": "Big 12",
     "season": null,
@@ -14300,16 +19240,6 @@
     "power_4": true
   },
   {
-    "id": "68904b9cc634cb4fc14e",
-    "name": "EJ Horton Jr.",
-    "position": "WR",
-    "team": "Purdue",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904b9cec7e6cac488d",
     "name": "Michael Jackson III",
     "position": "WR",
@@ -14350,28 +19280,8 @@
     "power_4": true
   },
   {
-    "id": "68904b9e1ab7b7e812c7",
-    "name": "AJ Richardson",
-    "position": "WR",
-    "team": "Purdue",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904b9e8b138f2117d8",
     "name": "Quinn Rosenkranz",
-    "position": "WR",
-    "team": "Purdue",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904b9ecfa186fed859",
-    "name": "Charles Ross",
     "position": "WR",
     "team": "Purdue",
     "conference": "Big Ten",
@@ -14460,26 +19370,6 @@
     "power_4": true
   },
   {
-    "id": "68904ba0f351fa7967d2",
-    "name": "Jack Weter",
-    "position": "K",
-    "team": "Purdue",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba138f5faadd678",
-    "name": "Austin Albericci",
-    "position": "QB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904ba1646274ca82b4",
     "name": "Sean Ashenfelder",
     "position": "QB",
@@ -14493,86 +19383,6 @@
     "id": "68904ba18c163c86931e",
     "name": "Athan Kaliakmanis",
     "position": "QB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba1b68c67d22576",
-    "name": "John Langan",
-    "position": "QB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba1de8d17fc5050",
-    "name": "Gavin Rupp",
-    "position": "QB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba21501eb52d2f7",
-    "name": "AJ Surace",
-    "position": "QB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba24378ad6aea2f",
-    "name": "Noah Vedral",
-    "position": "QB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba2696bd0fb2a28",
-    "name": "Jashon Benjamin",
-    "position": "RB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba28deb37ad71d8",
-    "name": "Samuel Brown",
-    "position": "RB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba2b2c4f9e4feb8",
-    "name": "CJ Campbell Jr.",
-    "position": "RB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba2dda39df9ac21",
-    "name": "Parker Day",
-    "position": "RB",
     "team": "Rutgers",
     "conference": "Big Ten",
     "season": null,
@@ -14600,48 +19410,8 @@
     "power_4": true
   },
   {
-    "id": "68904ba363af6904ddb1",
-    "name": "Piotr Partyla",
-    "position": "RB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904ba38efa80972b88",
     "name": "Antwan Raymond",
-    "position": "RB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba3ccb6ef85b329",
-    "name": "Al-Shadee Salaam",
-    "position": "RB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba4048fc1809e79",
-    "name": "Gabe Winowich",
-    "position": "RB",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba42f27b3e83aea",
-    "name": "Jamier Wright-Collins",
     "position": "RB",
     "team": "Rutgers",
     "conference": "Big Ten",
@@ -14680,98 +19450,8 @@
     "power_4": true
   },
   {
-    "id": "68904ba6c722ccb743a1",
-    "name": "Naseim Brantley",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba7058f2172de62",
-    "name": "Sage Clawges",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba7394e429b6428",
-    "name": "Aron Cruickshank",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba772c23778ac14",
-    "name": "Sah'nye Degraffenreidt",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba7b2f53736d16b",
-    "name": "Christian Dremel",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba7e4809c37d672",
-    "name": "Brayden Fox",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904ba943ba126a953b",
     "name": "Jourdin Houston",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba9a284dc9e0a82",
-    "name": "JaQuae Jackson",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904ba9d6ae4399c1dc",
-    "name": "Shameen Jones",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904baa358648c01be8",
-    "name": "Dino Kalikmanis",
     "position": "WR",
     "team": "Rutgers",
     "conference": "Big Ten",
@@ -14790,36 +19470,6 @@
     "power_4": true
   },
   {
-    "id": "68904baaac5bc234a22b",
-    "name": "Isaiah Washington",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904baadbabdefdbba8",
-    "name": "Josh Youngblood",
-    "position": "WR",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904bab15da0694cb66",
-    "name": "Matt Alaimo",
-    "position": "TE",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904bab45e97877e7a2",
     "name": "Logan Blake",
     "position": "TE",
@@ -14830,58 +19480,8 @@
     "power_4": true
   },
   {
-    "id": "68904bab8c2f94b2f85f",
-    "name": "Shawn Bowman",
-    "position": "TE",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904babb2bb536c1a8d",
-    "name": "KJ Duff",
-    "position": "TE",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904babd94a441b2870",
     "name": "Mike Higgins",
-    "position": "TE",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904bac13a4e0be65c7",
-    "name": "Victor Konopka",
-    "position": "TE",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904bac72936f1bd215",
-    "name": "Tahjay Moore",
-    "position": "TE",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904bacd25b93818698",
-    "name": "Brandon Myers",
     "position": "TE",
     "team": "Rutgers",
     "conference": "Big Ten",
@@ -14903,36 +19503,6 @@
     "id": "68904bad535a4d38d072",
     "name": "Colin Weber",
     "position": "TE",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904bad8c0ac9e360d5",
-    "name": "David Broncati",
-    "position": "K",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904badcaec38dbe619",
-    "name": "Justin Davidovicz",
-    "position": "K",
-    "team": "Rutgers",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904bae009fbb69534d",
-    "name": "Gavin Haggerty",
-    "position": "K",
     "team": "Rutgers",
     "conference": "Big Ten",
     "season": null,
@@ -15290,26 +19860,6 @@
     "power_4": true
   },
   {
-    "id": "68904bb5a75f168cd266",
-    "name": "Jaylynn Gramstad",
-    "position": "QB",
-    "team": "Nebraska",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904bb5d5ed998bfd68",
-    "name": "TJ Lateef",
-    "position": "QB",
-    "team": "Nebraska",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904bb64a8afbe09196",
     "name": "Luke Longval",
     "position": "QB",
@@ -15352,16 +19902,6 @@
   {
     "id": "68904bb84f67d4fe48f5",
     "name": "Izaac Dickey",
-    "position": "RB",
-    "team": "Nebraska",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904bb8868c948f306f",
-    "name": "Vincent Genantone",
     "position": "RB",
     "team": "Nebraska",
     "conference": "Big Ten",
@@ -15482,16 +20022,6 @@
   {
     "id": "68904bbb2cf16f08d96e",
     "name": "Keelan Smith",
-    "position": "WR",
-    "team": "Nebraska",
-    "conference": "Big Ten",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904bbb5a46789ba53e",
-    "name": "DJ Singleton",
     "position": "WR",
     "team": "Nebraska",
     "conference": "Big Ten",
@@ -16050,16 +20580,6 @@
     "power_4": true
   },
   {
-    "id": "68904e31c089bdf1fd4e",
-    "name": "Dillon Duff",
-    "position": "QB",
-    "team": "Kansas State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904e31f1d76795a3e9",
     "name": "Dylan Edwards",
     "position": "RB",
@@ -16230,16 +20750,6 @@
     "power_4": true
   },
   {
-    "id": "68904e35214fdaeb9a77",
-    "name": "JB Price",
-    "position": "RB",
-    "team": "Kansas State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904e354943ccf4939f",
     "name": "DeVon Rice",
     "position": "RB",
@@ -16263,16 +20773,6 @@
     "id": "68904e3619941697f00f",
     "name": "Leyton Simmering",
     "position": "K",
-    "team": "Kansas State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904e3644671488dcb7",
-    "name": "Demps",
-    "position": "WR",
     "team": "Kansas State",
     "conference": "Big 12",
     "season": null,
@@ -16330,16 +20830,6 @@
     "power_4": true
   },
   {
-    "id": "68904e37a0e3593430c3",
-    "name": "Hendrix",
-    "position": "RB",
-    "team": "Oklahoma State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904e37cddf3cd92c98",
     "name": "Banks Bowen",
     "position": "QB",
@@ -16390,16 +20880,6 @@
     "power_4": true
   },
   {
-    "id": "68904e38cb2b6160ff89",
-    "name": "DJ Dugar Jr.",
-    "position": "RB",
-    "team": "Oklahoma State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904e3900afe79757be",
     "name": "Rodney Fields Jr.",
     "position": "RB",
@@ -16442,16 +20922,6 @@
   {
     "id": "68904e39a8b795e1deaa",
     "name": "Gavin Freeman",
-    "position": "WR",
-    "team": "Oklahoma State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904e39de93d055e7d5",
-    "name": "Griffiths",
     "position": "WR",
     "team": "Oklahoma State",
     "conference": "Big 12",
@@ -16522,16 +20992,6 @@
   {
     "id": "68904e3b38a338d95208",
     "name": "Jaylen Lloyd",
-    "position": "WR",
-    "team": "Oklahoma State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904e3b60ce15b94fc7",
-    "name": "Wain Lofton",
     "position": "WR",
     "team": "Oklahoma State",
     "conference": "Big 12",
@@ -16612,16 +21072,6 @@
   {
     "id": "68904e3cd3067c056cd3",
     "name": "Talyn Shettron",
-    "position": "WR",
-    "team": "Oklahoma State",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904e3d02d5005e4571",
-    "name": "King",
     "position": "WR",
     "team": "Oklahoma State",
     "conference": "Big 12",
@@ -16950,16 +21400,6 @@
     "power_4": true
   },
   {
-    "id": "68904e442fdb71136f5b",
-    "name": "Morreun Pimpton",
-    "position": "TE",
-    "team": "TCU",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904e4453d5409855ab",
     "name": "Joe Pitchford",
     "position": "RB",
@@ -16983,16 +21423,6 @@
     "id": "68904e44cb70a0fdfc02",
     "name": "David Potter",
     "position": "QB",
-    "team": "TCU",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904e44f3f1827aacf1",
-    "name": "DJ Rogers",
-    "position": "TE",
     "team": "TCU",
     "conference": "Big 12",
     "season": null,
@@ -17123,16 +21553,6 @@
     "id": "68904e4798461891792e",
     "name": "Tristian Gentry",
     "position": "WR",
-    "team": "Texas Tech",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "68904e47bdc4e2ef28a0",
-    "name": "Mitch Griffis",
-    "position": "QB",
     "team": "Texas Tech",
     "conference": "Big 12",
     "season": null,
@@ -17330,16 +21750,6 @@
     "power_4": true
   },
   {
-    "id": "68904e4b5e7deb49266d",
-    "name": "T.J. West",
-    "position": "WR",
-    "team": "Texas Tech",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "68904e4b82744eec2f15",
     "name": "Haydon Wiginton",
     "position": "WR",
@@ -17348,36 +21758,6 @@
     "season": null,
     "draftable": true,
     "power_4": true
-  },
-  {
-    "id": "68904eee8d578ca0cb8d",
-    "name": "Kenny Minchey",
-    "position": "QB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904eeeb8856adff1cf",
-    "name": "CJ Carr",
-    "position": "QB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904eef039ffbc7d520",
-    "name": "Anthony Rezac",
-    "position": "QB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
   },
   {
     "id": "68904eef27d743e1fa47",
@@ -17390,246 +21770,6 @@
     "power_4": false
   },
   {
-    "id": "68904eef4a6220038048",
-    "name": "Gi'Bran Payne",
-    "position": "RB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904eef7965fb36871d",
-    "name": "Jeremiyah Love",
-    "position": "RB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904eefaa93e8c68ca2",
-    "name": "Aneyas Williams",
-    "position": "RB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904eefd4f68b1ce667",
-    "name": "Kedren Young",
-    "position": "RB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef0064a841dedd5",
-    "name": "Devyn Ford",
-    "position": "RB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef02b1ebcb46c8d",
-    "name": "Justin Fisher",
-    "position": "RB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef04c72faa41e66",
-    "name": "Jadarian Price",
-    "position": "RB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef082dbbdcc4f68",
-    "name": "Dylan Devezin",
-    "position": "RB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef0ab10dae598bb",
-    "name": "Jake Tafelski",
-    "position": "RB",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef0dc83c7e124c7",
-    "name": "Deion Colzie",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef1101950031a83",
-    "name": "Jaden Greathouse",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef137bb7200ad81",
-    "name": "Jayden Harrison",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef15f903b06aff9",
-    "name": "Beaux Collins",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef192f50bac6c93",
-    "name": "Jordan Faison",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef1b8857d419d90",
-    "name": "Kris Mitchell",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef1e72aae7829b0",
-    "name": "KK Smith",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef2183dbd6b78c2",
-    "name": "Micah Gilbert",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef24c7cec8c4b74",
-    "name": "Cam Williams",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef27868a58e78db",
-    "name": "Logan Saldate",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef29e107e6c8842",
-    "name": "Tyler Buchner",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef2cd0cef412014",
-    "name": "Matt Jeffery",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef2f2d94fc4a0a0",
-    "name": "Xavier Southall",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef324a8f7aba471",
-    "name": "Jack Polian",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef34c4d4db0aa12",
-    "name": "Leo Scheidler",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
     "id": "68904ef36f5281b7d090",
     "name": "Jayden Thomas",
     "position": "WR",
@@ -17638,116 +21778,6 @@
     "season": null,
     "draftable": true,
     "power_4": false
-  },
-  {
-    "id": "68904ef394ee378f1474",
-    "name": "Alex Whitman",
-    "position": "WR",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef3c72a16571d97",
-    "name": "Eli Raridon",
-    "position": "TE",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef3ed4afe678bdd",
-    "name": "Davis Sherwood",
-    "position": "TE",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef426e684078fd9",
-    "name": "Andrew Yanoshak",
-    "position": "TE",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef45d1e0043150f",
-    "name": "Henry Garrity",
-    "position": "TE",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef48b9d12d5cb64",
-    "name": "Kevin Bauman",
-    "position": "TE",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef4b1d5cae4d9e5",
-    "name": "Jack Larsen",
-    "position": "TE",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef4d7200cc9d27b",
-    "name": "Cooper Flanagan",
-    "position": "TE",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": false,
-    "power_4": false
-  },
-  {
-    "id": "68904ef5167ca40200da",
-    "name": "Mitchell Evans",
-    "position": "TE",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "68904ef53c716c5cc988",
-    "name": "Charlie Selna",
-    "position": "TE",
-    "team": "Notre Dame",
-    "conference": "Independent",
-    "season": null,
-    "draftable": true,
-    "power_4": false
-  },
-  {
-    "id": "689050a478c6436e0e88",
-    "name": "KJ Jefferson",
-    "position": "QB",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
   },
   {
     "id": "689050a4b3e28113b639",
@@ -17770,26 +21800,6 @@
     "power_4": true
   },
   {
-    "id": "689050a51418e7cc6d8a",
-    "name": "EJ Colson",
-    "position": "QB",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": false,
-    "power_4": true
-  },
-  {
-    "id": "689050a53ab6da44f2ea",
-    "name": "Riley Trujillo",
-    "position": "QB",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": false,
-    "power_4": true
-  },
-  {
     "id": "689050a5663912126d37",
     "name": "Brock Hansel",
     "position": "QB",
@@ -17797,46 +21807,6 @@
     "conference": "Big 12",
     "season": null,
     "draftable": false,
-    "power_4": true
-  },
-  {
-    "id": "689050a5a16ce58b1faa",
-    "name": "Johnny Richardson",
-    "position": "RB",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689050a5cebb94715eeb",
-    "name": "R.J. Harvey",
-    "position": "RB",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689050a5f2a7916b7bd3",
-    "name": "Peny Boone",
-    "position": "RB",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689050a625af7f8dffc9",
-    "name": "Kam Ingram",
-    "position": "RB",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
     "power_4": true
   },
   {
@@ -17860,16 +21830,6 @@
     "power_4": true
   },
   {
-    "id": "689050a69bb4f41dfd11",
-    "name": "Preston Foreman",
-    "position": "RB",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": false,
-    "power_4": true
-  },
-  {
     "id": "689050a6c58acbb61965",
     "name": "Tyler Wrenn",
     "position": "RB",
@@ -17877,16 +21837,6 @@
     "conference": "Big 12",
     "season": null,
     "draftable": false,
-    "power_4": true
-  },
-  {
-    "id": "689050a7087938a4edb7",
-    "name": "Kobe Hudson",
-    "position": "WR",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
     "power_4": true
   },
   {
@@ -17902,66 +21852,6 @@
   {
     "id": "689050a75a1aa0a61adf",
     "name": "Bredell Richardson",
-    "position": "WR",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": false,
-    "power_4": true
-  },
-  {
-    "id": "689050a7899d9093faaf",
-    "name": "Ja'Varrius Johnson",
-    "position": "WR",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689050a7acb04763ef8a",
-    "name": "Tyree Patterson",
-    "position": "WR",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": false,
-    "power_4": true
-  },
-  {
-    "id": "689050a7da3a3163a5c2",
-    "name": "Jacoby Jones",
-    "position": "WR",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689050a80d3e51ee71cb",
-    "name": "Jarrad Baker",
-    "position": "WR",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689050a82ec9c8c68b3e",
-    "name": "Trent Whittemore",
-    "position": "WR",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689050a853f5c8e6543b",
-    "name": "Kason Stokes",
     "position": "WR",
     "team": "UCF",
     "conference": "Big 12",
@@ -18010,16 +21900,6 @@
     "power_4": true
   },
   {
-    "id": "689050a938c5f5f0c9ce",
-    "name": "Randy Pittman",
-    "position": "TE",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": false,
-    "power_4": true
-  },
-  {
     "id": "689050a958bb42b27e2c",
     "name": "Kylan Fox",
     "position": "TE",
@@ -18030,26 +21910,6 @@
     "power_4": true
   },
   {
-    "id": "689050a98a629294caaf",
-    "name": "Evan Morris",
-    "position": "TE",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
-    "id": "689050a9b7cbe8e23a37",
-    "name": "Reece Adkins",
-    "position": "TE",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
-    "power_4": true
-  },
-  {
     "id": "689050a9e77909e9af5d",
     "name": "Thomas Wadsworth",
     "position": "TE",
@@ -18057,16 +21917,6 @@
     "conference": "Big 12",
     "season": null,
     "draftable": false,
-    "power_4": true
-  },
-  {
-    "id": "689050aa17f1e6b1595f",
-    "name": "Jordan Davis",
-    "position": "TE",
-    "team": "UCF",
-    "conference": "Big 12",
-    "season": null,
-    "draftable": true,
     "power_4": true
   }
 ]
