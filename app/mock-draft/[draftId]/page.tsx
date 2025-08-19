@@ -30,7 +30,24 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
   const [players, setPlayers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [turn, setTurn] = useState<TurnResp['turn'] | null>(null);
+  const [results, setResults] = useState<ResultsResp | null>(null);
   const unsubRef = useRef<() => void>();
+
+  // Refresh all data
+  async function refreshAll() {
+    try {
+      // Fetch current turn
+      const turnResp = await api<TurnResp>(`/api/mock-draft/turn/${draftId}`);
+      setTurn(turnResp.turn || null);
+      
+      // Fetch results
+      const resultsResp = await api<ResultsResp>(`/api/mock-draft/results/${draftId}`);
+      setResults(resultsResp);
+    } catch (e: any) {
+      console.error('Failed to refresh:', e);
+    }
+  }
 
   // Join draft as a user
   async function joinAs(userId: string, displayName: string) {
@@ -54,6 +71,8 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
 
   useEffect(() => {
     draftCore.refresh();
+    refreshAll(); // Load initial turn and results
+    
     // Load available players from your existing endpoint
     fetch('/api/draft/players')
       .then(res => res.json())
@@ -67,6 +86,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
     const poll = setInterval(() => {
       draftCore.refresh()
         .catch(() => {});
+      refreshAll(); // Also refresh turn and results
     }, 3000);
     
     return () => {
@@ -75,7 +95,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
     };
   }, [draftId]);
 
-  const secondsLeft = useMemo(() => null, []);
+  const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
 
   // Recompute seconds left every second
   useEffect(() => {
@@ -84,8 +104,9 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
         const now = Date.now();
         const deadline = new Date(turn.deadlineAt).getTime();
         const secs = Math.max(0, Math.floor((deadline - now) / 1000));
-        // Force re-render by updating turn
-        setTurn(prev => prev ? { ...prev } : null);
+        setSecondsLeft(secs);
+      } else {
+        setSecondsLeft(null);
       }
     }, 1000);
     return () => clearInterval(timer);
