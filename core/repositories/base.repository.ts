@@ -213,7 +213,9 @@ export abstract class BaseRepository<T extends Models.Document> {
       return document;
     } catch (error: any) {
       if (error instanceof AppError) throw error;
-      throw new AppError(500, 'REPOSITORY_ERROR', `Failed to create document: ${error.message}`);
+      const message = `Failed to create document in collection '${this.collectionId}': ${error.message}`;
+      console.error(message);
+      throw new AppError(500, 'REPOSITORY_ERROR', message);
     }
   }
 
