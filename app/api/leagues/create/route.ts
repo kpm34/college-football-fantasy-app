@@ -3,6 +3,9 @@ import { serverRepositories } from '../../../../core/repositories';
 import { withErrorHandler } from '../../../../core/utils/error-handler';
 import { ValidationError } from '../../../../core/errors/app-error';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export const POST = withErrorHandler(async (request: NextRequest) => {
   // Check if user is authenticated
   const sessionCookie = request.cookies.get('appwrite-session')?.value;
