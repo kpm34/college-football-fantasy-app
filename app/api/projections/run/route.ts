@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Finish run with metrics
+    // Finish run and write metrics to separate collection
     await databases.updateDocument(
       DATABASE_ID,
       COLLECTIONS.PROJECTION_RUNS,
@@ -71,6 +71,26 @@ export async function POST(request: NextRequest) {
         finishedAt: new Date().toISOString(),
       }
     );
+
+    // Minimal example metrics (could be computed MAE/MAPE, etc.)
+    const metrics = {
+      sampleSize: demoPlayers.length,
+      meanPoints: demoPlayers.reduce((s, p) => s + p.points, 0) / demoPlayers.length,
+    };
+
+    try {
+      await databases.createDocument(
+        DATABASE_ID,
+        COLLECTIONS.PROJECTION_RUN_METRICS,
+        runId,
+        {
+          runId,
+          metrics: JSON.stringify(metrics),
+        }
+      );
+    } catch (e) {
+      // Non-fatal: metrics are auxiliary
+    }
 
     return NextResponse.json({ success: true, runId });
   } catch (error: any) {

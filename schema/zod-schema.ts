@@ -113,21 +113,21 @@ export const Lineups = z.object({
 
 export const Auctions = z.object({
   leagueId: z.string().min(1).max(50),
-  currentPlayer: z.string().max(50).optional(),
-  currentBid: z.number().min(0).default(0),
-  currentBidder: z.string().max(50).optional(),
-  timeRemaining: z.number().int().min(0).default(0),
-  status: z.enum(['waiting', 'active', 'complete']).default('waiting'),
-  completedPlayers: z.string().max(10000).default('[]'), // JSON array
-  nominatingTeam: z.string().max(50).optional()
+  status: z.string().min(1).max(20),
+  currentPlayerId: z.string().min(1).max(50).optional(),
+  currentBid: z.number().min(0).optional(),
+  currentBidder: z.string().min(1).max(50).optional(),
+  startTime: z.date().optional(),
+  endTime: z.date().optional()
 });
 
 export const Bids = z.object({
-  auctionId: z.string().min(1).max(50),
+  leagueId: z.string().min(1).max(50),
+  sessionId: z.string().min(1).max(50),
+  userId: z.string().min(1).max(50),
   playerId: z.string().min(1).max(50),
-  bidderId: z.string().min(1).max(50),
-  amount: z.number().min(1).max(1000),
-  timestamp: z.date().default(() => new Date())
+  bidAmount: z.number().min(1),
+  timestamp: z.date()
 });
 
 export const PlayerStats = z.object({
@@ -292,8 +292,27 @@ export const ProjectionRuns = z.object({
 });
 
 /**
+ * Projection Run Metrics (separate to avoid attribute limits)
+ */
+export const ProjectionRunMetrics = z.object({
+  runId: z.string().min(1).max(64),
+  metrics: z.string().max(10000), // JSON string of metrics (e.g., MAE/MAPE)
+});
+
+/**
  * Matchups (weekly head-to-head)
  */
+export const Drafts = z.object({
+  leagueId: z.string().min(1).max(50),
+  status: z.string().min(1).max(20),
+  currentRound: z.number().int().min(1).optional(),
+  currentPick: z.number().int().min(1).optional(),
+  maxRounds: z.number().int().min(1).optional(),
+  draftOrder: z.string().max(1000).optional(), // JSON array of team IDs
+  startTime: z.date().optional(),
+  endTime: z.date().optional()
+});
+
 export const Matchups = z.object({
   leagueId: z.string().min(1).max(50),
   week: z.number().int().min(1).max(20),
@@ -303,6 +322,29 @@ export const Matchups = z.object({
   homePoints: z.number().optional(),
   awayPoints: z.number().optional(),
   status: z.enum(['scheduled', 'active', 'final']).default('scheduled')
+});
+
+/**
+ * Scores (weekly scoring results)
+ */
+export const Scores = z.object({
+  leagueId: z.string().min(1).max(50),
+  week: z.number().int().min(1).max(20),
+  rosterId: z.string().min(1).max(50),
+  points: z.number().min(0),
+  opponentId: z.string().min(1).max(50).optional(),
+  result: z.string().max(20).optional() // 'win', 'loss', 'tie'
+});
+
+/**
+ * Team Budgets (auction draft budgets)
+ */
+export const TeamBudgets = z.object({
+  leagueId: z.string().min(1).max(50),
+  userId: z.string().min(1).max(50),
+  budget: z.number().min(0),
+  spent: z.number().min(0).optional(),
+  remaining: z.number().min(0).optional()
 });
 
 /**
@@ -320,6 +362,9 @@ export type Bid = z.infer<typeof Bids>;
 export type PlayerStat = z.infer<typeof PlayerStats>;
 export type User = z.infer<typeof Users>;
 export type ActivityLogEntry = z.infer<typeof ActivityLog>;
+export type Draft = z.infer<typeof Drafts>;
+export type Score = z.infer<typeof Scores>;
+export type TeamBudget = z.infer<typeof TeamBudgets>;
 
 /**
  * COLLECTION REGISTRY
@@ -333,7 +378,9 @@ export const COLLECTIONS = {
   USER_TEAMS: 'user_teams',  // Updated from 'rosters'
   LINEUPS: 'lineups',
   AUCTIONS: 'auctions',
+  AUCTION_SESSIONS: 'auction_sessions',
   BIDS: 'bids',
+  AUCTION_BIDS: 'auction_bids',
   PLAYER_STATS: 'player_stats',
   USERS: 'users',
   ACTIVITY_LOG: 'activity_log',
@@ -341,7 +388,9 @@ export const COLLECTIONS = {
   MOCK_DRAFTS: 'mock_drafts',
   MOCK_DRAFT_PICKS: 'mock_draft_picks',
   MOCK_DRAFT_PARTICIPANTS: 'mock_draft_participants',
+  DRAFTS: 'drafts',
   MATCHUPS: 'matchups',
+  SCORES: 'scores',
   PLAYER_PROJECTIONS: 'player_projections',
   PROJECTIONS_YEARLY: 'projections_yearly',
   PROJECTIONS_WEEKLY: 'projections_weekly',
@@ -351,6 +400,8 @@ export const COLLECTIONS = {
   DRAFT_STATES: 'draft_states',
   LEAGUE_MEMBERSHIPS: 'league_memberships',
   PROJECTION_RUNS: 'projection_runs',
+  PROJECTION_RUN_METRICS: 'projection_run_metrics',
+  TEAM_BUDGETS: 'team_budgets',
 } as const;
 
 /**
@@ -365,7 +416,9 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.USER_TEAMS]: Rosters,  // Updated key to use user_teams
   [COLLECTIONS.LINEUPS]: Lineups,
   [COLLECTIONS.AUCTIONS]: Auctions,
+  [COLLECTIONS.AUCTION_SESSIONS]: Auctions, // Same schema as auctions
   [COLLECTIONS.BIDS]: Bids,
+  [COLLECTIONS.AUCTION_BIDS]: Bids, // Same schema as bids
   [COLLECTIONS.PLAYER_STATS]: PlayerStats,
   [COLLECTIONS.USERS]: Users,
   [COLLECTIONS.ACTIVITY_LOG]: ActivityLog,
@@ -373,7 +426,9 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.MOCK_DRAFTS]: MockDrafts,
   [COLLECTIONS.MOCK_DRAFT_PICKS]: MockDraftPicks,
   [COLLECTIONS.MOCK_DRAFT_PARTICIPANTS]: MockDraftParticipants,
+  [COLLECTIONS.DRAFTS]: Drafts,
   [COLLECTIONS.MATCHUPS]: Matchups,
+  [COLLECTIONS.SCORES]: Scores,
   [COLLECTIONS.PLAYER_PROJECTIONS]: PlayerProjections,
   [COLLECTIONS.PROJECTIONS_YEARLY]: ProjectionsYearly,
   [COLLECTIONS.PROJECTIONS_WEEKLY]: ProjectionsWeekly,
@@ -383,6 +438,8 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.DRAFT_STATES]: DraftStates,
   [COLLECTIONS.LEAGUE_MEMBERSHIPS]: LeagueMemberships,
   [COLLECTIONS.PROJECTION_RUNS]: ProjectionRuns,
+  [COLLECTIONS.PROJECTION_RUN_METRICS]: ProjectionRunMetrics,
+  [COLLECTIONS.TEAM_BUDGETS]: TeamBudgets,
 } as const;
 
 /**
