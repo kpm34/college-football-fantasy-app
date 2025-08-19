@@ -80,12 +80,10 @@ export async function POST(request: NextRequest) {
       }
     }
     
-    // Create roster for the user
+    // Create roster for the user (only include attributes that exist in `user_teams`)
     const rosterData: Record<string, any> = {
       teamName: teamName || `${user.name || user.email}'s Team`,
       userId: user.$id,
-      userName: user.name || user.email,
-      email: user.email,
       leagueId: leagueId,
       wins: 0,
       losses: 0,
