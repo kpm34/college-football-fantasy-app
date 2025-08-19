@@ -10,6 +10,7 @@
 ## 📁 Repository Structure
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px'}}}%%
 graph TD
     ROOT[college-football-fantasy-app]
     
@@ -52,6 +53,7 @@ graph TD
 ## 🔄 Functionality & Data Flow
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px'}}}%%
 graph TB
     %% External Data Sources
     subgraph ExtAPIs[External APIs]
@@ -104,7 +106,7 @@ graph TB
         API_PLAYERS[/api/draft/players<br/>Cached Player Lists<br/>Fantasy Projections]
         API_LEAGUES[/api/leagues/*<br/>Create, Join, Manage<br/>Commissioner Tools]
         API_MOCK[/api/mock-draft/*<br/>Live Human Draft<br/>Turn Management]
-        API_DRAFT[/api/draft/*<br/>Real Draft System<br/>Pick Management]
+        API_DRAFT[/api/drafts/*<br/>Real Draft System<br/>Pick/Autopick/Pause]
     end
     
     %% Frontend Layer
@@ -178,6 +180,7 @@ graph TB
 ## 🔧 Commissioner Settings Schema Fix Flow
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px'}}}%%
 sequenceDiagram
     participant UI as Commissioner UI
     participant API as API Route

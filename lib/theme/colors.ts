@@ -1,40 +1,44 @@
-// League Home Color Palette (updated from new swatches)
+// League Home Color Palette (simplified)
 export const leagueColors = {
   primary: {
-    mauve: '#C8A2A8',      // Soft mauve/dusty rose
-    sand: '#D4C4B8',       // Warm sand/beige
-    mint: '#C8DDD4',       // Soft mint green
-    sky: '#B8D4DC',        // Light sky blue
-    crimson: '#DC143C',    // Bright crimson red
-    highlight: '#DC143C'
+    mauve: '#9CA3AF',      // Simple gray
+    sand: '#D1D5DB',       // Light gray
+    mint: '#10B981',       // Simple green
+    sky: '#3B82F6',        // Simple blue
+    crimson: '#EF4444',    // Simple red
+    highlight: '#EF4444'
   },
   accent: {
-    pink: '#C8A2A8',       // Using mauve as accent pink
-    blue: '#B8D4DC',       // Sky blue for accents
-    green: '#C8DDD4'       // Mint for success states
+    pink: '#EC4899',       // Simple pink
+    blue: '#3B82F6',       // Simple blue
+    green: '#10B981'       // Simple green
   },
   background: {
-    main: '#F5F0EB',       // Light warm background
-    secondary: '#D4C4B8',  // Sand color for sections
-    tertiary: '#C8DDD4',   // Mint for alternate sections
-    overlay: 'rgba(212, 196, 184, 0.9)',
-    card: 'rgba(200, 162, 168, 0.15)'
+    main: '#FFFFFF',       // White
+    secondary: '#F3F4F6',  // Light gray
+    tertiary: '#E5E7EB',   // Gray
+    overlay: 'rgba(0, 0, 0, 0.5)',
+    card: 'rgba(0, 0, 0, 0.05)'
   },
   text: {
-    primary: '#2C2428',    // Dark charcoal
-    secondary: '#5A4A52',  // Medium gray-brown
-    muted: '#8A7A82',      // Muted gray-purple
+    primary: '#111827',    // Dark gray
+    secondary: '#4B5563',  // Medium gray
+    muted: '#9CA3AF',      // Muted gray
     inverse: '#FFFFFF'
   },
   border: {
-    light: 'rgba(200, 162, 168, 0.2)',
-    medium: 'rgba(200, 162, 168, 0.35)',
-    dark: 'rgba(200, 162, 168, 0.5)'
+    light: 'rgba(0, 0, 0, 0.1)',
+    medium: 'rgba(0, 0, 0, 0.2)',
+    dark: 'rgba(0, 0, 0, 0.3)'
+  },
+  success: {
+    light: '#D1FAE5',  // Light green
+    main: '#10B981'    // Green
   },
   interactive: {
-    hover: 'rgba(220, 20, 60, 0.15)',
-    active: 'rgba(220, 20, 60, 0.25)',
-    focus: '#DC143C'
+    hover: 'rgba(0, 0, 0, 0.05)',
+    active: 'rgba(0, 0, 0, 0.1)',
+    focus: '#3B82F6'
   }
 };
 

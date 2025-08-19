@@ -404,7 +404,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
               onClick={saveDraftSettings}
               disabled={saving}
               className="mt-4 px-4 py-2 rounded-lg transition-colors"
-              style={{ backgroundColor: leagueColors.primary.coral, color: leagueColors.text.inverse }}
+              style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
             >
               {saving ? 'Saving...' : 'Save Draft Settings'}
             </button>
@@ -525,7 +525,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
               onClick={saveScoringRules}
               disabled={saving}
               className="mt-6 px-4 py-2 rounded-lg transition-colors"
-              style={{ backgroundColor: leagueColors.primary.coral, color: leagueColors.text.inverse }}
+              style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
             >
               {saving ? 'Saving...' : 'Save Scoring Rules'}
             </button>

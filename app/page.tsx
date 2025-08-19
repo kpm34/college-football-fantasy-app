@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
+import { ScheduleNavigation } from '@/components/schedule/ScheduleNavigation';
 
 export default function Home() {
   const router = useRouter();
@@ -144,6 +145,23 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Schedule Navigation Section */}
+      <div className="py-16 bg-gradient-to-br from-[#3A1220] via-[#4A1626] to-[#5C1F30]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="section-title text-white mb-4 flex items-center justify-center gap-3">
+              <svg className="w-10 h-10 text-[#E89A5C]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>2025 CFB Schedule</span>
+            </h2>
+            <p className="section-subtitle text-gray-400">Navigate by week or team to find Power 4 matchups</p>
+          </div>
+          
+          <ScheduleNavigation />
         </div>
       </div>
 
