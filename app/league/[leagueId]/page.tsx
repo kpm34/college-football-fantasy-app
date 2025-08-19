@@ -25,7 +25,6 @@ interface League {
   draftDate: string;
   draftStartedAt?: string;
   status: string;
-  inviteCode: string;
   gameMode?: string;
   selectedConference?: string;
   isPrivate?: boolean;
@@ -187,7 +186,6 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           draftDate: l.draftDate || '',
           draftStartedAt: (l as any).draftStartedAt || undefined,
           status: l.status || 'ACTIVE',
-          inviteCode: '',
           gameMode: l.mode,
           selectedConference: l.conf || undefined,
           draftType: (l as any).draftType,

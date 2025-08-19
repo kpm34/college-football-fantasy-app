@@ -11,7 +11,6 @@ export interface League extends Models.Document {
   gameMode: 'power4' | 'sec' | 'acc' | 'big12' | 'bigten';
   status: 'open' | 'full' | 'drafting' | 'active' | 'completed';
   isPublic: boolean;
-  inviteCode?: string;
   pickTimeSeconds: number;
   scoringRules: Record<string, number>;
   draftDate?: string;

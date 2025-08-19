@@ -51,7 +51,6 @@ function JoinLeagueContent() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [selectedLeague, setSelectedLeague] = useState<League | null>(null);
   const [inviteToken, setInviteToken] = useState<string | null>(null);
-  const [inviteCode, setInviteCode] = useState<string | null>(null);
   const [inviteLeagueId, setInviteLeagueId] = useState<string | null>(null);
   const [checkingInvite, setCheckingInvite] = useState(false);
   const [password, setPassword] = useState('');
@@ -59,57 +58,9 @@ function JoinLeagueContent() {
   const [availableLeagues, setAvailableLeagues] = useState<League[]>([]);
   const { user: authUser, loading: authLoading } = useAuth();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const hasInvite = Boolean(inviteToken || inviteCode);
+  const hasInvite = Boolean(inviteToken);
 
-  // Validate a plain invite code for a specific league (NOT the password)
-  const validateCodeAndSelectLeague = async (code: string, leagueId: string) => {
-    try {
-      // Use API to get league details
-      const response = await fetch(`/api/leagues/${leagueId}`);
-      const data = await response.json();
-      
-      if (!response.ok || !data.success) {
-        throw new Error('League not found');
-      }
-      
-      const leagueDoc: any = data.league;
-
-      const teamsCount: number = Array.isArray(leagueDoc.members)
-        ? leagueDoc.members.length
-        : (typeof leagueDoc.teams === 'number' ? leagueDoc.teams : 0);
-
-      if (leagueDoc.inviteCode && leagueDoc.inviteCode === code) {
-        const selected: League = {
-          $id: leagueDoc.$id,
-          name: leagueDoc.name,
-          owner: leagueDoc.commissioner || (leagueDoc as any).commissioner_id || leagueDoc.commissionerId || 'Commissioner',
-          teams: teamsCount,
-          maxTeams: leagueDoc.maxTeams || 12,
-          draftType: (leagueDoc.draftType || 'snake') as 'snake' | 'auction',
-          entryFee: leagueDoc.entryFee || 0,
-          draftDate: leagueDoc.draftDate || new Date().toISOString(),
-          draftTime: leagueDoc.draftDate ? new Date(leagueDoc.draftDate).toTimeString().slice(0, 5) : '19:00',
-          description: leagueDoc.description || '',
-          type: leagueDoc.isPublic === false ? 'private' : 'public',
-          password: leagueDoc.password,
-          status: (leagueDoc.status || 'draft') as 'draft' | 'active' | 'completed',
-          createdAt: leagueDoc.$createdAt
-        };
-
-        setSelectedLeague(selected);
-        if (selected.type === 'private' || !!selected.password) {
-          setShowPasswordModal(true);
-        } else {
-          await joinLeague(selected);
-        }
-        return true;
-      }
-      return false;
-    } catch (err) {
-      console.error('validateCodeAndSelectLeague error', err);
-      return false;
-    }
-  };
+  // Invite code system removed - only token-based invites are supported
 
   // Load current user from auth hook
   useEffect(() => {
@@ -122,10 +73,9 @@ function JoinLeagueContent() {
     }
   }, [authUser, authLoading]);
 
-  // Check for invite token or code in URL
+  // Check for invite token in URL
   useEffect(() => {
     const token = searchParams.get('token');
-    const code = searchParams.get('code');
     const leagueId = searchParams.get('league');
     
     if (token && leagueId) {
@@ -181,47 +131,7 @@ function JoinLeagueContent() {
           setCheckingInvite(false);
         }
       })();
-    } else if (code && leagueId) {
-      if (!authUser && !authLoading) {
-        const redirectUrl = encodeURIComponent(`/league/join?code=${code}&league=${leagueId}`);
-        router.push(`/login?redirect=${redirectUrl}`);
-        return;
-      }
-      setInviteCode(code);
-      setInviteLeagueId(leagueId);
-      setSearchTerm(code);
-      // Validate code for this league and preselect it so user can enter password
-      validateCodeAndSelectLeague(code, leagueId);
-    } else if (code && !leagueId) {
-      // Handle code-only links by looking up the league via inviteCode
-      if (!authUser && !authLoading) {
-        const redirectUrl = encodeURIComponent(`/league/join?code=${code}`);
-        router.push(`/login?redirect=${redirectUrl}`);
-        return;
-      }
-      setInviteCode(code);
-      setSearchTerm(code);
-      (async () => {
-        try {
-          // Search for leagues with this invite code using API
-          const params = new URLSearchParams();
-          params.append('search', code);
-          params.append('includePrivate', 'true');
-          const response = await fetch(`/api/leagues/search?${params}`);
-          const data = await response.json();
-          
-          if (data.success && data.leagues) {
-            // Check if any league has this invite code
-            const league = data.leagues.find((l: any) => l.inviteCode === code);
-            if (league) {
-              await validateCodeAndSelectLeague(code, league.id || league.$id);
-            }
-          }
-        } catch (e) {
-          console.error('Lookup by inviteCode failed', e);
-        }
-      })();
-    } else if (leagueId && !token && !code) {
+    } else if (leagueId && !token) {
       // Handle direct league link without token or code
       if (!authUser && !authLoading) {
         const redirectUrl = encodeURIComponent(`/league/join?league=${leagueId}`);
@@ -420,7 +330,6 @@ function JoinLeagueContent() {
         body: JSON.stringify({
           leagueId: league.$id,
           password: password,
-          inviteCode: inviteCode,
           teamName: `${currentUser.name}'s Team`
         }),
       });
@@ -474,10 +383,10 @@ function JoinLeagueContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#5E2B8A] via-[#8A5EAA] to-[#8A6B4D]">
       {/* Invite Info Banner */}
-      {(inviteToken || inviteCode) && (
+      {inviteToken && (
         <div className="bg-[#E73C7E] text-white py-2 px-4 text-center">
           <p className="text-sm">
-            {inviteToken ? '🎉 You have been invited to join a league!' : `📧 Joining with invite code: ${inviteCode}`}
+            🎉 You have been invited to join a league!
           </p>
         </div>
       )}

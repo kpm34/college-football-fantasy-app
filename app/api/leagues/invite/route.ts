@@ -155,24 +155,19 @@ export async function GET(request: NextRequest) {
     // Use the dedicated invite page for better OG preview
     const directLink = `${baseUrl}/invite/${leagueId}`;
     
-    // Link with invite code if available
-    const codeLink = league.inviteCode 
-      ? `${baseUrl}/league/join?code=${league.inviteCode}&league=${leagueId}`
-      : null;
+    // No more invite code links - removed legacy invite code system
     
     return NextResponse.json({
       success: true,
       league: {
         id: league.$id,
         name: league.name,
-        inviteCode: league.inviteCode,
         isPrivate: league.isPrivate || Boolean(league.password),
         currentTeams: league.currentTeams || league.members?.length || 0,
         maxTeams: league.maxTeams
       },
       links: {
-        direct: directLink,
-        withCode: codeLink
+        direct: directLink
       }
     });
     
