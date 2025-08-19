@@ -51,6 +51,8 @@ interface League {
   seasonStartWeek?: number;
   playoffTeams?: number;
   playoffStartWeek?: number;
+  waiverType?: string;
+  waiverBudget?: number;
   primaryColor?: string;
   secondaryColor?: string;
   leagueTrophyName?: string;
@@ -88,6 +90,8 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
   const [seasonStartWeek, setSeasonStartWeek] = useState(1);
   const [playoffTeams, setPlayoffTeams] = useState(4);
   const [playoffStartWeek, setPlayoffStartWeek] = useState(13);
+  const [waiverType, setWaiverType] = useState<'FAAB' | 'Rolling'>('FAAB');
+  const [waiverBudget, setWaiverBudget] = useState<number>(100);
   const [primaryColor, setPrimaryColor] = useState('#8C1818');
   const [secondaryColor, setSecondaryColor] = useState('#DAA520');
   const [leagueTrophyName, setLeagueTrophyName] = useState('Championship Trophy');
@@ -162,6 +166,8 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       setSeasonStartWeek(league.seasonStartWeek || 1);
       setPlayoffTeams(league.playoffTeams || 4);
       setPlayoffStartWeek(league.playoffStartWeek || 13);
+      setWaiverType((league.waiverType as any) || 'FAAB');
+      setWaiverBudget(typeof league.waiverBudget === 'number' ? league.waiverBudget : 100);
       setPrimaryColor(league.primaryColor || '#8C1818');
       setSecondaryColor(league.secondaryColor || '#DAA520');
       setLeagueTrophyName(league.leagueTrophyName || 'Championship Trophy');
@@ -273,6 +279,8 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         seasonStartWeek,
         playoffTeams,
         playoffStartWeek,
+        waiverType,
+        waiverBudget,
         primaryColor,
         secondaryColor,
         leagueTrophyName,
@@ -469,6 +477,47 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
             >
               {saving ? 'Saving...' : 'Save Draft Settings'}
             </button>
+          </div>
+
+          {/* Waivers & Playoffs */}
+          <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Waivers & Playoffs</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Waiver Type</label>
+                <select
+                  value={waiverType}
+                  onChange={(e) => setWaiverType(e.target.value as any)}
+                  className="w-full px-3 py-2 rounded-lg"
+                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                >
+                  <option value="FAAB">FAAB</option>
+                  <option value="Rolling">Rolling</option>
+                </select>
+              </div>
+              <div>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Waiver Budget</label>
+                <input
+                  type="number"
+                  value={waiverBudget}
+                  onChange={(e) => setWaiverBudget(parseInt(e.target.value) || 0)}
+                  className="w-full px-3 py-2 rounded-lg"
+                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                />
+              </div>
+              <div>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Playoff Start Week</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={playoffStartWeek}
+                  onChange={(e) => setPlayoffStartWeek(parseInt(e.target.value) || 13)}
+                  className="w-full px-3 py-2 rounded-lg"
+                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Scoring Rules */}
