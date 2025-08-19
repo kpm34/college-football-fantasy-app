@@ -322,47 +322,58 @@ export default function DraftCore({
           </div>
         ) : state.activeTab === 'available' ? (
           <div className="p-6">
-            <div className="grid gap-4">
-              {sortedPlayers.map((player) => (
-                <div
-                  key={player.id}
-                  className={`p-4 border rounded-lg hover:shadow-sm transition-all cursor-pointer ${
-                    state.selectedPlayer?.id === player.id
-                      ? 'ring-2 ring-blue-500 border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                  onClick={() => handlePlayerSelect(player)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <h3 className="font-semibold text-gray-900">{player.name}</h3>
-                        <p className="text-sm text-gray-600">{player.team} • {player.class}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPositionColor(player.position)}`}>
-                        {player.position}
-                      </span>
-                      <div className="text-right">
-                        <p className="font-semibold text-gray-900">{player.projectedPoints?.toFixed(1) || '0.0'}</p>
-                        <p className="text-xs text-gray-500">proj pts</p>
-                      </div>
-                      {canDraft && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handlePlayerDraft(player);
-                          }}
-                          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
-                        >
-                          Draft
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="overflow-x-auto border border-gray-200 rounded-lg">
+              <table className="min-w-full text-sm">
+                <thead className="bg-gray-50 text-gray-600 text-xs uppercase tracking-wide">
+                  <tr>
+                    <th className="text-left py-3 px-4">#</th>
+                    <th className="text-left py-3 px-4">Player</th>
+                    <th className="text-center py-3 px-4">Pos</th>
+                    <th className="text-left py-3 px-4">School</th>
+                    <th className="text-center py-3 px-4">Proj</th>
+                    <th className="text-center py-3 px-4">ADP</th>
+                    <th className="text-center py-3 px-4">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedPlayers.map((player, idx) => {
+                    const projected = (player.projectedPoints || (player as any).projections?.fantasyPoints || 0);
+                    const adp = (player as any).adp ?? (player as any).rankings?.adp ?? 9999;
+                    return (
+                      <tr
+                        key={player.id}
+                        className={`border-t hover:bg-gray-50 cursor-pointer ${state.selectedPlayer?.id === player.id ? 'bg-blue-50' : ''}`}
+                        onClick={() => handlePlayerSelect(player)}
+                        style={{ borderColor: '#e5e7eb' }}
+                      >
+                        <td className="py-2.5 px-4 text-gray-500">{idx + 1}</td>
+                        <td className="py-2.5 px-4">
+                          <div className="font-semibold text-gray-900">{player.name}</div>
+                        </td>
+                        <td className="py-2.5 px-4 text-center">
+                          <span className={`inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded ${getPositionColor(player.position)}`}>{player.position}</span>
+                        </td>
+                        <td className="py-2.5 px-4 text-gray-600">{player.team || player.school || '-'}</td>
+                        <td className="py-2.5 px-4 text-center font-semibold text-gray-900">{projected ? projected.toFixed(1) : '0.0'}</td>
+                        <td className="py-2.5 px-4 text-center text-gray-600">{Number.isFinite(adp) ? Number(adp).toFixed(1) : '-'}</td>
+                        <td className="py-2.5 px-4 text-center">
+                          {canDraft && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePlayerDraft(player);
+                              }}
+                              className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
+                            >
+                              Draft
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         ) : state.activeTab === 'myteam' ? (
