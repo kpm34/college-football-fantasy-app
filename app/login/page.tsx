@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -20,6 +20,30 @@ function LoginPageContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
+  // Runtime feature detection for OAuth (fallback to env flags)
+  const [googleAvailable, setGoogleAvailable] = useState(
+    process.env.NEXT_PUBLIC_ENABLE_OAUTH_GOOGLE === 'true'
+  );
+  const [appleAvailable, setAppleAvailable] = useState(
+    process.env.NEXT_PUBLIC_ENABLE_OAUTH_APPLE === 'true'
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const g = await fetch('/api/auth/oauth/google', { cache: 'no-store' });
+        if (!cancelled && g.ok) setGoogleAvailable(true);
+      } catch {}
+      try {
+        const a = await fetch('/api/auth/oauth/apple', { cache: 'no-store' });
+        if (!cancelled && a.ok) setAppleAvailable(true);
+      } catch {}
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -108,7 +132,7 @@ function LoginPageContent() {
         
         <button disabled={loading} className="w-full mt-6 rounded-lg px-4 py-3 font-semibold disabled:opacity-60 transition-colors" style={{ backgroundColor: '#9256A4', color: '#FFFFFF' }}>{loading ? 'Logging in...' : 'Login'}</button>
         
-        {(process.env.NEXT_PUBLIC_ENABLE_OAUTH_GOOGLE === 'true' || process.env.NEXT_PUBLIC_ENABLE_OAUTH_APPLE === 'true') && (
+        {(googleAvailable || appleAvailable) && (
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center"><div className="w-full" style={{ borderTop: '1px solid #E6CFBF' }}></div></div>
@@ -118,7 +142,7 @@ function LoginPageContent() {
             </div>
             
             <div className="mt-4">
-              <OAuthButtons />
+              <OAuthButtons googleEnabled={googleAvailable} appleEnabled={appleAvailable} />
             </div>
           </div>
         )}
@@ -142,11 +166,9 @@ function LoginPageContent() {
   );
 }
 
-function OAuthButtons() {
+function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean; appleEnabled: boolean }) {
   const [loading, setLoading] = useState<'google' | 'apple' | null>(null);
   const router = useRouter();
-  const googleEnabled = process.env.NEXT_PUBLIC_ENABLE_OAUTH_GOOGLE === 'true';
-  const appleEnabled = process.env.NEXT_PUBLIC_ENABLE_OAUTH_APPLE === 'true';
   
   const handleOAuth = async (provider: 'google' | 'apple') => {
     setLoading(provider);
