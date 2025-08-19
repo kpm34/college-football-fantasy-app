@@ -421,15 +421,7 @@ async function setupDatabaseRelationships() {
         key: 'user_teams',
         onDelete: 'cascade'
       },
-      {
-        collection: COLLECTIONS.USER_TEAMS,
-        attribute: 'owner',
-        relatedCollection: COLLECTIONS.USERS,
-        type: 'manyToOne',
-        twoWay: true,
-        key: 'user_teams',
-        onDelete: 'setNull'
-      },
+      // User Teams -> Users relationship removed (using Appwrite Auth Users instead)
       {
         collection: COLLECTIONS.DRAFT_PICKS,
         attribute: 'league',
@@ -495,7 +487,7 @@ async function optimizeCollections() {
     const collectionsToSecure = [
       { id: COLLECTIONS.USER_TEAMS, name: 'User Teams' },
       { id: COLLECTIONS.LEAGUES, name: 'Leagues' },
-      { id: COLLECTIONS.USERS, name: 'Users' }
+      // { id: COLLECTIONS.USERS, name: 'Users' } // Deprecated - using Appwrite Auth Users
     ];
 
     for (const collection of collectionsToSecure) {

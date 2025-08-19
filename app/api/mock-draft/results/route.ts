@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDraftResults } from '@/lib/draft/engine';
+import { getMockDraftResults } from '@/lib/draft/mock-engine';
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,8 +16,8 @@ export async function GET(request: NextRequest) {
     
     console.log(`📊 Getting results for draft: ${draftId}`);
     
-    // Get draft results
-    const results = await getDraftResults(draftId);
+    // Get mock draft results
+    const results = await getMockDraftResults(draftId);
     
     return NextResponse.json({
       success: true,

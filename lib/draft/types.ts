@@ -46,13 +46,14 @@ export interface TeamNeeds {
 }
 
 export interface DraftPick {
+  id?: string;
   draftId: string;
   round: number;
   overall: number;
   slot: number;
   participantId: string;
   playerId: string;
-  pickedAt: string;
+  pickedAt: Date | string;
   autopick: boolean;
 }
 

@@ -32,8 +32,8 @@ export async function GET(request: NextRequest) {
       Query.offset(offset)
     ];
 
-    // Enforce draftability by default
-    queries.push(Query.equal('draftable', true));
+    // Note: 'draftable' attribute doesn't exist in schema, so we skip this filter
+    // queries.push(Query.equal('draftable', true));
     
     // Only add conference filter if not searching for ALL or specific conference
     if (!conference) {

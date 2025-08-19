@@ -1,0 +1,100 @@
+{
+  "id": "draft_picks",
+  "name": "draft_picks",
+  "documents": [],
+  "attributes": [
+    {
+      "key": "leagueId",
+      "type": "string",
+      "status": "available",
+      "error": "",
+      "required": true,
+      "array": false,
+      "$createdAt": "2025-08-07T23:33:46.188+00:00",
+      "$updatedAt": "2025-08-07T23:33:47.239+00:00",
+      "size": 100,
+      "default": null,
+      "encrypt": false
+    },
+    {
+      "key": "userId",
+      "type": "string",
+      "status": "available",
+      "error": "",
+      "required": true,
+      "array": false,
+      "$createdAt": "2025-08-07T23:33:46.251+00:00",
+      "$updatedAt": "2025-08-07T23:33:47.434+00:00",
+      "size": 100,
+      "default": null,
+      "encrypt": false
+    },
+    {
+      "key": "playerId",
+      "type": "string",
+      "status": "available",
+      "error": "",
+      "required": true,
+      "array": false,
+      "$createdAt": "2025-08-07T23:33:46.304+00:00",
+      "$updatedAt": "2025-08-07T23:33:47.617+00:00",
+      "size": 100,
+      "default": null,
+      "encrypt": false
+    },
+    {
+      "key": "round",
+      "type": "integer",
+      "status": "available",
+      "error": "",
+      "required": true,
+      "array": false,
+      "$createdAt": "2025-08-07T23:33:46.376+00:00",
+      "$updatedAt": "2025-08-07T23:33:47.815+00:00",
+      "min": -9223372036854776000,
+      "max": 9223372036854776000,
+      "default": null
+    },
+    {
+      "key": "pick",
+      "type": "integer",
+      "status": "available",
+      "error": "",
+      "required": true,
+      "array": false,
+      "$createdAt": "2025-08-07T23:33:46.436+00:00",
+      "$updatedAt": "2025-08-07T23:33:48.011+00:00",
+      "min": -9223372036854776000,
+      "max": 9223372036854776000,
+      "default": null
+    },
+    {
+      "key": "timestamp",
+      "type": "datetime",
+      "status": "available",
+      "error": "",
+      "required": true,
+      "array": false,
+      "$createdAt": "2025-08-07T23:33:46.500+00:00",
+      "$updatedAt": "2025-08-07T23:33:48.242+00:00",
+      "format": "",
+      "default": null
+    },
+    {
+      "key": "player",
+      "type": "relationship",
+      "status": "available",
+      "error": "",
+      "required": false,
+      "array": false,
+      "$createdAt": "2025-08-15T06:56:07.997+00:00",
+      "$updatedAt": "2025-08-15T06:56:09.149+00:00",
+      "relatedCollection": "college_players",
+      "relationType": "manyToOne",
+      "twoWay": true,
+      "twoWayKey": "draftedBy",
+      "onDelete": "restrict",
+      "side": "parent"
+    }
+  ]
+}

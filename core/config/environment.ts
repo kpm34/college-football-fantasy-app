@@ -75,7 +75,7 @@ export class EnvironmentConfig {
       userCustomProjections: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER_CUSTOM_PROJECTIONS || 'user_custom_projections',
       
       // Users collection deprecated in favor of Appwrite Auth Users
-      // users: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USERS || 'users',
+      // Note: User management is now handled by Appwrite Auth service
       activityLog: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ACTIVITY_LOG || 'activity_log',
     },
   };

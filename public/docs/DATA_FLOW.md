@@ -147,7 +147,7 @@ graph TD
 ## 🗄️ Database Collections
 
 ### Core Collections
-1. **users** - User profiles and preferences
+1. **Appwrite Auth Users** - User authentication and profiles (managed by Appwrite)
 2. **leagues** - League settings and metadata
 3. **rosters** - Team rosters and ownership
 4. **college_players** - Player database (~3000+)
@@ -160,7 +160,7 @@ graph TD
 
 ### Relationships
 - `leagues` → `rosters` (1:many)
-- `rosters` → `users` (many:1)
+- `rosters` → **Appwrite Auth Users** (many:1 via userId)
 - `rosters` → `college_players` (many:many)
 - `games` → `rankings` (temporal)
 - `college_players` → `player_stats` (1:many)
