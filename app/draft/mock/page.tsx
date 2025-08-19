@@ -103,8 +103,9 @@ export default function MockDraftPage() {
     draftType: 'snake',
     numTeams: 12,
     userPosition: 1,
-    timerSeconds: 90,
-    rounds: 15
+    pickTimeSeconds: 90,
+    scoringType: 'PPR',
+    rosterSize: 15
   });
 
   
@@ -338,8 +339,8 @@ export default function MockDraftPage() {
         },
         body: JSON.stringify({
           draftName: `Mock Draft ${new Date().toLocaleDateString()}`,
-          rounds: settings.rounds,
-          timerPerPickSec: settings.timerSeconds,
+          rounds: settings.rosterSize,
+          timerPerPickSec: settings.pickTimeSeconds,
           numTeams: settings.numTeams
         }),
       });
@@ -353,14 +354,20 @@ export default function MockDraftPage() {
         // Fallback to local mock draft
         console.log('Using local mock draft mode');
         setMockDraftStarted(true);
+        setDraftStarted(true);
         setDraftInitializing(false);
+        setTimeRemaining(settings.pickTimeSeconds); // Initialize timer
+        initializeDraftOrder();
         await loadPlayers();
       }
     } catch (error) {
       console.error('Error creating mock draft:', error);
       // Fallback to local mock draft
       setMockDraftStarted(true);
+      setDraftStarted(true);
       setDraftInitializing(false);
+      setTimeRemaining(settings.pickTimeSeconds); // Initialize timer
+      initializeDraftOrder();
       await loadPlayers();
     }
   };
@@ -384,7 +391,7 @@ export default function MockDraftPage() {
     setSelectedPlayer(null);
     
     // Reset timer
-    setTimeRemaining(settings.timerSeconds);
+    setTimeRemaining(settings.pickTimeSeconds);
   };
 
   const initializeDraftOrder = () => {
@@ -478,11 +485,27 @@ export default function MockDraftPage() {
     if (!draftStarted || timeRemaining <= 0) return;
     
     const timer = setInterval(() => {
-      setTimeRemaining(prev => prev - 1);
+      setTimeRemaining(prev => {
+        if (prev <= 1) {
+          // Auto-pick when time expires
+          const teamIndex = getCurrentTeam() - 1;
+          const isMyPick = teamIndex === settings.userPosition - 1;
+          
+          if (isMyPick && filteredPlayers.length > 0) {
+            // Auto-pick the best available player
+            const bestAvailable = filteredPlayers[0];
+            if (bestAvailable) {
+              handleMockDraftPlayer(bestAvailable);
+            }
+          }
+          return settings.pickTimeSeconds;
+        }
+        return prev - 1;
+      });
     }, 1000);
     
     return () => clearInterval(timer);
-  }, [draftStarted, timeRemaining]);
+  }, [draftStarted, timeRemaining, getCurrentTeam, settings, filteredPlayers]);
 
   // Load players on mount
   useEffect(() => {
@@ -497,20 +520,43 @@ export default function MockDraftPage() {
 
   // Show DraftCore when mock draft is started
   if (mockDraftStarted) {
+    const currentRound = Math.ceil(currentPick / settings.numTeams);
+    const isMyTurn = getCurrentTeam() - 1 === settings.userPosition - 1;
+    
     return (
       <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main }}>
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold" style={{ color: leagueColors.text.primary }}>
-              Mock Draft Practice
-            </h1>
-            <button
-              onClick={() => setMockDraftStarted(false)}
-              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              style={{ backgroundColor: leagueColors.background.overlay, color: leagueColors.text.primary }}
-            >
-              ← Back to Settings
-            </button>
+            <div>
+              <h1 className="text-2xl font-bold" style={{ color: leagueColors.text.primary }}>
+                Mock Draft Practice
+              </h1>
+              <p className="text-sm mt-1" style={{ color: leagueColors.text.secondary }}>
+                Round {currentRound} • Pick {currentPick} • {isMyTurn ? '🟢 Your Turn' : `On the clock: ${draftOrder[getCurrentTeam() - 1]}`}
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className={`px-4 py-2 rounded-lg font-mono ${timeRemaining <= 10 ? 'bg-red-100 text-red-700' : ''}`}
+                   style={{ backgroundColor: timeRemaining > 10 ? leagueColors.background.card : '', 
+                            color: timeRemaining > 10 ? leagueColors.text.primary : '',
+                            border: `1px solid ${leagueColors.border.light}` }}>
+                {Math.floor(timeRemaining / 60)}:{String(timeRemaining % 60).padStart(2, '0')}
+              </div>
+              <button
+                onClick={() => {
+                  setMockDraftStarted(false);
+                  setDraftStarted(false);
+                  setCurrentPick(1);
+                  setDraftedPlayers(new Set());
+                  setMyMockPicks([]);
+                  setTimeRemaining(0);
+                }}
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                style={{ backgroundColor: leagueColors.background.overlay, color: leagueColors.text.primary }}
+              >
+                ← Back to Settings
+              </button>
+            </div>
           </div>
           
           <DraftCore
@@ -519,11 +565,11 @@ export default function MockDraftPage() {
             onPlayerSelect={setSelectedPlayer}
             onPlayerDraft={handleMockDraftPlayer}
             myPicks={myMockPicks}
-            draftedPlayers={[]}
-            canDraft={getCurrentTeam() - 1 === settings.userPosition - 1}
+            draftedPlayers={Array.from(draftedPlayers).map(id => ({ id } as any))}
+            canDraft={isMyTurn}
             timeRemainingSec={timeRemaining}
             currentPickNumber={currentPick}
-            currentTeamLabel={draftOrder[getCurrentTeam() - 1]}
+            currentTeamLabel={draftOrder[getCurrentTeam() - 1] || 'Team 1'}
           />
         </div>
       </div>
