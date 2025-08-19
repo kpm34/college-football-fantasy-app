@@ -321,8 +321,8 @@ npx tsx scripts/sync-appwrite-simple.ts
 
 | Feature | Routes/Pages | Collections | Key Required Fields (from SSOT) |
 |---|---|---|---|
-| Create League | `POST /api/leagues/create`, `app/league/create` | `leagues`, `user_teams`, `users` | leagues: `name`, `commissioner`, `season`, `maxTeams`, `draftType`, `gameMode` |
-| Join League | `POST /api/leagues/join`, `app/league/join` | `leagues`, `user_teams`, `users`, `activity_log` | user_teams: `leagueId`, `userId`, `teamName` |
+| Create League | `POST /api/leagues/create`, `app/league/create` | `leagues`, `user_teams`, Appwrite Auth | leagues: `name`, `commissioner`, `season`, `maxTeams`, `draftType`, `gameMode` |
+| Join League | `POST /api/leagues/join`, `app/league/join` | `leagues`, `user_teams`, `activity_log`, Appwrite Auth | user_teams: `leagueId`, `userId`, `teamName` |
 | League Settings | `PUT /api/leagues/[id]/commissioner`, `app/league/[id]/commissioner` | `leagues` | ensure camelCase fields; no defaults on required |
 | Draft – Make Pick | `POST /api/draft/[leagueId]/pick`, `app/draft/[leagueId]` | `draft_picks`, `user_teams` | draft_picks: `leagueId`, `teamId`, `playerId` |
 | Draft – Status | `GET /api/draft/[leagueId]/status` | `draft_picks`, `user_teams`, `leagues` | n/a |

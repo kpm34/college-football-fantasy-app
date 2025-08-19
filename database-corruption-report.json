@@ -1,0 +1,390 @@
+[
+  {
+    "name": "leagues",
+    "exists": true,
+    "canRead": true,
+    "canCreate": true,
+    "canUpdate": false,
+    "canDelete": true,
+    "documentCount": 1
+  },
+  {
+    "name": "user_teams",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 10,
+    "error": "Invalid document structure: Missing required attribute \"wins\""
+  },
+  {
+    "name": "college_players",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 2315,
+    "error": "Invalid document structure: Missing required attribute \"year\""
+  },
+  {
+    "name": "teams",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 18,
+    "error": "Invalid document structure: Missing required attribute \"school\""
+  },
+  {
+    "name": "games",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "Invalid document structure: Missing required attribute \"date\""
+  },
+  {
+    "name": "rankings",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "draft_picks",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "Invalid document structure: Missing required attribute \"userId\""
+  },
+  {
+    "name": "draft_events",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "Invalid document structure: Missing required attribute \"draftId\""
+  },
+  {
+    "name": "draft_states",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "Invalid document structure: Missing required attribute \"draftId\""
+  },
+  {
+    "name": "auction_sessions",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "auction_bids",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "player_stats",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "matchups",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "lineups",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "player_projections",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 20,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "projections_yearly",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "projections_weekly",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "model_inputs",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 1,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "user_custom_projections",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "activity_log",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "Invalid document structure: Missing required attribute \"leagueId\""
+  },
+  {
+    "name": "leagues",
+    "exists": true,
+    "canRead": true,
+    "canCreate": true,
+    "canUpdate": false,
+    "canDelete": true,
+    "documentCount": 1
+  },
+  {
+    "name": "user_teams",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 10,
+    "error": "Invalid document structure: Missing required attribute \"wins\""
+  },
+  {
+    "name": "user_teams",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 10,
+    "error": "Invalid document structure: Missing required attribute \"wins\""
+  },
+  {
+    "name": "college_players",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 2315,
+    "error": "Invalid document structure: Missing required attribute \"year\""
+  },
+  {
+    "name": "teams",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 18,
+    "error": "Invalid document structure: Missing required attribute \"school\""
+  },
+  {
+    "name": "games",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "Invalid document structure: Missing required attribute \"date\""
+  },
+  {
+    "name": "rankings",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "draft_picks",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "Invalid document structure: Missing required attribute \"userId\""
+  },
+  {
+    "name": "auction_sessions",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "auction_bids",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "player_stats",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "matchups",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "lineups",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "player_projections",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 20,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "projections_yearly",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "projections_weekly",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "model_inputs",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 1,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "user_custom_projections",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "The document data is missing. Try again with document data populated"
+  },
+  {
+    "name": "activity_log",
+    "exists": true,
+    "canRead": true,
+    "canCreate": false,
+    "canUpdate": false,
+    "canDelete": false,
+    "documentCount": 0,
+    "error": "Invalid document structure: Missing required attribute \"leagueId\""
+  }
+]

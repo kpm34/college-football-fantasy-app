@@ -146,14 +146,7 @@ export const PlayerStats = z.object({
   updated: z.date().default(() => new Date())
 });
 
-export const Users = z.object({
-  email: z.string().email(),
-  name: z.string().min(1).max(100).optional(),
-  emailVerification: z.boolean().default(false),
-  preferences: z.string().max(2000).optional(), // JSON preferences
-  created: z.date().default(() => new Date()),
-  lastLogin: z.date().optional()
-});
+// Users collection deprecated - use Appwrite Auth Users instead
 
 export const ActivityLog = z.object({
   userId: z.string().max(50).optional(),
@@ -366,7 +359,7 @@ export type Lineup = z.infer<typeof Lineups>;
 export type Auction = z.infer<typeof Auctions>;
 export type Bid = z.infer<typeof Bids>;
 export type PlayerStat = z.infer<typeof PlayerStats>;
-export type User = z.infer<typeof Users>;
+// User type deprecated - use Appwrite User type instead
 export type ActivityLogEntry = z.infer<typeof ActivityLog>;
 export type Draft = z.infer<typeof Drafts>;
 export type Score = z.infer<typeof Scores>;
@@ -426,7 +419,7 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.BIDS]: Bids,
   [COLLECTIONS.AUCTION_BIDS]: Bids, // Same schema as bids
   [COLLECTIONS.PLAYER_STATS]: PlayerStats,
-  [COLLECTIONS.USERS]: Users,
+  // [COLLECTIONS.USERS]: Users, // Deprecated - use Appwrite Auth Users
   [COLLECTIONS.ACTIVITY_LOG]: ActivityLog,
   [COLLECTIONS.DRAFT_PICKS]: DraftPicks,
   [COLLECTIONS.MOCK_DRAFTS]: MockDrafts,

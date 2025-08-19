@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createDraft } from '@/lib/draft/engine';
+import { createMockDraft } from '@/lib/draft/mock-engine';
 import { DraftConfig, DEFAULT_POSITION_LIMITS } from '@/lib/draft/types';
 
 export async function POST(request: NextRequest) {
@@ -54,8 +54,8 @@ export async function POST(request: NextRequest) {
       seed
     };
     
-    // Create the draft
-    const draftId = await createDraft(draftName, config, participants, numTeams);
+    // Create the mock draft (in-memory only)
+    const draftId = await createMockDraft(draftName, config, participants, numTeams);
     
     const participantType = participants ? 
       `${participants.filter((p: any) => p.userType === 'human').length} human, ${participants.filter((p: any) => p.userType === 'bot').length} bot` : 

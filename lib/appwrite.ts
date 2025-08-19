@@ -46,7 +46,7 @@ export const COLLECTIONS = {
   PROJECTIONS_WEEKLY: ENV_COLLECTIONS.playerProjectionsWeekly,
   MODEL_INPUTS: ENV_COLLECTIONS.modelInputs,
   USER_CUSTOM_PROJECTIONS: ENV_COLLECTIONS.userCustomProjections,
-  USERS: ENV_COLLECTIONS.users,
+  // USERS collection deprecated - use Appwrite Auth Users instead
   ACTIVITY_LOG: ENV_COLLECTIONS.activityLog,
 } as const;
 

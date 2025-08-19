@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { startDraft } from '@/lib/draft/engine';
-import { serverDatabases as databases, DATABASE_ID } from '@/lib/appwrite-server';
+import { startMockDraft } from '@/lib/draft/mock-engine';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,34 +16,13 @@ export async function POST(request: NextRequest) {
     
     console.log(`🎯 Starting mock draft: ${draftId} (mode: ${mode})`);
     
-    if (mode === 'human') {
-      // For human drafts, just mark as active but don't auto-execute
-      await databases.updateDocument(
-        DATABASE_ID,
-        'mock_drafts',
-        draftId,
-        {
-          status: 'active',
-          startedAt: new Date().toISOString()
-        }
-      );
-      
-      console.log('✅ Human draft marked as active, waiting for picks...');
-      
-      return NextResponse.json({
-        ok: true,
-        message: 'Human draft started, awaiting picks'
-      });
-      
-    } else {
-      // Bot mode - run the entire draft to completion
-      await startDraft(draftId);
-      
-      return NextResponse.json({
-        ok: true,
-        message: 'Bot draft completed successfully'
-      });
-    }
+    // For now, mock drafts are always bot-only and run to completion
+    await startMockDraft(draftId);
+    
+    return NextResponse.json({
+      ok: true,
+      message: 'Mock draft completed successfully'
+    });
     
   } catch (error) {
     console.error('Mock draft start error:', error);
