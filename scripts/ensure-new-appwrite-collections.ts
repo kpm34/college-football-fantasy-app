@@ -105,6 +105,13 @@ async function main() {
   await ensureIndex('player_projections', 'season_week_version_idx', 'key', ['season', 'week', 'version'])
   await ensureIndex('player_projections', 'player_season_week_version_idx', 'key', ['playerId', 'season', 'week', 'version'])
 
+  // projection_run_metrics (separate metrics store)
+  await ensureCollection('projection_run_metrics', 'Projection Run Metrics')
+  await ensureString('projection_run_metrics', 'runId')
+  await ensureString('projection_run_metrics', 'metrics', 10000)
+  await ensureIndex('projection_run_metrics', 'run_id_idx', 'key', ['runId'])
+  await ensureIndex('projection_run_metrics', 'run_unique_idx', 'unique', ['runId'])
+
   // league_memberships
   await ensureCollection('league_memberships', 'League Memberships')
   await ensureString('league_memberships', 'leagueId')

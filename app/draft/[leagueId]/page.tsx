@@ -247,6 +247,10 @@ export default function DraftRoom({ params }: Props) {
               draftedBy: pick.userId,
               draftPosition: pick.pickNumber
             } as DraftPlayer))}
+            canDraft={draft.isMyTurn}
+            timeRemainingSec={undefined}
+            currentPickNumber={draft.currentPick}
+            currentTeamLabel={draft.onTheClock ? (users[draft.onTheClock]?.name || 'On the clock') : undefined}
           /></div>
 
         {/* Right Sidebar - Player Details */}

@@ -520,6 +520,10 @@ export default function MockDraftPage() {
             onPlayerDraft={handleMockDraftPlayer}
             myPicks={myMockPicks}
             draftedPlayers={[]}
+            canDraft={getCurrentTeam() - 1 === settings.userPosition - 1}
+            timeRemainingSec={timeRemaining}
+            currentPickNumber={currentPick}
+            currentTeamLabel={draftOrder[getCurrentTeam() - 1]}
           />
         </div>
       </div>

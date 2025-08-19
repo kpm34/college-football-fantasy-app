@@ -30,6 +30,10 @@ export interface DraftCoreProps {
   myPicks?: DraftPlayer[];
   draftedPlayers?: DraftPlayer[];
   children?: React.ReactNode;
+  canDraft?: boolean;
+  timeRemainingSec?: number;
+  currentPickNumber?: number;
+  currentTeamLabel?: string;
 }
 
 const POSITIONS: Position[] = ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
@@ -42,7 +46,11 @@ export default function DraftCore({
   onPlayerDraft,
   myPicks = [],
   draftedPlayers = [],
-  children
+  children,
+  canDraft = false,
+  timeRemainingSec,
+  currentPickNumber,
+  currentTeamLabel
 }: DraftCoreProps) {
   const { user } = useAuth();
   
@@ -162,6 +170,27 @@ export default function DraftCore({
 
   return (
     <div className="flex flex-col h-full">
+      {/* Optional Header (timer + pick info) */}
+      {(timeRemainingSec !== undefined || currentPickNumber !== undefined) && (
+        <div className="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-gray-200 px-6 py-3">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-700 font-semibold">
+              {currentPickNumber !== undefined && (
+                <span>
+                  Pick {currentPickNumber}
+                  {currentTeamLabel ? ` — ${currentTeamLabel}` : ''}
+                </span>
+              )}
+            </div>
+            {timeRemainingSec !== undefined && (
+              <div className={`px-3 py-1 rounded-lg text-sm font-mono ${timeRemainingSec <= 10 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-800'}`}>
+                {Math.floor((timeRemainingSec || 0) / 60)}:{String((timeRemainingSec || 0) % 60).padStart(2, '0')}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Filter Bar */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex flex-wrap items-center gap-4">
@@ -173,7 +202,7 @@ export default function DraftCore({
               placeholder="Search players or teams..."
               value={state.searchQuery}
               onChange={(e) => setState(prev => ({ ...prev, searchQuery: e.target.value }))}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg bg-white text-gray-800 placeholder-gray-500 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
             />
           </div>
 
@@ -183,7 +212,7 @@ export default function DraftCore({
             <select
               value={state.positionFilter}
               onChange={(e) => setState(prev => ({ ...prev, positionFilter: e.target.value as Position }))}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="border rounded-lg px-3 py-2 bg-white text-gray-800 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
             >
               {POSITIONS.map(pos => (
                 <option key={pos} value={pos}>{pos}</option>
@@ -196,7 +225,7 @@ export default function DraftCore({
             <select
               value={state.conferenceFilter}
               onChange={(e) => setState(prev => ({ ...prev, conferenceFilter: e.target.value as Conference }))}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="border rounded-lg px-3 py-2 bg-white text-gray-800 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
             >
               {CONFERENCES.map(conf => (
                 <option key={conf} value={conf}>{conf}</option>
@@ -209,7 +238,7 @@ export default function DraftCore({
             <select
               value={state.teamFilter}
               onChange={(e) => setState(prev => ({ ...prev, teamFilter: (e.target.value || 'ALL') as TeamFilter }))}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="border rounded-lg px-3 py-2 bg-white text-gray-800 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
             >
               <option value="ALL">ALL Teams</option>
               {uniqueTeams.map(team => (
@@ -221,7 +250,7 @@ export default function DraftCore({
           {/* Reset Button */}
           <button
             onClick={resetFilters}
-            className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-4 py-2 text-sm text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition-colors"
           >
             Reset
           </button>
@@ -319,13 +348,13 @@ export default function DraftCore({
                         <p className="font-semibold text-gray-900">{player.projectedPoints?.toFixed(1) || '0.0'}</p>
                         <p className="text-xs text-gray-500">proj pts</p>
                       </div>
-                      {draftType !== 'mock' && (
+                      {canDraft && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             handlePlayerDraft(player);
                           }}
-                          className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors"
+                          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
                         >
                           Draft
                         </button>
