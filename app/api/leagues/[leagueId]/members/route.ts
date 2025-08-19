@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, serverUsers, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
 
 export const runtime = 'nodejs';
@@ -29,24 +29,49 @@ export async function GET(
       ]
     );
 
-    // Map to consistent format
-    const teams = rosters.documents.map((doc: any) => ({
-      $id: doc.$id,
-      leagueId: doc.leagueId,
-      userId: doc.userId || doc.owner || '',
-      name: doc.teamName || doc.name || 'Team',
-      userName: doc.userName,
-      email: doc.email,
-      wins: doc.wins ?? 0,
-      losses: doc.losses ?? 0,
-      ties: doc.ties ?? 0,
-      points: doc.points ?? doc.pointsFor ?? 0,
-      pointsFor: doc.pointsFor ?? doc.points ?? 0,
-      pointsAgainst: doc.pointsAgainst ?? 0,
-      players: doc.players,
-      isActive: doc.isActive ?? true,
-      status: doc.status,
-    }));
+    // Resolve owner display names using Appwrite Users service
+    const uniqueUserIds = Array.from(
+      new Set(
+        (rosters.documents || [])
+          .map((d: any) => d.userId || d.owner)
+          .filter(Boolean)
+      )
+    );
+    const idToName = new Map<string, string>();
+    await Promise.all(
+      uniqueUserIds.map(async (uid) => {
+        try {
+          const u: any = await serverUsers.get(uid as string);
+          idToName.set(uid as string, u.name || u.email || 'Unknown');
+        } catch {
+          // Fallback to unknown if user lookup fails
+          idToName.set(uid as string, 'Unknown');
+        }
+      })
+    );
+
+    // Map to consistent format with resolved manager name
+    const teams = rosters.documents.map((doc: any) => {
+      const ownerId = doc.userId || doc.owner || '';
+      const managerName = idToName.get(ownerId) || doc.userName || 'Unknown';
+      return {
+        $id: doc.$id,
+        leagueId: doc.leagueId,
+        userId: ownerId,
+        name: doc.teamName || doc.name || 'Team',
+        userName: managerName,
+        email: doc.email,
+        wins: doc.wins ?? 0,
+        losses: doc.losses ?? 0,
+        ties: doc.ties ?? 0,
+        points: doc.points ?? doc.pointsFor ?? 0,
+        pointsFor: doc.pointsFor ?? doc.points ?? 0,
+        pointsAgainst: doc.pointsAgainst ?? 0,
+        players: doc.players,
+        isActive: doc.isActive ?? true,
+        status: doc.status,
+      };
+    });
 
     return NextResponse.json({
       success: true,
