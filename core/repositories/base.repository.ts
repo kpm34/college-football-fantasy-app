@@ -3,8 +3,8 @@
  * Provides common database operations with caching and platform optimization
  */
 
-import { Client, Databases, Query, Models, ID } from 'appwrite';
-import { Client as ServerClient, Databases as ServerDatabases } from 'node-appwrite';
+import { Client, Databases, Query, Models, ID as ClientID } from 'appwrite';
+import { Client as ServerClient, Databases as ServerDatabases, ID as ServerID } from 'node-appwrite';
 import { env } from '../config/environment';
 import { AppError, NotFoundError, ValidationError } from '../errors/app-error';
 import { SchemaValidator } from '../validation/schema-enforcer';
@@ -187,11 +187,18 @@ export abstract class BaseRepository<T extends Models.Document> {
       // Transform data for schema compliance
       const transformedData = SchemaValidator.transform(this.collectionId, data);
 
+      // Never allow caller-provided IDs to leak into create payload
+      // Appwrite determines ID from the third argument only
+      if ((transformedData as any).$id) {
+        delete (transformedData as any).$id;
+      }
+
       // Create document
       const document = await this.databases.createDocument(
         this.databaseId,
         this.collectionId,
-        ID.unique(),
+        // Use the correct ID helper for the current runtime
+        (this.isServer ? ServerID : ClientID).unique(),
         transformedData
       ) as T;
 
