@@ -5,9 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import CFPLoadingScreen from "./CFPLoadingScreen";
-import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
-import { isUserCommissioner } from "@/lib/utils/commissioner";
-import { Query } from "appwrite";
 import {
   HomeIcon,
   RectangleGroupIcon,
@@ -53,124 +50,26 @@ export default function Navbar() {
     };
   }, [open]);
 
-  // Load user's leagues to show in the drawer
+  // Load user's leagues via the unified server endpoint (Auth-driven; no direct DB reads)
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        // Prefer unified server endpoint (handles membership + commissioner)
-        try {
-          const res = await fetch('/api/leagues/mine', { cache: 'no-store' });
-          if (res.ok) {
-            const data = await res.json();
-            if (Array.isArray(data.leagues) && !cancelled) {
-              setLeagues(data.leagues);
-              return;
-            }
-          }
-        } catch {}
-
-        if (!user?.email) return;
-
-        // Fallback via rosters
-        let rosters = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTIONS.ROSTERS,
-          [Query.equal("email", user.email)]
-        );
-        if (rosters.documents.length === 0 && user.name) {
-          rosters = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.ROSTERS,
-            [Query.equal("userName", user.name)]
-          );
-        }
-        if (rosters.documents.length === 0 && user.$id) {
-          rosters = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.ROSTERS,
-            [Query.equal("userId", user.$id)]
-          );
-        }
-        // Legacy field name: owner
-        if (rosters.documents.length === 0 && user.$id) {
-          rosters = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.ROSTERS,
-            [Query.equal("owner", user.$id)]
-          );
-        }
-
-        if (rosters.documents.length > 0) {
-          const leagueIds = Array.from(
-            new Set((rosters.documents as any[]).map((d) => d.leagueId))
-          );
-          const fetched = await Promise.all(
-            leagueIds.map(async (lid: string) => {
-              try {
-                const d = await databases.getDocument(
-                  DATABASE_ID,
-                  COLLECTIONS.LEAGUES,
-                  lid
-                );
-                const isCommissioner = isUserCommissioner(d, user);
-                return { id: lid, name: (d as any).name, isCommissioner };
-              } catch {
-                return null;
-              }
-            })
-          );
-          if (!cancelled)
-            setLeagues(
-              fetched.filter(Boolean) as Array<{ id: string; name: string }>
-            );
-        } else if (user.$id) {
-          // Final fallback via ROSTERS collection
-          const rosters = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.ROSTERS,
-            [Query.equal("userId", user.$id)]
-          );
-          if (rosters.documents.length > 0) {
-            const leagueIds = Array.from(
-              new Set((rosters.documents as any[]).map((d) => d.leagueId))
-            );
-            const fetched = await Promise.all(
-              leagueIds.map(async (lid: string) => {
-                try {
-                  const d = await databases.getDocument(
-                    DATABASE_ID,
-                    COLLECTIONS.LEAGUES,
-                    lid
-                  );
-                  const leagueAny: any = d;
-                  const leagueIdentifiers = [
-                    leagueAny.commissionerId,
-                    leagueAny.commissioner,
-                    leagueAny.commissionerEmail
-                  ].filter(Boolean);
-                  const userIdentifiers = [user.$id, user.email, user.name].filter(Boolean) as string[];
-                  const isCommissioner = leagueIdentifiers.some((val: string) => userIdentifiers.includes(val));
-                  return { id: lid, name: (d as any).name, isCommissioner };
-                } catch {
-                  return null;
-                }
-              })
-            );
-            if (!cancelled)
-              setLeagues(
-                fetched.filter(Boolean) as Array<{ id: string; name: string }>
-              );
+        const res = await fetch('/api/leagues/mine', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (!cancelled && Array.isArray(data.leagues)) {
+            setLeagues(data.leagues);
           }
         }
       } catch (e) {
-        console.error("Failed to load user leagues", e);
+        console.error('Failed to load user leagues', e);
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [user?.email, user?.name, user?.$id]);
+  }, [user?.$id]);
 
   function handleNavigateWithLoading(href: string) {
     setIsNavigating(true);
