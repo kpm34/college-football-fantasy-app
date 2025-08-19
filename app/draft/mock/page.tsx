@@ -625,7 +625,7 @@ export default function MockDraftPage() {
               <button
                 onClick={handleStartMockDraft}
                 className="flex-1 py-3 rounded-lg font-semibold text-lg transition-all shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2"
-                style={{ backgroundImage: `linear-gradient(90deg, ${leagueColors.primary.coral}, ${leagueColors.primary.crimson})`, color: '#FFFFFF', border: `2px solid ${leagueColors.border.light}` }}
+                style={{ backgroundImage: `linear-gradient(90deg, ${leagueColors.primary.crimson}, ${leagueColors.primary.crimson})`, color: '#FFFFFF', border: `2px solid ${leagueColors.border.light}` }}
               >
                 Start Mock Draft
               </button>
@@ -749,7 +749,7 @@ export default function MockDraftPage() {
                   <button
                     onClick={() => setShowOnlyAvailable(!showOnlyAvailable)}
                     className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-1.5`}
-                    style={{ backgroundColor: showOnlyAvailable ? leagueColors.primary.coral : leagueColors.background.overlay, color: showOnlyAvailable ? leagueColors.text.inverse : leagueColors.text.primary, border: `1px solid ${showOnlyAvailable ? leagueColors.primary.coral : leagueColors.border.light}` }}
+                    style={{ backgroundColor: showOnlyAvailable ? leagueColors.primary.crimson : leagueColors.background.overlay, color: showOnlyAvailable ? leagueColors.text.inverse : leagueColors.text.primary, border: `1px solid ${showOnlyAvailable ? leagueColors.primary.crimson : leagueColors.border.light}` }}
                   >
                     <FunnelIcon className="w-4 h-4" />
                     Available

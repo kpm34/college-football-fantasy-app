@@ -50,14 +50,27 @@ graph LR
 
 ### 3. Draft Flow (Real-time) ✅ Updated Aug 18, 2025
 ```mermaid
-graph LR
-    A[Draft UI] --> B[API/Client Subscribe]
-    B --> C[Vercel KV State]
-    B --> D[Appwrite v16+ Realtime]
-    C --> E[Draft Logic]
-    E --> F[Pick Made]
-    F --> D
-    D --> G[All Clients Update]
+%%{init: {'themeVariables': {'fontSize': '22px'}}}%%
+flowchart LR
+  subgraph Client
+    UI[Draft UI]
+  end
+
+  UI -->|subscribe| RT[Appwrite Realtime]
+  UI -->|POST pick| API[/POST /api/drafts/:id/pick/]
+
+  API -->|SETNX draft:{id}:lock| KV[(Vercel KV)]
+  KV --> API
+
+  API -->|validate+persist| DB[(Appwrite DB)]
+  API -->|publish event| RT
+  API -->|DEL lock| KV
+
+  SCHED[Vercel Cron] --> AUTOPICK[/POST /api/drafts/:id/autopick/]
+  AUTOPICK --> DB
+  AUTOPICK --> RT
+
+  RT -->|state updates| UI
 ```
 
 **Components:**
@@ -88,21 +101,19 @@ graph TD
 
 ### 5. Projections System
 ```mermaid
-graph LR
-    A[Player Data] --> B[Talent Sources]
-    B --> C[EA Ratings CSV]
-    B --> D[Mock Draft Data]
-    B --> E[Depth Charts JSON]
-    B --> F[Previous Stats]
-    C --> G[Unified Projection Engine]
-    D --> G
-    E --> G
-    F --> G
-    G --> H[Talent Multiplier]
-    H --> I[Base Projection]
-    I --> J[Final Fantasy Points]
-    J --> K[Store in DB]
-    K --> L[Draft Interface]
+%%{init: {'themeVariables': {'fontSize': '22px'}}}%%
+flowchart LR
+  S1[EA Ratings CSV] --> N[Normalize]
+  S2[Mock Drafts] --> N
+  S3[Depth Charts JSON] --> N
+  S4[Prev Stats] --> N
+  N --> E[Projection Engine]
+  E --> M[Talent Multiplier & Adjustments]
+  M --> B[Base Projection]
+  B --> F[Final Fantasy Points]
+  F --> STORE[(player_projections)]
+  E -. metrics .-> RUNS[(projection_runs)]
+  STORE --> UI[Draft & Rankings UI]
 ```
 
 **Enhanced Calculation Factors:**
