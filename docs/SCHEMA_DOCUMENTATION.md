@@ -1,8 +1,8 @@
 # Schema Documentation
 
 **Generated from SSOT**: `schema/zod-schema.ts`  
-**Generated at**: 2025-08-18T23:47:14.216Z  
-**Collections**: 26
+**Generated at**: 2025-08-19T02:41:49.243Z  
+**Collections**: 32
 
 This documentation is automatically generated from the Single Source of Truth schema.
 
@@ -18,7 +18,9 @@ This documentation is automatically generated from the Single Source of Truth sc
 - [user_teams](#userteams)
 - [lineups](#lineups)
 - [auctions](#auctions)
+- [auction_sessions](#auctionsessions)
 - [bids](#bids)
+- [auction_bids](#auctionbids)
 - [player_stats](#playerstats)
 - [users](#users)
 - [activity_log](#activitylog)
@@ -26,7 +28,9 @@ This documentation is automatically generated from the Single Source of Truth sc
 - [mock_drafts](#mockdrafts)
 - [mock_draft_picks](#mockdraftpicks)
 - [mock_draft_participants](#mockdraftparticipants)
+- [drafts](#drafts)
 - [matchups](#matchups)
+- [scores](#scores)
 - [player_projections](#playerprojections)
 - [projections_yearly](#projectionsyearly)
 - [projections_weekly](#projectionsweekly)
@@ -36,6 +40,8 @@ This documentation is automatically generated from the Single Source of Truth sc
 - [draft_states](#draftstates)
 - [league_memberships](#leaguememberships)
 - [projection_runs](#projectionruns)
+- [projection_run_metrics](#projectionrunmetrics)
+- [team_budgets](#teambudgets)
 
 ---
 
@@ -144,7 +150,7 @@ This documentation is automatically generated from the Single Source of Truth sc
 ## leagues
 
 **Key**: `LEAGUES`  
-**Fields**: 13
+**Fields**: 17
 
 ### Fields
 
@@ -157,11 +163,15 @@ This documentation is automatically generated from the Single Source of Truth sc
 | `currentTeams` | number | ✅ | integer, min: 0, max: 32, default: 0 |
 | `draftType` | enum: snake | auction | ✅ | - |
 | `gameMode` | enum: power4 | sec | acc | big12 | bigten | ✅ | - |
+| `selectedConference` | string | ❌ | max: 50 |
 | `status` | enum: open | full | drafting | active | complete | ✅ | default: "open" |
 | `isPublic` | boolean | ✅ | default: true |
 | `pickTimeSeconds` | number | ✅ | integer, min: 30, max: 600, default: 90 |
 | `scoringRules` | string | ❌ | max: 2000 |
 | `draftDate` | date | ❌ | - |
+| `seasonStartWeek` | number | ❌ | integer, min: 1, max: 20 |
+| `playoffTeams` | number | ❌ | integer, min: 0, max: 20 |
+| `playoffStartWeek` | number | ❌ | integer, min: 1, max: 20 |
 | `password` | string | ❌ | max: 50 |
 
 ### Relationships
@@ -226,20 +236,42 @@ This documentation is automatically generated from the Single Source of Truth sc
 ## auctions
 
 **Key**: `AUCTIONS`  
-**Fields**: 8
+**Fields**: 7
 
 ### Fields
 
 | Field | Type | Required | Constraints |
 |-------|------|----------|-------------|
 | `leagueId` | string | ✅ | min: 1, max: 50 |
-| `currentPlayer` | string | ❌ | max: 50 |
-| `currentBid` | number | ✅ | min: 0, default: 0 |
-| `currentBidder` | string | ❌ | max: 50 |
-| `timeRemaining` | number | ✅ | integer, min: 0, default: 0 |
-| `status` | enum: waiting | active | complete | ✅ | default: "waiting" |
-| `completedPlayers` | string | ✅ | max: 10000, default: "[]" |
-| `nominatingTeam` | string | ❌ | max: 50 |
+| `status` | string | ✅ | min: 1, max: 20 |
+| `currentPlayerId` | string | ❌ | min: 1, max: 50 |
+| `currentBid` | number | ❌ | min: 0 |
+| `currentBidder` | string | ❌ | min: 1, max: 50 |
+| `startTime` | date | ❌ | - |
+| `endTime` | date | ❌ | - |
+
+### Relationships
+
+- leagueId → leagues
+
+---
+
+## auction_sessions
+
+**Key**: `AUCTION_SESSIONS`  
+**Fields**: 7
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `leagueId` | string | ✅ | min: 1, max: 50 |
+| `status` | string | ✅ | min: 1, max: 20 |
+| `currentPlayerId` | string | ❌ | min: 1, max: 50 |
+| `currentBid` | number | ❌ | min: 0 |
+| `currentBidder` | string | ❌ | min: 1, max: 50 |
+| `startTime` | date | ❌ | - |
+| `endTime` | date | ❌ | - |
 
 ### Relationships
 
@@ -250,21 +282,47 @@ This documentation is automatically generated from the Single Source of Truth sc
 ## bids
 
 **Key**: `BIDS`  
-**Fields**: 5
+**Fields**: 6
 
 ### Fields
 
 | Field | Type | Required | Constraints |
 |-------|------|----------|-------------|
-| `auctionId` | string | ✅ | min: 1, max: 50 |
+| `leagueId` | string | ✅ | min: 1, max: 50 |
+| `sessionId` | string | ✅ | min: 1, max: 50 |
+| `userId` | string | ✅ | min: 1, max: 50 |
 | `playerId` | string | ✅ | min: 1, max: 50 |
-| `bidderId` | string | ✅ | min: 1, max: 50 |
-| `amount` | number | ✅ | min: 1, max: 1000 |
-| `timestamp` | date | ✅ | default: "2025-08-18T23:47:14.215Z" |
+| `bidAmount` | number | ✅ | min: 1 |
+| `timestamp` | date | ✅ | - |
 
 ### Relationships
 
-- auctionId → auctions
+- leagueId → leagues
+- userId → users
+- playerId → college_players
+
+---
+
+## auction_bids
+
+**Key**: `AUCTION_BIDS`  
+**Fields**: 6
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `leagueId` | string | ✅ | min: 1, max: 50 |
+| `sessionId` | string | ✅ | min: 1, max: 50 |
+| `userId` | string | ✅ | min: 1, max: 50 |
+| `playerId` | string | ✅ | min: 1, max: 50 |
+| `bidAmount` | number | ✅ | min: 1 |
+| `timestamp` | date | ✅ | - |
+
+### Relationships
+
+- leagueId → leagues
+- userId → users
 - playerId → college_players
 
 ---
@@ -284,7 +342,7 @@ This documentation is automatically generated from the Single Source of Truth sc
 | `season` | number | ✅ | integer, min: 2020, max: 2030 |
 | `stats` | string | ✅ | max: 2000 |
 | `fantasy_points` | number | ✅ | default: 0 |
-| `updated` | date | ✅ | default: "2025-08-18T23:47:14.216Z" |
+| `updated` | date | ✅ | default: "2025-08-19T02:41:49.241Z" |
 
 ### Relationships
 
@@ -306,7 +364,7 @@ This documentation is automatically generated from the Single Source of Truth sc
 | `name` | string | ❌ | min: 1, max: 100 |
 | `emailVerification` | boolean | ✅ | default: false |
 | `preferences` | string | ❌ | max: 2000 |
-| `created` | date | ✅ | default: "2025-08-18T23:47:14.216Z" |
+| `created` | date | ✅ | default: "2025-08-19T02:41:49.243Z" |
 | `lastLogin` | date | ❌ | - |
 
 ---
@@ -323,7 +381,7 @@ This documentation is automatically generated from the Single Source of Truth sc
 | `userId` | string | ❌ | max: 50 |
 | `action` | string | ✅ | min: 1, max: 100 |
 | `details` | string | ❌ | max: 1000 |
-| `timestamp` | date | ✅ | default: "2025-08-18T23:47:14.216Z" |
+| `timestamp` | date | ✅ | default: "2025-08-19T02:41:49.243Z" |
 | `ip_address` | string | ❌ | max: 45 |
 | `user_agent` | string | ❌ | max: 500 |
 
@@ -395,6 +453,7 @@ This documentation is automatically generated from the Single Source of Truth sc
 
 ### Relationships
 
+- draftId → drafts
 - playerId → college_players
 
 ---
@@ -411,6 +470,34 @@ This documentation is automatically generated from the Single Source of Truth sc
 | `draftId` | string | ✅ | min: 1, max: 50 |
 | `name` | string | ✅ | min: 1, max: 100 |
 | `slot` | number | ✅ | integer, min: 1, max: 24 |
+
+### Relationships
+
+- draftId → drafts
+
+---
+
+## drafts
+
+**Key**: `DRAFTS`  
+**Fields**: 8
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `leagueId` | string | ✅ | min: 1, max: 50 |
+| `status` | string | ✅ | min: 1, max: 20 |
+| `currentRound` | number | ❌ | integer, min: 1 |
+| `currentPick` | number | ❌ | integer, min: 1 |
+| `maxRounds` | number | ❌ | integer, min: 1 |
+| `draftOrder` | string | ❌ | max: 1000 |
+| `startTime` | date | ❌ | - |
+| `endTime` | date | ❌ | - |
+
+### Relationships
+
+- leagueId → leagues
 
 ---
 
@@ -435,6 +522,29 @@ This documentation is automatically generated from the Single Source of Truth sc
 ### Relationships
 
 - leagueId → leagues
+
+---
+
+## scores
+
+**Key**: `SCORES`  
+**Fields**: 6
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `leagueId` | string | ✅ | min: 1, max: 50 |
+| `week` | number | ✅ | integer, min: 1, max: 20 |
+| `rosterId` | string | ✅ | min: 1, max: 50 |
+| `points` | number | ✅ | min: 0 |
+| `opponentId` | string | ❌ | min: 1, max: 50 |
+| `result` | string | ❌ | max: 20 |
+
+### Relationships
+
+- leagueId → leagues
+- rosterId → user_teams
 
 ---
 
@@ -564,6 +674,7 @@ This documentation is automatically generated from the Single Source of Truth sc
 
 ### Relationships
 
+- draftId → drafts
 - teamId → teams
 - playerId → college_players
 
@@ -584,6 +695,10 @@ This documentation is automatically generated from the Single Source of Truth sc
 | `round` | number | ✅ | integer, min: 1 |
 | `pickIndex` | number | ✅ | integer, min: 1 |
 | `status` | enum: active | paused | complete | ✅ | default: "active" |
+
+### Relationships
+
+- draftId → drafts
 
 ---
 
@@ -630,20 +745,56 @@ This documentation is automatically generated from the Single Source of Truth sc
 
 ---
 
+## projection_run_metrics
+
+**Key**: `PROJECTION_RUN_METRICS`  
+**Fields**: 2
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `runId` | string | ✅ | min: 1, max: 64 |
+| `metrics` | string | ✅ | max: 10000 |
+
+---
+
+## team_budgets
+
+**Key**: `TEAM_BUDGETS`  
+**Fields**: 5
+
+### Fields
+
+| Field | Type | Required | Constraints |
+|-------|------|----------|-------------|
+| `leagueId` | string | ✅ | min: 1, max: 50 |
+| `userId` | string | ✅ | min: 1, max: 50 |
+| `budget` | number | ✅ | min: 0 |
+| `spent` | number | ❌ | min: 0 |
+| `remaining` | number | ❌ | min: 0 |
+
+### Relationships
+
+- leagueId → leagues
+- userId → users
+
+---
+
 ## Schema Statistics
 
-- **Total Collections**: 26
-- **Total Fields**: 198
-- **Total Relationships**: 27
-- **Required Fields**: 125
-- **Optional Fields**: 73
+- **Total Collections**: 32
+- **Total Fields**: 236
+- **Total Relationships**: 41
+- **Required Fields**: 142
+- **Optional Fields**: 94
 
 ### Field Type Distribution
 
-- **string**: 97 fields
-- **number**: 66 fields
-- **enum**: 18 fields
-- **date**: 12 fields
+- **string**: 117 fields
+- **number**: 78 fields
+- **date**: 19 fields
+- **enum**: 17 fields
 - **boolean**: 5 fields
 
 ---
