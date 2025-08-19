@@ -86,6 +86,8 @@ export const Leagues = z.object({
   seasonStartWeek: z.number().int().min(1).max(20).optional(),
   playoffTeams: z.number().int().min(0).max(20).optional(),
   playoffStartWeek: z.number().int().min(1).max(20).optional(),
+  waiverType: z.string().max(20).optional(),
+  waiverBudget: z.number().int().min(0).max(1000).optional(),
   password: z.string().max(50).optional()
 });
 
