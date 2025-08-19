@@ -13,10 +13,11 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Set session cookies
+    // Set session cookies for the OAuth user
     const cookieStore = cookies();
     
-    cookieStore.set('session', sessionId, {
+    // Set Appwrite session cookie
+    cookieStore.set('appwrite-session', sessionId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
       path: '/'
     });
     
+    // Also set userId for convenience
     cookieStore.set('userId', userId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -32,11 +34,14 @@ export async function POST(request: NextRequest) {
       path: '/'
     });
     
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ 
+      success: true,
+      message: 'Session synced successfully'
+    });
   } catch (error) {
     console.error('OAuth sync error:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to sync OAuth session' },
+      { success: false, error: 'Failed to sync session' },
       { status: 500 }
     );
   }

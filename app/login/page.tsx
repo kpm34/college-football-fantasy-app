@@ -195,11 +195,18 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
       // Initiate OAuth2 session
       const providerName = provider === 'google' ? OAuthProvider.Google : OAuthProvider.Apple;
       
+      // Use the full URL for success and failure callbacks
+      const origin = window.location.origin;
+      const successUrl = `${origin}/api/auth/oauth/success`;
+      const failureUrl = `${origin}/login?error=oauth_failed`;
+      
+      console.log('OAuth URLs:', { successUrl, failureUrl, provider: providerName });
+      
       // This will redirect to the OAuth provider
       await account.createOAuth2Session(
         providerName,
-        data.successUrl,
-        data.failureUrl
+        successUrl,
+        failureUrl
       );
       
     } catch (error) {

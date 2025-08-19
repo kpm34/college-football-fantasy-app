@@ -52,8 +52,20 @@ export async function GET(request: NextRequest) {
               
               const account = new Account(client);
               
-              // Get current session
-              const session = await account.getSession('current');
+              // Try to get current session
+              let session;
+              try {
+                session = await account.getSession('current');
+                console.log('OAuth session found:', session);
+              } catch (sessionError) {
+                console.error('No session found, checking for OAuth callback params...');
+                // If no session, the OAuth flow might not be complete
+                // Redirect back to login
+                setTimeout(() => {
+                  window.location.href = '/login?error=oauth_incomplete';
+                }, 2000);
+                return;
+              }
               
               // Sync with server
               const response = await fetch('/api/auth/sync-oauth', {
@@ -61,6 +73,7 @@ export async function GET(request: NextRequest) {
                 headers: {
                   'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                   sessionId: session.$id,
                   userId: session.userId
@@ -69,16 +82,29 @@ export async function GET(request: NextRequest) {
               
               if (response.ok) {
                 // Redirect to dashboard
+                console.log('Session synced successfully, redirecting...');
                 window.location.href = '/dashboard';
               } else {
+                const error = await response.json();
+                console.error('Sync failed:', error);
                 throw new Error('Failed to sync session');
               }
             } catch (error) {
               console.error('OAuth sync error:', error);
-              alert('Login failed. Please try again.');
-              window.location.href = '/login';
+              setTimeout(() => {
+                alert('Login failed. Please try again.');
+                window.location.href = '/login';
+              }, 1000);
             }
           }
+          
+          // Add a timeout to prevent infinite loading
+          setTimeout(() => {
+            const container = document.querySelector('.container');
+            if (container && container.querySelector('.spinner')) {
+              container.innerHTML = '<p>Login is taking longer than expected...</p><p><a href="/login" style="color: #3B82F6;">Return to login</a></p>';
+            }
+          }, 10000);
           
           syncSession();
         </script>
@@ -92,3 +118,4 @@ export async function GET(request: NextRequest) {
     },
   });
 }
+

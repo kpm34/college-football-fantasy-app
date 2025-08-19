@@ -76,12 +76,11 @@
    - Enable "Sign in with Apple"
    - Configure domains:
      - Primary domain: cfbfantasy.app
-     - Return URLs:
+     - Return URLs (add one at a time):
        ```
        https://nyc.cloud.appwrite.io/v1/account/sessions/oauth2/callback/apple/college-football-fantasy-app
-       https://cfbfantasy.app/api/auth/oauth/callback
-       https://collegefootballfantasy.app/api/auth/oauth/callback
        ```
+       Note: Apple may not accept custom domain callbacks directly. Use only the Appwrite callback URL.
 
 5. Create Key:
    - Go to Keys → Add (+)
