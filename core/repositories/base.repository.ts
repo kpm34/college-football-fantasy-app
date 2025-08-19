@@ -5,6 +5,7 @@
 
 import { Client, Databases, Query, Models, ID as ClientID } from 'appwrite';
 import { Client as ServerClient, Databases as ServerDatabases, ID as ServerID } from 'node-appwrite';
+import { randomUUID } from 'crypto';
 import { env } from '../config/environment';
 import { AppError, NotFoundError, ValidationError } from '../errors/app-error';
 import { SchemaValidator } from '../validation/schema-enforcer';
@@ -193,24 +194,44 @@ export abstract class BaseRepository<T extends Models.Document> {
         delete (transformedData as any).$id;
       }
 
-      // Create document
-      const document = await this.databases.createDocument(
-        this.databaseId,
-        this.collectionId,
-        // Use the correct ID helper for the current runtime
-        (this.isServer ? ServerID : ClientID).unique(),
-        transformedData
-      ) as T;
+      // Create document with retry on rare duplicate-ID collisions
+      let lastError: any | null = null;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const idToUse = attempt === 0
+            ? (this.isServer ? ServerID : ClientID).unique()
+            : randomUUID().replace(/-/g, '').slice(0, 36);
 
-      // Invalidate related caches
-      if (options?.invalidateCache) {
-        await this.invalidateCache(options.invalidateCache);
+          const document = await this.databases.createDocument(
+            this.databaseId,
+            this.collectionId,
+            idToUse,
+            transformedData
+          ) as T;
+
+          // Invalidate related caches
+          if (options?.invalidateCache) {
+            await this.invalidateCache(options.invalidateCache);
+          }
+
+          // Invalidate list caches
+          await this.invalidateCache([`${this.cachePrefix}:list:*`]);
+
+          return document;
+        } catch (err: any) {
+          lastError = err;
+          const message = String(err?.message || '');
+          const isDuplicateId = message.includes('requested ID already exists') || message.includes('already exists');
+          // Retry only on duplicate ID errors; otherwise throw immediately
+          if (!isDuplicateId) {
+            throw err;
+          }
+          // Continue to next attempt with a brand-new UUID
+        }
       }
 
-      // Invalidate list caches
-      await this.invalidateCache([`${this.cachePrefix}:list:*`]);
-
-      return document;
+      // If we exhausted retries, throw enriched error
+      throw lastError;
     } catch (error: any) {
       if (error instanceof AppError) throw error;
       const message = `Failed to create document in collection '${this.collectionId}': ${error.message}`;
