@@ -186,7 +186,7 @@ export async function PUT(
     const knownSafeKeys = new Set([
       'name', 'maxTeams', 'isPublic', 'draftDate', 'pickTimeSeconds',
       'orderMode', 'gameMode', 'selectedConference', 'scoringRules',
-      'primaryColor', 'secondaryColor', 'leagueTrophyName', 'draftType'
+      'draftType', 'seasonStartWeek', 'playoffTeams', 'playoffStartWeek'
     ]);
     const leagueKeys = new Set(Object.keys(league as any));
     const safePayload: Record<string, any> = {};
