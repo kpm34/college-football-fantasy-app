@@ -15,9 +15,10 @@ function sanitizeApiKey(raw: string | undefined): string {
 }
 
 // Initialize server client with API key
+// Use NEXT_PUBLIC_ variables which are available in Vercel
 const serverClient = new Client()
-  .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
-  .setProject(process.env.APPWRITE_PROJECT_ID || 'college-football-fantasy-app')
+  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app')
   .setKey(sanitizeApiKey(process.env.APPWRITE_API_KEY));
 
 // Export server-side services
@@ -34,8 +35,8 @@ export { DATABASE_ID, COLLECTIONS } from './appwrite';
 export function isServerConfigured(): boolean {
   return !!(
     process.env.APPWRITE_API_KEY &&
-    process.env.APPWRITE_ENDPOINT &&
-    process.env.APPWRITE_PROJECT_ID
+    process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT &&
+    process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
   );
 }
 
