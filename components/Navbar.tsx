@@ -82,11 +82,13 @@ export default function Navbar() {
 
   async function handleLogout() {
     try {
-      await logout();
       setOpen(false);
-      router.push("/");
+      await logout();
     } catch (e) {
       console.error("Logout failed", e);
+      // Even if logout fails, close the menu and redirect
+      setOpen(false);
+      router.push("/");
     }
   }
 
@@ -327,9 +329,10 @@ function UserMenu({
   const handleLogout = async () => {
     try {
       await logout();
-      router.push("/");
     } catch (e) {
       console.error("Logout failed", e);
+      // Even if logout fails, redirect to home
+      router.push("/");
     }
   };
 
