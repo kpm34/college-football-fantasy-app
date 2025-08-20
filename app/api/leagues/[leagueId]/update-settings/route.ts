@@ -5,15 +5,16 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 // Valid league attributes that can be updated
+// NOTE: These must match EXACTLY what exists in Appwrite!
 const VALID_LEAGUE_ATTRIBUTES = [
   'name',
   'maxTeams', 
   'isPublic',
   'pickTimeSeconds',
   'scoringRules',
-  'draftDate',
+  // 'draftDate', // REMOVED - doesn't exist in Appwrite collection yet!
   'draftType',
-  'orderMode',
+  // 'orderMode', // May not exist either
   'gameMode',
   'status',
   'season',
@@ -64,12 +65,23 @@ export async function PUT(
       );
     }
     
+    // Map frontend field names to database field names
+    const fieldMapping: Record<string, string> = {
+      'draftDate': 'draft_date',  // Frontend sends camelCase, DB uses snake_case
+      // Add other mappings as needed
+    };
+    
     // Filter out invalid attributes to prevent schema errors
     const validUpdates: Record<string, any> = {};
     const invalidFields: string[] = [];
     
     for (const [key, value] of Object.entries(body)) {
-      if (VALID_LEAGUE_ATTRIBUTES.includes(key)) {
+      // Check if this field needs to be mapped
+      const dbFieldName = fieldMapping[key] || key;
+      
+      if (VALID_LEAGUE_ATTRIBUTES.includes(dbFieldName)) {
+        validUpdates[dbFieldName] = value;
+      } else if (VALID_LEAGUE_ATTRIBUTES.includes(key)) {
         validUpdates[key] = value;
       } else {
         invalidFields.push(key);
