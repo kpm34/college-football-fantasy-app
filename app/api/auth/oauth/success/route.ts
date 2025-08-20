@@ -68,18 +68,16 @@ export async function GET(request: NextRequest) {
                 // Show error details on the page for debugging
                 const container = document.querySelector('.container');
                 if (container) {
-                  container.innerHTML = \`
-                    <p style="color: #ef4444;">OAuth session not found</p>
-                    <p style="font-size: 12px; margin-top: 10px;">Error: \${sessionError.message || 'Unknown error'}</p>
-                    <p style="font-size: 12px;">Code: \${sessionError.code || 'N/A'}</p>
-                    <p style="font-size: 12px; margin-top: 20px;">This usually means:</p>
-                    <ul style="font-size: 12px; text-align: left; max-width: 400px; margin: 10px auto;">
-                      <li>Google OAuth is not properly configured in Appwrite</li>
-                      <li>The OAuth flow was cancelled or failed</li>
-                      <li>Session cookies are being blocked</li>
-                    </ul>
-                    <p style="margin-top: 20px;"><a href="/login" style="color: #3B82F6;">Return to login</a></p>
-                  \`;
+                  container.innerHTML = '<p style="color: #ef4444;">OAuth session not found</p>' +
+                    '<p style="font-size: 12px; margin-top: 10px;">Error: ' + (sessionError.message || 'Unknown error') + '</p>' +
+                    '<p style="font-size: 12px;">Code: ' + (sessionError.code || 'N/A') + '</p>' +
+                    '<p style="font-size: 12px; margin-top: 20px;">This usually means:</p>' +
+                    '<ul style="font-size: 12px; text-align: left; max-width: 400px; margin: 10px auto;">' +
+                    '<li>Google OAuth is not properly configured in Appwrite</li>' +
+                    '<li>The OAuth flow was cancelled or failed</li>' +
+                    '<li>Session cookies are being blocked</li>' +
+                    '</ul>' +
+                    '<p style="margin-top: 20px;"><a href="/login" style="color: #3B82F6;">Return to login</a></p>';
                 }
                 return;
               }
