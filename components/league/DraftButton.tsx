@@ -86,7 +86,7 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
   }, [league.draftDate, league.status]);
 
   const handleDraftClick = () => {
-    router.push(`/draft/${league.$id}/realtime`);
+    router.push(`/draft/${league.$id}`);
   };
 
   // Don't show button if user is not a member
@@ -113,7 +113,7 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
       >
         <FiPlay className="text-xl" />
         <div className="flex flex-col items-start">
-          <span className="font-semibold">Join Draft</span>
+          <span className="font-semibold">DRAFT ROOM</span>
           <span className="text-xs opacity-90">Draft in progress</span>
         </div>
       </button>
@@ -129,7 +129,7 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
       >
         <FiPlay className="text-xl" />
         <div className="flex flex-col items-start">
-          <span className="font-semibold">Enter Draft</span>
+          <span className="font-semibold">DRAFT ROOM</span>
           <span className="text-xs opacity-90">{timeUntilDraft}</span>
         </div>
       </button>
@@ -145,7 +145,7 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
       >
         <FiClock className="text-xl" />
         <div className="flex flex-col items-start">
-          <span className="font-semibold">Launch Draft</span>
+          <span className="font-semibold">DRAFT ROOM</span>
           <span className="text-xs opacity-90">{timeUntilDraft}</span>
         </div>
       </button>
