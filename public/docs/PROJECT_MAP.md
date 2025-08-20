@@ -89,15 +89,15 @@ graph TB
         end
         
         subgraph FantasyColls[Fantasy Collections]
-            LEAGUES[(leagues<br/>Commissioner<br/>Settings, Status)]
-            USER_TEAMS[(user_teams<br/>Team Rosters<br/>Wins, Points)]
-            LINEUPS[(lineups<br/>Starting Players<br/>Weekly Sets)]
+            LEAGUES[(leagues<br/>11 required fields<br/>DRAFT ROOM trigger)]
+            USER_TEAMS[(user_teams<br/>Team Management<br/>Scoring & Stats)]
+            LINEUPS[(lineups<br/>Weekly Lineups<br/>Roster Sets)]
         end
         
-        subgraph DraftSys[Draft System]
-            MOCK_DRAFTS[(mock_drafts<br/>Live Human Draft<br/>2-24 Teams)]
-            MOCK_PICKS[(mock_draft_picks<br/>Draft Selections<br/>Snake Algorithm)]
-            DRAFT_PICKS[(draft_picks<br/>League Drafts<br/>Real-time)]
+        subgraph DraftSys[Draft System - Live Schema]
+            MOCK_DRAFTS[(mock_drafts<br/>draftName, numTeams<br/>snake, status enum)]
+            MOCK_PICKS[(mock_draft_picks<br/>Snake Algorithm<br/>Real-time Updates)]
+            DRAFT_PICKS[(draft_picks<br/>League Drafts<br/>Timer-based)]
         end
     end
     
@@ -113,7 +113,7 @@ graph TB
     subgraph FrontendPages[Frontend Pages]
         MOCK_DRAFT_UI[/mock-draft/id<br/>Live Draft Room<br/>Real-time Picks]
         DRAFT_UI[/draft/leagueId<br/>League Draft<br/>Timer and Autopick]
-        LEAGUE_UI[/league/*<br/>Management Pages<br/>Commissioner Tools]
+        LEAGUE_UI[/league/*<br/>Management Pages<br/>Commissioner Tools<br/>DRAFT ROOM Button]
         RESULTS_UI[Results and Export<br/>JSON/CSV Download<br/>Team Summaries]
     end
     
@@ -177,6 +177,47 @@ graph TB
 
 ---
 
+## 🔧 DRAFT ROOM Button Time Window Flow
+
+```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px'}}}%%
+sequenceDiagram
+    participant UI as League Page
+    participant DB as DraftButton Component
+    participant Timer as Update Timer
+    participant Router as Next Router
+    
+    Note over UI,Router: August 19, 2025 - DRAFT ROOM Implementation
+    
+    UI->>DB: Render DraftButton
+    Note over UI,DB: Props: league, isCommissioner, isMember
+    
+    DB->>Timer: Start 60s interval
+    Note over Timer: Updates draft status every minute
+    
+    Timer->>DB: Calculate time windows
+    Note over Timer: 1hr before → 3hr after draft
+    
+    alt Draft Complete (status: active/complete)
+        DB-->>UI: Gray badge "Draft Complete"
+    else Draft Active (status: drafting)
+        DB-->>UI: Green animated "DRAFT ROOM" button
+    else Draft Window Open (within 1hr-3hr)
+        DB-->>UI: Orange animated "DRAFT ROOM" button
+    else Commissioner Access (any time)
+        DB-->>UI: Blue "DRAFT ROOM" button
+    else Countdown Mode (scheduled, not ready)
+        DB-->>UI: Gray badge with countdown
+    else No Draft Date
+        DB-->>UI: null (button hidden)
+    end
+    
+    UI->>Router: Click "DRAFT ROOM"
+    Router-->>UI: Navigate to /draft/[leagueId]
+    
+    Note over UI,Router: Auto-refresh countdown display<br/>Dynamic button states
+```
+
 ## 🔧 Commissioner Settings Schema Fix Flow
 
 ```mermaid
@@ -192,8 +233,8 @@ sequenceDiagram
     UI->>API: PUT /api/leagues/[id]/commissioner
     Note over UI,API: Frontend sends camelCase:<br/>maxTeams, pickTimeSeconds
     
-    API->>API: Field Mapping
-    Note over API: OLD: snake_case (max_teams)<br/>NEW: camelCase (maxTeams)
+    API->>API: Field Mapping & Validation
+    Note over API: ✅ Removed: primaryColor, secondaryColor, leagueTrophyName<br/>✅ Immutable: gameMode, selectedConference
     
     API->>DB: updateDocument(leagues)
     Note over DB: Database expects camelCase<br/>maxTeams: 12<br/>pickTimeSeconds: 90
@@ -210,10 +251,10 @@ sequenceDiagram
     
     UI->>API: GET /api/leagues/[id]/commissioner
     API->>API: Format Response
-    Note over API: Ensures camelCase fields<br/>in response object
+    Note over API: Ensures camelCase fields<br/>Conference mode saves selectedConference
     API-->>UI: ✅ Formatted league data
     
-    Note over UI,DB: Result: Commissioner page loads<br/>and settings save successfully
+    Note over UI,DB: Result: Commissioner page loads<br/>and all settings save successfully
 ```
 
 ---
@@ -246,17 +287,17 @@ sequenceDiagram
 
 | Operation | Entry Point | Data Flow | Required Fields |
 |-----------|-------------|-----------|-----------------|
-| **Create League** | `POST /api/leagues/create` | `leagues` + `user_teams` collections | name, maxTeams, gameMode, draftType |
-| **Join League** | `POST /api/leagues/join` | Update `leagues`, create `user_teams` | leagueId, teamName, password(if private) |
-| **Commissioner Update** | `PATCH /api/leagues/[id]/update-settings` | Update `leagues` collection | Various settings (commissioner only) |
-| **User Login** | `POST /api/auth/login` | Appwrite Auth → Session Cookie | email, password |
+| **Create League** | `POST /api/leagues/create` | `leagues` + `user_teams` collections | name, commissioner, season (required); maxTeams, gameMode (immutable), selectedConference (for conference mode) optional |
+| **Join League** | `POST /api/leagues/join` | Update `leagues`, create `user_teams` | leagueId, userId, teamName (required); password(if private) |
+| **Commissioner Update** | `PATCH /api/leagues/[id]/update-settings` | Update `leagues` collection | draftDate (DRAFT ROOM trigger), pickTimeSeconds (30-600), various optional settings |
+| **User Login** | `POST /api/auth/login` | Appwrite Auth → Session Cookie | email, password (11 active users) |
 | **User Signup** | `POST /api/auth/signup` | Create user → Auto-login | email, password, name |
 | **OAuth Login** | `GET /api/auth/oauth/[provider]` | OAuth flow → Session sync | Environment flags required |
-| **Start Mock Draft** | `POST /api/mock-draft/start` | Create `mock_drafts` + participants | draftId, numTeams |
+| **Start Mock Draft** | `POST /api/mock-draft/start` | Create `mock_drafts` + participants | draftName, numTeams, rounds, snake, status (required) |
 | **Make Draft Pick** | `POST /api/draft/[id]/pick` | Create `draft_picks`, update roster | leagueId, playerId |
-| **Get Players** | `GET /api/draft/players` | Query `college_players` + projections | Filters: position, conference, team |
+| **Get Players** | `GET /api/draft/players` | Query `college_players` + projections | Filters: name (fulltext), position, team, fantasy_points (all indexed) |
 | **Weekly Scoring** | `POST /api/cron/weekly-scoring` | Update `player_stats` + `lineups` | Automated cron job |
-| **Validate Schema** | `scripts/validate-ssot-schema.ts` | Compare SSOT ↔ Appwrite database | Build-time validation |
+| **Batch Player Sync** | `scripts/sync-players-batch.ts` | Purge + repopulate `college_players` | Batch processing with 70-player chunks |
 
 ---
 
@@ -373,12 +414,24 @@ npm run build
 - **Result**: Live draft updates, real-time pick notifications, dynamic status changes working
 - **Deployment**: https://cfbfantasy.app ✅
 
-### Commissioner Settings Schema Alignment ✅
+### Commissioner Settings Schema Alignment ✅ [Updated: Aug 19, 2025]
 - **Issue**: Field name mismatch between API and database (snake_case vs camelCase)
 - **Solution**: Updated all commissioner endpoints to use consistent camelCase field mapping
 - **Files Fixed**: `commissioner/route.ts` (GET/PUT), `join/route.ts`, `search/route.ts`, `create/page.tsx`
 - **Cache Update**: Service worker version bumped to force refresh
 - **Result**: Commissioner settings now save successfully in production
+- **Latest Fix**: Removed non-existent attributes (primaryColor, secondaryColor, leagueTrophyName)
+- **Immutable Fields**: `gameMode` and `selectedConference` cannot be changed after league creation
+- **Conference Mode**: Properly saves `selectedConference` when gameMode is 'conference'
+
+### DRAFT ROOM Button Implementation ✅ [Added: Aug 19, 2025]
+- **Component**: `components/league/DraftButton.tsx`
+- **Time Window**: Shows 1 hour before draft, stays visible during draft, hides 3 hours after
+- **Dynamic States**: Gray (scheduled), Blue (commissioner), Orange (window open), Green (draft active)
+- **Auto-Update**: Refreshes countdown every minute
+- **Navigation**: Routes to `/draft/[leagueId]` when clicked
+- **Access Control**: Only shows for league members, commissioner has special privileges
+- **Result**: Automated draft room access based on scheduled draft time
 
 ### Codebase Optimization ✅
 - **Removed**: 39,000+ files from awwwards-rig vendor directory 

@@ -15,7 +15,8 @@ export async function loadEligiblePlayers(): Promise<Player[]> {
       DATABASE_ID,
       'college_players',
       [
-        Query.equal('draftable', true),
+        // Use new availability flag
+        Query.equal('eligible', true),
         Query.equal('conference', ['SEC', 'ACC', 'Big 12', 'Big Ten']),
         Query.equal('position', ['QB', 'RB', 'WR', 'TE', 'K']),
         Query.orderDesc('fantasy_points'),

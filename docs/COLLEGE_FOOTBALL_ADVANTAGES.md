@@ -4,7 +4,7 @@
 
 ### **Massive Player Pool**
 - **Power 4 Conferences**: SEC, ACC, Big 12, Big Ten
-- **130+ teams** across these conferences
+- **50+ teams** across these conferences
 - **Thousands of eligible players** vs NFL's ~1,700 active players
 - **Deep rosters** allow for more strategic choices
 

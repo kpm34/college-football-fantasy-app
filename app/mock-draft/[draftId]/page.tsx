@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDraftCoreMock } from '@/lib/draft/core';
 import Link from 'next/link';
+import { leagueColors } from '@/lib/theme/colors';
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, { ...init, cache: 'no-store' });
@@ -72,6 +73,14 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
   useEffect(() => {
     draftCore.refresh();
     refreshAll(); // Load initial turn and results
+    // Auto-claim seat based on setup page selection, if present
+    try {
+      const storedId = localStorage.getItem('mockDraftUserId');
+      const storedName = localStorage.getItem('mockDraftUserName');
+      if (storedId && storedName) {
+        joinAs(storedId, storedName);
+      }
+    } catch {}
     
     // Load available players from your existing endpoint
     fetch('/api/draft/players')
@@ -96,21 +105,41 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
   }, [draftId]);
 
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
+  const [deadlineTs, setDeadlineTs] = useState<number | null>(null);
+  const [teamView, setTeamView] = useState<string>('');
+  const [filterTeam, setFilterTeam] = useState<string>('');
+  const [filterConf, setFilterConf] = useState<string>('');
+  const [filterPos, setFilterPos] = useState<string>('');
 
-  // Recompute seconds left every second
+  // Lock in the server deadline when the pick changes; do not bump on background refreshes
+  useEffect(() => {
+    if (turn?.deadlineAt) {
+      setDeadlineTs(new Date(turn.deadlineAt).getTime());
+    } else {
+      setDeadlineTs(null);
+    }
+  }, [turn?.overall, turn?.deadlineAt]);
+
+  // Local countdown from the locked deadline
   useEffect(() => {
     const timer = setInterval(() => {
-      if (turn) {
+      if (deadlineTs) {
         const now = Date.now();
-        const deadline = new Date(turn.deadlineAt).getTime();
-        const secs = Math.max(0, Math.floor((deadline - now) / 1000));
+        const secs = Math.max(0, Math.floor((deadlineTs - now) / 1000));
         setSecondsLeft(secs);
       } else {
         setSecondsLeft(null);
       }
     }, 1000);
     return () => clearInterval(timer);
-  }, [turn]);
+  }, [deadlineTs]);
+
+  // Fixed time limit for current pick (prevents jitter)
+  const timeLimitForPick = useMemo(() => {
+    if (!turn) return 0;
+    const msLeft = new Date(turn.deadlineAt).getTime() - Date.now();
+    return Math.max(0, Math.ceil(msLeft / 1000));
+  }, [turn?.overall, turn?.deadlineAt]);
 
   async function draftPlayer(playerId: string) {
     if (!me.participantId) return alert('Join first');
@@ -127,44 +156,109 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
 
   // Filter out already drafted players
   const pickedPlayerIds = new Set(draftCore.picks?.map((p: any) => p.playerId) || []);
-  const availablePlayers = players.filter(p => !pickedPlayerIds.has(p.id || p.$id));
+  const availablePlayers = players
+    .filter(p => !pickedPlayerIds.has(p.id || p.$id))
+    .filter(p => (filterPos ? (String(p.position||'').toUpperCase() === filterPos) : true))
+    .filter(p => (filterConf ? (String(p.conference||'') === filterConf) : true))
+    .filter(p => (filterTeam ? (String(p.team||'') === filterTeam) : true));
+
+  const allTeams = useMemo(() => Array.from(new Set(players.map(p => p.team).filter(Boolean))).sort(), [players]);
+  const allConfs = useMemo(() => Array.from(new Set(players.map(p => p.conference).filter(Boolean))).sort(), [players]);
+
+  // Map playerId to name
+  const idToName = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const p of players) {
+      const id = p.id || p.$id;
+      if (id) m.set(id, p.name || p.displayName || id);
+    }
+    return m;
+  }, [players]);
+
+  const idToPos = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const p of players) {
+      const id = p.id || p.$id;
+      if (id) m.set(id, p.position || '');
+    }
+    return m;
+  }, [players]);
+
+  // Recent picks ticker (last 12)
+  const recentPicks = (draftCore.picks || [])
+    .slice(-12)
+    .map((p: any) => ({
+      overall: p.overall,
+      playerId: p.playerId,
+      slot: p.slot,
+      name: idToName.get(p.playerId),
+      pos: idToPos.get(p.playerId)
+    }));
+
+  // My team picks
+  const myPicks = me.participantId
+    ? (draftCore.picks || []).filter((p: any) => p.participantId === me.participantId)
+    : [];
 
   return (
-    <div className="p-6 space-y-6">
-      <header className="flex items-center justify-between">
+    <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main, color: leagueColors.text.primary }}>
+      <header className="flex items-center justify-between px-2 lg:px-4 py-2 border-b" style={{ backgroundColor: leagueColors.background.secondary, borderColor: leagueColors.border.medium }}>
         <div>
-          <h1 className="text-2xl font-bold">Live Draft</h1>
-          {turn && (
-            <p className="text-sm text-gray-500">
-              Round {turn.round} • Overall #{turn.overall} • On the clock: Team #{turn.slot}
-            </p>
-          )}
+          <h1 className="text-sm font-semibold flex items-center gap-3" style={{ color: leagueColors.text.primary }}>
+            Live Draft
+            {turn && (
+              <span className="flex items-center gap-1 text-xs" style={{ color: leagueColors.text.secondary }}>
+                <span className="inline-block h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                On the clock: Team #{turn.slot}
+              </span>
+            )}
+          </h1>
           {me.participantId && (
-            <p className="text-xs text-gray-400">You are Team #{me.slot}</p>
+            <p className="text-xs" style={{ color: leagueColors.text.muted }}>You are Team #{me.slot}</p>
           )}
         </div>
         <div className="flex items-center gap-3">
-          {!me.participantId && (
-            <button
-              className="px-3 py-2 rounded bg-black text-white disabled:opacity-50"
-              onClick={() => {
-                const userId = prompt('User ID?') || `user-${Date.now()}`;
-                const displayName = prompt('Display name?') || 'Guest';
-                joinAs(userId, displayName);
-              }}
-              disabled={loading}
-            >
-              Join / Claim Seat
-            </button>
+          {results?.draft?.status === 'complete' && (
+            <Link href={`/mock-draft/${draftId}/results`} className="px-3 py-2 rounded border" style={{ borderColor: leagueColors.border.light, color: leagueColors.text.primary }}>
+              View Results
+            </Link>
           )}
-          <Link href={`/mock-draft/${draftId}/results`} className="px-3 py-2 rounded border">
-            View Results
-          </Link>
-          <div className="px-3 py-2 rounded border">
-            {secondsLeft !== null ? `${secondsLeft}s left` : '—'}
-          </div>
         </div>
       </header>
+
+      {/* Recent picks ticker */}
+      <div className="mx-auto px-2 lg:px-4 mt-3 w-full overflow-x-auto whitespace-nowrap py-2 rounded-md" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+        {recentPicks.length === 0 ? (
+          <span className="px-3 text-sm" style={{ color: leagueColors.text.secondary }}>No picks yet</span>
+        ) : (
+          recentPicks.map((p, i) => {
+            const pos = (p.pos || '').toUpperCase();
+            const bg = pos === 'QB' ? '#3B82F6' : pos === 'RB' ? '#10B981' : pos === 'WR' ? '#F59E0B' : pos === 'TE' ? '#8B5CF6' : pos === 'K' ? '#6B7280' : '#111827';
+            const fg = pos === 'K' ? leagueColors.text.primary : '#fff';
+            return (
+              <span key={`${p.overall}-${i}`} className="inline-flex items-center gap-2 text-xs px-3 py-1 m-1 rounded-full" style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
+                <span className="inline-flex items-center justify-center w-8 h-5 rounded text-[10px] font-bold" style={{ backgroundColor: bg, color: fg }}>{pos || '—'}</span>
+                <span>{p.name || p.playerId}</span>
+                <span className="text-[10px]" style={{ color: leagueColors.text.secondary }}>T{p.slot}</span>
+              </span>
+            );
+          })
+        )}
+      </div>
+
+      {/* Under-ticker meta row: pick info + timer */}
+      <div className="mx-auto px-2 lg:px-4 mt-2 mb-2 flex items-center justify-between text-xs">
+        {turn ? (
+          <div style={{ color: leagueColors.text.secondary }}>
+            Round {turn.round} • Overall #{turn.overall} • On the clock: Team #{turn.slot}
+          </div>
+        ) : <div />}
+        {turn && (
+          <div className="px-3 py-1 rounded font-mono" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}`, color: (secondsLeft ?? 0) <= 10 ? '#B41F24' : leagueColors.text.primary }}>
+            {Math.floor((secondsLeft ?? 0) / 60)}:{String((secondsLeft ?? 0) % 60).padStart(2, '0')}
+          </div>
+        )}
+      </div>
 
       {error && (
         <div className="p-4 bg-red-50 border border-red-200 rounded text-red-700">
@@ -172,97 +266,220 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
         </div>
       )}
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 border rounded-xl p-4">
-          <h2 className="font-semibold mb-2">Draft Board</h2>
-          <div className="overflow-auto max-h-[70vh]">
-            {(() => {
-              const numTeams = results?.draft?.numTeams || 8;
-              const rounds = results?.draft?.rounds || 15;
-              return (
-                <div className="space-y-3">
-                  {[...Array(rounds)].map((_, rIdx) => (
-                    <div key={rIdx} className="border rounded p-2">
-                      <div className="text-xs text-gray-500 mb-2">Round {rIdx + 1}</div>
-                      <div 
-                        className="grid gap-2" 
-                        style={{ 
-                          gridTemplateColumns: `repeat(${Math.min(numTeams, 12)}, minmax(0,1fr))`,
-                          ...(numTeams > 12 ? { gridAutoRows: 'min-content' } : {})
-                        }}
-                      >
-                        {[...Array(numTeams)].map((_, sIdx) => {
-                          const overall = rIdx * numTeams + (rIdx % 2 === 0 ? (sIdx + 1) : (numTeams - sIdx));
-                          const pick = results?.picks?.find(p => p.overall === overall);
-                          const isCurrentPick = turn?.overall === overall;
-                          return (
-                            <div
-                              key={sIdx}
-                              className={`border rounded p-2 min-h-[48px] text-xs ${
-                                isCurrentPick ? 'bg-yellow-50 border-yellow-400' : ''
-                              } ${pick ? 'bg-gray-50' : ''}`}
-                            >
-                              {pick ? (
-                                <div>
-                                  <div className="font-medium truncate">
-                                    {pick.playerName || pick.playerId?.slice(0, 8)}
-                                  </div>
-                                  <div className="text-gray-500">T{pick.slot}</div>
-                                </div>
-                              ) : (
-                                <div className="text-gray-400">
-                                  {isCurrentPick ? '⏱️' : `T${rIdx % 2 === 0 ? sIdx + 1 : numTeams - sIdx}`}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
+      {/* ESPN-like three-column layout */}
+      <section className="mx-auto px-0 py-4 grid grid-cols-1 lg:grid-cols-12 gap-3">
+        {/* Left: My Team */}
+        <aside className="lg:col-span-3 rounded-none p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+          <h2 className="font-medium text-sm mb-2" style={{ color: leagueColors.text.primary }}>My Team</h2>
+          {(() => {
+            // Build slot layout: QB(2), RB(4), WR(4), TE(2), K(1) as a simple example
+            const slotOrder = [
+              { key: 'QB', count: 2 },
+              { key: 'RB', count: 4 },
+              { key: 'WR', count: 4 },
+              { key: 'TE', count: 2 },
+              { key: 'K', count: 1 },
+            ];
+            const picks = (draftCore.picks || []).filter((p:any)=> p.participantId === me.participantId);
+            const takenByPos: Record<string, any[]> = {};
+            for (const pos of ['QB','RB','WR','TE','K']) takenByPos[pos] = [];
+            for (const p of picks) {
+              const pl = players.find(pp => (pp.id||pp.$id) === p.playerId);
+              const pos = pl?.position || 'FLEX';
+              (takenByPos[pos] = takenByPos[pos] || []).push({ ...p, name: pl?.name, team: pl?.team });
+            }
+            return (
+              <div className="space-y-3">
+                {slotOrder.map(({ key, count }) => (
+                  <div key={key}>
+                    <div className="text-xs font-semibold mb-1" style={{ color: leagueColors.text.secondary }}>{key}</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {Array.from({ length: count }, (_, i) => {
+                        const pick = takenByPos[key][i];
+                        return (
+                          <div key={i} className="px-2 py-2 rounded border text-xs" style={{ borderColor: leagueColors.border.light, backgroundColor: pick ? leagueColors.background.overlay : 'transparent' }}>
+                            {pick ? (
+                              <div>
+                                <div className="font-medium" style={{ color: leagueColors.text.primary }}>{pick.playerName || pick.name || idToName.get(pick.playerId) || pick.playerId}</div>
+                                <div style={{ color: leagueColors.text.muted }}>#{pick.overall} • R{pick.round}</div>
+                              </div>
+                            ) : (
+                              <span style={{ color: leagueColors.text.muted }}>Empty</span>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
-                  ))}
-                </div>
-              );
-            })()}
-          </div>
-        </div>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
+        </aside>
 
-        <div className="border rounded-xl p-4">
-          <h2 className="font-semibold mb-2">Available Players</h2>
+        {/* Middle: Available Players */}
+        <div className="lg:col-span-6 rounded-none p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+          <h2 className="font-medium text-sm mb-2" style={{ color: leagueColors.text.primary }}>Available Players</h2>
+          {/* Filters */}
+          <div className="flex items-center gap-2 mb-3">
+            <select className="rounded px-2 py-1 text-xs" value={filterPos} onChange={(e)=>setFilterPos(e.target.value)}
+              style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
+              <option value="">All Positions</option>
+              {['QB','RB','WR','TE','K'].map(p=> (<option key={p} value={p}>{p}</option>))}
+            </select>
+            <select className="rounded px-2 py-1 text-xs" value={filterConf} onChange={(e)=>setFilterConf(e.target.value)}
+              style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
+              <option value="">All Conferences</option>
+              {allConfs.map(c=> (<option key={c} value={String(c)}>{String(c)}</option>))}
+            </select>
+            <select className="rounded px-2 py-1 text-xs" value={filterTeam} onChange={(e)=>setFilterTeam(e.target.value)}
+              style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
+              <option value="">All Teams</option>
+              {allTeams.map(t=> (<option key={t} value={String(t)}>{String(t)}</option>))}
+            </select>
+            {(filterPos || filterConf || filterTeam) && (
+              <button className="ml-auto text-xs px-2 py-1 rounded" onClick={()=>{setFilterPos(''); setFilterConf(''); setFilterTeam('');}}
+                style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
+                Clear
+              </button>
+            )}
+          </div>
           <div className="flex flex-col gap-2 max-h-[60vh] overflow-auto">
             {availablePlayers.length > 0 ? (
-              availablePlayers.slice(0, 200).map((pl: any) => (
-                <button
-                  key={pl.id || pl.$id}
-                  onClick={() => draftPlayer(pl.id || pl.$id)}
-                  disabled={loading || !turn || me.participantId !== turn.participantId}
-                  className={`text-left border rounded p-2 hover:bg-gray-50 ${
-                    turn && me.participantId === turn.participantId
-                      ? 'cursor-pointer'
-                      : 'opacity-50 cursor-not-allowed'
-                  }`}
-                >
-                  <div className="font-medium">
-                    {pl.name || pl.displayName || (pl.$id?.slice(0, 8))}
-                  </div>
-                  {pl.position && pl.team && (
-                    <div className="text-xs text-gray-500">
-                      {pl.position} • {pl.team}
-                    </div>
-                  )}
-                </button>
-              ))
+              <table className="w-full text-sm" style={{ color: leagueColors.text.primary }}>
+                <thead>
+                  <tr className="text-xs" style={{ color: leagueColors.text.secondary }}>
+                    <th className="text-left py-2 px-2">Player</th>
+                    <th className="text-center py-2 px-1 w-12">Pos</th>
+                    <th className="text-left py-2 px-2">Team</th>
+                    <th className="text-center py-2 px-1 w-16">Full YR Proj</th>
+                    <th className="text-center py-2 px-1 w-14">ADP</th>
+                    <th className="text-center py-2 px-2 w-20">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {availablePlayers.slice(0, 200).map((pl: any, idx: number) => (
+                    <tr key={pl.id || pl.$id} className="border-t" style={{ borderColor: leagueColors.border.light }}>
+                      <td className="py-2 px-2 font-medium">{pl.name || pl.displayName || (pl.$id?.slice(0, 8))}</td>
+                      <td className="py-2 px-1 text-center">
+                        {(() => {
+                          const pos = (pl.position || '').toUpperCase();
+                          const bg = pos === 'QB' ? '#3B82F6'
+                            : pos === 'RB' ? '#10B981'
+                            : pos === 'WR' ? '#F59E0B'
+                            : pos === 'TE' ? '#8B5CF6'
+                            : pos === 'K' ? '#6B7280'
+                            : '#111827';
+                          const fg = pos === 'K' ? leagueColors.text.primary : '#fff';
+                          return (
+                            <span className="inline-flex items-center justify-center w-9 h-5 rounded text-xs font-bold"
+                                  style={{ backgroundColor: bg, color: fg }}>{pos || '-'}</span>
+                          );
+                        })()}
+                      </td>
+                      <td className="py-2 px-2" style={{ color: leagueColors.text.secondary }}>{pl.team || '-'}</td>
+                      <td className="py-2 px-1 text-center font-semibold">{pl.projectedPoints ?? pl.fantasy_points ?? '-'}</td>
+                      <td className="py-2 px-1 text-center" style={{ color: leagueColors.text.secondary }}>{pl.adp?.toFixed ? pl.adp.toFixed(1) : '-'}</td>
+                      <td className="py-2 px-2 text-center">
+                        <button
+                          onClick={() => draftPlayer(pl.id || pl.$id)}
+                          disabled={loading || !turn || !(me.participantId && me.participantId === turn.participantId)}
+                          className={`px-3 py-1.5 rounded text-xs font-bold transition-all ${
+                            loading || !turn || !(me.participantId && me.participantId === turn.participantId)
+                              ? 'opacity-50 cursor-not-allowed'
+                              : 'hover:shadow-md'
+                          }`}
+                          style={{ backgroundColor: '#B41F24', color: '#fff', border: '1px solid #8B0000' }}
+                        >
+                          DRAFT
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             ) : players.length === 0 ? (
-              <div className="text-sm text-gray-500">
+              <div className="text-sm" style={{ color: leagueColors.text.secondary }}>
                 Loading players... You can still test seat claiming & turns.
               </div>
             ) : (
-              <div className="text-sm text-gray-500">
+              <div className="text-sm" style={{ color: leagueColors.text.secondary }}>
                 All players have been drafted!
               </div>
             )}
           </div>
         </div>
+
+        {/* Right: Team Viewer */}
+        <aside className="lg:col-span-3 rounded-none p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+          <h2 className="font-medium text-sm mb-2" style={{ color: leagueColors.text.primary }}>Teams</h2>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-sm" style={{ color: leagueColors.text.secondary }}>View:</span>
+            <select className="rounded px-2 py-1 text-sm w-full" value={teamView} onChange={(e)=>setTeamView(e.target.value)} style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
+              <option value="">—</option>
+              {results?.participants?.map((p:any)=> (
+                <option key={p.$id||p.id} value={String(p.slot)}>Team {p.slot} — {p.displayName}</option>
+              ))}
+            </select>
+          </div>
+          {teamView && (
+            <div className="space-y-2 max-h-[60vh] overflow-auto">
+              {results?.picks?.filter((p:any)=> String(p.slot)===teamView).map((p:any)=> (
+                <div key={p.$id||p.id} className="flex items-center justify-between text-sm py-1" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
+                  <span>#{p.overall}</span>
+                  <span className="font-medium">{p.playerName||idToName.get(p.playerId)||p.playerId}</span>
+                  <span className="text-gray-500">R{p.round}</span>
+                </div>
+              ))}
+              {results?.picks?.filter((p:any)=> String(p.slot)===teamView).length===0 && (
+                <div className="text-xs" style={{ color: leagueColors.text.muted }}>No picks yet.</div>
+              )}
+            </div>
+          )}
+        </aside>
       </section>
+
+      {/* Collapsible Draft Board under main content */}
+      <details className="max-w-7xl mx-auto px-4 border rounded-xl p-4 mb-6" open style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+        <summary className="cursor-pointer font-semibold mb-2" style={{ color: leagueColors.text.primary }}>Draft Board</summary>
+        <div className="overflow-auto max-h-[60vh]">
+          {(() => {
+            const numTeams = results?.draft?.numTeams || 8;
+            const rounds = results?.draft?.rounds || 15;
+            return (
+              <div className="space-y-3">
+                {[...Array(rounds)].map((_, rIdx) => (
+                  <div key={rIdx} className="rounded p-2" style={{ border: `1px solid ${leagueColors.border.light}`, backgroundColor: leagueColors.background.overlay }}>
+                    <div className="text-xs mb-2" style={{ color: leagueColors.text.secondary }}>Round {rIdx + 1}</div>
+                    <div
+                      className="grid gap-2"
+                      style={{ gridTemplateColumns: `repeat(${Math.min(numTeams, 12)}, minmax(0,1fr))` }}
+                    >
+                      {[...Array(numTeams)].map((_, sIdx) => {
+                        const overall = rIdx * numTeams + (rIdx % 2 === 0 ? (sIdx + 1) : (numTeams - sIdx));
+                        const pick = results?.picks?.find(p => p.overall === overall);
+                        const isCurrentPick = turn?.overall === overall;
+                        return (
+                          <div key={sIdx} className={`rounded p-2 min-h-[48px] text-xs`} style={{ border: `1px solid ${leagueColors.border.light}`, backgroundColor: pick ? leagueColors.background.card : 'transparent', outline: isCurrentPick ? `2px solid ${leagueColors.primary.crimson}` : 'none' }}>
+                            {pick ? (
+                              <div>
+                                <div className="font-medium truncate">{pick.playerName || pick.playerId?.slice(0, 8)}</div>
+                                <div style={{ color: leagueColors.text.secondary }}>T{pick.slot}</div>
+                              </div>
+                            ) : (
+                              <div style={{ color: leagueColors.text.muted }}>{isCurrentPick ? '⏱️' : `T${rIdx % 2 === 0 ? sIdx + 1 : numTeams - sIdx}`}</div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
+        </div>
+      </details>
     </div>
   );
 }

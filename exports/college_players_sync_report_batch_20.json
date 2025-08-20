@@ -1,0 +1,74 @@
+{
+  "summary": {
+    "toCreate": 0,
+    "toUpdate": 0,
+    "toDeactivate": 0
+  },
+  "scope": {
+    "teams": [
+      "Iowa Hawkeyes",
+      "Iowa State Cyclones",
+      "Kansas Jayhawks",
+      "Kansas State Wildcats",
+      "Kentucky",
+      "L S U",
+      "Louisville",
+      "Maryland Terrapins",
+      "Miami",
+      "Michigan State Spartans"
+    ],
+    "onlyPower4": true
+  },
+  "verification": {
+    "perTeam": {
+      "Iowa Hawkeyes": {
+        "csvCount": 36,
+        "dbCount": 36
+      },
+      "Iowa State Cyclones": {
+        "csvCount": 42,
+        "dbCount": 42
+      },
+      "Kansas Jayhawks": {
+        "csvCount": 36,
+        "dbCount": 36
+      },
+      "Kansas State Wildcats": {
+        "csvCount": 33,
+        "dbCount": 33
+      },
+      "Kentucky": {
+        "csvCount": 36,
+        "dbCount": 39
+      },
+      "L S U": {
+        "csvCount": 37,
+        "dbCount": 37
+      },
+      "Louisville": {
+        "csvCount": 39,
+        "dbCount": 39
+      },
+      "Maryland Terrapins": {
+        "csvCount": 30,
+        "dbCount": 30
+      },
+      "Miami": {
+        "csvCount": 38,
+        "dbCount": 38
+      },
+      "Michigan State Spartans": {
+        "csvCount": 37,
+        "dbCount": 37
+      }
+    }
+  },
+  "examples": {
+    "create": [],
+    "update": [],
+    "deactivate": []
+  },
+  "options": {
+    "onlyPower4": true
+  }
+}

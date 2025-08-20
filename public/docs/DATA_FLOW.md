@@ -199,12 +199,70 @@ graph TD
 4. **Environment Variables**: Secure configuration
 5. **CORS**: Configured for production domains
 
-## 📊 Data Sync Schedule
+## 📊 Data Management & Batch Operations
+
+### Player Data Sync & Purge Workflow ✅ Updated Aug 20, 2025
+
+```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px'}}}%%
+flowchart TD
+    subgraph DataSources[Data Sources]
+        CFBD[CFBD API<br/>~3000+ players]
+        EA[EA Sports CSV<br/>Ratings & Stats]
+        MOCK[Mock Draft Data<br/>ADP Rankings]
+    end
+    
+    subgraph SyncProcess[Sync Process]
+        FETCH[Fetch External Data]
+        NORMALIZE[Normalize & Validate]
+        DEDUPE[Remove Duplicates]
+        BATCH[Create Batches<br/>70 players each]
+    end
+    
+    subgraph Database[Appwrite Database]
+        PURGE[Purge All Players<br/>Complete Cleanup]
+        POPULATE[Batch Population<br/>Parallel Inserts]
+        VERIFY[Count Verification<br/>Success Confirmation]
+    end
+    
+    subgraph OutputReports[Export Reports]
+        PURGE_REPORT[college_players_purge_report.json]
+        BATCH_REPORTS[college_players_sync_apply_batch_*.json]
+        VERIFY_REPORTS[college_players_sync_verify_batch_*.json]
+        SUMMARY[college_players_sync_report.json]
+    end
+    
+    %% Flow connections
+    CFBD --> FETCH
+    EA --> FETCH
+    MOCK --> FETCH
+    
+    FETCH --> NORMALIZE
+    NORMALIZE --> DEDUPE
+    DEDUPE --> BATCH
+    
+    BATCH --> PURGE
+    PURGE --> POPULATE
+    POPULATE --> VERIFY
+    
+    PURGE --> PURGE_REPORT
+    POPULATE --> BATCH_REPORTS
+    VERIFY --> VERIFY_REPORTS
+    VERIFY --> SUMMARY
+    
+    %% Styling
+    style PURGE fill:#f8cecc,stroke:#b85450,stroke-width:3px
+    style POPULATE fill:#d5e8d4,stroke:#82b366,stroke-width:3px
+    style VERIFY fill:#fff2cc,stroke:#d6b656,stroke-width:3px
+```
+
+### Data Sync Schedule
 
 - **Hourly**: Live game scores (during season)
 - **Daily**: Player stats, depth charts
 - **Weekly**: Rankings, projections
 - **As Needed**: Roster changes, injuries
+- **Batch Operations**: Full player database refresh with purge + repopulate workflow
 
 ## 🛠️ Error Handling
 

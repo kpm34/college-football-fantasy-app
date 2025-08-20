@@ -1,0 +1,80 @@
+{
+  "summary": {
+    "toCreate": 377,
+    "toUpdate": 0,
+    "toDeactivate": 0
+  },
+  "scope": {
+    "teams": [
+      "Alabama",
+      "Arizona State Sun Devils",
+      "Arizona Wildcats",
+      "Arkansas",
+      "Auburn",
+      "B Y U Cougars",
+      "Baylor Bears",
+      "Boston College",
+      "California",
+      "Cincinnati Bearcats"
+    ],
+    "onlyPower4": true
+  },
+  "verification": {
+    "perTeam": {
+      "Alabama": {
+        "csvCount": 44,
+        "dbCount": 0
+      },
+      "Arizona State Sun Devils": {
+        "csvCount": 32,
+        "dbCount": 0
+      },
+      "Arizona Wildcats": {
+        "csvCount": 36,
+        "dbCount": 0
+      },
+      "Arkansas": {
+        "csvCount": 38,
+        "dbCount": 0
+      },
+      "Auburn": {
+        "csvCount": 36,
+        "dbCount": 0
+      },
+      "B Y U Cougars": {
+        "csvCount": 39,
+        "dbCount": 0
+      },
+      "Baylor Bears": {
+        "csvCount": 38,
+        "dbCount": 0
+      },
+      "Boston College": {
+        "csvCount": 45,
+        "dbCount": 0
+      },
+      "California": {
+        "csvCount": 37,
+        "dbCount": 0
+      },
+      "Cincinnati Bearcats": {
+        "csvCount": 32,
+        "dbCount": 0
+      }
+    }
+  },
+  "examples": {
+    "create": [
+      "Andy Quinn",
+      "Liam Connor",
+      "Luca Lombardo",
+      "Sam Stone",
+      "Shamus Florio"
+    ],
+    "update": [],
+    "deactivate": []
+  },
+  "options": {
+    "onlyPower4": true
+  }
+}

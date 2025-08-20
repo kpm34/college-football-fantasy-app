@@ -341,34 +341,43 @@ export default function MockDraftPage() {
           draftName: `Mock Draft ${new Date().toLocaleDateString()}`,
           rounds: settings.rosterSize,
           timerPerPickSec: settings.pickTimeSeconds,
-          numTeams: settings.numTeams
+          numTeams: settings.numTeams,
+          // Pre-create participants so the user's chosen slot is human
+          participants: Array.from({ length: settings.numTeams }, (_, i) => {
+            const slot = i + 1;
+            if (slot === settings.userPosition) {
+              const displayName = (user as any)?.name || (user as any)?.email || 'Guest';
+              const userId = (user as any)?.$id || (user as any)?.id || `user-${Date.now()}`;
+              return { slot, userType: 'human', displayName, userId };
+            }
+            return { slot, userType: 'bot', displayName: `Bot Team ${slot}` };
+          })
         }),
       });
       
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || `Failed to create draft (${response.status})`);
+      }
+
       const data = await response.json();
-      
-      if (data.success && data.draftId) {
+
+      if (data?.draftId) {
+        try {
+          const displayName = (user as any)?.name || (user as any)?.email || 'Guest';
+          const userId = (user as any)?.$id || (user as any)?.id || `user-${Date.now()}`;
+          localStorage.setItem('mockDraftUserName', displayName);
+          localStorage.setItem('mockDraftUserId', userId);
+        } catch {}
         // Navigate to the new mock draft room
         router.push(`/mock-draft/${data.draftId}`);
       } else {
-        // Fallback to local mock draft
-        console.log('Using local mock draft mode');
-        setMockDraftStarted(true);
-        setDraftStarted(true);
-        setDraftInitializing(false);
-        setTimeRemaining(settings.pickTimeSeconds); // Initialize timer
-        initializeDraftOrder();
-        await loadPlayers();
+        throw new Error(data?.error || 'Draft creation returned no draftId');
       }
     } catch (error) {
       console.error('Error creating mock draft:', error);
-      // Fallback to local mock draft
-      setMockDraftStarted(true);
-      setDraftStarted(true);
+      alert(`Failed to start mock draft: ${(error as Error)?.message || error}`);
       setDraftInitializing(false);
-      setTimeRemaining(settings.pickTimeSeconds); // Initialize timer
-      initializeDraftOrder();
-      await loadPlayers();
     }
   };
 
@@ -531,8 +540,16 @@ export default function MockDraftPage() {
               <h1 className="text-2xl font-bold" style={{ color: leagueColors.text.primary }}>
                 Mock Draft Practice
               </h1>
-              <p className="text-sm mt-1" style={{ color: leagueColors.text.secondary }}>
-                Round {currentRound} • Pick {currentPick} • {isMyTurn ? '🟢 Your Turn' : `On the clock: ${draftOrder[getCurrentTeam() - 1]}`}
+              <p className="text-sm mt-1 flex items-center gap-2" style={{ color: leagueColors.text.secondary }}>
+                <span>Round {currentRound} • Pick {currentPick} • </span>
+                {isMyTurn ? (
+                  <span className="inline-flex items-center gap-2 text-green-600">
+                    <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="font-semibold">Your turn</span>
+                  </span>
+                ) : (
+                  <span>On the clock: {draftOrder[getCurrentTeam() - 1]}</span>
+                )}
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -719,10 +736,47 @@ export default function MockDraftPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Player Pool */}
-          <div className="lg:col-span-2">
+      <div className="max-w-7xl mx-auto px-4 pt-3">
+        <div className="overflow-x-auto whitespace-nowrap rounded-lg px-3 py-2 text-sm" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
+          {Object.entries(allPicks).sort((a,b)=> Number(a[0]) - Number(b[0])).slice(-12).map(([pickNum, info]) => (
+            <span key={pickNum} className="inline-flex items-center gap-2 mr-4">
+              <span className="text-xs" style={{ color: leagueColors.text.secondary }}>#{pickNum}</span>
+              <span className="font-medium">{info.player.name}</span>
+              <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.secondary }}>T{(info.team||0)+1}</span>
+            </span>
+          ))}
+          {Object.keys(allPicks).length === 0 && (
+            <span className="text-xs" style={{ color: leagueColors.text.secondary }}>No picks yet</span>
+          )}
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Left: My Team */}
+          <div className="lg:col-span-1 order-2 lg:order-1 space-y-4">
+            <div className="rounded-xl p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+              <h3 className="text-lg font-bold mb-3" style={{ color: leagueColors.text.primary }}>My Team</h3>
+              <div className="space-y-2">
+                {myRoster.length === 0 ? (
+                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>No players drafted yet</p>
+                ) : (
+                  myRoster.map((player, index) => (
+                    <div key={player.id} className="flex items-center justify-between py-2" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
+                      <div>
+                        <div className="text-sm" style={{ color: leagueColors.text.primary }}>{player.name}</div>
+                        <div className="text-xs" style={{ color: leagueColors.text.secondary }}>{player.position} - {player.team}</div>
+                      </div>
+                      <div className="text-xs" style={{ color: leagueColors.text.muted }}>Pick {Object.entries(allPicks).find(([_, p]) => p.player.id === player.id)?.[0]}</div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Middle: Player Pool */}
+          <div className="lg:col-span-2 order-1 lg:order-2">
             <div className="rounded-xl overflow-hidden" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
               {/* Filters */}
               <div className="p-4 space-y-4" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
@@ -813,14 +867,14 @@ export default function MockDraftPage() {
                 <table className="w-full">
                   <thead className="sticky top-0 z-10" style={{ backgroundColor: leagueColors.background.secondary }}>
                     <tr className="text-xs uppercase tracking-wider" style={{ color: leagueColors.text.secondary }}>
-                      <th className="text-left py-3 px-4 font-semibold">#</th>
-                      <th className="text-left py-3 px-4 font-semibold">Player</th>
-                      <th className="text-center py-3 px-4 font-semibold">Pos</th>
-                      <th className="text-left py-3 px-4 font-semibold">School</th>
-                      <th className="text-center py-3 px-4 font-semibold">Proj</th>
-                      <th className="text-center py-3 px-4 font-semibold">PPG</th>
-                      <th className="text-center py-3 px-4 font-semibold">ADP</th>
-                      <th className="text-center py-3 px-4 font-semibold">Action</th>
+                      <th className="text-left py-2 px-3 font-semibold">#</th>
+                      <th className="text-left py-2 px-3 font-semibold">Player</th>
+                      <th className="text-center py-2 px-2 font-semibold w-16">Pos</th>
+                      <th className="text-left py-2 px-3 font-semibold">School</th>
+                      <th className="text-center py-2 px-2 font-semibold w-16">Proj</th>
+                      <th className="text-center py-2 px-2 font-semibold w-16">PPG</th>
+                      <th className="text-center py-2 px-3 font-semibold w-16">ADP</th>
+                      <th className="text-center py-2 px-3 font-semibold">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -835,10 +889,10 @@ export default function MockDraftPage() {
                           className={`border-b hover:bg-opacity-5 hover:bg-white transition-colors ${isDrafted ? 'opacity-50' : ''}`} 
                           style={{ borderColor: leagueColors.border.light }}
                         >
-                          <td className="py-3 px-4 font-medium text-sm" style={{ color: leagueColors.text.muted }}>
+                          <td className="py-2 px-3 font-medium text-sm" style={{ color: leagueColors.text.muted }}>
                             {index + 1}
                           </td>
-                          <td className="py-3 px-4">
+                          <td className="py-2 px-3">
                             <div>
                               <div className="font-semibold text-sm" style={{ color: isDrafted ? leagueColors.text.muted : leagueColors.text.primary }}>
                                 {player.name}
@@ -848,7 +902,7 @@ export default function MockDraftPage() {
                               </div>
                             </div>
                           </td>
-                          <td className="py-3 px-4 text-center">
+                          <td className="py-2 px-2 text-center">
                             <span className={`inline-flex items-center justify-center w-10 h-6 rounded text-xs font-bold`} 
                               style={{ 
                                 backgroundColor: player.position === 'QB' ? '#3B82F6' : 
@@ -862,21 +916,21 @@ export default function MockDraftPage() {
                               {player.position}
                             </span>
                           </td>
-                          <td className="py-3 px-4 text-sm" style={{ color: leagueColors.text.secondary }}>
+                          <td className="py-2 px-3 text-sm" style={{ color: leagueColors.text.secondary }}>
                             {player.team}
                           </td>
-                          <td className="py-3 px-4 text-center">
+                          <td className="py-2 px-2 text-center">
                             <div className="text-sm font-bold" style={{ color: leagueColors.text.primary }}>
                               {player.projectedPoints}
                             </div>
                           </td>
-                          <td className="py-3 px-4 text-center text-sm" style={{ color: leagueColors.text.secondary }}>
+                          <td className="py-2 px-2 text-center text-sm" style={{ color: leagueColors.text.secondary }}>
                             {ppg}
                           </td>
-                          <td className="py-3 px-4 text-center text-sm" style={{ color: leagueColors.text.muted }}>
+                          <td className="py-2 px-3 text-center text-sm" style={{ color: leagueColors.text.muted }}>
                             {player.adp.toFixed(1)}
                           </td>
-                          <td className="py-3 px-4 text-center">
+                          <td className="py-2 px-3 text-center">
                             {!isDrafted && isMyPick && (
                               <button
                                 onClick={() => draftPlayer(player)}

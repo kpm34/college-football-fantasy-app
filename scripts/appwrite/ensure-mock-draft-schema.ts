@@ -37,7 +37,8 @@ const COLLECTIONS: CollectionSchema[] = [
       { key: 'numTeams', type: 'integer', required: true },
       { key: 'rounds', type: 'integer', required: true },
       { key: 'snake', type: 'boolean', required: true },
-      { key: 'status', type: 'enum', required: true, elements: ['pending', 'active', 'complete', 'failed'] },
+      // Align with engine.ts which uses 'waiting' initially
+      { key: 'status', type: 'enum', required: true, elements: ['waiting', 'active', 'complete', 'failed'] },
       { key: 'startedAt', type: 'datetime', required: false },
       { key: 'completedAt', type: 'datetime', required: false },
       { key: 'config', type: 'json', required: false }
@@ -52,7 +53,8 @@ const COLLECTIONS: CollectionSchema[] = [
     name: 'Mock Draft Participants',
     attributes: [
       { key: 'draftId', type: 'string', size: 255, required: true },
-      { key: 'userType', type: 'enum', required: true, elements: ['bot'] },
+      // Allow converting bot seats to human via join route
+      { key: 'userType', type: 'enum', required: true, elements: ['bot', 'human'] },
       { key: 'displayName', type: 'string', size: 255, required: true },
       { key: 'slot', type: 'integer', required: true }
     ],
@@ -71,6 +73,7 @@ const COLLECTIONS: CollectionSchema[] = [
       { key: 'slot', type: 'integer', required: true },
       { key: 'participantId', type: 'string', size: 255, required: true },
       { key: 'playerId', type: 'string', size: 255, required: true },
+      // Optional denormalization field was removed; UI derives name client-side
       { key: 'pickedAt', type: 'datetime', required: true },
       { key: 'autopick', type: 'boolean', required: true }
     ],
