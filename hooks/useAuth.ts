@@ -29,7 +29,12 @@ export function useAuth() {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch('/api/auth/user');
+      const response = await fetch('/api/auth/user', { 
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
       if (response.ok) {
         const payload = await response.json();
         // Handle both shapes: { success: true, data: {...} } and direct user object
@@ -50,13 +55,28 @@ export function useAuth() {
 
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      // Clear user state immediately
       setUser(null);
+      setLoading(true);
+      
+      // Call logout API
+      await fetch('/api/auth/logout', { 
+        method: 'POST',
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
+      // Re-check auth state to ensure server-side session is cleared
+      await checkAuth();
+      
       router.push('/');
     } catch (error) {
       console.error('Logout failed:', error);
       // Still clear user state even if logout request fails
       setUser(null);
+      setLoading(false);
       router.push('/');
     }
   };

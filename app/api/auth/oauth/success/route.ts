@@ -47,8 +47,8 @@ export async function GET(request: NextRequest) {
           async function syncSession() {
             try {
               const client = new Client()
-                .setEndpoint('${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1'}')
-                .setProject('${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app'}');
+                .setEndpoint('https://nyc.cloud.appwrite.io/v1')
+                .setProject('college-football-fantasy-app');
               
               const account = new Account(client);
               
