@@ -2,7 +2,7 @@
 
 **Single Source of Truth**: `schema/zod-schema.ts`  
 **Canonical Configs**: `lib/appwrite.ts` + `lib/appwrite-server.ts`  
-**Status**: ✅ Fully Consolidated Architecture (August 2025)  
+**Status**: ✅ Fully Consolidated Architecture (August 2025)
 **Latest**: 🔐 OAuth Authentication + 📊 Enhanced Talent Projections + 🚪 Desktop Logout
 
 ---
@@ -294,7 +294,7 @@ sequenceDiagram
 | **User Signup** | `POST /api/auth/signup` | Create user → Auto-login | email, password, name |
 | **OAuth Login** | `GET /api/auth/oauth/[provider]` | OAuth flow → Session sync | Environment flags required |
 | **Start Mock Draft** | `POST /api/mock-draft/start` | Create `mock_drafts` + participants | draftName, numTeams, rounds, snake, status (required) |
-| **Make Draft Pick** | `POST /api/draft/[id]/pick` | Create `draft_picks`, update roster | leagueId, playerId |
+| **Make Draft Pick** | `POST /api/draft/[leagueId]/pick` | Create `draft_picks`, update roster | leagueId, playerId |
 | **Get Players** | `GET /api/draft/players` | Query `college_players` + projections | Filters: name (fulltext), position, team, fantasy_points (all indexed) |
 | **Weekly Scoring** | `POST /api/cron/weekly-scoring` | Update `player_stats` + `lineups` | Automated cron job |
 | **Batch Player Sync** | `scripts/sync-players-batch.ts` | Purge + repopulate `college_players` | Batch processing with 70-player chunks |
