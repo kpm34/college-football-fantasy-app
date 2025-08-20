@@ -85,6 +85,8 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     scoringRules: requestData.scoringRules,
     draftDate: requestData.draftDate,
     season: requestData.season || new Date().getFullYear(),
+    // Save selectedConference when in conference mode
+    selectedConference: rawGameMode?.toLowerCase() === 'conference' ? selectedConference : undefined,
   });
 
   // Automatically join the commissioner to the league

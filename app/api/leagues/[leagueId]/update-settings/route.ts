@@ -5,28 +5,28 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 // Valid league attributes that can be updated
-// NOTE: All these attributes now exist in Appwrite!
+// NOTE: gameMode and selectedConference are IMMUTABLE after creation!
 const VALID_LEAGUE_ATTRIBUTES = [
   'name',
   'maxTeams', 
   'isPublic',
   'pickTimeSeconds',
   'scoringRules',
-  'draftDate',  // ✅ Added to Appwrite
+  'draftDate',
   'draftType',
-  'gameMode',
+  // 'gameMode',           // ❌ CANNOT be changed after creation
+  // 'selectedConference', // ❌ CANNOT be changed after creation
   'status',
   'season',
-  'commissioner',
+  // 'commissioner',      // ❌ Commissioner should not change
   'currentTeams',
   // Newly added attributes:
-  'selectedConference',  // ✅ Added to Appwrite
-  'seasonStartWeek',     // ✅ Added to Appwrite
-  'playoffTeams',        // ✅ Added to Appwrite
-  'playoffStartWeek',    // ✅ Added to Appwrite
-  'waiverType',          // ✅ Added to Appwrite
-  'waiverBudget',        // ✅ Added to Appwrite
-  'password'             // ✅ Added to Appwrite
+  'seasonStartWeek',
+  'playoffTeams',
+  'playoffStartWeek',
+  'waiverType',
+  'waiverBudget',
+  'password'
 ];
 
 export async function PUT(
