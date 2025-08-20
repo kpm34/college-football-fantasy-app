@@ -286,9 +286,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         playoffStartWeek,
         waiverType,
         waiverBudget,
-        primaryColor,
-        secondaryColor,
-        leagueTrophyName,
+        // primaryColor, secondaryColor, leagueTrophyName not in DB yet
         scoringRules: JSON.stringify(scoringRules)
       };
       
