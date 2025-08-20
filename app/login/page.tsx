@@ -156,8 +156,8 @@ function LoginPageContent() {
         {/* Debug info - remove in production */}
         {process.env.NODE_ENV === 'development' && (
           <div className="mt-4 p-2 rounded text-xs" style={{ backgroundColor: '#9256A4', color: '#FFF4EC' }}>
-            <p>Endpoint: {process.env.APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1"}</p>
-            <p>Project: {process.env.APPWRITE_PROJECT_ID || "college-football-fantasy-app"}</p>
+            <p>Endpoint: {process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1"}</p>
+            <p>Project: {process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || "college-football-fantasy-app"}</p>
             <p>Domain: {typeof window !== 'undefined' ? window.location.hostname : 'SSR'}</p>
           </div>
         )}
@@ -187,8 +187,8 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
       
       // Initialize client
       const client = new Client()
-        .setEndpoint(process.env.APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1")
-        .setProject(process.env.APPWRITE_PROJECT_ID || "college-football-fantasy-app");
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1")
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || "college-football-fantasy-app");
       
       const account = new Account(client);
       

@@ -52,9 +52,12 @@ export function useAuth() {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
       setUser(null);
-      router.push('/login');
+      router.push('/');
     } catch (error) {
       console.error('Logout failed:', error);
+      // Still clear user state even if logout request fails
+      setUser(null);
+      router.push('/');
     }
   };
 
