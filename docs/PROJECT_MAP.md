@@ -113,7 +113,7 @@ graph TB
     subgraph FrontendPages[Frontend Pages]
         MOCK_DRAFT_UI[/mock-draft/id<br/>Live Draft Room<br/>Real-time Picks]
         DRAFT_UI[/draft/leagueId<br/>League Draft<br/>Timer and Autopick]
-        LEAGUE_UI[/league/*<br/>Management Pages<br/>Commissioner Tools]
+        LEAGUE_UI[/league/*<br/>Management Pages<br/>Commissioner Tools<br/>DRAFT ROOM Button]
         RESULTS_UI[Results and Export<br/>JSON/CSV Download<br/>Team Summaries]
     end
     
@@ -246,7 +246,7 @@ sequenceDiagram
 
 | Operation | Entry Point | Data Flow | Required Fields |
 |-----------|-------------|-----------|-----------------|
-| **Create League** | `POST /api/leagues/create` | `leagues` + `user_teams` collections | name, maxTeams, gameMode, draftType |
+| **Create League** | `POST /api/leagues/create` | `leagues` + `user_teams` collections | name, maxTeams, gameMode (immutable), draftType, selectedConference (for conference mode) |
 | **Join League** | `POST /api/leagues/join` | Update `leagues`, create `user_teams` | leagueId, teamName, password(if private) |
 | **Commissioner Update** | `PATCH /api/leagues/[id]/update-settings` | Update `leagues` collection | Various settings (commissioner only) |
 | **User Login** | `POST /api/auth/login` | Appwrite Auth → Session Cookie | email, password |
@@ -373,12 +373,24 @@ npm run build
 - **Result**: Live draft updates, real-time pick notifications, dynamic status changes working
 - **Deployment**: https://cfbfantasy.app ✅
 
-### Commissioner Settings Schema Alignment ✅
+### Commissioner Settings Schema Alignment ✅ [Updated: Aug 19, 2025]
 - **Issue**: Field name mismatch between API and database (snake_case vs camelCase)
 - **Solution**: Updated all commissioner endpoints to use consistent camelCase field mapping
 - **Files Fixed**: `commissioner/route.ts` (GET/PUT), `join/route.ts`, `search/route.ts`, `create/page.tsx`
 - **Cache Update**: Service worker version bumped to force refresh
 - **Result**: Commissioner settings now save successfully in production
+- **Latest Fix**: Removed non-existent attributes (primaryColor, secondaryColor, leagueTrophyName)
+- **Immutable Fields**: `gameMode` and `selectedConference` cannot be changed after league creation
+- **Conference Mode**: Properly saves `selectedConference` when gameMode is 'conference'
+
+### DRAFT ROOM Button Implementation ✅ [Added: Aug 19, 2025]
+- **Component**: `components/league/DraftButton.tsx`
+- **Time Window**: Shows 1 hour before draft, stays visible during draft, hides 3 hours after
+- **Dynamic States**: Gray (scheduled), Blue (commissioner), Orange (window open), Green (draft active)
+- **Auto-Update**: Refreshes countdown every minute
+- **Navigation**: Routes to `/draft/[leagueId]` when clicked
+- **Access Control**: Only shows for league members, commissioner has special privileges
+- **Result**: Automated draft room access based on scheduled draft time
 
 ### Codebase Optimization ✅
 - **Removed**: 39,000+ files from awwwards-rig vendor directory 
