@@ -5,7 +5,9 @@ export async function GET(request: NextRequest) {
     const sessionCookie = request.cookies.get('appwrite-session')?.value;
     
     if (!sessionCookie) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      const response = NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+      return response;
     }
     
     // The cookie is now the raw session secret
@@ -26,7 +28,7 @@ export async function GET(request: NextRequest) {
     }
 
     const user = await response.json();
-    return NextResponse.json({
+    const userResponse = NextResponse.json({
       success: true,
       data: {
         id: user.$id,
@@ -37,6 +39,8 @@ export async function GET(request: NextRequest) {
         $id: user.$id
       }
     });
+    userResponse.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    return userResponse;
   } catch (error) {
     console.error('Get user error:', error);
     return NextResponse.json(
