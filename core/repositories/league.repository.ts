@@ -22,6 +22,7 @@ export interface CreateLeagueData {
   scoringRules?: Record<string, number>;
   draftDate?: string;
   season?: number;
+  selectedConference?: string; // For conference mode leagues
 }
 
 export interface UpdateLeagueData {
@@ -43,7 +44,7 @@ export class LeagueRepository extends BaseRepository<League> {
   async createLeague(data: CreateLeagueData): Promise<League> {
     // Set defaults and map fields to match database schema
     // Explicitly clean and type-cast all data to prevent schema conflicts
-    const leagueData = {
+    const leagueData: any = {
       name: String(data.name).trim(),
       maxTeams: Number(data.maxTeams),
       draftType: String(data.draftType) as 'snake' | 'auction',
@@ -56,6 +57,16 @@ export class LeagueRepository extends BaseRepository<League> {
       season: Number(data.season || new Date().getFullYear()),
       scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules())
     };
+
+    // Add selectedConference if provided (for conference mode leagues)
+    if (data.selectedConference) {
+      leagueData.selectedConference = String(data.selectedConference);
+    }
+
+    // Add draftDate if provided
+    if (data.draftDate) {
+      leagueData.draftDate = data.draftDate;
+    }
 
     // Schema validation - ensure data conforms to canonical schema
     const validation = SchemaValidator.validate('leagues', leagueData);

@@ -280,8 +280,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         name: leagueName,
         maxTeams,
         isPublic,
-        gameMode,
-        selectedConference: gameMode === 'conference' ? selectedConference : '',
+        // gameMode and selectedConference are immutable after creation
         seasonStartWeek,
         playoffTeams,
         playoffStartWeek,
