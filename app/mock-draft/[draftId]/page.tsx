@@ -110,6 +110,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
   const [filterTeam, setFilterTeam] = useState<string>('');
   const [filterConf, setFilterConf] = useState<string>('');
   const [filterPos, setFilterPos] = useState<string>('');
+  const [viewMode, setViewMode] = useState<string>('players');
 
   // Lock in the server deadline when the pick changes; do not bump on background refreshes
   useEffect(() => {
@@ -253,11 +254,29 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
             Round {turn.round} • Overall #{turn.overall} • On the clock: Team #{turn.slot}
           </div>
         ) : <div />}
-        {turn && (
-          <div className="px-3 py-1 rounded font-mono" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}`, color: (secondsLeft ?? 0) <= 10 ? '#B41F24' : leagueColors.text.primary }}>
-            {Math.floor((secondsLeft ?? 0) / 60)}:{String((secondsLeft ?? 0) % 60).padStart(2, '0')}
+        <div className="flex items-center gap-3">
+          <div className="inline-flex rounded overflow-hidden border" style={{ borderColor: leagueColors.border.light }}>
+            <button
+              className={`px-3 py-1 ${viewMode==='players' ? 'font-semibold' : ''}`}
+              style={{ backgroundColor: viewMode==='players' ? leagueColors.background.card : 'transparent', color: leagueColors.text.primary }}
+              onClick={()=>setViewMode('players')}
+            >
+              Available
+            </button>
+            <button
+              className={`px-3 py-1 ${viewMode==='board' ? 'font-semibold' : ''}`}
+              style={{ backgroundColor: viewMode==='board' ? leagueColors.background.card : 'transparent', color: leagueColors.text.primary, borderLeft: `1px solid ${leagueColors.border.light}` }}
+              onClick={()=>setViewMode('board')}
+            >
+              Draft Board
+            </button>
           </div>
-        )}
+          {turn && (
+            <div className="px-3 py-1 rounded font-mono" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}`, color: (secondsLeft ?? 0) <= 10 ? '#B41F24' : leagueColors.text.primary }}>
+              {Math.floor((secondsLeft ?? 0) / 60)}:{String((secondsLeft ?? 0) % 60).padStart(2, '0')}
+            </div>
+          )}
+        </div>
       </div>
 
       {error && (
@@ -321,6 +340,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
         <div className="lg:col-span-6 rounded-none p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
           <h2 className="font-medium text-sm mb-2" style={{ color: leagueColors.text.primary }}>Available Players</h2>
           {/* Filters */}
+          {viewMode === 'players' && (
           <div className="flex items-center gap-2 mb-3">
             <select className="rounded px-2 py-1 text-xs" value={filterPos} onChange={(e)=>setFilterPos(e.target.value)}
               style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
@@ -344,8 +364,10 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
               </button>
             )}
           </div>
+          )}
           <div className="flex flex-col gap-2 max-h-[60vh] overflow-auto">
-            {availablePlayers.length > 0 ? (
+            {viewMode === 'players' ? (
+              availablePlayers.length > 0 ? (
               <table className="w-full text-sm" style={{ color: leagueColors.text.primary }}>
                 <thead>
                   <tr className="text-xs" style={{ color: leagueColors.text.secondary }}>
@@ -398,13 +420,50 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
                   ))}
                 </tbody>
               </table>
-            ) : players.length === 0 ? (
-              <div className="text-sm" style={{ color: leagueColors.text.secondary }}>
-                Loading players... You can still test seat claiming & turns.
-              </div>
+              ) : players.length === 0 ? (
+                <div className="text-sm" style={{ color: leagueColors.text.secondary }}>
+                  Loading players... You can still test seat claiming & turns.
+                </div>
+              ) : (
+                <div className="text-sm" style={{ color: leagueColors.text.secondary }}>
+                  All players have been drafted!
+                </div>
+              )
             ) : (
-              <div className="text-sm" style={{ color: leagueColors.text.secondary }}>
-                All players have been drafted!
+              // Draft Board view
+              <div className="overflow-auto">
+                {(() => {
+                  const numTeams = results?.draft?.numTeams || 8;
+                  const rounds = results?.draft?.rounds || 15;
+                  return (
+                    <div className="space-y-3">
+                      {[...Array(rounds)].map((_, rIdx) => (
+                        <div key={rIdx} className="rounded p-2" style={{ border: `1px solid ${leagueColors.border.light}`, backgroundColor: leagueColors.background.overlay }}>
+                          <div className="text-xs mb-2" style={{ color: leagueColors.text.secondary }}>Round {rIdx + 1}</div>
+                          <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.min(numTeams, 12)}, minmax(0,1fr))` }}>
+                            {[...Array(numTeams)].map((_, sIdx) => {
+                              const overall = rIdx * numTeams + (rIdx % 2 === 0 ? (sIdx + 1) : (numTeams - sIdx));
+                              const pick = results?.picks?.find(p => p.overall === overall);
+                              const isCurrentPick = turn?.overall === overall;
+                              return (
+                                <div key={sIdx} className={`rounded p-2 min-h-[48px] text-xs`} style={{ border: `1px solid ${leagueColors.border.light}`, backgroundColor: pick ? leagueColors.background.card : 'transparent', outline: isCurrentPick ? `2px solid ${leagueColors.primary.crimson}` : 'none' }}>
+                                  {pick ? (
+                                    <div>
+                                      <div className="font-medium truncate">{pick.playerName || pick.playerId?.slice(0, 8)}</div>
+                                      <div style={{ color: leagueColors.text.secondary }}>T{pick.slot}</div>
+                                    </div>
+                                  ) : (
+                                    <div style={{ color: leagueColors.text.muted }}>{isCurrentPick ? '⏱️' : `T${rIdx % 2 === 0 ? sIdx + 1 : numTeams - sIdx}`}</div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
               </div>
             )}
           </div>
@@ -439,47 +498,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
         </aside>
       </section>
 
-      {/* Collapsible Draft Board under main content */}
-      <details className="max-w-7xl mx-auto px-4 border rounded-xl p-4 mb-6" open style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
-        <summary className="cursor-pointer font-semibold mb-2" style={{ color: leagueColors.text.primary }}>Draft Board</summary>
-        <div className="overflow-auto max-h-[60vh]">
-          {(() => {
-            const numTeams = results?.draft?.numTeams || 8;
-            const rounds = results?.draft?.rounds || 15;
-            return (
-              <div className="space-y-3">
-                {[...Array(rounds)].map((_, rIdx) => (
-                  <div key={rIdx} className="rounded p-2" style={{ border: `1px solid ${leagueColors.border.light}`, backgroundColor: leagueColors.background.overlay }}>
-                    <div className="text-xs mb-2" style={{ color: leagueColors.text.secondary }}>Round {rIdx + 1}</div>
-                    <div
-                      className="grid gap-2"
-                      style={{ gridTemplateColumns: `repeat(${Math.min(numTeams, 12)}, minmax(0,1fr))` }}
-                    >
-                      {[...Array(numTeams)].map((_, sIdx) => {
-                        const overall = rIdx * numTeams + (rIdx % 2 === 0 ? (sIdx + 1) : (numTeams - sIdx));
-                        const pick = results?.picks?.find(p => p.overall === overall);
-                        const isCurrentPick = turn?.overall === overall;
-                        return (
-                          <div key={sIdx} className={`rounded p-2 min-h-[48px] text-xs`} style={{ border: `1px solid ${leagueColors.border.light}`, backgroundColor: pick ? leagueColors.background.card : 'transparent', outline: isCurrentPick ? `2px solid ${leagueColors.primary.crimson}` : 'none' }}>
-                            {pick ? (
-                              <div>
-                                <div className="font-medium truncate">{pick.playerName || pick.playerId?.slice(0, 8)}</div>
-                                <div style={{ color: leagueColors.text.secondary }}>T{pick.slot}</div>
-                              </div>
-                            ) : (
-                              <div style={{ color: leagueColors.text.muted }}>{isCurrentPick ? '⏱️' : `T${rIdx % 2 === 0 ? sIdx + 1 : numTeams - sIdx}`}</div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            );
-          })()}
-        </div>
-      </details>
+      {/* Draft Board moved into center panel when toggled */}
     </div>
   );
 }

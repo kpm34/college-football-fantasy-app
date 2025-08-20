@@ -2,7 +2,7 @@
 
 **Status**: ✅ Production Ready & Live at https://cfbfantasy.app  
 **Real-time**: ✅ Appwrite v16+ compatibility restored  
-**Updated**: August 18, 2025
+**Updated**: August 20, 2025
 
 ## 🔄 Core Data Flows
 
@@ -74,7 +74,7 @@ flowchart LR
 ```
 
 **Components:**
-- **Draft State**: Current pick, timer, rosters in KV
+- **Draft State**: Current pick, timer, team rosters in KV
 - **Player Pool**: ~3000+ Power 4 players from Appwrite
 - **Real-time Updates**: Via `client.subscribe()` method (Appwrite v16+)
 - **Auto-pick**: Timer-based with BPA (Best Player Available)
@@ -111,7 +111,7 @@ flowchart LR
   E --> M[Talent Multiplier & Adjustments]
   M --> B[Base Projection]
   B --> F[Final Fantasy Points]
-  F --> STORE[(player_projections)]
+  F --> STORE[(projections_yearly/projections_weekly)]
   E -. metrics .-> RUNS[(projection_runs)]
   STORE --> UI[Draft & Rankings UI]
 ```
@@ -149,7 +149,7 @@ graph TD
 ### Core Collections
 1. **Appwrite Auth Users** - User authentication and profiles (managed by Appwrite)
 2. **leagues** - League settings and metadata
-3. **rosters** - Team rosters and ownership
+3. **user_teams** - Team rosters and ownership
 4. **college_players** - Player database (~3000+)
 5. **player_stats** - Historical performance
 6. **games** - Schedule and scores
@@ -159,9 +159,9 @@ graph TD
 10. **model_inputs** - Projection model data
 
 ### Relationships
-- `leagues` → `rosters` (1:many)
-- `rosters` → **Appwrite Auth Users** (many:1 via userId)
-- `rosters` → `college_players` (many:many)
+- `leagues` → `user_teams` (1:many)
+- `user_teams` → **Appwrite Auth Users** (many:1 via userId)
+- `user_teams` → `college_players` (many:many)
 - `games` → `rankings` (temporal)
 - `college_players` → `player_stats` (1:many)
 
