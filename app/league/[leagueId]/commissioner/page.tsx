@@ -439,6 +439,19 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                   <option value="private">Private</option>
                 </select>
               </div>
+
+              {/* Game Mode - Read Only */}
+              <div>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Game Mode</label>
+                <div className="w-full px-3 py-2 rounded-lg bg-gray-100" style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.secondary }}>
+                  {gameMode === 'power4' && 'Power 4 (All Power 4 Conferences)'}
+                  {gameMode === 'sec' && 'SEC Conference Only'}
+                  {gameMode === 'acc' && 'ACC Conference Only'}
+                  {gameMode === 'big12' && 'Big 12 Conference Only'}
+                  {gameMode === 'bigten' && 'Big Ten Conference Only'}
+                  {!gameMode && 'Not Set'}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -496,31 +509,35 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
             </button>
           </div>
 
-          {/* Waivers & Playoffs */}
+          {/* Season Settings */}
           <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
-            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Waivers & Playoffs</h2>
+            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Season Settings</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Waiver Type</label>
-                <select
-                  value={waiverType}
-                  onChange={(e) => setWaiverType(e.target.value as any)}
-                  className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
-                >
-                  <option value="FAAB">FAAB</option>
-                  <option value="Rolling">Rolling</option>
-                </select>
-              </div>
-              <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Waiver Budget</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Season Start Week</label>
                 <input
                   type="number"
-                  value={waiverBudget}
-                  onChange={(e) => setWaiverBudget(parseInt(e.target.value) || 0)}
+                  min={1}
+                  max={20}
+                  value={seasonStartWeek}
+                  onChange={(e) => setSeasonStartWeek(parseInt(e.target.value) || 1)}
                   className="w-full px-3 py-2 rounded-lg"
                   style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
                 />
+              </div>
+              <div>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Playoff Teams</label>
+                <select
+                  value={playoffTeams}
+                  onChange={(e) => setPlayoffTeams(parseInt(e.target.value))}
+                  className="w-full px-3 py-2 rounded-lg"
+                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                >
+                  <option value="0">No Playoffs</option>
+                  <option value="4">4 Teams</option>
+                  <option value="6">6 Teams</option>
+                  <option value="8">8 Teams</option>
+                </select>
               </div>
               <div>
                 <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Playoff Start Week</label>
@@ -531,8 +548,64 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                   value={playoffStartWeek}
                   onChange={(e) => setPlayoffStartWeek(parseInt(e.target.value) || 13)}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  disabled={playoffTeams === 0}
+                  style={{ 
+                    backgroundColor: playoffTeams === 0 ? '#e5e5e5' : leagueColors.background.overlay, 
+                    border: `1px solid ${leagueColors.border.light}`, 
+                    color: playoffTeams === 0 ? '#999' : leagueColors.text.primary,
+                    cursor: playoffTeams === 0 ? 'not-allowed' : 'auto'
+                  }}
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* Waivers */}
+          <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Waiver Settings</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Waiver Type</label>
+                <select
+                  value={waiverType}
+                  onChange={(e) => setWaiverType(e.target.value as any)}
+                  className="w-full px-3 py-2 rounded-lg"
+                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                >
+                  <option value="FAAB">FAAB (Free Agent Acquisition Budget)</option>
+                  <option value="Rolling">Rolling Waivers</option>
+                  <option value="None">No Waivers</option>
+                </select>
+              </div>
+              <div>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  {waiverType === 'FAAB' ? 'FAAB Budget ($)' : 'Waiver Priority Reset'}
+                </label>
+                {waiverType === 'FAAB' ? (
+                  <input
+                    type="number"
+                    value={waiverBudget}
+                    onChange={(e) => setWaiverBudget(parseInt(e.target.value) || 0)}
+                    min={0}
+                    max={1000}
+                    className="w-full px-3 py-2 rounded-lg"
+                    style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  />
+                ) : (
+                  <select
+                    className="w-full px-3 py-2 rounded-lg"
+                    disabled={waiverType === 'None'}
+                    style={{ 
+                      backgroundColor: waiverType === 'None' ? '#e5e5e5' : leagueColors.background.overlay, 
+                      border: `1px solid ${leagueColors.border.light}`, 
+                      color: waiverType === 'None' ? '#999' : leagueColors.text.primary,
+                      cursor: waiverType === 'None' ? 'not-allowed' : 'auto'
+                    }}
+                  >
+                    <option>Weekly - Inverse Standings</option>
+                    <option>Never Reset</option>
+                  </select>
+                )}
               </div>
             </div>
           </div>
