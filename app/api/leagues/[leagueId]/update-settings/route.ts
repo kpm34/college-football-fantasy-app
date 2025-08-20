@@ -5,21 +5,28 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 // Valid league attributes that can be updated
-// NOTE: These must match EXACTLY what exists in Appwrite!
+// NOTE: All these attributes now exist in Appwrite!
 const VALID_LEAGUE_ATTRIBUTES = [
   'name',
   'maxTeams', 
   'isPublic',
   'pickTimeSeconds',
   'scoringRules',
-  // 'draftDate', // REMOVED - doesn't exist in Appwrite collection yet!
+  'draftDate',  // ✅ Added to Appwrite
   'draftType',
-  // 'orderMode', // May not exist either
   'gameMode',
   'status',
   'season',
   'commissioner',
-  'currentTeams'
+  'currentTeams',
+  // Newly added attributes:
+  'selectedConference',  // ✅ Added to Appwrite
+  'seasonStartWeek',     // ✅ Added to Appwrite
+  'playoffTeams',        // ✅ Added to Appwrite
+  'playoffStartWeek',    // ✅ Added to Appwrite
+  'waiverType',          // ✅ Added to Appwrite
+  'waiverBudget',        // ✅ Added to Appwrite
+  'password'             // ✅ Added to Appwrite
 ];
 
 export async function PUT(
@@ -65,23 +72,12 @@ export async function PUT(
       );
     }
     
-    // Map frontend field names to database field names
-    const fieldMapping: Record<string, string> = {
-      'draftDate': 'draft_date',  // Frontend sends camelCase, DB uses snake_case
-      // Add other mappings as needed
-    };
-    
     // Filter out invalid attributes to prevent schema errors
     const validUpdates: Record<string, any> = {};
     const invalidFields: string[] = [];
     
     for (const [key, value] of Object.entries(body)) {
-      // Check if this field needs to be mapped
-      const dbFieldName = fieldMapping[key] || key;
-      
-      if (VALID_LEAGUE_ATTRIBUTES.includes(dbFieldName)) {
-        validUpdates[dbFieldName] = value;
-      } else if (VALID_LEAGUE_ATTRIBUTES.includes(key)) {
+      if (VALID_LEAGUE_ATTRIBUTES.includes(key)) {
         validUpdates[key] = value;
       } else {
         invalidFields.push(key);
