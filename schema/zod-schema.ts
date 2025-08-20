@@ -232,27 +232,62 @@ export const PlayerProjections = z.object({
 });
 
 export const ProjectionsYearly = z.object({
-  playerId: z.string().min(1).max(50),
+  // Live DB: projections_yearly
+  player_id: z.string().min(1).max(64),
   season: z.number().int().min(2020).max(2035),
-  fantasy_points: z.number().optional()
+  team_id: z.string().max(64).optional(),
+  position: z.enum(['QB', 'RB', 'WR', 'TE']),
+  model_version: z.string().min(1).max(50),
+  games_played_est: z.number().optional(),
+  usage_rate: z.number().optional(),
+  pace_adj: z.number().optional(),
+  fantasy_points_simple: z.number().optional(),
+  range_floor: z.number().optional(),
+  range_median: z.number().optional(),
+  range_ceiling: z.number().optional(),
+  injury_risk: z.number().optional(),
+  volatility_score: z.number().optional(),
+  replacement_value: z.number().optional(),
+  adp_est: z.number().optional(),
+  ecr_rank: z.number().int().optional(),
+  statline_simple_json: z.string().optional()
 });
 
 export const ProjectionsWeekly = z.object({
-  playerId: z.string().min(1).max(50),
+  // Live DB: projections_weekly
+  player_id: z.string().min(1).max(64),
   season: z.number().int().min(2020).max(2035),
   week: z.number().int().min(1).max(20),
-  fantasy_points: z.number().optional()
+  opponent_team_id: z.string().max(64).optional(),
+  home_away: z.enum(['H', 'A', 'N']).optional(),
+  team_total_est: z.number().optional(),
+  pace_matchup_adj: z.number().optional(),
+  fantasy_points_simple: z.number().optional(),
+  boom_prob: z.number().optional(),
+  bust_prob: z.number().optional(),
+  defense_vs_pos_grade: z.number().optional(),
+  injury_status: z.enum(['Healthy', 'Questionable', 'Doubtful', 'Out']).optional(),
+  utilization_trend: z.enum(['+', '=', '-']).optional(),
+  rank_pro: z.number().int().optional(),
+  start_sit_color: z.enum(['Green', 'Yellow', 'Red']).optional()
 });
 
 export const ModelInputs = z.object({
+  // Live DB: model_inputs
   season: z.number().int().min(2020).max(2035),
+  week: z.number().int().min(1).max(20).optional(),
+  depth_chart: z.string().optional(),
+  team_pace: z.string().optional(),
+  pass_rate: z.string().optional(),
+  rush_rate: z.string().optional(),
   depth_chart_json: z.string().optional(),
-  team_pace_json: z.string().optional(),
-  pass_rush_rates_json: z.string().optional(),
+  usage_priors_json: z.string().optional(),
+  team_efficiency_json: z.string().optional(),
+  pace_estimates_json: z.string().optional(),
   opponent_grades_by_pos_json: z.string().optional(),
-  injury_reports_json: z.string().optional(),
-  vegas_json: z.string().optional(),
-  manual_overrides_json: z.string().optional()
+  manual_overrides_json: z.string().optional(),
+  ea_ratings_json: z.string().optional(),
+  nfl_draft_capital_json: z.string().optional()
 });
 
 export const UserCustomProjections = z.object({
