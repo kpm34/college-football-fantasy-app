@@ -58,12 +58,29 @@ export async function GET(request: NextRequest) {
                 session = await account.getSession('current');
                 console.log('OAuth session found:', session);
               } catch (sessionError) {
-                console.error('No session found, checking for OAuth callback params...');
-                // If no session, the OAuth flow might not be complete
-                // Redirect back to login
-                setTimeout(() => {
-                  window.location.href = '/login?error=oauth_incomplete';
-                }, 2000);
+                console.error('No session found:', sessionError);
+                console.error('Session error details:', {
+                  message: sessionError.message,
+                  code: sessionError.code,
+                  type: sessionError.type
+                });
+                
+                // Show error details on the page for debugging
+                const container = document.querySelector('.container');
+                if (container) {
+                  container.innerHTML = \`
+                    <p style="color: #ef4444;">OAuth session not found</p>
+                    <p style="font-size: 12px; margin-top: 10px;">Error: \${sessionError.message || 'Unknown error'}</p>
+                    <p style="font-size: 12px;">Code: \${sessionError.code || 'N/A'}</p>
+                    <p style="font-size: 12px; margin-top: 20px;">This usually means:</p>
+                    <ul style="font-size: 12px; text-align: left; max-width: 400px; margin: 10px auto;">
+                      <li>Google OAuth is not properly configured in Appwrite</li>
+                      <li>The OAuth flow was cancelled or failed</li>
+                      <li>Session cookies are being blocked</li>
+                    </ul>
+                    <p style="margin-top: 20px;"><a href="/login" style="color: #3B82F6;">Return to login</a></p>
+                  \`;
+                }
                 return;
               }
               
