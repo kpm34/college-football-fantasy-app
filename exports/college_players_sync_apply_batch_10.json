@@ -1,0 +1,80 @@
+{
+  "summary": {
+    "toCreate": 382,
+    "toUpdate": 0,
+    "toDeactivate": 0
+  },
+  "scope": {
+    "teams": [
+      "Clemson",
+      "Colorado Buffaloes",
+      "Duke",
+      "Florida",
+      "Florida State",
+      "Georgia",
+      "Georgia Tech",
+      "Houston Cougars",
+      "Illinois Fighting Illini",
+      "Indiana Hoosiers"
+    ],
+    "onlyPower4": true
+  },
+  "verification": {
+    "perTeam": {
+      "Clemson": {
+        "csvCount": 39,
+        "dbCount": 0
+      },
+      "Colorado Buffaloes": {
+        "csvCount": 36,
+        "dbCount": 0
+      },
+      "Duke": {
+        "csvCount": 31,
+        "dbCount": 0
+      },
+      "Florida": {
+        "csvCount": 43,
+        "dbCount": 0
+      },
+      "Florida State": {
+        "csvCount": 36,
+        "dbCount": 0
+      },
+      "Georgia": {
+        "csvCount": 50,
+        "dbCount": 0
+      },
+      "Georgia Tech": {
+        "csvCount": 34,
+        "dbCount": 0
+      },
+      "Houston Cougars": {
+        "csvCount": 40,
+        "dbCount": 0
+      },
+      "Illinois Fighting Illini": {
+        "csvCount": 36,
+        "dbCount": 0
+      },
+      "Indiana Hoosiers": {
+        "csvCount": 37,
+        "dbCount": 0
+      }
+    }
+  },
+  "examples": {
+    "create": [
+      "Charlie Reed",
+      "Nolan Hauser",
+      "Quinn Castner",
+      "Robert Gunn III",
+      "Cade Klubnik"
+    ],
+    "update": [],
+    "deactivate": []
+  },
+  "options": {
+    "onlyPower4": true
+  }
+}

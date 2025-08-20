@@ -1,15 +1,16 @@
 // app/api/mock-draft/turn/[id]/route.ts
 import { NextResponse } from 'next/server';
-import { autopickIfExpired, getTurn } from '@/lib/draft/engine';
+import { autopickIfExpired, autopickBotIfOnClock, getTurn } from '@/lib/draft/engine';
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   try {
     const draftId = params.id;
     
-    // Check for and handle any expired picks
+    // If clock expired for a human, autopick; if a bot is on the clock, pick immediately
     await autopickIfExpired(draftId);
+    await autopickBotIfOnClock(draftId);
     
-    // Get the current turn
+    // Get the current turn (does not reset deadlines)
     const turn = await getTurn(draftId);
     
     return NextResponse.json({ 

@@ -1,43 +1,27 @@
-import fs from 'node:fs/promises'
-import path from 'node:path'
 import { MermaidRenderer } from '../../../components/docs/MermaidRenderer'
 
-async function loadMermaidBlocks(filePath: string): Promise<string[]> {
-  try {
-    const absolutePath = path.join(process.cwd(), filePath)
-    const content = await fs.readFile(absolutePath, 'utf8')
-    const blocks: string[] = []
-    const regex = /```mermaid\n([\s\S]*?)```/g
-    let match: RegExpExecArray | null
-    while ((match = regex.exec(content))) {
-      blocks.push(match[1].trim())
-    }
-    return blocks
-  } catch {
-    return []
-  }
-}
-
 export default async function Page() {
-  // Load from the single source PROJECT_MAP.md in root
-  let charts = await loadMermaidBlocks('PROJECT_MAP.md')
-  let extra = await loadMermaidBlocks('docs/SYSTEM_MAP.md')
-  if (charts.length === 0) {
-    try {
-      const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
-      if (res.ok) {
-        const json = await res.json()
-        charts = Array.isArray(json.charts) ? json.charts : []
-      }
-    } catch {}
-  }
-  if (extra.length === 0) {
-    // SYSTEM_MAP fallback is non-critical; ignore
-  }
+  let charts: string[] = []
+  let systemCharts: string[] = []
+  try {
+    const [pmRes, smRes] = await Promise.all([
+      fetch('/api/docs/mermaid/project-map', { cache: 'no-store' }),
+      fetch('/api/docs/mermaid/system-map', { cache: 'no-store' })
+    ])
+    if (pmRes.ok) {
+      const json = await pmRes.json()
+      charts = Array.isArray(json.charts) ? json.charts : []
+    }
+    if (smRes.ok) {
+      const json = await smRes.json()
+      systemCharts = Array.isArray(json.charts) ? json.charts : []
+    }
+  } catch {}
+
   return (
     <div className="max-w-screen-2xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Project Map</h1>
-      <MermaidRenderer charts={[...charts, ...extra]} />
+      <MermaidRenderer charts={[...charts, ...systemCharts]} />
     </div>
   )
 }

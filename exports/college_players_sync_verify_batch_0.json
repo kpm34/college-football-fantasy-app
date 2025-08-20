@@ -1,0 +1,74 @@
+{
+  "summary": {
+    "toCreate": 0,
+    "toUpdate": 0,
+    "toDeactivate": 0
+  },
+  "scope": {
+    "teams": [
+      "Alabama",
+      "Arizona State Sun Devils",
+      "Arizona Wildcats",
+      "Arkansas",
+      "Auburn",
+      "B Y U Cougars",
+      "Baylor Bears",
+      "Boston College",
+      "California",
+      "Cincinnati Bearcats"
+    ],
+    "onlyPower4": true
+  },
+  "verification": {
+    "perTeam": {
+      "Alabama": {
+        "csvCount": 44,
+        "dbCount": 44
+      },
+      "Arizona State Sun Devils": {
+        "csvCount": 32,
+        "dbCount": 32
+      },
+      "Arizona Wildcats": {
+        "csvCount": 36,
+        "dbCount": 36
+      },
+      "Arkansas": {
+        "csvCount": 38,
+        "dbCount": 38
+      },
+      "Auburn": {
+        "csvCount": 36,
+        "dbCount": 36
+      },
+      "B Y U Cougars": {
+        "csvCount": 39,
+        "dbCount": 39
+      },
+      "Baylor Bears": {
+        "csvCount": 38,
+        "dbCount": 38
+      },
+      "Boston College": {
+        "csvCount": 45,
+        "dbCount": 45
+      },
+      "California": {
+        "csvCount": 37,
+        "dbCount": 37
+      },
+      "Cincinnati Bearcats": {
+        "csvCount": 32,
+        "dbCount": 32
+      }
+    }
+  },
+  "examples": {
+    "create": [],
+    "update": [],
+    "deactivate": []
+  },
+  "options": {
+    "onlyPower4": true
+  }
+}

@@ -8,6 +8,7 @@ import { DraftConfig, MockDraft, DraftParticipant, DraftPick, Player, TeamNeeds,
 import { loadEligiblePlayers, filterAvailablePlayers } from './playerPool';
 import { getBestAvailablePlayer, getBotStrategy, calculateTeamNeeds } from './ranker';
 import { COLLECTIONS } from '@/schema/zod-schema';
+import { ensureMockDraftSchema } from '@/scripts/appwrite/ensure-mock-draft-schema';
 
 /**
  * Generate a random seed if none provided
@@ -32,49 +33,101 @@ export async function createDraft(
     const seed = config.seed || generateSeed();
     
     // Create the mock draft document using existing Appwrite schema
-    const draft = await databases.createDocument(
-      DATABASE_ID,
-      COLLECTIONS.MOCK_DRAFTS,
-      ID.unique(),
-      {
-        draftName: draftName, // Keep using 'draftName' as that's what Appwrite has
-        numTeams,
-        rounds: config.rounds,
-        snake: config.snake || false,
-        status: 'pending',
-        config: JSON.stringify({ // Keep using 'config' as that's what Appwrite has
-          seed,
-          timerPerPickSec: config.timerPerPickSec,
-          positionLimits: config.positionLimits,
-          rosterLimits: config.rosterLimits
-        })
+    let draft;
+    try {
+      draft = await databases.createDocument(
+        DATABASE_ID,
+        COLLECTIONS.MOCK_DRAFTS,
+        ID.unique(),
+        {
+          draftName: draftName, // Keep using 'draftName' as that's what Appwrite has
+          numTeams,
+          rounds: config.rounds,
+          snake: config.snake || false,
+          // Immediately start mock drafts so timers/autopick work
+          status: 'active',
+          startedAt: new Date().toISOString(),
+          config: JSON.stringify({ // Keep using 'config' as that's what Appwrite has
+            seed,
+            timerPerPickSec: config.timerPerPickSec,
+            positionLimits: config.positionLimits,
+            rosterLimits: config.rosterLimits
+          })
+        }
+      );
+    } catch (e: any) {
+      const msg = e?.message || '';
+      if (msg.includes('could not be found') || e?.type === 'collection_not_found') {
+        // Bootstrap schema on-the-fly and retry once
+        await ensureMockDraftSchema();
+        draft = await databases.createDocument(
+          DATABASE_ID,
+          COLLECTIONS.MOCK_DRAFTS,
+          ID.unique(),
+          {
+            draftName: draftName,
+            numTeams,
+            rounds: config.rounds,
+            snake: config.snake || false,
+            status: 'active',
+            startedAt: new Date().toISOString(),
+            config: JSON.stringify({
+              seed,
+              timerPerPickSec: config.timerPerPickSec,
+              positionLimits: config.positionLimits,
+              rosterLimits: config.rosterLimits
+            })
+          }
+        );
+      } else {
+        throw e;
       }
-    );
+    }
 
     console.log(`✅ Draft created with ID: ${draft.$id}`);
 
     // Create participants (use provided or default to bots for numTeams)
     const participantsList: DraftParticipant[] = [];
-    const participantsToCreate = participants || Array.from({ length: numTeams }, (_, i) => ({
+    const participantsToCreate = (participants as any[]) || Array.from({ length: numTeams }, (_, i) => ({
       slot: i + 1,
       userType: 'bot' as UserType,
       displayName: `Bot Team ${i + 1}`
     }));
 
     for (const p of participantsToCreate) {
-      const participant = await databases.createDocument(
-        DATABASE_ID,
-        COLLECTIONS.MOCK_DRAFT_PARTICIPANTS,
-        ID.unique(),
-        {
-          draftId: draft.$id,
-          userType: p.userType, // Keep userType as it exists in Appwrite
-          displayName: p.displayName, // Keep displayName as that's what Appwrite has
-          slot: p.slot
+      try {
+        const participant = await databases.createDocument(
+          DATABASE_ID,
+          COLLECTIONS.MOCK_DRAFT_PARTICIPANTS,
+          ID.unique(),
+          {
+            draftId: draft.$id,
+            userType: p.userType, // Keep userType as it exists in Appwrite
+            displayName: p.displayName, // Keep displayName as that's what Appwrite has
+            slot: p.slot
+          }
+        );
+        participantsList.push(participant as any);
+      } catch (e: any) {
+        const msg = e?.message || '';
+        if (msg.includes('could not be found') || e?.type === 'collection_not_found') {
+          await ensureMockDraftSchema();
+          const participant = await databases.createDocument(
+            DATABASE_ID,
+            COLLECTIONS.MOCK_DRAFT_PARTICIPANTS,
+            ID.unique(),
+            {
+              draftId: draft.$id,
+              userType: p.userType,
+              displayName: p.displayName,
+              slot: p.slot
+            }
+          );
+          participantsList.push(participant as any);
+        } else {
+          throw e;
         }
-      );
-      
-      participantsList.push(participant as any);
+      }
     }
 
     console.log(`✅ Created ${participantsList.length} participants (${participantsToCreate.filter(p => p.userType === 'human').length} human, ${participantsToCreate.filter(p => p.userType === 'bot').length} bot)`);
@@ -424,6 +477,27 @@ async function getDraftDoc(draftId: string) {
 export async function getTurn(draftId: string): Promise<TurnState> {
   const { d, cfg } = await getDraftDoc(draftId);
 
+  // Ensure startedAt is stable and persisted; avoid recomputing from Date.now()
+  let startedAtDate: Date;
+  if (d.startedAt) {
+    startedAtDate = new Date(d.startedAt);
+  } else {
+    const now = new Date();
+    try {
+      await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.MOCK_DRAFTS,
+        draftId,
+        {
+          startedAt: now.toISOString(),
+          // If still waiting, flip to active so timers/autopick behave
+          status: d.status === 'waiting' ? 'active' : d.status,
+        }
+      );
+    } catch {}
+    startedAtDate = now;
+  }
+
   const picks = await databases.listDocuments(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PICKS, [
     Query.equal('draftId', draftId),
     Query.orderAsc('overall'),
@@ -442,7 +516,7 @@ export async function getTurn(draftId: string): Promise<TurnState> {
   const participant = parts.documents[0];
   if (!participant) throw new Error('Participant not found for slot');
 
-  const lastPickAt = cfg.lastPickAt ? new Date(cfg.lastPickAt) : new Date(d.startedAt || Date.now());
+  const lastPickAt = cfg.lastPickAt ? new Date(cfg.lastPickAt) : startedAtDate;
   const deadline = new Date(lastPickAt.getTime() + (cfg.timerPerPickSec ?? 30) * 1000);
 
   return {
@@ -578,4 +652,54 @@ export async function autopickIfExpired(draftId: string, nowIso?: string) {
     });
   }
   return { autopicked: true, playerId };
+}
+
+/**
+ * Autopick immediately if the current participant is a bot.
+ * Returns true if a pick was made, false otherwise.
+ */
+export async function autopickBotIfOnClock(draftId: string, nowIso?: string): Promise<boolean> {
+  const now = nowIso ? new Date(nowIso) : new Date();
+  const { d, cfg } = await getDraftDoc(draftId);
+  if (d.status !== 'active') return false;
+
+  const turn = await getTurn(draftId);
+  // Load participant to check userType
+  const part = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PARTICIPANTS, turn.participantId);
+  if ((part as any).userType !== 'bot') return false;
+
+  // Rate-limit bot picks to at most one every 5 seconds
+  const lastBotAutoAt = cfg.lastBotAutoAt ? new Date(cfg.lastBotAutoAt).getTime() : 0;
+  if (now.getTime() - lastBotAutoAt < 5000) {
+    return false;
+  }
+
+  const playerId = await selectBestAvailablePlayer(draftId, cfg.seed);
+  await databases.createDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PICKS, ID.unique(), {
+    draftId,
+    round: turn.round,
+    overall: turn.overall,
+    slot: turn.slot,
+    participantId: turn.participantId,
+    playerId,
+    autopick: true,
+    pickedAt: now.toISOString(),
+  });
+
+  const metrics = { autopicksCount: (cfg?.metrics?.autopicksCount ?? 0) + 1 };
+  const nextCfg = { ...cfg, lastPickAt: now.toISOString(), lastBotAutoAt: now.toISOString(), metrics: { ...(cfg.metrics || {}), ...metrics } };
+  await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
+    config: JSON.stringify(nextCfg),
+  });
+
+  // Complete if this was the last pick
+  const totalPicks = (d.rounds ?? 15) * (d.numTeams ?? 8);
+  if (turn.overall >= totalPicks) {
+    await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
+      status: 'complete',
+      completedAt: now.toISOString(),
+      config: JSON.stringify(nextCfg),
+    });
+  }
+  return true;
 }

@@ -1,0 +1,80 @@
+{
+  "summary": {
+    "toCreate": 372,
+    "toUpdate": 0,
+    "toDeactivate": 0
+  },
+  "scope": {
+    "teams": [
+      "Syracuse",
+      "T C U Horned Frogs",
+      "Tennessee",
+      "Texas",
+      "Texas A& M",
+      "Texas Tech Red Raiders",
+      "U C F Knights",
+      "U C L A Bruins",
+      "U S C Trojans",
+      "Utah Utes"
+    ],
+    "onlyPower4": true
+  },
+  "verification": {
+    "perTeam": {
+      "Syracuse": {
+        "csvCount": 41,
+        "dbCount": 0
+      },
+      "T C U Horned Frogs": {
+        "csvCount": 36,
+        "dbCount": 0
+      },
+      "Tennessee": {
+        "csvCount": 34,
+        "dbCount": 0
+      },
+      "Texas": {
+        "csvCount": 39,
+        "dbCount": 0
+      },
+      "Texas A& M": {
+        "csvCount": 43,
+        "dbCount": 0
+      },
+      "Texas Tech Red Raiders": {
+        "csvCount": 31,
+        "dbCount": 0
+      },
+      "U C F Knights": {
+        "csvCount": 36,
+        "dbCount": 0
+      },
+      "U C L A Bruins": {
+        "csvCount": 35,
+        "dbCount": 0
+      },
+      "U S C Trojans": {
+        "csvCount": 37,
+        "dbCount": 0
+      },
+      "Utah Utes": {
+        "csvCount": 40,
+        "dbCount": 0
+      }
+    }
+  },
+  "examples": {
+    "create": [
+      "Jadyn Oh",
+      "Jan Bogdan",
+      "Tripp Woody",
+      "Jakhari Williams",
+      "Joseph Filardi"
+    ],
+    "update": [],
+    "deactivate": []
+  },
+  "options": {
+    "onlyPower4": true
+  }
+}

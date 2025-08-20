@@ -74,11 +74,11 @@ The system calculates a comprehensive talent multiplier (0.3x to 2.0x) based on:
 // EA Sports Impact (15% weight)
 ea_impact = (ea_overall - 70) / 30 * 0.15
 
-// Athletic bonus for skill positions (5% weight) 
-athletic_bonus = (ea_speed + ea_acceleration) / 2 - 80) / 20 * 0.05
+// Athletic bonus for skill positions (10% weight) 
+athletic_bonus = (ea_speed + ea_acceleration) / 2 - 80) / 20 * 0.1
 
-// NFL Draft Capital (20% weight)
-draft_impact = draft_capital_score * 0.20
+// NFL Draft Capital (15% weight)
+draft_impact = draft_capital_score * 0.15
 
 // Previous Performance (25% weight)
 prev_performance = (prev_ppg - position_benchmark) / position_benchmark * 0.25

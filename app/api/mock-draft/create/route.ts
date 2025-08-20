@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createMockDraft } from '@/lib/draft/mock-engine';
+import { createDraft } from '@/lib/draft/engine';
 import { DraftConfig, DEFAULT_POSITION_LIMITS } from '@/lib/draft/types';
 
 export async function POST(request: NextRequest) {
@@ -54,8 +54,8 @@ export async function POST(request: NextRequest) {
       seed
     };
     
-    // Create the mock draft (in-memory only)
-    const draftId = await createMockDraft(draftName, config, participants, numTeams);
+    // Create the mock draft in Appwrite so realtime/turn/results work consistently
+    const draftId = await createDraft(draftName, config, participants, numTeams);
     
     const participantType = participants ? 
       `${participants.filter((p: any) => p.userType === 'human').length} human, ${participants.filter((p: any) => p.userType === 'bot').length} bot` : 
@@ -67,15 +67,16 @@ export async function POST(request: NextRequest) {
       message: `Draft "${draftName}" created successfully with ${participantType} participants`
     });
     
-  } catch (error) {
+  } catch (error: any) {
     console.error('Mock draft creation error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    
+    const errorMessage = error?.message || 'Unknown error';
+    const details = error?.response?.message || error?.response || undefined;
     return NextResponse.json(
-      { 
+      {
         success: false,
         error: 'Failed to create mock draft',
-        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+        message: errorMessage,
+        details,
       },
       { status: 500 }
     );
