@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
   const router = useRouter();
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,7 +23,7 @@ export default function SignupPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify({ email, password, firstName, lastName }),
       });
 
       const data = await response.json();
@@ -47,9 +48,15 @@ export default function SignupPage() {
         {error && <p className="mb-3" style={{ color: '#B41F24' }}>{error}</p>}
         
         <div className="space-y-3">
-          <div>
-            <label className="block text-sm mb-1" style={{ color: '#6B4A35' }}>Name</label>
-            <input className="w-full px-3 py-2 rounded-md" style={{ backgroundColor: '#FFFFFF', color: '#5B2B8C', border: '1px solid #9256A4' }} placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm mb-1" style={{ color: '#6B4A35' }}>First Name</label>
+              <input className="w-full px-3 py-2 rounded-md" style={{ backgroundColor: '#FFFFFF', color: '#5B2B8C', border: '1px solid #9256A4' }} placeholder="First Name" required value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+            </div>
+            <div>
+              <label className="block text-sm mb-1" style={{ color: '#6B4A35' }}>Last Name</label>
+              <input className="w-full px-3 py-2 rounded-md" style={{ backgroundColor: '#FFFFFF', color: '#5B2B8C', border: '1px solid #9256A4' }} placeholder="Last Name" required value={lastName} onChange={(e) => setLastName(e.target.value)} />
+            </div>
           </div>
           
           <div>

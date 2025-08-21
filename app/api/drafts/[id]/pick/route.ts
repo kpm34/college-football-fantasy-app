@@ -35,6 +35,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     } catch {}
 
     // Validate on-clock team & deadline
+    // Enforce draft start time from Appwrite league document
+    try {
+      const leagueDoc = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, draftId);
+      const draftStart = (leagueDoc as any)?.draftDate ? new Date((leagueDoc as any).draftDate).getTime() : 0;
+      if (draftStart && Date.now() < draftStart) {
+        return NextResponse.json({ error: 'Draft has not started yet' }, { status: 400 });
+      }
+    } catch {}
+
     if (!state || state.onClockTeamId !== teamId) {
       return NextResponse.json({ error: 'Not your turn' }, { status: 400 });
     }
@@ -93,6 +102,24 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       const { kv } = await import('@vercel/kv');
       await kv.set(`draft:${draftId}:state`, JSON.stringify(next));
     } catch {}
+
+    // When a human picks, persist into DRAFT_PICKS for realtime UI and downstream roster save
+    await databases.createDocument(
+      DATABASE_ID,
+      COLLECTIONS.DRAFT_PICKS,
+      ID.unique(),
+      {
+        leagueId: draftId,
+        userId: teamId,
+        playerId,
+        playerName: undefined,
+        playerPosition: undefined,
+        playerTeam: undefined,
+        round: state.round,
+        pick: overall,
+        timestamp: new Date().toISOString(),
+      } as any
+    ).catch(() => {});
 
     // Publish realtime (Appwrite functions/channels can observe draft_events)
     return NextResponse.json({ success: true, state: next });

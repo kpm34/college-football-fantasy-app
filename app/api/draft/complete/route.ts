@@ -34,7 +34,8 @@ export async function POST(request: NextRequest) {
       COLLECTIONS.DRAFT_PICKS,
       [
         Query.equal('leagueId', leagueId),
-        Query.orderAsc('pickNumber'),
+        // Appwrite schema attribute is 'pick' in draft_picks
+        Query.orderAsc('pick'),
         Query.limit(1000) // Ensure we get all picks
       ]
     );
@@ -63,8 +64,8 @@ export async function POST(request: NextRequest) {
         playerName: pick.playerName,
         playerPosition: pick.playerPosition,
         playerTeam: pick.playerTeam,
-        draftPosition: pick.pickNumber,
-        round: pick.round,
+        draftPosition: (pick as any).pickNumber ?? (pick as any).pick,
+        round: (pick as any).round,
         draftedAt: pick.timestamp
       });
     }
