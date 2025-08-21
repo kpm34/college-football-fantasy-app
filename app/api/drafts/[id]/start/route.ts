@@ -109,6 +109,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         round: state.round,
         pickIndex: state.pickIndex,
         status: 'active',
+        // helpful for fallback reconstruction
+        picksPerRound: state.picksPerRound,
       } as any);
     } catch (error: any) {
       // DRAFT_STATES collection might not exist, that's okay

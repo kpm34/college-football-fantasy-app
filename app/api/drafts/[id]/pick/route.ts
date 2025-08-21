@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ID } from 'node-appwrite';
+import { ID, Query } from 'node-appwrite';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -26,13 +26,46 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: 'Missing playerId or teamId' }, { status: 400 });
     }
 
-    // Load ephemeral state from KV
+    // Load ephemeral state from KV; fallback to latest draft_states when KV missing
     let state: any = null;
     try {
       const { kv } = await import('@vercel/kv');
       const raw = await kv.get(`draft:${draftId}:state`);
       state = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : null;
     } catch {}
+
+    if (!state) {
+      try {
+        const latest = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.DRAFT_STATES,
+          [Query.equal('draftId', draftId), Query.orderDesc('$createdAt'), Query.limit(1)]
+        );
+        const st = latest.documents?.[0];
+        if (st) {
+          // Minimal state reconstruction
+          const lg = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, draftId);
+          const rounds = Number((lg as any)?.draftRounds || 15);
+          const picksPerRound = Number((st as any)?.picksPerRound || ((lg as any)?.draftOrder?.length || (Array.isArray((lg as any)?.members) ? (lg as any).members.length : 12)));
+          state = {
+            round: (st as any).round,
+            pickIndex: (st as any).pickIndex,
+            picksPerRound,
+            totalTeams: picksPerRound,
+            draftOrder: Array.isArray((lg as any).draftOrder)
+              ? (lg as any).draftOrder
+              : (typeof (lg as any).draftOrder === 'string'
+                ? (() => { try { return JSON.parse((lg as any).draftOrder); } catch { return []; } })()
+                : (Array.isArray((lg as any).members) ? (lg as any).members : [])),
+            onClockTeamId: (st as any).onClockTeamId,
+            deadlineAt: (st as any).deadlineAt,
+            pickTimeSeconds: Number((lg as any)?.pickTimeSeconds || 90),
+            overall: ((st as any).round - 1) * picksPerRound + (st as any).pickIndex,
+            rounds
+          } as any;
+        }
+      } catch {}
+    }
 
     // Validate on-clock team & deadline
     // Enforce draft start time from Appwrite league document
