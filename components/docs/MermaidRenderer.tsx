@@ -27,6 +27,11 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
         svg.style.transformOrigin = '0 0'
         svg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`
       }
+      const emitScale = () => {
+        try {
+          host.dispatchEvent(new CustomEvent('pz-scale', { detail: { scale } }))
+        } catch {}
+      }
 
       // Initialize from any existing transform set by initial fit
       const existing = svg.style.transform
@@ -70,7 +75,7 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
         e.preventDefault()
         const delta = -e.deltaY
         const factor = delta > 0 ? 1.1 : 0.9
-        const next = Math.min(4, Math.max(0.4, scale * factor))
+        const next = Math.min(4, Math.max(0.3, scale * factor))
         // Zoom towards cursor roughly
         const rect = host.getBoundingClientRect()
         const ox = (e.clientX - rect.left - translateX) / scale
@@ -79,6 +84,7 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
         translateY -= oy * (next - scale)
         scale = next
         applyTransform()
+        emitScale()
       }
       const onDblClick = () => {
         // Reset
@@ -86,6 +92,7 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
         translateY = 0
         scale = 1
         applyTransform()
+        emitScale()
       }
 
       svg.style.cursor = 'grab'
@@ -108,9 +115,10 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
       }
 
       const setScaleRelative = (factor: number) => {
-        const next = Math.max(0.4, Math.min(4, scale * factor))
+        const next = Math.max(0.3, Math.min(4, scale * factor))
         scale = next
         applyTransform()
+        emitScale()
       }
 
       const reset = () => {
@@ -118,11 +126,19 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
         translateY = 0
         scale = 1
         applyTransform()
+        emitScale()
       }
 
       const getScale = () => scale
 
-      return { dispose, setScaleRelative, reset, getScale }
+      const setScaleAbsolute = (next: number) => {
+        const bounded = Math.max(0.3, Math.min(4, next))
+        scale = bounded
+        applyTransform()
+        emitScale()
+      }
+
+      return { dispose, setScaleRelative, reset, getScale, setScaleAbsolute }
     }
     const renderAll = async () => {
       if (!containerRef.current) return
@@ -139,7 +155,7 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
             secondaryTextColor: '#e5e7eb',
             lineColor: '#9ca3af',
             nodeBorder: '#e5e7eb',
-            fontSize: '20px'
+            fontSize: '16px'
           }
         })
         if (!isMounted || !containerRef.current) return
@@ -167,7 +183,12 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
                   const vb = svgEl.viewBox.baseVal
                   if (!vb || vb.width === 0) return
                   const cw = host.clientWidth
-                  const scale = Math.max(0.6, Math.min(2.5, cw / vb.width))
+                  const chAvail = Math.max(300, Math.floor((window.innerHeight || 800) * 0.75))
+                  const sw = cw / vb.width
+                  const sh = chAvail / vb.height
+                  const base = Math.min(sw, sh)
+                  // Open smaller by default: cap initial zoom to 0.6 max and add margin
+                  const scale = Math.max(0.3, Math.min(0.6, base * 0.85))
                   svgEl.style.transformOrigin = '0 0'
                   svgEl.style.transform = `translate(0px, 0px) scale(${scale})`
                 }
@@ -193,10 +214,15 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
               toolbar.style.borderRadius = '0.375rem'
               toolbar.style.backdropFilter = 'blur(4px)'
               toolbar.innerHTML = `
+                <button data-a="fit">⌖</button>
                 <button data-a="zin">＋</button>
                 <button data-a="zout">－</button>
                 <button data-a="reset">⟲</button>
                 <button data-a="save">⬇︎</button>
+                <div style="display:flex;align-items:center;gap:6px;padding-left:6px;border-left:1px solid rgba(255,255,255,.2)">
+                  <input type="range" data-a="slider" min="30" max="200" step="5" style="width:120px" />
+                  <span data-a="percent" style="color:#fff;font-size:12px;min-width:40px;text-align:right">100%</span>
+                </div>
               `
               toolbar.querySelectorAll('button').forEach((b: any) => {
                 b.style.color = '#fff'
@@ -215,9 +241,48 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
               const setScale = (factor: number) => {
                 controller.setScaleRelative(factor)
               }
+              const slider = toolbar.querySelector('[data-a="slider"]') as HTMLInputElement | null
+              const percent = toolbar.querySelector('[data-a="percent"]') as HTMLElement | null
+              const syncSlider = () => {
+                const s = controller.getScale()
+                const pct = Math.round(s * 100)
+                if (slider) slider.value = String(Math.max(30, Math.min(200, pct)))
+                if (percent) percent.textContent = `${pct}%`
+              }
+              // initialize slider position
+              syncSlider()
+
+              // react to external scale changes (wheel, dblclick, reset)
+              host.addEventListener('pz-scale', () => syncSlider())
+
+              if (slider) {
+                slider.addEventListener('input', () => {
+                  const pct = Number(slider.value)
+                  const next = pct / 100
+                  ;(controller as any).setScaleAbsolute
+                    ? (controller as any).setScaleAbsolute(next)
+                    : controller.setScaleRelative(next / controller.getScale())
+                  syncSlider()
+                })
+              }
               toolbar.addEventListener('click', (e: any) => {
                 const a = e.target?.dataset?.a
                 if (!a) return
+                if (a === 'fit' && svgForSave) {
+                  const vb = svgForSave.viewBox.baseVal
+                  if (vb && vb.width > 0 && vb.height > 0) {
+                    const cw = host.clientWidth
+                    const chAvail = Math.max(300, Math.floor((window.innerHeight || 800) * 0.75))
+                    const base = Math.min(cw / vb.width, chAvail / vb.height)
+                    const scale = Math.max(0.3, Math.min(0.6, base * 0.85))
+                    controller.reset()
+                    // absolute set if supported; else relative from 1
+                    ;(controller as any).setScaleAbsolute
+                      ? (controller as any).setScaleAbsolute(scale)
+                      : controller.setScaleRelative(scale)
+                  }
+                  return
+                }
                 if (a === 'zin') setScale(1.15)
                 if (a === 'zout') setScale(1 / 1.15)
                 if (a === 'reset') controller.reset()
@@ -230,6 +295,8 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
                   link.click()
                   URL.revokeObjectURL(url)
                 }
+                // After button actions, sync slider
+                syncSlider()
               })
             }
           } catch (error) {

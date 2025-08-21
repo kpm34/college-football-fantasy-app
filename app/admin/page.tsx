@@ -46,9 +46,10 @@ export default function AdminDashboard() {
       setShowDiagram({ slug, title })
       setCharts(data.charts || [])
       setLastUpdated(data.updatedAt || '')
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error loading diagram:', error)
-      setDebugInfo({ endpoint: slug, error: error.message })
+      const message = (error as any)?.message || 'Unknown error'
+      setDebugInfo({ endpoint: slug, error: message })
       setCharts([])
     }
   }
@@ -450,24 +451,24 @@ export default function AdminDashboard() {
               )}
               {charts.length > 0 ? (
                 <div className="w-full h-full flex items-center justify-center">
-                  <div className="w-full max-w-[95vw] bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl">
+                  <div className="w-full max-w-[90vw] bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl">
                     <style jsx global>{`
                       .mermaid {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        min-height: 70vh;
+                        min-height: 60vh;
                       }
                       .mermaid svg {
                         max-width: 100% !important;
                         height: auto !important;
-                        min-height: 600px !important;
+                        min-height: 420px !important;
                       }
                       /* Enhance Mermaid diagram text visibility */
                       .mermaid .nodeLabel {
                         color: #1a1a1a !important;
                         font-weight: 600 !important;
-                        font-size: 14px !important;
+                        font-size: 13px !important;
                       }
                       .mermaid .edgeLabel {
                         background-color: white !important;
