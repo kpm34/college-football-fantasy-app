@@ -31,7 +31,7 @@ export async function GET(
     'project-map': 'docs/PROJECT_MAP.md',
     'system-map': 'docs/SYSTEM_MAP.md',
     
-    // New individual diagram mappings
+    // Projections System Diagrams
     'projections-overview': 'docs/diagrams/projections-overview.md',
     'projections-algorithm': 'docs/diagrams/projections-algorithm.md',
     'depth-multipliers': 'docs/diagrams/depth-multipliers.md',
@@ -39,7 +39,21 @@ export async function GET(
     'api-flow': 'docs/diagrams/api-flow.md',
     'troubleshooting': 'docs/diagrams/troubleshooting.md',
     
-    // Catch-all for projections (loads all projection diagrams)
+    // System Architecture Diagrams
+    'repository-structure': 'docs/diagrams/repository-structure.md',
+    'system-architecture': 'docs/diagrams/system-architecture.md',
+    'authentication-flow': 'docs/diagrams/authentication-flow.md',
+    
+    // League & Draft Management
+    'league-management': 'docs/diagrams/league-management.md',
+    'draft-realtime': 'docs/diagrams/draft-realtime.md',
+    'search-filter-flow': 'docs/diagrams/search-filter-flow.md',
+    
+    // Admin & Commissioner Tools
+    'admin-operations': 'docs/diagrams/admin-operations.md',
+    'commissioner-settings': 'docs/diagrams/commissioner-settings.md',
+    
+    // Catch-all for projections (loads overview)
     'projections': 'docs/diagrams/projections-overview.md',
   }
 
