@@ -112,12 +112,12 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Project Architecture Diagrams */}
+        {/* System Architecture Diagrams */}
         <div className="mb-10">
-          <h3 className="text-xl font-bold text-white mb-4">🏗️ Project Architecture Diagrams</h3>
+          <h3 className="text-xl font-bold text-white mb-4">🏗️ System Architecture</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <button
-              onClick={() => loadDiagram('project-map', '📁 Repository Structure')}
+              onClick={() => loadDiagram('repository-structure', '📁 Repository Structure')}
               className="px-4 py-3 rounded-lg bg-indigo-600 text-white transition-colors hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
             >
               <div className="font-semibold">📁 Repository Structure</div>
@@ -125,19 +125,79 @@ export default function AdminDashboard() {
             </button>
             
             <button
-              onClick={() => loadDiagram('data-flow', '🔄 Data Flow Architecture')}
+              onClick={() => loadDiagram('system-architecture', '🏛️ System Architecture')}
               className="px-4 py-3 rounded-lg bg-teal-600 text-white transition-colors hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
             >
-              <div className="font-semibold">🔄 Data Flow Architecture</div>
-              <div className="text-sm text-teal-100">APIs, database & real-time updates</div>
+              <div className="font-semibold">🏛️ System Architecture</div>
+              <div className="text-sm text-teal-100">Complete system overview</div>
             </button>
 
             <button
-              onClick={() => loadDiagram('system-map', '🗺️ System Map')}
+              onClick={() => loadDiagram('authentication-flow', '🔐 Authentication')}
               className="px-4 py-3 rounded-lg bg-cyan-600 text-white transition-colors hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
             >
-              <div className="font-semibold">🗺️ System Map</div>
-              <div className="text-sm text-cyan-100">Complete system overview</div>
+              <div className="font-semibold">🔐 Authentication</div>
+              <div className="text-sm text-cyan-100">OAuth & session management</div>
+            </button>
+          </div>
+        </div>
+
+        {/* League & Draft Management */}
+        <div className="mb-10">
+          <h3 className="text-xl font-bold text-white mb-4">🏆 League & Draft Management</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <button
+              onClick={() => loadDiagram('league-management', '🏟️ League Management')}
+              className="px-4 py-3 rounded-lg bg-purple-600 text-white transition-colors hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+            >
+              <div className="font-semibold">🏟️ League Management</div>
+              <div className="text-sm text-purple-100">Create, join, manage leagues</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('draft-realtime', '📋 Draft Flow')}
+              className="px-4 py-3 rounded-lg bg-pink-600 text-white transition-colors hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+            >
+              <div className="font-semibold">📋 Draft Flow</div>
+              <div className="text-sm text-pink-100">Real-time draft system</div>
+            </button>
+
+            <button
+              onClick={() => loadDiagram('search-filter-flow', '🔍 Search & Filter')}
+              className="px-4 py-3 rounded-lg bg-yellow-600 text-white transition-colors hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+            >
+              <div className="font-semibold">🔍 Search & Filter</div>
+              <div className="text-sm text-yellow-100">League search logic</div>
+            </button>
+          </div>
+        </div>
+
+        {/* Admin & Commissioner Tools */}
+        <div className="mb-10">
+          <h3 className="text-xl font-bold text-white mb-4">🛠️ Admin & Commissioner Tools</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <button
+              onClick={() => loadDiagram('admin-operations', '🎮 Admin Operations')}
+              className="px-4 py-3 rounded-lg bg-red-600 text-white transition-colors hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+            >
+              <div className="font-semibold">🎮 Admin Operations</div>
+              <div className="text-sm text-red-100">User & league management</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('commissioner-settings', '⚙️ Commissioner Settings')}
+              className="px-4 py-3 rounded-lg bg-orange-600 text-white transition-colors hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+            >
+              <div className="font-semibold">⚙️ Commissioner Settings</div>
+              <div className="text-sm text-orange-100">Settings schema fix flow</div>
+            </button>
+
+            <button
+              onClick={() => loadDiagram('data-flow', '📊 Complete Data Flow')}
+              className="px-4 py-3 rounded-lg bg-emerald-600 text-white transition-colors hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+            >
+              <div className="font-semibold">📊 Complete Data Flow</div>
+              <div className="text-sm text-emerald-100">All system data flows</div>
             </button>
           </div>
         </div>
