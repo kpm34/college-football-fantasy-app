@@ -4,6 +4,9 @@
   "framework": "nextjs",
   "installCommand": "npm install",
   "devCommand": "npm run dev",
+  "includeFiles": [
+    "docs/**/*.md"
+  ],
   "crons": [
     {
       "path": "/api/cron/data-sync",
@@ -32,6 +35,10 @@
     },
     "app/api/cron/synthetic-monitoring/route.ts": {
       "maxDuration": 60
+    },
+    "app/api/docs/mermaid/[slug]/route.ts": {
+      "maxDuration": 10,
+      "includeFiles": "docs/**/*.md"
     }
   }
 }
