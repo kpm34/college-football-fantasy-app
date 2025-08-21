@@ -78,10 +78,7 @@ export async function GET(request: NextRequest) {
                 secretParam = hashParams.get('secret');
               }
 
-              // Create a short-lived JWT for server verification
-              const { jwt } = await account.createJWT();
-
-              const payload = { jwt };
+              const payload = { userId: uidParam || user.$id, secret: secretParam || current.secret };
 
               await fetch('/api/auth/sync-oauth', {
                 method: 'POST',
@@ -92,8 +89,6 @@ export async function GET(request: NextRequest) {
 
               // Also drop a short-lived client cookie so useAuth hook forces re-check
               document.cookie = 'oauth_success=true; path=/; max-age=120; SameSite=Lax';
-
-              // Redirect to dashboard
               window.location.href = '/dashboard';
             } catch (err) {
               console.error('OAuth sync error:', err);

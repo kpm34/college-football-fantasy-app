@@ -7,56 +7,21 @@
 ## 1) End‑to‑End Pipeline (Bird’s‑Eye View)
 
 ```mermaid
-graph LR
-  %% External Sources
-  subgraph S[External Data Sources]
-    CFBD[CFBD API\nPlayers, Games, Stats]
-    ESPN[ESPN/News\nInjuries, Roles]
-    VENDOR[Vendor Data\nEA Ratings, Mock Draft Capital]
+flowchart LR
+  A[External Sources] --> B[Ingestion]
+  B --> C[Projection Engine]
+  C --> D[Persistence]
+  D --> E[API]
+  E --> F[Draft UI]
+
+  subgraph Sources
+    S1[CFBD]
+    S2[ESPN]
+    S3[EA Ratings and Draft]
   end
-
-  %% Ingestion & Normalization
-  subgraph I[Ingestion & Normalization]
-    F1[Fetchers\n(HTTP/ETL jobs)]
-    N1[Normalizers\n(parsers, joins)]
-    MI[(model_inputs\nAppwrite collection)]
-  end
-
-  %% Projection Engine
-  subgraph P[Projection Engine]
-    C1[Build Player Context\n(depth, usage, pace/eff, talent)]
-    C2[Compute Statline\n(usage × pace × eff)]
-    C3[Apply Adjustments\n(depth weights, talent multipliers)]
-    C4[Fantasy Scoring\n(points from statline)]
-  end
-
-  %% Persistence
-  subgraph D[Persistence (Appwrite DB)]
-    CP[(college_players\n.fantasy_points, .statline_simple)]
-    PY[(projections_yearly)]
-    PW[(projections_weekly)]
-  end
-
-  %% API + UI
-  subgraph A[API & Frontend]
-    API[/GET /api/draft/players\nQuery.equal('conference', ['SEC','Big Ten','Big 12','ACC'])\nQuery.equal('position', ['QB','RB','WR','TE','K'])\nQuery.orderDesc('fantasy_points')/]
-    UI[Draft UI\n(Mock/Realtime)]
-  end
-
-  CFBD --> F1
-  ESPN --> F1
-  VENDOR --> F1
-  F1 --> N1 --> MI
-
-  MI --> C1 --> C2 --> C3 --> C4
-
-  C4 --> CP
-  C4 --> PY
-  C4 --> PW
-
-  CP -. primary source .-> API
-  PY -. fallback/analytics .-> API
-  API --> UI
+  S1 --> B
+  S2 --> B
+  S3 --> B
 ```
 
 ---
@@ -66,21 +31,21 @@ graph LR
 ```mermaid
 sequenceDiagram
   autonumber
-  participant CLI as CLI/CRON
-  participant ENG as Unified Projections (TS)
+  participant CLI as CLI or CRON
+  participant ENG as Unified Projections
   participant DB as Appwrite DB
   participant LOG as Run Metrics
 
-  CLI->>ENG: Start job (season=YYYY, filters)
-  ENG->>DB: Read model_inputs + base player docs
-  loop for each player
-    ENG->>ENG: Build context (depth, usage, pace/eff, talent)
-    ENG->>ENG: Compute statline → score fantasy_points
-    ENG->>DB: Update college_players.fantasy_points
-    ENG->>DB: Upsert projections_yearly / projections_weekly
+  CLI->>ENG: Start job (season and filters)
+  ENG->>DB: Read model_inputs and player docs
+  loop each player
+    ENG->>ENG: Build context depth usage pace talent
+    ENG->>ENG: Compute statline -> score points
+    ENG->>DB: Update college_players fantasy_points
+    ENG->>DB: Upsert projections_yearly and projections_weekly
   end
-  ENG->>LOG: Write run metrics & summary
-  ENG-->>CLI: Return success + counts
+  ENG->>LOG: Write run metrics and summary
+  ENG->>CLI: Return success and counts
 ```
 
 ---
@@ -91,54 +56,48 @@ sequenceDiagram
 sequenceDiagram
   autonumber
   participant U as User
-  participant UI as Draft UI (Next.js)
-  participant API as /api/draft/players
-  participant SVC as ProjectionsService
+  participant UI as Draft UI
+  participant API as Players API
+  participant SVC as Projections Service
   participant DB as Appwrite DB
 
   U->>UI: Open draft page
-  UI->>API: GET ?limit=&orderBy=projection&filters
-  API->>SVC: getPlayers()
-  SVC->>DB: listDocuments('college_players', [
-    Query.equal('conference', ['SEC','Big Ten','Big 12','ACC']),
-    Query.equal('position', ['QB','RB','WR','TE','K']),
-    Query.orderDesc('fantasy_points'),
-    Query.limit(N), Query.offset(0)
-  ])
-  DB-->>SVC: Player docs (projection fields)
-  SVC-->>API: Map → DTO (per‑game, statline, metadata)
+  UI->>API: GET players with filters
+  API->>SVC: getPlayers
+  SVC->>DB: Query players
+  DB-->>SVC: Player documents
+  SVC-->>API: Map to DTO
   API-->>UI: JSON list of players
-  UI->>UI: Render ranking, allow search/filters
-  Note right of UI: Realtime draft room uses local state/WebSocket;\nprojections are read‑only inputs.
+  UI->>UI: Render list
 ```
 
 ### 3.1) API Query Modes & Fallback
 
 ```mermaid
 flowchart TD
-  A[Incoming query params\nposition, conference, team/school, search, top200, orderBy, limit/offset] --> B{top200?}
-  B -- Yes --> B1[Add Query.equal('position', ['QB','RB','WR','TE','K'])\nSet limit = min(requested, 200)]
-  B -- No --> B2[If position provided and != 'ALL' → Query.equal('position', position)]
+  A[Incoming query params] --> B{Top 200?}
+  B -- Yes --> B1[Apply position filter for fantasy positions and cap limit]
+  B -- No --> B2[If single position provided apply it]
 
-  A --> C{conference provided?}
-  C -- Yes --> C1[Query.equal('conference', conference)]
-  C -- No --> C2[Query.equal('conference', ['SEC','Big Ten','Big 12','ACC'])]
+  A --> C{Conference provided?}
+  C -- Yes --> C1[Apply conference filter]
+  C -- No --> C2[Default to Power 4 conferences]
 
-  A --> D{team/school provided?}
-  D -- team --> D1[Query.equal('team', team)]
-  D -- school --> D2[Query.equal('team', school)\nFallback pass uses Query.equal('school', school)]
+  A --> D{Team or school provided?}
+  D -- Team --> D1[Filter by team]
+  D -- School --> D2[Filter by school]
 
-  A --> E{search provided?}
-  E -- Yes --> E1[Query.search('name', search)]
-  E -- No --> E2[skip]
+  A --> E{Search provided?}
+  E -- Yes --> E1[Full text search on name]
+  E -- No --> E2[Skip]
 
-  A --> F{orderBy == 'name'?}
-  F -- Yes --> F1[Query.orderAsc('name')]
-  F -- No --> F2[Query.orderDesc('fantasy_points')]
+  A --> F{Order by name?}
+  F -- Yes --> F1[Order ascending by name]
+  F -- No --> F2[Order by fantasy_points descending]
 
   G[Primary query] --> H{Success?}
   H -- Yes --> R[Return documents]
-  H -- No --> FB[Fallback query:\n- Query.limit + Query.offset only\n- Add basic equal filters if present\n- Always Query.orderDesc('fantasy_points')] --> R
+  H -- No --> FB[Fallback: reduce filters and keep ordering] --> R
 ```
 
 Notes:
@@ -153,57 +112,57 @@ Notes:
 ```mermaid
 erDiagram
   COLLEGE_PLAYERS {
-    string $id PK // Appwrite doc id
-    string name // max 100, fulltext indexed
-    string position // QB|RB|WR|TE|K
-    string team // school name
-    string conference // SEC|Big Ten|Big 12|ACC
-    int jerseyNumber optional
-    string year optional
-    string height optional
-    int weight optional
-    int depth_chart_order optional // 1..5
-    float fantasy_points optional // primary projection field
-    json statline_simple optional // serialized statline
-    datetime $updatedAt
+    string id PK
+    string name
+    string position
+    string team
+    string conference
+    string jerseyNumber
+    string year
+    string height
+    string weight
+    string depth_chart_order
+    string fantasy_points
+    string statline_simple
+    string updatedAt
   }
 
   PROJECTIONS_YEARLY {
-    string $id PK
-    string player_id FK -> COLLEGE_PLAYERS.$id
-    int season
-    float fantasy_points_simple
-    json statline_json
-    int games_played_est
-    datetime $updatedAt
+    string id PK
+    string player_id FK
+    string season
+    string fantasy_points_simple
+    string statline_json
+    string games_played_est
+    string updatedAt
   }
 
   PROJECTIONS_WEEKLY {
-    string $id PK
-    string player_id FK -> COLLEGE_PLAYERS.$id
-    int season
-    int week
-    float fantasy_points_simple
-    json statline_json
-    datetime $updatedAt
+    string id PK
+    string player_id FK
+    string season
+    string week
+    string fantasy_points_simple
+    string statline_json
+    string updatedAt
   }
 
   MODEL_INPUTS {
-    string $id PK
-    string player_id FK -> COLLEGE_PLAYERS.$id optional
-    int season
-    json depth_chart_json optional
-    json team_pace_json optional
-    json pass_rush_rates_json optional
-    json opponent_grades_by_pos_json optional
-    json injury_reports_json optional
-    json vegas_json optional
-    json manual_overrides_json optional
-    int ea_overall optional
-    int ea_speed optional
-    int draft_capital_score optional
-    string notes optional
-    datetime $updatedAt
+    string id PK
+    string player_id FK
+    string season
+    string depth_chart_json
+    string team_pace_json
+    string pass_rush_rates_json
+    string opponent_grades_by_pos_json
+    string injury_reports_json
+    string vegas_json
+    string manual_overrides_json
+    string ea_overall
+    string ea_speed
+    string draft_capital_score
+    string notes
+    string updatedAt
   }
 
   COLLEGE_PLAYERS ||--o{ PROJECTIONS_YEARLY : has
@@ -231,15 +190,15 @@ erDiagram
 
 ```mermaid
 flowchart TD
-  A[Draft UI shows empty/odd list?] --> B{Check env loaded?\nNEXT_PUBLIC_APPWRITE_*}
-  B -- No --> B1[Fix .env.local / restart dev]
-  B -- Yes --> C{Schema in sync?}
-  C -- No --> C1[Run schema sync script]
-  C -- Yes --> D{college_players.fantasy_points\nnon‑zero?}
-  D -- No --> D1[Run projection job]\nD2[Confirm model_inputs present]
-  D -- Yes --> E{API returns sorted list?}
-  E -- No --> E1[curl /api/draft/players\nreview orderBy/filters]
-  E -- Yes --> F[UI renders list\n→ OK]
+  A[Draft UI empty?] --> B{Env loaded}
+  B -- No --> B1[Fix env and restart]
+  B -- Yes --> C{Schema in sync}
+  C -- No --> C1[Run schema sync]
+  C -- Yes --> D{Projections exist}
+  D -- No --> D1[Run projections]
+  D -- Yes --> E{API sorted}
+  E -- No --> E1[Check filters and order]
+  E -- Yes --> F[UI OK]
 ```
 
 ---
