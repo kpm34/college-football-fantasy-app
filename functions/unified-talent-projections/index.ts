@@ -42,6 +42,18 @@ function loadTeamAliases(): Record<string, string> {
 function normalizeTeamName(name: string | undefined | null): string {
   const n = (name || '').toString().trim();
   if (!n) return '';
+  // Try loading expanded aliases first
+  try {
+    const expandedPath = path.join(process.cwd(), 'data', 'team_aliases_expanded.json');
+    if (fs.existsSync(expandedPath)) {
+      const expanded = JSON.parse(fs.readFileSync(expandedPath, 'utf8'));
+      const found = expanded[n.toLowerCase()];
+      if (found) return found;
+    }
+  } catch (e) {
+    // Fall back to basic aliases
+  }
+  
   const aliases = loadTeamAliases();
   const found = aliases[n.toLowerCase()];
   return found ? found : n;
@@ -402,9 +414,13 @@ async function loadDepthChartData(databases: Databases, dbId: string, season: nu
     const player = (name || '').toString().trim();
     const teamNorm = normalizeTeamName(team);
     if (!player || !teamNorm) return;
-    const key = `${player.toLowerCase()}|${teamNorm.toLowerCase()}`;
+    // Try both normalized and original team names for matching
+    const key1 = `${player.toLowerCase()}|${teamNorm.toLowerCase()}`;
+    const key2 = `${player.toLowerCase()}|${team.toLowerCase()}`;
     const r = Math.max(1, Math.min(9, Number(rank) || 1));
-    if (!depthMap.has(key)) depthMap.set(key, r);
+    if (!depthMap.has(key1)) depthMap.set(key1, r);
+    // Also set with original team name for fallback matching
+    if (team !== teamNorm && !depthMap.has(key2)) depthMap.set(key2, r);
   };
   const tryParseSecRows = (arr: any[]) => {
     for (const row of arr) {
@@ -810,15 +826,55 @@ async function buildTalentProfiles(
       const baseUsageRate = Math.min(0.8, Math.max(0.1, (p.fantasy_points || 100) / 400));
       
       // Look up actual depth rank from loaded data or estimate from fantasy points
+      const teamNorm = normalizeTeamName(teamId);
       const playerKey = `${playerName.toLowerCase()}|${teamId.toLowerCase()}`;
-      const depthRank = depthChartData.get(playerKey) || p.depth_rank || estimateDepthRank(p.fantasy_points, posKey);
+      const playerKeyNorm = `${playerName.toLowerCase()}|${teamNorm.toLowerCase()}`;
+      
+      // Check for manual override first (try both keys)
+      const override = manualOverrides.get(playerKey) || manualOverrides.get(playerKeyNorm) || manualOverrides.get(playerName.toLowerCase());
+      let depthRank = override?.depthRank || depthChartData.get(playerKeyNorm) || depthChartData.get(playerKey) || p.depth_rank;
+      
+      // Fallback: if no depth rank found, search by player name across all teams in conference
+      if (!depthRank && p.conference) {
+        // Try to find this player in any depth chart entry
+        for (const [key, rank] of depthChartData.entries()) {
+          const [name, ] = key.split('|');
+          if (name === playerName.toLowerCase()) {
+            // Found the player, use their depth rank
+            depthRank = rank;
+            console.log(`Found ${playerName} via fallback search: depth rank ${rank}`);
+            break;
+          }
+        }
+      }
+      
+      // Only estimate from fantasy_points if we have a reasonable value
+      if (!depthRank) {
+        // For players with null/low fantasy_points, use position-based defaults
+        if (!p.fantasy_points || p.fantasy_points < 50) {
+          // Default depth ranks when no data available
+          // Be more optimistic for certain positions
+          if (posKey === 'QB') {
+            // For QBs, if we have their name in our data, assume they're at least QB2
+            depthRank = 2;
+          } else if (posKey === 'RB' || posKey === 'WR') {
+            // For skill positions, default to middle depth
+            depthRank = 3;
+          } else {
+            // TEs default to TE2
+            depthRank = 2;
+          }
+        } else {
+          depthRank = estimateDepthRank(p.fantasy_points, posKey);
+        }
+      }
       
       // Analyze surrounding talent for this team/position
       const surroundingTalent = await analyzeSurroundingTalent(databases, dbId, teamId, posKey, eaData);
       
-      // Look up talent data using player name and team (use same playerKey)
-      const eaRating = eaData.get(playerKey) || eaData.get(playerName.toLowerCase());
-      const draftData_player = draftData.get(playerKey) || draftData.get(playerName.toLowerCase());
+      // Look up talent data using player name and team (try both normalized and original keys)
+      const eaRating = eaData.get(playerKeyNorm) || eaData.get(playerKey) || eaData.get(playerName.toLowerCase());
+      const draftData_player = draftData.get(playerKeyNorm) || draftData.get(playerKey) || draftData.get(playerName.toLowerCase());
       const consensus = consensusRanks.get(playerName.toLowerCase());
       const espnAnalysis = await getESPNPlusAnalysis(playerName, teamId, posKey);
       
@@ -848,7 +904,6 @@ async function buildTalentProfiles(
       };
       
       let talentMultiplier = calculateTalentMultiplier(talent, posKey);
-      const override = manualOverrides.get(playerKey) || manualOverrides.get(playerName.toLowerCase());
       if (override?.talent_multiplier) {
         talentMultiplier = clamp(0.3, 2.0, Number(override.talent_multiplier));
       }

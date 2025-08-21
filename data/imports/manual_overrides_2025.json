@@ -1,7 +1,14 @@
 {
-  "players": [
-    { "player_name": "Desmond Reid", "team": "Pittsburgh", "talent_multiplier": 1.25 }
-  ]
+  "Desmond Reid|Pittsburgh": { "talentMultiplier": 1.25 },
+  "Sam Leavitt|Arizona State Sun Devils": { "talentMultiplier": 1.8, "depthRank": 1 },
+  "Sam Leavitt|Arizona State": { "talentMultiplier": 1.8, "depthRank": 1 },
+  "Ryan Williams|Alabama": { "talentMultiplier": 1.65, "depthRank": 1 },
+  "Jordyn Tyson|Arizona State Sun Devils": { "talentMultiplier": 1.4, "depthRank": 1 },
+  "Jordyn Tyson|Arizona State": { "talentMultiplier": 1.4, "depthRank": 1 },
+  "Raleek Brown|Arizona State Sun Devils": { "talentMultiplier": 1.35, "depthRank": 1 },
+  "Raleek Brown|Arizona State": { "talentMultiplier": 1.35, "depthRank": 1 },
+  "Kyson Brown|Arizona State Sun Devils": { "talentMultiplier": 1.2, "depthRank": 2 },
+  "Kyson Brown|Arizona State": { "talentMultiplier": 1.2, "depthRank": 2 },
+  "Cameron Harpole|Arizona State Sun Devils": { "talentMultiplier": 1.15, "depthRank": 1 },
+  "Cameron Harpole|Arizona State": { "talentMultiplier": 1.15, "depthRank": 1 }
 }
-
-

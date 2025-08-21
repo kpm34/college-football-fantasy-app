@@ -1,230 +1,348 @@
-# CFB Fantasy — Projections Data Flow Diagrams
+# CFB Fantasy — Updated Projections System (January 2025)
 
-> Overview diagrams showing: **(1)** data fetching, **(2)** projection computation, **(3)** persistence, and **(4)** frontend rendering, plus a simple troubleshooting flow.
+## System Overview
 
----
+```mermaid
+flowchart TB
+    subgraph "Data Sources"
+        CFBD[CFBD API]
+        EA[EA Ratings Files]
+        DC[Depth Charts]
+        NFL[2026 NFL Mock Draft]
+        MO[Manual Overrides]
+    end
+    
+    subgraph "Data Processing"
+        NORM[Team Name Normalizer]
+        INGEST[Data Ingestion Layer]
+        CACHE[Model Inputs Collection]
+    end
+    
+    subgraph "Projection Engine"
+        BUILD[Build Talent Profiles]
+        CALC[Calculate Projections]
+        MULT[Apply Multipliers]
+    end
+    
+    subgraph "Output"
+        DB[Appwrite DB]
+        API[Draft API]
+        UI[Draft UI]
+    end
+    
+    CFBD --> INGEST
+    EA --> NORM
+    DC --> NORM
+    NFL --> INGEST
+    MO --> INGEST
+    
+    NORM --> INGEST
+    INGEST --> CACHE
+    CACHE --> BUILD
+    BUILD --> CALC
+    CALC --> MULT
+    MULT --> DB
+    DB --> API
+    API --> UI
+```
 
-## 1) End‑to‑End Pipeline (Bird’s‑Eye View)
+## Data Ingestion Pipeline
+
+```mermaid
+sequenceDiagram
+    participant CLI as CLI/Script
+    participant FS as File System
+    participant NORM as Team Normalizer
+    participant DB as Appwrite
+    participant LOG as Logger
+    
+    CLI->>FS: Load EA Ratings (CSV/JSON)
+    CLI->>FS: Load Depth Charts
+    CLI->>FS: Load NFL Mock Draft
+    CLI->>FS: Load Manual Overrides
+    
+    FS->>NORM: Normalize team names
+    Note over NORM: Maps variations like<br/>"Ohio State Buckeyes"<br/>to "Ohio State"
+    
+    NORM->>DB: Check model_inputs collection
+    alt Data exists in DB
+        DB-->>CLI: Return existing data
+    else Data missing
+        CLI->>DB: Store in model_inputs
+    end
+    
+    CLI->>LOG: Write missing inputs report
+    Note over LOG: exports/missing_inputs_report_2025.json
+```
+
+## Enhanced Projection Algorithm
+
+```mermaid
+flowchart TD
+    START[Start Projection Run] --> LOAD[Load All Data Sources]
+    
+    LOAD --> CHECK{Check Each<br/>Data Source}
+    
+    CHECK --> EA_CHECK{EA Ratings<br/>Found?}
+    EA_CHECK -->|Yes| EA_APPLY[Apply EA Multiplier]
+    EA_CHECK -->|No| EA_DEFAULT[Use Base Rating]
+    
+    CHECK --> DC_CHECK{Depth Chart<br/>Found?}
+    DC_CHECK -->|Yes| DC_APPLY[Apply Depth Multiplier]
+    DC_CHECK -->|No| DC_FALLBACK[Search by Name Only]
+    
+    DC_FALLBACK --> DC_FOUND{Found in<br/>Any Team?}
+    DC_FOUND -->|Yes| DC_APPLY
+    DC_FOUND -->|No| DC_ESTIMATE[Estimate from Position]
+    
+    CHECK --> NFL_CHECK{NFL Draft<br/>Data?}
+    NFL_CHECK -->|Yes| NFL_APPLY[Apply Draft Capital]
+    NFL_CHECK -->|No| NFL_SKIP[Skip Draft Bonus]
+    
+    EA_APPLY --> TALENT[Calculate Talent Multiplier]
+    EA_DEFAULT --> TALENT
+    DC_APPLY --> TALENT
+    DC_ESTIMATE --> TALENT
+    NFL_APPLY --> TALENT
+    NFL_SKIP --> TALENT
+    
+    TALENT --> OVERRIDE{Manual<br/>Override?}
+    OVERRIDE -->|Yes| APPLY_OVERRIDE[Apply Override Values]
+    OVERRIDE -->|No| USE_CALC[Use Calculated Values]
+    
+    APPLY_OVERRIDE --> STATS[Generate Statline]
+    USE_CALC --> STATS
+    
+    STATS --> POINTS[Calculate Fantasy Points]
+    POINTS --> SAVE[Save to DB]
+```
+
+## Depth Chart Multiplier Logic
 
 ```mermaid
 flowchart LR
-  A[External Sources] --> B[Ingestion]
-  B --> C[Projection Engine]
-  C --> D[Persistence]
-  D --> E[API]
-  E --> F[Draft UI]
-
-  subgraph Sources
-    S1[CFBD]
-    S2[ESPN]
-    S3[EA Ratings and Draft]
-  end
-  S1 --> B
-  S2 --> B
-  S3 --> B
+    subgraph "QB Multipliers"
+        QB1[QB1: 100%]
+        QB2[QB2: 25%]
+        QB3[QB3+: 5%]
+    end
+    
+    subgraph "RB Multipliers"
+        RB1[RB1: 100%]
+        RB2[RB2: 60%]
+        RB3[RB3: 40%]
+        RB4[RB4: 25%]
+        RB5[RB5+: 15%]
+    end
+    
+    subgraph "WR Multipliers"
+        WR1[WR1: 100%]
+        WR2[WR2: 80%]
+        WR3[WR3: 60%]
+        WR4[WR4: 35%]
+        WR5[WR5+: 20%]
+    end
+    
+    subgraph "TE Multipliers"
+        TE1[TE1: 100%]
+        TE2[TE2: 35%]
+        TE3[TE3+: 15%]
+    end
 ```
 
----
-
-## 2) Batch Projection Run — Sequence
-
-```mermaid
-sequenceDiagram
-  autonumber
-  participant CLI as CLI or CRON
-  participant ENG as Unified Projections
-  participant DB as Appwrite DB
-  participant LOG as Run Metrics
-
-  CLI->>ENG: Start job (season and filters)
-  ENG->>DB: Read model_inputs and player docs
-  loop each player
-    ENG->>ENG: Build context depth usage pace talent
-    ENG->>ENG: Compute statline -> score points
-    ENG->>DB: Update college_players fantasy_points
-    ENG->>DB: Upsert projections_yearly and projections_weekly
-  end
-  ENG->>LOG: Write run metrics and summary
-  ENG->>CLI: Return success and counts
-```
-
----
-
-## 3) Draft UI Fetch/Render — Sequence
-
-```mermaid
-sequenceDiagram
-  autonumber
-  participant U as User
-  participant UI as Draft UI
-  participant API as Players API
-  participant SVC as Projections Service
-  participant DB as Appwrite DB
-
-  U->>UI: Open draft page
-  UI->>API: GET players with filters
-  API->>SVC: getPlayers
-  SVC->>DB: Query players
-  DB-->>SVC: Player documents
-  SVC-->>API: Map to DTO
-  API-->>UI: JSON list of players
-  UI->>UI: Render list
-```
-
-### 3.1) API Query Modes & Fallback
+## Data Source Priority & Fallback
 
 ```mermaid
 flowchart TD
-  A[Incoming query params] --> B{Top 200?}
-  B -- Yes --> B1[Apply position filter for fantasy positions and cap limit]
-  B -- No --> B2[If single position provided apply it]
-
-  A --> C{Conference provided?}
-  C -- Yes --> C1[Apply conference filter]
-  C -- No --> C2[Default to Power 4 conferences]
-
-  A --> D{Team or school provided?}
-  D -- Team --> D1[Filter by team]
-  D -- School --> D2[Filter by school]
-
-  A --> E{Search provided?}
-  E -- Yes --> E1[Full text search on name]
-  E -- No --> E2[Skip]
-
-  A --> F{Order by name?}
-  F -- Yes --> F1[Order ascending by name]
-  F -- No --> F2[Order by fantasy_points descending]
-
-  G[Primary query] --> H{Success?}
-  H -- Yes --> R[Return documents]
-  H -- No --> FB[Fallback: reduce filters and keep ordering] --> R
+    PLAYER[Player to Project] --> DEPTH[Get Depth Rank]
+    
+    DEPTH --> D1{Manual Override?}
+    D1 -->|Yes| USE_MANUAL[Use Override Depth]
+    D1 -->|No| D2{Team Match Found?}
+    
+    D2 -->|Yes| USE_DEPTH[Use Depth Chart Rank]
+    D2 -->|No| D3{Name Found<br/>Any Team?}
+    
+    D3 -->|Yes| USE_FOUND[Use Found Rank]
+    D3 -->|No| D4{Has Prior<br/>Fantasy Points?}
+    
+    D4 -->|Yes > 50| EST[Estimate from Points]
+    D4 -->|No or < 50| DEFAULT[Default by Position<br/>QB:2, RB/WR:3, TE:2]
+    
+    USE_MANUAL --> CONTINUE[Continue to Talent]
+    USE_DEPTH --> CONTINUE
+    USE_FOUND --> CONTINUE
+    EST --> CONTINUE
+    DEFAULT --> CONTINUE
 ```
 
-Notes:
-- top200 mode caps results to 200 and ensures fantasy positions filter is applied.
-- Primary query prioritizes projection ordering (`fantasy_points` DESC). Name ordering is supported via `orderBy=name`.
-- Fallback reduces filter complexity for non-indexed environments and maintains projection ordering.
-
----
-
-## 4) Data Model (ER‑style overview)
+## Talent Multiplier Calculation
 
 ```mermaid
-erDiagram
-  COLLEGE_PLAYERS {
-    string id PK
-    string name
-    string position
-    string team
-    string conference
-    string jerseyNumber
-    string year
-    string height
-    string weight
-    string depth_chart_order
-    string fantasy_points
-    string statline_simple
-    string updatedAt
-  }
-
-  PROJECTIONS_YEARLY {
-    string id PK
-    string player_id FK
-    string season
-    string fantasy_points_simple
-    string statline_json
-    string games_played_est
-    string updatedAt
-  }
-
-  PROJECTIONS_WEEKLY {
-    string id PK
-    string player_id FK
-    string season
-    string week
-    string fantasy_points_simple
-    string statline_json
-    string updatedAt
-  }
-
-  MODEL_INPUTS {
-    string id PK
-    string player_id FK
-    string season
-    string depth_chart_json
-    string team_pace_json
-    string pass_rush_rates_json
-    string opponent_grades_by_pos_json
-    string injury_reports_json
-    string vegas_json
-    string manual_overrides_json
-    string ea_overall
-    string ea_speed
-    string draft_capital_score
-    string notes
-    string updatedAt
-  }
-
-  COLLEGE_PLAYERS ||--o{ PROJECTIONS_YEARLY : has
-  COLLEGE_PLAYERS ||--o{ PROJECTIONS_WEEKLY : has
-  COLLEGE_PLAYERS ||--|| MODEL_INPUTS : uses
+flowchart LR
+    subgraph "Input Factors"
+        EA[EA Rating<br/>0.90-1.15x]
+        NFL[NFL Draft Capital<br/>0.97-1.03x]
+        DEPTH[Depth Rank<br/>Variable by Pos]
+        MANUAL[Manual Override<br/>Direct Set]
+    end
+    
+    subgraph "Calculation"
+        BASE[Base: 1.0x]
+        CALC[Combined Multiplier]
+    end
+    
+    subgraph "Output Range"
+        MIN[Min: 0.90x]
+        MAX[Max: 1.42x]
+    end
+    
+    EA --> CALC
+    NFL --> CALC
+    DEPTH --> CALC
+    MANUAL --> CALC
+    BASE --> CALC
+    CALC --> MIN
+    CALC --> MAX
 ```
 
----
-
-### Fields Legend (SSOT‑mapped)
-
-| Collection | Key Fields | Notes |
-|---|---|---|
-| `college_players` | `$id`, `name`, `position`, `team`, `conference` | Primary projection source: `fantasy_points` DESC for UI ranking |
-|  | `fantasy_points` | Calculated by pipeline; used by `/api/draft/players` ordering |
-|  | `depth_chart_order` | 1..5, used for depth multipliers and team depth sorting |
-|  | `statline_simple` | JSON string (serialized) for simple per‑season statline |
-| `projections_yearly` | `$id`, `player_id`, `season`, `fantasy_points_simple`, `statline_json` | Analytics/longitudinal storage; not required for UI list |
-| `projections_weekly` | `$id`, `player_id`, `season`, `week`, `fantasy_points_simple`, `statline_json` | Weekly breakdowns; optional for draft list |
-| `model_inputs` | `$id`, `season`, `depth_chart_json`, `team_pace_json`, `manual_overrides_json` | Pipeline inputs and overrides staging |
-
----
-
-## 5) Troubleshooting & Verification Flow
+## File Organization Structure
 
 ```mermaid
 flowchart TD
-  A[Draft UI empty?] --> B{Env loaded}
-  B -- No --> B1[Fix env and restart]
-  B -- Yes --> C{Schema in sync}
-  C -- No --> C1[Run schema sync]
-  C -- Yes --> D{Projections exist}
-  D -- No --> D1[Run projections]
-  D -- Yes --> E{API sorted}
-  E -- No --> E1[Check filters and order]
-  E -- Yes --> F[UI OK]
+    ROOT[Project Root]
+    
+    ROOT --> DATA[data/]
+    DATA --> IMPORTS[imports/]
+    
+    IMPORTS --> EA_DIR[ea/2025/]
+    EA_DIR --> EA_FILES[SEC.csv<br/>ACC.csv<br/>Big12.csv<br/>BigTen.csv]
+    
+    IMPORTS --> DC_DIR[depth-charts-2025/]
+    DC_DIR --> DC_FILES[sec_depth_2025.json<br/>acc_depth_2025.json<br/>big12_depth_2025.json<br/>bigten_depth_2025.json]
+    
+    IMPORTS --> NFL_DIR[2026-consensus/]
+    NFL_DIR --> CONSENSUS[consensus_all_real.json]
+    
+    IMPORTS --> OVERRIDES[manual_overrides_2025.json]
+    IMPORTS --> ALIASES[team_aliases_expanded.json]
+    
+    ROOT --> EXPORTS[exports/]
+    EXPORTS --> REPORTS[missing_inputs_report_2025.json<br/>college_players_sync_report.json]
 ```
 
+## API Query Flow
+
+```mermaid
+sequenceDiagram
+    participant UI as Draft UI
+    participant API as /api/draft/players
+    participant SVC as Player Service
+    participant DB as Appwrite
+    
+    UI->>API: GET with filters
+    Note over API: Filters: conference,<br/>position, team, search
+    
+    API->>SVC: buildPlayerQuery()
+    
+    SVC->>DB: Query college_players
+    Note over DB: Uses indexes:<br/>- conference_rankings_idx<br/>- team_depth_chart_idx
+    
+    DB-->>SVC: Player documents
+    
+    SVC->>SVC: Apply projections
+    Note over SVC: Sort by fantasy_points DESC<br/>or name ASC
+    
+    SVC-->>API: Enhanced players
+    API-->>UI: JSON response
+    
+    UI->>UI: Render draft board
+```
+
+## Troubleshooting Decision Tree
+
+```mermaid
+flowchart TD
+    ISSUE[Projection Issues] --> TYPE{What's Wrong?}
+    
+    TYPE -->|Low/Wrong Values| CHECK_DATA[Check Data Sources]
+    TYPE -->|Missing Players| CHECK_SYNC[Check Player Sync]
+    TYPE -->|Not Updating| CHECK_CACHE[Check Cache/Refresh]
+    
+    CHECK_DATA --> D1{Depth Chart<br/>Present?}
+    D1 -->|No| ADD_DC[Add depth chart file]
+    D1 -->|Yes| D2{EA Ratings<br/>Present?}
+    
+    D2 -->|No| ADD_EA[Add EA ratings file]
+    D2 -->|Yes| D3{Team Names<br/>Match?}
+    
+    D3 -->|No| FIX_NAMES[Update team_aliases.json]
+    D3 -->|Yes| CHECK_OVERRIDE[Add manual override]
+    
+    CHECK_SYNC --> S1{Players in DB?}
+    S1 -->|No| RUN_SYNC[Run sync script]
+    S1 -->|Yes| CHECK_ELIGIBLE[Check eligible flag]
+    
+    CHECK_CACHE --> C1{Fresh Run?}
+    C1 -->|No| RUN_PROJ[Run projections]
+    C1 -->|Yes| CLEAR_CACHE[Clear browser cache]
+```
+
+## Key Improvements (January 2025)
+
+### 1. Data Source Integration
+- ✅ Unified EA ratings format (one CSV per conference)
+- ✅ Standardized depth chart JSON structure
+- ✅ 2026 NFL mock draft consensus integration
+- ✅ Manual override system for fine-tuning
+
+### 2. Fallback Mechanisms
+- ✅ Team name normalization with aliases
+- ✅ Depth rank fallback: team → name-only → position default
+- ✅ EA ratings fallback: exact → normalized → skip
+- ✅ Progressive data loading: DB → files → defaults
+
+### 3. Projection Accuracy
+- ✅ Position-specific depth multipliers
+- ✅ Talent multiplier range: 0.90x - 1.42x
+- ✅ Realistic point ranges:
+  - QBs: 230-255 pts
+  - RBs: 290-330 pts
+  - WRs: 220-240 pts
+  - TEs: 140-180 pts
+
+### 4. Performance Optimizations
+- ✅ Batch processing (3 teams at a time)
+- ✅ Pagination for large queries
+- ✅ Indexed database queries
+- ✅ Cached model inputs
+
+## Running Projections
+
+```bash
+# Run for all Power 4
+npx tsx functions/unified-talent-projections/index.ts --season=2025
+
+# Run for specific conference
+npx tsx functions/unified-talent-projections/index.ts --season=2025 --conference='SEC'
+
+# Run for specific teams
+npx tsx functions/unified-talent-projections/index.ts --season=2025 --teams='Alabama,Georgia,LSU'
+
+# Check specific player
+npx tsx scripts/check-player-projections.ts --name='Sam Leavitt'
+```
+
+## Data File Locations
+
+| Data Type | Location | Format |
+|-----------|----------|--------|
+| EA Ratings | `data/imports/ea/2025/*.csv` | CSV with columns: Name, Team, Position, Overall, Speed, etc. |
+| Depth Charts | `data/imports/depth-charts-2025/*_depth_2025.json` | JSON with team/position structure |
+| NFL Consensus | `data/imports/2026-consensus/consensus_all_real.json` | JSON with player rankings |
+| Manual Overrides | `data/imports/manual_overrides_2025.json` | JSON with player-specific adjustments |
+| Team Aliases | `data/team_aliases_expanded.json` | JSON mapping team name variations |
+
 ---
 
-### Notes
-
-* **Primary source for the Draft UI** is `college_players.fantasy_points`. Yearly/weekly collections are useful for analytics and comparison but are not required to render the ranked draft list.
-* The `model_inputs` collection acts as the staging area for all inputs (depth, usage priors, team pace/efficiency, talent signals). The engine uses it to build per‑player contexts before scoring.
-* If projections appear stale, re‑run the batch job, then invalidate any local caches (dev server restart is usually enough).
-
----
-
-### Indexes used by API queries (for performance)
-
-- college_players.conference_rankings_idx
-  - Attributes: `conference`, `position`, `fantasy_points`
-  - Order: `ASC`, `ASC`, `DESC`
-  - Query patterns: `conference = ? AND position = ? ORDER BY fantasy_points DESC`
-  - Usage: high (primary for rankings)
-
-- college_players.team_depth_chart_idx
-  - Attributes: `team`, `position`, `depth_chart_order`
-  - Order: `ASC`, `ASC`, `ASC`
-  - Query patterns: `team = ? AND position = ? ORDER BY depth_chart_order ASC`
-  - Usage: medium (depth-chart views and pipeline context)
-
-- Name search uses Appwrite full‑text on `name` as configured (when `Query.search('name', search)` is present).
-
-
+*Last Updated: January 2025*
