@@ -77,7 +77,7 @@ export default function AdminDashboard() {
               <div className="font-semibold">🧮 Algorithm Flow</div>
               <div className="text-sm text-purple-100">Step-by-step projection logic</div>
             </button>
-            
+
             <button
               onClick={() => loadDiagram('depth-multipliers', '📊 Depth Multipliers')}
               className="px-4 py-3 rounded-lg bg-green-600 text-white transition-colors hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
@@ -123,7 +123,7 @@ export default function AdminDashboard() {
               <div className="font-semibold">📁 Repository Structure</div>
               <div className="text-sm text-indigo-100">Project folders & organization</div>
             </button>
-            
+
             <button
               onClick={() => loadDiagram('system-architecture', '🏛️ System Architecture')}
               className="px-4 py-3 rounded-lg bg-teal-600 text-white transition-colors hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
@@ -183,7 +183,7 @@ export default function AdminDashboard() {
               <div className="font-semibold">🎮 Admin Operations</div>
               <div className="text-sm text-red-100">User & league management</div>
             </button>
-            
+
             <button
               onClick={() => loadDiagram('commissioner-settings', '⚙️ Commissioner Settings')}
               className="px-4 py-3 rounded-lg bg-orange-600 text-white transition-colors hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
@@ -206,16 +206,16 @@ export default function AdminDashboard() {
         <div className="mb-10 flex flex-wrap gap-3">
           {debugInfo && (
             <>
-              <button
-                onClick={() => {
-                  const debugText = JSON.stringify(debugInfo, null, 2);
-                  navigator.clipboard.writeText(debugText);
-                  alert('Debug info copied to clipboard!');
-                }}
-                className="px-4 py-2 rounded-lg bg-yellow-600 text-white transition-colors hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-white/80"
-              >
-                📋 Copy Debug Info
-              </button>
+            <button
+              onClick={() => {
+                const debugText = JSON.stringify(debugInfo, null, 2);
+                navigator.clipboard.writeText(debugText);
+                alert('Debug info copied to clipboard!');
+              }}
+              className="px-4 py-2 rounded-lg bg-yellow-600 text-white transition-colors hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-white/80"
+            >
+              📋 Copy Debug Info
+            </button>
               <button
                 onClick={() => setDebugInfo(null)}
                 className="px-4 py-2 rounded-lg bg-gray-600 text-white transition-colors hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-white/80"
