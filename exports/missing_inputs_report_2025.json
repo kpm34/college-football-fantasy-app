@@ -6,47 +6,7 @@
   },
   "depth_chart": {
     "teams_without_depth_chart": [
-      "Arizona State Sun Devils",
-      "Arizona Wildcats",
-      "B Y U Cougars",
-      "Baylor Bears",
-      "Cincinnati Bearcats",
-      "Colorado Buffaloes",
-      "Houston Cougars",
-      "Illinois Fighting Illini",
-      "Indiana Hoosiers",
-      "Miami",
-      "Iowa State Cyclones",
-      "Kansas Jayhawks",
-      "Kansas State Wildcats",
-      "Iowa Hawkeyes",
-      "Maryland Terrapins",
-      "Michigan State Spartans",
-      "L S U",
-      "N C State",
-      "Michigan Wolverines",
-      "Minnesota Golden Gophers",
-      "Nebraska Cornhuskers",
-      "Northwestern Wildcats",
-      "Ohio State Buckeyes",
-      "Mississippi",
-      "S M U",
-      "Oklahoma State Cowboys",
-      "Oregon Ducks",
-      "Penn State Nittany Lions",
-      "Purdue Boilermakers",
-      "Rutgers Scarlet Knights",
-      "South Carolina Gamecocks",
-      "T C U Horned Frogs",
-      "Texas Tech Red Raiders",
-      "U C F Knights",
-      "Utah Utes",
-      "U C L A Bruins",
-      "U S C Trojans",
-      "Texas A& M",
-      "West Virginia Mountaineers",
-      "Washington Huskies",
-      "Wisconsin Badgers"
+      "South Carolina Gamecocks"
     ],
     "sample_counts": [
       [
@@ -78,7 +38,7 @@
         9
       ],
       [
-        "miami (fl)",
+        "miami",
         9
       ],
       [

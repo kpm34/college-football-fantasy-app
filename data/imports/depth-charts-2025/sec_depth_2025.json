@@ -72,7 +72,7 @@
     "WR4": "David Washington Jr."
   },
   {
-    "team": "LSU",
+    "team": "L S U",
     "QB1": "Garrett Nussmeier",
     "QB2": "Michael Van Buren Jr.",
     "RB1": "Caden Durham",
@@ -84,7 +84,7 @@
     "WR4": "Barion Brown"
   },
   {
-    "team": "Ole Miss",
+    "team": "Mississippi",
     "QB1": "Austin Simmons",
     "QB2": "Trinidad Chambliss",
     "RB1": "Logan Diggs",
@@ -156,7 +156,7 @@
     "WR4": "Parker Livingstone"
   },
   {
-    "team": "Texas A&M",
+    "team": "Texas A& M",
     "QB1": "Marcel Reed",
     "QB2": "Miles O'Neill",
     "RB1": "Le'Veon Moss",
@@ -192,5 +192,3 @@
     "WR4": "Martel Hight"
   }
 ]
-
-
