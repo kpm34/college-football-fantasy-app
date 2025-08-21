@@ -41,73 +41,25 @@ export async function GET(request: NextRequest) {
           <div class="spinner"></div>
           <p>Completing your login...</p>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0"></script>
-        <script type="module">
-          async function syncSession() {
-            try {
-              const { Client, Account } = window.Appwrite;
-
-              // Init client – use the same endpoint / project as the main app
-              const client = new Client()
-                .setEndpoint('https://nyc.cloud.appwrite.io/v1')
-                .setProject('college-football-fantasy-app');
-
-              const account = new Account(client);
-
-              // Get the current user – this proves the OAuth session succeeded and also gives us userId
-              const user = await account.get();
-
-              // Fetch current session list to grab the session ID for this browser
-              const { sessions } = await account.listSessions();
-              const current = sessions.find((s) => s.current) || sessions[0];
-
-              if (!current) throw new Error('No active session found');
-
-              let uidParam = null;
-              let secretParam = null;
-
-              // First look at query string
-              const urlParams = new URLSearchParams(window.location.search);
-              uidParam = urlParams.get('userId');
-              secretParam = urlParams.get('secret');
-
-              // Some Appwrite versions append as hash fragment (#userId=...&secret=...)
-              if (!secretParam && window.location.hash) {
-                const hashParams = new URLSearchParams(window.location.hash.substring(1));
-                uidParam = uidParam || hashParams.get('userId');
-                secretParam = hashParams.get('secret');
-              }
-
-              const payload = { userId: uidParam || user.$id, secret: secretParam || current.secret };
-
-              await fetch('/api/auth/sync-oauth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify(payload)
-              });
-
-              // Also drop a short-lived client cookie so useAuth hook forces re-check
-              document.cookie = 'oauth_success=true; path=/; max-age=120; SameSite=Lax';
-              window.location.href = '/dashboard';
-            } catch (err) {
-              console.error('OAuth sync error:', err);
-              setTimeout(() => {
-                alert('Login failed. Please try again.');
-                window.location.href = '/login';
-              }, 500);
+        <script>
+          (function () {
+            const params = new URLSearchParams(location.search || location.hash.substring(1));
+            const userId = params.get('userId');
+            const secret = params.get('secret');
+            if (!userId || !secret) {
+              location.replace('/login');
+              return;
             }
-          }
-          
-          // Add a timeout to prevent infinite loading
-          setTimeout(() => {
-            const container = document.querySelector('.container');
-            if (container && container.querySelector('.spinner')) {
-              container.innerHTML = '<p>Login is taking longer than expected...</p><p><a href="/login" style="color: #3B82F6;">Return to login</a></p>';
-            }
-          }, 10000);
-          
-          syncSession();
+            fetch('/api/auth/sync-oauth', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ userId, secret })
+            }).then(() => {
+              document.cookie = 'oauth_success=1;path=/;max-age=120;SameSite=Lax';
+              location.replace('/dashboard');
+            }).catch(() => location.replace('/login'));
+          }());
         </script>
       </body>
     </html>
