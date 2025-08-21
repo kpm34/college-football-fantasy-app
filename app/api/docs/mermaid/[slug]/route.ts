@@ -37,6 +37,7 @@ export async function GET(
     'data-flow': 'docs/DATA_FLOW.md',
     'project-map': 'docs/PROJECT_MAP.md',
     'system-map': 'docs/SYSTEM_MAP.md',
+    'projections': 'docs/draft/PROJECTIONS_DIAGRAMS.md',
   }
 
   const rel = fileMap[slug]

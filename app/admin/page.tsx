@@ -65,6 +65,21 @@ export default function AdminDashboard() {
             
             <button
               onClick={async () => {
+                const res = await fetch('/api/docs/mermaid/projections', { cache: 'no-store' })
+                const data = await res.json()
+                setDebugInfo({ endpoint: 'projections', response: data, status: res.status })
+                setShowDiagram({ slug: 'project-map', title: '📈 Projection Diagrams' })
+                setCharts(data.charts || [])
+                setLastUpdated(data.updatedAt || '')
+              }}
+              className="px-4 py-3 rounded-lg bg-pink-600 text-white transition-colors hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+            >
+              <div className="font-semibold">📈 Projection Diagrams</div>
+              <div className="text-sm text-pink-100">End-to-end projections pipeline</div>
+            </button>
+            
+            <button
+              onClick={async () => {
                 const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
                 const data = await res.json()
                 setDebugInfo({ endpoint: 'project-map-dataflow', response: data, status: res.status })

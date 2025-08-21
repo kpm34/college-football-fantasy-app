@@ -5,8 +5,8 @@ import { env, COLLECTIONS as ENV_COLLECTIONS } from '@/core/config/environment';
 const client = new Client();
 
 client
-  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
-  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app');
+  .setEndpoint((process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1').trim())
+  .setProject((process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app').trim());
 
 // Export Appwrite services for data operations only
 // Authentication is handled through API routes

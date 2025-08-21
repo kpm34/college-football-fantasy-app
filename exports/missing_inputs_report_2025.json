@@ -1,0 +1,223 @@
+{
+  "season": 2025,
+  "totals": {
+    "teams": 67,
+    "players": 2314
+  },
+  "depth_chart": {
+    "teams_without_depth_chart": [
+      "Arizona State Sun Devils",
+      "Arizona Wildcats",
+      "B Y U Cougars",
+      "Baylor Bears",
+      "Cincinnati Bearcats",
+      "Colorado Buffaloes",
+      "Houston Cougars",
+      "Illinois Fighting Illini",
+      "Indiana Hoosiers",
+      "Miami",
+      "Iowa State Cyclones",
+      "Kansas Jayhawks",
+      "Kansas State Wildcats",
+      "Iowa Hawkeyes",
+      "Maryland Terrapins",
+      "Michigan State Spartans",
+      "L S U",
+      "N C State",
+      "Michigan Wolverines",
+      "Minnesota Golden Gophers",
+      "Nebraska Cornhuskers",
+      "Northwestern Wildcats",
+      "Ohio State Buckeyes",
+      "Mississippi",
+      "S M U",
+      "Oklahoma State Cowboys",
+      "Oregon Ducks",
+      "Penn State Nittany Lions",
+      "Purdue Boilermakers",
+      "Rutgers Scarlet Knights",
+      "South Carolina Gamecocks",
+      "T C U Horned Frogs",
+      "Texas Tech Red Raiders",
+      "U C F Knights",
+      "Utah Utes",
+      "U C L A Bruins",
+      "U S C Trojans",
+      "Texas A& M",
+      "West Virginia Mountaineers",
+      "Washington Huskies",
+      "Wisconsin Badgers"
+    ],
+    "sample_counts": [
+      [
+        "boston college",
+        9
+      ],
+      [
+        "california",
+        9
+      ],
+      [
+        "clemson",
+        9
+      ],
+      [
+        "duke",
+        9
+      ],
+      [
+        "florida state",
+        9
+      ],
+      [
+        "georgia tech",
+        9
+      ],
+      [
+        "louisville",
+        9
+      ],
+      [
+        "miami (fl)",
+        9
+      ],
+      [
+        "north carolina",
+        9
+      ],
+      [
+        "nc state",
+        9
+      ]
+    ]
+  },
+  "ea_ratings": {
+    "teams_without_ea": [
+      "California",
+      "Arizona State Sun Devils",
+      "Arizona Wildcats",
+      "B Y U Cougars",
+      "Baylor Bears",
+      "Cincinnati Bearcats",
+      "Colorado Buffaloes",
+      "Houston Cougars",
+      "Illinois Fighting Illini",
+      "Indiana Hoosiers",
+      "Iowa State Cyclones",
+      "Kansas Jayhawks",
+      "Kansas State Wildcats",
+      "Iowa Hawkeyes",
+      "Maryland Terrapins",
+      "Michigan State Spartans",
+      "L S U",
+      "N C State",
+      "Michigan Wolverines",
+      "Minnesota Golden Gophers",
+      "Nebraska Cornhuskers",
+      "Northwestern Wildcats",
+      "Ohio State Buckeyes",
+      "Mississippi",
+      "S M U",
+      "Oklahoma State Cowboys",
+      "Oregon Ducks",
+      "Penn State Nittany Lions",
+      "Purdue Boilermakers",
+      "Rutgers Scarlet Knights",
+      "South Carolina Gamecocks",
+      "T C U Horned Frogs",
+      "Texas Tech Red Raiders",
+      "U C F Knights",
+      "Utah Utes",
+      "U C L A Bruins",
+      "U S C Trojans",
+      "Texas A& M",
+      "West Virginia Mountaineers",
+      "Washington Huskies",
+      "Wisconsin Badgers"
+    ],
+    "sample_present_counts": [
+      [
+        "Boston College",
+        7
+      ],
+      [
+        "Alabama",
+        10
+      ],
+      [
+        "Arkansas",
+        7
+      ],
+      [
+        "Auburn",
+        11
+      ],
+      [
+        "Clemson",
+        7
+      ],
+      [
+        "Duke",
+        7
+      ],
+      [
+        "Florida State",
+        5
+      ],
+      [
+        "Georgia Tech",
+        7
+      ],
+      [
+        "Florida",
+        10
+      ],
+      [
+        "Georgia",
+        10
+      ]
+    ],
+    "sample_missing_counts": [
+      [
+        "Boston College",
+        33
+      ],
+      [
+        "California",
+        34
+      ],
+      [
+        "Arizona State Sun Devils",
+        30
+      ],
+      [
+        "Arizona Wildcats",
+        33
+      ],
+      [
+        "B Y U Cougars",
+        36
+      ],
+      [
+        "Baylor Bears",
+        35
+      ],
+      [
+        "Cincinnati Bearcats",
+        30
+      ],
+      [
+        "Alabama",
+        30
+      ],
+      [
+        "Arkansas",
+        28
+      ],
+      [
+        "Auburn",
+        21
+      ]
+    ]
+  }
+}

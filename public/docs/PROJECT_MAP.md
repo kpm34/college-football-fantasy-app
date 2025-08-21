@@ -177,6 +177,21 @@ graph TB
 
 ---
 
+### API Query Annotations (Players & Projections)
+
+- GET `/api/draft/players`
+  - Filters applied (primary path):
+    - `Query.equal('conference', ['SEC','Big Ten','Big 12','ACC'])` when no specific conference provided
+    - `Query.equal('position', ['QB','RB','WR','TE','K'])` for top200 mode, or `Query.equal('position', position)` if provided
+    - `Query.search('name', search)` when provided
+    - Ordering: `Query.orderDesc('fantasy_points')` by default, or `Query.orderAsc('name')` when `orderBy=name`
+    - Pagination: `Query.limit(N)`, `Query.offset(0)`
+  - Fallback path (reduced filters) if primary query fails due to missing indexes:
+    - Always `Query.limit`, `Query.offset`
+    - Add basic `Query.equal` filters present in request
+    - Always `Query.orderDesc('fantasy_points')`
+  - Primary source collection: `college_players` (field: `fantasy_points`)
+
 ## 🔧 DRAFT ROOM Button Time Window Flow
 
 ```mermaid

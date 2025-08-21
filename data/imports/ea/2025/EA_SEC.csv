@@ -1,0 +1,145 @@
+team,slot,player,ovr,spd,agi
+Alabama,QB1,Ty Simpson,82,86,83
+Alabama,QB2,Austin Mack,80.0,75.0,72.0
+Alabama,RB1,Jam Miller,88,89,93
+Alabama,RB2,Richard Young,83,92,90
+Alabama,RB3,Dre Washington,83.0,87.0,80.0
+Alabama,WR1,Ryan Williams,95,96,99
+Alabama,WR2,Germie Bernard,87,91,89
+Alabama,WR3,Isaiah Horton,87.0,89.0,90.0
+Alabama,WR4,Bubba Hampton,69.0,92.0,91.0
+Alabama,TE1,Josh Cuevas,80.0,79.0,77.0
+Alabama,TE2,Jack Sammarco,65.0,76.0,79.0
+LSU,QB1,Garrett Nussmeier,92,76,78
+LSU,QB2,Michael Van Buren Jr.,76.0,85.0,86.0
+LSU,RB1,Caden Durham,89,95,93
+LSU,RB2,Harlem Berry,83,94,95
+LSU,RB3,Kaleb Jackson,83.0,88.0,82.0
+LSU,WR1,Aaron Anderson,89,94,96
+LSU,WR2,Nic Anderson,88,91,89
+LSU,WR3,Barion Brown,86.0,99.0,93.0
+LSU,WR4,Zavion Thomas,81.0,93.0,95.0
+LSU,TE1,Bauer Sharp,85.0,82.0,81.0
+LSU,TE2,Trey'Dez Green,82.0,87.0,87.0
+Texas,QB1,Arch Manning,90,87,86
+Texas,RB1,Quintrevion Wisner,91,90,92
+Texas,RB2,CJ Baxter,87,91,90
+Texas,RB3,Jerrick Gibson,85.0,93.0,93.0
+Texas,WR1,DeAndre Moore Jr.,87,90,92
+Texas,WR2,Ryan Wingo,86,96,93
+Texas,WR3,Emmett Mosley V,84.0,90.0,89.0
+Texas,WR4,Kaliq Lockett,81.0,92.0,93.0
+Texas,TE1,Jack Endries,90.0,83.0,81.0
+Georgia,QB1,Gunner Stockton,82,81,83
+Georgia,RB1,Nate Frazier,88,93,93
+Georgia,RB2,Josh McCray,86,84,80
+Georgia,RB3,Roderick Robinson II,84.0,88.0,83.0
+Georgia,WR1,Zachariah Branch,88,97,98
+Georgia,WR2,Dillon Bell,86,88,90
+Georgia,WR3,Noah Thomas,86.0,92.0,88.0
+Georgia,WR4,Colbie Young,84.0,87.0,87.0
+Georgia,TE1,Oscar Delp,90.0,87.0,86.0
+Georgia,TE2,Lawson Luckie,85.0,83.0,83.0
+Arkansas,QB1,Taylen Green,86,91,88
+Arkansas,RB1,Braylen Russell,83,87,76
+Arkansas,RB2,Mike Washington Jr.,83,87,80
+Arkansas,WR1,O'Mega Blake,87,92,88
+Arkansas,WR2,Kam Shanks,83,91,91
+Arkansas,WR3,Raylen Sharpe,82.0,92.0,90.0
+Arkansas,WR4,Jalen Brown,80.0,96.0,
+Arkansas,TE2,Ashton Ngo,68.0,75.0,73.0
+Auburn,QB1,Jackson Arnold,84,83,84
+Auburn,QB2,Ashton Daniels,80.0,84.0,85.0
+Auburn,RB1,Damari Alston,83,88,87
+Auburn,RB2,Durell Robinson,83,88,86
+Auburn,RB3,Jeremiah Cobb,83.0,92.0,91.0
+Auburn,WR1,Eric Singleton Jr.,92,94,97
+Auburn,WR2,Cam Coleman,89,93,95
+Auburn,WR3,Malcolm Simmons,79.0,91.0,91.0
+Auburn,WR4,Horatio Fields,77.0,86.0,86.0
+Auburn,TE1,Brandon Frazier,81.0,70.0,67.0
+Auburn,TE2,Preston Howard,81.0,81.0,83.0
+Florida,QB1,DJ Lagway,90,88,90
+Florida,QB2,Aidan Warner,68.0,77.0,80.0
+Florida,RB1,Jadan Baugh,86,88,85
+Florida,RB2,Ja'Kobi Jackson,83,87,81
+Florida,RB3,Treyaun Webb,81.0,87.0,83.0
+Florida,WR1,Eugene Wilson III,89,94,95
+Florida,WR2,J.Michael Sturdivant,85,94,89
+Florida,WR3,Dallas Wilson,80.0,91.0,91.0
+Florida,WR4,Vernell Brown III,80.0,92.0,95.0
+Florida,TE1,Hayden Hansen,79.0,70.0,70.0
+Florida,TE2,Cameron Kossmann,71.0,83.0,75.0
+Kentucky,QB1,Zach Calzada,81,79,77
+Kentucky,RB1,Dante Dowdell,88,89,83
+Kentucky,RB2,Seth McGowan,86,90,85
+Kentucky,RB3,Jamarion Wilcox,84.0,90.0,90.0
+Kentucky,WR1,Kendrick Law,83,97,89
+Kentucky,WR2,Ja'Mori Maclin,81,91,90
+Kentucky,WR3,Troy Stellato,80.0,90.0,90.0
+Kentucky,WR4,J.J. Hester,77.0,92.0,89.0
+Kentucky,TE1,Elijah Brown,77.0,79.0,81.0
+Kentucky,TE2,Josh Kattus,77.0,77.0,81.0
+Missouri,QB1,Beau Pribula,80,84,85
+Missouri,QB2,Sam Horn,77.0,76.0,77.0
+Missouri,RB1,Ahmad Hardy,92,91,96
+Missouri,RB2,Jamal Roberts,81,87,84
+Missouri,RB3,Tavorus Jones,79.0,91.0,88.0
+Missouri,WR1,Kevin Coleman Jr.,90,92,93
+Missouri,WR2,Marquis Johnson,78,95,91
+Missouri,WR4,Brett Norfleet,83.0,82.0,82.0
+Missouri,TE1,Jordon Harris,77.0,77.0,80.0
+Ole Miss,QB1,Austin Simmons,83,82,87
+Ole Miss,RB1,Damien Taylor,89,88,83
+Ole Miss,RB2,Logan Diggs,84,87,85
+Ole Miss,WR1,De'Zhaun Stribling,88,92,88
+Ole Miss,WR2,Cayden Lee,87,94,93
+Ole Miss,WR3,Harrison Wallace III,84.0,89.0,89.0
+Ole Miss,TE1,Luke Hasz,89.0,86.0,84.0
+Ole Miss,TE2,Dae'Quan Wright,86.0,79.0,81.0
+Oklahoma,QB1,John Mateer,91,89,89
+Oklahoma,QB2,Jett Niu,70.0,75.0,77.0
+Oklahoma,RB1,Jaydn Ott,90,91,92
+Oklahoma,RB2,Jovantae Barnes,86,91,91
+Oklahoma,RB3,Xavier Robinson,85.0,88.0,80.0
+Oklahoma,WR1,Deion Burks,88,93,93
+Oklahoma,WR2,Jayden Gibson,83,88,85
+Oklahoma,WR3,Isaiah Sategna,81.0,95.0,93.0
+South Carolina,QB1,LaNorris Sellers,91,89,91
+South Carolina,QB2,Air Noland,77.0,76.0,80.0
+South Carolina,RB1,Rahsul Faison,89,89,88
+South Carolina,RB2,Isaiah Augustave,84,87,81
+South Carolina,RB3,Oscar Adaway III,84.0,86.0,81.0
+South Carolina,WR1,Jared Brown,83,94,91
+South Carolina,WR2,Nyck Harbor,82,99,92
+South Carolina,WR3,Mazeo Bennett Jr.,81.0,92.0,93.0
+South Carolina,WR4,Vandrevius Jacobs,79.0,91.0,89.0
+South Carolina,TE1,Michael Smith,80.0,82.0,85.0
+South Carolina,TE2,Brady Hunt,79.0,83.0,81.0
+Tennessee,QB1,Joey Aguilar,82,83,83
+Tennessee,RB1,Star Thomas,87,87,84
+Tennessee,RB2,DeSean Bishop,84,87,88
+Tennessee,RB3,Peyton Lewis,84.0,94.0,86.0
+Tennessee,WR1,Chris Brazzell II,85,90,89
+Tennessee,WR2,Mike Matthews,81,93,93
+Texas A&M,QB1,Marcel Reed,85,90,90
+Texas A&M,QB2,Miles O'Neill,67.0,71.0,66.0
+Texas A&M,RB1,Le'Veon Moss,89,92,89
+Texas A&M,RB2,Amari Daniels,86,89,86
+Texas A&M,RB3,Rueben Owens,86.0,93.0,92.0
+Texas A&M,WR1,Kevin Concepcion,90,93,93
+Texas A&M,WR2,Terry Bussey,82,94,94
+Texas A&M,WR3,Mario Craver,80.0,92.0,93.0
+Texas A&M,WR4,Izaiah Williams,70.0,90.0,91.0
+Texas A&M,TE1,Amari Niblack,85.0,86.0,87.0
+Texas A&M,TE2,Levi Hancock,69.0,74.0,67.0
+Vanderbilt,QB1,Diego Pavia,88,89,88
+Vanderbilt,QB2,Blaze Berlowitz,69.0,82.0,84.0
+Vanderbilt,RB1,Sedrick Alexander,86,90,89
+Vanderbilt,RB2,AJ Newberry,81,88,86
+Vanderbilt,WR1,Junior Sherrill,83,90,89
+Vanderbilt,WR2,Trent Hudson,80,87,86
+Vanderbilt,WR3,Tristen Brown,68.0,92.0,92.0
+Vanderbilt,WR4,Joseph McVay,66.0,90.0,89.0
+Vanderbilt,TE1,Eli Stowers,93.0,90.0,91.0
+Vanderbilt,TE2,Brycen Coleman,69.0,85.0,89.0

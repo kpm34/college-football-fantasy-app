@@ -1,0 +1,898 @@
+[
+  {
+    "player_name": "Noah Fifita",
+    "school": "Arizona",
+    "ovr": 87,
+    "spd": 79,
+    "agi": 85
+  },
+  {
+    "player_name": "Tommy Trout",
+    "school": "Arizona",
+    "ovr": 79,
+    "spd": 77,
+    "agi": 79
+  },
+  {
+    "player_name": "Ismail Mahdi",
+    "school": "Arizona",
+    "ovr": 87,
+    "spd": 93,
+    "agi": 90
+  },
+  {
+    "player_name": "Kedrick Reescano",
+    "school": "Arizona",
+    "ovr": 83,
+    "spd": 88,
+    "agi": 84
+  },
+  {
+    "player_name": "Luke Wysong",
+    "school": "Arizona",
+    "ovr": 86,
+    "spd": 92,
+    "agi": 91
+  },
+  {
+    "player_name": "Kris Hutson",
+    "school": "Arizona",
+    "ovr": 82,
+    "spd": 93,
+    "agi": 94
+  },
+  {
+    "player_name": "Jeremiah Patterson",
+    "school": "Arizona",
+    "ovr": 76,
+    "spd": 92,
+    "agi": 92
+  },
+  {
+    "player_name": "Keyan Burnett",
+    "school": "Arizona",
+    "ovr": 83,
+    "spd": 82,
+    "agi": 82
+  },
+  {
+    "player_name": "Sam Leavitt",
+    "school": "Arizona State",
+    "ovr": 91,
+    "spd": 84,
+    "agi": 85
+  },
+  {
+    "player_name": "Navi Bruzon",
+    "school": "Arizona State",
+    "ovr": 70,
+    "spd": 85,
+    "agi": 87
+  },
+  {
+    "player_name": "Kanye Udoh",
+    "school": "Arizona State",
+    "ovr": 88,
+    "spd": 88,
+    "agi": 81
+  },
+  {
+    "player_name": "Kyson Brown",
+    "school": "Arizona State",
+    "ovr": 82,
+    "spd": 91,
+    "agi": 86
+  },
+  {
+    "player_name": "Jordyn Tyson",
+    "school": "Arizona State",
+    "ovr": 94,
+    "spd": 91,
+    "agi": 93
+  },
+  {
+    "player_name": "Jalen Moss",
+    "school": "Arizona State",
+    "ovr": 85,
+    "spd": 92,
+    "agi": 91
+  },
+  {
+    "player_name": "Jaren Hamilton",
+    "school": "Arizona State",
+    "ovr": 75,
+    "spd": 94,
+    "agi": 93
+  },
+  {
+    "player_name": "Chamon Metayer",
+    "school": "Arizona State",
+    "ovr": 86,
+    "spd": 80,
+    "agi": 82
+  },
+  {
+    "player_name": "Jake Retzlaff",
+    "school": "BYU",
+    "ovr": 88,
+    "spd": 84,
+    "agi": 85
+  },
+  {
+    "player_name": "Patrick Anderson",
+    "school": "BYU",
+    "ovr": 78,
+    "spd": 85,
+    "agi": 88
+  },
+  {
+    "player_name": "LJ Martin",
+    "school": "BYU",
+    "ovr": 89,
+    "spd": 89,
+    "agi": 84
+  },
+  {
+    "player_name": "Pokaiaua Haunga",
+    "school": "BYU",
+    "ovr": 74,
+    "spd": 88,
+    "agi": 86
+  },
+  {
+    "player_name": "Chase Roberts",
+    "school": "BYU",
+    "ovr": 90,
+    "spd": 90,
+    "agi": 87
+  },
+  {
+    "player_name": "Tiger Bachmeier",
+    "school": "BYU",
+    "ovr": 81,
+    "spd": 88,
+    "agi": 89
+  },
+  {
+    "player_name": "Parker Kingston",
+    "school": "BYU",
+    "ovr": 74,
+    "spd": 96,
+    "agi": 93
+  },
+  {
+    "player_name": "Ethan Erickson",
+    "school": "BYU",
+    "ovr": 71,
+    "spd": 83,
+    "agi": 84
+  },
+  {
+    "player_name": "Sawyer Robertson",
+    "school": "Baylor",
+    "ovr": 88,
+    "spd": 84,
+    "agi": 85
+  },
+  {
+    "player_name": "Parker Vanness",
+    "school": "Baylor",
+    "ovr": 73,
+    "spd": 79,
+    "agi": 79
+  },
+  {
+    "player_name": "Bryson Washington",
+    "school": "Baylor",
+    "ovr": 90,
+    "spd": 90,
+    "agi": 89
+  },
+  {
+    "player_name": "Dawson Pendergrass",
+    "school": "Baylor",
+    "ovr": 85,
+    "spd": 88,
+    "agi": 83
+  },
+  {
+    "player_name": "Josh Cameron",
+    "school": "Baylor",
+    "ovr": 89,
+    "spd": 89,
+    "agi": 89
+  },
+  {
+    "player_name": "Jadon Porter",
+    "school": "Baylor",
+    "ovr": 68,
+    "spd": 88,
+    "agi": 85
+  },
+  {
+    "player_name": "Mason Dossett",
+    "school": "Baylor",
+    "ovr": 67,
+    "spd": 87,
+    "agi": 87
+  },
+  {
+    "player_name": "Michael Trigg",
+    "school": "Baylor",
+    "ovr": 83,
+    "spd": 83,
+    "agi": 84
+  },
+  {
+    "player_name": "Samaj Jones",
+    "school": "Cincinnati",
+    "ovr": 74,
+    "spd": 81,
+    "agi": 85
+  },
+  {
+    "player_name": "Zebulin Kinsey",
+    "school": "Cincinnati",
+    "ovr": 73,
+    "spd": 82,
+    "agi": 83
+  },
+  {
+    "player_name": "Evan Pryor",
+    "school": "Cincinnati",
+    "ovr": 83,
+    "spd": 92,
+    "agi": 90
+  },
+  {
+    "player_name": "Chance Williams",
+    "school": "Cincinnati",
+    "ovr": 79,
+    "spd": 90,
+    "agi": 90
+  },
+  {
+    "player_name": "Cyrus Allen",
+    "school": "Cincinnati",
+    "ovr": 82,
+    "spd": 93,
+    "agi": 89
+  },
+  {
+    "player_name": "Caleb Goodie",
+    "school": "Cincinnati",
+    "ovr": 74,
+    "spd": 92,
+    "agi": 91
+  },
+  {
+    "player_name": "Noah Jennings",
+    "school": "Cincinnati",
+    "ovr": 70,
+    "spd": 90,
+    "agi": 89
+  },
+  {
+    "player_name": "Joe Royer",
+    "school": "Cincinnati",
+    "ovr": 87,
+    "spd": 80,
+    "agi": 80
+  },
+  {
+    "player_name": "Ryan Staub",
+    "school": "Colorado",
+    "ovr": 72,
+    "spd": 75,
+    "agi": 76
+  },
+  {
+    "player_name": "Levi Drayton",
+    "school": "Colorado",
+    "ovr": 71,
+    "spd": 73,
+    "agi": 74
+  },
+  {
+    "player_name": "Micah Welch",
+    "school": "Colorado",
+    "ovr": 83,
+    "spd": 89,
+    "agi": 89
+  },
+  {
+    "player_name": "Dallan Hayden",
+    "school": "Colorado",
+    "ovr": 81,
+    "spd": 92,
+    "agi": 88
+  },
+  {
+    "player_name": "Joseph Williams",
+    "school": "Colorado",
+    "ovr": 80,
+    "spd": 91,
+    "agi": 89
+  },
+  {
+    "player_name": "Drelon Miller",
+    "school": "Colorado",
+    "ovr": 79,
+    "spd": 91,
+    "agi": 92
+  },
+  {
+    "player_name": "Omarion Miller",
+    "school": "Colorado",
+    "ovr": 79,
+    "spd": 90,
+    "agi": 86
+  },
+  {
+    "player_name": "Sav’ell Smalls",
+    "school": "Colorado",
+    "ovr": 76,
+    "spd": 77,
+    "agi": 78
+  },
+  {
+    "player_name": "Conner Weigman",
+    "school": "Houston",
+    "ovr": 83,
+    "spd": 82,
+    "agi": 85
+  },
+  {
+    "player_name": "Austin Carlisle",
+    "school": "Houston",
+    "ovr": 73,
+    "spd": 92,
+    "agi": 89
+  },
+  {
+    "player_name": "Dean Connors",
+    "school": "Houston",
+    "ovr": 87,
+    "spd": 91,
+    "agi": 91
+  },
+  {
+    "player_name": "DJ Butler",
+    "school": "Houston",
+    "ovr": 74,
+    "spd": 88,
+    "agi": 84
+  },
+  {
+    "player_name": "Harvey Broussard",
+    "school": "Houston",
+    "ovr": 78,
+    "spd": 91,
+    "agi": 89
+  },
+  {
+    "player_name": "Devan Williams",
+    "school": "Houston",
+    "ovr": 74,
+    "spd": 87,
+    "agi": 85
+  },
+  {
+    "player_name": "Zaylen Cormier",
+    "school": "Houston",
+    "ovr": 72,
+    "spd": 89,
+    "agi": 88
+  },
+  {
+    "player_name": "Tanner Koziol",
+    "school": "Houston",
+    "ovr": 92,
+    "spd": 83,
+    "agi": 82
+  },
+  {
+    "player_name": "Rocco Becht",
+    "school": "Iowa State",
+    "ovr": 88,
+    "spd": 83,
+    "agi": 84
+  },
+  {
+    "player_name": "Connor Moberly",
+    "school": "Iowa State",
+    "ovr": 72,
+    "spd": 75,
+    "agi": 76
+  },
+  {
+    "player_name": "Carson Hansen",
+    "school": "Iowa State",
+    "ovr": 88,
+    "spd": 89,
+    "agi": 85
+  },
+  {
+    "player_name": "Abu Sama III",
+    "school": "Iowa State",
+    "ovr": 86,
+    "spd": 92,
+    "agi": 90
+  },
+  {
+    "player_name": "Chase Sowell",
+    "school": "Iowa State",
+    "ovr": 83,
+    "spd": 89,
+    "agi": 87
+  },
+  {
+    "player_name": "Daniel Jackson",
+    "school": "Iowa State",
+    "ovr": 79,
+    "spd": 85,
+    "agi": 86
+  },
+  {
+    "player_name": "Carson Brown",
+    "school": "Iowa State",
+    "ovr": 72,
+    "spd": 90,
+    "agi": 90
+  },
+  {
+    "player_name": "Tyler Moore",
+    "school": "Iowa State",
+    "ovr": 75,
+    "spd": 77,
+    "agi": 76
+  },
+  {
+    "player_name": "Jalon Daniels",
+    "school": "Kansas",
+    "ovr": 87,
+    "spd": 88,
+    "agi": 91
+  },
+  {
+    "player_name": "David McComb",
+    "school": "Kansas",
+    "ovr": 74,
+    "spd": 77,
+    "agi": 81
+  },
+  {
+    "player_name": "Leshon Williams",
+    "school": "Kansas",
+    "ovr": 85,
+    "spd": 87,
+    "agi": 83
+  },
+  {
+    "player_name": "Johnny Thompson Jr.",
+    "school": "Kansas",
+    "ovr": 77,
+    "spd": 89,
+    "agi": 86
+  },
+  {
+    "player_name": "Jackson Cook",
+    "school": "Kansas",
+    "ovr": 73,
+    "spd": 91,
+    "agi": 91
+  },
+  {
+    "player_name": "Bryson Hayes",
+    "school": "Kansas",
+    "ovr": 70,
+    "spd": 95,
+    "agi": 89
+  },
+  {
+    "player_name": "Doug Emilien",
+    "school": "Kansas",
+    "ovr": 67,
+    "spd": 88,
+    "agi": 85
+  },
+  {
+    "player_name": "DeShawn Hanika",
+    "school": "Kansas",
+    "ovr": 77,
+    "spd": 77,
+    "agi": 78
+  },
+  {
+    "player_name": "Avery Johnson",
+    "school": "Kansas State",
+    "ovr": 89,
+    "spd": 88,
+    "agi": 91
+  },
+  {
+    "player_name": "Blake Barnett",
+    "school": "Kansas State",
+    "ovr": 73,
+    "spd": 89,
+    "agi": 80
+  },
+  {
+    "player_name": "Dylan Edwards",
+    "school": "Kansas State",
+    "ovr": 89,
+    "spd": 95,
+    "agi": 95
+  },
+  {
+    "player_name": "Joe Jackson",
+    "school": "Kansas State",
+    "ovr": 81,
+    "spd": 91,
+    "agi": 89
+  },
+  {
+    "player_name": "Jerand Bradley",
+    "school": "Kansas State",
+    "ovr": 79,
+    "spd": 86,
+    "agi": 85
+  },
+  {
+    "player_name": "Jaron Tibbs",
+    "school": "Kansas State",
+    "ovr": 79,
+    "spd": 87,
+    "agi": 86
+  },
+  {
+    "player_name": "Caleb Medford",
+    "school": "Kansas State",
+    "ovr": 74,
+    "spd": 88,
+    "agi": 85
+  },
+  {
+    "player_name": "Garrett Oakley",
+    "school": "Kansas State",
+    "ovr": 85,
+    "spd": 82,
+    "agi": 81
+  },
+  {
+    "player_name": "Hauss Hejny",
+    "school": "Oklahoma State",
+    "ovr": 73,
+    "spd": 91,
+    "agi": 86
+  },
+  {
+    "player_name": "Zane Flores",
+    "school": "Oklahoma State",
+    "ovr": 73,
+    "spd": 80,
+    "agi": 80
+  },
+  {
+    "player_name": "Freddie Brock",
+    "school": "Oklahoma State",
+    "ovr": 87,
+    "spd": 89,
+    "agi": 90
+  },
+  {
+    "player_name": "Kalib Hicks",
+    "school": "Oklahoma State",
+    "ovr": 80,
+    "spd": 88,
+    "agi": 86
+  },
+  {
+    "player_name": "Talyn Shettron",
+    "school": "Oklahoma State",
+    "ovr": 81,
+    "spd": 92,
+    "agi": 90
+  },
+  {
+    "player_name": "Gavin Freeman",
+    "school": "Oklahoma State",
+    "ovr": 78,
+    "spd": 92,
+    "agi": 91
+  },
+  {
+    "player_name": "Jaylen Lloyd",
+    "school": "Oklahoma State",
+    "ovr": 77,
+    "spd": 95,
+    "agi": 93
+  },
+  {
+    "player_name": "Josh Ford",
+    "school": "Oklahoma State",
+    "ovr": 78,
+    "spd": 80,
+    "agi": 78
+  },
+  {
+    "player_name": "Josh Hoover",
+    "school": "TCU",
+    "ovr": 87,
+    "spd": 75,
+    "agi": 78
+  },
+  {
+    "player_name": "Ken Seals",
+    "school": "TCU",
+    "ovr": 72,
+    "spd": 72,
+    "agi": 74
+  },
+  {
+    "player_name": "Jeremy Payne",
+    "school": "TCU",
+    "ovr": 82,
+    "spd": 94,
+    "agi": 93
+  },
+  {
+    "player_name": "Jon Denman",
+    "school": "TCU",
+    "ovr": 72,
+    "spd": 89,
+    "agi": 85
+  },
+  {
+    "player_name": "Eric McAlister",
+    "school": "TCU",
+    "ovr": 87,
+    "spd": 90,
+    "agi": 88
+  },
+  {
+    "player_name": "Gekyle Baker",
+    "school": "TCU",
+    "ovr": 74,
+    "spd": 93,
+    "agi": 89
+  },
+  {
+    "player_name": "Major Everhart",
+    "school": "TCU",
+    "ovr": 72,
+    "spd": 96,
+    "agi": 93
+  },
+  {
+    "player_name": "DJ Rogers",
+    "school": "TCU",
+    "ovr": 76,
+    "spd": 79,
+    "agi": 80
+  },
+  {
+    "player_name": "Behren Morton",
+    "school": "Texas Tech",
+    "ovr": 87,
+    "spd": 82,
+    "agi": 82
+  },
+  {
+    "player_name": "Mitch Griffis",
+    "school": "Texas Tech",
+    "ovr": 77,
+    "spd": 86,
+    "agi": 91
+  },
+  {
+    "player_name": "Quinten Joyner",
+    "school": "Texas Tech",
+    "ovr": 86,
+    "spd": 91,
+    "agi": 89
+  },
+  {
+    "player_name": "Cam’Ron Valdez",
+    "school": "Texas Tech",
+    "ovr": 79,
+    "spd": 90,
+    "agi": 84
+  },
+  {
+    "player_name": "Reggie Virgil",
+    "school": "Texas Tech",
+    "ovr": 87,
+    "spd": 89,
+    "agi": 89
+  },
+  {
+    "player_name": "Caleb Douglas",
+    "school": "Texas Tech",
+    "ovr": 86,
+    "spd": 88,
+    "agi": 88
+  },
+  {
+    "player_name": "T.J. West",
+    "school": "Texas Tech",
+    "ovr": 70,
+    "spd": 89,
+    "agi": 87
+  },
+  {
+    "player_name": "Terrance Carter",
+    "school": "Texas Tech",
+    "ovr": 88,
+    "spd": 84,
+    "agi": 87
+  },
+  {
+    "player_name": "Tayven Jackson",
+    "school": "UCF",
+    "ovr": 77,
+    "spd": 83,
+    "agi": 85
+  },
+  {
+    "player_name": "Jacurri Brown",
+    "school": "UCF",
+    "ovr": 76,
+    "spd": 88,
+    "agi": 87
+  },
+  {
+    "player_name": "Myles Montgomery",
+    "school": "UCF",
+    "ovr": 86,
+    "spd": 90,
+    "agi": 88
+  },
+  {
+    "player_name": "Jaden Nixon",
+    "school": "UCF",
+    "ovr": 88,
+    "spd": 93,
+    "agi": 93
+  },
+  {
+    "player_name": "Marcus Burke",
+    "school": "UCF",
+    "ovr": 77,
+    "spd": 92,
+    "agi": 89
+  },
+  {
+    "player_name": "Duane Thomas Jr.",
+    "school": "UCF",
+    "ovr": 76,
+    "spd": 92,
+    "agi": 92
+  },
+  {
+    "player_name": "Nehemiah Hughes",
+    "school": "UCF",
+    "ovr": 73,
+    "spd": 90,
+    "agi": 89
+  },
+  {
+    "player_name": "Kylan Fox",
+    "school": "UCF",
+    "ovr": 70,
+    "spd": 86,
+    "agi": 84
+  },
+  {
+    "player_name": "Elijah Thomas",
+    "school": "Utah",
+    "ovr": 74,
+    "spd": 76,
+    "agi": 79
+  },
+  {
+    "player_name": "Nate Johnson",
+    "school": "Utah",
+    "ovr": 73,
+    "spd": 91,
+    "agi": 90
+  },
+  {
+    "player_name": "Bryce Duke",
+    "school": "Utah",
+    "ovr": 80,
+    "spd": 88,
+    "agi": 85
+  },
+  {
+    "player_name": "Bobby Mauga",
+    "school": "Utah",
+    "ovr": 77,
+    "spd": 88,
+    "agi": 84
+  },
+  {
+    "player_name": "Otto Tia",
+    "school": "Utah",
+    "ovr": 80,
+    "spd": 86,
+    "agi": 85
+  },
+  {
+    "player_name": "Ryan Davis",
+    "school": "Utah",
+    "ovr": 76,
+    "spd": 88,
+    "agi": 88
+  },
+  {
+    "player_name": "Rayshawn Glover",
+    "school": "Utah",
+    "ovr": 74,
+    "spd": 86,
+    "agi": 86
+  },
+  {
+    "player_name": "Drew Clemens",
+    "school": "Utah",
+    "ovr": 68,
+    "spd": 81,
+    "agi": 80
+  },
+  {
+    "player_name": "Jaylen Henderson",
+    "school": "West Virginia",
+    "ovr": 76,
+    "spd": 85,
+    "agi": 83
+  },
+  {
+    "player_name": "Nicco Marchiol",
+    "school": "West Virginia",
+    "ovr": 76,
+    "spd": 78,
+    "agi": 78
+  },
+  {
+    "player_name": "Jahiem White",
+    "school": "West Virginia",
+    "ovr": 89,
+    "spd": 94,
+    "agi": 95
+  },
+  {
+    "player_name": "Diore Hubbard",
+    "school": "West Virginia",
+    "ovr": 72,
+    "spd": 88,
+    "agi": 84
+  },
+  {
+    "player_name": "Cam Vaughn",
+    "school": "West Virginia",
+    "ovr": 83,
+    "spd": 88,
+    "agi": 90
+  },
+  {
+    "player_name": "Rodney Gallagher III",
+    "school": "West Virginia",
+    "ovr": 79,
+    "spd": 89,
+    "agi": 91
+  },
+  {
+    "player_name": "Christian Hamilton",
+    "school": "West Virginia",
+    "ovr": 77,
+    "spd": 92,
+    "agi": 92
+  },
+  {
+    "player_name": "Grayson Barnes",
+    "school": "West Virginia",
+    "ovr": 83,
+    "spd": 87,
+    "agi": 84
+  }
+]
