@@ -41,13 +41,48 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: 'Draft has not started yet' }, { status: 400 });
     }
 
-    // If state already exists in KV, return it (idempotent)
+    // If state already exists in KV, optionally refresh the deadline if requested/needed
     let existing: any = null;
     try {
       const { kv } = await import('@vercel/kv');
       const raw = await kv.get(`draft:${leagueId}:state`);
       existing = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : null;
       if (existing) {
+        const nowMs = Date.now();
+        const url = new URL(request.url);
+        const reset = url.searchParams.get('reset') === 'true' || url.searchParams.get('force') === 'true';
+        const deadlineMs = existing.deadlineAt ? new Date(existing.deadlineAt).getTime() : 0;
+        // If reset requested or deadline has passed and no picks exist yet, reseed deadline and return
+        if (reset || (deadlineMs && nowMs > deadlineMs)) {
+          // Check there are no picks yet
+          try {
+            const picks = await databases.listDocuments(
+              DATABASE_ID,
+              COLLECTIONS.DRAFT_PICKS,
+              [Query.equal('leagueId', leagueId), Query.limit(1)]
+            );
+            const nonePicked = (picks.total || picks.documents.length) === 0;
+            if (nonePicked) {
+              const pickTimeSeconds = Number((league as any)?.pickTimeSeconds || 90);
+              existing.deadlineAt = new Date(nowMs + pickTimeSeconds * 1000).toISOString();
+              existing.onClockTeamId = existing.draftOrder?.[0] || existing.onClockTeamId;
+              try {
+                await kv.set(`draft:${leagueId}:state`, JSON.stringify(existing));
+              } catch {}
+              try {
+                await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_STATES, 'unique()', {
+                  draftId: leagueId,
+                  onClockTeamId: existing.onClockTeamId,
+                  deadlineAt: existing.deadlineAt,
+                  round: existing.round || 1,
+                  pickIndex: existing.pickIndex || 1,
+                  status: 'active',
+                  picksPerRound: existing.picksPerRound || existing.totalTeams || 12,
+                } as any);
+              } catch {}
+            }
+          } catch {}
+        }
         return NextResponse.json({ success: true, state: existing, alreadyStarted: true });
       }
     } catch {}
