@@ -80,8 +80,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (!state || state.onClockTeamId !== teamId) {
       return NextResponse.json({ error: 'Not your turn' }, { status: 400 });
     }
-    if (state.deadlineAt && Date.now() > new Date(state.deadlineAt).getTime()) {
-      return NextResponse.json({ error: 'Pick deadline passed' }, { status: 400 });
+    if (state.deadlineAt) {
+      const deadlineMs = new Date(state.deadlineAt).getTime();
+      const nowMs = Date.now();
+      // Allow small tolerance to account for client-server drift and network delay
+      const driftAllowanceMs = 3000;
+      if (nowMs > deadlineMs + driftAllowanceMs) {
+        return NextResponse.json({ error: 'Pick deadline passed' }, { status: 400 });
+      }
     }
 
     // Persist event and update state in Appwrite

@@ -14,6 +14,7 @@ export type DraftCoreState = {
   connected: boolean;
   loading: boolean;
   error: string | null;
+  deadlineAt?: string | null;
 };
 
 export type DraftCoreActions = {
@@ -41,6 +42,7 @@ export function useDraftCoreLive(leagueId: string): DraftCore {
     connected: live.connected,
     loading: live.loading,
     error: live.error,
+    deadlineAt: (live as any)?.deadlineAt ?? null,
   };
 
   const actions: DraftCoreActions = {
