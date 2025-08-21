@@ -63,10 +63,20 @@ export async function GET(request: NextRequest) {
 
               if (!current) throw new Error('No active session found');
 
-              // If Appwrite appended userId & secret as query params, use them
+              let uidParam: string | null = null;
+              let secretParam: string | null = null;
+
+              // First look at query string
               const urlParams = new URLSearchParams(window.location.search);
-              const uidParam = urlParams.get('userId');
-              const secretParam = urlParams.get('secret');
+              uidParam = urlParams.get('userId');
+              secretParam = urlParams.get('secret');
+
+              // Some Appwrite versions append as hash fragment (#userId=...&secret=...)
+              if (!secretParam && window.location.hash) {
+                const hashParams = new URLSearchParams(window.location.hash.substring(1));
+                uidParam = uidParam || hashParams.get('userId');
+                secretParam = hashParams.get('secret');
+              }
 
               const payload = uidParam && secretParam
                 ? { userId: uidParam, secret: secretParam }
