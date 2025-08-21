@@ -7,7 +7,7 @@ flowchart LR
     end
 
     UI -->|subscribe| RT[Appwrite Realtime]
-    UI -->|POST pick| API[/api/drafts/pick]
+    UI -->|POST pick| API["Draft API"]
 
     API -->|SETNX lock| KV[(Vercel KV)]
     KV --> API
@@ -16,7 +16,7 @@ flowchart LR
     API -->|publish event| RT
     API -->|DEL lock| KV
 
-    SCHED[Vercel Cron] --> AUTOPICK[/api/drafts/autopick]
+    SCHED[Vercel Cron] --> AUTOPICK["Autopick API"]
     AUTOPICK --> DB
     AUTOPICK --> RT
 
