@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 export default function AdminDashboard() {
   const { user, loading } = useAuth();
-  const [showDiagram, setShowDiagram] = useState<null | { slug: 'data-flow' | 'project-map'; title: string }>(null)
+  const [showDiagram, setShowDiagram] = useState<null | { slug: string; title: string }>(null)
   const [charts, setCharts] = useState<string[]>([])
   const [lastUpdated, setLastUpdated] = useState<string>('')
   const [debugInfo, setDebugInfo] = useState<any>(null)
@@ -38,135 +38,131 @@ export default function AdminDashboard() {
     );
   }
 
-  // Unify: always load via API route for consistent behavior
+  const loadDiagram = async (slug: string, title: string) => {
+    try {
+      const res = await fetch(`/api/docs/mermaid/${slug}`, { cache: 'no-store' })
+      const data = await res.json()
+      setDebugInfo({ endpoint: slug, response: data, status: res.status })
+      setShowDiagram({ slug, title })
+      setCharts(data.charts || [])
+      setLastUpdated(data.updatedAt || '')
+    } catch (error) {
+      console.error('Error loading diagram:', error)
+      setDebugInfo({ endpoint: slug, error: error.message })
+      setCharts([])
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-white mb-6">Admin Dashboard - Product Vision 2025</h1>
-        {/* Quick Diagram Links (always visible at top) */}
+        
+        {/* Projections System Diagrams */}
         <div className="mb-10">
-          <h3 className="text-xl font-bold text-white mb-4">📊 Project Architecture Diagrams</h3>
+          <h3 className="text-xl font-bold text-white mb-4">📊 Projections System Diagrams</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <button
-              onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
-                const data = await res.json()
-                setDebugInfo({ endpoint: 'project-map-repo', response: data, status: res.status })
-                setShowDiagram({ slug: 'project-map', title: '📁 Repository Structure' })
-                setCharts(data.charts?.slice(0, 1) || [])
-                setLastUpdated(data.updatedAt || '')
-              }}
+              onClick={() => loadDiagram('projections-overview', '📈 Projections Overview')}
               className="px-4 py-3 rounded-lg bg-blue-600 text-white transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
             >
-              <div className="font-semibold">📁 Repository Structure</div>
-              <div className="text-sm text-blue-100">Project folders & organization</div>
+              <div className="font-semibold">📈 Projections Overview</div>
+              <div className="text-sm text-blue-100">System architecture & data flow</div>
             </button>
             
             <button
-              onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/projections', { cache: 'no-store' })
-                const data = await res.json()
-                setDebugInfo({ endpoint: 'projections', response: data, status: res.status })
-                setShowDiagram({ slug: 'project-map', title: '📈 Projection Diagrams' })
-                setCharts(data.charts || [])
-                setLastUpdated(data.updatedAt || '')
-              }}
-              className="px-4 py-3 rounded-lg bg-pink-600 text-white transition-colors hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
-            >
-              <div className="font-semibold">📈 Projection Diagrams</div>
-              <div className="text-sm text-pink-100">End-to-end projections pipeline</div>
-            </button>
-            
-            <button
-              onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
-                const data = await res.json()
-                setDebugInfo({ endpoint: 'project-map-dataflow', response: data, status: res.status })
-                setShowDiagram({ slug: 'project-map', title: '🔄 Functionality & Data Flow' })
-                setCharts(data.charts?.slice(1, 2) || [])
-                setLastUpdated(data.updatedAt || '')
-              }}
+              onClick={() => loadDiagram('projections-algorithm', '🧮 Algorithm Flow')}
               className="px-4 py-3 rounded-lg bg-purple-600 text-white transition-colors hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
             >
-              <div className="font-semibold">🔄 Data Flow Architecture</div>
-              <div className="text-sm text-purple-100">APIs, database & real-time updates</div>
+              <div className="font-semibold">🧮 Algorithm Flow</div>
+              <div className="text-sm text-purple-100">Step-by-step projection logic</div>
             </button>
-
+            
             <button
-              onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
-                const data = await res.json()
-                setDebugInfo({ endpoint: 'project-map-schema', response: data, status: res.status })
-                setShowDiagram({ slug: 'project-map', title: '🔧 Commissioner Schema Fix' })
-                setCharts(data.charts?.slice(2, 3) || [])
-                setLastUpdated(data.updatedAt || '')
-              }}
+              onClick={() => loadDiagram('depth-multipliers', '📊 Depth Multipliers')}
               className="px-4 py-3 rounded-lg bg-green-600 text-white transition-colors hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
             >
-              <div className="font-semibold">🔧 Schema Fix Flow</div>
-              <div className="text-sm text-green-100">Commissioner settings alignment</div>
+              <div className="font-semibold">📊 Depth Multipliers</div>
+              <div className="text-sm text-green-100">Position-specific multipliers</div>
             </button>
 
             <button
-              onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
-                const data = await res.json()
-                setDebugInfo({ endpoint: 'project-map-admin', response: data, status: res.status })
-                setShowDiagram({ slug: 'project-map', title: '🎮 Admin Operations Flow' })
-                setCharts(data.charts?.slice(3, 4) || [])
-                setLastUpdated(data.updatedAt || '')
-              }}
+              onClick={() => loadDiagram('data-sources', '📁 Data Sources')}
               className="px-4 py-3 rounded-lg bg-orange-600 text-white transition-colors hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
             >
-              <div className="font-semibold">🎮 Admin Operations</div>
-              <div className="text-sm text-orange-100">User & league management flows</div>
+              <div className="font-semibold">📁 Data Sources</div>
+              <div className="text-sm text-orange-100">File structure & organization</div>
             </button>
 
             <button
-              onClick={async () => {
-                setShowDiagram({ slug: 'data-flow', title: '📊 Complete Data Flow' })
-                const res = await fetch('/api/docs/mermaid/data-flow', { cache: 'no-store' })
-                const data = await res.json()
-                setDebugInfo({ endpoint: 'data-flow', response: data, status: res.status })
-                setCharts(data.charts || [])
-                setLastUpdated(data.updatedAt || '')
-              }}
-              className="px-4 py-3 rounded-lg bg-teal-600 text-white transition-colors hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+              onClick={() => loadDiagram('api-flow', '🔄 API Flow')}
+              className="px-4 py-3 rounded-lg bg-pink-600 text-white transition-colors hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
             >
-              <div className="font-semibold">📊 Complete Data Flow</div>
-              <div className="text-sm text-teal-100">All system flows & pipelines</div>
+              <div className="font-semibold">🔄 API Flow</div>
+              <div className="text-sm text-pink-100">Draft API query sequence</div>
             </button>
 
             <button
-              onClick={async () => {
-                const res = await fetch('/api/docs/mermaid/project-map', { cache: 'no-store' })
-                const data = await res.json()
-                setDebugInfo({ endpoint: 'project-map-all', response: data, status: res.status })
-                setShowDiagram({ slug: 'project-map', title: '🗺️ Complete Project Map' })
-                setCharts(data.charts || [])
-                setLastUpdated(data.updatedAt || '')
-              }}
+              onClick={() => loadDiagram('troubleshooting', '🔧 Troubleshooting')}
+              className="px-4 py-3 rounded-lg bg-red-600 text-white transition-colors hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+            >
+              <div className="font-semibold">🔧 Troubleshooting</div>
+              <div className="text-sm text-red-100">Debug & fix common issues</div>
+            </button>
+          </div>
+        </div>
+
+        {/* Project Architecture Diagrams */}
+        <div className="mb-10">
+          <h3 className="text-xl font-bold text-white mb-4">🏗️ Project Architecture Diagrams</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <button
+              onClick={() => loadDiagram('project-map', '📁 Repository Structure')}
               className="px-4 py-3 rounded-lg bg-indigo-600 text-white transition-colors hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
             >
-              <div className="font-semibold">🗺️ View All Project Maps</div>
-              <div className="text-sm text-indigo-100">All 4 diagrams together</div>
+              <div className="font-semibold">📁 Repository Structure</div>
+              <div className="text-sm text-indigo-100">Project folders & organization</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('data-flow', '🔄 Data Flow Architecture')}
+              className="px-4 py-3 rounded-lg bg-teal-600 text-white transition-colors hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+            >
+              <div className="font-semibold">🔄 Data Flow Architecture</div>
+              <div className="text-sm text-teal-100">APIs, database & real-time updates</div>
+            </button>
+
+            <button
+              onClick={() => loadDiagram('system-map', '🗺️ System Map')}
+              className="px-4 py-3 rounded-lg bg-cyan-600 text-white transition-colors hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
+            >
+              <div className="font-semibold">🗺️ System Map</div>
+              <div className="text-sm text-cyan-100">Complete system overview</div>
             </button>
           </div>
         </div>
         
+        {/* Debug Info Controls */}
         <div className="mb-10 flex flex-wrap gap-3">
           {debugInfo && (
-            <button
-              onClick={() => {
-                const debugText = JSON.stringify(debugInfo, null, 2);
-                navigator.clipboard.writeText(debugText);
-                alert('Debug info copied to clipboard!');
-              }}
-              className="px-4 py-2 rounded-lg bg-yellow-600 text-white transition-colors hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-white/80"
-            >
-              📋 Copy Debug Info
-            </button>
+            <>
+              <button
+                onClick={() => {
+                  const debugText = JSON.stringify(debugInfo, null, 2);
+                  navigator.clipboard.writeText(debugText);
+                  alert('Debug info copied to clipboard!');
+                }}
+                className="px-4 py-2 rounded-lg bg-yellow-600 text-white transition-colors hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-white/80"
+              >
+                📋 Copy Debug Info
+              </button>
+              <button
+                onClick={() => setDebugInfo(null)}
+                className="px-4 py-2 rounded-lg bg-gray-600 text-white transition-colors hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-white/80"
+              >
+                ❌ Clear Debug Info
+              </button>
+            </>
           )}
         </div>
         
@@ -176,11 +172,11 @@ export default function AdminDashboard() {
             <h3 className="text-lg font-bold text-yellow-400 mb-3">🐛 Mermaid API Debug Info</h3>
             <div className="text-sm text-gray-300 space-y-2">
               <div><strong>Endpoint:</strong> /api/docs/mermaid/{debugInfo.endpoint}</div>
-              <div><strong>Status:</strong> {debugInfo.status}</div>
+              <div><strong>Status:</strong> {debugInfo.status || 'N/A'}</div>
               <div><strong>Charts Found:</strong> {debugInfo.response?.charts?.length || 0}</div>
-              <div><strong>Error:</strong> {debugInfo.response?.error || 'None'}</div>
+              <div><strong>Error:</strong> {debugInfo.response?.error || debugInfo.error || 'None'}</div>
               <div><strong>Source:</strong> {debugInfo.response?.source || 'N/A'}</div>
-              <div><strong>Tried:</strong> {Array.isArray(debugInfo.response?.tried) ? debugInfo.response.tried.join(', ') : 'N/A'}</div>
+              <div><strong>File Name:</strong> {debugInfo.response?.fileName || 'N/A'}</div>
             </div>
             <details className="mt-4">
               <summary className="cursor-pointer text-yellow-400 hover:text-yellow-300">View Full Response</summary>
@@ -232,8 +228,6 @@ export default function AdminDashboard() {
             </Link>
           </div>
         </div>
-
-
 
         {/* Database Management */}
         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 mb-8">
@@ -301,7 +295,6 @@ export default function AdminDashboard() {
               <h3 className="font-semibold text-white">Sync Status</h3>
               <p className="text-sm text-gray-200 mt-1">Vercel-Appwrite Health</p>
             </Link>
-            {/* Removed non-existent cache status and SEC survey per request */}
             <button 
               onClick={() => {
                 const id = prompt('Enter League or Roster ID to delete for testing:');
@@ -319,7 +312,6 @@ export default function AdminDashboard() {
               <h3 className="font-semibold text-white">🧪 Test Real-time</h3>
               <p className="text-sm text-gray-200 mt-1">Delete league/roster for testing</p>
             </button>
-            {/* Removed Launch Beta placeholder */}
           </div>
         </div>
 
@@ -360,151 +352,49 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      {/* Diagram Modal */}
       {showDiagram && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
-          <div className="w-full max-w-7xl bg-gray-900 text-white rounded-xl border border-white/20 shadow-2xl overflow-hidden">
+          <div className="w-full max-w-6xl bg-gray-900 text-white rounded-xl border border-white/20 shadow-2xl overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-gray-800 to-gray-700">
               <div>
-                <h3 className="text-xl font-semibold">{showDiagram.title} (Mermaid)</h3>
+                <h3 className="text-xl font-semibold">{showDiagram.title}</h3>
                 {lastUpdated && <p className="text-xs text-gray-300">Last updated: {new Date(lastUpdated).toLocaleString()}</p>}
               </div>
-              <button onClick={() => setShowDiagram(null)} className="px-3 py-1.5 rounded-md bg-white text-gray-900 font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/80" aria-label="Close diagram">Close</button>
+              <button 
+                onClick={() => {
+                  setShowDiagram(null)
+                  setCharts([])
+                }} 
+                className="px-3 py-1.5 rounded-md bg-white text-gray-900 font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/80" 
+                aria-label="Close diagram"
+              >
+                Close
+              </button>
             </div>
             <div className="max-h-[80vh] overflow-auto p-6 bg-gray-950">
-              {/* Debug: Show chart count and API response */}
               {charts.length === 0 && (
                 <div className="text-yellow-400 mb-4 p-4 bg-gray-800 rounded">
                   <div className="font-bold mb-2">⚠️ No charts loaded</div>
                   {debugInfo && (
                     <div className="text-sm space-y-1">
-                      <div>API Status: {debugInfo.status}</div>
-                      <div>Error: {debugInfo.response?.error || 'Unknown'}</div>
-                      <div>Source tried: {debugInfo.response?.source || debugInfo.response?.tried?.join(', ') || 'None'}</div>
-                      <div>Charts returned: {debugInfo.response?.charts?.length || 0}</div>
+                      <div>API Status: {debugInfo.status || 'Unknown'}</div>
+                      <div>Error: {debugInfo.response?.error || debugInfo.error || 'Unknown'}</div>
+                      <div>File: {debugInfo.response?.fileName || 'Not found'}</div>
                     </div>
                   )}
                 </div>
               )}
               {charts.length > 0 ? (
                 <div className="space-y-8">
-                  {showDiagram.title.includes('Repository Structure') ? (
-                    <div className="mb-8">
-                      <h4 className="text-2xl font-bold text-white mb-6 border-b border-white/20 pb-2">📁 Repository Structure</h4>
-                      <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[600px] [&_svg]:h-auto [&_svg]:mx-auto [&_svg]:scale-125">
-                        {charts[0] ? <MermaidRenderer charts={[charts[0]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                      </div>
-                    </div>
-                  ) : showDiagram.title.includes('Data Flow Architecture') ? (
-                    <div className="mb-8">
-                      <h4 className="text-2xl font-bold text-white mb-6 border-b border-white/20 pb-2">🔄 Functionality & Data Flow</h4>
-                      <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[700px] [&_svg]:h-auto [&_svg]:mx-auto">
-                        {charts[0] ? <MermaidRenderer charts={[charts[0]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                      </div>
-                    </div>
-                  ) : showDiagram.title.includes('Schema Fix') ? (
-                    <div className="mb-8">
-                      <h4 className="text-2xl font-bold text-white mb-6 border-b border-white/20 pb-2">🔧 Commissioner Settings Schema Fix Flow</h4>
-                      <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[500px] [&_svg]:h-auto [&_svg]:mx-auto">
-                        {charts[0] ? <MermaidRenderer charts={[charts[0]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                      </div>
-                    </div>
-                  ) : showDiagram.title.includes('Admin Operations') ? (
-                    <div className="mb-8">
-                      <h4 className="text-2xl font-bold text-white mb-6 border-b border-white/20 pb-2">🎮 Complete Admin Operations Flow</h4>
-                      <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[500px] [&_svg]:h-auto [&_svg]:mx-auto">
-                        {charts[0] ? <MermaidRenderer charts={[charts[0]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                      </div>
-                    </div>
-                  ) : showDiagram.title.includes('Complete Project Map') ? (
-                    <>
-                      <div className="mb-8">
-                        <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">📁 Repository Structure</h4>
-                        <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
-                          {charts[0] ? <MermaidRenderer charts={[charts[0]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                        </div>
-                      </div>
-                      {charts.length > 1 && (
-                        <div className="mb-8">
-                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔄 Functionality & Data Flow</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[500px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            {charts[1] ? <MermaidRenderer charts={[charts[1]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                          </div>
-                        </div>
-                      )}
-                      {charts.length > 2 && (
-                        <div className="mb-8">
-                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔧 Commissioner Settings Schema Fix Flow</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            {charts[2] ? <MermaidRenderer charts={[charts[2]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                          </div>
-                        </div>
-                      )}
-                      {charts.length > 3 && (
-                        <div className="mb-8">
-                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🎮 Complete Admin Operations Flow</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            {charts[3] ? <MermaidRenderer charts={[charts[3]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  ) : showDiagram.title.includes('Complete Data Flow') ? (
-                    <>
-                      <div className="mb-8">
-                        <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔐 Authentication Flow</h4>
-                        <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
-                          {charts[0] ? <MermaidRenderer charts={[charts[0]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                        </div>
-                      </div>
-                      {charts.length > 1 && (
-                        <div className="mb-8">
-                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🏟️ League Management Flow</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            {charts[1] ? <MermaidRenderer charts={[charts[1]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                          </div>
-                        </div>
-                      )}
-                      {charts.length > 2 && (
-                        <div className="mb-8">
-                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">📋 Draft Flow (Real-time)</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            {charts[2] ? <MermaidRenderer charts={[charts[2]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                          </div>
-                        </div>
-                      )}
-                      {charts.length > 3 && (
-                        <div className="mb-8">
-                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">📊 Player Data Pipeline</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            {charts[3] ? <MermaidRenderer charts={[charts[3]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                          </div>
-                        </div>
-                      )}
-                      {charts.length > 4 && (
-                        <div className="mb-8">
-                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🎯 Projections System</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            {charts[4] ? <MermaidRenderer charts={[charts[4]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                          </div>
-                        </div>
-                      )}
-                      {charts.length > 5 && (
-                        <div className="mb-8">
-                          <h4 className="text-xl font-bold text-white mb-4 border-b border-white/20 pb-2">🔍 Search & Filter Flow</h4>
-                          <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[300px] [&_svg]:h-auto [&_svg]:mx-auto">
-                            {charts[5] ? <MermaidRenderer charts={[charts[5]]} /> : <div className="text-gray-400">Loading diagram...</div>}
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <div className="[&_svg]:!max-w-full [&_svg]:h-auto [&_svg]:mx-auto">
-                      <MermaidRenderer charts={charts} />
-                    </div>
-                  )}
+                  <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
+                    <MermaidRenderer charts={charts} />
+                  </div>
                 </div>
               ) : (
-                <div className="text-gray-200">No diagrams found.</div>
+                <div className="text-gray-400 text-center py-8">
+                  No diagrams found. Check the debug info above.
+                </div>
               )}
             </div>
           </div>
