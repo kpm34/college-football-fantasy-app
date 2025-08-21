@@ -18,46 +18,46 @@ function extractMermaidBlocks(markdown: string): string[] {
   return blocks
 }
 
-async function listDirectoryContents(dirPath: string): Promise<string[]> {
-  try {
-    const items = await fs.readdir(dirPath)
-    return items
-  } catch {
-    return []
-  }
-}
-
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params
 
+  // Map slugs to file paths - now using individual diagram files
   const fileMap: Record<string, string> = {
+    // Legacy mappings for existing pages
     'data-flow': 'docs/DATA_FLOW.md',
     'project-map': 'docs/PROJECT_MAP.md',
     'system-map': 'docs/SYSTEM_MAP.md',
-    'projections': 'docs/draft/PROJECTIONS_DIAGRAMS.md',
+    
+    // New individual diagram mappings
+    'projections-overview': 'docs/diagrams/projections-overview.md',
+    'projections-algorithm': 'docs/diagrams/projections-algorithm.md',
+    'depth-multipliers': 'docs/diagrams/depth-multipliers.md',
+    'data-sources': 'docs/diagrams/data-sources.md',
+    'api-flow': 'docs/diagrams/api-flow.md',
+    'troubleshooting': 'docs/diagrams/troubleshooting.md',
+    
+    // Catch-all for projections (loads all projection diagrams)
+    'projections': 'docs/diagrams/projections-overview.md',
   }
 
   const rel = fileMap[slug]
   if (!rel) {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    return NextResponse.json({ 
+      error: 'Not found', 
+      availableSlugs: Object.keys(fileMap) 
+    }, { status: 404 })
   }
-
-  // No fallback needed since we're using the correct file directly
-  const candidates = [rel]
 
   // Try multiple possible paths for Vercel serverless environment
   const allCandidates = [
-    path.join(process.cwd(), 'public', rel), // /var/task/public/docs/PROJECT_MAP.md (most likely)
-    path.join(process.cwd(), rel),        // /var/task/docs/PROJECT_MAP.md
-    path.join('/var/task/public', rel),   // Vercel public directory
+    path.join(process.cwd(), rel),        // /var/task/docs/... (most likely in Vercel)
     path.join('/var/task', rel),          // Vercel Lambda direct path
-    rel,                                  // relative path
-    path.join('.', rel),                  // ./docs/PROJECT_MAP.md
-    path.join('public', rel),             // public/docs/PROJECT_MAP.md
-    path.join(__dirname, '..', '..', '..', '..', '..', 'public', rel), // relative to API route
+    path.join('.', rel),                  // ./docs/...
+    rel,                                   // relative path
+    path.join(__dirname, '..', '..', '..', '..', '..', rel), // relative to API route
   ]
 
   for (const candidate of allCandidates) {
@@ -65,12 +65,9 @@ export async function GET(
       const absolutePath = path.resolve(candidate)
       
       // Check if file exists first
-      console.log('Trying path:', absolutePath)
       const fileExists = await fs.access(absolutePath).then(() => true).catch(() => false)
-      console.log('File exists:', fileExists)
       
       if (!fileExists) {
-        console.log('File does not exist, skipping:', absolutePath)
         continue
       }
       
@@ -78,21 +75,18 @@ export async function GET(
         fs.readFile(absolutePath, 'utf8'),
         fs.stat(absolutePath),
       ])
-      const charts = extractMermaidBlocks(content)
       
-      // Return debug info even if no charts found
-      const debugInfo = {
-        fileLength: content.length,
-        containsMermaid: content.includes('```mermaid'),
-        containsClosing: content.includes('```'),
-        first200Chars: content.substring(0, 200),
-        mermaidCount: (content.match(/```mermaid/g) || []).length,
-        closingCount: (content.match(/```/g) || []).length
-      }
+      const charts = extractMermaidBlocks(content)
       
       if (charts.length > 0) {
         return NextResponse.json(
-          { charts, updatedAt: stat.mtime.toISOString(), source: candidate, debug: debugInfo },
+          { 
+            charts, 
+            updatedAt: stat.mtime.toISOString(), 
+            source: candidate,
+            slug: slug,
+            fileName: path.basename(rel)
+          },
           { 
             headers: {
               'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -102,9 +96,16 @@ export async function GET(
           }
         )
       } else {
-        // Return debug info when no charts found
+        // Return empty charts array but with metadata
         return NextResponse.json(
-          { charts: [], error: 'No diagrams found', source: candidate, debug: debugInfo },
+          { 
+            charts: [], 
+            error: 'No diagrams found in file', 
+            source: candidate,
+            slug: slug,
+            fileName: path.basename(rel),
+            contentLength: content.length
+          },
           { 
             headers: {
               'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -114,28 +115,19 @@ export async function GET(
           }
         )
       }
-    } catch {}
+    } catch (error) {
+      // Continue to next candidate
+    }
   }
 
-  // Enhanced debug info for troubleshooting
+  // If we get here, file wasn't found
   return NextResponse.json({ 
     charts: [], 
-    error: 'No diagrams found', 
+    error: 'File not found', 
     tried: allCandidates.map(c => path.resolve(c)),
     workingDir: process.cwd(),
-    debug: {
-      processEnv: {
-        NODE_ENV: process.env.NODE_ENV,
-        VERCEL: process.env.VERCEL,
-        VERCEL_ENV: process.env.VERCEL_ENV
-      },
-      allFiles: await listDirectoryContents(process.cwd()),
-      publicFiles: await listDirectoryContents(path.join(process.cwd(), 'public')).catch(() => 'not found')
-    }
-  }, { status: 200 })
-
+    slug: slug
+  }, { status: 404 })
 }
 
 export const runtime = 'nodejs'
-
-
