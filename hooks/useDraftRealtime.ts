@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Models, RealtimeResponseEvent } from 'appwrite';
 import { client, databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { Query } from 'appwrite';
@@ -30,51 +30,90 @@ export function useDraftRealtime(leagueId: string) {
     loading: true,
     error: null,
   });
+  // Track IDs that represent "me" for turn checks (auth user id + roster doc ids)
+  const myIdsRef = useRef<Set<string>>(new Set());
 
   // Initialize draft data
   useEffect(() => {
-    if (!leagueId || !user) return;
+    if (!leagueId) return;
 
     const loadDraftData = async () => {
       try {
         setState(prev => ({ ...prev, loading: true }));
 
-        // Load league data
-        const league = await databases.getDocument(
-          DATABASE_ID,
-          COLLECTIONS.LEAGUES,
-          leagueId
-        ) as unknown as League;
+        // Load all draft data through API route (server-side auth)
+        const response = await fetch(`/api/drafts/${leagueId}/data`);
+        if (!response.ok) {
+          throw new Error('Failed to load draft data');
+        }
+        
+        const { data } = await response.json();
+        const { league, userTeams, picks: picksData, userId } = data;
 
-        // Load existing draft picks
-        const picksResponse = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTIONS.DRAFT_PICKS,
-          [
-            Query.equal('leagueId', leagueId),
-            Query.orderAsc('pickNumber')
-          ]
-        );
+        // Load my roster ids within this league (some data paths use roster $id instead of userId)
+        myIdsRef.current = new Set([userId]);
+        for (const d of userTeams as any[]) {
+          if (d?.$id) myIdsRef.current.add(String(d.$id));
+        }
 
-        const picks = picksResponse.documents as unknown as DraftPick[];
+        // Use picks from API response
+        const picksResponse = { documents: picksData };
+
+        const normalizePick = (doc: any): DraftPick => ({
+          $id: doc.$id,
+          leagueId: doc.leagueId,
+          round: doc.round,
+          pickNumber: typeof doc.pickNumber === 'number' ? doc.pickNumber : (doc.pick as number),
+          userId: doc.userId,
+          playerId: doc.playerId,
+          playerName: doc.playerName,
+          playerPosition: doc.playerPosition,
+          playerTeam: doc.playerTeam,
+          timestamp: doc.timestamp,
+          timeRemaining: doc.timeRemaining,
+        });
+
+        const picks = (picksResponse.documents as any[]).map(normalizePick);
         const currentPick = picks.length + 1;
-        const currentRound = Math.ceil(currentPick / (league.draftOrder?.length || 12));
+        let orderArray: string[] = Array.isArray((league as any).draftOrder)
+          ? (league as any).draftOrder
+          : (typeof (league as any).draftOrder === 'string'
+            ? (() => { try { return JSON.parse((league as any).draftOrder); } catch { return []; } })()
+            : []);
+        // Fallback: look in scoringRules.draftOrderOverride if present
+        if (orderArray.length === 0 && typeof (league as any).scoringRules === 'string') {
+          try {
+            const rules = JSON.parse((league as any).scoringRules);
+            if (Array.isArray(rules?.draftOrderOverride)) {
+              orderArray = [...rules.draftOrderOverride];
+            }
+          } catch {}
+        }
+        // Fallback: use members when present
+        if (orderArray.length === 0 && Array.isArray((league as any).members)) {
+          orderArray = [...(league as any).members];
+        }
+        const teamsCount = orderArray.length || (league.members?.length || 12);
+        const currentRound = Math.ceil(currentPick / teamsCount);
         
         // Determine who's on the clock
-        const pickIndex = (currentPick - 1) % league.draftOrder.length;
+        const pickIndex = (currentPick - 1) % teamsCount;
         const isSnakeRound = currentRound % 2 === 0;
         const actualIndex = isSnakeRound 
-          ? league.draftOrder.length - 1 - pickIndex 
+          ? teamsCount - 1 - pickIndex 
           : pickIndex;
-        const onTheClock = league.draftOrder[actualIndex];
-        const isMyTurn = onTheClock === user.$id;
+        const onTheClock = orderArray[actualIndex] || league.draftOrder?.[actualIndex];
+        const draftStartMs = (league as any)?.draftDate ? new Date((league as any).draftDate).getTime() : 0;
+        // Only allow draft to be open if we have a valid draft date and current time is past it
+        const draftOpen = draftStartMs > 0 ? Date.now() >= draftStartMs : false;
+        const isMyTurn = draftOpen && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
 
         setState({
           league,
           picks,
           currentPick,
           currentRound,
-          onTheClock,
+          onTheClock: draftOpen ? onTheClock : null,
           isMyTurn,
           connected: false,
           loading: false,
@@ -91,11 +130,11 @@ export function useDraftRealtime(leagueId: string) {
     };
 
     loadDraftData();
-  }, [leagueId, user]);
+  }, [leagueId]);
 
   // Subscribe to realtime updates
   useEffect(() => {
-    if (!leagueId || !user) return;
+    if (!leagueId) return;
 
     console.log('[Draft Realtime] Subscribing to updates...');
 
@@ -125,11 +164,15 @@ export function useDraftRealtime(leagueId: string) {
       }
     );
 
+    // Optimistically mark as connected upon successful subscription to avoid
+    // showing a stale "Reconnecting" state while waiting for the first event.
+    setState(prev => ({ ...prev, connected: true }));
+
     return () => {
       console.log('[Draft Realtime] Unsubscribing...');
       unsubscribe();
     };
-  }, [leagueId, user]);
+  }, [leagueId]);
 
   // Handle draft pick events
   const handleDraftPickEvent = useCallback((response: RealtimeResponseEvent<any>) => {
@@ -137,7 +180,20 @@ export function useDraftRealtime(leagueId: string) {
 
     // New pick created
     if (events.includes('databases.*.collections.*.documents.*.create')) {
-      const newPick = payload as DraftPick;
+      const src = payload as any;
+      const newPick: DraftPick = {
+        $id: src.$id,
+        leagueId: src.leagueId,
+        round: src.round,
+        pickNumber: typeof src.pickNumber === 'number' ? src.pickNumber : (src.pick as number),
+        userId: src.userId,
+        playerId: src.playerId,
+        playerName: src.playerName,
+        playerPosition: src.playerPosition,
+        playerTeam: src.playerTeam,
+        timestamp: src.timestamp,
+        timeRemaining: src.timeRemaining,
+      };
       
       // Only process picks for this league
       if (newPick.leagueId !== leagueId) return;
@@ -145,11 +201,17 @@ export function useDraftRealtime(leagueId: string) {
       setState(prev => {
         const updatedPicks = [...prev.picks, newPick].sort((a, b) => a.pickNumber - b.pickNumber);
         const currentPick = updatedPicks.length + 1;
-        const currentRound = Math.ceil(currentPick / (prev.league?.draftOrder?.length || 12));
+        const parsedOrder: string[] = Array.isArray((prev.league as any)?.draftOrder)
+          ? (prev.league as any).draftOrder
+          : (typeof (prev.league as any)?.draftOrder === 'string'
+            ? (() => { try { return JSON.parse((prev.league as any).draftOrder); } catch { return []; } })()
+            : []);
+        const totalTeams = parsedOrder.length || ((prev.league as any)?.members?.length || 12);
+        const currentRound = Math.ceil(currentPick / totalTeams);
         
         // Check if draft is complete
         const totalRounds = prev.league?.draftRounds || 15;
-        const totalTeams = prev.league?.draftOrder?.length || 12;
+        // parsedOrder already computed
         const totalPicks = totalRounds * totalTeams;
         
         if (updatedPicks.length >= totalPicks) {
@@ -178,20 +240,24 @@ export function useDraftRealtime(leagueId: string) {
         
         // Determine who's on the clock next (if draft not complete)
         if (prev.league && updatedPicks.length < totalPicks) {
-          const pickIndex = (currentPick - 1) % prev.league.draftOrder.length;
+          const pickIndex = (currentPick - 1) % totalTeams;
           const isSnakeRound = currentRound % 2 === 0;
           const actualIndex = isSnakeRound 
-            ? prev.league.draftOrder.length - 1 - pickIndex 
+            ? totalTeams - 1 - pickIndex 
             : pickIndex;
-          const onTheClock = prev.league.draftOrder[actualIndex];
-          const isMyTurn = onTheClock === user?.$id;
+          const fallbackMembers: string[] = Array.isArray((prev.league as any)?.members) ? (prev.league as any).members : [];
+          const onTheClock = parsedOrder[actualIndex] || fallbackMembers[actualIndex] || prev.league.draftOrder?.[actualIndex];
+          const draftStartMs = (prev.league as any)?.draftDate ? new Date((prev.league as any).draftDate).getTime() : 0;
+          // Only allow draft to be open if we have a valid draft date and current time is past it
+          const draftOpen = draftStartMs > 0 ? Date.now() >= draftStartMs : false;
+          const isMyTurn = draftOpen && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
 
           return {
             ...prev,
             picks: updatedPicks,
             currentPick,
             currentRound,
-            onTheClock,
+            onTheClock: draftOpen ? onTheClock : null,
             isMyTurn,
           };
         }
@@ -209,7 +275,20 @@ export function useDraftRealtime(leagueId: string) {
 
     // Pick updated (e.g., timer expired, auto-pick)
     if (events.includes('databases.*.collections.*.documents.*.update')) {
-      const updatedPick = payload as DraftPick;
+      const src = payload as any;
+      const updatedPick: DraftPick = {
+        $id: src.$id,
+        leagueId: src.leagueId,
+        round: src.round,
+        pickNumber: typeof src.pickNumber === 'number' ? src.pickNumber : (src.pick as number),
+        userId: src.userId,
+        playerId: src.playerId,
+        playerName: src.playerName,
+        playerPosition: src.playerPosition,
+        playerTeam: src.playerTeam,
+        timestamp: src.timestamp,
+        timeRemaining: src.timeRemaining,
+      };
       
       setState(prev => ({
         ...prev,

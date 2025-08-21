@@ -74,7 +74,8 @@ export async function GET(
         commissioner: league.commissioner,
         lineupProfileId: league.lineup_profile_id,
         scoringProfileId: league.scoring_profile_id,
-        draftDate: league.draft_date,
+        // Support both legacy snake_case and current camelCase field names
+        draftDate: (league as any).draftDate || (league as any).draft_date,
         seasonStartWeek: league.season_start_week,
         createdAt: league.created_at,
         updatedAt: league.updated_at,

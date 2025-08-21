@@ -50,7 +50,7 @@ export function middleware(request: NextRequest) {
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' vercel.live https://accounts.google.com https://apis.google.com",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.gstatic.com",
-      "connect-src 'self' https://nyc.cloud.appwrite.io https://api.collegefootballdata.com https://*.vercel.app https://accounts.google.com https://apis.google.com",
+      "connect-src 'self' https://nyc.cloud.appwrite.io wss://nyc.cloud.appwrite.io https://api.collegefootballdata.com https://*.vercel.app wss://*.vercel.app https://accounts.google.com https://apis.google.com",
       "font-src 'self' data:",
       // Allow Google OAuth redirect flows in frames if needed
       "frame-src 'self' https://accounts.google.com",

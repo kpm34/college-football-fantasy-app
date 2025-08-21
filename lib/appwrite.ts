@@ -48,6 +48,7 @@ export const COLLECTIONS = {
   USER_CUSTOM_PROJECTIONS: ENV_COLLECTIONS.userCustomProjections,
   // USERS collection deprecated - use Appwrite Auth Users instead
   ACTIVITY_LOG: ENV_COLLECTIONS.activityLog,
+  DRAFT_STATES: ENV_COLLECTIONS.draftStates,
 } as const;
 
 // Realtime channels

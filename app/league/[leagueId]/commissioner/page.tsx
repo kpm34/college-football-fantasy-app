@@ -95,6 +95,9 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
   const [primaryColor, setPrimaryColor] = useState('#8C1818');
   const [secondaryColor, setSecondaryColor] = useState('#DAA520');
   const [leagueTrophyName, setLeagueTrophyName] = useState('Championship Trophy');
+  // Draft order management
+  const [orderMode, setOrderMode] = useState<'custom'|'random'>('custom');
+  const [draftOrder, setDraftOrder] = useState<string[]>([]);
   
   // Scoring rules
   const [scoringRules, setScoringRules] = useState<ScoringRules>({
@@ -171,6 +174,24 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       setPrimaryColor(league.primaryColor || '#8C1818');
       setSecondaryColor(league.secondaryColor || '#DAA520');
       setLeagueTrophyName(league.leagueTrophyName || 'Championship Trophy');
+      // Draft order
+      try {
+        const rawOrder = (league as any).draftOrder;
+        if (rawOrder) {
+          const parsed = Array.isArray(rawOrder) ? rawOrder : JSON.parse(rawOrder);
+          if (Array.isArray(parsed)) setDraftOrder(parsed);
+        } else if (league.scoringRules) {
+          try {
+            const parsedRules = JSON.parse(league.scoringRules);
+            if (Array.isArray(parsedRules?.draftOrderOverride)) {
+              setDraftOrder(parsedRules.draftOrderOverride);
+            }
+          } catch {}
+        } else if (Array.isArray((league as any).members)) {
+          setDraftOrder((league as any).members);
+        }
+      } catch {}
+      setOrderMode(((league as any).orderMode as any) || 'custom');
       
       // Parse draft date/time
       if (league.draftDate) {
@@ -294,6 +315,9 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         updates.draftDate = new Date(`${draftDate}T${draftTime}`).toISOString();
       }
       updates.pickTimeSeconds = pickTimeSeconds;
+      // Persist draft order inside scoringRules payload to avoid schema drift
+      const mergedRules = { ...scoringRules, draftOrderOverride: draftOrder.filter(Boolean) } as any;
+      updates.scoringRules = JSON.stringify(mergedRules);
       
       console.log('Saving settings with updates:', updates);
       
@@ -506,6 +530,125 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
             </button>
           </div>
 
+          {/* Draft Order */}
+          <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Draft Order</h2>
+            <div className="mb-3 flex items-center gap-3">
+              <label className="text-sm" style={{ color: leagueColors.text.secondary }}>Mode</label>
+              <select
+                value={orderMode}
+                onChange={(e)=> setOrderMode(e.target.value as any)}
+                className="px-3 py-2 rounded-lg"
+                style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+              >
+                <option value="custom">Custom</option>
+                <option value="random">Randomize</option>
+              </select>
+              <button
+                onClick={() => {
+                  if (members.length === 0) return;
+                  const base = members.map(m => (m as any).userId || m.$id);
+                  const shuffled = [...base].sort(() => Math.random() - 0.5);
+                  setDraftOrder(shuffled);
+                  setOrderMode('custom');
+                }}
+                className="px-3 py-2 rounded-lg text-sm"
+                style={{ backgroundColor: leagueColors.accent.pink, color: leagueColors.text.inverse }}
+              >
+                Randomize Now
+              </button>
+              <button
+                onClick={() => {
+                  const target = maxTeams || 12;
+                  const next = new Set(draftOrder);
+                  let i = 1;
+                  while (next.size < target) {
+                    const id = `BOT-${i++}`;
+                    next.add(id);
+                  }
+                  setDraftOrder(Array.from(next));
+                }}
+                className="px-3 py-2 rounded-lg text-sm"
+                style={{ backgroundColor: '#6b7280', color: leagueColors.text.inverse }}
+              >
+                Fill With Bots
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[15px]">
+              <div>
+                <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>Available Members</div>
+                <div className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900" style={{ border: `1px solid ${leagueColors.border.light}` }}>
+                  {members.map(m => (
+                    <div key={m.$id} className="flex items-center justify-between px-3 py-2 rounded border" style={{ borderColor: leagueColors.border.light }}>
+                      <div className="truncate" title={m.name || m.teamName || m.$id}>
+                        {m.name || m.teamName || m.$id}
+                      </div>
+                      <button
+                        onClick={() => {
+                          const mid = (m as any).userId || m.$id;
+                          const target = maxTeams || 12;
+                          setDraftOrder(prev => {
+                            const clean = prev.filter(id => id);
+                            const next = clean.includes(mid) ? clean : [...clean, mid];
+                            let i = 1;
+                            while (next.length < target) {
+                              const bot = `BOT-${i++}`;
+                              if (!next.includes(bot)) next.push(bot);
+                            }
+                            return next;
+                          });
+                        }}
+                        className="text-sm px-3 py-1 rounded"
+                        style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
+                      >Add</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>Order (1..N)</div>
+                <div className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900" style={{ border: `1px solid ${leagueColors.border.light}` }}>
+                  {draftOrder.map((id, idx) => {
+                    const m = members.find(mm => mm.$id === id || (mm as any).userId === id);
+                    return (
+                      <div key={`${id}-${idx}`} className="flex items-center gap-3 px-3 py-2 rounded border" style={{ borderColor: leagueColors.border.light }}>
+                        <div className="w-6 text-center font-medium">{idx+1}</div>
+                        <div className="flex-1 truncate" title={m?.name || m?.teamName || id}>
+                          {m?.name || m?.teamName || id}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button onClick={() => setDraftOrder(prev => {
+                            if (idx === 0) return prev;
+                            const clone = [...prev];
+                            [clone[idx-1], clone[idx]] = [clone[idx], clone[idx-1]];
+                            return clone;
+                          })} className="text-sm px-3 py-1 rounded border">Up</button>
+                          <button onClick={() => setDraftOrder(prev => {
+                            if (idx === prev.length -1) return prev;
+                            const clone = [...prev];
+                            [clone[idx+1], clone[idx]] = [clone[idx], clone[idx+1]];
+                            return clone;
+                          })} className="text-sm px-3 py-1 rounded border">Down</button>
+                          <button onClick={() => setDraftOrder(prev => prev.filter(x => x !== id))} className="text-sm px-3 py-1 rounded border">Remove</button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <button
+                onClick={saveAllSettings}
+                disabled={saving}
+                className="px-4 py-2 rounded-lg"
+                style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
+              >
+                {saving ? 'Saving...' : 'Save Draft Order'}
+              </button>
+            </div>
+          </div>
+
           {/* Season Settings */}
           <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
             <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Season Settings</h2>
@@ -591,12 +734,12 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                 ) : (
                   <select
                     className="w-full px-3 py-2 rounded-lg"
-                    disabled={waiverType === 'None'}
+                    disabled={waiverType === ('None' as any)}
                     style={{ 
-                      backgroundColor: waiverType === 'None' ? '#e5e5e5' : leagueColors.background.overlay, 
+                      backgroundColor: (waiverType as any) === 'None' ? '#e5e5e5' : leagueColors.background.overlay, 
                       border: `1px solid ${leagueColors.border.light}`, 
-                      color: waiverType === 'None' ? '#999' : leagueColors.text.primary,
-                      cursor: waiverType === 'None' ? 'not-allowed' : 'auto'
+                      color: (waiverType as any) === 'None' ? '#999' : leagueColors.text.primary,
+                      cursor: (waiverType as any) === 'None' ? 'not-allowed' : 'auto'
                     }}
                   >
                     <option>Weekly - Inverse Standings</option>

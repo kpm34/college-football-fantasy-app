@@ -185,7 +185,7 @@ export async function PUT(
     // Filter payload to only attributes that exist on the document (or are known safe)
     const knownSafeKeys = new Set([
       'name', 'maxTeams', 'isPublic', 'draftDate', 'pickTimeSeconds',
-      'orderMode', 'gameMode', 'selectedConference', 'scoringRules',
+      'orderMode', 'draftOrder', 'gameMode', 'selectedConference', 'scoringRules',
       'draftType', 'seasonStartWeek', 'playoffTeams', 'playoffStartWeek',
       'waiverType', 'waiverBudget', 'primaryColor', 'secondaryColor',
       'leagueTrophyName', 'scoringType', 'tradeDeadline', 'rosterSize'
