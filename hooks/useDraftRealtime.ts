@@ -15,6 +15,7 @@ interface DraftRealtimeState {
   connected: boolean;
   loading: boolean;
   error: string | null;
+  deadlineAt: string | null;
 }
 
 export function useDraftRealtime(leagueId: string) {
@@ -29,6 +30,7 @@ export function useDraftRealtime(leagueId: string) {
     connected: false,
     loading: true,
     error: null,
+    deadlineAt: null,
   });
   // Track IDs that represent "me" for turn checks (auth user id + roster doc ids)
   const myIdsRef = useRef<Set<string>>(new Set());
@@ -48,7 +50,7 @@ export function useDraftRealtime(leagueId: string) {
         }
         
         const { data } = await response.json();
-        const { league, userTeams, picks: picksData, userId } = data;
+        const { league, userTeams, picks: picksData, userId, draftState } = data as any;
 
         // Load my roster ids within this league (some data paths use roster $id instead of userId)
         myIdsRef.current = new Set([userId]);
@@ -104,20 +106,21 @@ export function useDraftRealtime(leagueId: string) {
           : pickIndex;
         const onTheClock = orderArray[actualIndex] || league.draftOrder?.[actualIndex];
         const draftStartMs = (league as any)?.draftDate ? new Date((league as any).draftDate).getTime() : 0;
-        // Only allow draft to be open if we have a valid draft date and current time is past it
-        const draftOpen = draftStartMs > 0 ? Date.now() >= draftStartMs : false;
-        const isMyTurn = draftOpen && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
+        // Live only when status is drafting and time has reached or passed
+        const isDraftLive = (String((league as any)?.status) === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
+        const isMyTurn = isDraftLive && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
 
         setState({
           league,
           picks,
           currentPick,
           currentRound,
-          onTheClock: draftOpen ? onTheClock : null,
+          onTheClock: isDraftLive ? onTheClock : null,
           isMyTurn,
           connected: false,
           loading: false,
           error: null,
+          deadlineAt: draftState?.deadlineAt || null,
         });
       } catch (error) {
         console.error('Error loading draft data:', error);
@@ -248,16 +251,15 @@ export function useDraftRealtime(leagueId: string) {
           const fallbackMembers: string[] = Array.isArray((prev.league as any)?.members) ? (prev.league as any).members : [];
           const onTheClock = parsedOrder[actualIndex] || fallbackMembers[actualIndex] || prev.league.draftOrder?.[actualIndex];
           const draftStartMs = (prev.league as any)?.draftDate ? new Date((prev.league as any).draftDate).getTime() : 0;
-          // Only allow draft to be open if we have a valid draft date and current time is past it
-          const draftOpen = draftStartMs > 0 ? Date.now() >= draftStartMs : false;
-          const isMyTurn = draftOpen && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
+          const isDraftLive = (String((prev.league as any)?.status) === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
+          const isMyTurn = isDraftLive && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
 
           return {
             ...prev,
             picks: updatedPicks,
             currentPick,
             currentRound,
-            onTheClock: draftOpen ? onTheClock : null,
+            onTheClock: isDraftLive ? onTheClock : null,
             isMyTurn,
           };
         }

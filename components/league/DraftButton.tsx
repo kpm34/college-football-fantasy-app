@@ -33,7 +33,7 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
       const timeDiff = draftDate.getTime() - now.getTime();
       
       // Draft is complete if status is active or complete
-      if (league.status === 'active' || league.status === 'complete') {
+      if (league.status === 'active' || league.status === 'complete' || league.status === 'complete') {
         setIsDraftComplete(true);
         setIsDraftActive(false);
         setIsDraftTime(false);

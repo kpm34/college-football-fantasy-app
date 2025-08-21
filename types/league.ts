@@ -9,7 +9,7 @@ export interface League extends Models.Document {
   currentTeams: number;
   draftType: 'snake' | 'auction';
   gameMode: 'power4' | 'sec' | 'acc' | 'big12' | 'bigten';
-  status: 'open' | 'full' | 'drafting' | 'active' | 'completed';
+  status: 'open' | 'full' | 'drafting' | 'active' | 'complete';
   isPublic: boolean;
   pickTimeSeconds: number;
   scoringRules: Record<string, number>;
