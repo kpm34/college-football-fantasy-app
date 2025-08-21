@@ -63,7 +63,18 @@ export async function GET(request: NextRequest) {
 
               if (!current) throw new Error('No active session found');
 
-              // At this point we know the Appwrite session exists; just continue into the app
+              // Send session info to server so it can set first-party cookie
+              await fetch('/api/auth/sync-oauth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ sessionId: current.$id, userId: user.$id })
+              });
+
+              // Also drop a short-lived client cookie so useAuth hook forces re-check
+              document.cookie = 'oauth_success=true; path=/; max-age=120; SameSite=Lax';
+
+              // Redirect to dashboard
               window.location.href = '/dashboard';
             } catch (err) {
               console.error('OAuth sync error:', err);
