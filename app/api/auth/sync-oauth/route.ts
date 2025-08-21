@@ -4,11 +4,11 @@ import { cookies } from 'next/headers';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { sessionId, userId } = body;
-    
-    if (!sessionId || !userId) {
+    const { userId, secret } = body;
+
+    if (!userId || !secret) {
       return NextResponse.json(
-        { success: false, error: 'Missing session data' },
+        { success: false, error: 'Missing OAuth credentials' },
         { status: 400 }
       );
     }
@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
     // Set session cookies for the OAuth user
     const cookieStore = cookies();
     
-    // Set Appwrite session cookie
-    cookieStore.set('appwrite-session', sessionId, {
+    // Set Appwrite session cookie (value must be session secret)
+    cookieStore.set('appwrite-session', secret, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
