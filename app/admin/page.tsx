@@ -412,48 +412,135 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Diagram Modal */}
+      {/* Diagram Modal - Full Screen with Better Contrast */}
       {showDiagram && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
-          <div className="w-full max-w-6xl bg-gray-900 text-white rounded-xl border border-white/20 shadow-2xl overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-gray-800 to-gray-700">
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-md flex items-center justify-center z-50" role="dialog" aria-modal="true">
+          <div className="w-full h-full bg-gradient-to-br from-slate-900 via-gray-900 to-zinc-900 text-white flex flex-col">
+            {/* Header with strong contrast */}
+            <div className="flex items-center justify-between px-8 py-4 bg-gradient-to-r from-indigo-900/50 to-purple-900/50 border-b border-white/20">
               <div>
-                <h3 className="text-xl font-semibold">{showDiagram.title}</h3>
-                {lastUpdated && <p className="text-xs text-gray-300">Last updated: {new Date(lastUpdated).toLocaleString()}</p>}
+                <h3 className="text-2xl font-bold text-white drop-shadow-lg">{showDiagram.title}</h3>
+                {lastUpdated && <p className="text-sm text-blue-200 mt-1">Last updated: {new Date(lastUpdated).toLocaleString()}</p>}
               </div>
               <button 
                 onClick={() => {
                   setShowDiagram(null)
                   setCharts([])
                 }} 
-                className="px-3 py-1.5 rounded-md bg-white text-gray-900 font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/80" 
+                className="px-6 py-2.5 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-500 transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 shadow-lg" 
                 aria-label="Close diagram"
               >
-                Close
+                ✕ Close
               </button>
             </div>
-            <div className="max-h-[80vh] overflow-auto p-6 bg-gray-950">
+            
+            {/* Content area - full height with better background */}
+            <div className="flex-1 overflow-auto bg-gradient-to-b from-gray-900 to-black p-8">
               {charts.length === 0 && (
-                <div className="text-yellow-400 mb-4 p-4 bg-gray-800 rounded">
-                  <div className="font-bold mb-2">⚠️ No charts loaded</div>
+                <div className="text-yellow-300 mb-6 p-6 bg-yellow-900/30 border border-yellow-500/50 rounded-lg backdrop-blur-sm">
+                  <div className="font-bold text-lg mb-3">⚠️ No charts loaded</div>
                   {debugInfo && (
-                    <div className="text-sm space-y-1">
-                      <div>API Status: {debugInfo.status || 'Unknown'}</div>
-                      <div>Error: {debugInfo.response?.error || debugInfo.error || 'Unknown'}</div>
-                      <div>File: {debugInfo.response?.fileName || 'Not found'}</div>
+                    <div className="text-sm space-y-2 text-yellow-200">
+                      <div><span className="font-semibold">API Status:</span> {debugInfo.status || 'Unknown'}</div>
+                      <div><span className="font-semibold">Error:</span> {debugInfo.response?.error || debugInfo.error || 'Unknown'}</div>
+                      <div><span className="font-semibold">File:</span> {debugInfo.response?.fileName || 'Not found'}</div>
                     </div>
                   )}
                 </div>
               )}
               {charts.length > 0 ? (
-                <div className="space-y-8">
-                  <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[400px] [&_svg]:h-auto [&_svg]:mx-auto">
-                    <MermaidRenderer charts={charts} />
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="w-full max-w-[95vw] bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl">
+                    <style jsx global>{`
+                      .mermaid {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        min-height: 70vh;
+                      }
+                      .mermaid svg {
+                        max-width: 100% !important;
+                        height: auto !important;
+                        min-height: 600px !important;
+                      }
+                      /* Enhance Mermaid diagram text visibility */
+                      .mermaid .nodeLabel {
+                        color: #1a1a1a !important;
+                        font-weight: 600 !important;
+                        font-size: 14px !important;
+                      }
+                      .mermaid .edgeLabel {
+                        background-color: white !important;
+                        color: #1a1a1a !important;
+                        font-weight: 500 !important;
+                      }
+                      .mermaid rect {
+                        stroke-width: 2px !important;
+                      }
+                      .mermaid .node rect,
+                      .mermaid .node circle,
+                      .mermaid .node ellipse,
+                      .mermaid .node polygon,
+                      .mermaid .node path {
+                        fill: #e0e7ff !important;
+                        stroke: #4338ca !important;
+                      }
+                      .mermaid .node.default rect,
+                      .mermaid .node.default circle,
+                      .mermaid .node.default ellipse,
+                      .mermaid .node.default polygon {
+                        fill: #f3f4f6 !important;
+                        stroke: #6b7280 !important;
+                      }
+                      /* Subgraph styling */
+                      .mermaid .cluster rect {
+                        fill: #fef3c7 !important;
+                        stroke: #f59e0b !important;
+                        stroke-width: 2px !important;
+                      }
+                      .mermaid .cluster text {
+                        fill: #92400e !important;
+                        font-weight: bold !important;
+                      }
+                      /* Arrow styling */
+                      .mermaid .arrowheadPath {
+                        fill: #4338ca !important;
+                      }
+                      .mermaid .edgePath .path {
+                        stroke: #4338ca !important;
+                        stroke-width: 2px !important;
+                      }
+                      /* Sequence diagram specific */
+                      .mermaid .actor {
+                        fill: #ddd6fe !important;
+                        stroke: #7c3aed !important;
+                      }
+                      .mermaid .actor-line {
+                        stroke: #7c3aed !important;
+                      }
+                      .mermaid .messageLine0 {
+                        stroke: #4338ca !important;
+                      }
+                      .mermaid .messageLine1 {
+                        stroke: #4338ca !important;
+                        stroke-dasharray: 2, 2 !important;
+                      }
+                      /* Dark mode override for better contrast */
+                      .dark .mermaid {
+                        filter: none !important;
+                      }
+                    `}</style>
+                    <div className="[&_svg]:!max-w-full [&_svg]:!min-h-[600px] [&_svg]:h-auto [&_svg]:mx-auto">
+                      <MermaidRenderer charts={charts} />
+                    </div>
                   </div>
                 </div>
               ) : (
-                <div className="text-gray-400 text-center py-8">
-                  No diagrams found. Check the debug info above.
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-gray-300 text-center p-12 bg-gray-800/50 rounded-xl backdrop-blur-sm">
+                    <div className="text-xl mb-2">📊 No diagrams found</div>
+                    <div className="text-sm text-gray-400">Check the debug info above for details</div>
+                  </div>
                 </div>
               )}
             </div>
