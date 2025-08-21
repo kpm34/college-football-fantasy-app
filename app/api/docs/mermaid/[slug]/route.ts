@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'node:fs/promises'
+import fs from 'node:fs'
 import path from 'node:path'
 
 function extractMermaidBlocks(markdown: string): string[] {
@@ -24,123 +24,117 @@ export async function GET(
 ) {
   const { slug } = await params
 
-  // Map slugs to file paths - now using individual diagram files
+  // Map slugs to file paths
   const fileMap: Record<string, string> = {
     // Legacy mappings for existing pages
-    'data-flow': 'docs/DATA_FLOW.md',
-    'project-map': 'docs/PROJECT_MAP.md',
-    'system-map': 'docs/SYSTEM_MAP.md',
+    'data-flow': 'DATA_FLOW.md',
+    'project-map': 'PROJECT_MAP.md',
+    'system-map': 'SYSTEM_MAP.md',
     
     // Projections System Diagrams
-    'projections-overview': 'docs/diagrams/projections-overview.md',
-    'projections-algorithm': 'docs/diagrams/projections-algorithm.md',
-    'depth-multipliers': 'docs/diagrams/depth-multipliers.md',
-    'data-sources': 'docs/diagrams/data-sources.md',
-    'api-flow': 'docs/diagrams/api-flow.md',
-    'troubleshooting': 'docs/diagrams/troubleshooting.md',
+    'projections-overview': 'diagrams/projections-overview.md',
+    'projections-algorithm': 'diagrams/projections-algorithm.md',
+    'depth-multipliers': 'diagrams/depth-multipliers.md',
+    'data-sources': 'diagrams/data-sources.md',
+    'api-flow': 'diagrams/api-flow.md',
+    'troubleshooting': 'diagrams/troubleshooting.md',
     
     // System Architecture Diagrams
-    'repository-structure': 'docs/diagrams/repository-structure.md',
-    'system-architecture': 'docs/diagrams/system-architecture.md',
-    'authentication-flow': 'docs/diagrams/authentication-flow.md',
+    'repository-structure': 'diagrams/repository-structure.md',
+    'system-architecture': 'diagrams/system-architecture.md',
+    'authentication-flow': 'diagrams/authentication-flow.md',
     
     // League & Draft Management
-    'league-management': 'docs/diagrams/league-management.md',
-    'draft-realtime': 'docs/diagrams/draft-realtime.md',
-    'search-filter-flow': 'docs/diagrams/search-filter-flow.md',
+    'league-management': 'diagrams/league-management.md',
+    'draft-realtime': 'diagrams/draft-realtime.md',
+    'search-filter-flow': 'diagrams/search-filter-flow.md',
     
     // Admin & Commissioner Tools
-    'admin-operations': 'docs/diagrams/admin-operations.md',
-    'commissioner-settings': 'docs/diagrams/commissioner-settings.md',
+    'admin-operations': 'diagrams/admin-operations.md',
+    'commissioner-settings': 'diagrams/commissioner-settings.md',
     
     // Catch-all for projections (loads overview)
-    'projections': 'docs/diagrams/projections-overview.md',
+    'projections': 'diagrams/projections-overview.md',
   }
 
-  const rel = fileMap[slug]
-  if (!rel) {
+  const fileName = fileMap[slug]
+  if (!fileName) {
     return NextResponse.json({ 
       error: 'Not found', 
       availableSlugs: Object.keys(fileMap) 
     }, { status: 404 })
   }
 
-  // Try multiple possible paths for Vercel serverless environment
-  const allCandidates = [
-    path.join(process.cwd(), rel),        // /var/task/docs/... (most likely in Vercel)
-    path.join('/var/task', rel),          // Vercel Lambda direct path
-    path.join('.', rel),                  // ./docs/...
-    rel,                                   // relative path
-    path.join(__dirname, '..', '..', '..', '..', '..', rel), // relative to API route
+  // Try multiple locations where docs might be
+  const possiblePaths = [
+    // In production, docs are copied to public/docs by prebuild
+    path.join(process.cwd(), 'public', 'docs', fileName),
+    // Alternative: direct in public
+    path.join(process.cwd(), 'public', fileName),
+    // Development: original docs folder
+    path.join(process.cwd(), 'docs', fileName),
+    // Vercel: might be at root
+    path.join('/var/task', 'public', 'docs', fileName),
+    path.join('/var/task', 'docs', fileName),
   ]
 
-  for (const candidate of allCandidates) {
+  for (const filePath of possiblePaths) {
     try {
-      const absolutePath = path.resolve(candidate)
-      
-      // Check if file exists first
-      const fileExists = await fs.access(absolutePath).then(() => true).catch(() => false)
-      
-      if (!fileExists) {
-        continue
-      }
-      
-      const [content, stat] = await Promise.all([
-        fs.readFile(absolutePath, 'utf8'),
-        fs.stat(absolutePath),
-      ])
-      
-      const charts = extractMermaidBlocks(content)
-      
-      if (charts.length > 0) {
-        return NextResponse.json(
-          { 
-            charts, 
-            updatedAt: stat.mtime.toISOString(), 
-            source: candidate,
-            slug: slug,
-            fileName: path.basename(rel)
-          },
-          { 
-            headers: {
-              'Cache-Control': 'no-cache, no-store, must-revalidate',
-              'Pragma': 'no-cache',
-              'Expires': '0'
+      if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath, 'utf8')
+        const charts = extractMermaidBlocks(content)
+        const stat = fs.statSync(filePath)
+        
+        if (charts.length > 0) {
+          return NextResponse.json(
+            { 
+              charts, 
+              updatedAt: stat.mtime.toISOString(), 
+              source: filePath,
+              slug: slug,
+              fileName: fileName
+            },
+            { 
+              headers: {
+                'Cache-Control': 'public, max-age=3600',
+              }
             }
-          }
-        )
-      } else {
-        // Return empty charts array but with metadata
-        return NextResponse.json(
-          { 
-            charts: [], 
-            error: 'No diagrams found in file', 
-            source: candidate,
-            slug: slug,
-            fileName: path.basename(rel),
-            contentLength: content.length
-          },
-          { 
-            headers: {
-              'Cache-Control': 'no-cache, no-store, must-revalidate',
-              'Pragma': 'no-cache',
-              'Expires': '0'
+          )
+        } else {
+          return NextResponse.json(
+            { 
+              charts: [], 
+              error: 'No mermaid blocks found', 
+              source: filePath,
+              slug: slug,
+              fileName: fileName,
+              contentLength: content.length,
+              contentPreview: content.substring(0, 200)
+            },
+            { 
+              headers: {
+                'Cache-Control': 'no-cache',
+              }
             }
-          }
-        )
+          )
+        }
       }
     } catch (error) {
-      // Continue to next candidate
+      // Continue to next path
+      continue
     }
   }
 
-  // If we get here, file wasn't found
+  // If we get here, file wasn't found in any location
   return NextResponse.json({ 
     charts: [], 
-    error: 'File not found', 
-    tried: allCandidates.map(c => path.resolve(c)),
+    error: 'File not found in any location', 
+    slug: slug,
+    fileName: fileName,
+    triedPaths: possiblePaths,
     workingDir: process.cwd(),
-    slug: slug
+    nodeEnv: process.env.NODE_ENV,
+    vercel: process.env.VERCEL || 'false'
   }, { status: 404 })
 }
 
