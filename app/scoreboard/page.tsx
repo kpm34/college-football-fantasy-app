@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '@/hooks/useAuth';
 import { POWER4_CONFERENCES, POWER4_TEAM_SET, type Power4Conference } from '@/lib/power4';
+import { ScheduleNavigation } from '@/components/schedule/ScheduleNavigation';
 
 interface Game {
   id: string;
@@ -122,8 +123,13 @@ export default function ScoreboardPage() {
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* College Schedule (Primary) */}
       <div className="container mx-auto px-4 py-8 relative">
+        <ScheduleNavigation />
+      </div>
+
+      {/* Live Scoreboard (Secondary) */}
+      <div className="container mx-auto px-4 pb-12 relative">
         {loading ? (
           <div className="text-center text-white/60 py-12">Loading games...</div>
         ) : games.length === 0 ? (
