@@ -43,8 +43,10 @@ export const INDEX_SCHEMA: Record<string, IndexProfile> = {
   draft_states: {
     collectionId: 'draft_states',
     description: 'Persisted draft state snapshot',
-    commonQueries: ['Get current state by draftId'],
-    compoundIndexes: [],
+    commonQueries: ['Get current state by draftId', 'Find expired deadlines for autopick'],
+    compoundIndexes: [
+      { key: 'deadline_scan_idx', type: 'key', attributes: ['status', 'deadlineAt'], orders: ['ASC', 'ASC'], description: 'Scan for expired deadlines', queryPatterns: ['status = "active" AND deadlineAt <= now()'], estimatedUsage: 'high' }
+    ],
     singleIndexes: [
       { key: 'draft_unique_idx', type: 'unique', attributes: ['draftId'], description: 'One state per draft', queryPatterns: ['draftId = ?'], estimatedUsage: 'high' }
     ]
