@@ -35,21 +35,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success:false, error:'No cookie from Appwrite'},{status:500});
     }
 
-    const match = setCookie.match(/a_session_[^=]+=([^;]+)/);
-    if (!match) {
-      return NextResponse.json({ success:false, error:'Cookie parse failed'},{status:500});
-    }
-
-    const cookieStore = cookies();
-    cookieStore.set('appwrite-session', match[1], {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 30
-    });
-
-    return NextResponse.json({ success:true });
+    // Forward the exact cookie back to the browser so path, domain, expiry etc stay intact
+    const proxyResponse = NextResponse.json({ success:true });
+    proxyResponse.headers.set('set-cookie', setCookie);
+    return proxyResponse;
   } catch (error) {
     console.error('OAuth sync error:', error);
     return NextResponse.json({ success: false, error: 'Failed to sync session' }, { status: 500 });
