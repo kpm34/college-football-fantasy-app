@@ -25,6 +25,27 @@ export async function GET(request: NextRequest) {
     const requestedLimit = parseInt(searchParams.get('limit') || `${maxCount}`, 10);
     const limit = Math.min(requestedLimit, maxCount);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
+    const leagueId = searchParams.get('leagueId');
+
+    // If a leagueId is provided and the league is conference-mode, force conference filter
+    let enforcedConference: string | null = null;
+    if (!conference && leagueId) {
+      try {
+        const league = await databases.getDocument(
+          DATABASE_ID,
+          COLLECTIONS.LEAGUES,
+          leagueId
+        );
+        const mode = (league as any).gameMode || (league as any).mode;
+        const selectedConf = (league as any).selectedConference || (league as any).conf;
+        if (String(mode).toLowerCase() === 'conference' && selectedConf) {
+          enforcedConference = String(selectedConf);
+        }
+      } catch (e) {
+        // Best-effort; continue without enforcement on failure
+        console.warn('Failed to load league for conference enforcement', e);
+      }
+    }
 
     // Build queries based on search type
     const queries: any[] = [
@@ -36,7 +57,7 @@ export async function GET(request: NextRequest) {
     // queries.push(Query.equal('draftable', true));
     
     // Only add conference filter if not searching for ALL or specific conference
-    if (!conference) {
+    if (!conference && !enforcedConference) {
       const power4 = ['SEC', 'Big Ten', 'Big 12', 'ACC'];
       queries.push(Query.equal('conference', power4 as any));
     }
@@ -51,8 +72,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Add conference filter if specified
-    if (conference) {
-      queries.push(Query.equal('conference', conference));
+    if (conference || enforcedConference) {
+      queries.push(Query.equal('conference', (conference || enforcedConference)!));
     }
 
     // Add team/school filter if specified (prefer team; fallback to school)
