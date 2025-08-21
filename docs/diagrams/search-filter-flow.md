@@ -5,7 +5,7 @@ flowchart TD
     UI[Search UI] --> INPUT[User Input]
     INPUT --> PARAMS[Build Query Params]
     
-    PARAMS --> API[/api/leagues/search]
+    PARAMS --> API["Search API"]
     API --> VALIDATE{Validate Params}
     
     VALIDATE -->|Invalid| ERROR[Return 400]
