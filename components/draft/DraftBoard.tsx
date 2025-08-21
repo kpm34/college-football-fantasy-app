@@ -9,6 +9,8 @@ type BoardPick = {
   userId?: string;
   playerName?: string;
   playerId: string;
+  position?: string;
+  team?: string; // school/team name
 };
 
 export interface DraftBoardProps {
@@ -34,6 +36,26 @@ export function DraftBoard({ picks, numTeams, rounds, currentOverall, slotLabels
     return map;
   }, [picks]);
 
+  const getPositionBg = (pos?: string) => {
+    const P = String(pos || '').toUpperCase();
+    switch (P) {
+      case 'QB':
+        return '#3B82F6'; // blue
+      case 'RB':
+        return '#10B981'; // green
+      case 'WR':
+        return '#F59E0B'; // amber
+      case 'TE':
+        return '#8B5CF6'; // purple
+      case 'K':
+        return '#6B7280'; // gray
+      case 'DEF':
+        return '#374151';
+      default:
+        return '#111827';
+    }
+  };
+
   const renderCell = (roundIndex: number, slotIndex: number) => {
     const roundNumber = roundIndex + 1;
     const slotNumber = slotIndex + 1; // 1-based
@@ -43,16 +65,23 @@ export function DraftBoard({ picks, numTeams, rounds, currentOverall, slotLabels
     const pick = overallToPick.get(overall);
     const isCurrent = currentOverall != null && overall === currentOverall;
 
+    const bgColor = pick ? getPositionBg(pick.position) : undefined;
     return (
       <div
         key={`r${roundNumber}-s${slotNumber}`}
-        className={`rounded border p-2 min-h-[56px] text-xs ${pick ? 'bg-white' : 'bg-gray-50'} ${isCurrent ? 'ring-2 ring-red-600' : ''}`}
-        style={{ borderColor: '#e5e7eb' }}
+        className={`rounded border p-2 min-h-[56px] text-xs ${pick ? '' : 'bg-gray-50'} ${isCurrent ? 'ring-2 ring-red-600' : ''}`}
+        style={{ borderColor: '#e5e7eb', backgroundColor: bgColor, color: pick ? '#fff' : undefined }}
       >
         {pick ? (
           <div>
-            <div className="font-medium truncate">{pick.playerName || pick.playerId}</div>
-            <div className="text-[11px] text-gray-500">#{overall} • R{roundNumber}</div>
+            <div className="truncate font-semibold leading-tight text-[12px]">{pick.playerName || '—'}</div>
+            <div className="text-[11px] opacity-90 flex items-center gap-1">
+              {pick.position && (
+                <span className="inline-flex items-center justify-center w-6 h-4 rounded text-[10px] font-bold" style={{ backgroundColor: 'rgba(0,0,0,.25)' }}>{pick.position.toUpperCase()}</span>
+              )}
+              <span className="truncate">{pick.team || ''}</span>
+              <span className="ml-auto">#{overall} • R{roundNumber}</span>
+            </div>
           </div>
         ) : (
           <div className="text-[11px] text-gray-400">#{overall}</div>

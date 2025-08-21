@@ -188,6 +188,15 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
     return m;
   }, [players]);
 
+  const idToTeam = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const p of players) {
+      const id = p.id || p.$id;
+      if (id) m.set(id, String(p.team || ''));
+    }
+    return m;
+  }, [players]);
+
   // Recent picks ticker (last 12)
   const recentPicks = (draftCore.picks || [])
     .slice(-12)
@@ -211,11 +220,13 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
       round: p.round,
       slot: p.slot,
       userId: p.participantId,
-      playerName: p.playerName,
+      playerName: p.playerName || idToName.get(p.playerId),
       playerId: p.playerId,
+      position: p.position || idToPos.get(p.playerId) || '',
+      team: idToTeam.get(p.playerId) || '',
     }));
     return list;
-  }, [results?.picks]);
+  }, [results?.picks, idToName, idToPos, idToTeam]);
 
   const boardNumTeams = results?.draft?.numTeams || 8;
   const boardRounds = results?.draft?.rounds || 15;
@@ -245,14 +256,14 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
               style={{ backgroundColor: interfaceMode==='dashboard' ? leagueColors.background.card : 'transparent', color: leagueColors.text.primary }}
               onClick={()=>setInterfaceMode('dashboard')}
             >
-              DraftDashboard
+              Draft Dashboard
             </button>
             <button
               className={`px-3 py-1 text-xs ${interfaceMode==='board' ? 'font-semibold' : ''}`}
               style={{ backgroundColor: interfaceMode==='board' ? leagueColors.background.card : 'transparent', color: leagueColors.text.primary, borderLeft: `1px solid ${leagueColors.border.light}` }}
               onClick={()=>setInterfaceMode('board')}
             >
-              DraftBoard
+              Draft Board
             </button>
           </div>
           {results?.draft?.status === 'complete' && (
@@ -293,24 +304,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
           </div>
         ) : <div />}
         <div className="flex items-center gap-3">
-          {interfaceMode==='dashboard' && (
-            <div className="inline-flex rounded overflow-hidden border" style={{ borderColor: leagueColors.border.light }}>
-              <button
-                className={`px-3 py-1 ${viewMode==='players' ? 'font-semibold' : ''}`}
-                style={{ backgroundColor: viewMode==='players' ? leagueColors.background.card : 'transparent', color: leagueColors.text.primary }}
-                onClick={()=>setViewMode('players')}
-              >
-                Available
-              </button>
-              <button
-                className={`px-3 py-1 ${viewMode==='board' ? 'font-semibold' : ''}`}
-                style={{ backgroundColor: viewMode==='board' ? leagueColors.background.card : 'transparent', color: leagueColors.text.primary, borderLeft: `1px solid ${leagueColors.border.light}` }}
-                onClick={()=>setViewMode('board')}
-              >
-                Draft Board
-              </button>
-            </div>
-          )}
+          {/* Removed redundant Available/Draft Board toggle inside dashboard */}
           {turn && (
             <div className="px-3 py-1 rounded font-mono" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}`, color: (secondsLeft ?? 0) <= 10 ? '#B41F24' : leagueColors.text.primary }}>
               {Math.floor((secondsLeft ?? 0) / 60)}:{String((secondsLeft ?? 0) % 60).padStart(2, '0')}

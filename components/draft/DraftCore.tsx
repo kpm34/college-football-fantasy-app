@@ -34,6 +34,7 @@ export interface DraftCoreProps {
   timeRemainingSec?: number;
   currentPickNumber?: number;
   currentTeamLabel?: string;
+  showBoardTab?: boolean; // allow hiding to avoid duplicate toggles
 }
 
 const POSITIONS: Position[] = ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
@@ -309,16 +310,21 @@ export default function DraftCore({
           >
             My Team ({myPicks.length})
           </button>
-          <button
-            onClick={() => setState(prev => ({ ...prev, activeTab: 'board' }))}
-            className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
-              state.activeTab === 'board'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            Draft Board
-          </button>
+          {(
+            // Only show the board tab if explicitly enabled
+            typeof (arguments as any) !== 'undefined'
+          ) && (typeof showBoardTab === 'undefined' || showBoardTab) && (
+            <button
+              onClick={() => setState(prev => ({ ...prev, activeTab: 'board' }))}
+              className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                state.activeTab === 'board'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Draft Board
+            </button>
+          )}
         </div>
       </div>
 
