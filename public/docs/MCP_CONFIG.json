@@ -1,0 +1,105 @@
+{
+  "mcpServers": {
+    "appwrite": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-appwrite",
+        "--users"
+      ],
+      "env": {
+        "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
+        "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
+        "APPWRITE_DATABASE_ID": "college-football-fantasy"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/kashyapmaheshwari/college-football-fantasy-app"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "git": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "--repository",
+        "/Users/kashyapmaheshwari/college-football-fantasy-app"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "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"
+      }
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "BSAQJHPdhjJ3hPcblDWtVJ8Z1qI6O2E"
+      }
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ]
+    }
+  },
+  "aiToolbox": {
+    "description": "AI Development Toolbox - Custom tools for development assistance",
+    "runway": {
+      "available": true,
+      "description": "Runway AI video generation",
+      "wrapper": "/lib/runway.ts",
+      "apiRoute": "/api/runway/create",
+      "envRequired": "RUNWAY_API_KEY"
+    },
+    "openai": {
+      "available": true,
+      "description": "OpenAI direct client (separate from Vercel AI SDK)",
+      "wrapper": "/lib/openai.ts", 
+      "capabilities": ["text-generation", "image-analysis", "image-generation", "embeddings", "moderation"],
+      "envRequired": "OPENAI_API_KEY"
+    },
+    "meshy": {
+      "available": true,
+      "description": "Meshy AI 3D model generation",
+      "wrapper": "/vendor/awwwards-rig/src/lib/meshy.ts",
+      "apiRoute": "/api/meshy/jobs",
+      "envRequired": "MESHY_API_KEY"
+    },
+    "ffmpeg": {
+      "available": true,
+      "description": "Local FFmpeg video processing utilities",
+      "script": "/scripts/ffmpeg-helpers.js",
+      "localOnly": true,
+      "requires": "FFmpeg installed locally"
+    },
+    "jobPolling": {
+      "available": true,
+      "description": "Automated job status polling for async AI operations",
+      "cronRoute": "/api/cron/poll-jobs",
+      "schedule": "*/5 * * * *",
+      "types": "/types/jobs.ts"
+    }
+  }
+}

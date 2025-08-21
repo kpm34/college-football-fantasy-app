@@ -9,6 +9,7 @@ import { DraftRealtimeStatus } from '@/components/draft/DraftRealtimeStatus';
 import DraftCore from '@/components/draft/DraftCore';
 import { PlayerProjection, DraftPlayer } from '@/types/projections';
 import { FiTrendingUp, FiStar, FiWifi } from 'react-icons/fi';
+import DraftBoard from '@/components/draft/DraftBoard';
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 
@@ -28,6 +29,7 @@ export default function DraftRoom({ params }: Props) {
   const [users, setUsers] = useState<Record<string, any>>({});
   const [myPicks, setMyPicks] = useState<DraftPlayer[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<DraftPlayer | null>(null);
+  const [interfaceMode, setInterfaceMode] = useState<'dashboard'|'board'>('dashboard');
 
   // Resolve params
   useEffect(() => {
@@ -195,110 +197,146 @@ export default function DraftRoom({ params }: Props) {
                 </button>
               </div>
             ) : (
-              <DraftTimer
-                timeLimit={draft.league?.settings?.draftTimeLimit || 90}
-                isMyTurn={draft.isMyTurn}
-                onTimeExpired={handleTimeExpired}
-                currentPick={draft.currentPick}
-              />
+              <div className="flex items-center gap-3">
+                <div className="inline-flex rounded overflow-hidden border border-white/20">
+                  <button
+                    className={`px-3 py-1 text-xs ${interfaceMode==='dashboard' ? 'bg-white/10 font-semibold' : ''}`}
+                    onClick={()=>setInterfaceMode('dashboard')}
+                  >Draft Dashboard</button>
+                  <button
+                    className={`px-3 py-1 text-xs ${interfaceMode==='board' ? 'bg-white/10 font-semibold' : ''}`}
+                    onClick={()=>setInterfaceMode('board')}
+                  >Draft Board</button>
+                </div>
+                <DraftTimer
+                  timeLimit={draft.league?.settings?.draftTimeLimit || 90}
+                  isMyTurn={draft.isMyTurn}
+                  onTimeExpired={handleTimeExpired}
+                  currentPick={draft.currentPick}
+                />
+              </div>
             )}
           </div>
         </div>
       </div>
 
-      <div className="flex h-[calc(100vh-60px)]">
-        {/* Left Sidebar - Realtime Status */}
-        <div className="w-80 bg-white border-r border-gray-200 p-4 overflow-y-auto">
-          <DraftRealtimeStatus
-            connected={draft.connected}
-            onTheClock={draft.onTheClock}
-            currentPick={draft.currentPick}
-            currentRound={draft.currentRound}
-            recentPicks={draft.picks}
-            users={users}
-          />
+      {interfaceMode==='board' ? (
+        <div className="p-4">
+          <div className="bg-white rounded border border-gray-200">
+            <DraftBoard
+              picks={(draft.picks || []).map(p=>({
+                overall: p.pickNumber,
+                round: p.round,
+                slot: undefined,
+                userId: p.userId,
+                playerName: p.playerName,
+                playerId: p.playerId,
+                position: p.playerPosition,
+                team: p.playerTeam,
+              }))}
+              numTeams={draft.league?.draftOrder?.length || 12}
+              rounds={draft.league?.draftRounds || 15}
+              currentOverall={draft.currentPick}
+              slotLabels={(draft.league?.draftOrder||[]).map((uid: string)=> users[uid]?.name || 'Team')}
+            />
+          </div>
         </div>
+      ) : (
+        <div className="flex h-[calc(100vh-60px)]">
+          {/* Left Sidebar - Realtime Status */}
+          <div className="w-80 bg-white border-r border-gray-200 p-4 overflow-y-auto">
+            <DraftRealtimeStatus
+              connected={draft.connected}
+              onTheClock={draft.onTheClock}
+              currentPick={draft.currentPick}
+              currentRound={draft.currentRound}
+              recentPicks={draft.picks}
+              users={users}
+            />
+          </div>
 
-        {/* Main Content - DraftCore Component */}
-        <div className="flex-1">
-          <DraftCore
-            leagueId={leagueId}
-            draftType="snake"
-            onPlayerSelect={setSelectedPlayer}
-            onPlayerDraft={handleDraftPlayer}
-            myPicks={myPicks}
-            draftedPlayers={draft.picks.map(pick => ({
-              $id: pick.playerId,
-              playerId: pick.playerId,
-              playerName: pick.playerName,
-              position: pick.playerPosition,
-              team: pick.playerTeam,
-              conference: '',
-              school: '',
-              year: 'JR',
-              prevYearStats: { gamesPlayed: 0, fantasyPoints: 0 },
-              ratings: { composite: 0 },
-              projections: { gamesPlayed: 0, fantasyPoints: 0, confidence: 0 },
-              rankings: { overall: 0, position: 0, adp: 0, tier: 0 },
-              sources: { espn: false, ncaa: false, spPlus: false, mockDrafts: [], socialMediaBuzz: 0, articles: [] },
-              risk: { injuryHistory: [], suspensions: [], riskScore: 0 },
-              updatedAt: new Date().toISOString(),
-              isDrafted: true,
-              draftedBy: pick.userId,
-              draftPosition: pick.pickNumber
-            } as DraftPlayer))}
-            canDraft={draft.isMyTurn}
-            timeRemainingSec={undefined}
-            currentPickNumber={draft.currentPick}
-            currentTeamLabel={draft.onTheClock ? (users[draft.onTheClock]?.name || 'On the clock') : undefined}
-          /></div>
+          {/* Main Content - DraftCore Component */}
+          <div className="flex-1">
+            <DraftCore
+              leagueId={leagueId}
+              draftType="snake"
+              onPlayerSelect={setSelectedPlayer}
+              onPlayerDraft={handleDraftPlayer}
+              myPicks={myPicks}
+              draftedPlayers={draft.picks.map(pick => ({
+                $id: pick.playerId,
+                playerId: pick.playerId,
+                playerName: pick.playerName,
+                position: pick.playerPosition,
+                team: pick.playerTeam,
+                conference: '',
+                school: '',
+                year: 'JR',
+                prevYearStats: { gamesPlayed: 0, fantasyPoints: 0 },
+                ratings: { composite: 0 },
+                projections: { gamesPlayed: 0, fantasyPoints: 0, confidence: 0 },
+                rankings: { overall: 0, position: 0, adp: 0, tier: 0 },
+                sources: { espn: false, ncaa: false, spPlus: false, mockDrafts: [], socialMediaBuzz: 0, articles: [] },
+                risk: { injuryHistory: [], suspensions: [], riskScore: 0 },
+                updatedAt: new Date().toISOString(),
+                isDrafted: true,
+                draftedBy: pick.userId,
+                draftPosition: pick.pickNumber
+              } as DraftPlayer))}
+              canDraft={draft.isMyTurn}
+              timeRemainingSec={undefined}
+              currentPickNumber={draft.currentPick}
+              currentTeamLabel={draft.onTheClock ? (users[draft.onTheClock]?.name || 'On the clock') : undefined}
+              showBoardTab={false}
+            /></div>
 
-        {/* Right Sidebar - Player Details */}
-        {selectedPlayer && (
-          <div className="w-96 bg-white border-l border-gray-200 p-6 overflow-y-auto">
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold">{selectedPlayer.playerName}</h2>
-                <p className="text-gray-600">{selectedPlayer.position} • {selectedPlayer.team}</p>
-              </div>
+          {/* Right Sidebar - Player Details */}
+          {selectedPlayer && (
+            <div className="w-96 bg-white border-l border-gray-200 p-6 overflow-y-auto">
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-2xl font-bold">{selectedPlayer.playerName}</h2>
+                  <p className="text-gray-600">{selectedPlayer.position} • {selectedPlayer.team}</p>
+                </div>
 
-              {/* Draft Button */}
-              <button
-                onClick={() => handleDraftPlayer(selectedPlayer)}
-                disabled={!draft.isMyTurn || selectedPlayer.isDrafted}
-                className={`w-full py-3 rounded-lg font-semibold transition-colors ${
-                  !draft.isMyTurn || selectedPlayer.isDrafted
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-green-500 text-white hover:bg-green-600'
-                }`}
-              >
-                {selectedPlayer.isDrafted ? 'Already Drafted' : 
-                 !draft.isMyTurn ? 'Not Your Turn' : 'Draft Player'}
-              </button>
+                {/* Draft Button */}
+                <button
+                  onClick={() => handleDraftPlayer(selectedPlayer)}
+                  disabled={!draft.isMyTurn || selectedPlayer.isDrafted}
+                  className={`w-full py-3 rounded-lg font-semibold transition-colors ${
+                    !draft.isMyTurn || selectedPlayer.isDrafted
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-green-500 text-white hover:bg-green-600'
+                  }`}
+                >
+                  {selectedPlayer.isDrafted ? 'Already Drafted' : 
+                   !draft.isMyTurn ? 'Not Your Turn' : 'Draft Player'}
+                </button>
 
-              {/* Projections */}
-              <div>
-                <h3 className="font-semibold mb-3 flex items-center gap-2">
-                  <FiTrendingUp /> 2025 Projections
-                </h3>
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Fantasy Points</span>
-                    <span className="font-bold">{selectedPlayer.projections?.fantasyPoints?.toFixed(1) || '0.0'}</span>
+                {/* Projections */}
+                <div>
+                  <h3 className="font-semibold mb-3 flex items-center gap-2">
+                    <FiTrendingUp /> 2025 Projections
+                  </h3>
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Fantasy Points</span>
+                      <span className="font-bold">{selectedPlayer.projections?.fantasyPoints?.toFixed(1) || '0.0'}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <button
-                onClick={() => setSelectedPlayer(null)}
-                className="w-full bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition-colors"
-              >
-                Close
-              </button>
+                <button
+                  onClick={() => setSelectedPlayer(null)}
+                  className="w-full bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 } 
