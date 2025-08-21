@@ -42,74 +42,35 @@ export async function GET(request: NextRequest) {
           <p>Completing your login...</p>
         </div>
         <script type="module">
-          import { Client, Account } from 'https://cdn.jsdelivr.net/npm/appwrite@14.0.0/+esm';
-          
           async function syncSession() {
             try {
+              // Dynamically import the Appwrite Web SDK (ESM build hosted on jsdelivr)
+              const { Client, Account } = await import('https://cdn.jsdelivr.net/npm/appwrite@14.0.0/+esm');
+
+              // Init client – use the same endpoint / project as the main app
               const client = new Client()
                 .setEndpoint('https://nyc.cloud.appwrite.io/v1')
                 .setProject('college-football-fantasy-app');
-              
+
               const account = new Account(client);
-              
-              // Try to get current session
-              let session;
-              try {
-                session = await account.getSession('current');
-                console.log('OAuth session found:', session);
-              } catch (sessionError) {
-                console.error('No session found:', sessionError);
-                console.error('Session error details:', {
-                  message: sessionError.message,
-                  code: sessionError.code,
-                  type: sessionError.type
-                });
-                
-                // Show error details on the page for debugging
-                const container = document.querySelector('.container');
-                if (container) {
-                  container.innerHTML = '<p style="color: #ef4444;">OAuth session not found</p>' +
-                    '<p style="font-size: 12px; margin-top: 10px;">Error: ' + (sessionError.message || 'Unknown error') + '</p>' +
-                    '<p style="font-size: 12px;">Code: ' + (sessionError.code || 'N/A') + '</p>' +
-                    '<p style="font-size: 12px; margin-top: 20px;">This usually means:</p>' +
-                    '<ul style="font-size: 12px; text-align: left; max-width: 400px; margin: 10px auto;">' +
-                    '<li>Google OAuth is not properly configured in Appwrite</li>' +
-                    '<li>The OAuth flow was cancelled or failed</li>' +
-                    '<li>Session cookies are being blocked</li>' +
-                    '</ul>' +
-                    '<p style="margin-top: 20px;"><a href="/login" style="color: #3B82F6;">Return to login</a></p>';
-                }
-                return;
-              }
-              
-              // Sync with server
-              const response = await fetch('/api/auth/sync-oauth', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                  sessionId: session.$id,
-                  userId: session.userId
-                })
-              });
-              
-              if (response.ok) {
-                // Redirect to dashboard
-                console.log('Session synced successfully, redirecting...');
-                window.location.href = '/dashboard';
-              } else {
-                const error = await response.json();
-                console.error('Sync failed:', error);
-                throw new Error('Failed to sync session');
-              }
-            } catch (error) {
-              console.error('OAuth sync error:', error);
+
+              // Get the current user – this proves the OAuth session succeeded and also gives us userId
+              const user = await account.get();
+
+              // Fetch current session list to grab the session ID for this browser
+              const { sessions } = await account.listSessions();
+              const current = sessions.find((s) => s.current) || sessions[0];
+
+              if (!current) throw new Error('No active session found');
+
+              // At this point we know the Appwrite session exists; just continue into the app
+              window.location.href = '/dashboard';
+            } catch (err) {
+              console.error('OAuth sync error:', err);
               setTimeout(() => {
                 alert('Login failed. Please try again.');
                 window.location.href = '/login';
-              }, 1000);
+              }, 500);
             }
           }
           
