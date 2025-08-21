@@ -41,11 +41,11 @@ export async function GET(request: NextRequest) {
           <div class="spinner"></div>
           <p>Completing your login...</p>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0"></script>
         <script type="module">
           async function syncSession() {
             try {
-              // Dynamically import the Appwrite Web SDK (ESM build hosted on jsdelivr)
-              const { Client, Account } = await import('https://cdn.jsdelivr.net/npm/appwrite@14.0.0/+esm');
+              const { Client, Account } = window.Appwrite;
 
               // Init client – use the same endpoint / project as the main app
               const client = new Client()
