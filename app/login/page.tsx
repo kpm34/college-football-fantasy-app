@@ -20,30 +20,9 @@ function LoginPageContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
-  // Runtime feature detection for OAuth (fallback to env flags)
-  const [googleAvailable, setGoogleAvailable] = useState(
-    process.env.NEXT_PUBLIC_ENABLE_OAUTH_GOOGLE === 'true'
-  );
-  const [appleAvailable, setAppleAvailable] = useState(
-    process.env.NEXT_PUBLIC_ENABLE_OAUTH_APPLE === 'true'
-  );
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const g = await fetch('/api/auth/oauth/google', { cache: 'no-store' });
-        if (!cancelled && g.ok) setGoogleAvailable(true);
-      } catch {}
-      try {
-        const a = await fetch('/api/auth/oauth/apple', { cache: 'no-store' });
-        if (!cancelled && a.ok) setAppleAvailable(true);
-      } catch {}
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // OAuth providers – toggle via env vars
+  const googleAvailable = process.env.NEXT_PUBLIC_ENABLE_OAUTH_GOOGLE !== 'false';
+  const appleAvailable = process.env.NEXT_PUBLIC_ENABLE_OAUTH_APPLE === 'true';
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -56,6 +35,7 @@ function LoginPageContent() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // ensure cookies from response are stored
         body: JSON.stringify({ email, password }),
       });
 
@@ -109,6 +89,7 @@ function LoginPageContent() {
               className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors" 
               style={{ borderColor: '#9256A4', backgroundColor: '#FFFFFF', color: '#5B2B8C' }}
               type="email" 
+              autoComplete="email" // allow browser autofill email
               required 
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
@@ -124,6 +105,7 @@ function LoginPageContent() {
               className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors" 
               style={{ borderColor: '#9256A4', backgroundColor: '#FFFFFF', color: '#5B2B8C' }}
               type="password" 
+              autoComplete="current-password" // allow browser autofill password
               required 
               value={password} 
               onChange={(e) => setPassword(e.target.value)}
@@ -176,14 +158,6 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
     setLoading(provider);
     
     try {
-      // Get OAuth configuration from our API
-      const response = await fetch(`/api/auth/oauth/${provider}`);
-      const data = await response.json();
-      
-      if (!data.success) {
-        throw new Error('Failed to get OAuth configuration');
-      }
-      
       // Import Appwrite client-side SDK
       const { Account, OAuthProvider } = await import('appwrite');
       // Reuse shared initialized client to avoid project header mismatches
@@ -194,25 +168,25 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
       
       // Use the full URL for success and failure callbacks
       const origin = window.location.origin;
-      const successUrl = `${origin}/api/auth/oauth/success`;
+      const successUrl = `${origin}/login/oauth-success?token=true`;
       const failureUrl = `${origin}/login?error=oauth_failed`;
       
       console.log('OAuth URLs:', { successUrl, failureUrl, provider: providerName });
       
-      // This will redirect to the OAuth provider
-      await account.createOAuth2Session(
+      // Appwrite SDK v11: 4th param scopes (array) + 6th param token flag (boolean)
+      await (account as any).createOAuth2Session(
         providerName,
         successUrl,
-        failureUrl
+        failureUrl,
+        [],          // scopes
+        undefined,   // projectId
+        true         // token=true so Appwrite appends userId & secret
       );
       
     } catch (error) {
       console.error('OAuth error:', error);
       setLoading(null);
-      // Show error message to user
-      if (error instanceof Error) {
-        alert(`OAuth login failed: ${error.message}`);
-      }
+      alert('OAuth login failed. Please try again.');
     }
   };
   
