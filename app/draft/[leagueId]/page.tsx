@@ -124,7 +124,7 @@ export default function DraftRoom({ params }: Props) {
   const isDraftComplete = draft.league && draft.picks.length >= 
     (draft.league.draftRounds || 15) * (draft.league.draftOrder?.length || 12);
 
-  // Check if draft has started based on commissioner's set time
+  // Check if draft has started based on status + time (isDraftLive)
   useEffect(() => {
     if (!draft.league) return;
     
@@ -136,7 +136,7 @@ export default function DraftRoom({ params }: Props) {
     
     const draftStartMs = new Date(draftDate).getTime();
     const now = Date.now();
-    const hasStarted = now >= draftStartMs;
+    const hasStarted = String((draft.league as any)?.status) === 'drafting' && now >= draftStartMs;
     setDraftHasStarted(hasStarted);
     
     // Check every second if draft hasn't started yet
@@ -151,7 +151,7 @@ export default function DraftRoom({ params }: Props) {
     }
   }, [draft.league]);
 
-  // Derive and lock a deadline when the turn changes (mimic mock timer behavior)
+  // Derive and lock a deadline when the turn changes (use server draftState when present)
   useEffect(() => {
     // Only set timer if draft has started
     if (!draftHasStarted) {
@@ -161,10 +161,16 @@ export default function DraftRoom({ params }: Props) {
     }
     
     const timeLimitSec = Number((draft.league as any)?.settings?.draftTimeLimit || (draft.league as any)?.pickTimeSeconds || 90);
-    // Use the last pick timestamp if available; otherwise anchor to now when onTheClock changes
-    const lastPick = draft.picks.length > 0 ? draft.picks[draft.picks.length - 1] : null;
-    const lastTs = lastPick?.timestamp ? new Date(lastPick.timestamp).getTime() : Date.now();
-    setDeadlineTs(lastTs + timeLimitSec * 1000);
+    // Prefer server-provided deadline if available (late joiners)
+    const serverDeadline = (draft as any)?.deadlineAt ? new Date((draft as any).deadlineAt).getTime() : null;
+    if (serverDeadline && serverDeadline > Date.now() - 5000) {
+      setDeadlineTs(serverDeadline);
+    } else {
+      // Fallback: use the last pick timestamp if available; otherwise anchor to now when onTheClock changes
+      const lastPick = draft.picks.length > 0 ? draft.picks[draft.picks.length - 1] : null;
+      const lastTs = lastPick?.timestamp ? new Date(lastPick.timestamp).getTime() : Date.now();
+      setDeadlineTs(lastTs + timeLimitSec * 1000);
+    }
   }, [draft.currentPick, draft.onTheClock, draftHasStarted, (draft.league as any)?.settings?.draftTimeLimit, (draft.league as any)?.pickTimeSeconds]);
 
   // Countdown from the locked deadline

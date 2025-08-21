@@ -19,7 +19,7 @@ interface League {
   description: string;
   type: 'public' | 'private';
   password?: string;
-  status: 'draft' | 'active' | 'completed';
+  status: 'open' | 'full' | 'drafting' | 'active' | 'complete';
   createdAt: string;
 }
 
@@ -164,7 +164,7 @@ function JoinLeagueContent() {
             description: leagueDoc.description || '',
             type: (leagueDoc.isPublic === false || !!leagueDoc.password) ? 'private' : 'public',
             password: leagueDoc.password,
-            status: (leagueDoc.status || 'draft') as 'draft' | 'active' | 'completed',
+            status: (leagueDoc.status || 'open') as any,
             createdAt: leagueDoc.$createdAt
           };
           setSelectedLeague(league);

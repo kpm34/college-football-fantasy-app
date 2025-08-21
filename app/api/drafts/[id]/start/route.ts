@@ -1,16 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { Query } from 'node-appwrite';
 
-export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: leagueId } = await params;
 
   try {
     // Load league
     const league = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, leagueId);
 
-    // Enforce draft start time
+    // Authorization: allow either commissioner session or CRON secret
+    const authHeader = request.headers.get('authorization') || '';
+    const isCron = !!process.env.CRON_SECRET && authHeader === `Bearer ${process.env.CRON_SECRET}`;
+
+    let isCommissioner = false;
+    try {
+      const sessionCookie = request.cookies.get('appwrite-session')?.value;
+      if (sessionCookie) {
+        const cookieHeader = `a_session_college-football-fantasy-app=${sessionCookie}`;
+        const userRes = await fetch('https://nyc.cloud.appwrite.io/v1/account', {
+          headers: {
+            'X-Appwrite-Project': 'college-football-fantasy-app',
+            'X-Appwrite-Response-Format': '1.4.0',
+            'Cookie': cookieHeader,
+          },
+        });
+        if (userRes.ok) {
+          const user = await userRes.json();
+          isCommissioner = String((league as any)?.commissioner) === String(user.$id);
+        }
+      }
+    } catch {}
+
+    const url = new URL(request.url);
+    const force = url.searchParams.get('force') === 'true';
+
+    // Enforce draft start time unless overridden by commissioner or cron with force=true
     const draftStartMs = (league as any)?.draftDate ? new Date((league as any).draftDate).getTime() : 0;
-    if (draftStartMs && Date.now() < draftStartMs) {
+    if (draftStartMs && Date.now() < draftStartMs && !(force && (isCron || isCommissioner))) {
       return NextResponse.json({ error: 'Draft has not started yet' }, { status: 400 });
     }
 

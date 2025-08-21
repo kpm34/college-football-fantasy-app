@@ -41,7 +41,7 @@ export interface League {
     scoringType: 'PPR' | 'Standard' | 'HalfPPR';
     rosterSize: number;
   };
-  status: 'drafting' | 'active' | 'completed';
+  status: 'drafting' | 'active' | 'complete';
   currentRound: number;
   currentPick: number;
   draftOrder: string[]; // array of userIds in draft order
