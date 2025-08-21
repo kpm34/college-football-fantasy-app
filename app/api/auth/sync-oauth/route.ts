@@ -38,6 +38,19 @@ export async function POST(request: NextRequest) {
     // Relay the exact cookie so the browser stores the full Appwrite session payload
     const proxyResponse = NextResponse.json({ success: true });
     proxyResponse.headers.set('set-cookie', setCookie);
+
+    // Also set a same-site first-party cookie so our domain always sends it
+    const match = setCookie.match(/a_session_[^=]+=([^;]+)/);
+    if (match) {
+      proxyResponse.cookies.set('appwrite-session', match[1], {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7
+      });
+    }
+
     return proxyResponse;
   } catch (error) {
     console.error('OAuth sync error:', error);
