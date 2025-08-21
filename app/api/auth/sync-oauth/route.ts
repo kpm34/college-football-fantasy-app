@@ -13,17 +13,35 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Store session secret in httpOnly cookie
-    const cookieStore = cookies();
-    cookieStore.set('appwrite-session', secret, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 30 // 30 days
+    // Hit Appwrite to convert secret -> session cookie
+    const resp = await fetch('https://nyc.cloud.appwrite.io/v1/account/sessions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Appwrite-Project': 'college-football-fantasy-app',
+        'X-Appwrite-Response-Format': '1.4.0'
+      },
+      body: JSON.stringify({ userId, secret })
     });
 
-    cookieStore.set('userId', userId, {
+    if (!resp.ok) {
+      const err = await resp.text();
+      console.error('Appwrite session create failed', err);
+      return NextResponse.json({ success:false, error:'createSession failed' },{status:500});
+    }
+
+    const setCookie = resp.headers.get('set-cookie');
+    if (!setCookie) {
+      return NextResponse.json({ success:false, error:'No cookie from Appwrite'},{status:500});
+    }
+
+    const match = setCookie.match(/a_session_[^=]+=([^;]+)/);
+    if (!match) {
+      return NextResponse.json({ success:false, error:'Cookie parse failed'},{status:500});
+    }
+
+    const cookieStore = cookies();
+    cookieStore.set('appwrite-session', match[1], {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -31,7 +49,7 @@ export async function POST(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 30
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success:true });
   } catch (error) {
     console.error('OAuth sync error:', error);
     return NextResponse.json({ success: false, error: 'Failed to sync session' }, { status: 500 });
