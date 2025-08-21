@@ -183,13 +183,8 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
       }
       
       // Import Appwrite client-side SDK
-      const { Client, Account, OAuthProvider } = await import('appwrite');
-      
-      // Initialize client
-      const client = new Client()
-        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1")
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || "college-football-fantasy-app");
-      
+      const { Account, OAuthProvider } = await import('appwrite');
+      // Reuse shared initialized client to avoid project header mismatches
       const account = new Account(client);
       
       // Initiate OAuth2 session

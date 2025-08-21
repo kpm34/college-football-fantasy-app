@@ -17,8 +17,68 @@ import { Client, Databases, ID, Query } from 'node-appwrite';
 import fs from 'node:fs';
 import path from 'node:path';
 import csv from 'csv-parser';
+import dotenv from 'dotenv';
 
 type Position = 'QB' | 'RB' | 'WR' | 'TE';
+
+// Optional team alias mapping (e.g., "Ohio State Buckeyes" -> "Ohio State")
+const TEAM_ALIAS_PATH = path.join(process.cwd(), 'data', 'team_aliases.json');
+let teamAliasCache: Record<string, string> | null = null;
+function loadTeamAliases(): Record<string, string> {
+  if (teamAliasCache) return teamAliasCache;
+  try {
+    if (fs.existsSync(TEAM_ALIAS_PATH)) {
+      const raw = JSON.parse(fs.readFileSync(TEAM_ALIAS_PATH, 'utf8')) as Record<string, string>;
+      // store with lowercase keys
+      const mapped: Record<string, string> = {};
+      for (const [k, v] of Object.entries(raw)) mapped[k.toLowerCase()] = v;
+      teamAliasCache = mapped;
+      return mapped;
+    }
+  } catch {}
+  teamAliasCache = {};
+  return teamAliasCache;
+}
+function normalizeTeamName(name: string | undefined | null): string {
+  const n = (name || '').toString().trim();
+  if (!n) return '';
+  const aliases = loadTeamAliases();
+  const found = aliases[n.toLowerCase()];
+  return found ? found : n;
+}
+
+/**
+ * Load manual overrides from imports
+ * Supported format (JSON):
+ * { "players": [ { "player_name": "Name", "team": "Team", "talent_multiplier": 1.2 } ] }
+ * or an object map: { "name|team": { "talent_multiplier": 1.2 } }
+ */
+async function loadManualOverrides(season: number): Promise<Map<string, { talent_multiplier?: number }>> {
+  const out = new Map<string, { talent_multiplier?: number }>();
+  try {
+    const importsDir = path.join(process.cwd(), 'data', 'imports');
+    const file = path.join(importsDir, `manual_overrides_${season}.json`);
+    if (!fs.existsSync(file)) return out;
+    const raw = JSON.parse(fs.readFileSync(file, 'utf8')) as any;
+    if (raw && Array.isArray(raw.players)) {
+      for (const p of raw.players) {
+        const name = (p.player_name || p.name || '').toString();
+        const team = normalizeTeamName((p.team || p.school || '').toString());
+        if (!name || !team) continue;
+        out.set(`${name.toLowerCase()}|${team.toLowerCase()}` as string, { talent_multiplier: Number(p.talent_multiplier) });
+      }
+    } else if (raw && typeof raw === 'object') {
+      for (const [k, v] of Object.entries(raw)) {
+        const key = k.toLowerCase();
+        const tm = (v as any)?.talent_multiplier;
+        if (tm !== undefined) out.set(key, { talent_multiplier: Number(tm) });
+      }
+    }
+  } catch (e) {
+    console.warn('Manual overrides load error:', e);
+  }
+  return out;
+}
 
 interface TalentProfile {
   // EA Sports ratings
@@ -30,6 +90,10 @@ interface TalentProfile {
   projected_pick?: number;     // 1-260
   projected_round?: number;    // 1-7
   draft_capital_score?: number; // 0-1 normalized
+  
+  // 2026 NFL consensus rankings (light weight, name-based)
+  nfl_consensus_rank?: number;   // 1..N (lower is better)
+  nfl_consensus_score?: number;  // 0..1 (normalized, higher is better)
   
   // Previous year stats
   prev_fantasy_points?: number;
@@ -100,40 +164,157 @@ function clamp(min: number, max: number, v: number): number {
 /**
  * Load EA Sports ratings from CSV
  */
-async function loadEAData(season: number): Promise<Map<string, any>> {
+async function loadEAData(databases: Databases, dbId: string, season: number): Promise<Map<string, any>> {
   const eaMap = new Map<string, any>();
-  const filePath = path.join(process.cwd(), `data/ea/ratings_${season}.csv`);
-  
-  if (!fs.existsSync(filePath)) {
-    console.warn(`EA ratings file not found: ${filePath}`);
-    return eaMap;
-  }
-  
-  return new Promise((resolve) => {
-    const results: any[] = [];
-    fs.createReadStream(filePath)
-      .pipe(csv())
-      .on('data', (data) => results.push(data))
-      .on('end', () => {
-        for (const row of results) {
-          const key = `${row.player_name?.toLowerCase()}|${row.school?.toLowerCase()}`;
-          eaMap.set(key, {
-            overall: parseInt(row.ovr) || 0,
-            speed: parseInt(row.spd) || 0,
-            acceleration: parseInt(row.acc) || 0
+  // Load exclusively from user-provided imports
+  try {
+    const importsDir = path.join(process.cwd(), 'data', 'imports');
+    if (!fs.existsSync(importsDir)) {
+      console.warn('EA ratings: imports directory not found');
+      return eaMap;
+    }
+    // Recursively scan imports to support multiple naming conventions
+    const listFilesRecursive = (dir: string): string[] => {
+      const out: string[] = [];
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true }) as any) {
+        const name = (entry.name as string);
+        const full = path.join(dir, name);
+        if ((entry as any).isDirectory()) out.push(...listFilesRecursive(full));
+        else out.push(full);
+      }
+      return out;
+    };
+    // Prefer canonical directory if present: data/imports/ea/<season>/*.csv|*.json
+    const canonicalDir = path.join(importsDir, 'ea', String(season));
+    let allFiles = listFilesRecursive(importsDir);
+    let files = allFiles.filter(f => {
+      const base = path.basename(f).toLowerCase();
+      // Season-tagged EA files (legacy) OR standardized new ratings files OR SEC wide CSV
+      return (
+        (base.includes('ea') && base.includes(String(season))) ||
+        base.includes('ea_college_football_ratings') ||
+        base.includes('ea_college_football_sec')
+      ) && (f.endsWith('.json') || f.endsWith('.csv') || !path.extname(f));
+    });
+    if (fs.existsSync(canonicalDir)) {
+      const canonicalFiles = listFilesRecursive(canonicalDir).filter(f => f.endsWith('.csv') || f.endsWith('.json'));
+      if (canonicalFiles.length > 0) {
+        files = canonicalFiles;
+      }
+    }
+    for (const file of files) {
+      const full = file; // 'files' already contains absolute paths
+      try {
+        if (full.endsWith('.json')) {
+          const arr = JSON.parse(fs.readFileSync(full, 'utf8')) as any[];
+          if (Array.isArray(arr)) {
+            for (const row of arr) {
+              const name = (row.player_name || row.name || '').toString();
+              const school = (row.school || row.team || '').toString();
+              const key = `${name.toLowerCase()}|${school.toLowerCase()}`;
+              eaMap.set(key, {
+                overall: Number(row.ovr ?? row.overall ?? 0),
+                speed: Number(row.spd ?? row.speed ?? 0),
+                acceleration: Number(row.acc ?? row.acceleration ?? row.agi ?? 0)
+              });
+            }
+          }
+        } else if (full.endsWith('.csv') || !path.extname(full)) {
+          // Parse CSV (including files without extension interpreted as CSV)
+          const rows: any[] = [];
+          await new Promise<void>((resolve) => {
+            fs.createReadStream(full).pipe(csv()).on('data', d => rows.push(d)).on('end', () => resolve());
           });
+          // Detect format:
+          // A) Row-wise: Team,Slot,Player,OVR,SPD,AGI (may have an extra leading index column)
+          // B) Wide: Team, QB1, QB1_OVR, QB1_SPD, QB1_AGI, ..., WR1..., TE1...
+          const hasRowWise = rows.some(r => ('Player' in r) || ('player' in r) || ('Slot' in r) || ('slot' in r));
+          const hasWide = rows.some(r => Object.keys(r).some(k => /^(QB|RB|WR|TE)\d$/.test(k)));
+
+          const addEA = (player: string, team: string, ovr?: any, spd?: any, agi?: any) => {
+            const name = (player || '').toString().trim();
+            const school = (team || '').toString().trim();
+            if (!name || !school) return;
+            const key = `${name.toLowerCase()}|${school.toLowerCase()}`;
+            eaMap.set(key, {
+              overall: Number(ovr ?? 0),
+              speed: Number(spd ?? 0),
+              acceleration: Number(agi ?? 0)
+            });
+          };
+
+          if (hasRowWise && !hasWide) {
+            for (const row of rows) {
+              const team = row.Team || row.team || row.School || row.school;
+              const player = row.Player || row.player || row.Name || row.name;
+              const ovr = row.OVR ?? row.ovr ?? row.Overall ?? row.overall;
+              const spd = row.SPD ?? row.spd ?? row.Speed ?? row.speed;
+              // Some files use AGI as acceleration proxy
+              const agi = row.AGI ?? row.agi ?? row.ACC ?? row.acc ?? row.Acceleration ?? row.acceleration;
+              if (!player || !team) continue;
+              addEA(player, team, ovr, spd, agi);
+            }
+          } else {
+            // Wide format (e.g., SEC)
+            const slotPrefixes = ['QB1','QB2','RB1','RB2','RB3','WR1','WR2','WR3','WR4','TE1','TE2'];
+            for (const row of rows) {
+              const team = row.Team || row.team || row.School || row.school;
+              if (!team) continue;
+              for (const slot of slotPrefixes) {
+                const name = row[slot];
+                if (!name || String(name).trim() === '') continue;
+                const ovr = row[`${slot}_OVR`] ?? row[`${slot}_ovr`];
+                const spd = row[`${slot}_SPD`] ?? row[`${slot}_spd`];
+                const agi = row[`${slot}_AGI`] ?? row[`${slot}_agi`] ?? row[`${slot}_ACC`] ?? row[`${slot}_acc`];
+                addEA(name, team, ovr, spd, agi);
+              }
+            }
+          }
         }
-        console.log(`Loaded ${eaMap.size} EA ratings for ${season}`);
-        resolve(eaMap);
-      });
-  });
+      } catch (e) {
+        console.warn(`Skipping EA import ${file}:`, e);
+      }
+    }
+    console.log(`Loaded ${eaMap.size} EA ratings from imports (${files.length} file(s))`);
+  } catch (e) {
+    console.warn('EA ratings import error:', e);
+  }
+  return eaMap;
 }
 
 /**
  * Load mock draft data from CSV
  */
-async function loadMockDraftData(season: number): Promise<Map<string, any>> {
+async function loadMockDraftData(databases: Databases, dbId: string, season: number): Promise<Map<string, any>> {
   const draftMap = new Map<string, any>();
+  // Try model_inputs first (nfl_draft_capital_json)
+  try {
+    const miRes = await databases.listDocuments(dbId, 'model_inputs', [
+      Query.equal('season', season),
+      Query.limit(1)
+    ]);
+    const doc: any = miRes.documents?.[0];
+    if (doc?.nfl_draft_capital_json) {
+      const arr = typeof doc.nfl_draft_capital_json === 'string' ? JSON.parse(doc.nfl_draft_capital_json) : doc.nfl_draft_capital_json;
+      if (Array.isArray(arr)) {
+        for (const row of arr) {
+          const key = `${(row.player_name||'').toLowerCase()}|${(row.school||'').toLowerCase()}`;
+          const pick = Number(row.projected_pick) || 260;
+          const round = Number(row.projected_round) || 7;
+          const draftCapitalScore = Math.max(0, (260 - pick) / 260);
+          draftMap.set(key, {
+            projected_pick: pick,
+            projected_round: round,
+            draft_capital_score: draftCapitalScore,
+            source: row.source || 'model_inputs'
+          });
+        }
+        console.log(`Loaded ${draftMap.size} draft capital entries from model_inputs for ${season}`);
+      }
+    }
+  } catch (e) {
+    console.warn('Draft capital from model_inputs not available; falling back to file');
+  }
   const filePath = path.join(process.cwd(), `data/mockdraft/${season}.csv`);
   
   if (!fs.existsSync(filePath)) {
@@ -169,35 +350,153 @@ async function loadMockDraftData(season: number): Promise<Map<string, any>> {
 }
 
 /**
+ * Load 2026 consensus rankings JSON (QB/RB/WR/TE) and normalize to 0..1 score
+ * File: data/imports/2026-consensus/consensus_all_real.json
+ * Schema example:
+ * { "QB": [ { "Player": "LaNorris Sellers", "Mean_Rank": 2.0, ... }, ... ], ... }
+ */
+async function loadConsensusRanks(): Promise<Map<string, { rank: number; score: number }>> {
+  const map = new Map<string, { rank: number; score: number }>();
+  try {
+    const file = path.join(process.cwd(), 'data', 'imports', '2026-consensus', 'consensus_all_real.json');
+    if (!fs.existsSync(file)) {
+      return map;
+    }
+    const json = JSON.parse(fs.readFileSync(file, 'utf8')) as Record<string, Array<any>>;
+    const positions = ['QB', 'RB', 'WR', 'TE'];
+    for (const pos of positions) {
+      const arr = Array.isArray((json as any)[pos]) ? (json as any)[pos] as any[] : [];
+      if (arr.length === 0) continue;
+      // Determine maxRank for normalization. Prefer explicit Mean_Rank if numeric, else index
+      const ranks: number[] = arr.map((row, idx) => {
+        const mr = Number.isFinite(row?.Mean_Rank) ? Number(row.Mean_Rank) : undefined;
+        return mr ?? (idx + 1);
+      });
+      const maxRank = Math.max(...ranks);
+      arr.forEach((row: any, idx: number) => {
+        const name = (row?.Player || row?.player || '').toString().trim();
+        if (!name) return;
+        const rank = Number.isFinite(row?.Mean_Rank) ? Number(row.Mean_Rank) : (idx + 1);
+        const score = Math.max(0, (maxRank - rank + 1) / maxRank);
+        const key = name.toLowerCase();
+        // If player appears in multiple positions (unlikely), keep best (highest score)
+        const prev = map.get(key);
+        if (!prev || score > prev.score) {
+          map.set(key, { rank, score });
+        }
+      });
+    }
+    console.log(`Loaded ${map.size} consensus-ranked players from 2026 file`);
+  } catch (e) {
+    console.warn('Consensus ranks load error:', e);
+  }
+  return map;
+}
+
+/**
  * Load depth chart data from JSON
  */
-async function loadDepthChartData(season: number): Promise<Map<string, number>> {
+async function loadDepthChartData(databases: Databases, dbId: string, season: number): Promise<Map<string, number>> {
   const depthMap = new Map<string, number>();
-  const filePath = path.join(process.cwd(), `data/processed/depth/depth_chart_${season}.json`);
-  
-  if (!fs.existsSync(filePath)) {
-    console.warn(`Depth chart file not found: ${filePath}`);
-    return depthMap;
-  }
-  
-  try {
-    const depthData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    
-    for (const [team, positions] of Object.entries(depthData)) {
+  const mergeEntry = (team: string, name?: string, rank?: number) => {
+    const player = (name || '').toString().trim();
+    const teamNorm = normalizeTeamName(team);
+    if (!player || !teamNorm) return;
+    const key = `${player.toLowerCase()}|${teamNorm.toLowerCase()}`;
+    const r = Math.max(1, Math.min(9, Number(rank) || 1));
+    if (!depthMap.has(key)) depthMap.set(key, r);
+  };
+  const tryParseSecRows = (arr: any[]) => {
+    for (const row of arr) {
+      if (!row || typeof row !== 'object') continue;
+      const team = row.team || row.Team || row.school || row.School;
+      if (!team) continue;
+      const pushBlock = (prefix: string, max: number) => {
+        for (let i = 1; i <= max; i++) mergeEntry(team, row[`${prefix}${i}`], i);
+      };
+      pushBlock('QB', 4);
+      pushBlock('RB', 5);
+      pushBlock('WR', 5);
+      pushBlock('TE', 3);
+    }
+  };
+  const tryParseNested = (obj: any) => {
+    for (const [team, positions] of Object.entries(obj || {})) {
       for (const [position, players] of Object.entries(positions as any)) {
-        for (const player of players as any[]) {
-          const key = `${player.player_name?.toLowerCase()}|${team.toLowerCase()}`;
-          depthMap.set(key, player.pos_rank || 1);
+        const list = players as any[];
+        let idx = 0;
+        for (const player of list) {
+          idx++;
+          if (typeof player === 'string') mergeEntry(team, player, idx);
+          else if (player && typeof player === 'object') mergeEntry(team, (player as any).player_name || (player as any).name, (player as any).pos_rank || idx);
         }
       }
     }
-    
-    console.log(`Loaded ${depthMap.size} depth chart entries for ${season}`);
-    return depthMap;
-  } catch (error) {
-    console.warn(`Error loading depth chart data:`, error);
-    return depthMap;
+  };
+  const tryParsePlainText = (text: string) => {
+    // Format:
+    // Team:
+    // QB 1: Name
+    // RB 2: Name
+    let currentTeam = '';
+    const lines = text.split(/\r?\n/);
+    const lineRe = /^(QB|RB|WR|TE)\s+(\d+):\s*(.+)$/i;
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line) continue;
+      if (line.endsWith(':') && !line.includes(' ')) {
+        // Likely a team header like Alabama:
+        currentTeam = line.slice(0, -1).trim();
+        continue;
+      }
+      const m = line.match(lineRe);
+      if (m && currentTeam) {
+        const rank = Number(m[2]);
+        const name = m[3];
+        mergeEntry(currentTeam, name, rank);
+      }
+    }
+  };
+  // Load exclusively from user-provided imports (multiple files)
+  try {
+    const importsDir = path.join(process.cwd(), 'data', 'imports');
+    if (fs.existsSync(importsDir)) {
+      const listFilesRecursive = (dir: string): string[] => {
+        const out: string[] = [];
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true }) as any) {
+          const name = (entry.name as string);
+          const full = path.join(dir, name);
+          if ((entry as any).isDirectory()) out.push(...listFilesRecursive(full));
+          else out.push(full);
+        }
+        return out;
+      };
+      const allFiles = listFilesRecursive(importsDir);
+      const files = allFiles.filter(f => f.toLowerCase().includes('depth') && f.includes(String(season)) && (f.endsWith('.json') || f.endsWith('.txt')));
+      for (const file of files) {
+        const full = file;
+        try {
+          if (full.endsWith('.json')) {
+            const json = JSON.parse(fs.readFileSync(full, 'utf8'));
+            if (Array.isArray(json)) tryParseSecRows(json);
+            else if (json && typeof json === 'object') tryParseNested(json);
+          } else if (full.endsWith('.txt')) {
+            tryParsePlainText(fs.readFileSync(full, 'utf8'));
+          }
+        } catch (e) {
+          console.warn(`Skipping import ${full}:`, e);
+        }
+      }
+      if (depthMap.size > 0) {
+        console.log(`Loaded ${depthMap.size} depth chart entries from imports (${files.length} file(s))`);
+        return depthMap;
+      }
+    }
+  } catch (e) {
+    console.warn('Failed reading imports directory:', e);
   }
+  console.warn('No depth chart imports found');
+  return depthMap;
 }
 
 /**
@@ -222,6 +521,11 @@ function calculateTalentMultiplier(talent: TalentProfile, pos: Position): number
   if (talent.draft_capital_score) {
     const draftBonus = talent.draft_capital_score * 0.20; // 0-20% boost
     multiplier += draftBonus;
+  }
+  
+  // 2026 consensus rank impact (very light, max +3%)
+  if (talent.nfl_consensus_score) {
+    multiplier += Math.max(0, Math.min(0.03, talent.nfl_consensus_score * 0.03));
   }
   
   // Previous year performance (25% weight)
@@ -415,31 +719,53 @@ async function getESPNPlusAnalysis(playerName: string, teamId: string, pos: Posi
 async function buildTalentProfiles(
   databases: Databases,
   dbId: string,
-  season: number
+  season: number,
+  teamsFilter?: Set<string>,
+  conferenceFilter?: string
 ): Promise<EnhancedPlayerContext[]> {
   
   console.log('Loading external talent data...');
-  const [eaData, draftData, depthChartData] = await Promise.all([
-    loadEAData(season),
-    loadMockDraftData(season),
-    loadDepthChartData(season)
+  const [eaData, draftData, depthChartData, manualOverrides, consensusRanks] = await Promise.all([
+    loadEAData(databases, dbId, season),
+    loadMockDraftData(databases, dbId, season),
+    loadDepthChartData(databases, dbId, season),
+    loadManualOverrides(season),
+    loadConsensusRanks()
   ]);
   
-  console.log('Loading college players from database...');
-  // Get all active college players with fantasy points > 0 and draftable = true
-  const playersResponse = await databases.listDocuments(
-    dbId,
-    'college_players',
-    [
-      Query.greaterThan('fantasy_points', 0),
-      Query.equal('draftable', true),
-      Query.equal('position', ['QB', 'RB', 'WR', 'TE']),
-      Query.equal('team', 'Louisville'), // Focus on Louisville players for testing
-      Query.limit(20) // Test with Louisville players specifically
-    ]
-  );
+  console.log('Loading college players from database (Power 4)...');
+  // Paginate Power 4 skill positions to ensure we fetch all
+  const playersDocs: any[] = [];
+  let offset = 0;
+  const pageLimit = 100;
+  let total = 0;
+  do {
+    const page = await databases.listDocuments(
+      dbId,
+      'college_players',
+      [
+        Query.equal('position', ['QB', 'RB', 'WR', 'TE']),
+        Query.equal('conference', (conferenceFilter ? [conferenceFilter] : ['SEC', 'ACC', 'Big Ten', 'Big 12']) as any),
+        Query.equal('eligible', true),
+        Query.limit(pageLimit),
+        Query.offset(offset)
+      ]
+    );
+    total = page.total || (offset + page.documents.length);
+    playersDocs.push(...page.documents);
+    offset += page.documents.length;
+  } while (offset < total);
   
-  console.log(`Found ${playersResponse.documents.length} active college players`);
+  // Optional team filter (batch processing)
+  let filteredDocs = playersDocs;
+  if (teamsFilter && teamsFilter.size > 0) {
+    const normalizedFilter = new Set<string>(Array.from(teamsFilter).map(t => normalizeTeamName(t)));
+    filteredDocs = playersDocs.filter((p: any) => normalizedFilter.has(normalizeTeamName((p.team || '').toString())));
+  }
+  const ctxSuffix = teamsFilter && teamsFilter.size>0
+    ? ` for teams [${Array.from(teamsFilter).join(', ')}]`
+    : (conferenceFilter ? ` in conference ${conferenceFilter}` : '');
+  console.log(`Found ${filteredDocs.length} active Power 4 players${ctxSuffix}`);
   
   // Load optional model inputs for team context (fallback to defaults if not available)
   let teamEff: any = {};
@@ -463,8 +789,8 @@ async function buildTalentProfiles(
   
   // Process players in batches to avoid memory issues
   const batchSize = 100;
-  for (let i = 0; i < playersResponse.documents.length; i += batchSize) {
-    const batch = playersResponse.documents.slice(i, i + batchSize);
+  for (let i = 0; i < filteredDocs.length; i += batchSize) {
+    const batch = filteredDocs.slice(i, i + batchSize);
     
     for (const player of batch) {
       const p = player as any;
@@ -493,6 +819,7 @@ async function buildTalentProfiles(
       // Look up talent data using player name and team (use same playerKey)
       const eaRating = eaData.get(playerKey) || eaData.get(playerName.toLowerCase());
       const draftData_player = draftData.get(playerKey) || draftData.get(playerName.toLowerCase());
+      const consensus = consensusRanks.get(playerName.toLowerCase());
       const espnAnalysis = await getESPNPlusAnalysis(playerName, teamId, posKey);
       
       // Get previous year stats 
@@ -506,6 +833,8 @@ async function buildTalentProfiles(
         projected_pick: draftData_player?.projected_pick,
         projected_round: draftData_player?.projected_round,
         draft_capital_score: draftData_player?.draft_capital_score,
+        nfl_consensus_rank: consensus?.rank,
+        nfl_consensus_score: consensus?.score,
         prev_fantasy_points: prevStats.fantasy_points,
         prev_games_played: prevStats.games_played,
         prev_usage_rate: prevStats.usage_rate,
@@ -518,7 +847,11 @@ async function buildTalentProfiles(
         coaching_change_impact: espnAnalysis.coaching_change_impact
       };
       
-      const talentMultiplier = calculateTalentMultiplier(talent, posKey);
+      let talentMultiplier = calculateTalentMultiplier(talent, posKey);
+      const override = manualOverrides.get(playerKey) || manualOverrides.get(playerName.toLowerCase());
+      if (override?.talent_multiplier) {
+        talentMultiplier = clamp(0.3, 2.0, Number(override.talent_multiplier));
+      }
       
       profiles.push({
         playerId,
@@ -536,7 +869,7 @@ async function buildTalentProfiles(
     }
     
     if ((i + batchSize) % 200 === 0) {
-      console.log(`Processed ${Math.min(i + batchSize, playersResponse.documents.length)}/${playersResponse.documents.length} players...`);
+      console.log(`Processed ${Math.min(i + batchSize, filteredDocs.length)}/${filteredDocs.length} players...`);
     }
   }
   
@@ -659,19 +992,28 @@ function computeEnhancedStatline(ctx: EnhancedPlayerContext): any {
   const G = ctx.games;
   const PR = 0.52; // Pass rate
   const RR = 1 - PR; // Run rate
-  const usage = ctx.usageRate * getDepthChartMultiplier(ctx.pos, ctx.depthRank);
+  // Base usage estimate from current data then override by position/role targets
+  const baseUsage = ctx.usageRate;
+  const usage = getPositionUsageShare(ctx.pos, ctx.depthRank, baseUsage);
   
-  // Apply talent multiplier to base production
+  // Apply talent primarily to efficiency (not volume) and dampen effect
   const talentBoost = ctx.talentMultiplier;
+  const talentAdj = 1 + (talentBoost - 1) * 0.5; // 50% strength
+  // Tunable adjustments
+  const RB_RUSH_ATT_ADJ = 0.95; // reduce RB carries by 5%
+  const RB_REC_YARDS_ADJ = 0.62;   // reduce RB receiving yards to target ~350 for RB1 like Isaac Brown
+  const WR_TARGET_USAGE_ADJ = 0.72; // global WR target scaler (raised to lift WR yardage)
+  const WR_YPR_BASE = 11.4; // adjusted WR YPR baseline (-5%)
   
   if (ctx.pos === 'QB') {
-    const passAtt = P * PR * 1.0 * G * talentBoost;
-    const passYds = passAtt * 7.5 * talentBoost;
-    const passTD = passAtt * 0.05 * talentBoost;
+    const depthMult = getDepthChartMultiplier(ctx.pos, ctx.depthRank);
+    const passAtt = P * PR * 1.0 * G * depthMult;
+    const passYds = passAtt * 7.5 * talentAdj;
+    const passTD = passAtt * 0.05 * talentAdj;
     const ints = passAtt * 0.025; // Interceptions don't scale with talent as much
-    const rushAtt = P * RR * 0.10 * G;
-    const rushYds = rushAtt * 5.0 * talentBoost;
-    const rushTD = rushAtt * 0.02 * talentBoost;
+    const rushAtt = P * RR * 0.10 * G * depthMult;
+    const rushYds = rushAtt * 5.0 * talentAdj;
+    const rushTD = rushAtt * 0.02 * talentAdj;
     
     return { 
       pass_yards: Math.round(passYds), 
@@ -679,6 +1021,9 @@ function computeEnhancedStatline(ctx: EnhancedPlayerContext): any {
       ints: Math.round(ints), 
       rush_yards: Math.round(rushYds), 
       rush_tds: Math.round(rushTD), 
+      pass_att: Math.round(passAtt),
+      rush_att: Math.round(rushAtt),
+      targets: 0,
       receptions: 0, 
       rec_yards: 0, 
       rec_tds: 0 
@@ -686,13 +1031,13 @@ function computeEnhancedStatline(ctx: EnhancedPlayerContext): any {
   }
   
   if (ctx.pos === 'RB') {
-    const rushAtt = P * RR * usage * G * talentBoost;
-    const rushYds = rushAtt * 4.8 * talentBoost;
-    const rushTD = rushAtt * 0.03 * talentBoost;
-    const targets = P * PR * (usage * 0.5) * G * talentBoost;
+    const rushAtt = P * RR * usage * G * RB_RUSH_ATT_ADJ;
+    const rushYds = rushAtt * 4.8 * talentAdj;
+    const rushTD = rushAtt * 0.03 * talentAdj;
+    const targets = P * PR * (usage * 0.35) * G;
     const rec = targets * 0.65;
-    const recYds = rec * 7.5 * talentBoost;
-    const recTD = targets * 0.03 * talentBoost;
+    const recYds = rec * 7.5 * talentAdj * RB_REC_YARDS_ADJ;
+    const recTD = targets * 0.03 * talentAdj;
     
     return { 
       pass_yards: 0, 
@@ -700,6 +1045,9 @@ function computeEnhancedStatline(ctx: EnhancedPlayerContext): any {
       ints: 0, 
       rush_yards: Math.round(rushYds), 
       rush_tds: Math.round(rushTD), 
+      pass_att: 0,
+      rush_att: Math.round(rushAtt),
+      targets: Math.round(targets),
       receptions: Math.round(rec), 
       rec_yards: Math.round(recYds), 
       rec_tds: Math.round(recTD) 
@@ -707,13 +1055,13 @@ function computeEnhancedStatline(ctx: EnhancedPlayerContext): any {
   }
   
   // WR / TE
-  const targets = P * PR * usage * G * talentBoost;
+  const targets = P * PR * usage * G * WR_TARGET_USAGE_ADJ;
   const catchRate = ctx.pos === 'TE' ? 0.62 : 0.65;
-  const ypr = (ctx.pos === 'TE' ? 10 : 12) * talentBoost;
-  const tdRate = ctx.pos === 'TE' ? 0.04 : 0.05;
+  const ypr = (ctx.pos === 'TE' ? 10 : WR_YPR_BASE) * talentAdj;
+  const tdRate = (ctx.pos === 'TE' ? 0.04 : 0.05) * talentAdj;
   const rec = targets * catchRate;
   const recYds = rec * ypr;
-  const recTD = targets * tdRate * talentBoost;
+  const recTD = targets * tdRate * talentAdj;
   
   return { 
     pass_yards: 0, 
@@ -721,6 +1069,9 @@ function computeEnhancedStatline(ctx: EnhancedPlayerContext): any {
     ints: 0, 
     rush_yards: 0, 
     rush_tds: 0, 
+    pass_att: 0,
+    rush_att: 0,
+    targets: Math.round(targets),
     receptions: Math.round(rec), 
     rec_yards: Math.round(recYds), 
     rec_tds: Math.round(recTD) 
@@ -730,28 +1081,66 @@ function computeEnhancedStatline(ctx: EnhancedPlayerContext): any {
 function getDepthChartMultiplier(pos: Position, posRank: number): number {
   if (pos === 'QB') {
     if (posRank === 1) return 1.0;
-    if (posRank === 2) return 0.25;
+    if (posRank === 2) return 0.10; // backup ~10%
+    // For deeper QB ranks, approximate with 0.05 (target: 0.08/0.03/0.01)
     return 0.05;
   }
   if (pos === 'RB') {
+    // Depth scaling isn't used directly for usage (see getPositionUsageShare),
+    // but keep conservative caps for any volume components if needed
     if (posRank === 1) return 1.0;
-    if (posRank === 2) return 0.65;
-    if (posRank === 3) return 0.35;
+    if (posRank === 2) return 0.60;
+    if (posRank === 3) return 0.40;
+    if (posRank === 4) return 0.25;
     return 0.15;
   }
   if (pos === 'WR') {
+    // Same note as RB; primary usage comes from getPositionUsageShare
     if (posRank === 1) return 1.0;
-    if (posRank === 2) return 0.85;
+    if (posRank === 2) return 0.80;
     if (posRank === 3) return 0.60;
     if (posRank === 4) return 0.35;
-    return 0.15;
-  }
-  if (pos === 'TE') {
-    if (posRank === 1) return 1.0;
-    if (posRank === 2) return 0.50;
     return 0.20;
   }
+  if (pos === 'TE') {
+    // TE multipliers: 100% / 35% / 15%
+    if (posRank === 1) return 1.0;
+    if (posRank === 2) return 0.35;
+    return 0.15;
+  }
   return 1.0;
+}
+
+/**
+ * Position usage share by depth rank (12-game season context)
+ * Matches requested targets:
+ * - RB: 0.66, 0.25, 0.09, 0.05, 0.02
+ * - WR: 0.40, 0.25, 0.15, 0.10, 0.05
+ * Others: fall back to usageRate-based approach
+ */
+function getPositionUsageShare(pos: Position | 'TE', posRank: number, fallback: number): number {
+  if (pos === 'RB') {
+    if (posRank === 1) return 0.66;
+    if (posRank === 2) return 0.25;
+    if (posRank === 3) return 0.09;
+    if (posRank === 4) return 0.05;
+    return 0.02;
+  }
+  if (pos === 'WR') {
+    // Redistributed: WR1 and WR2 -4% each; +8% spread across WR3–WR5
+    if (posRank === 1) return 0.41;
+    if (posRank === 2) return 0.285;
+    if (posRank === 3) return 0.2067;
+    if (posRank === 4) return 0.1267;
+    return 0.0766;
+  }
+  if (pos === 'TE') {
+    // Keep TE conservative
+    if (posRank === 1) return Math.min(0.22, Math.max(0.12, fallback));
+    if (posRank === 2) return 0.12;
+    return 0.06;
+  }
+  return fallback;
 }
 
 function score(stat: any): number {
@@ -804,13 +1193,128 @@ async function main() {
   
   const seasonArg = process.argv.find((a) => a.startsWith('--season='));
   const season = seasonArg ? Number(seasonArg.split('=')[1]) : new Date().getFullYear();
+  const teamsArg = process.argv.find((a) => a.startsWith('--teams='));
+  const teamsFilter = teamsArg ? new Set(teamsArg.split('=')[1].split(',').map(s => s.trim())) : undefined;
+  const confArg = process.argv.find((a) => a.startsWith('--conference='));
+  const conference = confArg ? confArg.split('=')[1].trim() : undefined;
   
   console.log(`🚀 Running Unified Talent-Based Projections for ${season}`);
   
   const { databases, dbId } = getDatabases();
   
   // Build comprehensive talent profiles
-  const profiles = await buildTalentProfiles(databases, dbId, season);
+  const profiles = await buildTalentProfiles(databases, dbId, season, teamsFilter, conference);
+  
+  // Coverage report: teams missing depth chart or EA ratings
+  try {
+    // Recreate the same inputs for coverage stats
+    console.log('Computing input coverage report...');
+    const [eaData, , depthChartData] = await Promise.all([
+      loadEAData(databases, dbId, season),
+      Promise.resolve(new Map<string, any>()),
+      loadDepthChartData(databases, dbId, season)
+    ]);
+    const playersDocs: any[] = [];
+    let offset = 0;
+    const pageLimit = 200;
+    let total = 0;
+    do {
+      const page = await databases.listDocuments(
+        dbId,
+        'college_players',
+        [
+          Query.equal('position', ['QB', 'RB', 'WR', 'TE']),
+          Query.equal('conference', ['SEC', 'ACC', 'Big Ten', 'Big 12'] as any),
+          Query.equal('eligible', true),
+          Query.limit(pageLimit),
+          Query.offset(offset)
+        ]
+      );
+      total = page.total || (offset + page.documents.length);
+      playersDocs.push(...page.documents);
+      offset += page.documents.length;
+    } while (offset < total);
+
+    const uniqueTeams = Array.from(new Set(playersDocs.map(p => (p.team || '').toString()))).filter(Boolean);
+
+    // Depth chart coverage per team
+    const depthByTeam = new Map<string, number>();
+    for (const key of depthChartData.keys()) {
+      const parts = key.split('|');
+      const team = parts[1] || '';
+      depthByTeam.set(team, (depthByTeam.get(team) || 0) + 1);
+    }
+    const teamsWithoutDepth = uniqueTeams.filter(t => (depthByTeam.get(t.toLowerCase()) || 0) === 0);
+
+    // EA ratings coverage per team
+    const eaPresentByTeam = new Map<string, number>();
+    const eaMissingByTeam = new Map<string, number>();
+    for (const p of playersDocs) {
+      const team = (p.team || '').toString();
+      const key = `${(p.name || '').toString().toLowerCase()}|${team.toLowerCase()}`;
+      const has = eaData.has(key);
+      if (has) eaPresentByTeam.set(team, (eaPresentByTeam.get(team) || 0) + 1);
+      else eaMissingByTeam.set(team, (eaMissingByTeam.get(team) || 0) + 1);
+    }
+    const teamsWithoutEA = uniqueTeams.filter(t => (eaPresentByTeam.get(t) || 0) === 0);
+
+    const report = {
+      season,
+      totals: {
+        teams: uniqueTeams.length,
+        players: playersDocs.length
+      },
+      depth_chart: {
+        teams_without_depth_chart: teamsWithoutDepth,
+        sample_counts: Array.from(depthByTeam.entries()).slice(0, 10)
+      },
+      ea_ratings: {
+        teams_without_ea: teamsWithoutEA,
+        sample_present_counts: Array.from(eaPresentByTeam.entries()).slice(0, 10),
+        sample_missing_counts: Array.from(eaMissingByTeam.entries()).slice(0, 10)
+      }
+    };
+    const outDir = path.join(process.cwd(), 'exports');
+    try { fs.mkdirSync(outDir, { recursive: true }); } catch {}
+    const outPath = path.join(outDir, `missing_inputs_report_${season}.json`);
+    fs.writeFileSync(outPath, JSON.stringify(report, null, 2));
+    console.log(`📄 Missing inputs report written to ${outPath}`);
+    console.log(`Teams without depth charts (${report.depth_chart.teams_without_depth_chart.length}):`, report.depth_chart.teams_without_depth_chart.slice(0, 20));
+    console.log(`Teams without EA ratings (${report.ea_ratings.teams_without_ea.length}):`, report.ea_ratings.teams_without_ea.slice(0, 20));
+  } catch (e) {
+    console.warn('Coverage report generation failed:', e);
+  }
+  
+  // Report statlines for selected players (case-insensitive)
+  const targets = new Map<string, string>([
+    ['miller moss', 'QB'],
+    ['isaac brown', 'RB'],
+    ['duke watson', 'RB'],
+    ['caullin lacy', 'WR'],
+    ['chris bell', 'WR']
+  ]);
+  const byName = new Map<string, EnhancedPlayerContext>();
+  for (const p of profiles) {
+    byName.set(p.playerName.toLowerCase(), p);
+  }
+  console.log('\n📊 Statline Projections (12-game totals)');
+  for (const [name, pos] of targets.entries()) {
+    const ctx = byName.get(name);
+    if (!ctx) {
+      console.log(`- ${name} (${pos}): not found in current Louisville set`);
+      continue;
+    }
+    const s = computeEnhancedStatline(ctx);
+    const pts = score(s);
+    if (ctx.pos === 'QB') {
+      console.log(`- ${ctx.playerName} (QB): ATT ${s.pass_att||0}, YDS ${s.pass_yards}, TD ${s.pass_tds}, INT ${s.ints}, RATT ${s.rush_att||0}, RYDS ${s.rush_yards}, RTD ${s.rush_tds} → ${pts} pts`);
+    } else if (ctx.pos === 'RB') {
+      console.log(`- ${ctx.playerName} (RB): RATT ${s.rush_att||0}, RYDS ${s.rush_yards}, RTD ${s.rush_tds}, TGT ${s.targets||0}, REC ${s.receptions}, RECY ${s.rec_yards}, RECTD ${s.rec_tds} → ${pts} pts`);
+    } else {
+      // WR/TE
+      console.log(`- ${ctx.playerName} (${ctx.pos}): TGT ${s.targets||0}, REC ${s.receptions}, YDS ${s.rec_yards}, TD ${s.rec_tds}, RYDS ${s.rush_yards} → ${pts} pts`);
+    }
+  }
   
   // Update all players with enhanced projections
   let updated = 0;
@@ -825,6 +1329,22 @@ async function main() {
   
   console.log(`✅ Updated ${updated} players with talent-based projections`);
   
+  // If batch (teams filter) is provided, print concise report: Top-2 QBs/RBs/WRs
+  if (teamsFilter && teamsFilter.size > 0) {
+    const scored = profiles.map(ctx => ({
+      name: ctx.playerName,
+      team: ctx.teamId,
+      pos: ctx.pos,
+      pts: score(computeEnhancedStatline(ctx))
+    }));
+    const topN = (pos: string) => scored.filter(x => x.pos === (pos as any)).sort((a,b)=>b.pts-a.pts).slice(0,2);
+    console.log('\n📝 Batch Report');
+    console.log('Teams:', Array.from(teamsFilter).join(', '));
+    console.log('Top2 QBs:', topN('QB'));
+    console.log('Top2 RBs:', topN('RB'));
+    console.log('Top2 WRs:', topN('WR'));
+  }
+
   // Log top 10 players by talent-adjusted projections
   const topPlayers = profiles
     .map(ctx => ({
@@ -842,6 +1362,15 @@ async function main() {
     console.log(`${i + 1}. ${p.name} (${p.pos}, ${p.team}): ${p.points} pts (${p.talent.toFixed(2)}x)`);
   });
 }
+
+// Load environment variables early (supports .env and .env.local)
+try {
+  dotenv.config();
+  const localEnv = path.join(process.cwd(), '.env.local');
+  if (fs.existsSync(localEnv)) {
+    dotenv.config({ path: localEnv });
+  }
+} catch {}
 
 const entry = process.argv[1] || '';
 if (entry.includes('unified-talent-projections')) {

@@ -40,17 +40,23 @@ export function middleware(request: NextRequest) {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
-  // Optional CSP (disable if it breaks OAuth, adjust as needed)
-  const enableCsp = process.env.NEXT_PUBLIC_ENABLE_CSP === 'true';
+  // Content Security Policy to block third‑party injections while allowing Appwrite & Google OAuth
+  // Enabled in non-development environments by default; can be forced via NEXT_PUBLIC_ENABLE_CSP
+  const enableCsp = process.env.NEXT_PUBLIC_ENABLE_CSP === 'true' || process.env.NODE_ENV !== 'development';
   if (enableCsp) {
     const csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' vercel.live",
+      // Allow Next.js live reload in preview, Appwrite SDK via jsDelivr, and Google OAuth domains
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' vercel.live https://accounts.google.com https://apis.google.com",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob:",
-      "connect-src 'self' https://nyc.cloud.appwrite.io https://api.collegefootballdata.com https://*.vercel.app",
+      "img-src 'self' data: blob: https://lh3.googleusercontent.com https://*.gstatic.com",
+      "connect-src 'self' https://nyc.cloud.appwrite.io https://api.collegefootballdata.com https://*.vercel.app https://accounts.google.com https://apis.google.com",
       "font-src 'self' data:",
+      // Allow Google OAuth redirect flows in frames if needed
+      "frame-src 'self' https://accounts.google.com",
       "frame-ancestors 'none'",
+      // Report CSP violations to our endpoint (best-effort)
+      `report-uri ${request.nextUrl.origin}/api/security/csp-report`
     ].join('; ');
     response.headers.set('Content-Security-Policy', csp);
   }

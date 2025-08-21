@@ -1,0 +1,48 @@
+[
+  {"player_name":"Ty Simpson","school":"Alabama","ovr":82,"spd":86,"agi":83},
+  {"player_name":"Austin Mack","school":"Alabama","ovr":80,"spd":75,"agi":72},
+  {"player_name":"Jam Miller","school":"Alabama","ovr":88,"spd":89,"agi":93},
+  {"player_name":"Richard Young","school":"Alabama","ovr":83,"spd":92,"agi":90},
+  {"player_name":"Dre Washington","school":"Alabama","ovr":83,"spd":87,"agi":80},
+  {"player_name":"Ryan Williams","school":"Alabama","ovr":95,"spd":96,"agi":99},
+  {"player_name":"Germie Bernard","school":"Alabama","ovr":87,"spd":91,"agi":89},
+  {"player_name":"Isaiah Horton","school":"Alabama","ovr":87,"spd":89,"agi":90},
+  {"player_name":"Bubba Hampton","school":"Alabama","ovr":69,"spd":92,"agi":91},
+  {"player_name":"Josh Cuevas","school":"Alabama","ovr":80,"spd":79,"agi":77},
+  {"player_name":"Jack Sammarco","school":"Alabama","ovr":65,"spd":76,"agi":79},
+
+  {"player_name":"Garrett Nussmeier","school":"LSU","ovr":92,"spd":76,"agi":78},
+  {"player_name":"Michael Van Buren Jr.","school":"LSU","ovr":76,"spd":85,"agi":86},
+  {"player_name":"Caden Durham","school":"LSU","ovr":89,"spd":95,"agi":93},
+  {"player_name":"Harlem Berry","school":"LSU","ovr":83,"spd":94,"agi":95},
+  {"player_name":"Kaleb Jackson","school":"LSU","ovr":83,"spd":88,"agi":82},
+  {"player_name":"Aaron Anderson","school":"LSU","ovr":89,"spd":94,"agi":96},
+  {"player_name":"Nic Anderson","school":"LSU","ovr":88,"spd":91,"agi":89},
+  {"player_name":"Barion Brown","school":"LSU","ovr":86,"spd":99,"agi":93},
+  {"player_name":"Zavion Thomas","school":"LSU","ovr":81,"spd":93,"agi":95},
+  {"player_name":"Bauer Sharp","school":"LSU","ovr":85,"spd":82,"agi":81},
+  {"player_name":"Trey'Dez Green","school":"LSU","ovr":82,"spd":87,"agi":87},
+
+  {"player_name":"Arch Manning","school":"Texas","ovr":90,"spd":87,"agi":86},
+  {"player_name":"Quintrevion Wisner","school":"Texas","ovr":91,"spd":90,"agi":92},
+  {"player_name":"CJ Baxter","school":"Texas","ovr":87,"spd":91,"agi":90},
+  {"player_name":"Jerrick Gibson","school":"Texas","ovr":85,"spd":93,"agi":93},
+  {"player_name":"DeAndre Moore Jr.","school":"Texas","ovr":87,"spd":90,"agi":92},
+  {"player_name":"Ryan Wingo","school":"Texas","ovr":86,"spd":96,"agi":93},
+  {"player_name":"Emmett Mosley V","school":"Texas","ovr":84,"spd":90,"agi":89},
+  {"player_name":"Kaliq Lockett","school":"Texas","ovr":81,"spd":92,"agi":93},
+  {"player_name":"Jack Endries","school":"Texas","ovr":90,"spd":83,"agi":81},
+
+  {"player_name":"Gunner Stockton","school":"Georgia","ovr":82,"spd":81,"agi":83},
+  {"player_name":"Nate Frazier","school":"Georgia","ovr":88,"spd":93,"agi":93},
+  {"player_name":"Josh McCray","school":"Georgia","ovr":86,"spd":84,"agi":80},
+  {"player_name":"Roderick Robinson II","school":"Georgia","ovr":84,"spd":88,"agi":83},
+  {"player_name":"Zachariah Branch","school":"Georgia","ovr":88,"spd":97,"agi":98},
+  {"player_name":"Dillon Bell","school":"Georgia","ovr":86,"spd":88,"agi":90},
+  {"player_name":"Noah Thomas","school":"Georgia","ovr":86,"spd":92,"agi":88},
+  {"player_name":"Colbie Young","school":"Georgia","ovr":84,"spd":87,"agi":87},
+  {"player_name":"Oscar Delp","school":"Georgia","ovr":90,"spd":87,"agi":86},
+  {"player_name":"Lawson Luckie","school":"Georgia","ovr":85,"spd":83,"agi":83}
+]
+
+

@@ -1,0 +1,556 @@
+{
+  "QB": [
+    {
+      "Player": "LaNorris Sellers",
+      "WalterFootball_Rank": 1,
+      "PFN_Rank": 3,
+      "n_sources": 2,
+      "Mean_Rank": 2.0
+    },
+    {
+      "Player": "Garrett Nussmeier",
+      "WalterFootball_Rank": 2,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 2.0
+    },
+    {
+      "Player": "Cade Klubnik",
+      "WalterFootball_Rank": 5,
+      "PFN_Rank": 1,
+      "n_sources": 2,
+      "Mean_Rank": 3.0
+    },
+    {
+      "Player": "Arch Manning",
+      "WalterFootball_Rank": 3,
+      "PFN_Rank": 4,
+      "n_sources": 2,
+      "Mean_Rank": 3.5
+    },
+    {
+      "Player": "Drew Allar",
+      "WalterFootball_Rank": 4,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 4.0
+    },
+    {
+      "Player": "Fernando Mendoza",
+      "WalterFootball_Rank": 8,
+      "PFN_Rank": 2,
+      "n_sources": 2,
+      "Mean_Rank": 5.0
+    },
+    {
+      "Player": "Carson Beck",
+      "WalterFootball_Rank": 6,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 6.0
+    },
+    {
+      "Player": "Eli Holstein",
+      "WalterFootball_Rank": 7,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 7.0
+    },
+    {
+      "Player": "Miller Moss",
+      "WalterFootball_Rank": 9,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 9.0
+    },
+    {
+      "Player": "Behren Morton",
+      "WalterFootball_Rank": 10,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 10.0
+    },
+    {
+      "Player": "Brenden Sorsby",
+      "WalterFootball_Rank": 11,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 11.0
+    },
+    {
+      "Player": "Jackson Arnold",
+      "WalterFootball_Rank": 12,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 12.0
+    },
+    {
+      "Player": "Jalon Daniels",
+      "WalterFootball_Rank": 13,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 13.0
+    },
+    {
+      "Player": "Sam Leavitt",
+      "WalterFootball_Rank": 14,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 14.0
+    },
+    {
+      "Player": "Tyler Van Dyke",
+      "WalterFootball_Rank": 15,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 15.0
+    },
+    {
+      "Player": "Max Johnson",
+      "WalterFootball_Rank": 16,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 16.0
+    },
+    {
+      "Player": "Donovan Smith",
+      "WalterFootball_Rank": 17,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 17.0
+    },
+    {
+      "Player": "Kyron Drones",
+      "WalterFootball_Rank": 18,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 18.0
+    },
+    {
+      "Player": "Noah Fifita",
+      "WalterFootball_Rank": 19,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 19.0
+    }
+  ],
+  "RB": [
+    {
+      "Player": "Jeremiyah Love",
+      "WalterFootball_Rank": 1,
+      "PFN_Rank": 1,
+      "n_sources": 2,
+      "Mean_Rank": 1.0
+    },
+    {
+      "Player": "Nicholas Singleton",
+      "WalterFootball_Rank": 2,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 2.0
+    },
+    {
+      "Player": "Quintrevion Wisner",
+      "WalterFootball_Rank": 3,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 3.0
+    },
+    {
+      "Player": "Makhi Hughes",
+      "WalterFootball_Rank": 4,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 4.0
+    },
+    {
+      "Player": "Le'Veon Moss",
+      "WalterFootball_Rank": 5,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 5.0
+    },
+    {
+      "Player": "Jadarian Price",
+      "WalterFootball_Rank": 6,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 6.0
+    },
+    {
+      "Player": "Jayden Ott",
+      "WalterFootball_Rank": 7,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 7.0
+    },
+    {
+      "Player": "Jonah Coleman",
+      "WalterFootball_Rank": 8,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 8.0
+    },
+    {
+      "Player": "Demond Claiborne",
+      "WalterFootball_Rank": 9,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 9.0
+    },
+    {
+      "Player": "Darius Taylor",
+      "WalterFootball_Rank": 10,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 10.0
+    },
+    {
+      "Player": "Jam Miller",
+      "WalterFootball_Rank": 11,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 11.0
+    },
+    {
+      "Player": "Josh McCray",
+      "WalterFootball_Rank": 12,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 12.0
+    },
+    {
+      "Player": "Jamal Haynes",
+      "WalterFootball_Rank": 13,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 13.0
+    },
+    {
+      "Player": "L.J. Martin",
+      "WalterFootball_Rank": 14,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 14.0
+    },
+    {
+      "Player": "Justice Haynes",
+      "WalterFootball_Rank": 15,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 15.0
+    },
+    {
+      "Player": "Emmett Johnson",
+      "WalterFootball_Rank": 16,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 16.0
+    },
+    {
+      "Player": "Carson Hansen",
+      "WalterFootball_Rank": 17,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 17.0
+    },
+    {
+      "Player": "Richard Young",
+      "WalterFootball_Rank": 18,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 18.0
+    },
+    {
+      "Player": "Cash Jones",
+      "WalterFootball_Rank": 19,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 19.0
+    }
+  ],
+  "WR": [
+    {
+      "Player": "Jordyn Tyson",
+      "WalterFootball_Rank": 1,
+      "PFN_Rank": 1,
+      "n_sources": 2,
+      "Mean_Rank": 1.0
+    },
+    {
+      "Player": "Denzel Boston",
+      "WalterFootball_Rank": 2,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 2.0
+    },
+    {
+      "Player": "Antonio Williams",
+      "WalterFootball_Rank": 3,
+      "PFN_Rank": 2,
+      "n_sources": 2,
+      "Mean_Rank": 2.5
+    },
+    {
+      "Player": "Nic Anderson",
+      "WalterFootball_Rank": 4,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 4.0
+    },
+    {
+      "Player": "Germie Bernard",
+      "WalterFootball_Rank": 5,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 5.0
+    },
+    {
+      "Player": "Carnell Tate",
+      "WalterFootball_Rank": 6,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 6.0
+    },
+    {
+      "Player": "Aaron Anderson",
+      "WalterFootball_Rank": 7,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 7.0
+    },
+    {
+      "Player": "Deion Burks",
+      "WalterFootball_Rank": 8,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 8.0
+    },
+    {
+      "Player": "Eric Singleton",
+      "WalterFootball_Rank": 9,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 9.0
+    },
+    {
+      "Player": "Elijah Sarratt",
+      "WalterFootball_Rank": 10,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 10.0
+    },
+    {
+      "Player": "Tre Wilson III",
+      "WalterFootball_Rank": 11,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 11.0
+    },
+    {
+      "Player": "Isaiah Horton",
+      "WalterFootball_Rank": 12,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 12.0
+    },
+    {
+      "Player": "Squirrel White",
+      "WalterFootball_Rank": 13,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 13.0
+    },
+    {
+      "Player": "Malachi Fields",
+      "WalterFootball_Rank": 14,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 14.0
+    },
+    {
+      "Player": "Omar Cooper Jr.",
+      "WalterFootball_Rank": 15,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 15.0
+    },
+    {
+      "Player": "Chris Brazzell II",
+      "WalterFootball_Rank": 16,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 16.0
+    },
+    {
+      "Player": "Nyck Harbor",
+      "WalterFootball_Rank": 17,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 17.0
+    },
+    {
+      "Player": "Ja'Kobi Lane",
+      "WalterFootball_Rank": 18,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 18.0
+    },
+    {
+      "Player": "Bryce Lance",
+      "WalterFootball_Rank": 19,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 19.0
+    },
+    {
+      "Player": "Noah Thomas",
+      "WalterFootball_Rank": 20,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 20.0
+    },
+    {
+      "Player": "Chris Bell",
+      "WalterFootball_Rank": 21,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 21.0
+    },
+    {
+      "Player": "Jayden Gibson",
+      "WalterFootball_Rank": 22,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 22.0
+    },
+    {
+      "Player": "Jaden Greathouse",
+      "WalterFootball_Rank": 23,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 23.0
+    },
+    {
+      "Player": "Caleb Douglas",
+      "WalterFootball_Rank": 24,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 24.0
+    },
+    {
+      "Player": "Jayce Brown",
+      "WalterFootball_Rank": 25,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 25.0
+    }
+  ],
+  "TE": [
+    {
+      "Player": "Max Klare",
+      "WalterFootball_Rank": 1,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 1.0
+    },
+    {
+      "Player": "John Michael Gyllenborg",
+      "WalterFootball_Rank": 2,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 2.0
+    },
+    {
+      "Player": "Jack Velling",
+      "WalterFootball_Rank": 3,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 3.0
+    },
+    {
+      "Player": "Jack Endries",
+      "WalterFootball_Rank": 4,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 4.0
+    },
+    {
+      "Player": "Joe Royer",
+      "WalterFootball_Rank": 5,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 5.0
+    },
+    {
+      "Player": "Justin Joly",
+      "WalterFootball_Rank": 6,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 6.0
+    },
+    {
+      "Player": "Oscar Delp",
+      "WalterFootball_Rank": 7,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 7.0
+    },
+    {
+      "Player": "Hayden Hansen",
+      "WalterFootball_Rank": 8,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 8.0
+    },
+    {
+      "Player": "Arlis Boardingham",
+      "WalterFootball_Rank": 9,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 9.0
+    },
+    {
+      "Player": "Josh Cuevas",
+      "WalterFootball_Rank": 10,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 10.0
+    },
+    {
+      "Player": "Marlin Klein",
+      "WalterFootball_Rank": 11,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 11.0
+    },
+    {
+      "Player": "Eli Stowers",
+      "WalterFootball_Rank": 12,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 12.0
+    },
+    {
+      "Player": "Terrance Carter",
+      "WalterFootball_Rank": 13,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 13.0
+    },
+    {
+      "Player": "Eli Raridon",
+      "WalterFootball_Rank": 14,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 14.0
+    },
+    {
+      "Player": "Bauer Sharp",
+      "WalterFootball_Rank": 15,
+      "PFN_Rank": null,
+      "n_sources": 1,
+      "Mean_Rank": 15.0
+    }
+  ]
+}

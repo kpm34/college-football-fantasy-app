@@ -1,0 +1,145 @@
+Team,Slot,Player,OVR,SPD,AGI
+Illinois,QB1,Luke Altmyer,89.0,85.0,82.0
+Illinois,QB2,Ethan Hampton,77.0,73.0,72.0
+Illinois,RB1,Aidan Laughery,86.0,91.0,90.0
+Illinois,RB2,Kaden Feagin,84.0,89.0,76.0
+Illinois,WR1,Hudson Clement,82.0,86.0,86.0
+Illinois,WR2,Collin Dixon,79.0,86.0,85.0
+Illinois,WR3,Hank Beatty,78.0,92.0,90.0
+Illinois,TE1,Tanner Arkin,80.0,77.0,75.0
+Indiana,QB1,Fernando Mendoza,87.0,82.0,84.0
+Indiana,QB2,,,,
+Indiana,RB1,Roman Hemby,87.0,93.0,90.0
+Indiana,RB2,Lee Beebe Jr.,86.0,88.0,85.0
+Indiana,WR1,Elijah Sarratt,93.0,89.0,87.0
+Indiana,WR2,Omar Cooper Jr.,84.0,92.0,87.0
+Indiana,WR3,Tyler Morris,79.0,92.0,92.0
+Indiana,TE1,Holden Staes,83.0,82.0,82.0
+Iowa,QB1,Mark Gronowski,81.0,81.0,80.0
+Iowa,QB2,,,,
+Iowa,RB1,Kamari Moulton,85.0,92.0,89.0
+Iowa,RB2,Jaziun Patterson,80.0,87.0,84.0
+Iowa,WR1,Jacob Gill,79.0,90.0,88.0
+Iowa,WR2,Kaden Wetjen,78.0,88.0,91.0
+Iowa,WR3,Seth Anderson,75.0,89.0,87.0
+Iowa,TE1,Addison Ostrenga,83.0,75.0,76.0
+Maryland,QB1,Jackson Hamilton,70.0,85.0,87.0
+Maryland,QB2,Khristian Martin,70.0,73.0,72.0
+Maryland,RB1,Nolan Ray,83.0,89.0,86.0
+Maryland,RB2,Josiah McLaurin,77.0,91.0,89.0
+Maryland,WR1,Jalil Farooq,85.0,90.0,88.0
+Maryland,WR2,Shaleak Knotts,76.0,90.0,91.0
+Maryland,WR3,Ryan Manning,72.0,91.0,92.0
+Maryland,TE1,Dorian Fleming,87.0,84.0,84.0
+Michigan,QB1,Bryce Underwood,81.0,87.0,88.0
+Michigan,QB2,Mikey Keene,81.0,80.0,81.0
+Michigan,RB1,Justice Haynes,87.0,92.0,88.0
+Michigan,RB2,Jordan Marshall,83.0,89.0,86.0
+Michigan,WR1,Donaven McCulley,83.0,88.0,85.0
+Michigan,WR2,Anthony Simpson,77.0,89.0,88.0
+Michigan,WR3,,,,
+Michigan,TE1,Marlin Klein,77.0,,
+Michigan State,QB1,Aidan Chiles,81.0,86.0,85.0
+Michigan State,QB2,,,,
+Michigan State,RB1,Nate Carter,84.0,89.0,90.0
+Michigan State,RB2,Makhi Frazier,68.0,88.0,85.0
+Michigan State,WR1,Chrishon McCray,87.0,,
+Michigan State,WR2,Omari Kelly,85.0,,
+Michigan State,WR3,Nick Marsh,84.0,91.0,92.0
+Michigan State,TE1,Jack Velling,88.0,85.0,81.0
+Minnesota,QB1,,,,
+Minnesota,QB2,,,,
+Minnesota,RB1,Darius Taylor,91.0,89.0,88.0
+Minnesota,RB2,A.J. Turner,88.0,91.0,88.0
+Minnesota,WR1,Javon Tracy,86.0,88.0,88.0
+Minnesota,WR2,Logan Loya,81.0,90.0,92.0
+Minnesota,WR3,Malachi Coleman,80.0,96.0,88.0
+Minnesota,TE1,Jameson Geers,77.0,73.0,74.0
+Nebraska,QB1,Dylan Raiola,87.0,82.0,85.0
+Nebraska,QB2,Marcos Davila,74.0,75.0,74.0
+Nebraska,RB1,Kwinten Ives,79.0,87.0,85.0
+Nebraska,RB2,Mekhi Nelson,72.0,89.0,87.0
+Nebraska,WR1,Dane Key,88.0,89.0,90.0
+Nebraska,WR2,Nyziah Hunter,84.0,91.0,90.0
+Nebraska,WR3,Jacory Barney Jr.,83.0,93.0,93.0
+Nebraska,TE1,Heinrich Haarberg,78.0,86.0,83.0
+Northwestern,QB1,Preston Stone,82.0,76.0,78.0
+Northwestern,QB2,,,,
+Northwestern,RB1,Cam Porter,87.0,87.0,83.0
+Northwestern,RB2,Joseph Himon II,82.0,92.0,90.0
+Northwestern,WR1,,,,
+Northwestern,WR2,,,,
+Northwestern,WR3,,,,
+Northwestern,TE1,Jack Florentine,65.0,67.0,70.0
+Ohio State,QB1,Julian Sayin,85.0,81.0,84.0
+Ohio State,QB2,Lincoln Kienholz,80.0,80.0,82.0
+Ohio State,RB1,James Peoples,87.0,91.0,91.0
+Ohio State,RB2,CJ Donaldson,86.0,86.0,81.0
+Ohio State,WR1,Jeremiah Smith,98.0,95.0,95.0
+Ohio State,WR2,Carnell Tate,91.0,91.0,92.0
+Ohio State,WR3,Brandon Inniss,80.0,91.0,91.0
+Ohio State,TE1,Max Klare,91.0,82.0,83.0
+Oregon,QB1,Dante Moore,84.0,86.0,86.0
+Oregon,QB2,,,,
+Oregon,RB1,Makhi Hughes,92.0,90.0,90.0
+Oregon,RB2,Noah Whittington,84.0,91.0,88.0
+Oregon,WR1,Evan Stewart,91.0,95.0,96.0
+Oregon,WR2,Gary Bryant Jr.,85.0,92.0,92.0
+Oregon,WR3,Dakorien Moore,84.0,96.0,97.0
+Oregon,TE1,Kenyon Sadiq,88.0,84.0,81.0
+Penn State,QB1,Drew Allar,92.0,81.0,79.0
+Penn State,QB2,,,,
+Penn State,RB1,Nicholas Singleton,93.0,94.0,91.0
+Penn State,RB2,Kaytron Allen,92.0,89.0,86.0
+Penn State,WR1,Devonte Ross,90.0,94.0,93.0
+Penn State,WR2,Trebor Pena,89.0,93.0,93.0
+Penn State,WR3,Kyron Hudson,83.0,87.0,90.0
+Penn State,TE1,Luke Reynolds,81.0,88.0,87.0
+Purdue,QB1,Ryan Browne,74.0,79.0,78.0
+Purdue,QB2,Malachi Singleton,73.0,75.0,76.0
+Purdue,RB1,Devin Mockobee,84.0,90.0,86.0
+Purdue,RB2,Malachi Thomas,81.0,87.0,81.0
+Purdue,WR1,Charles Ross,76.0,89.0,88.0
+Purdue,WR2,Michael Jackson III,74.0,90.0,89.0
+Purdue,WR3,Nitro Tuggle,74.0,92.0,92.0
+Purdue,TE1,Rico Walker,74.0,79.0,81.0
+Rutgers,QB1,Athan Kaliakmanis,80.0,81.0,82.0
+Rutgers,QB2,AJ Surace,72.0,76.0,79.0
+Rutgers,RB1,CJ Campbell Jr.,82.0,88.0,86.0
+Rutgers,RB2,Samuel Brown V,80.0,90.0,81.0
+Rutgers,WR1,DT Sheffield,90.0,93.0,94.0
+Rutgers,WR2,Ian Strong,85.0,88.0,86.0
+Rutgers,WR3,KJ Duff,76.0,84.0,85.0
+Rutgers,TE1,Colin Weber,84.0,78.0,76.0
+UCLA,QB1,,,,
+UCLA,QB2,,,,
+UCLA,RB1,,,,
+UCLA,RB2,,,,
+UCLA,WR1,,,,
+UCLA,WR2,,,,
+UCLA,WR3,,,,
+UCLA,TE1,,,,
+USC,QB1,,,,
+USC,QB2,,,,
+USC,RB1,,,,
+USC,RB2,,,,
+USC,WR1,,,,
+USC,WR2,,,,
+USC,WR3,,,,
+USC,TE1,,,,
+Washington,QB1,Demond Williams Jr.,82.0,88.0,89.0
+Washington,QB2,,,,
+Washington,RB1,Jonah Coleman,93.0,88.0,84.0
+Washington,RB2,Adam Mohammed,82.0,92.0,90.0
+Washington,WR1,Denzel Boston,91.0,89.0,88.0
+Washington,WR2,Omari Evans,82.0,93.0,91.0
+Washington,WR3,Kevin Green Jr.,76.0,92.0,93.0
+Washington,TE1,Decker DeGraaf,79.0,82.0,84.0
+Wisconsin,QB1,Billy Edwards Jr.,81.0,,
+Wisconsin,QB2,,,,
+Wisconsin,RB1,Darrion Dupree,82.0,,
+Wisconsin,RB2,Cade Yacamelli,82.0,,
+Wisconsin,WR1,Vinny Anthony II,82.0,,
+Wisconsin,WR2,Dekel Crowdus,80.0,,
+Wisconsin,WR3,Jayden Ballard,78.0,,
+Wisconsin,TE1,Lance Mason,82.0,,

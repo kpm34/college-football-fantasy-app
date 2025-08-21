@@ -1,0 +1,120 @@
+,Team,Slot,Player,OVR,SPD,AGI
+0,Boston College,QB1,Grayson James,78.0,79.0,80.0
+1,Boston College,QB2,Dylan Lonergan,77.0,80.0,81.0
+2,Boston College,RB1,Jordan McDonald,83.0,89.0,84.0
+3,Boston College,RB2,Turbo Richard,83.0,88.0,88.0
+4,Boston College,WR1,Lewis Bond,84.0,91.0,90.0
+5,Boston College,WR2,Reed Harris,78.0,88.0,85.0
+6,Boston College,WR3,VJ Wilkins,76.0,92.0,90.0
+7,Cal,QB1,Devin Brown,79.0,80.0,79.0
+8,Cal,QB2,Jaron-Keawe Sagapolutele,78.0,78.0,81.0
+9,Cal,RB1,LJ Johnson Jr.,82.0,90.0,84.0
+10,Cal,RB2,Kendrick Raphael,82.0,89.0,88.0
+11,Cal,WR1,Jacob De Jesus,83.0,90.0,93.0
+12,Cal,WR2,Trond Grizzell,80.0,86.0,84.0
+13,Cal,WR3,Kyion Grayes,77.0,92.0,90.0
+14,Clemson,QB1,Cade Klubnik,92.0,86.0,85.0
+15,Clemson,QB2,Christopher Vizzina,78.0,84.0,79.0
+16,Clemson,RB1,Jay Haynes,85.0,89.0,89.0
+17,Clemson,RB2,Gideon Davidson,83.0,93.0,93.0
+18,Clemson,WR1,Antonio Williams,90.0,92.0,94.0
+19,Clemson,WR2,Bryant Wesco Jr.,88.0,90.0,93.0
+20,Clemson,WR3,T.J. Moore,86.0,93.0,93.0
+21,Duke,QB1,Darian Mensah,89.0,83.0,88.0
+22,Duke,QB2,Dan Mahan,73.0,83.0,85.0
+23,Duke,RB1,Jaquez Moore,85.0,91.0,85.0
+24,Duke,RB2,Anderson Castle,82.0,86.0,79.0
+25,Duke,WR1,Andrel Anthony,81.0,94.0,91.0
+26,Duke,WR2,Que'Sean Brown,80.0,91.0,91.0
+27,Duke,WR3,Sahmir Hagans,78.0,92.0,93.0
+28,Florida State,QB1,Tommy Castellanos,83.0,90.0,92.0
+29,Florida State,QB2,,,,
+30,Florida State,RB1,Roydell Williams,83.0,89.0,85.0
+31,Florida State,RB2,Kam Davis,81.0,90.0,84.0
+32,Florida State,WR1,Squirrel White,85.0,95.0,96.0
+33,Florida State,WR2,Duce Robinson,83.0,87.0,85.0
+34,Florida State,WR3,,,,
+35,Georgia Tech,QB1,Haynes King,86.0,91.0,89.0
+36,Georgia Tech,QB2,Graham Knowles,65.0,66.0,58.0
+37,Georgia Tech,RB1,Jamal Haynes,90.0,92.0,93.0
+38,Georgia Tech,RB2,Chad Alexander,82.0,88.0,85.0
+39,Georgia Tech,WR1,Eric Rivers,92.0,92.0,93.0
+40,Georgia Tech,WR2,Malik Rutherford,86.0,91.0,95.0
+41,Georgia Tech,WR3,Dean Patterson,81.0,85.0,87.0
+42,Louisville,QB1,Miller Moss,85.0,79.0,79.0
+43,Louisville,QB2,Brady Allen,66.0,67.0,59.0
+44,Louisville,RB1,Isaac Brown,93.0,95.0,96.0
+45,Louisville,RB2,Duke Watson,87.0,94.0,94.0
+46,Louisville,WR1,Chris Bell,89.0,89.0,88.0
+47,Louisville,WR2,Caullin Lacy,88.0,91.0,93.0
+48,Louisville,WR3,TreShun Hurry,79.0,89.0,86.0
+49,Miami,QB1,Carson Beck,91.0,75.0,75.0
+50,Miami,QB2,Luke Nickel,72.0,78.0,81.0
+51,Miami,RB1,Mark Fletcher Jr.,88.0,90.0,83.0
+52,Miami,RB2,Jordan Lyle,86.0,92.0,93.0
+53,Miami,WR1,CJ Daniels,85.0,89.0,89.0
+54,Miami,WR2,Ray Ray Joseph,82.0,93.0,94.0
+55,Miami,WR3,Joshisa Trader,82.0,92.0,92.0
+63,NC State,QB1,CJ Bailey,78.0,80.0,82.0
+64,NC State,QB2,Lex Thomas,75.0,77.0,80.0
+65,NC State,RB1,Hollywood Smothers,83.0,90.0,89.0
+66,NC State,RB2,Deandre Desinor,78.0,91.0,91.0
+67,NC State,WR1,Noah Rogers,80.0,91.0,90.0
+68,NC State,WR2,Wesley Grimes,77.0,92.0,92.0
+69,NC State,WR3,,,,
+56,North Carolina,QB1,Gio Lopez,83.0,84.0,87.0
+57,North Carolina,QB2,Max Johnson,77.0,67.0,66.0
+58,North Carolina,RB1,Davion Gause,83.0,88.0,85.0
+59,North Carolina,RB2,Benjamin Hall,81.0,87.0,79.0
+60,North Carolina,WR1,Kobe Paysour,81.0,89.0,87.0
+61,North Carolina,WR2,Nathan Leacock,79.0,94.0,84.0
+62,North Carolina,WR3,Aziah Johnson,76.0,90.0,90.0
+70,Pittsburgh,QB1,Eli Holstein,83.0,84.0,84.0
+71,Pittsburgh,QB2,David Lynch,61.0,70.0,65.0
+72,Pittsburgh,RB1,Desmond Reid,91.0,93.0,95.0
+73,Pittsburgh,RB2,Derrick Davis Jr.,81.0,89.0,86.0
+74,Pittsburgh,WR1,Raphael Williams Jr.,83.0,92.0,92.0
+75,Pittsburgh,WR2,Kenny Johnson,81.0,91.0,89.0
+76,Pittsburgh,WR3,Censere Lee,79.0,91.0,90.0
+77,SMU,QB1,Kevin Jennings,89.0,89.0,92.0
+78,SMU,QB2,,,,
+79,SMU,RB1,T.J. Harden,85.0,87.0,79.0
+80,SMU,RB2,Derrick McFall,81.0,91.0,91.0
+81,SMU,WR1,Jordan Hudson,84.0,92.0,92.0
+82,SMU,WR2,Yamir Knight,84.0,90.0,91.0
+83,SMU,WR3,Romello Brinson,80.0,92.0,89.0
+84,Stanford,QB1,Elijah Brown,75.0,78.0,80.0
+85,Stanford,QB2,Dylan Rizk,74.0,74.0,73.0
+86,Stanford,RB1,Micah Ford,82.0,88.0,85.0
+87,Stanford,RB2,Sedrick Irvin,82.0,89.0,86.0
+88,Stanford,WR1,C.J. Williams,79.0,90.0,91.0
+89,Stanford,WR2,Bryce Farrell,75.0,92.0,92.0
+90,Stanford,WR3,Caden High,74.0,91.0,89.0
+91,Syracuse,QB1,Steve Angeli,79.0,81.0,79.0
+92,Syracuse,QB2,Rickie Collins,77.0,85.0,88.0
+93,Syracuse,RB1,Yasin Willis,80.0,86.0,84.0
+94,Syracuse,RB2,Will Nixon,79.0,90.0,86.0
+95,Syracuse,WR1,Johntay Cook,82.0,92.0,94.0
+96,Syracuse,WR2,Darrell Gill Jr.,81.0,88.0,88.0
+97,Syracuse,WR3,Justus Ross-Simmons,80.0,87.0,86.0
+98,Virginia,QB1,Chandler Morris,82.0,85.0,89.0
+99,Virginia,QB2,,,,
+100,Virginia,RB1,Harrison Waylee,85.0,88.0,85.0
+101,Virginia,RB2,Xavier Brown,82.0,90.0,86.0
+102,Virginia,WR1,Jahmal Edrine,81.0,87.0,86.0
+103,Virginia,WR2,Jayden Thomas,80.0,88.0,86.0
+104,Virginia,WR3,Trell Harris,80.0,90.0,89.0
+105,Virginia Tech,QB1,Kyron Drones,83.0,86.0,86.0
+106,Virginia Tech,QB2,A.J. Brand,76.0,85.0,88.0
+107,Virginia Tech,RB1,Terion Stewart,88.0,87.0,81.0
+108,Virginia Tech,RB2,Braydon Bennett,86.0,88.0,83.0
+109,Virginia Tech,WR1,Donavon Greene,84.0,92.0,89.0
+110,Virginia Tech,WR2,Ayden Greene,76.0,90.0,88.0
+111,Virginia Tech,WR3,Isaiah Spencer,69.0,88.0,85.0
+112,Wake Forest,QB1,Robby Ashford,79.0,88.0,89.0
+113,Wake Forest,QB2,Deshawn Purdie,75.0,77.0,81.0
+114,Wake Forest,RB1,Demond Claiborne,91.0,96.0,91.0
+115,Wake Forest,RB2,Tate Carney,81.0,86.0,85.0
+116,Wake Forest,WR1,Carlos Hernandez,76.0,92.0,88.0
+117,Wake Forest,WR2,Micah Mays Jr.,76.0,93.0,90.0
+118,Wake Forest,WR3,Jeremiah Melvin,70.0,88.0,84.0

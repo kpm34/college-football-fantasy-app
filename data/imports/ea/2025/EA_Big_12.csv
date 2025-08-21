@@ -1,0 +1,129 @@
+team,slot,player,ovr,spd,agi
+Arizona,QB1,Noah Fifita,87.0,79.0,85.0
+Arizona,QB2,Tommy Trout,79.0,77.0,79.0
+Arizona,RB1,Ismail Mahdi,87.0,93.0,90.0
+Arizona,RB2,Kedrick Reescano,83.0,88.0,84.0
+Arizona,WR1,Luke Wysong,86.0,92.0,91.0
+Arizona,WR2,Kris Hutson,82.0,93.0,94.0
+Arizona,WR3,Jeremiah Patterson,76.0,92.0,92.0
+Arizona,TE1,Keyan Burnett,83.0,82.0,82.0
+Arizona State,QB1,Sam Leavitt,91.0,84.0,85.0
+Arizona State,QB2,Navi Bruzon,70.0,85.0,87.0
+Arizona State,RB1,Kanye Udoh,88.0,88.0,81.0
+Arizona State,RB2,Kyson Brown,82.0,91.0,86.0
+Arizona State,WR1,Jordyn Tyson,94.0,91.0,93.0
+Arizona State,WR2,Jalen Moss,85.0,92.0,91.0
+Arizona State,WR3,Jaren Hamilton,75.0,94.0,93.0
+Arizona State,TE1,Chamon Metayer,86.0,80.0,82.0
+BYU,QB1,Jake Retzlaff,88.0,84.0,85.0
+BYU,QB2,Patrick Anderson,78.0,85.0,88.0
+BYU,RB1,LJ Martin,89.0,89.0,84.0
+BYU,RB2,Pokaiaua Haunga,74.0,88.0,86.0
+BYU,WR1,Chase Roberts,90.0,90.0,87.0
+BYU,WR2,Tiger Bachmeier,81.0,88.0,89.0
+BYU,WR3,Parker Kingston,74.0,96.0,93.0
+BYU,TE1,Ethan Erickson,71.0,83.0,84.0
+Baylor,QB1,Sawyer Robertson,88.0,84.0,85.0
+Baylor,QB2,Parker Vanness,73.0,79.0,79.0
+Baylor,RB1,Bryson Washington,90.0,90.0,89.0
+Baylor,RB2,Dawson Pendergrass,85.0,88.0,83.0
+Baylor,WR1,Josh Cameron,89.0,89.0,89.0
+Baylor,WR2,Jadon Porter,68.0,88.0,85.0
+Baylor,WR3,Mason Dossett,67.0,87.0,87.0
+Baylor,TE1,Michael Trigg,83.0,83.0,84.0
+Cincinnati,QB1,Samaj Jones,74.0,81.0,85.0
+Cincinnati,QB2,Zebulin Kinsey,73.0,82.0,83.0
+Cincinnati,RB1,Evan Pryor,83.0,92.0,90.0
+Cincinnati,RB2,Chance Williams,79.0,90.0,90.0
+Cincinnati,WR1,Cyrus Allen,82.0,93.0,89.0
+Cincinnati,WR2,Caleb Goodie,74.0,92.0,91.0
+Cincinnati,WR3,Noah Jennings,70.0,90.0,89.0
+Cincinnati,TE1,Joe Royer,87.0,80.0,80.0
+Colorado,QB1,Ryan Staub,72.0,75.0,76.0
+Colorado,QB2,Levi Drayton,71.0,73.0,74.0
+Colorado,RB1,Micah Welch,83.0,89.0,89.0
+Colorado,RB2,Dallan Hayden,81.0,92.0,88.0
+Colorado,WR1,Joseph Williams,80.0,91.0,89.0
+Colorado,WR2,Drelon Miller,79.0,91.0,92.0
+Colorado,WR3,Omarion Miller,79.0,90.0,86.0
+Colorado,TE1,Sav’ell Smalls,76.0,77.0,78.0
+Houston,QB1,Conner Weigman,83.0,82.0,85.0
+Houston,QB2,Austin Carlisle,73.0,92.0,89.0
+Houston,RB1,Dean Connors,87.0,91.0,91.0
+Houston,RB2,DJ Butler,74.0,88.0,84.0
+Houston,WR1,Harvey Broussard,78.0,91.0,89.0
+Houston,WR2,Devan Williams,74.0,87.0,85.0
+Houston,WR3,Zaylen Cormier,72.0,89.0,88.0
+Houston,TE1,Tanner Koziol,92.0,83.0,82.0
+Iowa State,QB1,Rocco Becht,88.0,83.0,84.0
+Iowa State,QB2,Connor Moberly,72.0,75.0,76.0
+Iowa State,RB1,Carson Hansen,88.0,89.0,85.0
+Iowa State,RB2,Abu Sama III,86.0,92.0,90.0
+Iowa State,WR1,Chase Sowell,83.0,89.0,87.0
+Iowa State,WR2,Daniel Jackson,79.0,85.0,86.0
+Iowa State,WR3,Carson Brown,72.0,90.0,90.0
+Iowa State,TE1,Tyler Moore,75.0,77.0,76.0
+Kansas,QB1,Jalon Daniels,87.0,88.0,91.0
+Kansas,QB2,David McComb,74.0,77.0,81.0
+Kansas,RB1,Leshon Williams,85.0,87.0,83.0
+Kansas,RB2,Johnny Thompson Jr.,77.0,89.0,86.0
+Kansas,WR1,Jackson Cook,73.0,91.0,91.0
+Kansas,WR2,Bryson Hayes,70.0,95.0,89.0
+Kansas,WR3,Doug Emilien,67.0,88.0,85.0
+Kansas,TE1,DeShawn Hanika,77.0,77.0,78.0
+Kansas State,QB1,Avery Johnson,89.0,88.0,91.0
+Kansas State,QB2,Blake Barnett,73.0,89.0,80.0
+Kansas State,RB1,Dylan Edwards,89.0,95.0,95.0
+Kansas State,RB2,Joe Jackson,81.0,91.0,89.0
+Kansas State,WR1,Jerand Bradley,79.0,86.0,85.0
+Kansas State,WR2,Jaron Tibbs,79.0,87.0,86.0
+Kansas State,WR3,Caleb Medford,74.0,88.0,85.0
+Kansas State,TE1,Garrett Oakley,85.0,82.0,81.0
+Oklahoma State,QB1,Hauss Hejny,73.0,91.0,86.0
+Oklahoma State,QB2,Zane Flores,73.0,80.0,80.0
+Oklahoma State,RB1,Freddie Brock,87.0,89.0,90.0
+Oklahoma State,RB2,Kalib Hicks,80.0,88.0,86.0
+Oklahoma State,WR1,Talyn Shettron,81.0,92.0,90.0
+Oklahoma State,WR2,Gavin Freeman,78.0,92.0,91.0
+Oklahoma State,WR3,Jaylen Lloyd,77.0,95.0,93.0
+Oklahoma State,TE1,Josh Ford,78.0,80.0,78.0
+TCU,QB1,Josh Hoover,87.0,75.0,78.0
+TCU,QB2,Ken Seals,72.0,72.0,74.0
+TCU,RB1,Jeremy Payne,82.0,94.0,93.0
+TCU,RB2,Jon Denman,72.0,89.0,85.0
+TCU,WR1,Eric McAlister,87.0,90.0,88.0
+TCU,WR2,Gekyle Baker,74.0,93.0,89.0
+TCU,WR3,Major Everhart,72.0,96.0,93.0
+TCU,TE1,DJ Rogers,76.0,79.0,80.0
+Texas Tech,QB1,Behren Morton,87.0,82.0,82.0
+Texas Tech,QB2,Mitch Griffis,77.0,86.0,91.0
+Texas Tech,RB1,Quinten Joyner,86.0,91.0,89.0
+Texas Tech,RB2,Cam’Ron Valdez,79.0,90.0,84.0
+Texas Tech,WR1,Reggie Virgil,87.0,89.0,89.0
+Texas Tech,WR2,Caleb Douglas,86.0,88.0,88.0
+Texas Tech,WR3,T.J. West,70.0,89.0,87.0
+Texas Tech,TE1,Terrance Carter,88.0,84.0,87.0
+UCF,QB1,Tayven Jackson,77.0,83.0,85.0
+UCF,QB2,Jacurri Brown,76.0,88.0,87.0
+UCF,RB1,Myles Montgomery,86.0,90.0,88.0
+UCF,RB2,Jaden Nixon,88.0,93.0,93.0
+UCF,WR1,Marcus Burke,77.0,92.0,89.0
+UCF,WR2,Duane Thomas Jr.,76.0,92.0,92.0
+UCF,WR3,Nehemiah Hughes,73.0,90.0,89.0
+UCF,TE1,Kylan Fox,70.0,86.0,84.0
+Utah,QB1,Elijah Thomas,74.0,76.0,79.0
+Utah,QB2,Nate Johnson,73.0,91.0,90.0
+Utah,RB1,Bryce Duke,80.0,88.0,85.0
+Utah,RB2,Bobby Mauga,77.0,88.0,84.0
+Utah,WR1,Otto Tia,80.0,86.0,85.0
+Utah,WR2,Ryan Davis,76.0,88.0,88.0
+Utah,WR3,Rayshawn Glover,74.0,86.0,86.0
+Utah,TE1,Drew Clemens,68.0,81.0,80.0
+West Virginia,QB1,Jaylen Henderson,76.0,85.0,83.0
+West Virginia,QB2,Nicco Marchiol,76.0,78.0,78.0
+West Virginia,RB1,Jahiem White,89.0,94.0,95.0
+West Virginia,RB2,Diore Hubbard,72.0,88.0,84.0
+West Virginia,WR1,Cam Vaughn,83.0,88.0,90.0
+West Virginia,WR2,Rodney Gallagher III,79.0,89.0,91.0
+West Virginia,WR3,Christian Hamilton,77.0,92.0,92.0
+West Virginia,TE1,Grayson Barnes,83.0,87.0,84.0
