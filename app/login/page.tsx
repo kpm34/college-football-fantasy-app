@@ -105,6 +105,7 @@ function LoginPageContent() {
             <label htmlFor="email" className="block text-sm mb-2 font-medium" style={{ color: '#6B4A35' }}>Email</label>
             <input
               id="email"
+              name="email"
               className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors" 
               style={{ borderColor: '#9256A4', backgroundColor: '#FFFFFF', color: '#5B2B8C' }}
               type="email" 
@@ -119,6 +120,7 @@ function LoginPageContent() {
             <label htmlFor="password" className="block text-sm mb-2 font-medium" style={{ color: '#6B4A35' }}>Password</label>
             <input 
               id="password"
+              name="password"
               className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors" 
               style={{ borderColor: '#9256A4', backgroundColor: '#FFFFFF', color: '#5B2B8C' }}
               type="password" 
