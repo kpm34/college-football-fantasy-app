@@ -58,7 +58,7 @@ export default function DraftRoom({ params }: Props) {
     const startDraft = async () => {
       try {
         console.log('[Draft] Attempting to start draft for league:', leagueId);
-        const response = await fetch(`/api/drafts/${leagueId}/start`, { 
+        const response = await fetch(`/api/drafts/${leagueId}/start?reset=true`, { 
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         });
