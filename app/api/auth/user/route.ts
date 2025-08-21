@@ -2,7 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
-    const sessionCookie = request.cookies.get('appwrite-session')?.value;
+    let sessionCookie = request.cookies.get('appwrite-session')?.value;
+
+    // Fallback to the cookie set directly by Appwrite (a_session_<projectId>)
+    if (!sessionCookie) {
+      const native = request.cookies.get('a_session_college-football-fantasy-app')?.value;
+      if (native) sessionCookie = native;
+    }
     
     if (!sessionCookie) {
       const response = NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
