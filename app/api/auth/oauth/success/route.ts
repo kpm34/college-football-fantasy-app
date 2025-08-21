@@ -63,12 +63,20 @@ export async function GET(request: NextRequest) {
 
               if (!current) throw new Error('No active session found');
 
-              // Send session info to server so it can set first-party cookie
+              // If Appwrite appended userId & secret as query params, use them
+              const urlParams = new URLSearchParams(window.location.search);
+              const uidParam = urlParams.get('userId');
+              const secretParam = urlParams.get('secret');
+
+              const payload = uidParam && secretParam
+                ? { userId: uidParam, secret: secretParam }
+                : { userId: user.$id, secret: current.secret || null };
+
               await fetch('/api/auth/sync-oauth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ sessionId: current.$id, userId: user.$id })
+                body: JSON.stringify(payload)
               });
 
               // Also drop a short-lived client cookie so useAuth hook forces re-check
