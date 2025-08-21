@@ -11,8 +11,12 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(request: NextRequest) {
   try {
-    // Check if user is authenticated
-    const sessionCookie = request.cookies.get('appwrite-session')?.value;
+    let sessionCookie = request.cookies.get('appwrite-session')?.value;
+    if (!sessionCookie) {
+      const native = request.cookies.get('a_session_college-football-fantasy-app')?.value;
+      if (native) sessionCookie = native;
+    }
+
     if (!sessionCookie) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
