@@ -121,8 +121,51 @@ export default function ConferenceShowcasePage() {
     { name: "Texas A&M Aggies", abbreviation: "TAMU", mascot: "Aggies" }
   ];
 
+  const staticBig12Teams = [
+    { name: "Texas Longhorns", abbreviation: "TEX", mascot: "Longhorns" },
+    { name: "Oklahoma State Cowboys", abbreviation: "OKST", mascot: "Cowboys" },
+    { name: "Kansas Jayhawks", abbreviation: "KU", mascot: "Jayhawks" },
+    { name: "Kansas State Wildcats", abbreviation: "KSU", mascot: "Wildcats" },
+    { name: "TCU Horned Frogs", abbreviation: "TCU", mascot: "Horned Frogs" },
+    { name: "Baylor Bears", abbreviation: "BAYL", mascot: "Bears" },
+    { name: "Texas Tech Red Raiders", abbreviation: "TTU", mascot: "Red Raiders" },
+    { name: "West Virginia Mountaineers", abbreviation: "WVU", mascot: "Mountaineers" },
+    { name: "Iowa State Cyclones", abbreviation: "ISU", mascot: "Cyclones" },
+    { name: "Cincinnati Bearcats", abbreviation: "CINCY", mascot: "Bearcats" },
+    { name: "Houston Cougars", abbreviation: "HOU", mascot: "Cougars" },
+    { name: "UCF Knights", abbreviation: "UCF", mascot: "Knights" },
+    { name: "BYU Cougars", abbreviation: "BYU", mascot: "Cougars" },
+    { name: "Colorado Buffaloes", abbreviation: "COLO", mascot: "Buffaloes" },
+    { name: "Arizona Wildcats", abbreviation: "ARIZ", mascot: "Wildcats" },
+    { name: "Arizona State Sun Devils", abbreviation: "ASU", mascot: "Sun Devils" },
+    { name: "Utah Utes", abbreviation: "UTAH", mascot: "Utes" }
+  ];
+
+  const staticAccTeams = [
+    { name: "Florida State Seminoles", abbreviation: "FSU", mascot: "Seminoles" },
+    { name: "Clemson Tigers", abbreviation: "CLEM", mascot: "Tigers" },
+    { name: "Miami Hurricanes", abbreviation: "MIA", mascot: "Hurricanes" },
+    { name: "North Carolina Tar Heels", abbreviation: "UNC", mascot: "Tar Heels" },
+    { name: "NC State Wolfpack", abbreviation: "NCST", mascot: "Wolfpack" },
+    { name: "Duke Blue Devils", abbreviation: "DUKE", mascot: "Blue Devils" },
+    { name: "Wake Forest Demon Deacons", abbreviation: "WF", mascot: "Demon Deacons" },
+    { name: "Virginia Cavaliers", abbreviation: "UVA", mascot: "Cavaliers" },
+    { name: "Virginia Tech Hokies", abbreviation: "VT", mascot: "Hokies" },
+    { name: "Georgia Tech Yellow Jackets", abbreviation: "GT", mascot: "Yellow Jackets" },
+    { name: "Louisville Cardinals", abbreviation: "LOU", mascot: "Cardinals" },
+    { name: "Syracuse Orange", abbreviation: "SYR", mascot: "Orange" },
+    { name: "Boston College Eagles", abbreviation: "BC", mascot: "Eagles" },
+    { name: "Pitt Panthers", abbreviation: "PITT", mascot: "Panthers" },
+    { name: "Notre Dame Fighting Irish", abbreviation: "ND", mascot: "Fighting Irish" },
+    { name: "California Golden Bears", abbreviation: "CAL", mascot: "Golden Bears" },
+    { name: "Stanford Cardinal", abbreviation: "STAN", mascot: "Cardinal" },
+    { name: "SMU Mustangs", abbreviation: "SMU", mascot: "Mustangs" }
+  ];
+
   const displayBigTenTeams = bigTenTeams.length > 0 ? bigTenTeams : staticBigTenTeams;
   const displaySecTeams = secTeams.length > 0 ? secTeams : staticSecTeams;
+  const displayBig12Teams = big12Teams.length > 0 ? big12Teams : staticBig12Teams;
+  const displayAccTeams = accTeams.length > 0 ? accTeams : staticAccTeams;
 
   console.log('Display Big Ten Teams:', displayBigTenTeams);
   console.log('Display SEC Teams:', displaySecTeams);
@@ -256,11 +299,11 @@ export default function ConferenceShowcasePage() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-4xl font-black text-[#7a1c1c] uppercase">BIG 12</h2>
             <span className="px-4 py-2 bg-[#7a1c1c]/10 text-[#7a1c1c] rounded-full text-sm font-bold">
-              {big12Teams.length} Teams
+              {displayBig12Teams.length} Teams
             </span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {big12Teams.map((team, index) => {
+            {displayBig12Teams.map((team, index) => {
               const teamName = team.name || (team as any).school || '';
               const colors = getTeamColors(teamName);
               return (
@@ -284,11 +327,11 @@ export default function ConferenceShowcasePage() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-4xl font-black text-[#0B0E13] uppercase">ACC</h2>
             <span className="px-4 py-2 bg-[#0B0E13]/10 text-[#0B0E13] rounded-full text-sm font-bold">
-              {accTeams.length} Teams
+              {displayAccTeams.length} Teams
             </span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {accTeams.map((team, index) => {
+            {displayAccTeams.map((team, index) => {
               const teamName = team.name || (team as any).school || '';
               const colors = getTeamColors(teamName);
               return (

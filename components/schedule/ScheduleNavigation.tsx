@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Calendar, Users } from 'lucide-react';
 import { Game, WeekSchedule } from '@/app/api/schedule/route';
+import { getTeamColors } from '@/lib/team-colors';
 
 interface ScheduleNavigationProps {
   className?: string;
@@ -246,6 +247,15 @@ interface GameCardProps {
 }
 
 function GameCard({ game, highlightTeam, showWeek = false }: GameCardProps) {
+  const awayColors = getTeamColors(game.awayTeam);
+  const homeColors = getTeamColors(game.homeTeam);
+
+  const getInitials = (name: string) => {
+    if (!name) return '';
+    const words = name.replace(/\([^)]*\)/g, '').trim().split(/\s+/);
+    if (words.length === 1) return words[0].slice(0, 3).toUpperCase();
+    return (words[0][0] + words[1][0]).toUpperCase();
+  };
   const getConferenceBadgeColor = (conference: string) => {
     switch (conference) {
       case 'SEC': return 'bg-red-100 text-red-700 border-red-200';
@@ -282,7 +292,19 @@ function GameCard({ game, highlightTeam, showWeek = false }: GameCardProps) {
           
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <span className={`font-semibold ${isTeamHighlighted(game.awayTeam) ? 'text-[#E73C7E]' : 'text-[#5E2B8A]'}`}>
+              <span
+                className="inline-flex items-center justify-center w-6 h-6 rounded-full border"
+                style={{ backgroundColor: awayColors.primary, borderColor: awayColors.secondary }}
+                aria-hidden="true"
+              >
+                <span className="text-[10px] font-bold" style={{ color: awayColors.secondary }}>
+                  {getInitials(game.awayTeam)}
+                </span>
+              </span>
+              <span
+                className="font-semibold"
+                style={{ color: isTeamHighlighted(game.awayTeam) ? '#E73C7E' : awayColors.secondary }}
+              >
                 {game.awayTeam}
               </span>
               <span className={`px-2 py-1 text-xs font-medium rounded border ${getConferenceBadgeColor(game.awayConference)}`}>
@@ -293,7 +315,19 @@ function GameCard({ game, highlightTeam, showWeek = false }: GameCardProps) {
             <span className="text-gray-400">@</span>
             
             <div className="flex items-center gap-2">
-              <span className={`font-semibold ${isTeamHighlighted(game.homeTeam) ? 'text-[#E73C7E]' : 'text-[#5E2B8A]'}`}>
+              <span
+                className="inline-flex items-center justify-center w-6 h-6 rounded-full border"
+                style={{ backgroundColor: homeColors.primary, borderColor: homeColors.secondary }}
+                aria-hidden="true"
+              >
+                <span className="text-[10px] font-bold" style={{ color: homeColors.secondary }}>
+                  {getInitials(game.homeTeam)}
+                </span>
+              </span>
+              <span
+                className="font-semibold"
+                style={{ color: isTeamHighlighted(game.homeTeam) ? '#E73C7E' : homeColors.secondary }}
+              >
                 {game.homeTeam}
               </span>
               <span className={`px-2 py-1 text-xs font-medium rounded border ${getConferenceBadgeColor(game.homeConference)}`}>
