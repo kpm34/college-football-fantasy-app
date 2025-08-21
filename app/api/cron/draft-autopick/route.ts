@@ -8,7 +8,8 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   try {
     const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    const fromVercelCron = Boolean(request.headers.get('x-vercel-cron'));
+    if (!fromVercelCron && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return new Response('Unauthorized', { status: 401 });
     }
 
@@ -31,9 +32,10 @@ export async function GET(request: NextRequest) {
 
     for (const st of due) {
       try {
-        const resp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/drafts/${st.draftId}/autopick`, {
+        const base = (process.env.NEXT_PUBLIC_BASE_URL && process.env.NEXT_PUBLIC_BASE_URL.trim()) || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '');
+        const resp = await fetch(`${base}/api/drafts/${st.draftId}/autopick`, {
           method: 'POST',
-          headers: { authorization: `Bearer ${process.env.CRON_SECRET}` },
+          headers: fromVercelCron ? {} : { authorization: `Bearer ${process.env.CRON_SECRET}` },
         });
         if (resp.ok) successes += 1;
         results.push({ id: st.draftId, ok: resp.ok });
