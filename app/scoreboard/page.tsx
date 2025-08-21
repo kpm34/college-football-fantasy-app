@@ -132,11 +132,7 @@ export default function ScoreboardPage() {
       <div className="container mx-auto px-4 pb-12 relative">
         {loading ? (
           <div className="text-center text-white/60 py-12">Loading games...</div>
-        ) : games.length === 0 ? (
-          <div className="surface-card rounded-xl p-12 text-center">
-            <p className="text-xl text-white/60">No games scheduled for Week {week}</p>
-          </div>
-        ) : (
+        ) : games.length > 0 ? (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {games.map((game) => (
               <div key={game.id} className="surface-card rounded-xl p-6">
@@ -159,7 +155,7 @@ export default function ScoreboardPage() {
               </div>
             ))}
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
