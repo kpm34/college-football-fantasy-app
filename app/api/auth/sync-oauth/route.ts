@@ -4,11 +4,11 @@ import { cookies } from 'next/headers';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { userId, secret } = body;
+    const { jwt } = body;
 
-    if (!userId || !secret) {
+    if (!jwt) {
       return NextResponse.json(
-        { success: false, error: 'Missing OAuth credentials' },
+        { success: false, error: 'Missing JWT' },
         { status: 400 }
       );
     }
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     const cookieStore = cookies();
     
     // Set Appwrite session cookie (value must be session secret)
-    cookieStore.set('appwrite-session', secret, {
+    cookieStore.set('appwrite-jwt', jwt, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -26,13 +26,7 @@ export async function POST(request: NextRequest) {
     });
     
     // Also set userId for convenience
-    cookieStore.set('userId', userId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/'
-    });
+    // plain userId cookie not required
     
     return NextResponse.json({ 
       success: true,

@@ -78,9 +78,10 @@ export async function GET(request: NextRequest) {
                 secretParam = hashParams.get('secret');
               }
 
-              const payload = uidParam && secretParam
-                ? { userId: uidParam, secret: secretParam }
-                : { userId: user.$id, secret: current.secret || null };
+              // Create a short-lived JWT for server verification
+              const { jwt } = await account.createJWT();
+
+              const payload = { jwt };
 
               await fetch('/api/auth/sync-oauth', {
                 method: 'POST',

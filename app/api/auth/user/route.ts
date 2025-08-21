@@ -2,24 +2,28 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
+    const jwt = request.cookies.get('appwrite-jwt')?.value;
     const sessionCookie = request.cookies.get('appwrite-session')?.value;
     
-    if (!sessionCookie) {
+    if (!sessionCookie && !jwt) {
       const response = NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
       response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
       return response;
     }
     
-    // The cookie is now the raw session secret
-    const cookieHeader = `a_session_college-football-fantasy-app=${sessionCookie}`;
-    
+    const headers: any = {
+      'X-Appwrite-Project': 'college-football-fantasy-app',
+      'X-Appwrite-Response-Format': '1.4.0'
+    };
+    if (sessionCookie) {
+      headers['Cookie'] = `a_session_college-football-fantasy-app=${sessionCookie}`;
+    } else if (jwt) {
+      headers['X-Appwrite-JWT'] = jwt;
+    }
+
     const response = await fetch('https://nyc.cloud.appwrite.io/v1/account', {
       method: 'GET',
-      headers: {
-        'X-Appwrite-Project': 'college-football-fantasy-app',
-        'X-Appwrite-Response-Format': '1.4.0',
-        'Cookie': cookieHeader,
-      },
+      headers
     });
 
     if (!response.ok) {
