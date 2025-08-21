@@ -4,39 +4,36 @@ import { cookies } from 'next/headers';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { jwt } = body;
+    const { userId, secret } = body;
 
-    if (!jwt) {
+    if (!userId || !secret) {
       return NextResponse.json(
-        { success: false, error: 'Missing JWT' },
+        { success: false, error: 'Missing OAuth credentials' },
         { status: 400 }
       );
     }
-    
-    // Set session cookies for the OAuth user
+
+    // Store session secret in httpOnly cookie
     const cookieStore = cookies();
-    
-    // Set Appwrite session cookie (value must be session secret)
-    cookieStore.set('appwrite-jwt', jwt, {
+    cookieStore.set('appwrite-session', secret, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/'
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30 // 30 days
     });
-    
-    // Also set userId for convenience
-    // plain userId cookie not required
-    
-    return NextResponse.json({ 
-      success: true,
-      message: 'Session synced successfully'
+
+    cookieStore.set('userId', userId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30
     });
+
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('OAuth sync error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to sync session' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: 'Failed to sync session' }, { status: 500 });
   }
 }

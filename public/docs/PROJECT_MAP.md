@@ -103,18 +103,18 @@ graph TB
     
     %% Application Layer
     subgraph APIRoutes[Next.js API Routes]
-        API_PLAYERS[/api/draft/players<br/>Cached Player Lists<br/>Fantasy Projections]
-        API_LEAGUES[/api/leagues/*<br/>Create, Join, Manage<br/>Commissioner Tools]
-        API_MOCK[/api/mock-draft/*<br/>Live Human Draft<br/>Turn Management]
-        API_DRAFT[/api/drafts/*<br/>Real Draft System<br/>Pick/Autopick/Pause]
+        API_PLAYERS[Players API]
+        API_LEAGUES[Leagues API]
+        API_MOCK[Mock Draft API]
+        API_DRAFT[Drafts API]
     end
     
     %% Frontend Layer
     subgraph FrontendPages[Frontend Pages]
-        MOCK_DRAFT_UI[/mock-draft/id<br/>Live Draft Room<br/>Real-time Picks]
-        DRAFT_UI[/draft/leagueId<br/>League Draft<br/>Timer and Autopick]
-        LEAGUE_UI[/league/*<br/>Management Pages<br/>Commissioner Tools<br/>DRAFT ROOM Button]
-        RESULTS_UI[Results and Export<br/>JSON/CSV Download<br/>Team Summaries]
+        MOCK_DRAFT_UI[Mock Draft Room]
+        DRAFT_UI[League Draft Room]
+        LEAGUE_UI[League Management]
+        RESULTS_UI[Results and Export]
     end
     
     %% Realtime System
