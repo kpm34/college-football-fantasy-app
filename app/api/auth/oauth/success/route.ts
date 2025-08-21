@@ -63,8 +63,8 @@ export async function GET(request: NextRequest) {
 
               if (!current) throw new Error('No active session found');
 
-              let uidParam: string | null = null;
-              let secretParam: string | null = null;
+              let uidParam = null;
+              let secretParam = null;
 
               // First look at query string
               const urlParams = new URLSearchParams(window.location.search);
