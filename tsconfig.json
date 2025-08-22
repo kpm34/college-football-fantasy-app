@@ -36,6 +36,7 @@
       "@/hooks/*": ["lib/hooks/*"],
       "@/types/*": ["lib/types/*"],
       "@future/*": ["future/*"]
+      ,"@data/*": ["data/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
