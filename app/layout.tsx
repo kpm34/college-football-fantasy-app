@@ -29,7 +29,7 @@ const robotoMono = Roboto_Mono({
   display: 'swap',
 })
 
-import Navbar from '../components/Navbar'
+import Navbar from '@/components/Navbar'
 
 export const metadata: Metadata = {
   title: 'College Football Fantasy App',
