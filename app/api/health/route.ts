@@ -3,7 +3,7 @@ import { serverDatabases, serverUsers, isServerConfigured, DATABASE_ID, COLLECTI
 import { Query } from 'node-appwrite';
 import { kv } from '@vercel/kv';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 interface HealthStatus {
   status: 'healthy' | 'degraded' | 'unhealthy';
@@ -109,10 +109,12 @@ export async function GET(request: NextRequest) {
   // Determine overall health
   const isHealthy = health.services.appwrite.status && health.services.vercel.status;
   health.status = isHealthy ? 'healthy' : health.status;
+  // Add simple ok boolean for quick probes
+  const ok = health.status === 'healthy';
 
   // Add cache headers
-  return NextResponse.json(health, {
-    status: health.status === 'healthy' ? 200 : 503,
+  return NextResponse.json({ ok, ...health }, {
+    status: ok ? 200 : 503,
     headers: {
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       'X-Health-Status': health.status,
