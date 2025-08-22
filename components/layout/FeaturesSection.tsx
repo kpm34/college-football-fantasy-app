@@ -1,4 +1,4 @@
-import { Card, CardTitle, CardContent } from '@/components/ui/Card';
+import { Card, CardTitle, CardContent } from '@components/ui/Card';
 
 const features = [
   {

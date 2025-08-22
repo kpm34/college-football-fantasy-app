@@ -1,9 +1,9 @@
 'use client';
 
 import { useGames } from '@/lib/hooks/useGames';
-import { GamesGrid } from '@/components/features/games/GamesGrid';
-import { Button } from '@/components/ui/Button';
-import { Card, CardContent } from '@/components/ui/Card';
+import { GamesGrid } from '@components/features/games/GamesGrid';
+import { Button } from '@components/ui/Button';
+import { Card, CardContent } from '@components/ui/Card';
 
 export function GamesSection() {
   const { games, loading, error } = useGames({ autoRefresh: true });

@@ -23,10 +23,18 @@ module.exports = function transform(fileInfo, api, options) {
     { from: /^(?:\.{1,2}\/)*core\//,               to: '@domain/' },
     { from: /^@\/core\//,                           to: '@domain/' },
 
-    // components moved under app/components
-    { from: /^(\.\.?\/)+components\//, to: '@/components/' },
-    { from: /^@components\//, to: '@\/components/' },
-    { from: /^\/@components\//, to: '@\/components/' },
+    // components paths → @components
+    { from: /^(?:\.{1,2}\/)+components\//, to: '@components/' },
+    { from: /^@components\//, to: '@components/' },
+    { from: /^@\/components\//, to: '@components/' },
+    // legacy inner paths
+    { from: /^@components\/draft\//, to: '@components/draft/' },
+    { from: /^@components\/schedule\//, to: '@components/features/leagues/' },
+    { from: /^@components\/league\//, to: '@components/features/leagues/' },
+    { from: /^@components\/layouts\//, to: '@components/layout/' },
+    { from: /^@components\/docs\//, to: '@components/docs/' },
+    { from: /^@components\/features\/draft\//, to: '@components/features/draft/' },
+    { from: /^@components\/features\/leagues\//, to: '@components/features/leagues/' },
 
     // hooks/types absolute fallbacks to new aliases
     { from: /^\/(hooks|types)\//, to: '@/$1/' },

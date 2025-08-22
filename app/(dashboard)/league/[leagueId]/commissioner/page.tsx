@@ -6,7 +6,7 @@ import { useAuth } from '@hooks/useAuth';
 import Link from 'next/link';
 import { ChevronLeftIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { leagueColors } from '@/lib/theme/colors';
-import { InviteModal } from '@/components/features/leagues/InviteModal';
+import { InviteModal } from '@components/features/leagues/InviteModal';
 
 interface ScoringRules {
   // Passing

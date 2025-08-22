@@ -14,7 +14,7 @@ import {
   CheckCircleIcon,
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
-import { RotowireNews } from '@/components/RotowireNews';
+import { RotowireNews } from '@components/RotowireNews';
 
 interface Player {
   $id: string;
