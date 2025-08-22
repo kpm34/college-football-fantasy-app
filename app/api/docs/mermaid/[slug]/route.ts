@@ -67,15 +67,15 @@ export async function GET(
 
   // Try multiple locations where docs might be
   const possiblePaths = [
-    // In production, docs are copied to public/docs by prebuild
+    // Consolidated docs first
+    path.join(process.cwd(), 'docs', fileName),
+    // In production, docs are mirrored to public/docs by prebuild
     path.join(process.cwd(), 'public', 'docs', fileName),
     // Alternative: direct in public
     path.join(process.cwd(), 'public', fileName),
-    // Development: original docs folder
-    path.join(process.cwd(), 'docs', fileName),
-    // Vercel: might be at root
-    path.join('/var/task', 'public', 'docs', fileName),
+    // Vercel: common locations
     path.join('/var/task', 'docs', fileName),
+    path.join('/var/task', 'public', 'docs', fileName),
   ]
 
   for (const filePath of possiblePaths) {

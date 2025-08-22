@@ -26,19 +26,19 @@ graph TD
     ROOT --> TYPES[types/<br/>TypeScript Types<br/>Shared Interfaces]
     
     %% Data and Scripts
-    ROOT --> SCRIPTS[ops/common/scripts/<br/>Migrations, Sync<br/>Validation Guards]
+    ROOT --> SCRIPTS[ops/common/scripts/<br/>Prompts, Codemods<br/>Dev-time Scripts]
     ROOT --> DATA[data/<br/>EA Ratings, Mock Drafts<br/>Depth Charts, CSV/JSON]
     ROOT --> FUNCTIONS[ops/common/functions/<br/>Appwrite & Pipeline Functions<br/>Serverless Code]
     
     %% Documentation and Deployment
-    ROOT --> DOCS[docs/<br/>Documentation<br/>Project Memory]
+    ROOT --> DOCS[docs/<br/>Project Map + Diagrams<br/>Consolidated]
     ROOT --> VENDOR[vendor/<br/>Submodules<br/>3D Assets]
     
     %% Key Files Detail
     SCHEMA --> SSOT[zod-schema.ts<br/>Collections, Types<br/>Validation Rules]
     LIB --> FRONTEND[appwrite.ts<br/>Frontend Client<br/>Session Auth]
     LIB --> BACKEND[appwrite-server.ts<br/>Server Client<br/>API Key Auth]
-    SCRIPTS --> GUARDS[guards/<br/>Build Validation<br/>Schema Drift Prevention]
+    SCRIPTS --> GUARDS[guards/<br/>SSOT Guards (Dev-time)<br/>Schema Drift Prevention]
     
     %% Styling
     style SCHEMA fill:#fff2cc,stroke:#d6b656,stroke-width:4px,color:#000000
