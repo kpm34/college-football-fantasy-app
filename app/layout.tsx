@@ -30,6 +30,8 @@ const robotoMono = Roboto_Mono({
 })
 
 import Navbar from '@components/Navbar'
+import dynamic from 'next/dynamic'
+const DevCursorOverlay = dynamic(() => import('@components/dev/DevCursorOverlay').then(m=>m.default), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'College Football Fantasy App',
@@ -84,6 +86,7 @@ export default function RootLayout({
         </div>
         <Analytics />
         <SpeedInsights />
+        {process.env.NODE_ENV === 'development' ? <DevCursorOverlay /> : null}
       </body>
     </html>
   )

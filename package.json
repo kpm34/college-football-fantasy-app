@@ -8,12 +8,10 @@
     "schema:pull": "appwrite pull collections",
     "schema:push": "appwrite push collections --force",
     "schema:types": "appwrite types -l ts ./src/types/appwrite",
-    "schema:sync": "npm run schema:pull && npm run schema:types",
     "schema:sync": "npx tsx ops/common/scripts/sync-appwrite-simple.ts",
     "schema:all": "npm run schema:push && npm run schema:types",
     "schema:list": "ts-node ops/common/scripts/list-appwrite-collections.ts",
     "schema:validate": "npx tsx ops/common/scripts/validate-schema-compliance.ts",
-
     "seed": "npx tsx ops/common/scripts/seed.ts",
     "migrate:auth-users": "ts-node --transpile-only scripts/migrations/2025-08-15-backfill-auth-users.ts",
     "migrate:commissioner": "node --import 'data:text/javascript,import%20%7B%20register%20%7D%20from%20%22node:module%22;%20import%20%7B%20pathToFileURL%20%7D%20from%20%22node:url%22;%20register(%22ts-node/esm%22,%20pathToFileURL(%22./%22));' scripts/migrations/2025-08-14-backfill-commissioner.ts",
@@ -72,11 +70,6 @@
     "export:players:json": "npx tsx ops/common/scripts/export-college-players-json.ts",
     "export:database": "npx tsx ops/common/scripts/export-complete-database.ts",
     "compress:prompt": "npx tsx ops/common/scripts/compress-players-for-prompt.ts",
-
-    
-    
-    
-    
     "check:versions": "ts-node ops/common/scripts/check-file-versions.ts",
     "commit:safe": "npm run check:versions && git add -A && git commit",
     "generate:types:legacy": "node schema/generators/types.ts",
@@ -105,7 +98,8 @@
     "monitoring:dashboard": "curl -s https://cfbfantasy.app/api/monitoring/dashboard | jq .",
     "demo:glob": "npx tsx ops/common/scripts/demo-enhanced-glob.ts",
     "demo:glob:basic": "npx tsx ops/common/scripts/demo-enhanced-glob.ts --basic",
-    "ingest:run": "npx tsx ops/common/scripts/run-data-ingestion.ts"
+    "ingest:run": "npx tsx ops/common/scripts/run-data-ingestion.ts",
+    "ops:cursor:open": "tsx ops/common/scripts/open-latest-context.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",
@@ -200,6 +194,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "figma-transformer": "^2.1.0",
     "glob": "^11.0.3",
+    "html2canvas": "^1.4.1",
     "jest": "^29.7.0",
     "msw": "^2.0.11",
     "playwright": "^1.54.2",
