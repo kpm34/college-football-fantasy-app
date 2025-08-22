@@ -31,6 +31,9 @@ export const serverMessaging = new Messaging(serverClient);
 
 // Re-export common constants
 export { DATABASE_ID, COLLECTIONS };
+// Alias commonly imported names for backward compatibility
+export const databases = serverDatabases;
+export const client = serverClient;
 
 // Helper to check if server is properly configured
 export function isServerConfigured(): boolean {
