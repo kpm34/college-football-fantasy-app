@@ -26,6 +26,7 @@
       "@/components/*": ["app/components/*"],
       "@lib/*": ["lib/*"],
       "@domain/*": ["lib/domain/*"],
+      "@repos/*": ["lib/repos/*"],
       "@schema/*": ["schema/*"],
       "@functions/*": ["functions/*"],
       "@ops/*": ["ops/*"],
@@ -33,7 +34,8 @@
       "@hooks/*": ["lib/hooks/*"],
       "@types/*": ["lib/types/*"],
       "@/hooks/*": ["lib/hooks/*"],
-      "@/types/*": ["lib/types/*"]
+      "@/types/*": ["lib/types/*"],
+      "@future/*": ["future/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

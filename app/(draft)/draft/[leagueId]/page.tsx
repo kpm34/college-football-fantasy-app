@@ -319,7 +319,6 @@ export default function DraftRoom({ params }: Props) {
           </div>
         </div>
       )}
-      
       {/* Header - match mock styling */}
       <header className="flex items-center justify-between px-2 lg:px-4 py-2 border-b" style={{ backgroundColor: leagueColors.background.secondary, borderColor: leagueColors.border.medium }}>
         <div className="flex items-center gap-3">
@@ -360,7 +359,6 @@ export default function DraftRoom({ params }: Props) {
           )}
         </div>
       </header>
-
       {/* Recent picks ticker (match mock layout) */}
       {interfaceMode==='dashboard' && (
         <div className="mx-auto px-2 lg:px-4 mt-3 w-full overflow-x-auto whitespace-nowrap py-2 rounded-md" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
@@ -382,7 +380,6 @@ export default function DraftRoom({ params }: Props) {
           )}
         </div>
       )}
-
       {/* Under-ticker meta row: pick info + timer */}
       {interfaceMode==='dashboard' && (
         <div className="mx-auto px-4 mt-2 mb-2 flex items-center justify-between text-xs text-gray-700">
@@ -408,7 +405,6 @@ export default function DraftRoom({ params }: Props) {
           </div>
         </div>
       )}
-
       {interfaceMode==='board' ? (
         <div className="p-4">
           <div className="rounded border" style={{ borderColor: leagueColors.border.light, backgroundColor: leagueColors.background.card }}>
@@ -432,7 +428,7 @@ export default function DraftRoom({ params }: Props) {
         </div>
       ) : (
         // Mirror mock three-panel dashboard
-        <section className="mx-auto px-0 py-4 grid grid-cols-1 lg:grid-cols-12 gap-3">
+        (<section className="mx-auto px-0 py-4 grid grid-cols-1 lg:grid-cols-12 gap-3">
           {/* Left: My Team */}
           <aside className="lg:col-span-3 rounded-none p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
             <h2 className="font-medium text-sm mb-2" style={{ color: leagueColors.text.primary }}>My Team</h2>
@@ -449,7 +445,6 @@ export default function DraftRoom({ params }: Props) {
               )}
             </div>
           </aside>
-
           {/* Middle: Available Players */}
           <div className="lg:col-span-6 rounded-none p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
             <h2 className="font-medium text-sm mb-2" style={{ color: leagueColors.text.primary }}>Available Players</h2>
@@ -563,7 +558,6 @@ export default function DraftRoom({ params }: Props) {
               )}
             </div>
           </div>
-
           {/* Right: Teams viewer */}
           <aside className="lg:col-span-3 rounded-none p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
             <h2 className="font-medium text-sm mb-2" style={{ color: leagueColors.text.primary }}>Teams</h2>
@@ -588,7 +582,7 @@ export default function DraftRoom({ params }: Props) {
               </div>
             )}
           </aside>
-        </section>
+        </section>)
       )}
     </div>
   );
