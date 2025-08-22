@@ -4,6 +4,7 @@
   "description": "Fantasy football platform for Power 4 conferences",
   "private": true,
   "scripts": {
+    "generate:types": "tsx schema/generators/generate-appwrite-types.ts",
     "schema:pull": "appwrite pull collections",
     "schema:push": "appwrite push collections --force",
     "schema:types": "appwrite types -l ts ./src/types/appwrite",
@@ -78,7 +79,7 @@
     
     "check:versions": "ts-node ops/common/scripts/check-file-versions.ts",
     "commit:safe": "npm run check:versions && git add -A && git commit",
-    "generate:types": "node schema/generators/types.ts",
+    "generate:types:legacy": "node schema/generators/types.ts",
     "generate:appwrite": "node schema/generators/appwrite.ts",
     "generate:env": "node schema/generators/env.ts",
     "generate:docs": "npx tsx ops/common/scripts/generate-schema-docs.ts",

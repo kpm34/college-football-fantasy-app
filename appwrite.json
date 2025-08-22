@@ -56,7 +56,7 @@
             "entrypoint": "index.js",
             "commands": "npm install",
             "specification": "s-1vcpu-512mb",
-            "path": "functions/Import Players"
+            "path": "functions/appwrite/import-players"
         }
     ],
     "sites": [
