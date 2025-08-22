@@ -72,7 +72,7 @@ const ALLOWED_LEGACY_FILES = [
   'tests/',
   'schema/',
   'migration-script.js',
-  'appwrite-functions/',
+  'ops/common/functions/',
   '.js',
   'forbid-legacy-collections.ts' // This file itself
 ];

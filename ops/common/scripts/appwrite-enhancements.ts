@@ -553,7 +553,7 @@ async function main() {
     
     log('\n✅ Appwrite platform enhancements complete!', 'green');
     log('\n📋 Next Steps:', 'blue');
-    log('1. Deploy function code to appwrite-functions/ directories', 'yellow');
+    log('1. Deploy function code to ops/common/functions/ directories', 'yellow');
     log('2. Update environment variables in Vercel for new bucket IDs', 'yellow');
     log('3. Test messaging integration with sample notifications', 'yellow');
     log('4. Monitor function executions in Appwrite console', 'yellow');
