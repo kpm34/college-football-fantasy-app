@@ -3,7 +3,7 @@ import { serverDatabases, serverUsers, isServerConfigured, DATABASE_ID, COLLECTI
 import { Query } from 'node-appwrite';
 import { kv } from '@vercel/kv';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 interface HealthStatus {
   status: 'healthy' | 'degraded' | 'unhealthy';
