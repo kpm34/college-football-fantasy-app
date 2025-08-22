@@ -273,7 +273,6 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
           )}
         </div>
       </header>
-
       {/* Recent picks ticker (only in DraftDashboard mode) */}
       {interfaceMode==='dashboard' && (
       <div className="mx-auto px-2 lg:px-4 mt-3 w-full overflow-x-auto whitespace-nowrap py-2 rounded-md" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
@@ -295,7 +294,6 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
         )}
       </div>
       )}
-
       {/* Under-ticker meta row: pick info + timer */}
       <div className="mx-auto px-2 lg:px-4 mt-2 mb-2 flex items-center justify-between text-xs">
         {turn ? (
@@ -312,13 +310,11 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
           )}
         </div>
       </div>
-
       {error && (
         <div className="p-4 bg-red-50 border border-red-200 rounded text-red-700">
           {error}
         </div>
       )}
-
       {/* Interface rendering: DraftBoard full-screen vs DraftDashboard (three panels) */}
       {interfaceMode==='board' ? (
         <section className="mx-auto px-2 lg:px-4 py-4">
@@ -478,7 +474,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
               )
             ) : (
               // Inline board retained for dashboard mode
-              <div className="overflow-auto">
+              (<div className="overflow-auto">
                 <DraftBoard
                   picks={boardPicks}
                   numTeams={boardNumTeams}
@@ -486,7 +482,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
                   currentOverall={currentOverall}
                   slotLabels={(results?.participants || []).sort((a:any,b:any)=>a.slot-b.slot).map((p:any)=>`Team ${p.slot} — ${p.displayName}`)}
                 />
-              </div>
+              </div>)
             )}
           </div>
         </div>
@@ -520,7 +516,6 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
         </aside>
       </section>
       )}
-
       {/* Draft Board moved into center panel when toggled */}
     </div>
   );

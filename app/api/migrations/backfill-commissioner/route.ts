@@ -33,7 +33,7 @@ async function isAdmin(request: NextRequest): Promise<boolean> {
 
 export async function POST(request: NextRequest) {
   try {
-    const authorized = await isAdmin(request) || (request.headers.get('x-migration-token') && request.headers.get('x-migration-token') === process.env.MIGRATION_TOKEN);
+    const authorized = (await isAdmin(request)) || (request.headers.get('x-migration-token') && request.headers.get('x-migration-token') === process.env.MIGRATION_TOKEN);
     if (!authorized) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

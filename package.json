@@ -94,6 +94,7 @@
     "env:pull": "vercel env pull .env.local",
     "guards:ssot": "tsx ops/common/guards/validate-ssot-integrity.ts",
     "guards:drift": "tsx ops/common/guards/detect-schema-drift.ts",
+    "guard:ci": "npm run guards:ssot",
     "ops:cursor:context": "tsx ops/common/scripts/generate-cursor-context.ts",
     "ops:codemod": "tsx ops/common/codemods/run-codemod.ts",
     "fx:deploy": "appwrite functions deploy --all",

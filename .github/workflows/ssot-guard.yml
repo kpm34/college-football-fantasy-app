@@ -1,0 +1,22 @@
+name: SSOT Guard
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ssot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: Run SSOT Guard
+        run: npm run guard:ci
+        env:
+          NEXT_PUBLIC_APPWRITE_ENDPOINT: https://nyc.cloud.appwrite.io/v1
+          NEXT_PUBLIC_APPWRITE_PROJECT_ID: college-football-fantasy-app
+          NEXT_PUBLIC_APPWRITE_DATABASE_ID: college-football-fantasy
+          APPWRITE_API_KEY: ${{ secrets.APPWRITE_API_KEY }}

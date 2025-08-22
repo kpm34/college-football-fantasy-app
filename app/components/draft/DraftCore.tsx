@@ -196,7 +196,6 @@ export default function DraftCore({
           </div>
         </div>
       )}
-
       {/* Recent picks ticker */}
       {Array.isArray(draftedPlayers) && draftedPlayers.length > 0 && (
         <div className="px-6 py-2 border-b border-gray-200 bg-white/70">
@@ -215,7 +214,6 @@ export default function DraftCore({
           </div>
         </div>
       )}
-
       {/* Filter Bar */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex flex-wrap items-center gap-4">
@@ -286,7 +284,6 @@ export default function DraftCore({
           </div>
         </div>
       </div>
-
       {/* Tab Navigation */}
       <div className="bg-white border-b border-gray-200">
         <div className="flex">
@@ -312,7 +309,7 @@ export default function DraftCore({
           </button>
           {(
             // Only show the board tab if explicitly enabled
-            typeof (arguments as any) !== 'undefined'
+            (typeof (arguments as any) !== 'undefined')
           ) && (typeof showBoardTab === 'undefined' || showBoardTab) && (
             <button
               onClick={() => setState(prev => ({ ...prev, activeTab: 'board' }))}
@@ -327,7 +324,6 @@ export default function DraftCore({
           )}
         </div>
       </div>
-
       {/* Content Area */}
       <div className="flex-1 overflow-auto">
         {state.loading ? (
@@ -490,7 +486,6 @@ export default function DraftCore({
           </div>
         )}
       </div>
-
       {/* Children (custom content) */}
       {children}
     </div>

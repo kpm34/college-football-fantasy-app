@@ -76,7 +76,6 @@ export default function LeagueSettings({
   return (
     <div className="space-y-6">
       <h3 className="text-2xl font-bold mb-6">League Settings</h3>
-
       {/* Scoring Settings */}
       <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
         <h4 className="text-xl font-bold mb-4">Scoring Settings</h4>
@@ -105,7 +104,6 @@ export default function LeagueSettings({
           ))}
         </div>
       </div>
-
       {/* Draft Settings */}
       <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
         <h4 className="text-xl font-bold mb-4">Draft Settings</h4>
@@ -189,7 +187,6 @@ export default function LeagueSettings({
           </div>
         </div>
       </div>
-
       {/* Commissioner Tools */}
       {isCommissioner && (
         <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
