@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "app/**/*",
+    "components/**/*",
+    "functions/**/*",
+    "lib/**/*",
+    "schema/**/*",
+    "docs/**/*",
+    "types/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "ops/attic/**/*",
+    "ops/common/scripts/**/*",
+    "ops/common/prompts/**/*",
+    "ops/common/codemods/**/*",
+    "ops/common/guards/guardrails/**/*",
+    "future/**/*"
+  ]
+}

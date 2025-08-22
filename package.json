@@ -23,7 +23,7 @@
     "prebuild": "npx tsx ops/common/guards/forbid-test-pages.ts && npx tsx ops/common/guards/forbid-legacy-collections.ts && node ops/common/scripts/generate-icons.js 2>/dev/null || true && npm run validate:env",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
     "lint:fix": "next lint --fix",
     "icons": "node ops/common/scripts/generate-icons.js",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,json}\"",
