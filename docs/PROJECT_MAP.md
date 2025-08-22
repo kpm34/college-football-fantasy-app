@@ -30,13 +30,17 @@ graph TD
     %% Data and Scripts
     ROOT --> SCRIPTS[ops/common/scripts/<br/>Prompts, Codemods<br/>Dev-time Scripts]
     ROOT --> FUNCTIONS[functions/<br/>Appwrite Functions<br/>Workers & Cron]
+    FUNCTIONS --> FX_APPWRITE[functions/appwrite/*]
+    FUNCTIONS --> FX_WORKERS[functions/workers/*]
+    FUNCTIONS --> FX_CRON[functions/cron/*]
     ROOT --> FUTURE[future/<br/>ideas, scoring, trading,<br/>waiver, auctions]
     
     %% Documentation and Deployment
     ROOT --> DOCS[docs/<br/>Project Map + Diagrams<br/>Consolidated]
     ROOT --> DATA[data/<br/>Datasets & Processed Inputs]
-    ROOT --> DATAIO[data-io/<br/>Data Scripts & Utilities]
     ROOT --> VENDOR[vendor/<br/>Submodules<br/>3D Assets]
+    ROOT --> OPSCFG[ops/config/<br/>Configs (jest, sentry)]
+    ROOT --> OPSC[ops/cursor/<br/>Dev tooling<br/>screenshots]
     
     %% Key Files Detail
     SCHEMA --> SSOT[zod-schema.ts<br/>Collections, Types<br/>Validation Rules]
