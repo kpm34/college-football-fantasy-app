@@ -18,7 +18,7 @@ External Data → Pipeline Scripts → Appwrite Database → API Routes → UI C
 **Primary Script:** `functions/project-yearly-simple/index.ts`
 - **Inputs:** Team pace, efficiency, depth charts, usage priors, injury risk, NFL draft capital
 - **Output:** Comprehensive fantasy projections stored in `college_players.fantasy_points`
-- **Trigger:** `scripts/activate-pipeline-simple.ts`
+- **Trigger:** `ops/common/scripts/activate-pipeline-simple.ts`
 
 **Key Data Inputs:**
 - `model_inputs.depth_chart_json` - Depth chart positions and rankings
@@ -70,7 +70,7 @@ Pipeline → college_players.fantasy_points → API response → UI display
 **Projection Verification:**
 ```bash
 # Run pipeline to update projections
-npm run tsx scripts/activate-pipeline-simple.ts
+npm run tsx ops/common/scripts/activate-pipeline-simple.ts
 
 # Verify top players via API
 curl "https://cfbfantasy.app/api/draft/players?limit=10&orderBy=projection"
@@ -133,7 +133,7 @@ player.projectedPoints === player.fantasy_points (from DB)
 
 ## Deployment Pipeline
 
-1. **Update Projections:** `npm run tsx scripts/activate-pipeline-simple.ts`
+1. **Update Projections:** `npm run tsx ops/common/scripts/activate-pipeline-simple.ts`
 2. **Deploy to Vercel:** Automatic via Git push
 3. **Verify API:** Test `/api/draft/players` endpoint
 4. **Verify UI:** Check draft interface shows updated projections

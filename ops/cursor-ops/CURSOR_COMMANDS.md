@@ -6,17 +6,17 @@
 npm run generate:all
 
 # Sync schema to Appwrite
-npx tsx scripts/sync-appwrite-simple.ts
+npx tsx ops/common/scripts/sync-appwrite-simple.ts
 
 # Seed Appwrite database (collections/attributes/indexes)
 node schema/generators/seed-appwrite.ts
 
 # Validate schema integrity
-npx tsx scripts/validate-ssot-schema.ts
+npx tsx ops/common/scripts/validate-ssot-schema.ts
 
 # Run schema guards
-npx tsx scripts/guards/validate-ssot-integrity.ts
-npx tsx scripts/guards/forbid-legacy-collections.ts
+npx tsx ops/common/scripts/guards/validate-ssot-integrity.ts
+npx tsx ops/common/scripts/guards/forbid-legacy-collections.ts
 ```
 
 ## 🚀 Development Commands
@@ -56,11 +56,11 @@ curl https://nyc.cloud.appwrite.io/v1/health
 
 # Data sync
 npm run sync-data           # Sync from APIs to Appwrite
-node scripts/setup-appwrite-indexes.ts  # Setup DB indexes
+node ops/common/scripts/setup-appwrite-indexes.ts  # Setup DB indexes
 
 # Collections management
-npx tsx scripts/list-all-collections.ts  # List all collections
-npx tsx scripts/export-complete-database.ts  # Export database
+npx tsx ops/common/scripts/list-all-collections.ts  # List all collections
+npx tsx ops/common/scripts/export-complete-database.ts  # Export database
 ```
 
 ## 🐙 Git & GitHub
@@ -104,15 +104,15 @@ node -e "console.log(process.env.APPWRITE_API_KEY ? '✅ Key set' : '❌ Key mis
 ## 📊 Admin Operations
 ```bash
 # Player management
-npx tsx scripts/admin/dedupe/players.ts  # Remove duplicate players
-npx tsx scripts/admin/players/refresh.ts  # Refresh player data
-npx tsx scripts/admin/players/retire.ts   # Mark players as retired
+npx tsx ops/common/scripts/admin/dedupe/players.ts  # Remove duplicate players
+npx tsx ops/common/scripts/admin/players/refresh.ts  # Refresh player data
+npx tsx ops/common/scripts/admin/players/retire.ts   # Mark players as retired
 
 # League management
-npx tsx scripts/admin/leagues/sync-members.ts  # Sync league members
+npx tsx ops/common/scripts/admin/leagues/sync-members.ts  # Sync league members
 
 # Pipeline status
-npx tsx scripts/admin/pipeline-status.ts  # Check pipeline status
+npx tsx ops/common/scripts/admin/pipeline-status.ts  # Check pipeline status
 ```
 
 ## 🎨 AI & Media Tools
@@ -122,16 +122,16 @@ node ops/claude-ops/claude-cli.js
 # Commands: /code, /review, /explain, /test
 
 # Figma sync
-node scripts/figma-sync.js all        # Sync everything
+node ops/common/scripts/figma-sync.js all        # Sync everything
 node scripts/figma-sync.js colors     # Sync design tokens
 node scripts/figma-sync.js components # Generate components
 
 # Video workflow
-node scripts/video-workflow.js create-highlight --input "clips" --output "highlight.mp4"
-node scripts/video-workflow.js social --input "video.mp4" --format instagram
+node ops/common/scripts/video-workflow.js create-highlight --input "clips" --output "highlight.mp4"
+node ops/common/scripts/video-workflow.js social --input "video.mp4" --format instagram
 
 # FFmpeg helpers
-node scripts/ffmpeg-helpers.js convert input.mov output.mp4 --quality high
+node ops/common/scripts/ffmpeg-helpers.js convert input.mov output.mp4 --quality high
 node scripts/ffmpeg-helpers.js compress large.mp4 small.mp4 --target-size 10
 ```
 

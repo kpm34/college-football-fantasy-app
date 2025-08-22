@@ -13,10 +13,10 @@ This guide ensures code changes and database schema remain synchronized, prevent
 git pull origin main
 
 # 2. Check database schema is in sync
-APPWRITE_API_KEY="your-key" node scripts/check-all-permissions.js
+APPWRITE_API_KEY="your-key" node ops/common/scripts/check-all-permissions.js
 
 # 3. Run sync if needed
-APPWRITE_API_KEY="your-key" node scripts/sync-appwrite-complete.js
+APPWRITE_API_KEY="your-key" node ops/common/scripts/sync-appwrite-complete.js
 ```
 
 ### 2. Making Database Schema Changes
@@ -28,12 +28,12 @@ APPWRITE_API_KEY="your-key" node scripts/sync-appwrite-complete.js
    - Add field to collection attributes
 
 2. **Update Sync Script**:
-   - Edit `scripts/sync-appwrite-complete.js`
+   - Edit `ops/common/scripts/sync-appwrite-complete.js`
    - Add field to COLLECTIONS_SCHEMA
 
 3. **Run Sync**:
    ```bash
-   APPWRITE_API_KEY="your-key" node scripts/sync-appwrite-complete.js
+   APPWRITE_API_KEY="your-key" node ops/common/scripts/sync-appwrite-complete.js
    ```
 
 4. **Update TypeScript Types**:
@@ -148,7 +148,7 @@ npm run lint
 npm run type-check
 
 # 3. Verify schema sync
-APPWRITE_API_KEY="your-key" node scripts/check-all-permissions.js
+APPWRITE_API_KEY="your-key" node ops/common/scripts/check-all-permissions.js
 ```
 
 #### Deploy:
@@ -230,7 +230,7 @@ git push origin feature/trophy-system
 
 #### Quick Permission Fix:
 ```javascript
-// scripts/emergency-fix.js
+// ops/common/scripts/emergency-fix.js
 const { Client, Databases, Permission, Role } = require('node-appwrite');
 
 const client = new Client()
@@ -278,13 +278,13 @@ redirect('/login');
 
 ```bash
 # Sync all collections
-APPWRITE_API_KEY="..." node scripts/sync-appwrite-complete.js
+APPWRITE_API_KEY="..." node ops/common/scripts/sync-appwrite-complete.js
 
 # Check permissions only
-APPWRITE_API_KEY="..." node scripts/check-all-permissions.js
+APPWRITE_API_KEY="..." node ops/common/scripts/check-all-permissions.js
 
 # Fix specific collection
-APPWRITE_API_KEY="..." node scripts/fix-rosters-permissions.js
+APPWRITE_API_KEY="..." node ops/common/scripts/fix-rosters-permissions.js
 
 # Deploy to production
 vercel --prod

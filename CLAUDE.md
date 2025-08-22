@@ -93,11 +93,11 @@ npm run lint                    # ESLint checks
 npm run typecheck              # TypeScript type checking
 
 # SSOT (Single Source of Truth) Management
-npx tsx scripts/guards/validate-ssot-integrity.ts    # Validate SSOT structure
-npx tsx scripts/guards/detect-schema-drift.ts        # Check database alignment
-npx tsx scripts/validate-ssot-schema.ts              # Full schema validation
-npx tsx scripts/sync-appwrite-from-ssot.ts           # Sync schema to Appwrite
-npx tsx scripts/test-ssot-workflow.ts                # Test SSOT workflow
+npx tsx ops/common/scripts/guards/validate-ssot-integrity.ts    # Validate SSOT structure
+npx tsx ops/common/scripts/guards/detect-schema-drift.ts        # Check database alignment
+npx tsx ops/common/scripts/validate-ssot-schema.ts              # Full schema validation
+npx tsx ops/common/scripts/sync-appwrite-from-ssot.ts           # Sync schema to Appwrite
+npx tsx ops/common/scripts/test-ssot-workflow.ts                # Test SSOT workflow
 
 # Deployment
 vercel                         # Deploy preview

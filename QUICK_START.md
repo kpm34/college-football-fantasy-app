@@ -38,7 +38,7 @@ npm run server
 ### 5. Verify Everything Works
 ```bash
 # Test the join league feature
-node scripts/test-join-league.js
+node ops/common/scripts/test-join-league.js
 
 # Run type checking
 npm run typecheck
@@ -73,13 +73,13 @@ npm run server             # Start Express backend
 npm run build              # Production build
 
 # Database
-node scripts/sync-appwrite-schema.js    # Sync database schema
+node ops/common/scripts/sync-appwrite-schema.js    # Sync database schema
 node scripts/test-join-league.js        # Test join functionality
-node scripts/cleanup-test-data.js       # Clean test data
+node ops/common/scripts/cleanup-test-data.js       # Clean test data
 
 # AI Tools
 node ops/claude-ops/claude-cli.js       # Interactive Claude CLI
-node scripts/figma-sync.js all          # Sync Figma designs
+node ops/common/scripts/figma-sync.js all          # Sync Figma designs
 
 # Quality
 npm run lint               # Code linting
