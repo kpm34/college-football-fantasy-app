@@ -21,7 +21,7 @@ graph TD
     APP --> SEG_DRAFT[app/(draft)]
     APP --> ADMIN[app/admin]
     APP --> API_IDX[app/api/* index routes]
-    ROOT --> COMPONENTS[app/components/<br/>React Components]
+    ROOT --> COMPONENTS[components/<br/>Reusable UI Library]
     ROOT --> SCHEMA[schema/<br/>SINGLE SOURCE OF TRUTH<br/>zod-schema.ts]
     
     %% Configuration and Services  
@@ -30,6 +30,7 @@ graph TD
     %% Data and Scripts
     ROOT --> SCRIPTS[ops/common/scripts/<br/>Prompts, Codemods<br/>Dev-time Scripts]
     ROOT --> FUNCTIONS[functions/<br/>Appwrite Functions<br/>Workers & Cron]
+    ROOT --> FUTURE[future/<br/>ideas, scoring, trading,<br/>waiver, auctions]
     
     %% Documentation and Deployment
     ROOT --> DOCS[docs/<br/>Project Map + Diagrams<br/>Consolidated]

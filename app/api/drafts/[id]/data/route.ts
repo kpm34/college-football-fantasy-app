@@ -4,9 +4,9 @@ import { Query } from 'node-appwrite';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
-  const { id: leagueId } = await params;
+  const { id: leagueId } = params;
 
   try {
     // Get user from session
@@ -38,7 +38,7 @@ export async function GET(
     );
 
     // Load user's roster
-    let userTeams = [];
+    let userTeams: any[] = [];
     try {
       const rosterDocs = await databases.listDocuments(
         DATABASE_ID,
@@ -49,7 +49,7 @@ export async function GET(
     } catch {}
 
     // Load existing draft picks
-    let picks = [];
+    let picks: any[] = [];
     try {
       const picksResponse = await databases.listDocuments(
         DATABASE_ID,
@@ -64,7 +64,7 @@ export async function GET(
     } catch {}
 
     // Load draft state if exists
-    let draftState = null;
+    let draftState: any = null;
     try {
       const statesResponse = await databases.listDocuments(
         DATABASE_ID,
