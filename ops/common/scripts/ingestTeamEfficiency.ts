@@ -54,7 +54,7 @@ function readJson(file: string): any[] | null { if (!fs.existsSync(file)) return
 function readCsv(file: string): any[] | null { if (!fs.existsSync(file)) return null; const txt = fs.readFileSync(file, 'utf8'); return parseCsv(txt, { columns: true, skip_empty_lines: true, trim: true }) as any[]; }
 
 export async function loadEfficiencyData(season: number): Promise<{ sp: RawSP[]; fei: RawFEI[]; pace: RawPace[] }> {
-  const dir = path.join(process.cwd(), 'data/efficiency');
+  const dir = path.join(process.cwd(), 'data/market/efficiency');
   const candidates = (base: string) => [path.join(dir, `${base}_${season}.json`), path.join(dir, `${base}_${season}.csv`)];
 
   const spFiles = [...candidates('sp_plus'), ...candidates('spplus')];
@@ -231,7 +231,7 @@ async function main() {
   const opponentGrades = deriveOpponentGrades(teamEfficiency);
 
   // Save snapshots
-  const outDir = path.join(process.cwd(), 'data/processed/efficiency'); fs.mkdirSync(outDir, { recursive: true });
+  const outDir = path.join(process.cwd(), 'data/player/processed/efficiency'); fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, `team_efficiency_${season}.json`), JSON.stringify(teamEfficiency, null, 2));
   fs.writeFileSync(path.join(outDir, `pace_estimates_${season}.json`), JSON.stringify(paceEstimates, null, 2));
   fs.writeFileSync(path.join(outDir, `opponent_grades_${season}.json`), JSON.stringify(opponentGrades, null, 2));

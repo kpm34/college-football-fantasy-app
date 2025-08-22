@@ -337,10 +337,10 @@ npx tsx ops/common/scripts/check-player-projections.ts --name='Sam Leavitt'
 
 | Data Type | Location | Format |
 |-----------|----------|--------|
-| EA Ratings | `data/imports/ea/2025/*.csv` | CSV with columns: Name, Team, Position, Overall, Speed, etc. |
-| Depth Charts | `data/imports/depth-charts-2025/*_depth_2025.json` | JSON with team/position structure |
-| NFL Consensus | `data/imports/2026-consensus/consensus_all_real.json` | JSON with player rankings |
-| Manual Overrides | `data/imports/manual_overrides_2025.json` | JSON with player-specific adjustments |
+| EA Ratings | `data/scripts/imports/ea/2025/*.csv` | CSV with columns: Name, Team, Position, Overall, Speed, etc. |
+| Depth Charts | `data/scripts/imports/depth-charts-2025/*_depth_2025.json` | JSON with team/position structure |
+| NFL Consensus | `data/scripts/imports/2026-consensus/consensus_all_real.json` | JSON with player rankings |
+| Manual Overrides | `data/scripts/imports/manual_overrides_2025.json` | JSON with player-specific adjustments |
 | Team Aliases | `data/team_aliases_expanded.json` | JSON mapping team name variations |
 
 ---

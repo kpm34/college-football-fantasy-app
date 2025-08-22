@@ -5,7 +5,7 @@ import path from 'node:path';
 import { ID, Query } from 'node-appwrite';
 import { serverDatabases as databases, DATABASE_ID as DB_ID } from '../lib/appwrite-server';
 
-// Accepts JSON input placed at data/depth/depth_chart_{{season}}.json
+// Accepts JSON input placed at data/player/processed/depth/depth_chart_{{season}}.json
 // Shape is flexible; we store as-is under depth_chart_json to allow audits.
 
 async function upsert(season: number, payload: any): Promise<void> {
@@ -23,14 +23,14 @@ async function upsert(season: number, payload: any): Promise<void> {
 async function main() {
   const seasonArg = process.argv.find((a) => a.startsWith('--season='));
   const season = seasonArg ? Number(seasonArg.split('=')[1]) : new Date().getFullYear();
-  const file = path.join(process.cwd(), `data/depth/depth_chart_${season}.json`);
+  const file = path.join(process.cwd(), `data/player/processed/depth/depth_chart_${season}.json`);
   if (!fs.existsSync(file)) {
     console.warn(`No depth chart file at ${file} — skipping.`);
     return;
   }
   const payload = JSON.parse(fs.readFileSync(file, 'utf8'));
 
-  const rawDir = path.join(process.cwd(), 'data/raw/depth');
+  const rawDir = path.join(process.cwd(), 'data/player/raw/depth');
   fs.mkdirSync(rawDir, { recursive: true });
   fs.writeFileSync(path.join(rawDir, `depth_chart_${season}.json`), JSON.stringify(payload, null, 2));
 

@@ -47,10 +47,10 @@ function clamp01(x: number): number { return Math.max(0, Math.min(1, x)); }
 
 export function loadMockDraft(season: number): MockRow[] {
   const candidates = [
-    path.join(process.cwd(), `data/mockdraft/${season}.json`),
-    path.join(process.cwd(), `data/mockdraft/capital_${season}.json`),
-    path.join(process.cwd(), `data/mockdraft/${season}.csv`),
-    path.join(process.cwd(), `data/mockdraft/capital_${season}.csv`),
+    path.join(process.cwd(), `data/market/mockdraft/${season}.json`),
+    path.join(process.cwd(), `data/market/mockdraft/capital_${season}.json`),
+    path.join(process.cwd(), `data/market/mockdraft/${season}.csv`),
+    path.join(process.cwd(), `data/market/mockdraft/capital_${season}.csv`),
   ];
 
   for (const file of candidates) {
@@ -63,7 +63,7 @@ export function loadMockDraft(season: number): MockRow[] {
       return parseCsv(text, { columns: true, skip_empty_lines: true, trim: true }) as MockRow[];
     }
   }
-  console.warn(`No mock draft file found in data/mockdraft for season ${season} — skipping.`);
+  console.warn(`No mock draft file found in data/market/mockdraft for season ${season} — skipping.`);
   return [];
 }
 
@@ -147,7 +147,7 @@ async function main() {
   if (rows.length === 0) return;
 
   // Save raw snapshot
-  const rawDir = path.join(process.cwd(), 'data/raw/mockdraft');
+  const rawDir = path.join(process.cwd(), 'data/player/raw/mockdraft');
   fs.mkdirSync(rawDir, { recursive: true });
   fs.writeFileSync(path.join(rawDir, `capital_${season}.json`), JSON.stringify(rows, null, 2));
 
@@ -156,7 +156,7 @@ async function main() {
   const normalized = normalizeDraft(rows, teamMap);
   const payload = toDraftPayload(normalized);
 
-  const processedDir = path.join(process.cwd(), 'data/processed/mockdraft');
+  const processedDir = path.join(process.cwd(), 'data/player/processed/mockdraft');
   fs.mkdirSync(processedDir, { recursive: true });
   fs.writeFileSync(path.join(processedDir, `capital_${season}.json`), JSON.stringify(payload, null, 2));
 

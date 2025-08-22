@@ -60,7 +60,7 @@ async function activatePipeline() {
     
     // Step 1: Load existing depth chart data
     console.log('📊 Loading depth chart data...');
-    const depthFile = path.join(process.cwd(), 'data/depth/team_sites_2025.json');
+    const depthFile = path.join(process.cwd(), 'data/player/depth/team_sites_2025.json');
     let depthData: any[] = [];
     if (fs.existsSync(depthFile)) {
       depthData = JSON.parse(fs.readFileSync(depthFile, 'utf8'));

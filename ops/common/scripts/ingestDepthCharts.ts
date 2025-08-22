@@ -105,7 +105,7 @@ function readCsvIfExists(file: string): any[] | null {
 }
 
 export async function loadDepthSources(season: number): Promise<RawDepth[]> {
-  const dir = path.join(process.cwd(), 'data/depth');
+  const dir = path.join(process.cwd(), 'data/player/depth');
   const patterns: Array<{ name: SourceTag; files: string[] }> = [
     { name: 'team_sites', files: [`team_sites_${season}.json`, `team_sites_${season}.csv`] },
     { name: 'ourlads', files: [`ourlads_${season}.json`, `ourlads_${season}.csv`] },
@@ -136,7 +136,7 @@ export async function loadDepthSources(season: number): Promise<RawDepth[]> {
     }
   }
   if (rows.length === 0) {
-    console.warn(`No depth sources found under data/depth for season ${season}. Expected files like 247_${season}.csv/json, ourlads_${season}.csv/json, team_sites_${season}.csv/json.`);
+    console.warn(`No depth sources found under data/player/depth for season ${season}. Expected files like 247_${season}.csv/json, ourlads_${season}.csv/json, team_sites_${season}.csv/json.`);
   }
   return rows;
 }
@@ -291,7 +291,7 @@ function readTeamMap(): Record<string, string> {
 }
 
 function applyOverrides(season: number, priors: UsagePriorsPayload): UsagePriorsPayload {
-  const file = path.join(process.cwd(), `data/depth/overrides_${season}.json`);
+  const file = path.join(process.cwd(), `data/player/depth/overrides_${season}.json`);
   if (!fs.existsSync(file)) return priors;
   try {
     const overrides = JSON.parse(fs.readFileSync(file, 'utf8')) as Record<string, any>;
@@ -318,9 +318,9 @@ async function main() {
   priors = applyOverrides(season, priors);
 
   // Save snapshots
-  const rawDir = path.join(process.cwd(), 'data/raw/depth'); fs.mkdirSync(rawDir, { recursive: true });
+  const rawDir = path.join(process.cwd(), 'data/player/raw/depth'); fs.mkdirSync(rawDir, { recursive: true });
   fs.writeFileSync(path.join(rawDir, `merged_${season}.json`), JSON.stringify(resolved, null, 2));
-  const processedDir = path.join(process.cwd(), 'data/processed/depth'); fs.mkdirSync(processedDir, { recursive: true });
+  const processedDir = path.join(process.cwd(), 'data/player/processed/depth'); fs.mkdirSync(processedDir, { recursive: true });
   fs.writeFileSync(path.join(processedDir, `depth_chart_${season}.json`), JSON.stringify(depth, null, 2));
   fs.writeFileSync(path.join(processedDir, `usage_priors_${season}.json`), JSON.stringify(priors, null, 2));
 

@@ -68,7 +68,7 @@ function normalizeTeamName(name: string | undefined | null): string {
 async function loadManualOverrides(season: number): Promise<Map<string, { talent_multiplier?: number }>> {
   const out = new Map<string, { talent_multiplier?: number }>();
   try {
-    const importsDir = path.join(process.cwd(), 'data', 'imports');
+    const importsDir = path.join(process.cwd(), 'data', 'scripts', 'imports');
     const file = path.join(importsDir, `manual_overrides_${season}.json`);
     if (!fs.existsSync(file)) return out;
     const raw = JSON.parse(fs.readFileSync(file, 'utf8')) as any;
@@ -327,7 +327,7 @@ async function loadMockDraftData(databases: Databases, dbId: string, season: num
   } catch (e) {
     console.warn('Draft capital from model_inputs not available; falling back to file');
   }
-  const filePath = path.join(process.cwd(), `data/mockdraft/${season}.csv`);
+  const filePath = path.join(process.cwd(), `data/market/mockdraft/${season}.csv`);
   
   if (!fs.existsSync(filePath)) {
     console.warn(`Mock draft file not found: ${filePath}`);
@@ -370,7 +370,7 @@ async function loadMockDraftData(databases: Databases, dbId: string, season: num
 async function loadConsensusRanks(): Promise<Map<string, { rank: number; score: number }>> {
   const map = new Map<string, { rank: number; score: number }>();
   try {
-    const file = path.join(process.cwd(), 'data', 'imports', '2026-consensus', 'consensus_all_real.json');
+    const file = path.join(process.cwd(), 'data', 'scripts', 'imports', '2026-consensus', 'consensus_all_real.json');
     if (!fs.existsSync(file)) {
       return map;
     }
@@ -475,7 +475,7 @@ async function loadDepthChartData(databases: Databases, dbId: string, season: nu
   };
   // Load exclusively from user-provided imports (multiple files)
   try {
-    const importsDir = path.join(process.cwd(), 'data', 'imports');
+    const importsDir = path.join(process.cwd(), 'data', 'scripts', 'imports');
     if (fs.existsSync(importsDir)) {
       const listFilesRecursive = (dir: string): string[] => {
         const out: string[] = [];
