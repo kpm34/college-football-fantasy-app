@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ID } from 'node-appwrite';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
-export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id: draftId } = await params;
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+  const { id: draftId } = params;
   const { by, teamId } = await request.json().catch(() => ({}));
 
   // TODO: verify commissioner auth if needed
