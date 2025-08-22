@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDraftCoreLive } from '@/lib/draft/core';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '/useAuth';
 import DraftCore from '@/components/draft/DraftCore';
 import { DraftPlayer } from '@/types/projections';
 import { FiStar, FiClock } from 'react-icons/fi';

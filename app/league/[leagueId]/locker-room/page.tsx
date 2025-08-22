@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
 import { Query } from 'appwrite';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '/useAuth';
 import Link from 'next/link';
 import {
   ChevronLeftIcon,
