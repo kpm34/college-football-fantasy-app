@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ID, Query } from 'node-appwrite';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
-export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id: draftId } = await params;
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+  const { id: draftId } = params;
 
   // SETNX lock guard (3s TTL)
   try {

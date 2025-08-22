@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ID } from 'node-appwrite';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 
-export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id: draftId } = await params;
+export async function POST(_request: NextRequest, { params }: { params: { id: string } }) {
+  const { id: draftId } = params;
 
   // Load state
   let state: any = null;
