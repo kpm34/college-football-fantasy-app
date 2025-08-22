@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '/useAuth';
+import { useAuth } from '@hooks/useAuth';
 import { DraftPlayer } from '@/types/projections';
 import { FiSearch, FiFilter, FiTrendingUp, FiStar, FiWifi } from 'react-icons/fi';
 
