@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
 import { leagueColors } from '@/lib/theme/colors';
-import { useLeagueMembersRealtime } from '@/hooks/useLeagueMembersRealtime';
+import { useLeagueMembersRealtime } from '/useLeagueMembersRealtime';
 
 interface PageProps {
   params: Promise<{
