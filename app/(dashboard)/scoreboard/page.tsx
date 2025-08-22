@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '@hooks/useAuth'
 import { POWER4_CONFERENCES, POWER4_TEAM_SET, type Power4Conference } from '@/lib/power4';
-import { ScheduleNavigation } from '@/components/schedule/ScheduleNavigation';
+import { ScheduleNavigation } from '@/components/features/leagues/ScheduleNavigation';
 
 interface Game {
   id: string;

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDraftCoreMock } from '@/lib/draft/core';
 import Link from 'next/link';
 import { leagueColors } from '@/lib/theme/colors';
-import DraftBoard from '@/components/draft/DraftBoard';
+import DraftBoard from '@/components/features/draft/DraftBoard';
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, { ...init, cache: 'no-store' });
