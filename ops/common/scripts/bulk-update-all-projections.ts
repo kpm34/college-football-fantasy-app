@@ -76,7 +76,7 @@ function clamp(min: number, max: number, v: number): number {
  */
 async function loadEAData(season: number): Promise<Map<string, any>> {
   const eaMap = new Map<string, any>();
-  const filePath = path.join(process.cwd(), `data/ea/ratings_${season}.csv`);
+  const filePath = path.join(process.cwd(), `data/player/ea/ratings_${season}.csv`);
   
   if (!fs.existsSync(filePath)) {
     console.warn(`EA ratings file not found: ${filePath}`);
@@ -108,7 +108,7 @@ async function loadEAData(season: number): Promise<Map<string, any>> {
  */
 async function loadMockDraftData(season: number): Promise<Map<string, any>> {
   const draftMap = new Map<string, any>();
-  const filePath = path.join(process.cwd(), `data/mockdraft/${season}.csv`);
+  const filePath = path.join(process.cwd(), `data/market/mockdraft/${season}.csv`);
   
   if (!fs.existsSync(filePath)) {
     console.warn(`Mock draft file not found: ${filePath}`);

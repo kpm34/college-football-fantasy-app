@@ -69,9 +69,9 @@ graph TB
     
     %% Talent Data Sources  
     subgraph TalentIntel[Talent Intelligence]
-        EA_DATA[EA Sports Ratings<br/>Overall, Speed, Acceleration<br/>data/ea/ratings_2025.csv]
-        MOCK_DATA[Mock Draft Data<br/>NFL Draft Projections<br/>data/mockdraft/2025.csv]
-        DEPTH_DATA[Depth Charts<br/>Position Rankings<br/>data/processed/depth/]
+        EA_DATA[EA Sports Ratings<br/>Overall, Speed, Acceleration<br/>data/player/ea/ratings_2025.csv]
+        MOCK_DATA[Mock Draft Data<br/>NFL Draft Projections<br/>data/market/mockdraft/2025.csv]
+        DEPTH_DATA[Depth Charts<br/>Position Rankings<br/>data/player/processed/depth/]
         ESPN_PLUS[ESPN+ Analysis<br/>Expert Sentiment<br/>kpm34@pitt.edu Auth]
     end
     

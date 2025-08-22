@@ -58,7 +58,7 @@ function normRating(value: number | undefined | null): { raw: number; norm: numb
 }
 
 export async function loadEA(season: number): Promise<EARow[]> {
-  const file = path.join(process.cwd(), `data/ea/ratings_${season}.csv`);
+  const file = path.join(process.cwd(), `data/player/ea/ratings_${season}.csv`);
   if (!fs.existsSync(file)) {
     throw new Error(`Missing EA ratings CSV at ${file}`);
   }
@@ -160,12 +160,12 @@ async function main() {
   const payload = toEAInputsPayload(normalized);
 
   // Ensure raw write path and save raw snapshot
-  const rawDir = path.join(process.cwd(), 'data/raw/ea');
+  const rawDir = path.join(process.cwd(), 'data/player/raw/ea');
   fs.mkdirSync(rawDir, { recursive: true });
   fs.writeFileSync(path.join(rawDir, `ratings_${season}.json`), JSON.stringify(rows, null, 2));
 
   // Save transformed snapshot
-  const outDir = path.join(process.cwd(), 'data/processed/ea');
+  const outDir = path.join(process.cwd(), 'data/player/processed/ea');
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, `ratings_${season}.json`), JSON.stringify(payload, null, 2));
 
