@@ -1,6 +1,8 @@
 /**
  * Next.js Instrumentation Hook
- * Initializes monitoring and error tracking
+ * Monitoring stub (Sentry temporarily disabled)
  */
 
-export { register } from './sentry.config';
+export async function register() {
+  // Sentry is not yet configured; noop to satisfy Next.js hook
+}
