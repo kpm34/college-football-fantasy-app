@@ -30,7 +30,9 @@
       "@ops/*": ["ops/*"],
       "@docs/*": ["docs/*"],
       "@hooks/*": ["lib/hooks/*"],
-      "@types/*": ["lib/types/*"]
+      "@types/*": ["lib/types/*"],
+      "@/hooks/*": ["lib/hooks/*"],
+      "@/types/*": ["lib/types/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
