@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '/useAuth';
+import { useAuth } from '@hooks/useAuth'
 
 interface TeamStanding {
   rank: number;

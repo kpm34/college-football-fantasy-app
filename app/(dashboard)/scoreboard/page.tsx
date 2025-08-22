@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '/useAuth';
+import { useAuth } from '@hooks/useAuth'
 import { POWER4_CONFERENCES, POWER4_TEAM_SET, type Power4Conference } from '@/lib/power4';
 import { ScheduleNavigation } from '@/components/schedule/ScheduleNavigation';
 
