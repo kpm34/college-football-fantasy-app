@@ -65,7 +65,12 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isSensitive = pathname.startsWith('/api/auth') || pathname.startsWith('/api/leagues') || pathname.startsWith('/api/draft');
   if (isSensitive) {
-    const ip = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
+    const fwd = request.headers.get('x-forwarded-for');
+    const ip = (fwd ? fwd.split(',')[0].trim() : null)
+      || request.headers.get('x-real-ip')
+      || request.headers.get('cf-connecting-ip')
+      || request.headers.get('x-client-ip')
+      || 'unknown';
     const key = `${ip}:${pathname}`;
     const now = Date.now();
     const bucket = buckets.get(key) || { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };

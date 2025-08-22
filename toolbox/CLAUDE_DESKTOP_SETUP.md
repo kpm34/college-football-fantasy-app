@@ -321,7 +321,7 @@ npm run dev
 node ops/claude-ops/claude-cli.js
 
 # Test Figma sync (if configured)
-node scripts/figma-sync.js
+node ops/common/scripts/figma-sync.js
 
 # Test deployment
 vercel --prod --dry-run

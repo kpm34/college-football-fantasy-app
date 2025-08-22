@@ -26,7 +26,7 @@ graph TD
     ROOT --> TYPES[types/<br/>TypeScript Types<br/>Shared Interfaces]
     
     %% Data and Scripts
-    ROOT --> SCRIPTS[scripts/<br/>Migrations, Sync<br/>Validation Guards]
+    ROOT --> SCRIPTS[ops/common/scripts/<br/>Migrations, Sync<br/>Validation Guards]
     ROOT --> DATA[data/<br/>EA Ratings, Mock Drafts<br/>Depth Charts, CSV/JSON]
     ROOT --> FUNCTIONS[functions/<br/>Unified Talent Projections<br/>Serverless Code]
     
@@ -287,7 +287,7 @@ sequenceDiagram
 - **Result**: No configuration duplication, consistent imports
 
 ### Build-time Validation
-- **Guards**: `scripts/guards/forbid-legacy-collections.ts`
+- **Guards**: `ops/common/scripts/guards/forbid-legacy-collections.ts`
 - **Trigger**: `npm run prebuild` (automatic)
 - **Purpose**: Prevent hardcoded collection names, enforce SSOT usage
 
@@ -365,10 +365,10 @@ graph LR
 ### Schema Validation
 ```bash
 # Validate SSOT ↔ Database alignment
-npx tsx scripts/validate-ssot-schema.ts
+npx tsx ops/common/scripts/validate-ssot-schema.ts
 
 # Sync SSOT to Appwrite  
-npx tsx scripts/sync-appwrite-simple.ts
+npx tsx ops/common/scripts/sync-appwrite-simple.ts
 ```
 
 ---

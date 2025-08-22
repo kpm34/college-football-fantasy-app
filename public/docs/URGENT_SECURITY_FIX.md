@@ -16,7 +16,7 @@ Even though your repo is private, this is a critical security vulnerability.
 
 ```bash
 # Run the rotation script for instructions
-node scripts/rotate-appwrite-key.js
+node ops/common/scripts/rotate-appwrite-key.js
 ```
 
 **Manual Steps:**
