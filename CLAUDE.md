@@ -105,6 +105,13 @@ vercel --prod                  # Deploy to production
 vercel pull                    # Pull environment variables
 ```
 
+## Operational Scripts & Tools
+**Location**: `/ops/` folder (consolidated operational scripts)
+- All project scripts have been moved to the `ops` folder for better organization
+- Includes data sync, migrations, guards, validation, and deployment scripts
+- **Reference `/ops/` folder at the start of each session** for available operational tools
+- Previously located in `/scripts/` - now centralized for easier maintenance
+
 ## Appwrite CLI Status
 - **Status**: ✅ Configured and authenticated
 - **User**: kashpm2002@gmail.com  

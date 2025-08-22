@@ -8,7 +8,7 @@ import { DraftConfig, MockDraft, DraftParticipant, DraftPick, Player, TeamNeeds,
 import { loadEligiblePlayers, filterAvailablePlayers } from './playerPool';
 import { getBestAvailablePlayer, getBotStrategy, calculateTeamNeeds } from './ranker';
 import { COLLECTIONS } from '@/schema/zod-schema';
-import { ensureMockDraftSchema } from '@/scripts/appwrite/ensure-mock-draft-schema';
+import { ensureMockDraftSchema } from '@/ops/common/scripts/appwrite/ensure-mock-draft-schema';
 
 /**
  * Generate a random seed if none provided

@@ -24,7 +24,7 @@ echo "  npm run server               # Start Express backend"
 echo "  npm run build                # Production build"
 
 echo -e "\n${GREEN}AI Tools:${NC}"
-echo "  node scripts/claude-cli.js   # Interactive Claude AI assistant"
+echo "  node ops/claude-ops/claude-cli.js   # Interactive Claude AI assistant"
 echo "  node scripts/figma-sync.js   # Sync designs from Figma"
 
 echo -e "\n${GREEN}Code Quality:${NC}"

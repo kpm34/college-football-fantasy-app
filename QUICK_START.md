@@ -78,7 +78,7 @@ node scripts/test-join-league.js        # Test join functionality
 node scripts/cleanup-test-data.js       # Clean test data
 
 # AI Tools
-node scripts/claude-cli.js              # Interactive Claude CLI
+node ops/claude-ops/claude-cli.js       # Interactive Claude CLI
 node scripts/figma-sync.js all          # Sync Figma designs
 
 # Quality

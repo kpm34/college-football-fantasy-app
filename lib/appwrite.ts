@@ -49,6 +49,15 @@ export const COLLECTIONS = {
   // USERS collection deprecated - use Appwrite Auth Users instead
   ACTIVITY_LOG: ENV_COLLECTIONS.activityLog,
   DRAFT_STATES: ENV_COLLECTIONS.draftStates,
+  DRAFTS: ENV_COLLECTIONS.drafts,
+  SCORES: ENV_COLLECTIONS.scores,
+  TEAM_BUDGETS: ENV_COLLECTIONS.teamBudgets,
+  SEASON_SCHEDULES: ENV_COLLECTIONS.seasonSchedules,
+  LEAGUE_INVITES: ENV_COLLECTIONS.leagueInvites,
+  PLAYER_RANKINGS: ENV_COLLECTIONS.playerRankings,
+  WEEKLY_STATS: ENV_COLLECTIONS.weeklyStats,
+  TEAM_STATS: ENV_COLLECTIONS.teamStats,
+  LEAGUE_SETTINGS: ENV_COLLECTIONS.leagueSettings,
 } as const;
 
 // Realtime channels

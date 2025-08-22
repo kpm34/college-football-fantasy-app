@@ -118,7 +118,7 @@ npx tsx scripts/admin/pipeline-status.ts  # Check pipeline status
 ## 🎨 AI & Media Tools
 ```bash
 # Claude CLI
-node scripts/claude-cli.js
+node ops/claude-ops/claude-cli.js
 # Commands: /code, /review, /explain, /test
 
 # Figma sync
