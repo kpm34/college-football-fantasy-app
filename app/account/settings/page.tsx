@@ -4,7 +4,7 @@ import { databases, DATABASE_ID } from '@/lib/appwrite';
 import { getTeamColors } from '@/lib/team-colors';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '/useAuth';
+import { useAuth } from '@hooks/useAuth';
 import { ID } from 'appwrite';
 
 const POWER_4_TEAMS = [
