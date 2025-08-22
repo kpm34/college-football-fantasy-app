@@ -43,3 +43,5 @@ yarn-debug.log*
 yarn-error.log*
 .env*.local
 tsconfig.tsbuildinfo
+.venv/
+venv/
