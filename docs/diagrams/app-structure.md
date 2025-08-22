@@ -18,4 +18,14 @@ graph TD
   APP --> SEG_DASH[app/(dashboard) — authed app]
   APP --> SEG_DRAFT[app/(draft) — draft feature]
   APP --> SEG_ADMIN[app/admin — docs/diagram viewer]
+  
+  %% --- COMPONENTS ---
+  ROOT --> COMPONENTS[/components/]
+  COMPONENTS --> UI[components/ui/* — design system]
+  COMPONENTS --> TABLES[components/tables/*]
+  COMPONENTS --> CHARTS[components/charts/*]
+  COMPONENTS --> FEATURES[components/features/*]
+  FEATURES --> FEAT_DRAFT[components/features/draft/*]
+  FEATURES --> FEAT_LEAGUES[components/features/leagues/*]
+  COMPONENTS --> INDEX[components/index.ts — barrel]
 
