@@ -1,6 +1,0 @@
-# <toolbox:BEGIN toolbox/pnpm-workspace.yaml v1>
-packages:
-  - packages/*
-  - templates/*
-  - docs
-# <toolbox:END toolbox/pnpm-workspace.yaml v1>

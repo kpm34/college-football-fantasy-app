@@ -142,7 +142,7 @@ export function writeEnvFiles(): void {
   
   // Write Vercel setup script
   const vercelScript = generateVercelEnvScript();
-  const scriptPath = path.join(process.cwd(), 'scripts', 'setup-vercel-env.sh');
+  const scriptPath = path.join(process.cwd(), 'ops', 'common', 'scripts', 'setup-vercel-env.sh');
   fs.writeFileSync(scriptPath, vercelScript, { mode: 0o755 });
   console.log(`✅ Generated Vercel setup script: ${scriptPath}`);
 }

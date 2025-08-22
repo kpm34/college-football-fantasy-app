@@ -330,7 +330,7 @@ npx tsx functions/unified-talent-projections/index.ts --season=2025 --conference
 npx tsx functions/unified-talent-projections/index.ts --season=2025 --teams='Alabama,Georgia,LSU'
 
 # Check specific player
-npx tsx scripts/check-player-projections.ts --name='Sam Leavitt'
+npx tsx ops/common/scripts/check-player-projections.ts --name='Sam Leavitt'
 ```
 
 ## Data File Locations

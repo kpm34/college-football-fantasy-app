@@ -1,4 +1,5 @@
 import { Client, Databases, Users, Storage, Functions, Messaging } from 'node-appwrite';
+import { DATABASE_ID, COLLECTIONS } from './appwrite';
 
 // Server-side Appwrite client configuration (with API key)
 // This should only be used in API routes, never exposed to client
@@ -29,7 +30,7 @@ export const serverFunctions = new Functions(serverClient);
 export const serverMessaging = new Messaging(serverClient);
 
 // Re-export common constants
-export { DATABASE_ID, COLLECTIONS } from './appwrite';
+export { DATABASE_ID, COLLECTIONS };
 
 // Helper to check if server is properly configured
 export function isServerConfigured(): boolean {

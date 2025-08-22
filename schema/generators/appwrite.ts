@@ -348,7 +348,7 @@ export function writeAppwriteFiles(): void {
   
   // Write seeder file
   const seederContent = generateAppwriteSeeder();
-  const seederPath = path.join(process.cwd(), 'schema', 'generators', 'seed-appwrite.ts');
+  const seederPath = path.join(process.cwd(), 'lib', 'appwrite-seeder.generated.ts');
   fs.writeFileSync(seederPath, seederContent);
   console.log(`✅ Generated Appwrite seeder: ${seederPath}`);
 }
