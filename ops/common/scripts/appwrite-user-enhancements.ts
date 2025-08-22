@@ -244,9 +244,9 @@ async function main() {
     log('   - league-assets (10MB, images/PDFs)', 'reset');
     
     log('\n3. 🚀 Functions (Settings > Functions):', 'yellow');
-    log('   - Deploy appwrite-functions/weekly-scoring', 'reset');
-    log('   - Deploy appwrite-functions/draft-reminder', 'reset');
-    log('   - Deploy appwrite-functions/trade-processor', 'reset');
+    log('   - Deploy ops/common/functions/weekly-scoring', 'reset');
+    log('   - Deploy ops/common/functions/draft-reminder', 'reset');
+    log('   - Deploy ops/common/functions/trade-processor', 'reset');
     
     log('\n4. 📧 Messaging (Settings > Messaging):', 'yellow');
     log('   - Configure SMTP provider', 'reset');

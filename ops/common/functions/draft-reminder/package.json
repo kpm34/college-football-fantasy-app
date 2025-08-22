@@ -1,0 +1,9 @@
+{
+  "name": "draft-reminder",
+  "version": "1.0.0",
+  "description": "Send reminders for upcoming fantasy football drafts",
+  "main": "index.js",
+  "dependencies": {
+    "node-appwrite": "^14.0.0"
+  }
+}
