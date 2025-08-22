@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import fs from 'node:fs'
+import path from 'node:path'
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,11 +10,17 @@ export async function POST(req: NextRequest) {
 
     if (!file) return NextResponse.json({ ok: false, error: 'missing screenshot' }, { status: 400 })
 
-    // For now, just echo back metadata; future: store in tmp or upload to bucket
+    // Persist to ops/cursor/screenshot with timestamp
     const arrayBuffer = await file.arrayBuffer()
-    const sizeKb = Math.round(arrayBuffer.byteLength / 1024)
+    const buf = Buffer.from(arrayBuffer)
+    const dir = path.join(process.cwd(), 'ops', 'cursor', 'screenshot')
+    try { fs.mkdirSync(dir, { recursive: true }) } catch {}
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-')
+    const out = path.join(dir, `${stamp}-${file.name || 'cursor-context'}.png`)
+    fs.writeFileSync(out, buf)
+    const sizeKb = Math.round(buf.byteLength / 1024)
 
-    return NextResponse.json({ ok: true, received: { sizeKb, path, name: file.name, type: file.type } })
+    return NextResponse.json({ ok: true, saved: out.replace(process.cwd() + path.sep, ''), meta: { sizeKb, path, name: file.name, type: file.type } })
   } catch (e) {
     return NextResponse.json({ ok: false, error: (e as Error).message }, { status: 500 })
   }
