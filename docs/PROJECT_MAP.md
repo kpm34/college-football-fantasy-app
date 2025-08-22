@@ -16,19 +16,20 @@ graph TD
     
     %% Core Application
     ROOT --> APP[app/<br/>Next.js 15 App Router<br/>Pages and API Routes]
-    ROOT --> COMPONENTS[components/<br/>React Components<br/>UI Library]
+    APP --> SEG_MKT[app/(marketing)]
+    APP --> SEG_DASH[app/(dashboard)]
+    APP --> SEG_DRAFT[app/(draft)]
+    APP --> ADMIN[app/admin]
+    APP --> API_IDX[app/api/* index routes]
+    ROOT --> COMPONENTS[app/components/<br/>React Components]
     ROOT --> SCHEMA[schema/<br/>SINGLE SOURCE OF TRUTH<br/>zod-schema.ts]
     
     %% Configuration and Services  
-    ROOT --> LIB[lib/<br/>Appwrite Clients<br/>Services and Utils]
-    ROOT --> CORE[core/<br/>Config, Auth<br/>Domain Logic]
-    ROOT --> HOOKS[hooks/<br/>React Hooks<br/>Realtime Logic]
-    ROOT --> TYPES[types/<br/>TypeScript Types<br/>Shared Interfaces]
+    ROOT --> LIB[lib/<br/>Clients, Repos, Domain, Utils]
     
     %% Data and Scripts
     ROOT --> SCRIPTS[ops/common/scripts/<br/>Prompts, Codemods<br/>Dev-time Scripts]
-    ROOT --> DATA[data/<br/>EA Ratings, Mock Drafts<br/>Depth Charts, CSV/JSON]
-    ROOT --> FUNCTIONS[ops/common/functions/<br/>Appwrite & Pipeline Functions<br/>Serverless Code]
+    ROOT --> FUNCTIONS[functions/<br/>Appwrite Functions<br/>Workers & Cron]
     
     %% Documentation and Deployment
     ROOT --> DOCS[docs/<br/>Project Map + Diagrams<br/>Consolidated]
