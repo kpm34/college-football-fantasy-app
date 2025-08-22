@@ -34,6 +34,8 @@ graph TD
     
     %% Documentation and Deployment
     ROOT --> DOCS[docs/<br/>Project Map + Diagrams<br/>Consolidated]
+    ROOT --> DATA[data/<br/>Datasets & Processed Inputs]
+    ROOT --> DATAIO[data-io/<br/>Data Scripts & Utilities]
     ROOT --> VENDOR[vendor/<br/>Submodules<br/>3D Assets]
     
     %% Key Files Detail

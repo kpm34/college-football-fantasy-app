@@ -13,4 +13,6 @@ Start here:
 /functions     # Non-HTTP runtime: Appwrite Functions, workers, queues, ETL, cron tasks
 /ops           # AI toolbox only: prompts, playbooks, codemods, guards (dev-time), Cursor/Claude helpers
 /docs          # Project map, diagrams, runbooks
+/data          # Datasets and processed inputs (EA ratings, depth charts, efficiency)
+/data-io       # Data scripts & utilities (Python, ETL helpers)
 /public        # Static assets and public JSON (if truly needed)
