@@ -318,7 +318,7 @@ claude --help
 npm run dev
 
 # Test Claude interactive CLI
-node scripts/claude-cli.js
+node ops/claude-ops/claude-cli.js
 
 # Test Figma sync (if configured)
 node scripts/figma-sync.js

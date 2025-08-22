@@ -61,8 +61,11 @@ export class EnvironmentConfig {
       draftPicks: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS || 'draft_picks',
       draftEvents: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_EVENTS || 'draft_events',
       draftStates: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_STATES || 'draft_states',
-      auctions: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_AUCTIONS || 'auctions',
-      bids: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_BIDS || 'bids',
+      drafts: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFTS || 'drafts',
+      auctions: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_AUCTIONS || 'auction_sessions',
+      bids: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_BIDS || 'auction_bids',
+      scores: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_SCORES || 'scores',
+      teamBudgets: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_TEAM_BUDGETS || 'team_budgets',
       
       // Stats collections
       playerStats: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_STATS || 'player_stats',
@@ -77,6 +80,14 @@ export class EnvironmentConfig {
       // Users collection deprecated in favor of Appwrite Auth Users
       // Note: User management is now handled by Appwrite Auth service
       activityLog: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ACTIVITY_LOG || 'activity_log',
+      
+      // Additional collections (available but not yet actively used)
+      seasonSchedules: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_SEASON_SCHEDULES || 'season_schedules',
+      leagueInvites: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUE_INVITES || 'league_invites',
+      playerRankings: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_RANKINGS || 'player_rankings',
+      weeklyStats: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_WEEKLY_STATS || 'weekly_stats',
+      teamStats: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_TEAM_STATS || 'team_stats',
+      leagueSettings: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUE_SETTINGS || 'league_settings',
     },
   };
 

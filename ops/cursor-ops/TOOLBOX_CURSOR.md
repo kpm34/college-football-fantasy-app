@@ -18,14 +18,14 @@
 "use openai" → Text/image AI at /lib/openai.ts  
 "use meshy" → 3D generation at /vendor/awwwards-rig/src/lib/meshy.ts
 "use claude" → Code assistance at /lib/claude.ts
-"use ffmpeg" → Video processing at scripts/ffmpeg-helpers.js
+"use ffmpeg" → Video processing at ops/common/scripts/ffmpeg-helpers.js
 "check ai jobs" → Job polling at /api/cron/poll-jobs
 ```
 
 ### Development Tools
 ```bash
-"use figma" → Design sync with scripts/figma-sync.js
-"video workflow" → Production pipeline at scripts/video-workflow.js
+"use figma" → Design sync with ops/common/scripts/figma-sync.js
+"video workflow" → Production pipeline at ops/common/scripts/video-workflow.js
 "run tests" → Execute npm run typecheck, lint, playwright
 "deploy" → vercel --prod for production deployment
 "git operations" → GitHub CLI commands (gh pr, gh issue)
@@ -96,17 +96,17 @@ npm run lint:fix            # Auto-fix linting
 npm run generate:all
 
 # Sync schema to Appwrite
-npx tsx scripts/sync-appwrite-simple.ts
+npx tsx ops/common/scripts/sync-appwrite-simple.ts
 
 # Seed Appwrite database
 node schema/generators/seed-appwrite.ts
 
 # Validate schema consistency
-npx tsx scripts/validate-ssot-schema.ts
+npx tsx ops/common/scripts/validate-ssot-schema.ts
 
 # Run schema guards
-npx tsx scripts/guards/validate-ssot-integrity.ts
-npx tsx scripts/guards/forbid-legacy-collections.ts
+npx tsx ops/common/scripts/guards/validate-ssot-integrity.ts
+npx tsx ops/common/scripts/guards/forbid-legacy-collections.ts
 ```
 
 ### Deployment
@@ -162,7 +162,7 @@ node scripts/figma-sync.js components # Generate components
 
 ### Claude CLI
 ```bash
-node scripts/claude-cli.js
+node ops/claude-ops/claude-cli.js
 /code <description>        # Generate code
 /review <file>            # Review code
 /explain <file>           # Explain code
