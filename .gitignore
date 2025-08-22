@@ -45,3 +45,7 @@ yarn-error.log*
 tsconfig.tsbuildinfo
 .venv/
 venv/
+client_secret_*.json
+cookies*.txt
+.next-dev.pid
+.next-dev.log
