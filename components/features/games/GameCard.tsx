@@ -1,5 +1,5 @@
 import { Game } from '@/types/game';
-import { Badge } from '@/components/ui/Badge';
+import { Badge } from '@components/ui/Badge';
 import { formatGameTime } from '@/lib/utils/formatters';
 
 interface GameCardProps {

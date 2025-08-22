@@ -1,4 +1,4 @@
-import { MermaidRenderer } from '@/components/docs/MermaidRenderer'
+import { MermaidRenderer } from '@components/docs/MermaidRenderer'
 
 export default async function Page() {
   let charts: string[] = []

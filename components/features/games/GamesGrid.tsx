@@ -2,8 +2,8 @@
 
 import { Game } from '@/types/game';
 import { GameCard } from './GameCard';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { Card, CardContent } from '@/components/ui/Card';
+import { LoadingSpinner } from '@components/ui/LoadingSpinner';
+import { Card, CardContent } from '@components/ui/Card';
 
 interface GamesGridProps {
   games: Game[];

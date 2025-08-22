@@ -10,8 +10,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useLeagueMembersRealtime } from "@/hooks/useLeagueMembersRealtime";
 import { useLeagueRealtime } from "@/hooks/useLeagueRealtime";
 import { isUserCommissioner, debugCommissionerMatch } from "@/lib/utils/commissioner";
-import { InviteModal } from "@/components/features/leagues/InviteModal";
-import { DraftButton } from "@/components/features/leagues/DraftButton";
+import { InviteModal } from '@components/features/leagues/InviteModal';
+import { DraftButton } from '@components/features/leagues/DraftButton';
 
 interface League {
   $id: string;

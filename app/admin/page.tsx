@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { MermaidRenderer } from '@/components/docs/MermaidRenderer'
+import { MermaidRenderer } from '@components/docs/MermaidRenderer'
 import { useAuth } from '@hooks/useAuth';
 
 export default function AdminDashboard() {

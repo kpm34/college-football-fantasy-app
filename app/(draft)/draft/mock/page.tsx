@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import DraftCore from '@/components/draft/DraftCore';
+import DraftCore from '@components/draft/DraftCore';
 import { DraftPlayer } from '@/types/projections';
 import {
   ClockIcon,
@@ -13,7 +13,7 @@ import {
   AdjustmentsHorizontalIcon
 } from "@heroicons/react/24/outline";
 import { leagueColors } from '@/lib/theme/colors';
-import CFPLoadingScreen from '@/components/CFPLoadingScreen';
+import CFPLoadingScreen from '@components/CFPLoadingScreen';
 
 type DraftType = 'snake' | 'auction';
 type Position = 'ALL' | 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF';

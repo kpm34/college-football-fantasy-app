@@ -10,7 +10,35 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends(
+    "next/core-web-vitals",
+    "next/typescript",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended"
+  ),
+  {
+    rules: {
+      // Enforce layering: lib/** cannot import from components/**
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '@/components/**',
+                '@components/**'
+              ],
+              message: 'Do not import UI from lib/**; keep layering clean.'
+            }
+          ],
+          zones: [
+            { target: './lib/**', from: '@/components/**' },
+            { target: './lib/**', from: '@components/**' }
+          ]
+        }
+      ]
+    }
+  }
 ];
 
 export default eslintConfig;
