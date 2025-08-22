@@ -28,7 +28,7 @@ graph TD
     %% Data and Scripts
     ROOT --> SCRIPTS[ops/common/scripts/<br/>Migrations, Sync<br/>Validation Guards]
     ROOT --> DATA[data/<br/>EA Ratings, Mock Drafts<br/>Depth Charts, CSV/JSON]
-    ROOT --> FUNCTIONS[functions/<br/>Unified Talent Projections<br/>Serverless Code]
+    ROOT --> FUNCTIONS[ops/common/functions/<br/>Appwrite & Pipeline Functions<br/>Serverless Code]
     
     %% Documentation and Deployment
     ROOT --> DOCS[docs/<br/>Documentation<br/>Project Memory]

@@ -16,7 +16,7 @@ flowchart TD
     ROOT --> SCRIPTS[ops/common/scripts/<br/>Migrations, Sync<br/>Validation Guards]
     ROOT --> OPS[ops/<br/>Claude/Cursor/ChatGPT Ops<br/>Automation Scripts]
     ROOT --> DATA[data/<br/>EA Ratings, Mock Drafts<br/>Depth Charts, CSV/JSON]
-    ROOT --> FUNCTIONS[functions/<br/>Unified Talent Projections<br/>Serverless Code]
+    ROOT --> FUNCTIONS[ops/common/functions/<br/>Appwrite & Pipeline Functions<br/>Serverless Code]
     
     ROOT --> DOCS[docs/<br/>Documentation<br/>Project Memory]
     ROOT --> PUBLICDOCS[public/docs/<br/>Docs served via API<br/>Mermaid for Admin]
