@@ -45,13 +45,12 @@ export function detectSchemaDrift(): void {
     }
   }
 
-  // 4. Extract schema definitions
-  const schemaMatches = ssotContent.match(/export const \w+Schema = z\.object/g);
-  if (schemaMatches) {
-    for (const match of schemaMatches) {
-      const schemaName = match.replace('export const ', '').replace('Schema = z.object', '');
-      schemas.add(schemaName);
-    }
+  // 4. Extract schema definitions (match pattern: export const <Name> = z.object({ ... }))
+  const schemaRegex = /export\s+const\s+([A-Za-z0-9_]+)\s*=\s*z\.object\s*\(/g;
+  let m: RegExpExecArray | null;
+  while ((m = schemaRegex.exec(ssotContent)) !== null) {
+    const schemaName = m[1];
+    schemas.add(schemaName);
   }
 
   console.log(`🔍 Collections: ${collections.size}`);

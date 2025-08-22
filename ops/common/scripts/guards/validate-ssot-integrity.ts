@@ -59,18 +59,70 @@ export function validateSSOTIntegrity(): void {
     process.exit(1);
   }
 
-  // 5. Count collections defined
-  const collectionMatches = ssotContent.match(/[A-Z_]+:\s*['"][a-z_]+['"]/g);
-  const collectionCount = collectionMatches ? collectionMatches.length : 0;
+  // 5. Count collections defined in SSOT (COLLECTIONS object only)
+  const collectionsBlockMatch = ssotContent.match(/export\s+const\s+COLLECTIONS\s*=\s*\{([\s\S]*?)\}\s*as\s*const;/);
+  let ssotCollectionsCount = 0;
+  const ssotCollections = new Set<string>();
+  if (collectionsBlockMatch) {
+    const block = collectionsBlockMatch[1];
+    const pairs = block.match(/[A-Z_]+:\s*['"][a-z0-9_]+['"]/gi) || [];
+    for (const pair of pairs) {
+      const m = pair.match(/([A-Z_]+):\s*['"]([a-z0-9_]+)['"]/i);
+      if (m) ssotCollections.add(m[2]);
+    }
+    ssotCollectionsCount = ssotCollections.size;
+  }
 
-  if (collectionCount < 10) {
-    console.error(`❌ Insufficient collections defined in SSOT (found ${collectionCount}, expected at least 10)`);
+  // 6. Count SCHEMA_REGISTRY entries
+  const schemaRegistryBlockMatch = ssotContent.match(/export\s+const\s+SCHEMA_REGISTRY\s*=\s*\{([\s\S]*?)\}\s*as\s*const;/);
+  let registryCount = 0;
+  if (schemaRegistryBlockMatch) {
+    const block = schemaRegistryBlockMatch[1];
+    const entries = block.match(/\[COLLECTIONS\.[A-Z_]+\]\s*:/g) || [];
+    registryCount = entries.length;
+  }
+
+  // 7. Optionally read generated collections (for visibility only)
+  const generatedPath = join(process.cwd(), 'lib', 'appwrite-generated.ts');
+  let generatedCollectionsCount = 0;
+  const generatedCollections = new Set<string>();
+  if (existsSync(generatedPath)) {
+    try {
+      const gen = readFileSync(generatedPath, 'utf-8');
+      const genBlockMatch = gen.match(/export\s+const\s+COLLECTIONS\s*=\s*\{([\s\S]*?)\}\s*as\s*const;/);
+      if (genBlockMatch) {
+        const block = genBlockMatch[1];
+        const pairs = block.match(/[A-Z_]+:\s*['"][a-z0-9_]+['"]/gi) || [];
+        for (const pair of pairs) {
+          const m = pair.match(/([A-Z_]+):\s*['"]([a-z0-9_]+)['"]/i);
+          if (m) generatedCollections.add(m[2]);
+        }
+        generatedCollectionsCount = generatedCollections.size;
+      }
+    } catch {}
+  }
+
+  if (ssotCollectionsCount < 10) {
+    console.error(`❌ Insufficient collections defined in SSOT (found ${ssotCollectionsCount}, expected at least 10)`);
     process.exit(1);
   }
 
+  // 8. Cross-validate SSOT COLLECTIONS and SCHEMA_REGISTRY sizes
+  if (registryCount !== ssotCollectionsCount) {
+    console.warn(`⚠️ Registry count (${registryCount}) does not match SSOT COLLECTIONS (${ssotCollectionsCount}).`);
+  }
+
+  // 9. Print union visibility (helps reconcile toward expected 42)
+  const union = new Set([...ssotCollections, ...generatedCollections]);
+
   console.log('✅ SSOT Integrity Validation Passed');
   console.log(`📍 Schema location: ${SSOT_PATH}`);
-  console.log(`🔍 Collections validated: ${collectionCount}`);
+  console.log(`🔍 SSOT COLLECTIONS: ${ssotCollectionsCount}`);
+  console.log(`📚 SCHEMA_REGISTRY entries: ${registryCount}`);
+  if (generatedCollectionsCount) {
+    console.log(`🧩 Generated collections (lib/appwrite-generated): ${generatedCollectionsCount}`);
+    console.log(`🧮 Union (SSOT ∪ Generated): ${union.size}`);
+  }
 }
 
 // Run validation if called directly
