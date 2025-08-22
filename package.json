@@ -90,6 +90,7 @@
     "validate:ssot": "npx tsx ops/common/scripts/guards/validate-ssot-integrity.ts",
     "detect:drift": "npx tsx ops/common/scripts/guards/detect-schema-drift.ts",
     "guard:all": "npm run validate:ssot && npm run detect:drift && npm run validate:schema",
+    "diff:ssot": "npx tsx ops/common/scripts/guards/diff-ssot-vs-appwrite.ts",
     "test:ssot": "npx tsx ops/common/scripts/test-ssot-workflow.ts",
     "setup:monitoring": "tsx ops/common/scripts/setup-monitoring.ts",
     "monitoring:dashboard": "curl -s https://cfbfantasy.app/api/monitoring/dashboard | jq .",
