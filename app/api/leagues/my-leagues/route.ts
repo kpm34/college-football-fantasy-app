@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverRepositories } from '../../../../core/repositories';
-import { withErrorHandler } from '../../../../core/utils/error-handler';
+import { serverRepositories } from '@domain/repositories';
+import { withErrorHandler } from '@lib/utils/error-handler';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { AuthService } from '../../../../core/services/auth.service';
-import { withErrorHandler } from '../../../../core/utils/error-handler';
-import { ForbiddenError } from '../../../../core/errors/app-error';
+import { AuthService } from '@domain/services/auth.service';
+import { withErrorHandler } from '@lib/utils/error-handler';
+import { ForbiddenError } from '@domain/errors/app-error';
 
 export const POST = withErrorHandler(async (request: NextRequest) => {
   // Check if signups are disabled
