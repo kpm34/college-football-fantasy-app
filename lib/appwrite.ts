@@ -1,5 +1,5 @@
 import { Client, Databases, Avatars, Storage, Functions } from 'appwrite';
-import { env, COLLECTIONS as ENV_COLLECTIONS } from '@/core/config/environment';
+import { env, COLLECTIONS as ENV_COLLECTIONS } from '@lib/config/environment';
 
 // Initialize Appwrite client for frontend (NO API KEY - uses session auth)
 const client = new Client();

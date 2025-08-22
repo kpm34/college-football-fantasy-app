@@ -3,10 +3,31 @@ module.exports = function transform(fileInfo, api, options) {
   const root = j(fileInfo.source);
 
   const aliasMap = [
+    // core → new structure (relative)
+    { from: /^(?:\.{1,2}\/)*core\/repositories\//, to: '@repos/' },
+    { from: /^(?:\.{1,2}\/)*core\/services\//,     to: '@domain/services/' },
+    { from: /^(?:\.{1,2}\/)*core\/models\//,       to: '@domain/types/' },
+    { from: /^(?:\.{1,2}\/)*core\/utils\//,        to: '@lib/utils/' },
+    { from: /^(?:\.{1,2}\/)*core\/config\//,       to: '@lib/config/' },
+    { from: /^(?:\.{1,2}\/)*core\/constants\//,    to: '@lib/config/constants' },
+    { from: /^(?:\.{1,2}\/)*core\/hooks\//,        to: '@components/hooks/' },
+    // core → new structure (alias '@/core/...')
+    { from: /^@\/core\/repositories\//, to: '@repos/' },
+    { from: /^@\/core\/services\//,     to: '@domain/services/' },
+    { from: /^@\/core\/models\//,       to: '@domain/types/' },
+    { from: /^@\/core\/utils\//,        to: '@lib/utils/' },
+    { from: /^@\/core\/config\//,       to: '@lib/config/' },
+    { from: /^@\/core\/constants\//,    to: '@lib/config/constants' },
+    { from: /^@\/core\/hooks\//,        to: '@components/hooks/' },
+    // fallback: any other core import → domain root
+    { from: /^(?:\.{1,2}\/)*core\//,               to: '@domain/' },
+    { from: /^@\/core\//,                           to: '@domain/' },
+
     // components moved under app/components
     { from: /^(\.\.?\/)+components\//, to: '@/components/' },
     { from: /^@components\//, to: '@\/components/' },
     { from: /^\/@components\//, to: '@\/components/' },
+
     // hooks/types absolute fallbacks to new aliases
     { from: /^\/(hooks|types)\//, to: '@/$1/' },
   ];
