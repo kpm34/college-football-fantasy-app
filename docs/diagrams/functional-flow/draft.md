@@ -20,14 +20,14 @@ flowchart TD
     SetMockFlag --> GenerateOrder[Generate Random Order]
     GenerateOrder --> OpenRoom[Open Draft Room]
     
-    OpenRoom --> MockBanner[Display "MOCK DRAFT" Banner]
+    OpenRoom --> MockBanner[Display MOCK DRAFT Banner]
     MockBanner --> EnablePicks[Enable All Pick Actions]
     
     EnablePicks --> UserPick{User's Turn?}
     UserPick -->|Yes| MakePick[Make Pick]
     UserPick -->|No| WaitTurn[Wait/Watch]
     
-    MakePick --> WriteMockEvent[Write draft_events<br/>type='pick']
+    MakePick --> WriteMockEvent[Write draft_events<br/>type=pick]
     WriteMockEvent --> UpdateMockState[Update draft_states]
     UpdateMockState --> NextPick[Next Pick]
     
@@ -76,18 +76,18 @@ flowchart TD
     UserSelect --> ValidatePick[Validate Pick]
     AutoPick --> ValidatePick
     
-    ValidatePick --> WriteRealEvent[Write draft_events<br/>type='pick']
+    ValidatePick --> WriteRealEvent[Write draft_events<br/>type=pick]
     WriteRealEvent --> UpdateRealState[Update draft_states]
     UpdateRealState --> CommitRoster[Write roster_slots]
-    CommitRoster --> RecordTransaction[Write transactions<br/>type='draft']
-    RecordTransaction --> UpdateBudget[Update auction_budget<br/>(if auction)]
+    CommitRoster --> RecordTransaction[Write transactions<br/>type=draft]
+    RecordTransaction --> UpdateBudget[Update auction_budget<br/>if auction]
     
     UpdateBudget --> NextRealPick[Next Pick]
     NextRealPick --> CheckRealComplete{Draft Complete?}
     CheckRealComplete -->|No| RealPick
     CheckRealComplete -->|Yes| FinalizeDraft[Finalize Draft]
     
-    FinalizeDraft --> MarkComplete[drafts.status='completed']
+    FinalizeDraft --> MarkComplete[drafts.status=completed]
     MarkComplete --> GenerateBoard[Generate Mermaid Board]
     GenerateBoard --> SaveAssets[Save to draft-boards/]
     SaveAssets --> UpdateURI[Set board_asset_uri]
