@@ -1,0 +1,91 @@
+{
+  "existing": [
+    {
+      "path": "docs/diagrams/system-architecture/project-map/",
+      "title": "Project Maps (10 root directories)",
+      "type": "project",
+      "files": [
+        "app.md",
+        "components.md",
+        "lib.md",
+        "data.md",
+        "schema.md",
+        "future.md",
+        "functions.md",
+        "docs.md",
+        "ops.md",
+        "public.md"
+      ]
+    },
+    {
+      "path": "docs/diagrams/system-architecture/",
+      "title": "System Architecture",
+      "type": "architecture",
+      "files": [
+        "authentication-flow.md",
+        "complete-data-flow.md",
+        "system-architecture.md"
+      ]
+    },
+    {
+      "path": "docs/diagrams/league-draft/",
+      "title": "League & Draft",
+      "type": "functional",
+      "files": [
+        "draft-realtime.md",
+        "league-management.md",
+        "search-filter-flow.md"
+      ]
+    },
+    {
+      "path": "docs/diagrams/projections/",
+      "title": "Projections System",
+      "type": "functional",
+      "files": [
+        "api-flow.md",
+        "data-sources.md",
+        "depth-multipliers.md",
+        "projections-algorithm.md",
+        "projections-overview.md",
+        "troubleshooting.md"
+      ]
+    },
+    {
+      "path": "docs/diagrams/admin-tools/",
+      "title": "Admin Tools",
+      "type": "functional",
+      "files": [
+        "admin-operations.md",
+        "commissioner-settings.md"
+      ]
+    }
+  ],
+  "fetch_shape": {
+    "endpoint": "/api/docs/mermaid/[slug]",
+    "expected_format": {
+      "content": "# Title\n\n```mermaid\nflowchart TB\n...\n```",
+      "type": "markdown"
+    }
+  },
+  "todo": [
+    "Create Account flow",
+    "Create League flow",
+    "Join League flow",
+    "Draft flow (complete)",
+    "Commissioner Settings flow",
+    "Save Roster flow",
+    "Rankings flow",
+    "Waivers flow",
+    "Trading flow",
+    "API routing maps",
+    "External service integration maps"
+  ],
+  "completed": [
+    "Project Maps - Updated with lighter colors",
+    "Authentication flow",
+    "Data flow",
+    "Projections system",
+    "Draft realtime",
+    "League management"
+  ]
+}

@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const ROOT = process.cwd()
-const OUT_DIR = path.join(ROOT, 'docs/diagrams/system-architecture/project-map')
+const OUT_DIR = path.join(ROOT, 'docs/diagrams/project-map')
 
 const ROOT_FOLDERS = [
   'app',
@@ -48,9 +48,9 @@ function buildMermaid(root: string): string {
   lines.push('')
   lines.push('```mermaid')
   lines.push('flowchart TB')
-  // Classes for folders vs files
-  lines.push('  classDef folder fill:#0b2942,stroke:#60a5fa,stroke-width:1.2,color:#e5f2ff,rx:6,ry:6')
-  lines.push('  classDef file fill:#111827,stroke:#9ca3af,stroke-width:1,color:#f3f4f6,rx:4,ry:4')
+  // Classes for folders vs files - high contrast with dark brown fonts
+  lines.push('  classDef folder fill:#fef3c7,stroke:#d97706,stroke-width:2,color:#451a03,rx:8,ry:8')
+  lines.push('  classDef file fill:#f0fdf4,stroke:#65a30d,stroke-width:1.5,color:#422006,rx:4,ry:4')
   lines.push(`  R["${labelText(root + '/')}"]`)
   lines.push('  class R folder')
 
@@ -120,8 +120,8 @@ function buildHeader(title: string): string[] {
   lines.push('')
   lines.push('```mermaid')
   lines.push('flowchart TB')
-  lines.push('  classDef folder fill:#0b2942,stroke:#60a5fa,stroke-width:1.2,color:#e5f2ff,rx:6,ry:6')
-  lines.push('  classDef file fill:#111827,stroke:#9ca3af,stroke-width:1,color:#f3f4f6,rx:4,ry:4')
+  lines.push('  classDef folder fill:#fef3c7,stroke:#d97706,stroke-width:2,color:#451a03,rx:8,ry:8')
+  lines.push('  classDef file fill:#f0fdf4,stroke:#65a30d,stroke-width:1.5,color:#422006,rx:4,ry:4')
   return lines
 }
 

@@ -1,0 +1,102 @@
+# Project Map — ops/attic/migration-scripts
+
+```mermaid
+flowchart TB
+  classDef folder fill:#fef3c7,stroke:#d97706,stroke-width:2,color:#451a03,rx:8,ry:8
+  classDef file fill:#f0fdf4,stroke:#65a30d,stroke-width:1.5,color:#422006,rx:4,ry:4
+  ops_attic_migration_scripts["ops/attic/migration-scripts/" ]
+  class ops_attic_migration_scripts folder
+  ops_attic_migration_scripts_add_roster_slots_from_user_teams_ts["add_roster_slots_from_user_teams.ts"]
+  class ops_attic_migration_scripts_add_roster_slots_from_user_teams_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_add_roster_slots_from_user_teams_ts
+  ops_attic_migration_scripts_check_collections_ts["check_collections.ts"]
+  class ops_attic_migration_scripts_check_collections_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_check_collections_ts
+  ops_attic_migration_scripts_check_draft_events_schema_ts["check_draft_events_schema.ts"]
+  class ops_attic_migration_scripts_check_draft_events_schema_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_check_draft_events_schema_ts
+  ops_attic_migration_scripts_check_draft_progress_ts["check_draft_progress.ts"]
+  class ops_attic_migration_scripts_check_draft_progress_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_check_draft_progress_ts
+  ops_attic_migration_scripts_check_memberships_ts["check_memberships.ts"]
+  class ops_attic_migration_scripts_check_memberships_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_check_memberships_ts
+  ops_attic_migration_scripts_check_mock_drafts_ts["check_mock_drafts.ts"]
+  class ops_attic_migration_scripts_check_mock_drafts_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_check_mock_drafts_ts
+  ops_attic_migration_scripts_check_new_collections_ts["check_new_collections.ts"]
+  class ops_attic_migration_scripts_check_new_collections_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_check_new_collections_ts
+  ops_attic_migration_scripts_check_teams_status_ts["check_teams_status.ts"]
+  class ops_attic_migration_scripts_check_teams_status_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_check_teams_status_ts
+  ops_attic_migration_scripts_consolidate_projections_ts["consolidate_projections.ts"]
+  class ops_attic_migration_scripts_consolidate_projections_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_consolidate_projections_ts
+  ops_attic_migration_scripts_count_draft_events_ts["count_draft_events.ts"]
+  class ops_attic_migration_scripts_count_draft_events_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_count_draft_events_ts
+  ops_attic_migration_scripts_debug_seed_memberships_ts["debug_seed_memberships.ts"]
+  class ops_attic_migration_scripts_debug_seed_memberships_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_debug_seed_memberships_ts
+  ops_attic_migration_scripts_drop_legacy_collections_ts["drop_legacy_collections.ts"]
+  class ops_attic_migration_scripts_drop_legacy_collections_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_drop_legacy_collections_ts
+  ops_attic_migration_scripts_drop_remaining_legacy_ts["drop_remaining_legacy.ts"]
+  class ops_attic_migration_scripts_drop_remaining_legacy_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_drop_remaining_legacy_ts
+  ops_attic_migration_scripts_export_current_schema_ts["export_current_schema.ts"]
+  class ops_attic_migration_scripts_export_current_schema_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_export_current_schema_ts
+  ops_attic_migration_scripts_export_legacy_collections_ts["export_legacy_collections.ts"]
+  class ops_attic_migration_scripts_export_legacy_collections_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_export_legacy_collections_ts
+  ops_attic_migration_scripts_fix_fantasy_teams_owner_ts["fix_fantasy_teams_owner.ts"]
+  class ops_attic_migration_scripts_fix_fantasy_teams_owner_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_fix_fantasy_teams_owner_ts
+  ops_attic_migration_scripts_lineups_rosterid_to_fantasy_team_id_ts["lineups_rosterid_to_fantasy_team_id.ts"]
+  class ops_attic_migration_scripts_lineups_rosterid_to_fantasy_team_id_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_lineups_rosterid_to_fantasy_team_id_ts
+  ops_attic_migration_scripts_merge_auction_bids_to_bids_ts["merge_auction_bids_to_bids.ts"]
+  class ops_attic_migration_scripts_merge_auction_bids_to_bids_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_merge_auction_bids_to_bids_ts
+  ops_attic_migration_scripts_merge_draft_picks_and_mock_picks_to_draft_events_ts["merge_draft_picks_and_mock_picks_to_draft_events.ts"]
+  class ops_attic_migration_scripts_merge_draft_picks_and_mock_picks_to_draft_events_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_merge_draft_picks_and_mock_picks_to_draft_events_ts
+  ops_attic_migration_scripts_merge_scores_to_matchups_ts["merge_scores_to_matchups.ts"]
+  class ops_attic_migration_scripts_merge_scores_to_matchups_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_merge_scores_to_matchups_ts
+  ops_attic_migration_scripts_migrate_mock_drafts_to_drafts_ts["migrate_mock_drafts_to_drafts.ts"]
+  class ops_attic_migration_scripts_migrate_mock_drafts_to_drafts_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_migrate_mock_drafts_to_drafts_ts
+  ops_attic_migration_scripts_migrate_teams_to_schools_ts["migrate_teams_to_schools.ts"]
+  class ops_attic_migration_scripts_migrate_teams_to_schools_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_migrate_teams_to_schools_ts
+  ops_attic_migration_scripts_projection_runs_to_model_runs_ts["projection_runs_to_model_runs.ts"]
+  class ops_attic_migration_scripts_projection_runs_to_model_runs_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_projection_runs_to_model_runs_ts
+  ops_attic_migration_scripts_recreate_draft_events_ts["recreate_draft_events.ts"]
+  class ops_attic_migration_scripts_recreate_draft_events_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_recreate_draft_events_ts
+  ops_attic_migration_scripts_recreate_league_memberships_ts["recreate_league_memberships.ts"]
+  class ops_attic_migration_scripts_recreate_league_memberships_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_recreate_league_memberships_ts
+  ops_attic_migration_scripts_rename_user_teams_to_fantasy_teams_ts["rename_user_teams_to_fantasy_teams.ts"]
+  class ops_attic_migration_scripts_rename_user_teams_to_fantasy_teams_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_rename_user_teams_to_fantasy_teams_ts
+  ops_attic_migration_scripts_rename_users_to_clients_ts["rename_users_to_clients.ts"]
+  class ops_attic_migration_scripts_rename_users_to_clients_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_rename_users_to_clients_ts
+  ops_attic_migration_scripts_rewrite_college_players_team_fk_ts["rewrite_college_players_team_fk.ts"]
+  class ops_attic_migration_scripts_rewrite_college_players_team_fk_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_rewrite_college_players_team_fk_ts
+  ops_attic_migration_scripts_seed_memberships_from_fantasy_teams_ts["seed_memberships_from_fantasy_teams.ts"]
+  class ops_attic_migration_scripts_seed_memberships_from_fantasy_teams_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_seed_memberships_from_fantasy_teams_ts
+  ops_attic_migration_scripts_sync_auth_to_clients_ts["sync_auth_to_clients.ts"]
+  class ops_attic_migration_scripts_sync_auth_to_clients_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_sync_auth_to_clients_ts
+  ops_attic_migration_scripts_update_collection_references_ts["update_collection_references.ts"]
+  class ops_attic_migration_scripts_update_collection_references_ts file
+  ops_attic_migration_scripts --> ops_attic_migration_scripts_update_collection_references_ts
+```
