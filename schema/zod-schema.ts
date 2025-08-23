@@ -5,10 +5,10 @@ export * from './zod/college_players'
 export * from './zod/games'
 export * from './zod/player_stats'
 export * from './zod/rankings'
-export * from './zod/rosters'
+export * from './zod/roster_slots'
 export * from './zod/lineups'
 export * from './zod/drafts'
-export * from './zod/draft_picks'
+export * from './zod/draft_events'
 /**
  * ZOD-FIRST SINGLE SOURCE OF TRUTH
  * 
