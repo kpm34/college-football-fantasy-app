@@ -3,10 +3,12 @@
 import { useEffect, useRef } from 'react'
 
 interface MermaidRendererProps {
-  charts: string[]
+  charts?: string[]
+  chart?: string
 }
 
-export function MermaidRenderer({ charts }: MermaidRendererProps) {
+export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
+  const chartsToRender = charts || (chart ? [chart] : [])
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -327,11 +329,11 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
         try { d() } catch {}
       })
     }
-  }, [charts])
+  }, [chartsToRender])
 
   return (
     <div ref={containerRef} className="space-y-8">
-      {charts.map((code, idx) => (
+      {chartsToRender.map((code, idx) => (
         <div key={idx} data-mermaid data-mermaid-code={code} className="min-h-[200px]" />
       ))}
     </div>

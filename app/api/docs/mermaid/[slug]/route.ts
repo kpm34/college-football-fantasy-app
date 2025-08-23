@@ -22,7 +22,10 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { slug } = await params
+  const { slug: rawSlug } = await params
+  
+  // Decode the slug to handle URL encoding
+  const slug = decodeURIComponent(rawSlug)
 
   // Map slugs to file paths - organized into 3 main categories
   const fileMap: Record<string, string> = {
@@ -54,6 +57,15 @@ export async function GET(
     'system-architecture:yearly-projections': 'diagrams/system-architecture/yearly-projections.md',
     'system-architecture:weekly-projections': 'diagrams/system-architecture/weekly-projections.md',
     'system-architecture:weight-tuning': 'diagrams/system-architecture/weight-tuning.md',
+    
+    // API Documentation (generated)
+    'api:routes': 'diagrams/api/routes.md',
+    'api:external': 'diagrams/api/external.md',
+    'api:data-sources': 'diagrams/api/data-sources.md',
+    
+    // Reports
+    'report:main': 'diagrams/report.md',
+    'report:route-status': 'diagrams/runtime/route-status.json',
   }
 
   // Handle dynamic 3-level project map paths
@@ -80,11 +92,16 @@ export async function GET(
   const filePath = fileMap[slug]
   
   if (!filePath) {
+    console.error(`Diagram not found for slug: ${slug}`)
+    console.error('Available slugs:', Object.keys(fileMap))
+    
     return NextResponse.json(
       { 
         error: 'Diagram not found', 
         slug,
-        availableKeys: Object.keys(fileMap).slice(0, 10)
+        receivedSlug: rawSlug,
+        decodedSlug: slug,
+        availableKeys: Object.keys(fileMap)
       },
       { status: 404 }
     )
@@ -94,13 +111,18 @@ export async function GET(
     const docsPath = path.join(process.cwd(), 'docs')
     const fullPath = path.join(docsPath, filePath)
     
+    console.log(`Attempting to read: ${fullPath}`)
+    
     if (!fs.existsSync(fullPath)) {
+      console.error(`File not found: ${fullPath}`)
+      
       return NextResponse.json(
         { 
           error: 'File not found', 
           path: filePath,
           fullPath: fullPath.replace(process.cwd(), '...'),
-          slug
+          slug,
+          exists: false
         },
         { status: 404 }
       )
@@ -109,20 +131,26 @@ export async function GET(
     const content = fs.readFileSync(fullPath, 'utf-8')
     const charts = extractMermaidBlocks(content)
     
+    console.log(`Found ${charts.length} charts in ${filePath}`)
+    
     const stats = fs.statSync(fullPath)
     
     return NextResponse.json({
       charts,
       updatedAt: stats.mtime.toISOString(),
       path: filePath,
-      slug
+      slug,
+      chartsCount: charts.length
     })
   } catch (error: any) {
+    console.error(`Error reading diagram for slug ${slug}:`, error)
+    
     return NextResponse.json(
       { 
         error: 'Failed to read diagram', 
         details: error?.message || 'Unknown error',
-        path: filePath
+        path: filePath,
+        slug
       },
       { status: 500 }
     )
