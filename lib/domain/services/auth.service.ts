@@ -7,7 +7,7 @@ import { Client, Account, ID, Models } from 'appwrite';
 import { Client as ServerClient, Account as ServerAccount } from 'node-appwrite';
 import { cookies } from 'next/headers';
 import type { NextRequest, NextResponse } from 'next/server';
-import { env } from '../config/environment';
+import { env } from '../../config/environment';
 import { UnauthorizedError, ValidationError } from '../errors/app-error';
 
 export interface AuthUser extends Models.User<Models.Preferences> {

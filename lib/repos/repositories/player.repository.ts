@@ -5,8 +5,8 @@
 
 import { BaseRepository, QueryOptions } from './base.repository';
 import { Query } from 'appwrite';
-import { env } from '../config/environment';
-import { SchemaValidator, enforceSchema } from '../validation/schema-enforcer';
+import { env } from '../../config/environment';
+import { SchemaValidator, enforceSchema } from '../../domain/validation/schema-enforcer';
 import type { Player } from '../../types/player';
 
 export interface PlayerSearchOptions extends QueryOptions {
