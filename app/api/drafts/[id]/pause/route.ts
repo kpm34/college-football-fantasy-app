@@ -11,7 +11,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   // Append event
   await databases.createDocument(
     DATABASE_ID,
-    COLLECTIONS.DRAFT_EVENTS,
+    COLLECTIONS.draftEvents,
     ID.unique(),
     { draftId, ts: new Date().toISOString(), type: 'pause', teamId: teamId || 'system', round: 0, overall: 0, by: by || undefined }
   );

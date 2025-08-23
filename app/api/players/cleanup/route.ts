@@ -46,7 +46,7 @@ async function fetchAllPlayers(limit = 100): Promise<AnyDoc[]> {
   while (true) {
     const queries: string[] = [Query.orderAsc('$id'), Query.limit(limit)];
     if (cursor) queries.push(Query.cursorAfter(cursor));
-    const page = await databases.listDocuments(DATABASE_ID, COLLECTIONS.COLLEGE_PLAYERS, queries as any);
+    const page = await databases.listDocuments(DATABASE_ID, COLLECTIONS.players, queries as any);
     items.push(...(page.documents as AnyDoc[]));
     if (page.documents.length < limit) break;
     cursor = page.documents[page.documents.length - 1].$id;
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
       // Deletes
       for (const id of toDelete) {
         try {
-          await databases.deleteDocument(DATABASE_ID, COLLECTIONS.COLLEGE_PLAYERS, id);
+          await databases.deleteDocument(DATABASE_ID, COLLECTIONS.players, id);
           deleted++;
         } catch (err) {
           // continue best-effort
@@ -162,7 +162,7 @@ export async function POST(request: NextRequest) {
       // Updates
       for (const [id, data] of updateMap.entries()) {
         try {
-          await databases.updateDocument(DATABASE_ID, COLLECTIONS.COLLEGE_PLAYERS, id, data);
+          await databases.updateDocument(DATABASE_ID, COLLECTIONS.players, id, data);
           updated++;
         } catch (err) {
           // continue best-effort

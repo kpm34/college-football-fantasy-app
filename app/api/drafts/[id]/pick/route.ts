@@ -95,7 +95,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     await databases.createDocument(
       DATABASE_ID,
-      COLLECTIONS.DRAFT_EVENTS,
+      COLLECTIONS.draftEvents,
       ID.unique(),
       {
         draftId,

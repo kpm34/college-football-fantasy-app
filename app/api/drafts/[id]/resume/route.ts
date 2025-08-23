@@ -10,7 +10,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
   await databases.createDocument(
     DATABASE_ID,
-    COLLECTIONS.DRAFT_EVENTS,
+    COLLECTIONS.draftEvents,
     ID.unique(),
     { draftId, ts: new Date().toISOString(), type: 'resume', teamId: teamId || 'system', round: 0, overall: 0, by: by || undefined }
   );

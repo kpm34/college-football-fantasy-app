@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     // Create projection_runs record (running)
     await databases.createDocument(
       DATABASE_ID,
-      COLLECTIONS.PROJECTION_RUNS,
+      COLLECTIONS.projection_runs,
       runId,
       {
         runId,
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     // Finish run and write metrics to separate collection
     await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.PROJECTION_RUNS,
+      COLLECTIONS.projection_runs,
       runId,
       {
         status: 'success',
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     try {
       await databases.createDocument(
         DATABASE_ID,
-        COLLECTIONS.PROJECTION_RUN_METRICS,
+        COLLECTIONS.projection_run_metrics,
         runId,
         {
           runId,

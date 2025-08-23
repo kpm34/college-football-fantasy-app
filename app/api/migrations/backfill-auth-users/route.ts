@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     // Fetch existing profiles (optional; used to backfill authMethod flag)
     let profiles: any[] = [];
     try {
-      const res = await databases.listDocuments(DATABASE_ID, COLLECTIONS.USERS, []);
+      const res = await databases.listDocuments(DATABASE_ID, COLLECTIONS.activityLog, []);
       profiles = (res.documents as any[]) || [];
     } catch {}
 
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         const profile = profiles.find((p) => (p.email || '').toLowerCase() === email.toLowerCase());
         if (profile) {
           try {
-            await databases.updateDocument(DATABASE_ID, COLLECTIONS.USERS, profile.$id, {
+            await databases.updateDocument(DATABASE_ID, COLLECTIONS.activityLog, profile.$id, {
               authMethod: 'email',
               migratedAt: new Date().toISOString()
             });
