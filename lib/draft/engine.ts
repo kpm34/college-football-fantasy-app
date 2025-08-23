@@ -8,7 +8,6 @@ import { DraftConfig, MockDraft, DraftParticipant, DraftPick, Player, TeamNeeds,
 import { loadEligiblePlayers, filterAvailablePlayers } from './playerPool';
 import { getBestAvailablePlayer, getBotStrategy, calculateTeamNeeds } from './ranker';
 import { COLLECTIONS } from '@schema/zod-schema';
-import { ensureMockDraftSchema } from '@ops/common/scripts/appwrite/ensure-mock-draft-schema';
 
 /**
  * Generate a random seed if none provided
@@ -59,7 +58,7 @@ export async function createDraft(
       const msg = e?.message || '';
       if (msg.includes('could not be found') || e?.type === 'collection_not_found') {
         // Bootstrap schema on-the-fly and retry once
-        await ensureMockDraftSchema();
+        // Schema should already exist in production
         draft = await databases.createDocument(
           DATABASE_ID,
           COLLECTIONS.DRAFTS,
@@ -111,7 +110,7 @@ export async function createDraft(
       } catch (e: any) {
         const msg = e?.message || '';
         if (msg.includes('could not be found') || e?.type === 'collection_not_found') {
-          await ensureMockDraftSchema();
+          // Schema should already exist in production
           const participant = await databases.createDocument(
             DATABASE_ID,
             COLLECTIONS.DRAFT_EVENTS,
