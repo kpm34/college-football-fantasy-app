@@ -33,14 +33,14 @@ graph TB
     end
     
     subgraph "Loader Modules"
-        DC --> LDC[loadDepthCharts()]
-        ER --> LEA[loadEaRatings()]
-        MD --> LMD[loadMockDraftsAgg()]
-        PS --> LHS[loadHistoricalStats()]
-        PS --> LCS[loadCurrentStats()]
-        RW --> LI[loadInjuries()]
-        WX --> LW[loadWeather()]
-        GM --> CSOS[computeSOS()]
+        DC --> LDC[loadDepthCharts]
+        ER --> LEA[loadEaRatings]
+        MD --> LMD[loadMockDraftsAgg]
+        PS --> LHS[loadHistoricalStats]
+        PS --> LCS[loadCurrentStats]
+        RW --> LI[loadInjuries]
+        WX --> LW[loadWeather]
+        GM --> CSOS[computeSOS]
     end
     
     subgraph "Feature Engineering"
