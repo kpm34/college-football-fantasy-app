@@ -836,7 +836,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                   <p className="font-semibold">{league?.scoringType || 'PPR'}</p>
                 </div>
                 <div>
-                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>Teams</p>
+                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>My Fantasy Teams</p>
                   <p className="font-semibold">{membersRealtime.loading ? '...' : (membersRealtime.count || teams.length || 0)} / {league?.maxTeams || 12}</p>
                 </div>
                 <div>

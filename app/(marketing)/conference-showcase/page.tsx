@@ -211,7 +211,7 @@ export default function ConferenceShowcasePage() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-4xl font-black text-[#002D72] uppercase tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif', fontWeight: 900 }}>BIG TEN</h2>
             <span className="px-4 py-2 bg-[#002D72]/20 text-[#002D72] rounded-full text-sm font-bold">
-              {displayBigTenTeams.length} Teams
+              {displayBigTenTeams.length} Schools
             </span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -255,7 +255,7 @@ export default function ConferenceShowcasePage() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-4xl font-black text-[#002D72] uppercase" style={{ fontFamily: 'Georgia, serif', letterSpacing: '0.15em' }}>SEC</h2>
             <span className="px-4 py-2 bg-[#FCD647]/30 text-[#002D72] rounded-full text-sm font-bold">
-              {displaySecTeams.length} Teams
+              {displaySecTeams.length} Schools
             </span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -299,7 +299,7 @@ export default function ConferenceShowcasePage() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-4xl font-black text-[#7a1c1c] uppercase">BIG 12</h2>
             <span className="px-4 py-2 bg-[#7a1c1c]/10 text-[#7a1c1c] rounded-full text-sm font-bold">
-              {displayBig12Teams.length} Teams
+              {displayBig12Teams.length} Schools
             </span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -327,7 +327,7 @@ export default function ConferenceShowcasePage() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-4xl font-black text-[#0B0E13] uppercase">ACC</h2>
             <span className="px-4 py-2 bg-[#0B0E13]/10 text-[#0B0E13] rounded-full text-sm font-bold">
-              {displayAccTeams.length} Teams
+              {displayAccTeams.length} Schools
             </span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
