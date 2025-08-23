@@ -19,7 +19,17 @@ const nextConfig: NextConfig = {
   redirects: async () => [
     {
       source: '/docs/:path*',
-      destination: '/documentation/:path*',
+      destination: '/admin',
+      permanent: true,
+    },
+    {
+      source: '/documentation',
+      destination: '/admin',
+      permanent: true,
+    },
+    {
+      source: '/documentation/:path*',
+      destination: '/admin',
       permanent: true,
     },
   ],

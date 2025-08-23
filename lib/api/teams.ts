@@ -1,5 +1,5 @@
 import apiClient from './client';
-import type { Team, TeamPlayer, TeamsResponse } from '@/types/team';
+import type { Team, TeamPlayer, TeamsResponse } from '@lib/types/team';
 
 export const teamsAPI = {
   getAll: () => 

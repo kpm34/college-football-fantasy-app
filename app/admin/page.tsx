@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { MermaidRenderer } from '@components/docs/MermaidRenderer'
-import { useAuth } from '@hooks/useAuth';
+import { useAuth } from '@lib/hooks/useAuth';
 
 export default function AdminDashboard() {
   const { user, loading } = useAuth();
@@ -117,13 +117,13 @@ export default function AdminDashboard() {
         <div className="mb-10">
           <h3 className="text-xl font-bold text-white mb-4">🏗️ System Architecture</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <button
-              onClick={() => loadDiagram('project-map', '📁 Project Map')}
+            <Link
+              href="/admin/project-map"
               className="px-4 py-3 rounded-lg bg-indigo-600 text-white transition-colors hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white/80 text-left"
             >
               <div className="font-semibold">📁 Project Map</div>
-              <div className="text-sm text-indigo-100">Current repo structure & organization</div>
-            </button>
+              <div className="text-sm text-indigo-100">Explore by root folders</div>
+            </Link>
 
             <button
               onClick={() => loadDiagram('system-architecture', '🏛️ System Architecture')}

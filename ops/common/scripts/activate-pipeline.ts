@@ -5,7 +5,7 @@
  * Connects all 4 modules: Sourcing → Algorithm → Collections → UI
  */
 
-import { IngestionOrchestrator } from '../core/data-ingestion/orchestrator/ingestion-orchestrator';
+import { IngestionOrchestrator } from '@domain/data-ingestion/orchestrator/ingestion-orchestrator';
 import { serverDatabases as databases, DATABASE_ID } from '../lib/appwrite-server';
 import { ID, Query } from 'node-appwrite';
 

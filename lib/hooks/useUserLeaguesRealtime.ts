@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { client, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite'
+import { client, DATABASE_ID, COLLECTIONS } from '@lib/appwrite'
 import { type RealtimeResponseEvent } from 'appwrite'
-import { useAuth } from '@hooks/useAuth'
+import { useAuth } from '@lib/hooks/useAuth'
 
 export interface UserLeague {
   $id: string

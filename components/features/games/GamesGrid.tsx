@@ -1,6 +1,6 @@
 'use client';
 
-import { Game } from '@/types/game';
+import { Game } from '@lib/types/game';
 import { GameCard } from './GameCard';
 import { LoadingSpinner } from '@components/ui/LoadingSpinner';
 import { Card, CardContent } from '@components/ui/Card';

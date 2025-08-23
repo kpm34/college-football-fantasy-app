@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { WebScraper } from '@/lib/web-scraper';
+import { WebScraper } from '@lib/web-scraper';
 import { z } from 'zod';
 
 // Request validation schemas

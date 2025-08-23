@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '@hooks/useAuth';
-import { DraftPlayer } from '@/types/projections';
+import { useAuth } from '@lib/hooks/useAuth';
+import { DraftPlayer } from '@lib/types/projections';
 import { FiSearch, FiFilter, FiTrendingUp, FiStar, FiWifi } from 'react-icons/fi';
 
 export type DraftType = 'snake' | 'mock';

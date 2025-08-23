@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite';
 import { Query } from 'appwrite';
-import { cache, CACHE_DURATIONS } from '@/lib/cache';
+import { cache, CACHE_DURATIONS } from '@lib/cache';
 
 export const runtime = 'edge';
 

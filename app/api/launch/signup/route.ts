@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases as databases, DATABASE_ID } from '@/lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID } from '@lib/appwrite-server';
 import { ID } from 'node-appwrite';
 
 export async function POST(request: NextRequest) {

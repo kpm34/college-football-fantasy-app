@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { dataSyncManager } from '@/lib/data-sync';
+import { dataSyncManager } from '@lib/data-sync';
 // Removed auth-utils import - using inline auth check
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite';
 import { Query } from 'appwrite';
 
 export async function POST(request: NextRequest) {

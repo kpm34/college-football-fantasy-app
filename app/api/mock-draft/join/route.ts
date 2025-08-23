@@ -1,8 +1,8 @@
 // app/api/mock-draft/join/route.ts
 import { NextResponse } from 'next/server';
-import { serverDatabases, DATABASE_ID } from '@/lib/appwrite-server';
+import { serverDatabases, DATABASE_ID } from '@lib/appwrite-server';
 import { Query } from 'node-appwrite';
-import { COLLECTIONS } from '@/schema/zod-schema';
+import { COLLECTIONS } from '@schema/zod-schema';
 
 export async function POST(req: Request) {
   try {

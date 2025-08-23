@@ -1,6 +1,6 @@
 // app/api/mock-draft/pick/route.ts
 import { NextResponse } from 'next/server';
-import { applyPick, getTurn } from '@/lib/draft/engine';
+import { applyPick, getTurn } from '@lib/draft/engine';
 
 export async function POST(req: Request) {
   try {

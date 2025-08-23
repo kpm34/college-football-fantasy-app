@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { teamsAPI } from '@/lib/api/teams';
-import { Team, TeamsResponse } from '@/types/team';
-import { APIError } from '@/lib/api/client';
+import { teamsAPI } from '@lib/api/teams';
+import { Team, TeamsResponse } from '@lib/types/team';
+import { APIError } from '@lib/api/client';
 
 interface UseTeamsReturn {
   teams: Record<string, Team[]>;

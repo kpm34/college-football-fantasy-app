@@ -1,9 +1,9 @@
 // app/draft/[draftId]/page.tsx
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useDraftCoreMock } from '@/lib/draft/core';
+import { useDraftCoreMock } from '@lib/draft/core';
 import Link from 'next/link';
-import { leagueColors } from '@/lib/theme/colors';
+import { leagueColors } from '@lib/theme/colors';
 import DraftBoard from '@components/features/draft/DraftBoard';
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {

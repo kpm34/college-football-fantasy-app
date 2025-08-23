@@ -1,6 +1,6 @@
-import { Game } from '@/types/game';
+import { Game } from '@lib/types/game';
 import { Badge } from '@components/ui/Badge';
-import { formatGameTime } from '@/lib/utils/formatters';
+import { formatGameTime } from '@lib/utils/formatters';
 
 interface GameCardProps {
   game: Game;

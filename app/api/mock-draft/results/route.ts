@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getMockDraftResults } from '@/lib/draft/mock-engine';
+import { getMockDraftResults } from '@lib/draft/mock-engine';
 
 export async function GET(request: NextRequest) {
   try {

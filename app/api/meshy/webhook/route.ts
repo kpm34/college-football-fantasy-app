@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { serverDatabases as databases } from '@/lib/appwrite-server'
-import { DATABASE_ID } from '@/lib/appwrite'
+import { serverDatabases as databases } from '@lib/appwrite-server'
+import { DATABASE_ID } from '@lib/appwrite'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'

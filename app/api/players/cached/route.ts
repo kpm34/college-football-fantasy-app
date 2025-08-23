@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
 import { Query } from 'node-appwrite';
-import { cache, CACHE_DURATIONS } from '@/lib/cache';
+import { cache, CACHE_DURATIONS } from '@lib/cache';
 
 export const runtime = 'edge'; // Use Edge Runtime for better performance
 

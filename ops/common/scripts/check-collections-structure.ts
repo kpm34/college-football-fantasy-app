@@ -6,7 +6,7 @@
  */
 
 import { Client, Databases } from 'node-appwrite';
-import { env } from '../core/config/environment';
+import { env } from '@lib/config/environment';
 
 const client = new Client();
 client

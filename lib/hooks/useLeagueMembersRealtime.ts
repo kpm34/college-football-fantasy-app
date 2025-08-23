@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { client, databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite'
+import { client, databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite'
 import { Query, type RealtimeResponseEvent } from 'appwrite'
 
 export interface LeagueTeam {

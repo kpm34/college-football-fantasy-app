@@ -2,15 +2,15 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useDraftCoreLive } from '@/lib/draft/core';
-import { useAuth } from '@hooks/useAuth';
+import { useDraftCoreLive } from '@lib/draft/core';
+import { useAuth } from '@lib/hooks/useAuth';
 import DraftCore from '@components/features/draft/DraftCore';
-import { DraftPlayer } from '@/types/projections';
+import { DraftPlayer } from '@lib/types/projections';
 import { FiStar, FiClock } from 'react-icons/fi';
 import DraftBoard from '@components/features/draft/DraftBoard';
-import { databases, DATABASE_ID } from '@/lib/appwrite';
+import { databases, DATABASE_ID } from '@lib/appwrite';
 import { Query } from 'appwrite';
-import { leagueColors } from '@/lib/theme/colors';
+import { leagueColors } from '@lib/theme/colors';
 
 interface Props {
   params: Promise<{ leagueId: string }>;

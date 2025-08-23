@@ -99,7 +99,8 @@
     "demo:glob": "npx tsx ops/common/scripts/demo-enhanced-glob.ts",
     "demo:glob:basic": "npx tsx ops/common/scripts/demo-enhanced-glob.ts --basic",
     "ingest:run": "npx tsx ops/common/scripts/run-data-ingestion.ts",
-    "ops:cursor:open": "tsx ops/common/scripts/open-latest-context.ts"
+    "ops:cursor:open": "tsx ops/common/scripts/open-latest-context.ts",
+    "generate:project-map": "tsx ops/common/scripts/generate-project-map-diagrams.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",

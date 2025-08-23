@@ -8,7 +8,7 @@
  * - Won't overwrite existing Accounts
  */
 
-import { serverDatabases as databases, serverUsers as users, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, serverUsers as users, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
 
 function randomTempPassword(): string {
   const base = Math.random().toString(36).slice(2);

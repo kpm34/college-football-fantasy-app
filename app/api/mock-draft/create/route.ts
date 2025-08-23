@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createDraft } from '@/lib/draft/engine';
-import { DraftConfig, DEFAULT_POSITION_LIMITS } from '@/lib/draft/types';
+import { createDraft } from '@lib/draft/engine';
+import { DraftConfig, DEFAULT_POSITION_LIMITS } from '@lib/draft/types';
 
 export async function POST(request: NextRequest) {
   try {

@@ -16,7 +16,7 @@ function normalizeTeamName(team: string): string {
   return team
     .replace(/ & /g, ' and ')
     .replace(/\s+/g, ' ')
-    .trim()
+    .trim();
 }
 
 // Known OurLads NCAA team slug map (extend as needed)
@@ -36,7 +36,7 @@ function toOurLadsSlug(team: string): string | null {
   return norm
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
+    .replace(/\s+/g, '-');
 }
 
 async function fetchDepthChartForTeam(team: string) {

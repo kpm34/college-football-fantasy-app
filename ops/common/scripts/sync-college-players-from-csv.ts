@@ -105,11 +105,11 @@ function normalizePosition(pos: string): string {
 function normalizeTeamName(team: string): string {
   const t = (team || '').trim()
   // Normalize whitespace and punctuation for comparison key
-  return t.replace(/[^A-Za-z0-9]/g, '').toLowerCase()
+  return t.replace(/[^A-Za-z0-9]/g, '').toLowerCase();
 }
 
 function normalizeName(name: string): string {
-  return (name || '').trim().replace(/\s+/g, ' ')
+  return (name || '').trim().replace(/\s+/g, ' ');
 }
 
 function buildKey(name: string, team: string, pos: string): string {

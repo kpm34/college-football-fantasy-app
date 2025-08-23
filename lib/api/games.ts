@@ -1,5 +1,5 @@
 import apiClient from './client';
-import type { Game, GameWithEligibility, EligibleGamesResponse } from '@/types/game';
+import type { Game, GameWithEligibility, EligibleGamesResponse } from '@lib/types/game';
 
 export const gamesAPI = {
   getCurrent: () => 

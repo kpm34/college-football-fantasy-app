@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { rankingsAPI } from '@/lib/api/rankings';
-import { RankingsResponse, APRanking } from '@/types/rankings';
-import { APIError } from '@/lib/api/client';
+import { rankingsAPI } from '@lib/api/rankings';
+import { RankingsResponse, APRanking } from '@lib/types/rankings';
+import { APIError } from '@lib/api/client';
 
 interface UseRankingsOptions {
   week?: number;

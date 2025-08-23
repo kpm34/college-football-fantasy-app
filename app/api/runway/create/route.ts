@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRunwayJob } from '@/lib/runway';
-import { serverDatabases as databases } from '@/lib/appwrite-server';
-import { DATABASE_ID } from '@/lib/appwrite';
+import { createRunwayJob } from '@lib/runway';
+import { serverDatabases as databases } from '@lib/appwrite-server';
+import { DATABASE_ID } from '@lib/appwrite';
 import { ID } from 'node-appwrite';
 
 export const runtime = 'nodejs';

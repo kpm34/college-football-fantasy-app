@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { gamesAPI } from '@/lib/api/games';
-import { Game, EligibleGamesResponse } from '@/types/game';
-import { APIError } from '@/lib/api/client';
+import { gamesAPI } from '@lib/api/games';
+import { Game, EligibleGamesResponse } from '@lib/types/game';
+import { APIError } from '@lib/api/client';
 
 interface UseGamesOptions {
   week?: number;
