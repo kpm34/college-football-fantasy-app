@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     // Get all rosters for this league
     const rostersResponse = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER_TEAMS,
+      COLLECTIONS.FANTASY_TEAMS,
       [
         Query.equal('leagueId', leagueId),
         Query.limit(100)
@@ -62,14 +62,14 @@ export async function POST(request: NextRequest) {
       try {
         const rosterInfo = {
           teamName: roster.teamName,
-          userId: roster.userId,
+          userId: roster.client_id,
           leagueId: roster.leagueId,
           status: 'ok'
         };
 
         // Verify user exists and can access
         try {
-          const userCheck = await fetch(`https://nyc.cloud.appwrite.io/v1/users/${roster.userId}`, {
+          const userCheck = await fetch(`https://nyc.cloud.appwrite.io/v1/users/${roster.client_id}`, {
             headers: {
               'X-Appwrite-Project': 'college-football-fantasy-app',
               'X-Appwrite-Key': process.env.APPWRITE_API_KEY || '',
@@ -90,13 +90,13 @@ export async function POST(request: NextRequest) {
         try {
           await databases.updateDocument(
             DATABASE_ID,
-            COLLECTIONS.USER_TEAMS,
+            COLLECTIONS.FANTASY_TEAMS,
             roster.$id,
             {
               // Refresh the roster record with current data (only valid fields)
-              teamName: roster.teamName || `Team ${roster.userId.slice(-4)}`,
+              teamName: roster.teamName || `Team ${roster.client_id.slice(-4)}`,
               leagueId: roster.leagueId,
-              userId: roster.userId,
+              userId: roster.client_id,
               wins: roster.wins || 0,
               losses: roster.losses || 0,
               ties: roster.ties || 0,
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
         errors++;
         results.push({
           teamName: roster.teamName,
-          userId: roster.userId,
+          userId: roster.client_id,
           status: 'processing_failed',
           error: error.message
         });

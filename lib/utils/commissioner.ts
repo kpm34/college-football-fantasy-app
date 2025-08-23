@@ -37,7 +37,7 @@ export function isUserCommissioner(league: any, user: any): boolean {
     league.commissioner_id,
     league.commissionerEmail,
     league.commissioner_email,
-    league.userId,
+    league.client_id,
     league.ownerId,
     league.owner,
     league.createdBy,
@@ -74,7 +74,7 @@ export function debugCommissionerMatch(league: any, user: any) {
     ].filter(Boolean);
     const userCandidates = [user?.$id, user?.email, user?.name].filter(Boolean) as string[];
     // eslint-disable-next-line no-console
-    console.log('[CommishDebug] leagueIds:', leagueCandidates, 'userIds:', userCandidates);
+    console.log('[CommishDebug] leagueIds:', leagueCandidates, 'client_ids:', userCandidates);
     // eslint-disable-next-line no-console
     console.log('[CommishDebug] normalized compare:', leagueCandidates.map(norm), userCandidates.map(norm));
   } catch {}

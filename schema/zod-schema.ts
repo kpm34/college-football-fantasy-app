@@ -415,36 +415,46 @@ export type TeamBudget = z.infer<typeof TeamBudgets>;
  * COLLECTION REGISTRY
  */
 export const COLLECTIONS = {
+  // Core entities
   COLLEGE_PLAYERS: 'college_players',
-  TEAMS: 'teams', 
+  SCHOOLS: 'schools',  // Renamed from 'teams'
   GAMES: 'games',
   RANKINGS: 'rankings',
+  
+  // League management
   LEAGUES: 'leagues',
-  USER_TEAMS: 'user_teams',  // Updated from 'rosters'
-  LINEUPS: 'lineups',
-  AUCTIONS: 'auctions',
-  AUCTION_SESSIONS: 'auction_sessions',
-  BIDS: 'bids',
-  AUCTION_BIDS: 'auction_bids',
-  PLAYER_STATS: 'player_stats',
-  USERS: 'users',
-  ACTIVITY_LOG: 'activity_log',
-  DRAFT_PICKS: 'draft_picks',
-  MOCK_DRAFTS: 'mock_drafts',
-  MOCK_DRAFT_PICKS: 'mock_draft_picks',
-  MOCK_DRAFT_PARTICIPANTS: 'mock_draft_participants',
-  DRAFTS: 'drafts',
-  MATCHUPS: 'matchups',
-  SCORES: 'scores',
-  PLAYER_PROJECTIONS: 'player_projections',
-  PROJECTIONS_YEARLY: 'projections_yearly',
-  PROJECTIONS_WEEKLY: 'projections_weekly',
-  MODEL_INPUTS: 'model_inputs',
-  USER_CUSTOM_PROJECTIONS: 'user_custom_projections',
-  DRAFT_EVENTS: 'draft_events',
-  DRAFT_STATES: 'draft_states',
+  FANTASY_TEAMS: 'fantasy_teams',  // Renamed from 'user_teams'
   LEAGUE_MEMBERSHIPS: 'league_memberships',
-  PROJECTION_RUNS: 'projection_runs',
+  CLIENTS: 'clients',  // Renamed from 'users'
+  
+  // Draft & auction
+  DRAFTS: 'drafts',  // Consolidated mock_drafts + auction_sessions
+  DRAFT_EVENTS: 'draft_events',  // Consolidated draft_picks + mock_draft_picks
+  DRAFT_STATES: 'draft_states',
+  AUCTIONS: 'auctions',
+  BIDS: 'bids',  // Consolidated auction_bids
+  
+  // Gameplay
+  LINEUPS: 'lineups',
+  MATCHUPS: 'matchups',  // Consolidated scores
+  TRANSACTIONS: 'transactions',
+  ROSTER_SLOTS: 'roster_slots',
+  
+  // Projections & stats
+  PLAYER_STATS: 'player_stats',
+  PROJECTIONS: 'projections',  // Consolidated all projection tables
+  MODEL_RUNS: 'model_runs',  // Renamed from projection_runs
+  MODEL_VERSIONS: 'model_versions',
+  
+  // System
+  ACTIVITY_LOG: 'activity_log',
+  INVITES: 'invites',
+  MESHY_JOBS: 'meshy_jobs',
+  
+  // Legacy (to be removed)
+  MOCK_DRAFTS: 'mock_drafts',  // Use DRAFTS instead
+  MOCK_DRAFT_PICKS: 'mock_draft_picks',  // Use DRAFT_EVENTS instead
+  MOCK_DRAFT_PARTICIPANTS: 'mock_draft_participants',  // Use DRAFT_EVENTS instead
   PROJECTION_RUN_METRICS: 'projection_run_metrics',
   TEAM_BUDGETS: 'team_budgets',
 } as const;

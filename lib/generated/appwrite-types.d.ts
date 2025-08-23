@@ -1,5 +1,5 @@
 // AUTO-GENERATED. Do not edit by hand.
-export type CollectionId = 'leagues' | 'user_teams' | 'college_players' | 'games' | 'rankings' | 'rosters' | 'lineups' | 'drafts' | 'draft_picks'
+export type CollectionId = 'leagues' | 'fantasy_teams' | 'college_players' | 'games' | 'rankings' | 'rosters' | 'lineups' | 'drafts' | 'draft_picks'
 
 export interface LeaguesDoc {
   name: string
@@ -54,7 +54,7 @@ export interface RostersDoc {
 }
 
 export interface LineupsDoc {
-  rosterId: string
+  fantasy_team_id: string
   week: number
   season: number
   starters?: any[]

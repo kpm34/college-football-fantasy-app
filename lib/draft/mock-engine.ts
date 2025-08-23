@@ -36,7 +36,7 @@ function generateDraftId(): string {
 export async function createMockDraft(
   draftName: string,
   config: DraftConfig,
-  participants?: Array<{ slot: number; userType: UserType; displayName: string; userId?: string }>,
+  participants?: Array<{ slot: number; userType: UserType; displayName: string; client_id?: string }>,
   numTeams: number = 8
 ): Promise<string> {
   try {
@@ -59,7 +59,7 @@ export async function createMockDraft(
         userType: p.userType,
         displayName: p.displayName,
         slot: p.slot,
-        userId: p.userId
+        userId: p.client_id
       });
     }
 

@@ -35,7 +35,7 @@ class MockRotowireService {
 
   async getDepthChart(teamId: string) {
     return {
-      teamId,
+      fantasy_team_id,
       positions: {
         QB: ['Bryce Young', 'Jalen Milroe'],
         RB: ['Bijan Robinson', 'Keilan Robinson'],
@@ -77,16 +77,16 @@ class MockRotowireService {
 
   async getTeamUpdates(teamId: string) {
     const [depthChart, injuries] = await Promise.all([
-      this.getDepthChart(teamId),
+      this.getDepthChart(fantasy_team_id),
       this.getInjuryUpdates()
     ]);
 
     const teamInjuries = injuries.injuries?.filter(
-      (injury: any) => injury.teamId === teamId
+      (injury: any) => injury.fantasy_team_id === fantasy_team_id
     ) || [];
 
     return {
-      teamId,
+      fantasy_team_id,
       depthChart: depthChart.positions || {},
       injuries: teamInjuries,
       lastUpdated: new Date().toISOString()
@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const action = searchParams.get('action');
     const playerId = searchParams.get('playerId');
-    const teamId = searchParams.get('teamId');
+    const fantasy_team_id = searchParams.get('fantasy_team_id');
 
     let data: any = {};
 
@@ -132,17 +132,17 @@ export async function GET(request: NextRequest) {
         break;
 
       case 'team-updates':
-        if (!teamId) {
+        if (!fantasy_team_id) {
           return NextResponse.json({ error: 'Team ID required' }, { status: 400 });
         }
-        data = await rotowireService.getTeamUpdates(teamId);
+        data = await rotowireService.getTeamUpdates(fantasy_team_id);
         break;
 
       case 'depth-chart':
-        if (!teamId) {
+        if (!fantasy_team_id) {
           return NextResponse.json({ error: 'Team ID required' }, { status: 400 });
         }
-        data = await rotowireService.getDepthChart(teamId);
+        data = await rotowireService.getDepthChart(fantasy_team_id);
         break;
 
       case 'injuries':

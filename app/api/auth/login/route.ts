@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     const res = NextResponse.json({
       success: true,
       data: {
-        userId: session.userId,
+        userId: session.client_id,
         expire: session.expire,
       }
     });

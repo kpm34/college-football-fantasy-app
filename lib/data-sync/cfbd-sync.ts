@@ -116,7 +116,7 @@ export class CFBDSync {
         try {
           const existing = await databases.listDocuments(
             DATABASE_ID,
-            COLLECTIONS.TEAMS,
+            COLLECTIONS.SCHOOLS,
             [Query.equal('school', team.school)]
           );
           
@@ -139,7 +139,7 @@ export class CFBDSync {
           if (existing.documents.length > 0) {
             await databases.updateDocument(
               DATABASE_ID,
-              COLLECTIONS.TEAMS,
+              COLLECTIONS.SCHOOLS,
               existing.documents[0].$id,
               teamData
             );
@@ -147,7 +147,7 @@ export class CFBDSync {
           } else {
             await databases.createDocument(
               DATABASE_ID,
-              COLLECTIONS.TEAMS,
+              COLLECTIONS.SCHOOLS,
               ID.unique(),
               teamData
             );

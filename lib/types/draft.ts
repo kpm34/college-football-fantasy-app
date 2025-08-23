@@ -44,7 +44,7 @@ export interface League {
   status: 'drafting' | 'active' | 'complete';
   currentRound: number;
   currentPick: number;
-  draftOrder: string[]; // array of userIds in draft order
+  draftOrder: string[]; // array of client_ids in draft order
   createdAt: string;
 }
 

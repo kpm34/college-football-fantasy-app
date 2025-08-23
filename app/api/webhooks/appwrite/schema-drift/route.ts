@@ -5,7 +5,7 @@ export const runtime = 'nodejs';
 
 interface AppwriteWebhookBody {
   events?: string[];
-  userId?: string;
+  client_id?: string;
   payload?: unknown;
   [key: string]: unknown;
 }

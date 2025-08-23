@@ -26,7 +26,7 @@ function mapRosterToTeam(doc: any): LeagueTeam {
   return {
     $id: doc.$id,
     leagueId: doc.leagueId,
-    userId: doc.userId || doc.owner || '',
+    userId: doc.client_id || doc.owner || '',
     name: doc.teamName || doc.name || 'Team',
     userName: doc.userName,
     email: doc.email,
@@ -84,7 +84,7 @@ export function useLeagueMembersRealtime(leagueId: string) {
     if (!leagueId) return
 
     try {
-      const channel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.USER_TEAMS}.documents`
+      const channel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.FANTASY_TEAMS}.documents`
       console.log('Subscribing to channel:', channel)
       const unsubscribe = client.subscribe(channel, (event: RealtimeResponseEvent<any>) => {
         setConnected(true)

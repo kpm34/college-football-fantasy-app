@@ -1,10 +1,10 @@
 {
   "summary": {
     "pairsChecked": 36,
-    "okPairs": 22,
-    "warnPairs": 0,
-    "mergeGroupsOk": 7,
-    "mergeGroupsWarn": 0
+    "okPairs": 20,
+    "warnPairs": 2,
+    "mergeGroupsOk": 4,
+    "mergeGroupsWarn": 3
   },
   "counts": [
     {
@@ -51,16 +51,16 @@
       "oldId": "college_players",
       "targetId": "college_players",
       "action": "keep",
-      "oldCount": 0,
-      "newCount": 0,
+      "oldCount": 2508,
+      "newCount": 2508,
       "status": "ok"
     },
     {
       "oldId": "draft_events",
       "targetId": "draft_events",
       "action": "keep",
-      "oldCount": 0,
-      "newCount": 0,
+      "oldCount": 4,
+      "newCount": 4,
       "status": "ok"
     },
     {
@@ -68,15 +68,15 @@
       "targetId": "draft_events",
       "action": "merge",
       "oldCount": 0,
-      "newCount": 0,
+      "newCount": 4,
       "status": "info"
     },
     {
       "oldId": "draft_states",
       "targetId": "draft_states",
       "action": "keep",
-      "oldCount": 0,
-      "newCount": 0,
+      "oldCount": 1,
+      "newCount": 1,
       "status": "ok"
     },
     {
@@ -91,8 +91,8 @@
       "oldId": "games",
       "targetId": "games",
       "action": "keep",
-      "oldCount": 0,
-      "newCount": 0,
+      "oldCount": 106,
+      "newCount": 106,
       "status": "ok"
     },
     {
@@ -107,16 +107,16 @@
       "oldId": "league_memberships",
       "targetId": "league_memberships",
       "action": "keep",
-      "oldCount": 0,
-      "newCount": 0,
+      "oldCount": 14,
+      "newCount": 14,
       "status": "ok"
     },
     {
       "oldId": "leagues",
       "targetId": "leagues",
       "action": "keep",
-      "oldCount": 0,
-      "newCount": 0,
+      "oldCount": 2,
+      "newCount": 2,
       "status": "ok"
     },
     {
@@ -147,7 +147,7 @@
       "oldId": "mock_draft_participants",
       "targetId": "drafts",
       "action": "merge",
-      "oldCount": 0,
+      "oldCount": 432,
       "newCount": 0,
       "status": "info"
     },
@@ -155,15 +155,15 @@
       "oldId": "mock_draft_picks",
       "targetId": "draft_events",
       "action": "merge",
-      "oldCount": 0,
-      "newCount": 0,
+      "oldCount": 4,
+      "newCount": 4,
       "status": "info"
     },
     {
       "oldId": "mock_drafts",
       "targetId": "drafts",
       "action": "merge",
-      "oldCount": 0,
+      "oldCount": 36,
       "newCount": 0,
       "status": "info"
     },
@@ -171,7 +171,7 @@
       "oldId": "model_inputs",
       "targetId": "model_runs",
       "action": "merge",
-      "oldCount": 0,
+      "oldCount": 1,
       "newCount": 0,
       "status": "info"
     },
@@ -187,7 +187,7 @@
       "oldId": "player_projections",
       "targetId": "projections",
       "action": "merge",
-      "oldCount": 0,
+      "oldCount": 20,
       "newCount": 0,
       "status": "info"
     },
@@ -211,9 +211,9 @@
       "oldId": "projection_runs",
       "targetId": "model_runs",
       "action": "keep_rename",
-      "oldCount": 0,
+      "oldCount": 2,
       "newCount": 0,
-      "status": "ok"
+      "status": "warn"
     },
     {
       "oldId": "projections_weekly",
@@ -252,7 +252,7 @@
       "targetId": "fantasy_teams",
       "action": "merge",
       "oldCount": 0,
-      "newCount": 0,
+      "newCount": 24,
       "status": "info"
     },
     {
@@ -283,17 +283,17 @@
       "oldId": "user_teams",
       "targetId": "fantasy_teams",
       "action": "rename",
-      "oldCount": 0,
-      "newCount": 0,
+      "oldCount": 24,
+      "newCount": 24,
       "status": "ok"
     },
     {
       "oldId": "users",
       "targetId": "clients",
       "action": "rename",
-      "oldCount": 0,
-      "newCount": 0,
-      "status": "ok"
+      "oldCount": 4,
+      "newCount": 12,
+      "status": "warn"
     }
   ],
   "merges": [
@@ -305,27 +305,27 @@
     },
     {
       "targetId": "drafts",
-      "sumOld": 0,
+      "sumOld": 468,
       "newCount": 0,
-      "status": "ok"
+      "status": "warn"
     },
     {
       "targetId": "draft_events",
-      "sumOld": 0,
-      "newCount": 0,
+      "sumOld": 4,
+      "newCount": 4,
       "status": "ok"
     },
     {
       "targetId": "model_runs",
-      "sumOld": 0,
+      "sumOld": 1,
       "newCount": 0,
-      "status": "ok"
+      "status": "warn"
     },
     {
       "targetId": "projections",
-      "sumOld": 0,
+      "sumOld": 20,
       "newCount": 0,
-      "status": "ok"
+      "status": "warn"
     },
     {
       "targetId": "matchups",
@@ -336,14 +336,14 @@
     {
       "targetId": "fantasy_teams",
       "sumOld": 0,
-      "newCount": 0,
+      "newCount": 24,
       "status": "ok"
     }
   ],
   "spotChecks": {
     "playersSchools": {
       "ok": 0,
-      "total": 0
+      "total": 10
     },
     "lineupsPoints": {
       "ok": 0,

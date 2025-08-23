@@ -47,15 +47,15 @@ export async function GET(
     // Load team from ROSTERS (TEAMS collection deprecated)
     let team = null;
     try {
-      const teamQuery = [AwQuery.equal('leagueId', leagueId), AwQuery.equal('userId', user.$id), AwQuery.limit(1)];
-      const rostersRes = await serverDb.listDocuments(DATABASE_ID, COLLECTIONS.USER_TEAMS, teamQuery);
+      const teamQuery = [AwQuery.equal('leagueId', leagueId), AwQuery.equal('client_id', user.$id), AwQuery.limit(1)];
+      const rostersRes = await serverDb.listDocuments(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, teamQuery);
       team = rostersRes.documents[0] || null;
     } catch (error: any) {
       console.error('Error loading roster:', error);
       // If leagueId doesn't exist in rosters, try without it
       try {
-        const userQuery = [AwQuery.equal('userId', user.$id)];
-        const allRosters = await serverDb.listDocuments(DATABASE_ID, COLLECTIONS.USER_TEAMS, userQuery);
+        const userQuery = [AwQuery.equal('client_id', user.$id)];
+        const allRosters = await serverDb.listDocuments(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, userQuery);
         // Filter by leagueId manually
         team = allRosters.documents.find((r: any) => r.leagueId === leagueId) || null;
       } catch (fallbackError) {

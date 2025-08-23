@@ -1,16 +1,18 @@
 {
   "mcpServers": {
     "appwrite": {
-      "command": "/Users/kashyapmaheshwari/.local/bin/uvx",
+      "command": "uvx",
       "args": [
         "mcp-server-appwrite",
-        "--users"
+        "--users",
+        "--databases",
+        "--collections",
+        "--documents"
       ],
       "env": {
         "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
         "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
-        "APPWRITE_DATABASE_ID": "college-football-fantasy",
-        "APPWRITE_API_KEY": "standard_aab226bb45e4cb9ee0349c9ff0fda2df9124a993f75c1182c78900929f96e1d48756d968594825a571ce273d2adad954aad78d2c152c4f39eb4a53785fc51bbabeccd4734ae28d5cb227d5bc2d77fa20c6522812042924c44296eca173526891c9ad19c66ad34a29035dcbca611d6703189cf95a7575cc085afe363466478891"
+        "APPWRITE_DATABASE_ID": "college-football-fantasy"
       }
     },
     "filesystem": {

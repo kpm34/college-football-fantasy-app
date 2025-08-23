@@ -40,9 +40,9 @@ export async function GET(request: NextRequest) {
     // Get user's rosters to find their leagues
     const rostersResponse = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER_TEAMS,
+      COLLECTIONS.FANTASY_TEAMS,
       [
-        Query.equal('userId', user.$id),
+        Query.equal('client_id', user.$id),
         Query.limit(50)
       ]
     );

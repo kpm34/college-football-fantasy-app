@@ -58,7 +58,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
       const r = await api<{ ok: boolean; participantId: string; slot: number }>('/api/mock-draft/join', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ draftId, userId, displayName })
+        body: JSON.stringify({ draftId, client_id, displayName })
       });
       setMe({ participantId: r.participantId, slot: r.slot });
       await refreshAll();

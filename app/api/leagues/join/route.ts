@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     // Compute capacity using authoritative roster count (ignore stale league fields)
     const rosterCountPage = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER_TEAMS,
+      COLLECTIONS.FANTASY_TEAMS,
       [Query.equal('leagueId', leagueId), Query.limit(1)]
     );
     const rosterCount = (rosterCountPage as any).total ?? (rosterCountPage.documents?.length || 0);
@@ -57,10 +57,10 @@ export async function POST(request: NextRequest) {
     // Check if user is already in the league
     const existingRosters = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER_TEAMS,
+      COLLECTIONS.FANTASY_TEAMS,
       [
         Query.equal('leagueId', leagueId),
-        Query.equal('userId', user.$id)
+        Query.equal('client_id', user.$id)
       ]
     );
     
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
     // Only include fields that exist in the collection
     // Abbreviation is optional and may not exist in schema
     try {
-      const rostersCollection = await databases.getCollection(DATABASE_ID, COLLECTIONS.USER_TEAMS);
+      const rostersCollection = await databases.getCollection(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS);
       const hasAbbreviation = Array.isArray((rostersCollection as any).attributes) && (rostersCollection as any).attributes.some((a: any) => a.key === 'abbreviation');
       if (hasAbbreviation) {
         rosterData.abbreviation = (teamName || user.name || 'TEAM').substring(0, 3).toUpperCase();
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
     
     const roster = await databases.createDocument(
       DATABASE_ID,
-      COLLECTIONS.USER_TEAMS,
+      COLLECTIONS.FANTASY_TEAMS,
       ID.unique(),
       rosterData
     );
@@ -114,10 +114,10 @@ export async function POST(request: NextRequest) {
     // Rebuild members/currentTeams from rosters to keep schema in sync
     const allRosters = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER_TEAMS,
+      COLLECTIONS.FANTASY_TEAMS,
       [Query.equal('leagueId', leagueId), Query.limit(1000)]
     );
-    const updatedMembers = Array.from(new Set((allRosters.documents || []).map((r: any) => r.userId))).filter(Boolean);
+    const updatedMembers = Array.from(new Set((allRosters.documents || []).map((r: any) => r.client_id))).filter(Boolean);
     const currentTeams = (allRosters as any).total ?? updatedMembers.length;
 
     // Only include attributes that actually exist in the leagues collection to avoid
@@ -181,7 +181,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Successfully joined league',
-      rosterId: roster.$id,
+      fantasy_team_id: roster.$id,
       leagueId: leagueId
     });
     

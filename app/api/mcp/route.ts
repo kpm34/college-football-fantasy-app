@@ -256,7 +256,7 @@ const handler = createMcpHandler(
       'Gets data for a specific Power 4 conference',
       { 
         conference: z.enum(['bigten', 'sec', 'big12', 'acc']),
-        dataType: z.enum(['teams', 'players', 'games']).default('teams')
+        dataType: z.enum(['schools', 'players', 'games']).default('schools')
       },
       async ({ conference, dataType }) => {
         try {

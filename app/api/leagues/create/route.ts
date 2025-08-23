@@ -90,7 +90,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   });
 
   // Automatically join the commissioner to the league
-  const { rosterId } = await leagues.joinLeague(
+  const { fantasy_team_id } = await leagues.joinLeague(
     league.$id,
     user.$id,
     requestData.teamName || `${user.name || user.email}'s Team`,
@@ -100,7 +100,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   return NextResponse.json({
     success: true,
     league,
-    rosterId,
+    fantasy_team_id,
     message: 'League created successfully!'
   });
 });

@@ -235,12 +235,12 @@ export class AuthService {
   
   /**
    * Complete password reset
-   * @param userId - User ID from reset link
+   * @param client_id - User ID from reset link
    * @param secret - Secret from reset link
    * @param password - New password
    */
   async resetPassword(userId: string, secret: string, password: string): Promise<void> {
-    if (!userId || !secret || !password) {
+    if (!client_id || !secret || !password) {
       throw new ValidationError('Invalid password reset link');
     }
     
@@ -248,7 +248,7 @@ export class AuthService {
       throw new ValidationError('Password must be at least 8 characters');
     }
     
-    await this.account.updateRecovery(userId, secret, password);
+    await this.account.updateRecovery(client_id, secret, password);
   }
   
   /**

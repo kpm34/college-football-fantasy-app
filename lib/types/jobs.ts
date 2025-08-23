@@ -17,7 +17,7 @@ export interface BaseJob {
   completedAt?: string;
   error?: string;
   progress?: number; // 0-100
-  userId?: string;
+  client_id?: string;
   metadata?: Record<string, any>;
   webhookSecret?: string;
 }
@@ -107,7 +107,7 @@ export type Job = MeshyJob | RunwayJob | BlenderJob | OpenAIJob;
  */
 export interface CreateJobInput {
   provider: JobProvider;
-  userId?: string;
+  client_id?: string;
   metadata?: Record<string, any>;
   webhookSecret?: string;
 }
@@ -179,7 +179,7 @@ export interface JobPollResult {
 export interface JobFilters {
   provider?: JobProvider;
   status?: JobStatus;
-  userId?: string;
+  client_id?: string;
   createdAfter?: string;
   createdBefore?: string;
   limit?: number;

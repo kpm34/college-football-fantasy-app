@@ -180,7 +180,7 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
         failureUrl,
         [],          // scopes
         undefined,   // projectId
-        true         // token=true so Appwrite appends userId & secret
+        true         // token=true so Appwrite appends client_id & secret
       );
       
     } catch (error) {

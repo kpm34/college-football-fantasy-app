@@ -7,10 +7,10 @@ export async function GET(
   { params }: { params: { userId: string } }
 ) {
   try {
-    const { userId } = params;
+    const { client_id } = params;
 
     // Get user details from Appwrite Users API using server key
-    const userRes = await fetch(`https://nyc.cloud.appwrite.io/v1/users/${userId}`, {
+    const userRes = await fetch(`https://nyc.cloud.appwrite.io/v1/users/${client_id}`, {
       headers: {
         'X-Appwrite-Project': 'college-football-fantasy-app',
         'X-Appwrite-Key': process.env.APPWRITE_API_KEY!,

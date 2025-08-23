@@ -33,20 +33,20 @@ async function loadNflRosters(): Promise<Map<string, { team: string; pos?: strin
 
     // 2) For each team, try to fetch roster via the most stable endpoints
     for (const t of teams) {
-      const teamId = t.id || t.team?.id;
-      const teamName = t.displayName || t.name || t.nickname || t.location || `NFL-${teamId}`;
-      if (!teamId) continue;
+      const fantasy_team_id = t.id || t.team?.id;
+      const teamName = t.displayName || t.name || t.nickname || t.location || `NFL-${fantasy_team_id}`;
+      if (!fantasy_team_id) continue;
 
       let roster: any[] | null = null;
       // Try dedicated roster endpoint first
       try {
-        const r = await fetchJson(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${teamId}/roster`);
+        const r = await fetchJson(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${fantasy_team_id}/roster`);
         // NCAA-style schema uses athletes
         roster = (r?.athletes || []).flatMap((grp: any) => grp?.items || []);
       } catch {
         // Fallback: team endpoint with roster enabled
         try {
-          const r = await fetchJson(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${teamId}?enable=roster`);
+          const r = await fetchJson(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${fantasy_team_id}?enable=roster`);
           roster = (r?.team?.athletes || []).flatMap((grp: any) => grp?.items || []);
         } catch {
           roster = null;

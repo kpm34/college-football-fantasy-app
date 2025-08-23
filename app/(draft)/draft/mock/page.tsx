@@ -348,8 +348,8 @@ export default function MockDraftPage() {
             const slot = i + 1;
             if (slot === settings.userPosition) {
               const displayName = (user as any)?.name || (user as any)?.email || 'Guest';
-              const userId = (user as any)?.$id || (user as any)?.id || `user-${Date.now()}`;
-              return { slot, userType: 'human', displayName, userId };
+              const client_id = (user as any)?.$id || (user as any)?.id || `user-${Date.now()}`;
+              return { slot, userType: 'human', displayName, client_id };
             }
             return { slot, userType: 'bot', displayName: `Bot Team ${slot}` };
           })
@@ -366,9 +366,9 @@ export default function MockDraftPage() {
       if (data?.draftId) {
         try {
           const displayName = (user as any)?.name || (user as any)?.email || 'Guest';
-          const userId = (user as any)?.$id || (user as any)?.id || `user-${Date.now()}`;
+          const client_id = (user as any)?.$id || (user as any)?.id || `user-${Date.now()}`;
           localStorage.setItem('mockDraftUserName', displayName);
-          localStorage.setItem('mockDraftUserId', userId);
+          localStorage.setItem('mockDraftUserId', client_id);
         } catch {}
         // Navigate to the new mock draft room
         router.push(`/mock-draft/${data.draftId}`);

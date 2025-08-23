@@ -6,17 +6,17 @@ import { COLLECTIONS } from '@schema/zod-schema';
 
 export async function POST(req: Request) {
   try {
-    const { draftId, userId, displayName } = await req.json();
+    const { draftId, client_id, displayName } = await req.json();
     
-    if (!draftId || !userId) {
+    if (!draftId || !client_id) {
       return NextResponse.json(
-        { ok: false, error: 'draftId and userId required' }, 
+        { ok: false, error: 'draftId and client_id required' }, 
         { status: 400 }
       );
     }
 
     // Get all participants for this draft
-    const parts = await serverDatabases.listDocuments(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PARTICIPANTS, [
+    const parts = await serverDatabases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
       Query.equal('draftId', draftId),
       Query.orderAsc('slot'),
       Query.limit(100)
@@ -44,11 +44,11 @@ export async function POST(req: Request) {
     // Claim the slot by converting bot to human
     const upd = await serverDatabases.updateDocument(
       DATABASE_ID, 
-      COLLECTIONS.MOCK_DRAFT_PARTICIPANTS, 
+      COLLECTIONS.DRAFT_EVENTS, 
       open.$id, 
       {
         userType: 'human',
-        displayName: displayName || `User ${userId.slice(0, 8)}`
+        displayName: displayName || `User ${client_id.slice(0, 8)}`
       }
     );
     

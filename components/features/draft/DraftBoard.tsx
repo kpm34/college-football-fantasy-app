@@ -6,7 +6,7 @@ type BoardPick = {
   overall: number;
   round: number;
   slot?: number; // 1-based team slot in the snake ordering for that round
-  userId?: string;
+  client_id?: string;
   playerName?: string;
   playerId: string;
   position?: string;

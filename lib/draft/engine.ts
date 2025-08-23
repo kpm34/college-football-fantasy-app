@@ -23,7 +23,7 @@ function generateSeed(): string {
 export async function createDraft(
   draftName: string,
   config: DraftConfig,
-  participants?: Array<{ slot: number; userType: UserType; displayName: string; userId?: string }>,
+  participants?: Array<{ slot: number; userType: UserType; displayName: string; client_id?: string }>,
   numTeams: number = 8
 ): Promise<string> {
   try {
@@ -98,7 +98,7 @@ export async function createDraft(
       try {
         const participant = await databases.createDocument(
           DATABASE_ID,
-          COLLECTIONS.MOCK_DRAFT_PARTICIPANTS,
+          COLLECTIONS.DRAFT_EVENTS,
           ID.unique(),
           {
             draftId: draft.$id,
@@ -114,7 +114,7 @@ export async function createDraft(
           await ensureMockDraftSchema();
           const participant = await databases.createDocument(
             DATABASE_ID,
-            COLLECTIONS.MOCK_DRAFT_PARTICIPANTS,
+            COLLECTIONS.DRAFT_EVENTS,
             ID.unique(),
             {
               draftId: draft.$id,
@@ -194,7 +194,7 @@ export async function startDraft(draftId: string): Promise<void> {
     // Get participants
     const participantsResponse = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.MOCK_DRAFT_PARTICIPANTS,
+      COLLECTIONS.DRAFT_EVENTS,
       [Query.equal('draftId', draftId), Query.orderAsc('slot')]
     );
     
@@ -273,7 +273,7 @@ export async function startDraft(draftId: string): Promise<void> {
           // Verify this is still the expected pick number
           const existingPicks = await databases.listDocuments(
             DATABASE_ID,
-            COLLECTIONS.MOCK_DRAFT_PICKS,
+            COLLECTIONS.DRAFT_EVENTS,
             [Query.equal('draftId', draftId), Query.orderAsc('overall')]
           );
           
@@ -287,7 +287,7 @@ export async function startDraft(draftId: string): Promise<void> {
           // Create the pick
           const pick = await databases.createDocument(
             DATABASE_ID,
-            COLLECTIONS.MOCK_DRAFT_PICKS,
+            COLLECTIONS.DRAFT_EVENTS,
             ID.unique(),
             {
               draftId,
@@ -395,14 +395,14 @@ export async function getDraftResults(draftId: string): Promise<any> {
     // Get participants
     const participantsResponse = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.MOCK_DRAFT_PARTICIPANTS,
+      COLLECTIONS.DRAFT_EVENTS,
       [Query.equal('draftId', draftId), Query.orderAsc('slot')]
     );
     
     // Get picks (ensure we get all picks, not just default limit)
     const picksResponse = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.MOCK_DRAFT_PICKS,
+      COLLECTIONS.DRAFT_EVENTS,
       [
         Query.equal('draftId', draftId), 
         Query.orderAsc('overall'),
@@ -498,7 +498,7 @@ export async function getTurn(draftId: string): Promise<TurnState> {
     startedAtDate = now;
   }
 
-  const picks = await databases.listDocuments(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PICKS, [
+  const picks = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
     Query.equal('draftId', draftId),
     Query.orderAsc('overall'),
     Query.limit(500)
@@ -508,7 +508,7 @@ export async function getTurn(draftId: string): Promise<TurnState> {
   const numTeams = d.numTeams ?? 8;
   const { round, slot } = computeSlotFor(nextOverall, numTeams);
 
-  const parts = await databases.listDocuments(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PARTICIPANTS, [
+  const parts = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
     Query.equal('draftId', draftId),
     Query.equal('slot', slot),
     Query.limit(1)
@@ -531,7 +531,7 @@ export async function getTurn(draftId: string): Promise<TurnState> {
 
 async function selectBestAvailablePlayer(draftId: string, seed: string | undefined) {
   // Uses your existing playerPool + ranker; falls back to first available
-  const picked = await databases.listDocuments(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PICKS, [
+  const picked = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
     Query.equal('draftId', draftId),
     Query.select(['playerId']),
     Query.limit(500)
@@ -571,7 +571,7 @@ export async function applyPick(draftId: string, participantId: string, playerId
   }
 
   // Prevent duplicate player
-  const existing = await databases.listDocuments(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PICKS, [
+  const existing = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
     Query.equal('draftId', draftId),
     Query.equal('playerId', playerId),
     Query.limit(1)
@@ -583,7 +583,7 @@ export async function applyPick(draftId: string, participantId: string, playerId
   }
 
   // Write pick with overall = current count + 1
-  await databases.createDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PICKS, ID.unique(), {
+  await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, ID.unique(), {
     draftId,
     round: turn.round,
     overall: turn.overall,
@@ -621,11 +621,11 @@ export async function autopickIfExpired(draftId: string, nowIso?: string) {
   if (now <= deadline) return null;
 
   // Check participant type (using userType from existing schema)
-  const part = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PARTICIPANTS, turn.participantId);
+  const part = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, turn.participantId);
   if ((part as any).userType !== 'human') return null; // Only autopick for human players
 
   const playerId = await selectBestAvailablePlayer(draftId, cfg.seed);
-  await databases.createDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PICKS, ID.unique(), {
+  await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, ID.unique(), {
     draftId,
     round: turn.round,
     overall: turn.overall,
@@ -665,7 +665,7 @@ export async function autopickBotIfOnClock(draftId: string, nowIso?: string): Pr
 
   const turn = await getTurn(draftId);
   // Load participant to check userType
-  const part = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PARTICIPANTS, turn.participantId);
+  const part = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, turn.participantId);
   if ((part as any).userType !== 'bot') return false;
 
   // Rate-limit bot picks to at most one every 5 seconds
@@ -675,7 +675,7 @@ export async function autopickBotIfOnClock(draftId: string, nowIso?: string): Pr
   }
 
   const playerId = await selectBestAvailablePlayer(draftId, cfg.seed);
-  await databases.createDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFT_PICKS, ID.unique(), {
+  await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, ID.unique(), {
     draftId,
     round: turn.round,
     overall: turn.overall,

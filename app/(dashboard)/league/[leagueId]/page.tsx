@@ -239,7 +239,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
   // Adopt realtime teams whenever hook emits
   useEffect(() => {
     if (membersRealtime && Array.isArray(membersRealtime.teams)) {
-      console.log('Realtime members update:', membersRealtime.teams.length, 'teams');
+      console.log('Realtime members update:', membersRealtime.teams.length, 'schools');
       setTeams(membersRealtime.teams as unknown as Team[]);
     }
   }, [membersRealtime.teams]);
@@ -272,7 +272,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       userName: user.name,
       teams: teams.map(t => ({ 
         teamId: t.$id, 
-        userId: t.userId, 
+        userId: t.client_id, 
         email: t.email, 
         userName: t.userName,
         owner: (t as any).owner 
@@ -280,8 +280,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     });
     // Check multiple fields for user match
     const mine = teams.find(t => 
-      t.userId === user.$id || 
-      t.userId === user.email ||
+      t.client_id === user.$id || 
+      t.client_id === user.email ||
       t.email === user.email ||
       t.userName === user.name ||
       (t as any).owner === user.$id // legacy field
@@ -332,7 +332,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               <tr key={team.$id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                 <td className="py-4 px-6">
                   <span className="font-semibold">{team.name}</span>
-                  {team.userId === league?.commissioner && (
+                  {team.client_id === league?.commissioner && (
                     <span className="ml-2 text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Commissioner</span>
                   )}
                 </td>
@@ -390,7 +390,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                     <td className="py-4 px-6 font-bold">{index + 1}</td>
                     <td className="py-4 px-6">
                       <span className="font-semibold">{team.name}</span>
-                      {team.userId === user?.$id && (
+                      {team.client_id === user?.$id && (
                         <span className="ml-2 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">You</span>
                       )}
                     </td>

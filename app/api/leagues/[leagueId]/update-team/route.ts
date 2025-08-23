@@ -28,9 +28,9 @@ export async function PUT(
     const user = await userRes.json();
     
     const body = await request.json();
-    const { teamId, updates } = body;
+    const { fantasy_team_id, updates } = body;
     
-    if (!teamId || !updates) {
+    if (!fantasy_team_id || !updates) {
       return NextResponse.json(
         { error: 'Team ID and updates are required' },
         { status: 400 }
@@ -44,16 +44,16 @@ export async function PUT(
       teamDoc = await databases.getDocument(
         DATABASE_ID,
         COLLECTIONS.ROSTERS,
-        teamId
+        fantasy_team_id
       );
     } catch (_err) {
       try {
         teamDoc = await databases.getDocument(
           DATABASE_ID,
-          COLLECTIONS.TEAMS,
-          teamId
+          COLLECTIONS.SCHOOLS,
+          fantasy_team_id
         );
-        collectionToUpdate = COLLECTIONS.TEAMS;
+        collectionToUpdate = COLLECTIONS.SCHOOLS;
       } catch (_err2) {
         return NextResponse.json({ error: 'Team not found' }, { status: 404 });
       }
@@ -71,7 +71,7 @@ export async function PUT(
       params.leagueId
     );
 
-    const isOwner = (teamDoc as any).userId === user.$id || (teamDoc as any).ownerId === user.$id;
+    const isOwner = (teamDoc as any).client_id === user.$id || (teamDoc as any).ownerId === user.$id;
     const isCommissioner = Boolean((league as any)?.commissioner && (league as any).commissioner === user.$id);
 
     if (!isOwner && !isCommissioner) {
@@ -82,7 +82,7 @@ export async function PUT(
     const result = await databases.updateDocument(
       DATABASE_ID,
       collectionToUpdate,
-      teamId,
+      fantasy_team_id,
       updates
     );
     

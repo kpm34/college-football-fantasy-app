@@ -51,15 +51,15 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Group picks by userId to build each member's roster
+    // Group picks by client_id to build each member's roster
     const rostersByUser: Record<string, any[]> = {};
     for (const pick of picks) {
-      if (!rostersByUser[pick.userId]) {
-        rostersByUser[pick.userId] = [];
+      if (!rostersByUser[pick.client_id]) {
+        rostersByUser[pick.client_id] = [];
       }
       
       // Add player info to the roster
-      rostersByUser[pick.userId].push({
+      rostersByUser[pick.client_id].push({
         playerId: pick.playerId,
         playerName: pick.playerName,
         playerPosition: pick.playerPosition,
@@ -75,24 +75,24 @@ export async function POST(request: NextRequest) {
     const results = [];
 
     // Update each member's roster with their drafted players
-    for (const [userId, draftedPlayers] of Object.entries(rostersByUser)) {
+    for (const [client_id, draftedPlayers] of Object.entries(rostersByUser)) {
       try {
         // Find the user's roster record
         const rostersResponse = await databases.listDocuments(
           DATABASE_ID,
-          COLLECTIONS.USER_TEAMS,
+          COLLECTIONS.FANTASY_TEAMS,
           [
             Query.equal('leagueId', leagueId),
-            Query.equal('userId', userId),
+            Query.equal('client_id', client_id),
             Query.limit(1)
           ]
         );
 
         if (rostersResponse.documents.length === 0) {
-          console.warn(`No roster found for user ${userId} in league ${leagueId}`);
+          console.warn(`No roster found for user ${client_id} in league ${leagueId}`);
           errors++;
           results.push({
-            userId,
+            client_id,
             status: 'error',
             message: 'No roster found for user'
           });
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
         // Update the roster with the drafted players
         await databases.updateDocument(
           DATABASE_ID,
-          COLLECTIONS.USER_TEAMS,
+          COLLECTIONS.FANTASY_TEAMS,
           roster.$id,
           {
             // Store player IDs as JSON string for compatibility with existing system
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
 
         processed++;
         results.push({
-          userId,
+          client_id,
           teamName: roster.teamName,
           status: 'success',
           playersCount: draftedPlayers.length,
@@ -127,10 +127,10 @@ export async function POST(request: NextRequest) {
         console.log(`✅ Updated roster for ${roster.teamName}: ${draftedPlayers.length} players`);
 
       } catch (error) {
-        console.error(`❌ Failed to update roster for user ${userId}:`, error);
+        console.error(`❌ Failed to update roster for user ${client_id}:`, error);
         errors++;
         results.push({
-          userId,
+          client_id,
           status: 'error',
           message: error.message
         });

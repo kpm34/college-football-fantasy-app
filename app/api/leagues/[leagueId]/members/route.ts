@@ -33,7 +33,7 @@ export async function GET(
     const uniqueUserIds = Array.from(
       new Set(
         (rosters.documents || [])
-          .map((d: any) => d.userId || d.owner)
+          .map((d: any) => d.client_id || d.owner)
           .filter(Boolean)
       )
     );
@@ -52,7 +52,7 @@ export async function GET(
 
     // Map to consistent format with resolved manager name
     const teams = rosters.documents.map((doc: any) => {
-      const ownerId = doc.userId || doc.owner || '';
+      const ownerId = doc.client_id || doc.owner || '';
       const managerName = idToName.get(ownerId) || doc.userName || 'Unknown';
       return {
         $id: doc.$id,

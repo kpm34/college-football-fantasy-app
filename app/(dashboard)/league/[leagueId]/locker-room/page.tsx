@@ -72,7 +72,7 @@ const DEFAULT_ROSTER_CONFIG: SlotConfig[] = [
 
 export default function LockerRoomPage({ params, searchParams }: {
   params: Promise<{ leagueId: string }>;
-  searchParams?: Promise<{ teamId?: string }>;
+  searchParams?: Promise<{ fantasy_team_id?: string }>;
 }) {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
@@ -82,7 +82,7 @@ export default function LockerRoomPage({ params, searchParams }: {
   const [players, setPlayers] = useState<Player[]>([]);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
   const [leagueId, setLeagueId] = useState('');
-  const [teamIdParam, setTeamIdParam] = useState('');
+  const [fantasy_team_idParam, setTeamIdParam] = useState('');
   const [viewingOtherTeam, setViewingOtherTeam] = useState(false);
   const [isCommissioner, setIsCommissioner] = useState(false);
   const [canEdit, setCanEdit] = useState(true);
@@ -122,7 +122,7 @@ export default function LockerRoomPage({ params, searchParams }: {
       const resolvedParams = await params;
       setLeagueId(resolvedParams.leagueId);
       const resolvedSearchParams = await searchParams;
-      setTeamIdParam(resolvedSearchParams?.teamId || '');
+      setTeamIdParam(resolvedSearchParams?.fantasy_team_id || '');
     };
     resolveParams();
   }, [params, searchParams]);
@@ -138,7 +138,7 @@ export default function LockerRoomPage({ params, searchParams }: {
     
     console.log('Locker room: Loading data for user:', user.$id);
     loadLeagueAndTeamData();
-  }, [leagueId, authLoading, user, teamIdParam, router]);
+  }, [leagueId, authLoading, user, fantasy_team_idParam, router]);
 
   const loadLeagueAndTeamData = async () => {
     try {

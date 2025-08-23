@@ -12,7 +12,7 @@ export async function GET(
     const { leagueId } = params;
 
     // Resolve current user from cookie session header if present (optional)
-    const userId = request.headers.get('x-user-id') || request.headers.get('x-app-user') || '';
+    const client_id = request.headers.get('x-user-id') || request.headers.get('x-app-user') || '';
 
     // Read league via server key (documentSecurity-safe)
     const league = await databases.getDocument(
@@ -21,15 +21,15 @@ export async function GET(
       leagueId
     );
 
-    // Validate membership if userId provided
-    if (userId) {
+    // Validate membership if client_id provided
+    if (client_id) {
       try {
         const rosters = await databases.listDocuments(
           databaseId,
-          COLLECTIONS.USER_TEAMS,
-          [Query.equal('leagueId', leagueId), Query.equal('userId', userId), Query.limit(1)]
+          COLLECTIONS.FANTASY_TEAMS,
+          [Query.equal('leagueId', leagueId), Query.equal('client_id', client_id), Query.limit(1)]
         );
-        if (rosters.total === 0 && league.commissioner !== userId) {
+        if (rosters.total === 0 && league.commissioner !== client_id) {
           return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
       } catch {}
@@ -111,12 +111,12 @@ export async function PATCH(
   try {
     const { leagueId } = params;
     const body = await request.json();
-    const { teamId, name } = body;
-    if (!teamId || !name) {
-      return NextResponse.json({ error: 'teamId and name required' }, { status: 400 });
+    const { fantasy_team_id, name } = body;
+    if (!fantasy_team_id || !name) {
+      return NextResponse.json({ error: 'fantasy_team_id and name required' }, { status: 400 });
     }
 
-    await databases.updateDocument(databaseId, COLLECTIONS.TEAMS, teamId, { name, updated_at: new Date().toISOString() });
+    await databases.updateDocument(databaseId, COLLECTIONS.SCHOOLS, fantasy_team_id, { name, updated_at: new Date().toISOString() });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating team name:', error);

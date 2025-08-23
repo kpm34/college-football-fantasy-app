@@ -74,7 +74,7 @@ export default function AccountSettingsPage() {
       const docs = await databases.listDocuments(
         DATABASE_ID,
         USER_PREFS_COLLECTION,
-        [`equal("userId", "${userId}")`]
+        [`equal("client_id", "${client_id}")`]
       );
       
       if (docs.documents.length > 0) {
@@ -136,7 +136,7 @@ export default function AccountSettingsPage() {
         const docs = await databases.listDocuments(
           DATABASE_ID,
           USER_PREFS_COLLECTION,
-          [`equal("userId", "${user.$id}")`]
+          [`equal("client_id", "${user.$id}")`]
         );
         
         if (docs.documents.length > 0) {

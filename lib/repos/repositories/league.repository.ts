@@ -86,9 +86,9 @@ export class LeagueRepository extends BaseRepository<League> {
     // First get all rosters for the user
     const rosterRepo = new RosterRepository(this.isServer, this.client);
     const { documents: rosters } = await rosterRepo.find({
-      filters: { userId },
+      filters: { client_id },
       cache: {
-        key: `roster:user:${userId}`,
+        key: `roster:user:${client_id}`,
         ttl: 300
       }
     });
@@ -108,7 +108,7 @@ export class LeagueRepository extends BaseRepository<League> {
         $id: leagueIds
       },
       cache: {
-        key: `league:user:${userId}:list`,
+        key: `league:user:${client_id}:list`,
         ttl: 300
       }
     });
@@ -157,7 +157,7 @@ export class LeagueRepository extends BaseRepository<League> {
     userId: string, 
     teamName: string,
     abbreviation?: string
-  ): Promise<{ league: League; rosterId: string }> {
+  ): Promise<{ league: League; fantasy_team_id: string }> {
     // Get league with fresh data (bypass cache)
     const league = await this.findById(leagueId, { cache: { bypass: true } });
     if (!league) {
@@ -178,7 +178,7 @@ export class LeagueRepository extends BaseRepository<League> {
     const existingRoster = await rosterRepo.find({
       filters: {
         leagueId,
-        userId
+        client_id
       }
     });
 
@@ -190,7 +190,7 @@ export class LeagueRepository extends BaseRepository<League> {
     // Explicitly define clean roster data to avoid schema conflicts
     const cleanRosterData = {
       leagueId: String(leagueId),
-      userId: String(userId),
+      userId: String(client_id),
       teamName: String(teamName),
       abbreviation: String(abbreviation || teamName.substring(0, 3).toUpperCase()),
       draftPosition: Number(league.currentTeams + 1),
@@ -203,7 +203,7 @@ export class LeagueRepository extends BaseRepository<League> {
     };
 
     // Schema validation for roster data
-    const rosterValidation = SchemaValidator.validate('user_teams', cleanRosterData);
+    const rosterValidation = SchemaValidator.validate('fantasy_teams', cleanRosterData);
     if (!rosterValidation.success) {
       throw new ValidationError(`Roster creation failed schema validation: ${rosterValidation.errors?.join(', ')}`);
     }
@@ -217,11 +217,11 @@ export class LeagueRepository extends BaseRepository<League> {
     }, {
       invalidateCache: [
         'league:public:*',
-        `league:user:${userId}:*`
+        `league:user:${client_id}:*`
       ]
     });
 
-    return { league: updatedLeague, rosterId: roster.$id };
+    return { league: updatedLeague, fantasy_team_id: roster.$id };
   }
 
   /**
@@ -237,7 +237,7 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('League not found');
     }
 
-    if (league.commissioner !== userId) {
+    if (league.commissioner !== client_id) {
       throw new ForbiddenError('Only the commissioner can update league settings');
     }
 
@@ -267,7 +267,7 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('League not found');
     }
 
-    if (league.commissioner !== userId) {
+    if (league.commissioner !== client_id) {
       throw new ForbiddenError('Only the commissioner can start the draft');
     }
 

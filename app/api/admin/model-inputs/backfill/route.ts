@@ -35,34 +35,34 @@ function buildUsagePriors(depth: Record<string, Record<string, Array<{ player_na
     const sum = values.reduce((a, b) => a + b, 0) || 1;
     return values.map((v) => (v / sum) * target);
   };
-  for (const [teamId, posMap] of Object.entries(depth)) {
-    priors[teamId] = {};
+  for (const [fantasy_team_id, posMap] of Object.entries(depth)) {
+    priors[fantasy_team_id] = {};
     const byPos = posMap as Record<Position, Array<{ player_name: string; pos_rank: number }>>;
 
     // QB
     if (byPos.QB) {
-      priors[teamId].QB = byPos.QB.map((p, idx) => ({ player_name: p.player_name, snap_share: idx === 0 ? 0.95 : 0.05 }));
+      priors[fantasy_team_id].QB = byPos.QB.map((p, idx) => ({ player_name: p.player_name, snap_share: idx === 0 ? 0.95 : 0.05 }));
     }
 
     // RB
     if (byPos.RB) {
       const rbWeights = byPos.RB.map((_, idx) => (idx === 0 ? 0.6 : idx === 1 ? 0.3 : 0.1));
       const snapShares = normalizeToSum(rbWeights, Math.min(0.95, rbWeights.reduce((a, b) => a + b, 0)));
-      priors[teamId].RB = byPos.RB.map((p, i) => ({ player_name: p.player_name, snap_share: Number((snapShares[i] || 0).toFixed(2)), rush_share: Number(((snapShares[i] || 0) * 0.9).toFixed(2)) }));
+      priors[fantasy_team_id].RB = byPos.RB.map((p, i) => ({ player_name: p.player_name, snap_share: Number((snapShares[i] || 0).toFixed(2)), rush_share: Number(((snapShares[i] || 0) * 0.9).toFixed(2)) }));
     }
 
     // WR
     if (byPos.WR) {
       const weights = byPos.WR.map((_, idx) => (idx === 0 ? 0.8 : idx === 1 ? 0.7 : idx === 2 ? 0.6 : 0.2));
       const snapShares = normalizeToSum(weights.slice(0, Math.max(byPos.WR.length, 1)), 1.0);
-      priors[teamId].WR = byPos.WR.map((p, i) => ({ player_name: p.player_name, snap_share: Number((snapShares[i] || 0).toFixed(2)), target_share: Number((snapShares[i] || 0).toFixed(2)) }));
+      priors[fantasy_team_id].WR = byPos.WR.map((p, i) => ({ player_name: p.player_name, snap_share: Number((snapShares[i] || 0).toFixed(2)), target_share: Number((snapShares[i] || 0).toFixed(2)) }));
     }
 
     // TE
     if (byPos.TE) {
       const weights = byPos.TE.map((_, idx) => (idx === 0 ? 0.7 : idx === 1 ? 0.35 : 0.15));
       const snapShares = normalizeToSum(weights, 0.85);
-      priors[teamId].TE = byPos.TE.map((p, i) => ({ player_name: p.player_name, snap_share: Number((snapShares[i] || 0).toFixed(2)), target_share: Number((snapShares[i] || 0).toFixed(2)) }));
+      priors[fantasy_team_id].TE = byPos.TE.map((p, i) => ({ player_name: p.player_name, snap_share: Number((snapShares[i] || 0).toFixed(2)), target_share: Number((snapShares[i] || 0).toFixed(2)) }));
     }
   }
   return priors;
@@ -88,7 +88,7 @@ async function backfill(season: number) {
   const positions: Position[] = ['QB', 'RB', 'WR', 'TE'];
   const teamsMap = readTeamsMap();
   const teamNameToId = teamsMap; // school name -> team_id
-  const teamIdToName = invert(teamsMap); // team_id -> school name
+  const fantasy_team_idToName = invert(teamsMap); // team_id -> school name
 
   // Build depth chart from current players
   const byTeam: Record<string, Record<Position, Array<{ player_name: string; pos_rank: number }>>> = {} as any;
@@ -108,10 +108,10 @@ async function backfill(season: number) {
       const pos = (doc.position || '').toUpperCase();
       if (!positions.includes(pos as Position)) continue;
       const teamName = (doc.team || doc.school || '').toString().trim();
-      const teamId = teamNameToId[teamName];
-      if (!teamId) continue;
+      const fantasy_team_id = teamNameToId[teamName];
+      if (!fantasy_team_id) continue;
 
-      const keyTeam = teamId;
+      const keyTeam = fantasy_team_id;
       byTeam[keyTeam] = byTeam[keyTeam] || ({} as any);
       const arr = (byTeam[keyTeam][pos as Position] = byTeam[keyTeam][pos as Position] || []);
       arr.push({ player_name: doc.name || `${doc.first_name || ''} ${doc.last_name || ''}`.trim(), pos_rank: 9999 });
@@ -122,7 +122,7 @@ async function backfill(season: number) {
   }
 
   // Rank within each team/position using projection, then rating fallbacks
-  for (const [teamId, posMap] of Object.entries(byTeam)) {
+  for (const [fantasy_team_id, posMap] of Object.entries(byTeam)) {
     for (const pos of Object.keys(posMap)) {
       const list = posMap[pos as Position];
       list.sort((a, b) => {
@@ -132,7 +132,7 @@ async function backfill(season: number) {
       });
       for (let i = 0; i < list.length; i++) list[i].pos_rank = i + 1;
       // Cap to top 5 per position to keep payload small
-      byTeam[teamId][pos as Position] = list.slice(0, 5);
+      byTeam[fantasy_team_id][pos as Position] = list.slice(0, 5);
     }
   }
 
