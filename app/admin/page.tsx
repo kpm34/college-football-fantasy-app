@@ -59,47 +59,7 @@ export default function AdminDashboard() {
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-amber-900 mb-8">Admin Dashboard - Product Vision 2025</h1>
         
-        {/* Functional Architecture Diagrams */}
-        <div className="mb-10">
-          <h3 className="text-xl font-bold text-amber-900 mb-4">⚡ Functional Architecture</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <button
-              onClick={() => loadDiagram('functional-architecture:create-account', '👤 Create Account')}
-              className="px-4 py-3 rounded-lg bg-sky-600 text-white transition-all hover:bg-sky-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
-            >
-              <div className="font-semibold">👤 Create Account</div>
-              <div className="text-sm text-sky-100">User registration flow</div>
-            </button>
-            
-            <button
-              onClick={() => loadDiagram('functional-architecture:create-league', '🏆 Create League')}
-              className="px-4 py-3 rounded-lg bg-rose-700 text-white transition-all hover:bg-rose-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
-            >
-              <div className="font-semibold">🏆 Create League</div>
-              <div className="text-sm text-rose-100">League setup process</div>
-            </button>
-
-            <button
-              onClick={() => loadDiagram('functional-architecture:join-league', '🤝 Join League')}
-              className="px-4 py-3 rounded-lg bg-orange-600 text-white transition-all hover:bg-orange-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
-            >
-              <div className="font-semibold">🤝 Join League</div>
-              <div className="text-sm text-orange-100">Join via invite or browse</div>
-            </button>
-
-            <button
-              onClick={() => loadDiagram('functional-architecture:draft', '📋 Draft System')}
-              className="px-4 py-3 rounded-lg bg-amber-700 text-white transition-all hover:bg-amber-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
-            >
-              <div className="font-semibold">📋 Draft System</div>
-              <div className="text-sm text-amber-100">Snake & auction drafts</div>
-            </button>
-          </div>
-        </div>
-
-
-
-        {/* Project Map */}
+        {/* Project Map Section */}
         <div className="mb-10">
           <h3 className="text-xl font-bold text-amber-900 mb-4">🗺️ Project Map</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -110,6 +70,122 @@ export default function AdminDashboard() {
               <div className="font-semibold">🗺️ Interactive Project Map</div>
               <div className="text-sm text-sky-100">Navigate repository structure</div>
             </Link>
+            
+            <button
+              onClick={() => loadDiagram('project-map:app', '📱 App Structure')}
+              className="px-4 py-3 rounded-lg bg-rose-600 text-white transition-all hover:bg-rose-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">📱 App Structure</div>
+              <div className="text-sm text-rose-100">App directory overview</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('project-map:components', '🧩 Components')}
+              className="px-4 py-3 rounded-lg bg-orange-600 text-white transition-all hover:bg-orange-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">🧩 Components</div>
+              <div className="text-sm text-orange-100">Component library</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('project-map:lib', '📚 Libraries')}
+              className="px-4 py-3 rounded-lg bg-amber-600 text-white transition-all hover:bg-amber-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">📚 Libraries</div>
+              <div className="text-sm text-amber-100">Core libraries</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('project-map:schema', '🗄️ Schema')}
+              className="px-4 py-3 rounded-lg bg-stone-600 text-white transition-all hover:bg-stone-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">🗄️ Schema</div>
+              <div className="text-sm text-stone-100">Data schemas</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('project-map:ops', '⚙️ Operations')}
+              className="px-4 py-3 rounded-lg bg-sky-700 text-white transition-all hover:bg-sky-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">⚙️ Operations</div>
+              <div className="text-sm text-sky-100">Ops & scripts</div>
+            </button>
+          </div>
+        </div>
+
+        {/* Functional Flow Section */}
+        <div className="mb-10">
+          <h3 className="text-xl font-bold text-amber-900 mb-4">⚡ Functional Flow</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <button
+              onClick={() => loadDiagram('functional-flow:create-account', '👤 Create Account')}
+              className="px-4 py-3 rounded-lg bg-sky-600 text-white transition-all hover:bg-sky-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">👤 Create Account</div>
+              <div className="text-sm text-sky-100">User registration flow</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('functional-flow:create-league', '🏆 Create League')}
+              className="px-4 py-3 rounded-lg bg-rose-700 text-white transition-all hover:bg-rose-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">🏆 Create League</div>
+              <div className="text-sm text-rose-100">League setup & scheduling</div>
+            </button>
+
+            <button
+              onClick={() => loadDiagram('functional-flow:join-league', '🤝 Join League')}
+              className="px-4 py-3 rounded-lg bg-orange-600 text-white transition-all hover:bg-orange-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">🤝 Join League</div>
+              <div className="text-sm text-orange-100">Join via invite or browse</div>
+            </button>
+
+            <button
+              onClick={() => loadDiagram('functional-flow:draft', '📋 Draft System')}
+              className="px-4 py-3 rounded-lg bg-amber-700 text-white transition-all hover:bg-amber-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">📋 Draft System</div>
+              <div className="text-sm text-amber-100">Mock & real drafts with timing</div>
+            </button>
+          </div>
+        </div>
+
+        {/* System Architecture Section */}
+        <div className="mb-10">
+          <h3 className="text-xl font-bold text-amber-900 mb-4">🏗️ System Architecture</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <button
+              onClick={() => loadDiagram('system-architecture:projections-overview', '📊 Projections Overview')}
+              className="px-4 py-3 rounded-lg bg-sky-700 text-white transition-all hover:bg-sky-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">📊 Projections Overview</div>
+              <div className="text-sm text-sky-100">Complete pipeline architecture</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('system-architecture:yearly-projections', '📈 Yearly Projections')}
+              className="px-4 py-3 rounded-lg bg-rose-600 text-white transition-all hover:bg-rose-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">📈 Yearly Projections</div>
+              <div className="text-sm text-rose-100">Draft season projections</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('system-architecture:weekly-projections', '📅 Weekly Projections')}
+              className="px-4 py-3 rounded-lg bg-orange-700 text-white transition-all hover:bg-orange-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">📅 Weekly Projections</div>
+              <div className="text-sm text-orange-100">In-season with weather & injuries</div>
+            </button>
+            
+            <button
+              onClick={() => loadDiagram('system-architecture:weight-tuning', '⚖️ Weight Tuning')}
+              className="px-4 py-3 rounded-lg bg-amber-600 text-white transition-all hover:bg-amber-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">⚖️ Weight Tuning</div>
+              <div className="text-sm text-amber-100">ML optimization loop</div>
+            </button>
           </div>
         </div>
 
@@ -198,7 +274,7 @@ export default function AdminDashboard() {
                   <div className="text-amber-800">
                     <p>No diagram found for: {showDiagram.slug}</p>
                     {debugInfo && (
-                      <pre className="mt-4 p-4 bg-amber-100 rounded text-xs overflow-auto text-amber-900">
+                      <pre className="mt-4 p-4 bg-amber-100 rounded text-xs overflow-auto">
                         {JSON.stringify(debugInfo, null, 2)}
                       </pre>
                     )}

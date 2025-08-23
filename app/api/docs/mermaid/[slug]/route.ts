@@ -24,9 +24,9 @@ export async function GET(
 ) {
   const { slug } = await params
 
-  // Map slugs to file paths
+  // Map slugs to file paths - organized into 3 main categories
   const fileMap: Record<string, string> = {
-    // Project Map (split by root folders)
+    // Project Map (repository structure)
     'project-map:app': 'diagrams/project-map/app.md',
     'project-map:app:dashboard': 'diagrams/project-map/app.dashboard.md',
     'project-map:app:draft': 'diagrams/project-map/app.draft.md',
@@ -43,11 +43,17 @@ export async function GET(
     'project-map:ops': 'diagrams/project-map/ops.md',
     'project-map:public': 'diagrams/project-map/public.md',
     
-    // Functional Architecture Diagrams
-    'functional-architecture:create-account': 'diagrams/functional-architecture/create-account.md',
-    'functional-architecture:create-league': 'diagrams/functional-architecture/create-league.md',
-    'functional-architecture:join-league': 'diagrams/functional-architecture/join-league.md',
-    'functional-architecture:draft': 'diagrams/functional-architecture/draft.md',
+    // Functional Flow (user journeys and features)
+    'functional-flow:create-account': 'diagrams/functional-flow/create-account.md',
+    'functional-flow:create-league': 'diagrams/functional-flow/create-league.md',
+    'functional-flow:join-league': 'diagrams/functional-flow/join-league.md',
+    'functional-flow:draft': 'diagrams/functional-flow/draft.md',
+    
+    // System Architecture (technical systems)
+    'system-architecture:projections-overview': 'diagrams/system-architecture/projections-overview.md',
+    'system-architecture:yearly-projections': 'diagrams/system-architecture/yearly-projections.md',
+    'system-architecture:weekly-projections': 'diagrams/system-architecture/weekly-projections.md',
+    'system-architecture:weight-tuning': 'diagrams/system-architecture/weight-tuning.md',
   }
 
   // Handle dynamic 3-level project map paths
