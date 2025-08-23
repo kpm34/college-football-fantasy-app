@@ -1,0 +1,42 @@
+{
+  "collectionId": "message_templates",
+  "count": 3,
+  "documents": [
+    {
+      "name": "draft-reminder",
+      "subject": "Your CFB Fantasy Draft Starts Soon!",
+      "content": "Hi {{name}},\n\nYour draft for {{leagueName}} starts in {{timeUntil}}!\n\nJoin here: {{draftLink}}\n\nGood luck!\nCFB Fantasy Team",
+      "$id": "689eda4e001ac06d14ab",
+      "$sequence": 1,
+      "$createdAt": "2025-08-15T06:57:18.625+00:00",
+      "$updatedAt": "2025-08-15T06:57:18.625+00:00",
+      "$permissions": [],
+      "$databaseId": "college-football-fantasy",
+      "$collectionId": "message_templates"
+    },
+    {
+      "name": "trade-offer",
+      "subject": "New Trade Offer in {{leagueName}}",
+      "content": "Hi {{name}},\n\nYou have a new trade offer from {{senderName}}:\n\nThey offer: {{theirPlayers}}\nFor your: {{yourPlayers}}\n\nReview it here: {{tradeLink}}\n\nCFB Fantasy Team",
+      "$id": "689eda4e00254a0e8680",
+      "$sequence": 2,
+      "$createdAt": "2025-08-15T06:57:18.779+00:00",
+      "$updatedAt": "2025-08-15T06:57:18.779+00:00",
+      "$permissions": [],
+      "$databaseId": "college-football-fantasy",
+      "$collectionId": "message_templates"
+    },
+    {
+      "name": "weekly-recap",
+      "subject": "Week {{week}} Recap - {{leagueName}}",
+      "content": "Hi {{name}},\n\nWeek {{week}} is complete!\n\nYour score: {{yourScore}}\nOpponent score: {{opponentScore}}\nResult: {{result}}\n\nCurrent standing: {{standing}}\n\nView full standings: {{standingsLink}}\n\nCFB Fantasy Team",
+      "$id": "689eda4e002f249c7d1d",
+      "$sequence": 3,
+      "$createdAt": "2025-08-15T06:57:18.931+00:00",
+      "$updatedAt": "2025-08-15T06:57:18.931+00:00",
+      "$permissions": [],
+      "$databaseId": "college-football-fantasy",
+      "$collectionId": "message_templates"
+    }
+  ]
+}

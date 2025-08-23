@@ -147,7 +147,7 @@
       "oldId": "mock_draft_participants",
       "targetId": "drafts",
       "action": "merge",
-      "oldCount": 432,
+      "oldCount": 444,
       "newCount": 0,
       "status": "info"
     },
@@ -155,7 +155,7 @@
       "oldId": "mock_draft_picks",
       "targetId": "draft_events",
       "action": "merge",
-      "oldCount": 4,
+      "oldCount": 28,
       "newCount": 4,
       "status": "info"
     },
@@ -163,7 +163,7 @@
       "oldId": "mock_drafts",
       "targetId": "drafts",
       "action": "merge",
-      "oldCount": 36,
+      "oldCount": 37,
       "newCount": 0,
       "status": "info"
     },
@@ -171,7 +171,7 @@
       "oldId": "model_inputs",
       "targetId": "model_runs",
       "action": "merge",
-      "oldCount": 1,
+      "oldCount": 0,
       "newCount": 0,
       "status": "info"
     },
@@ -291,7 +291,7 @@
       "oldId": "users",
       "targetId": "clients",
       "action": "rename",
-      "oldCount": 4,
+      "oldCount": 0,
       "newCount": 12,
       "status": "warn"
     }
@@ -305,21 +305,21 @@
     },
     {
       "targetId": "drafts",
-      "sumOld": 468,
+      "sumOld": 481,
       "newCount": 0,
       "status": "warn"
     },
     {
       "targetId": "draft_events",
-      "sumOld": 4,
+      "sumOld": 28,
       "newCount": 4,
-      "status": "ok"
+      "status": "warn"
     },
     {
       "targetId": "model_runs",
-      "sumOld": 1,
+      "sumOld": 0,
       "newCount": 0,
-      "status": "warn"
+      "status": "ok"
     },
     {
       "targetId": "projections",
