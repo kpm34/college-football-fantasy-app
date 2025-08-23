@@ -78,6 +78,14 @@ export interface PlayerProjection {
 }
 
 export interface DraftPlayer extends PlayerProjection {
+  // Compatibility fields used throughout UI components
+  id?: string; // mirrors $id or playerId for UI lists
+  name?: string; // mirrors playerName
+  class?: string; // UI-friendly year/class label
+  projectedPoints?: number; // mirrors projections.fantasyPoints
+  adp?: number; // mirrors rankings.adp
+
+  // Draft-specific flags
   isDrafted: boolean;
   draftedBy?: string;
   draftPosition?: number;

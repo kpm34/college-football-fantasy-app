@@ -65,7 +65,7 @@ function download(filename: string, content: string, mime = 'text/plain') {
 }
 
 export default function DraftResultsPage({ params }: { params: { draftId: string } }) {
-  const draftId = params.draftId;
+  const draftId = (params as any)?.draftId || '';
   const [data, setData] = useState<ResultsPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

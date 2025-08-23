@@ -245,7 +245,7 @@ export default function GamesList({ week, showEligibleOnly = false }: GamesListP
             {/* Game Time */}
             <div className="mt-4 pt-3 border-t border-gray-700">
               <div className="text-sm text-gray-400">
-                {formatGameTime(game.startDate)}
+                {formatGameTime(game.startDate || game.date || new Date().toISOString())}
               </div>
             </div>
 
