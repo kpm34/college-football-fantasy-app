@@ -10,7 +10,7 @@ export async function GET(
   try {
     const conference = params.conference.toUpperCase().replace('-', '');
     const { searchParams } = new URL(request.url);
-    const type = searchParams.get('type') || 'teams';
+    const type = searchParams.get('type') || 'schools';
 
     // Normalize conference name
     let normalizedConference = conference;
@@ -20,7 +20,7 @@ export async function GET(
     if (conference === 'SEC') normalizedConference = 'SEC';
 
     switch (type) {
-      case 'teams': {
+      case 'schools': {
         const teams = getTeamsByConference(conference);
         if (teams.length === 0) {
           return NextResponse.json(

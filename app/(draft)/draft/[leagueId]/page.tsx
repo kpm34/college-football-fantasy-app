@@ -101,7 +101,7 @@ export default function DraftRoom({ params }: Props) {
   // Update my picks when draft picks change
   useEffect(() => {
     if (user && draft.picks.length > 0) {
-      const myDraftPicks = draft.picks.filter(pick => pick.userId === user.$id);
+      const myDraftPicks = draft.picks.filter(pick => pick.client_id === user.$id);
       setMyPicks(
         myDraftPicks.map(pick => ({
           $id: pick.playerId,
@@ -110,7 +110,7 @@ export default function DraftRoom({ params }: Props) {
           team: pick.playerTeam,
           draftPosition: pick.pickNumber,
           isDrafted: true,
-          draftedBy: pick.userId,
+          draftedBy: pick.client_id,
           // Add other required fields with defaults
           projections: { fantasyPoints: 0 },
           rankings: { overall: 0, position: 0, adp: 0 },
@@ -234,7 +234,7 @@ export default function DraftRoom({ params }: Props) {
       if (draft.league?.members) {
         const userDocs = await databases.listDocuments(
           DATABASE_ID,
-          'users',
+          'clients',
           [Query.equal('$id', draft.league.members)]
         );
         
@@ -373,7 +373,7 @@ export default function DraftRoom({ params }: Props) {
                 <span key={`${p.$id || p.playerId}-${i}`} className="inline-flex items-center gap-2 text-xs px-3 py-1 m-1 rounded-full" style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
                   <span className="inline-flex items-center justify-center w-8 h-5 rounded text-[10px] font-bold" style={{ backgroundColor: bg, color: fg }}>{pos || '—'}</span>
                   <span>{p.playerName || p.playerId}</span>
-                  <span className="text-[10px]" style={{ color: leagueColors.text.secondary }}>{users[p.userId]?.name ? users[p.userId].name : 'Team'}</span>
+                  <span className="text-[10px]" style={{ color: leagueColors.text.secondary }}>{users[p.client_id]?.name ? users[p.client_id].name : 'Team'}</span>
                 </span>
               );
             })
@@ -413,7 +413,7 @@ export default function DraftRoom({ params }: Props) {
                 overall: p.pickNumber,
                 round: p.round,
                 slot: undefined,
-                userId: p.userId,
+                userId: p.client_id,
                 playerName: p.playerName,
                 playerId: p.playerId,
                 position: p.playerPosition,
@@ -433,10 +433,10 @@ export default function DraftRoom({ params }: Props) {
           <aside className="lg:col-span-3 rounded-none p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
             <h2 className="font-medium text-sm mb-2" style={{ color: leagueColors.text.primary }}>My Team</h2>
             <div className="space-y-2">
-              {draft.picks.filter(p=>p.userId===user?.$id).length===0 ? (
+              {draft.picks.filter(p=>p.client_id===user?.$id).length===0 ? (
                 <div className="text-xs" style={{ color: leagueColors.text.muted }}>No players drafted yet</div>
               ) : (
-                draft.picks.filter(p=>p.userId===user?.$id).map((p,i)=> (
+                draft.picks.filter(p=>p.client_id===user?.$id).map((p,i)=> (
                   <div key={`${p.playerId}-${i}`} className="flex items-center justify-between text-sm py-1" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
                     <span className="font-medium">{p.playerName || idToName.get(p.playerId) || p.playerId}</span>
                     <span className="text-gray-500">{String(p.playerPosition||'').toUpperCase()}</span>
@@ -543,7 +543,7 @@ export default function DraftRoom({ params }: Props) {
                       overall: p.pickNumber,
                       round: p.round,
                       slot: undefined,
-                      userId: p.userId,
+                      userId: p.client_id,
                       playerName: p.playerName,
                       playerId: p.playerId,
                       position: p.playerPosition,
@@ -572,7 +572,7 @@ export default function DraftRoom({ params }: Props) {
             </div>
             {teamView && (
               <div className="space-y-2 max-h-[60vh] overflow-auto">
-                {draft.picks.filter((p:any)=> String(((draft.league?.draftOrder || []).indexOf(p.userId))+1)===teamView).map((p:any, i:number)=> (
+                {draft.picks.filter((p:any)=> String(((draft.league?.draftOrder || []).indexOf(p.client_id))+1)===teamView).map((p:any, i:number)=> (
                   <div key={`${p.playerId}-${i}`} className="flex items-center justify-between text-sm py-1" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
                     <span>#{p.pickNumber}</span>
                     <span className="font-medium">{p.playerName||idToName.get(p.playerId)||p.playerId}</span>

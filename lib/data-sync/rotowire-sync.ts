@@ -273,7 +273,7 @@ export class RotowireSync {
             // Check if projection exists
             const existing = await databases.listDocuments(
               DATABASE_ID,
-              COLLECTIONS.PLAYER_PROJECTIONS,
+              COLLECTIONS.PROJECTIONS,
               [
                 Query.equal('playerId', playerId),
                 Query.equal('week', week)
@@ -301,7 +301,7 @@ export class RotowireSync {
             if (existing.documents.length > 0) {
               await databases.updateDocument(
                 DATABASE_ID,
-                COLLECTIONS.PLAYER_PROJECTIONS,
+                COLLECTIONS.PROJECTIONS,
                 existing.documents[0].$id,
                 projectionData
               );
@@ -309,7 +309,7 @@ export class RotowireSync {
             } else {
               await databases.createDocument(
                 DATABASE_ID,
-                COLLECTIONS.PLAYER_PROJECTIONS,
+                COLLECTIONS.PROJECTIONS,
                 ID.unique(),
                 projectionData
               );

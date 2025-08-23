@@ -6,5 +6,5 @@ export const teamsAPI = {
     apiClient.get<TeamsResponse>('/teams'),
 
   getRoster: (teamId: string) => 
-    apiClient.get<TeamPlayer[]>(`/teams/${teamId}/roster`),
+    apiClient.get<TeamPlayer[]>(`/teams/${fantasy_team_id}/roster`),
 };

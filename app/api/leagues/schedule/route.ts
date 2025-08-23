@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     // Get all teams in the league
     const teamsResponse = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.TEAMS,
+      COLLECTIONS.SCHOOLS,
       [Query.equal('league_id', leagueId)]
     );
 
@@ -119,12 +119,12 @@ export async function POST(request: NextRequest) {
 }
 
 function generateSchedule(teams: any[], startWeek: number, endWeek: number): Matchup[] {
-  const teamIds = teams.map(team => team.$id);
-  const teamCount = teamIds.length;
+  const fantasy_team_ids = teams.map(team => team.$id);
+  const teamCount = fantasy_team_ids.length;
   const schedule: Matchup[] = [];
 
   // For odd number of teams, add a "BYE" team
-  const teamsWithBye = teamCount % 2 === 1 ? [...teamIds, 'BYE'] : [...teamIds];
+  const teamsWithBye = teamCount % 2 === 1 ? [...fantasy_team_ids, 'BYE'] : [...fantasy_team_ids];
   const adjustedTeamCount = teamsWithBye.length;
 
   // Generate round-robin schedule
@@ -136,12 +136,12 @@ function generateSchedule(teams: any[], startWeek: number, endWeek: number): Mat
   return schedule;
 }
 
-function generateWeekMatchups(teamIds: string[], week: number): Matchup[] {
+function generateWeekMatchups(fantasy_team_ids: string[], week: number): Matchup[] {
   const matchups: Matchup[] = [];
-  const teamCount = teamIds.length;
+  const teamCount = fantasy_team_ids.length;
   
   // Rotate teams for round-robin (except first team stays in place)
-  const rotatedTeams = [...teamIds];
+  const rotatedTeams = [...fantasy_team_ids];
   if (week > 1) {
     // Rotate all teams except the first one
     const firstTeam = rotatedTeams[0];

@@ -69,7 +69,7 @@ export function useUserLeaguesRealtime() {
     try {
       // Subscribe to league changes
       const leaguesChannel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.LEAGUES}.documents`
-      const rostersChannel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.USER_TEAMS}.documents`
+      const rostersChannel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.FANTASY_TEAMS}.documents`
       
       console.log('Subscribing to user leagues realtime channels')
       
@@ -104,7 +104,7 @@ export function useUserLeaguesRealtime() {
       // Subscribe to roster changes (for when user gets kicked from league)
       const unsubscribeRosters = client.subscribe(rostersChannel, (event: RealtimeResponseEvent<any>) => {
         const payload = event.payload as any
-        if (!payload || payload.userId !== user.$id) return
+        if (!payload || payload.client_id !== user.$id) return
 
         console.log('User roster event:', event.events, payload.leagueId)
 

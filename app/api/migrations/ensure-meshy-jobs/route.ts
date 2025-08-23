@@ -31,7 +31,7 @@ export async function GET(_req: NextRequest) {
       ensureString('imageUrl', 1024, false),
       ensureString('baseModelUrl', 1024, false),
       ensureString('resultUrl', 1024, false),
-      ensureString('userId', 128, false),
+      ensureString('client_id', 128, false),
       ensureString('webhookSecret', 256, false),
       ensureString('error', 1024, false),
       ensureDatetime('createdAt', true),

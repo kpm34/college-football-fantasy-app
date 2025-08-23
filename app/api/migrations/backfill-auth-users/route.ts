@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
         if (exists) {
           results.push({ email, status: 'exists' });
         } else {
-          // Signature: create(userId, email?, phone?, password?, name?)
+          // Signature: create(client_id, email?, phone?, password?, name?)
           await users.create('unique()', email, undefined, password, name);
           results.push({ email, status: 'created' });
         }

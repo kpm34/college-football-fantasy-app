@@ -25,7 +25,7 @@ export function DraftRealtimeStatus({
 
   // Get user display name
   const getUserName = (userId: string) => {
-    return users[userId]?.teamName || users[userId]?.name || 'Unknown User';
+    return users[client_id]?.teamName || users[client_id]?.name || 'Unknown User';
   };
 
   // Get last 3 picks
@@ -87,7 +87,7 @@ export function DraftRealtimeStatus({
               >
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-500">#{pick.pickNumber}</span>
-                  <span>{getUserName(pick.userId)}</span>
+                  <span>{getUserName(pick.client_id)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 text-xs rounded font-medium text-white ${

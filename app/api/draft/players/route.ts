@@ -188,7 +188,7 @@ export async function GET(request: NextRequest) {
     // Optional: load manual overrides from model_inputs to correct teams/draftable flags
     let overrides: Record<string, any> | null = null;
     let depthIndex: Map<string, string> | null = null; // name|pos -> team_id
-    let teamIdToName: Record<string, string> = {};
+    let fantasy_team_idToName: Record<string, string> = {};
     let depth: any = null; // Declare depth in outer scope
     // Note: do not use CFBD here; rely solely on our database (depth_chart_json + overrides)
     try {
@@ -206,11 +206,11 @@ export async function GET(request: NextRequest) {
           depth = JSON.parse(depth);
           // Convert compact format back to full format if needed
           if (depth && typeof depth === 'object') {
-            for (const [teamId, positions] of Object.entries(depth)) {
+            for (const [fantasy_team_id, positions] of Object.entries(depth)) {
               for (const [pos, players] of Object.entries(positions as any)) {
                 if (Array.isArray(players) && players.length > 0 && typeof players[0] === 'string') {
                   // Convert "name:rank" format back to object format
-                  (depth[teamId] as any)[pos] = players.map((p: string) => {
+                  (depth[fantasy_team_id] as any)[pos] = players.map((p: string) => {
                     const [name, rank] = p.split(':');
                     return { player_name: name, pos_rank: parseInt(rank) || 1 };
                   });
@@ -229,17 +229,17 @@ export async function GET(request: NextRequest) {
             const map = JSON.parse(fs.readFileSync(file, 'utf8')) as Record<string, string>;
             // invert
             for (const [name, id] of Object.entries(map)) {
-              teamIdToName[id] = name;
+              fantasy_team_idToName[id] = name;
             }
           }
         } catch {}
-        for (const [teamId, posMap] of Object.entries(depth)) {
+        for (const [fantasy_team_id, posMap] of Object.entries(depth)) {
           for (const pos of Object.keys(posMap as any)) {
             const arr = (posMap as any)[pos] as Array<any>;
             if (!Array.isArray(arr)) continue;
             for (const entry of arr) {
               const key = `${(entry.player_name || '').toString().trim().toLowerCase()}|${pos}`;
-              depthIndex.set(key, teamId);
+              depthIndex.set(key, fantasy_team_id);
             }
           }
         }

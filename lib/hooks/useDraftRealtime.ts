@@ -10,7 +10,7 @@ interface DraftRealtimeState {
   picks: DraftPick[];
   currentPick: number;
   currentRound: number;
-  onTheClock: string | null; // userId who is currently picking
+  onTheClock: string | null; // client_id who is currently picking
   isMyTurn: boolean;
   connected: boolean;
   loading: boolean;
@@ -50,10 +50,10 @@ export function useDraftRealtime(leagueId: string) {
         }
         
         const { data } = await response.json();
-        const { league, userTeams, picks: picksData, userId, draftState } = data as any;
+        const { league, userTeams, picks: picksData, client_id, draftState } = data as any;
 
-        // Load my roster ids within this league (some data paths use roster $id instead of userId)
-        myIdsRef.current = new Set([userId]);
+        // Load my roster ids within this league (some data paths use roster $id instead of client_id)
+        myIdsRef.current = new Set([client_id]);
         for (const d of userTeams as any[]) {
           if (d?.$id) myIdsRef.current.add(String(d.$id));
         }
@@ -66,7 +66,7 @@ export function useDraftRealtime(leagueId: string) {
           leagueId: doc.leagueId,
           round: doc.round,
           pickNumber: typeof doc.pickNumber === 'number' ? doc.pickNumber : (doc.pick as number),
-          userId: doc.userId,
+          userId: doc.client_id,
           playerId: doc.playerId,
           playerName: doc.playerName,
           playerPosition: doc.playerPosition,
@@ -189,7 +189,7 @@ export function useDraftRealtime(leagueId: string) {
         leagueId: src.leagueId,
         round: src.round,
         pickNumber: typeof src.pickNumber === 'number' ? src.pickNumber : (src.pick as number),
-        userId: src.userId,
+        userId: src.client_id,
         playerId: src.playerId,
         playerName: src.playerName,
         playerPosition: src.playerPosition,
@@ -283,7 +283,7 @@ export function useDraftRealtime(leagueId: string) {
         leagueId: src.leagueId,
         round: src.round,
         pickNumber: typeof src.pickNumber === 'number' ? src.pickNumber : (src.pick as number),
-        userId: src.userId,
+        userId: src.client_id,
         playerId: src.playerId,
         playerName: src.playerName,
         playerPosition: src.playerPosition,

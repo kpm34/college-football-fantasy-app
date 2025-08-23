@@ -69,13 +69,13 @@ export async function POST(request: NextRequest) {
 
     // Build reverse index: name+pos -> team_id
     const nameIndex = new Map<string, { teamId: string; pos: Position }>();
-    for (const [teamId, posMap] of Object.entries(depthChart)) {
+    for (const [fantasy_team_id, posMap] of Object.entries(depthChart)) {
       for (const posKey of Object.keys(posMap as any)) {
         if (!positions.includes(posKey as Position)) continue;
         const arr: Array<any> = (posMap as any)[posKey] || [];
         for (const entry of arr) {
           const key = `${cleanName(entry.player_name)}|${posKey}`;
-          nameIndex.set(key, { teamId: teamId, pos: posKey as Position });
+          nameIndex.set(key, { teamId: fantasy_team_id, pos: posKey as Position });
         }
       }
     }
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
           notFound.push({ name: doc.name, pos });
           continue;
         }
-        const expectedTeam = idToTeamName[match.teamId] || doc.team;
+        const expectedTeam = idToTeamName[match.fantasy_team_id] || doc.team;
         if (expectedTeam && doc.team !== expectedTeam) {
           updates.push({ id: doc.$id, fromTeam: doc.team, toTeam: expectedTeam });
           if (apply) {

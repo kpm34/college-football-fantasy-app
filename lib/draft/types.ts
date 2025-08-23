@@ -63,7 +63,7 @@ export interface DraftParticipant {
   userType: UserType;
   displayName: string;
   slot: number;
-  userId?: string; // For human users
+  client_id?: string; // For human users
 }
 
 export interface MockDraft {

@@ -21,9 +21,9 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   } catch {}
 
   try {
-    const { playerId, teamId, by } = await request.json();
-    if (!playerId || !teamId) {
-      return NextResponse.json({ error: 'Missing playerId or teamId' }, { status: 400 });
+    const { playerId, fantasy_team_id, by } = await request.json();
+    if (!playerId || !fantasy_team_id) {
+      return NextResponse.json({ error: 'Missing playerId or fantasy_team_id' }, { status: 400 });
     }
 
     // Load ephemeral state from KV; fallback to latest draft_states when KV missing
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       }
     } catch {}
 
-    if (!state || state.onClockTeamId !== teamId) {
+    if (!state || state.onClockTeamId !== fantasy_team_id) {
       return NextResponse.json({ error: 'Not your turn' }, { status: 400 });
     }
     if (state.deadlineAt) {
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         draftId,
         ts: new Date().toISOString(),
         type: 'pick',
-        teamId,
+        fantasy_team_id,
         playerId,
         round: state.round,
         overall,
@@ -149,7 +149,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       ID.unique(),
       {
         leagueId: draftId,
-        userId: teamId,
+        userId: fantasy_team_id,
         playerId,
         playerName: undefined,
         playerPosition: undefined,

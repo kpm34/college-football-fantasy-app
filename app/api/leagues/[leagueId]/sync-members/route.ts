@@ -22,12 +22,12 @@ export async function POST(
     // Get all rosters for this league
     const rosters = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER_TEAMS,
+      COLLECTIONS.FANTASY_TEAMS,
       [Query.equal('leagueId', leagueId), Query.limit(100)]
     );
 
     // Extract user IDs from rosters (actual count)
-    const memberIds = rosters.documents.map((roster: any) => roster.userId).filter(Boolean);
+    const memberIds = rosters.documents.map((roster: any) => roster.client_id).filter(Boolean);
     const actualTeamCount = rosters.total || rosters.documents.length;
     const maxTeams = (league as any).maxTeams || 12;
 

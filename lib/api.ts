@@ -43,7 +43,7 @@ export const api = {
   // Teams endpoints
   teams: {
     getAll: () => api.fetch('/teams'),
-    getRoster: (teamId: string) => api.fetch(`/teams/${teamId}/roster`),
+    getRoster: (teamId: string) => api.fetch(`/teams/${fantasy_team_id}/roster`),
   },
 
   // Eligibility endpoints

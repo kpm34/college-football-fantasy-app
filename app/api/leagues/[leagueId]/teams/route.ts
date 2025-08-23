@@ -30,7 +30,7 @@ export async function GET(
     );
 
     // Resolve display names via Appwrite Auth Users to avoid relying on deprecated users collection
-    const uniqueUserIds = Array.from(new Set((rostersResponse.documents || []).map((d: any) => d.userId || d.owner).filter(Boolean)));
+    const uniqueUserIds = Array.from(new Set((rostersResponse.documents || []).map((d: any) => d.client_id || d.owner).filter(Boolean)));
     const idToName = new Map<string, string>();
     await Promise.all(uniqueUserIds.map(async (uid) => {
       try {
@@ -42,7 +42,7 @@ export async function GET(
     }));
 
     const teams = rostersResponse.documents.map((r: any) => {
-      const ownerId = r.userId || r.owner || '';
+      const ownerId = r.client_id || r.owner || '';
       const managerName = idToName.get(ownerId) || r.userName || 'Unknown';
       return {
         $id: r.$id,
@@ -76,7 +76,7 @@ export async function GET(
       
       if (userRes.ok) {
         const user = await userRes.json();
-        userTeam = teams.find((t: any) => t.userId === user.$id);
+        userTeam = teams.find((t: any) => t.client_id === user.$id);
       }
     }
 

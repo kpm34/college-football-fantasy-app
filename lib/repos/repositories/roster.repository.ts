@@ -34,21 +34,21 @@ export interface AddPlayerData {
 }
 
 export class RosterRepository extends BaseRepository<Roster> {
-  protected collectionId = 'user_teams';
+  protected collectionId = 'fantasy_teams';
   protected cachePrefix = 'roster';
 
   /**
    * Validate roster data using schema enforcer
    */
   protected async validateCreate(data: Partial<Roster>): Promise<void> {
-    const validation = SchemaValidator.validate('user_teams', data);
+    const validation = SchemaValidator.validate('fantasy_teams', data);
     if (!validation.success) {
       throw new ValidationError(`Roster validation failed: ${validation.errors?.join(', ')}`);
     }
   }
 
   protected async validateUpdate(id: string, data: Partial<Roster>): Promise<void> {
-    const validation = SchemaValidator.validate('user_teams', data);
+    const validation = SchemaValidator.validate('fantasy_teams', data);
     if (!validation.success) {
       throw new ValidationError(`Roster validation failed: ${validation.errors?.join(', ')}`);
     }
@@ -61,11 +61,11 @@ export class RosterRepository extends BaseRepository<Roster> {
     const result = await this.find({
       filters: {
         leagueId,
-        userId
+        client_id
       },
       limit: 1,
       cache: {
-        key: `roster:${leagueId}:${userId}`,
+        key: `roster:${leagueId}:${client_id}`,
         ttl: 300
       }
     });
@@ -101,10 +101,10 @@ export class RosterRepository extends BaseRepository<Roster> {
    * Add player to roster
    */
   async addPlayer(
-    rosterId: string,
+    fantasy_team_id: string,
     playerData: AddPlayerData
   ): Promise<Roster> {
-    const roster = await this.findById(rosterId);
+    const roster = await this.findById(fantasy_team_id);
     if (!roster) {
       throw new ValidationError('Roster not found');
     }
@@ -129,12 +129,12 @@ export class RosterRepository extends BaseRepository<Roster> {
     ];
 
     // Transform data for schema compliance (JSON stringify for large arrays)
-    const updateData = SchemaValidator.transform('user_teams', {
+    const updateData = SchemaValidator.transform('fantasy_teams', {
       players: JSON.stringify(updatedPlayers),
       updatedAt: new Date().toISOString()
     });
 
-    return this.update(rosterId, updateData, {
+    return this.update(fantasy_team_id, updateData, {
       invalidateCache: [
         `roster:league:${roster.leagueId}:*`,
         `player:roster:${playerData.playerId}`
@@ -145,8 +145,8 @@ export class RosterRepository extends BaseRepository<Roster> {
   /**
    * Remove player from roster
    */
-  async removePlayer(rosterId: string, playerId: string): Promise<Roster> {
-    const roster = await this.findById(rosterId);
+  async removePlayer(fantasy_team_id: string, playerId: string): Promise<Roster> {
+    const roster = await this.findById(fantasy_team_id);
     if (!roster) {
       throw new ValidationError('Roster not found');
     }
@@ -167,7 +167,7 @@ export class RosterRepository extends BaseRepository<Roster> {
     // Remove from bench if present
     const updatedBench = roster.bench.filter(id => id !== playerId);
 
-    return this.update(rosterId, {
+    return this.update(fantasy_team_id, {
       players: updatedPlayers,
       lineup: updatedLineup,
       bench: updatedBench,
@@ -184,10 +184,10 @@ export class RosterRepository extends BaseRepository<Roster> {
    * Update lineup
    */
   async updateLineup(
-    rosterId: string,
+    fantasy_team_id: string,
     lineup: Record<string, string>
   ): Promise<Roster> {
-    const roster = await this.findById(rosterId);
+    const roster = await this.findById(fantasy_team_id);
     if (!roster) {
       throw new ValidationError('Roster not found');
     }
@@ -211,7 +211,7 @@ export class RosterRepository extends BaseRepository<Roster> {
       .filter(p => !lineupPlayerIds.has(p.playerId))
       .map(p => p.playerId);
 
-    return this.update(rosterId, {
+    return this.update(fantasy_team_id, {
       lineup,
       bench: benchPlayers,
       updatedAt: new Date().toISOString()
@@ -225,7 +225,7 @@ export class RosterRepository extends BaseRepository<Roster> {
    * Update roster stats (usually after games)
    */
   async updateStats(
-    rosterId: string,
+    fantasy_team_id: string,
     stats: {
       wins?: number;
       losses?: number;
@@ -234,7 +234,7 @@ export class RosterRepository extends BaseRepository<Roster> {
       pointsAgainst?: number;
     }
   ): Promise<Roster> {
-    return this.update(rosterId, {
+    return this.update(fantasy_team_id, {
       ...stats,
       updatedAt: new Date().toISOString()
     }, {

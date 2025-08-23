@@ -22,7 +22,7 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
   const playerId = available[0];
   if (!playerId) return NextResponse.json({ error: 'No players available' }, { status: 400 });
 
-  const teamId = state.onClockTeamId;
+  const fantasy_team_id = state.onClockTeamId;
 
   const overall = state.overall ?? (state.round - 1) * state.totalTeams + state.pickIndex;
 
@@ -34,7 +34,7 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
       draftId,
       ts: new Date().toISOString(),
       type: 'autopick',
-      teamId,
+      fantasy_team_id,
       playerId,
       round: state.round,
       overall,

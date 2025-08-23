@@ -54,7 +54,7 @@ export async function GET(
       ),
       databases.listDocuments(
         DATABASE_ID,
-        COLLECTIONS.TEAMS,
+        COLLECTIONS.SCHOOLS,
         [Query.equal('leagueId', params.leagueId)]
       ).catch(() => ({ documents: [] }))
     ]);

@@ -51,9 +51,9 @@ export class EnvironmentConfig {
     collections: {
       // Core collections
       leagues: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUES || 'leagues',
-      userTeams: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER_TEAMS || 'user_teams',
+      userTeams: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER_TEAMS || 'fantasy_teams',
       players: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYERS || 'college_players',
-      teams: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_TEAMS || 'teams',
+      teams: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_TEAMS || 'schools',
       games: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_GAMES || 'games',
       rankings: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_RANKINGS || 'rankings',
       

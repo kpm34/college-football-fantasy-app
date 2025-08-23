@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 // POST: enqueue a blender job
 export async function POST(req: NextRequest) {
   try {
-    const { inputGlbUrl, prompt, ops, teamId } = await req.json()
+    const { inputGlbUrl, prompt, ops, fantasy_team_id } = await req.json()
     if (!inputGlbUrl) return NextResponse.json({ error: 'inputGlbUrl required' }, { status: 400 })
 
     const doc = await databases.createDocument(
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         inputGlbUrl,
         prompt: String(prompt || ''),
         ops: ops || [],
-        teamId: teamId || null,
+        teamId: fantasy_team_id || null,
         createdAt: new Date().toISOString()
       }
     )

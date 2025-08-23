@@ -31,7 +31,7 @@ export async function GET(_req: NextRequest) {
       addUrl('outputGlbUrl', false),
       addString('prompt', 1024, false),
       addString('ops', 8192, false),
-      addString('teamId', 64, false),
+      addString('fantasy_team_id', 64, false),
       addString('error', 1024, false),
       addDatetime('createdAt', true),
       addDatetime('startedAt', false),

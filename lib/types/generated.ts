@@ -442,7 +442,7 @@ export interface UpdateUserTeams {
   /** League document ID */
   leagueId?: string | undefined;
   /** Team owner user ID */
-  userId?: string | undefined;
+  client_id?: string | undefined;
   /** Fantasy team name */
   teamName?: string | undefined;
   /** Draft order position */
@@ -570,7 +570,7 @@ export interface Lineups {
   $permissions: string[];
 
   /** Roster document ID */
-  rosterId: string;
+  fantasy_team_id: string;
   /** Week number */
   week: number;
   /** Season year */
@@ -590,7 +590,7 @@ export interface Lineups {
  */
 export interface CreateLineups {
   /** Roster document ID */
-  rosterId: string;
+  fantasy_team_id: string;
   /** Week number */
   week: number;
   /** Season year */
@@ -606,7 +606,7 @@ export interface CreateLineups {
  */
 export interface UpdateLineups {
   /** Roster document ID */
-  rosterId?: string | undefined;
+  fantasy_team_id?: string | undefined;
   /** Week number */
   week?: number | undefined;
   /** Season year */
@@ -829,7 +829,7 @@ export interface UpdateDraftPicks {
   /** League document ID */
   leagueId?: string | undefined;
   /** Drafting user ID */
-  userId?: string | undefined;
+  client_id?: string | undefined;
   /** Selected player ID */
   playerId?: string | undefined;
   /** Draft round number */
@@ -963,7 +963,7 @@ export interface UpdateBids {
   /** Player being bid on */
   playerId?: string | undefined;
   /** Bidding team roster ID */
-  teamId?: string | undefined;
+  fantasy_team_id?: string | undefined;
   /** Bid amount */
   amount?: number | undefined;
   /** When bid was placed */
@@ -1269,7 +1269,7 @@ export interface CreateActivityLog {
  */
 export interface UpdateActivityLog {
   /** Acting user ID */
-  userId?: string | undefined;
+  client_id?: string | undefined;
   /** Related league ID */
   leagueId?: string | undefined;
   /** Action performed */
@@ -2120,10 +2120,10 @@ export interface UpdateDataSourceRegistry {
  */
 export const COLLECTIONS = {
   COLLEGE_PLAYERS: 'college_players' as const,
-  TEAMS: 'teams' as const,
+  TEAMS: 'schools' as const,
   GAMES: 'games' as const,
   RANKINGS: 'rankings' as const,
-  USER_TEAMS: 'user_teams' as const,
+  USER_TEAMS: 'fantasy_teams' as const,
   LEAGUES: 'leagues' as const,
   LINEUPS: 'lineups' as const,
   MATCHUPS: 'matchups' as const,
@@ -2133,7 +2133,7 @@ export const COLLECTIONS = {
   BIDS: 'bids' as const,
   PLAYER_STATS: 'player_stats' as const,
   MODEL_INPUTS: 'model_inputs' as const,
-  USERS: 'users' as const,
+  USERS: 'clients' as const,
   ACTIVITY_LOG: 'activity_log' as const,
   PLAYER_DEPTH_CHARTS: 'player_depth_charts' as const,
   TEAM_CONTEXT: 'team_context' as const,

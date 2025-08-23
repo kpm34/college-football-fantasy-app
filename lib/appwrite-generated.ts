@@ -22,10 +22,10 @@ export const DATABASE_ID = process.env.APPWRITE_DATABASE_ID || 'college-football
 // Collection IDs derived from schema
 export const COLLECTIONS = {
   COLLEGE_PLAYERS: 'college_players',
-  TEAMS: 'teams',
+  TEAMS: 'schools',
   GAMES: 'games',
   RANKINGS: 'rankings',
-  USER_TEAMS: 'user_teams',
+  USER_TEAMS: 'fantasy_teams',
   LEAGUES: 'leagues',
   LINEUPS: 'lineups',
   MATCHUPS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MATCHUPS || 'matchups',
@@ -35,7 +35,7 @@ export const COLLECTIONS = {
   BIDS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_BIDS || 'bids',
   PLAYER_STATS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_STATS || 'player_stats',
   MODEL_INPUTS: 'model_inputs',
-  USERS: 'users',
+  USERS: 'clients',
   ACTIVITY_LOG: 'activity_log',
   PLAYER_DEPTH_CHARTS: 'player_depth_charts',
   TEAM_CONTEXT: 'team_context',
@@ -55,7 +55,7 @@ export const COLLECTION_METADATA = {
     requiredAttributes: ['name', 'position', 'team', 'conference'],
   },
   teams: {
-    id: 'teams',
+    id: 'schools',
     name: 'Teams',
     description: 'Power 4 conference team information',
     attributeCount: 10,
@@ -79,12 +79,12 @@ export const COLLECTION_METADATA = {
     requiredAttributes: ['week', 'season', 'poll_type', 'team', 'rank'],
   },
   user_teams: {
-    id: 'user_teams',
+    id: 'fantasy_teams',
     name: 'User Teams',
     description: 'Fantasy team rosters within leagues',
     attributeCount: 9,
     indexCount: 3,
-    requiredAttributes: ['leagueId', 'userId', 'teamName', 'players'],
+    requiredAttributes: ['leagueId', 'client_id', 'teamName', 'players'],
   },
   leagues: {
     id: 'leagues',
@@ -100,7 +100,7 @@ export const COLLECTION_METADATA = {
     description: 'Weekly fantasy lineups',
     attributeCount: 7,
     indexCount: 3,
-    requiredAttributes: ['rosterId', 'week', 'season'],
+    requiredAttributes: ['fantasy_team_id', 'week', 'season'],
   },
   matchups: {
     id: COLLECTIONS.MATCHUPS,
@@ -124,7 +124,7 @@ export const COLLECTION_METADATA = {
     description: 'Individual draft picks and selections',
     attributeCount: 8,
     indexCount: 4,
-    requiredAttributes: ['leagueId', 'userId', 'playerId', 'round', 'pick', 'timestamp'],
+    requiredAttributes: ['leagueId', 'client_id', 'playerId', 'round', 'pick', 'timestamp'],
   },
   auctions: {
     id: 'auctions',
@@ -140,7 +140,7 @@ export const COLLECTION_METADATA = {
     description: 'Auction bid history',
     attributeCount: 6,
     indexCount: 4,
-    requiredAttributes: ['auctionId', 'playerId', 'teamId', 'amount', 'timestamp'],
+    requiredAttributes: ['auctionId', 'playerId', 'fantasy_team_id', 'amount', 'timestamp'],
   },
   player_stats: {
     id: COLLECTIONS.PLAYER_STATS,
@@ -159,7 +159,7 @@ export const COLLECTION_METADATA = {
     requiredAttributes: ['season'],
   },
   users: {
-    id: 'users',
+    id: 'clients',
     name: 'Users',
     description: 'Application users',
     attributeCount: 7,

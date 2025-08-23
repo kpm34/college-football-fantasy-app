@@ -547,7 +547,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
               <button
                 onClick={() => {
                   if (members.length === 0) return;
-                  const base = members.map(m => (m as any).userId || m.$id);
+                  const base = members.map(m => (m as any).client_id || m.$id);
                   const shuffled = [...base].sort(() => Math.random() - 0.5);
                   setDraftOrder(shuffled);
                   setOrderMode('custom');
@@ -585,7 +585,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                       </div>
                       <button
                         onClick={() => {
-                          const mid = (m as any).userId || m.$id;
+                          const mid = (m as any).client_id || m.$id;
                           const target = maxTeams || 12;
                           setDraftOrder(prev => {
                             const clean = prev.filter(id => id);
@@ -609,7 +609,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                 <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>Order (1..N)</div>
                 <div className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900" style={{ border: `1px solid ${leagueColors.border.light}` }}>
                   {draftOrder.map((id, idx) => {
-                    const m = members.find(mm => mm.$id === id || (mm as any).userId === id);
+                    const m = members.find(mm => mm.$id === id || (mm as any).client_id === id);
                     return (
                       <div key={`${id}-${idx}`} className="flex items-center gap-3 px-3 py-2 rounded border" style={{ borderColor: leagueColors.border.light }}>
                         <div className="w-6 text-center font-medium">{idx+1}</div>

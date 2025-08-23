@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     for (const p of demoPlayers) {
       await databases.createDocument(
         DATABASE_ID,
-        COLLECTIONS.PLAYER_PROJECTIONS,
+        COLLECTIONS.PROJECTIONS,
         ID.unique(),
         {
           playerId: p.playerId,

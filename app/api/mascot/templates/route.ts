@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { name, category, modelUrl, thumbnailUrl, presets, userId } = body
+    const { name, category, modelUrl, thumbnailUrl, presets, client_id } = body
 
     if (!name || !category || !modelUrl) {
       return NextResponse.json(
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
         modelUrl,
         thumbnailUrl: thumbnailUrl || '',
         presets: JSON.stringify(presets || {}),
-        userId: userId || null,
+        userId: client_id || null,
         isPublic: false,
         downloads: 0,
         rating: 0,
