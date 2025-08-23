@@ -115,7 +115,7 @@ function JoinLeagueContent() {
               draftTime: '19:00',
               description: '',
               type: 'private',
-              status: 'draft',
+              status: 'drafting',
               createdAt: new Date().toISOString(),
             };
             setSelectedLeague(normalized);
@@ -201,7 +201,7 @@ function JoinLeagueContent() {
           draftTime: '19:00',
           description: '',
           type: 'private',
-          status: 'draft',
+          status: 'drafting',
           createdAt: new Date().toISOString(),
         };
         setSelectedLeague(normalized);
@@ -258,7 +258,7 @@ function JoinLeagueContent() {
           draftTime: '19:00',
           description: 'Competitive league for Power 4 conference fans',
           type: 'public',
-          status: 'draft',
+          status: 'drafting',
           createdAt: new Date().toISOString()
         },
         {
@@ -274,7 +274,7 @@ function JoinLeagueContent() {
           description: 'SEC-focused league with auction draft',
           type: 'private',
           password: 'sec2025',
-          status: 'draft',
+          status: 'drafting',
           createdAt: new Date().toISOString()
         }
       ]);
@@ -489,7 +489,7 @@ function JoinLeagueContent() {
                       {league.type === 'private' ? '🔒 Private' : '🌐 Public'}
                     </span>
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      league.status === 'draft' ? 'bg-[#FF0080]/20 text-[#FF0080] border border-[#FF0080]/30' :
+                      league.status === 'drafting' ? 'bg-[#FF0080]/20 text-[#FF0080] border border-[#FF0080]/30' :
                       league.status === 'active' ? 'bg-[#8A5EAA]/20 text-[#8A5EAA] border border-[#8A5EAA]/30' :
                       'bg-[#8A6B4D]/20 text-[#8A6B4D] border border-[#8A6B4D]/30'
                     }`}>

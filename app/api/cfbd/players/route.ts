@@ -73,10 +73,10 @@ export async function GET(request: NextRequest) {
         // Check if player already exists
         const existingPlayers = await databases.listDocuments(
           DATABASE_ID,
-          COLLECTIONS.COLLEGE_PLAYERS,
+          COLLECTIONS.players,
           [
             // Query by CFBD ID if we have it, otherwise by name + team
-            { field: 'cfbd_id', operator: 'equal', value: cfbdPlayer.id.toString() }
+            (await import('appwrite')).Query.equal('cfbd_id', cfbdPlayer.id.toString())
           ]
         );
 
@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
           // Update existing player
           await databases.updateDocument(
             DATABASE_ID,
-            COLLECTIONS.COLLEGE_PLAYERS,
+            COLLECTIONS.players,
             existingPlayers.documents[0].$id,
             {
               ...playerData,
@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
           // Create new player
           await databases.createDocument(
             DATABASE_ID,
-            COLLECTIONS.COLLEGE_PLAYERS,
+            COLLECTIONS.players,
             ID.unique(),
             playerData
           );

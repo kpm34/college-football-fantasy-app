@@ -105,7 +105,7 @@ export default function DraftCore({
 
   // Filter available players (not drafted)
   const availablePlayers = state.players.filter(player => 
-    !draftedPlayers.some(drafted => drafted.id === player.id)
+    !draftedPlayers.some(drafted => (drafted as any).id === (player as any).id || (drafted as any).playerId === (player as any).playerId)
   );
 
   // Derive unique teams for team filter
@@ -130,7 +130,7 @@ export default function DraftCore({
 
   // Sort players by projected points (descending)
   const sortedPlayers = filteredPlayers.sort((a, b) => 
-    (b.projectedPoints || 0) - (a.projectedPoints || 0)
+    ((b as any).projectedPoints ?? (b as any).projections?.fantasyPoints ?? 0) - ((a as any).projectedPoints ?? (a as any).projections?.fantasyPoints ?? 0)
   );
 
   // Handle player selection
@@ -307,10 +307,7 @@ export default function DraftCore({
           >
             My Team ({myPicks.length})
           </button>
-          {(
-            // Only show the board tab if explicitly enabled
-            (typeof (arguments as any) !== 'undefined')
-          ) && (typeof showBoardTab === 'undefined' || showBoardTab) && (
+          {(typeof showBoardTab === 'undefined' || showBoardTab) && (
             <button
               onClick={() => setState(prev => ({ ...prev, activeTab: 'board' }))}
               className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${

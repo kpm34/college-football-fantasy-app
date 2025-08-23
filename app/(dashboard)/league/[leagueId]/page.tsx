@@ -18,6 +18,7 @@ interface League {
   name: string;
   commissioner: string; // User ID of commissioner
   commissionerName?: string; // Commissioner display name
+  commissionerId?: string; // Optional legacy compatibility
   season: number;
   scoringType: string;
   maxTeams: number;
@@ -133,7 +134,6 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     console.log('Commissioner check data:', {
       league_commissioner: league.commissioner,
       league_commissionerId: league.commissionerId,
-      league_commissionerEmail: league.commissionerEmail,
       user_id: user.$id,
       user_email: user.email,
       user_name: user.name
