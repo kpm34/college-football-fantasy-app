@@ -1,0 +1,57 @@
+# Project Map — data/conference rosters/Big_12_2025
+
+```mermaid
+flowchart TB
+  classDef folder fill:#e0f2fe,stroke:#0284c7,stroke-width:2,color:#075985,rx:8,ry:8
+  classDef file fill:#f0f9ff,stroke:#64748b,stroke-width:1,color:#334155,rx:4,ry:4
+  data_conference_rosters_Big_12_2025["data/conference rosters/Big_12_2025/" ]
+  class data_conference_rosters_Big_12_2025 folder
+  data_conference_rosters_Big_12_2025_Arizona_State_Sun_Devils_2025_Rosters_pdf["Arizona State Sun Devils 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Arizona_State_Sun_Devils_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Arizona_State_Sun_Devils_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Arizona_Wildcats_2025_Rosters_pdf["Arizona Wildcats 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Arizona_Wildcats_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Arizona_Wildcats_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_BYU_Cougars_2025_Rosters_pdf["BYU Cougars 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_BYU_Cougars_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_BYU_Cougars_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Baylor_Bears_2025_Rosters_pdf["Baylor Bears 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Baylor_Bears_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Baylor_Bears_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Cincinnati_Bearcats_2025_Rosters_pdf["Cincinnati Bearcats 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Cincinnati_Bearcats_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Cincinnati_Bearcats_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Colorado_Buffaloes_2025_Rosters_pdf["Colorado Buffaloes 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Colorado_Buffaloes_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Colorado_Buffaloes_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Houston_Cougars_2025_Rosters_pdf["Houston Cougars 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Houston_Cougars_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Houston_Cougars_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Iowa_State_Cyclones_2025_Rosters_pdf["Iowa State Cyclones 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Iowa_State_Cyclones_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Iowa_State_Cyclones_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Kansas_Jayhawks_2025_Rosters_pdf["Kansas Jayhawks 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Kansas_Jayhawks_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Kansas_Jayhawks_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Kansas_State_Wildcats_2025_Rosters_pdf["Kansas State Wildcats 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Kansas_State_Wildcats_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Kansas_State_Wildcats_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Oklahoma_State_Cowboys_2025_Rosters_pdf["Oklahoma State Cowboys 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Oklahoma_State_Cowboys_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Oklahoma_State_Cowboys_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_TCU_Horned_Frogs_2025_Rosters_pdf["TCU Horned Frogs 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_TCU_Horned_Frogs_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_TCU_Horned_Frogs_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Texas_Tech_Red_Raiders_2025_Rosters_pdf["Texas Tech Red Raiders 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Texas_Tech_Red_Raiders_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Texas_Tech_Red_Raiders_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_UCF_Knights_2025_Rosters_pdf["UCF Knights 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_UCF_Knights_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_UCF_Knights_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_Utah_Utes_2025_Rosters_pdf["Utah Utes 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_Utah_Utes_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_Utah_Utes_2025_Rosters_pdf
+  data_conference_rosters_Big_12_2025_West_Virginia_Mountaineers_2025_Rosters_pdf["West Virginia Mountaineers 2025 Rosters.pdf"]
+  class data_conference_rosters_Big_12_2025_West_Virginia_Mountaineers_2025_Rosters_pdf file
+  data_conference_rosters_Big_12_2025 --> data_conference_rosters_Big_12_2025_West_Virginia_Mountaineers_2025_Rosters_pdf
+```
