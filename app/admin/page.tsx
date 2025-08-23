@@ -242,7 +242,7 @@ export default function AdminDashboard() {
         {/* Diagram Display Modal */}
         {showDiagram && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-auto border-2 border-amber-300">
+            <div className="bg-white rounded-xl shadow-2xl max-w-[95vw] w-full max-h-[90vh] overflow-auto border-2 border-amber-300">
               <div className="sticky top-0 bg-gradient-to-r from-amber-100 to-orange-100 px-6 py-4 border-b border-amber-300 flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-amber-900">{showDiagram.title}</h2>
                 <button
@@ -256,11 +256,11 @@ export default function AdminDashboard() {
                   ×
                 </button>
               </div>
-              <div className="p-6">
+              <div className="p-8">
                 {charts.length > 0 ? (
-                  <div className="space-y-6">
+                  <div className="space-y-8">
                     {charts.map((chart: string, idx: number) => (
-                      <div key={idx} className="border border-amber-200 rounded-lg p-4 bg-amber-50/30">
+                      <div key={idx} className="border border-amber-200 rounded-lg p-6 bg-amber-50/30">
                         <MermaidRenderer chart={chart} />
                       </div>
                     ))}
