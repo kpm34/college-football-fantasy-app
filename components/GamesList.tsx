@@ -5,11 +5,24 @@ import { useState, useEffect } from 'react';
 interface Game {
   id: string;
   week: number;
-  home_team: string;
-  away_team: string;
-  date: string;
-  completed: boolean;
-  eligible: boolean;
+  // Legacy fields from older API
+  home_team?: string;
+  away_team?: string;
+  date?: string;
+  completed?: boolean;
+  eligible?: boolean;
+  // Canonical fields used by UI and lib/types/game
+  seasonType?: string;
+  startDate?: string;
+  homeTeam?: string;
+  homeConference?: string;
+  homePoints?: number;
+  awayTeam?: string;
+  awayConference?: string;
+  awayPoints?: number;
+  status?: 'scheduled' | 'in_progress' | 'final';
+  period?: number;
+  clock?: string;
 }
 
 interface GamesListProps {

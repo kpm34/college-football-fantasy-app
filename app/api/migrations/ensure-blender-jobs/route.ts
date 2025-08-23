@@ -39,8 +39,8 @@ export async function GET(_req: NextRequest) {
     ])
 
     // Indexes
-    await databases.createIndex(DATABASE_ID, COLLECTION_ID, 'status_idx', 'key', ['status'])
-    await databases.createIndex(DATABASE_ID, COLLECTION_ID, 'created_desc', 'key', ['createdAt'], ['DESC'])
+    try { await databases.createIndex(DATABASE_ID, COLLECTION_ID, 'status_idx', 'key', ['status']) } catch {}
+    try { await databases.createIndex(DATABASE_ID, COLLECTION_ID, 'created_desc', 'key', ['createdAt'], ['DESC']) } catch {}
 
     return NextResponse.json({ ok: true, created: true, $id: created.$id })
   } catch (e: any) {

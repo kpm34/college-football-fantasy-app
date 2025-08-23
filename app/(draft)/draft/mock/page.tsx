@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import DraftCore from '@components/features/draft/DraftCore';
+import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
 import { DraftPlayer } from '@/types/projections';
 import {
   ClockIcon,

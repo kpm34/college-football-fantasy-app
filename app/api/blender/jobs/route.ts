@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { serverDatabases as databases, serverStorage as storage } from '@/lib/appwrite-server'
 import { DATABASE_ID, COLLECTIONS } from '@/lib/appwrite'
-import { ID, InputFile } from 'node-appwrite'
+import { ID } from 'node-appwrite'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
     const doc = await databases.createDocument(
       DATABASE_ID,
-      COLLECTIONS?.BLENDER_JOBS || 'blender_jobs',
+      (COLLECTIONS as any)?.blender_jobs || 'blender_jobs',
       ID.unique(),
       {
         status: 'QUEUED',
@@ -36,7 +36,7 @@ export async function GET() {
   try {
     const res = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS?.BLENDER_JOBS || 'blender_jobs',
+      (COLLECTIONS as any)?.blender_jobs || 'blender_jobs',
       []
     )
     const next = res.documents.find((d: any) => d.status === 'QUEUED')
@@ -44,7 +44,7 @@ export async function GET() {
     // mark running
     await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS?.BLENDER_JOBS || 'blender_jobs',
+      (COLLECTIONS as any)?.blender_jobs || 'blender_jobs',
       next.$id,
       { status: 'RUNNING', startedAt: new Date().toISOString() }
     )

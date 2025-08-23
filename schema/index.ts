@@ -13,8 +13,17 @@
 export * from './schema';
 
 // Export generated configurations
-export { COLLECTIONS, databases, DATABASE_ID } from '@/lib/appwrite-server';
-export type * from '../types/generated';
+// Generated types and server exports may not exist in dev; provide fallbacks
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const generated = require('../lib/generated/appwrite-types');
+  // Re-export if present
+  // @ts-ignore
+  exports.generated = generated;
+} catch {}
+
+export { COLLECTIONS } from '@/lib/appwrite';
+export { DATABASE_ID } from '@/lib/appwrite';
 
 // Re-export commonly used items for convenience
 export { 

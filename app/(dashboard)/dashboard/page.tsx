@@ -12,7 +12,7 @@ type League = {
   name: string;
   status: string;
   maxTeams: number;
-  teams: number;
+  currentTeams?: number;
   commissioner: string;
   draftDate?: string;
 };
@@ -280,7 +280,7 @@ export default function DashboardPage() {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2 text-sm" style={{ color: palette.brown }}>
                       <UserGroupIcon className="h-4 w-4" />
-                      <span>{league.teams}/{league.maxTeams} teams</span>
+                      <span>{(league as any).teams ?? league.currentTeams ?? 0}/{league.maxTeams} teams</span>
                     </div>
                     {league.draftDate && (
                       <div className="flex items-center gap-2 text-sm" style={{ color: palette.brown }}>
