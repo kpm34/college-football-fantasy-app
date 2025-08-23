@@ -37,7 +37,7 @@ export async function createDraft(
     try {
       draft = await databases.createDocument(
         DATABASE_ID,
-        COLLECTIONS.MOCK_DRAFTS,
+        COLLECTIONS.DRAFTS,
         ID.unique(),
         {
           draftName: draftName, // Keep using 'draftName' as that's what Appwrite has
@@ -62,7 +62,7 @@ export async function createDraft(
         await ensureMockDraftSchema();
         draft = await databases.createDocument(
           DATABASE_ID,
-          COLLECTIONS.MOCK_DRAFTS,
+          COLLECTIONS.DRAFTS,
           ID.unique(),
           {
             draftName: draftName,
@@ -177,7 +177,7 @@ export async function startDraft(draftId: string): Promise<void> {
     console.log(`🚀 Starting draft: ${draftId}`);
     
     // Get draft details
-    const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId);
+    const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId);
     const config = draft.config ? JSON.parse(draft.config) : {};
     
     // Update status to active
@@ -357,12 +357,12 @@ export async function startDraft(draftId: string): Promise<void> {
     
     // Update draft status to failed
     try {
-      const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId);
+      const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId);
       const config = draft.config ? JSON.parse(draft.config) : {};
       
       await databases.updateDocument(
         DATABASE_ID,
-        COLLECTIONS.MOCK_DRAFTS,
+        COLLECTIONS.DRAFTS,
         draftId,
         {
           status: 'failed',
@@ -386,7 +386,7 @@ export async function startDraft(draftId: string): Promise<void> {
 export async function getDraftResults(draftId: string): Promise<any> {
   try {
     // Get draft
-    const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId);
+    const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId);
     // Parse config if it exists
     if (draft.config && typeof draft.config === 'string') {
       draft.config = JSON.parse(draft.config);
@@ -469,7 +469,7 @@ function computeSlotFor(overall: number, numTeams: number): { round: number; slo
 }
 
 async function getDraftDoc(draftId: string) {
-  const d = await databases.getDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId);
+  const d = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId);
   const cfg = typeof d.config === 'string' ? JSON.parse(d.config) : d.config || {};
   return { d, cfg };
 }
@@ -486,7 +486,7 @@ export async function getTurn(draftId: string): Promise<TurnState> {
     try {
       await databases.updateDocument(
         DATABASE_ID,
-        COLLECTIONS.MOCK_DRAFTS,
+        COLLECTIONS.DRAFTS,
         draftId,
         {
           startedAt: now.toISOString(),
@@ -596,14 +596,14 @@ export async function applyPick(draftId: string, participantId: string, playerId
 
   // Update lastPickAt
   const nextCfg = { ...cfg, lastPickAt: now.toISOString() };
-  await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
+  await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
     config: JSON.stringify(nextCfg),
   });
 
   // If final pick, flip status
   const totalPicks = (d.rounds ?? 15) * (d.numTeams ?? 8);
   if (turn.overall >= totalPicks) {
-    await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
+    await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
       status: 'complete',
       completedAt: now.toISOString(),
       config: JSON.stringify(nextCfg),
@@ -638,14 +638,14 @@ export async function autopickIfExpired(draftId: string, nowIso?: string) {
 
   const metrics = { autopicksCount: (cfg?.metrics?.autopicksCount ?? 0) + 1 };
   const nextCfg = { ...cfg, lastPickAt: now.toISOString(), metrics: { ...(cfg.metrics || {}), ...metrics } };
-  await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
+  await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
     config: JSON.stringify(nextCfg),
   });
 
   // If final pick, complete
   const totalPicks = (d.rounds ?? 15) * (d.numTeams ?? 8);
   if (turn.overall >= totalPicks) {
-    await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
+    await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
       status: 'complete',
       completedAt: now.toISOString(),
       config: JSON.stringify(nextCfg),
@@ -688,14 +688,14 @@ export async function autopickBotIfOnClock(draftId: string, nowIso?: string): Pr
 
   const metrics = { autopicksCount: (cfg?.metrics?.autopicksCount ?? 0) + 1 };
   const nextCfg = { ...cfg, lastPickAt: now.toISOString(), lastBotAutoAt: now.toISOString(), metrics: { ...(cfg.metrics || {}), ...metrics } };
-  await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
+  await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
     config: JSON.stringify(nextCfg),
   });
 
   // Complete if this was the last pick
   const totalPicks = (d.rounds ?? 15) * (d.numTeams ?? 8);
   if (turn.overall >= totalPicks) {
-    await databases.updateDocument(DATABASE_ID, COLLECTIONS.MOCK_DRAFTS, draftId, {
+    await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
       status: 'complete',
       completedAt: now.toISOString(),
       config: JSON.stringify(nextCfg),
