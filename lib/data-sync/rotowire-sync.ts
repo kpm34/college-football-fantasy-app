@@ -1,6 +1,6 @@
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite';
 import { ID, Query } from 'appwrite';
-import { RotowireScraper } from '@/lib/rotowire/scraper';
+import { RotowireScraper } from '@lib/rotowire/scraper';
 import { kv } from '@vercel/kv';
 
 export interface InjuryReport {

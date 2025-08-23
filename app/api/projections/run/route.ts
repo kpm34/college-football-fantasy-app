@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { ID } from 'node-appwrite';
-import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
 
 const BodySchema = z.object({
   version: z.number().int().min(1),

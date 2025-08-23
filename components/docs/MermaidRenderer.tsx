@@ -49,6 +49,11 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
       }
 
       const onPointerDown = (e: PointerEvent) => {
+        // If the user is clicking a link inside the SVG, don't start panning
+        const targetEl = e.target as HTMLElement | null
+        if (targetEl && targetEl.closest('a')) {
+          return
+        }
         if (e.button !== 0) return
         isDragging = true
         lastX = e.clientX
@@ -175,6 +180,9 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
               host.style.background = '#111827'
               host.style.borderRadius = '0.5rem'
               host.style.padding = '0.5rem'
+              host.style.width = '100%'
+              host.style.height = '85vh'
+              host.style.minHeight = '70vh'
 
               // Fit-to-width once the SVG is in the DOM and keep responsive
               const svgEl = host.querySelector('svg') as SVGSVGElement | null
@@ -183,12 +191,12 @@ export function MermaidRenderer({ charts }: MermaidRendererProps) {
                   const vb = svgEl.viewBox.baseVal
                   if (!vb || vb.width === 0) return
                   const cw = host.clientWidth
-                  const chAvail = Math.max(300, Math.floor((window.innerHeight || 800) * 0.75))
+                  const chAvail = Math.max(400, host.clientHeight || Math.floor((window.innerHeight || 800) * 0.85))
                   const sw = cw / vb.width
                   const sh = chAvail / vb.height
                   const base = Math.min(sw, sh)
-                  // Open smaller by default: cap initial zoom to 0.6 max and add margin
-                  const scale = Math.max(0.3, Math.min(0.6, base * 0.85))
+                  // Fit to container more aggressively for readability
+                  const scale = Math.max(0.5, base * 0.98)
                   svgEl.style.transformOrigin = '0 0'
                   svgEl.style.transform = `translate(0px, 0px) scale(${scale})`
                 }

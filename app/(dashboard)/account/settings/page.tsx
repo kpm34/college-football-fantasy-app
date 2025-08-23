@@ -1,10 +1,10 @@
 'use client';
 
-import { databases, DATABASE_ID } from '@/lib/appwrite';
-import { getTeamColors } from '@/lib/team-colors';
+import { databases, DATABASE_ID } from '@lib/appwrite';
+import { getTeamColors } from '@lib/team-colors';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@hooks/useAuth';
+import { useAuth } from '@lib/hooks/useAuth';
 import { ID } from 'appwrite';
 
 const POWER_4_TEAMS = [

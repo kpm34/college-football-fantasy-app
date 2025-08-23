@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases as databases, serverUsers as users, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, serverUsers as users, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

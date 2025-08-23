@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
 import { ID } from 'node-appwrite';
 import { Query } from 'node-appwrite';
 

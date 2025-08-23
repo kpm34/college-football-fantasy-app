@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from '@lib/hooks/useAuth';
 import CFPLoadingScreen from "./CFPLoadingScreen";
 import {
   HomeIcon,

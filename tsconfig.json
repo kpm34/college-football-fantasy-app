@@ -23,6 +23,8 @@
       "@app/*": ["app/*"],
       "@components/*": ["components/*"],
       "@lib/*": ["lib/*"],
+      "@/*": ["*"],
+      "@hooks/*": ["lib/hooks/*"],
       "@domain/*": ["lib/domain/*"],
       "@repos/*": ["lib/repos/*"],
       "@schema/*": ["schema/*"],

@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { Models, RealtimeResponseEvent } from 'appwrite';
-import { client, databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { client, databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite';
 import { Query } from 'appwrite';
-import { DraftPick, League } from '@/types/draft';
+import { DraftPick, League } from '@lib/types/draft';
 import { useAuth } from './useAuth';
 
 interface DraftRealtimeState {

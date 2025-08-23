@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { serverStorage as storage, serverDatabases as databases } from '@/lib/appwrite-server'
+import { serverStorage as storage, serverDatabases as databases } from '@lib/appwrite-server'
 import { ID, InputFile } from 'node-appwrite'
-import { DATABASE_ID, COLLECTIONS } from '@/lib/appwrite'
+import { DATABASE_ID, COLLECTIONS } from '@lib/appwrite'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'

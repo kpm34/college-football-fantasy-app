@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Calendar, Users } from 'lucide-react';
-import { Game, WeekSchedule } from '@/app/api/schedule/route';
-import { getTeamColors } from '@/lib/team-colors';
+import { Game, WeekSchedule } from '@app/api/schedule/route';
+import { getTeamColors } from '@lib/team-colors';
 
 interface ScheduleNavigationProps {
   className?: string;

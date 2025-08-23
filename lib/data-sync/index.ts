@@ -1,4 +1,4 @@
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite';
 import { CFBDSync } from './cfbd-sync';
 // Temporarily disable Rotowire sync to fix deployment
 // import { RotowireSync } from './rotowire-sync';

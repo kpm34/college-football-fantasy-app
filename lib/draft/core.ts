@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDraftRealtime } from '@hooks/useDraftRealtime';
-import { subscribeToDraft } from '@/lib/realtime/draft';
+import { useDraftRealtime } from '@lib/hooks/useDraftRealtime';
+import { subscribeToDraft } from '@lib/realtime/draft';
 
 export type DraftCoreState = {
   league: any | null;

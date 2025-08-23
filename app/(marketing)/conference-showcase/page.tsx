@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getTeamColors } from '@/lib/team-colors';
+import { getTeamColors } from '@lib/team-colors';
 import Link from 'next/link';
 
 interface ConferenceTeam {

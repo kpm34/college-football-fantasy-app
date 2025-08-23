@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
+import { databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite';
 
 interface LeagueSettingsProps {
   league: any;

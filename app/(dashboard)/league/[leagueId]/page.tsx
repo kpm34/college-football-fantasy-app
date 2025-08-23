@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 // import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
 import Link from "next/link";
 import { FiSettings, FiUsers, FiCalendar, FiTrendingUp, FiClipboard, FiAward, FiShare2, FiActivity } from "react-icons/fi";
-import { leagueColors } from "@/lib/theme/colors";
-import { useAuth } from "@/hooks/useAuth";
-import { useLeagueMembersRealtime } from "@/hooks/useLeagueMembersRealtime";
-import { useLeagueRealtime } from "@/hooks/useLeagueRealtime";
-import { isUserCommissioner, debugCommissionerMatch } from "@/lib/utils/commissioner";
+import { leagueColors } from '@lib/theme/colors';
+import { useAuth } from '@lib/hooks/useAuth';
+import { useLeagueMembersRealtime } from '@lib/hooks/useLeagueMembersRealtime';
+import { useLeagueRealtime } from '@lib/hooks/useLeagueRealtime';
+import { isUserCommissioner, debugCommissionerMatch } from '@lib/utils/commissioner';
 import { InviteModal } from '@components/features/leagues/InviteModal';
 import { DraftButton } from '@components/features/leagues/DraftButton';
 

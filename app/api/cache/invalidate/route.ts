@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { invalidateCache } from '@/lib/cache';
+import { invalidateCache } from '@lib/cache';
 
 export const runtime = 'edge';
 

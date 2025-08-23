@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@hooks/useAuth';
+import { useAuth } from '@lib/hooks/useAuth';
 import Link from 'next/link';
 // Removed direct Appwrite imports - using API routes instead
 

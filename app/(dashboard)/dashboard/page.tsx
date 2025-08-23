@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserGroupIcon, CalendarIcon } from "@heroicons/react/24/outline";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserLeaguesRealtime } from "@/hooks/useUserLeaguesRealtime";
+import { useAuth } from '@lib/hooks/useAuth';
+import { useUserLeaguesRealtime } from '@lib/hooks/useUserLeaguesRealtime';
 
 type League = {
   $id: string;

@@ -12,9 +12,9 @@
  *   npx tsx scripts/run-data-ingestion.ts --season 2025 --week 5 --adapters team_notes,stats_inference
  */
 
-import { IngestionOrchestrator, IngestionConfig } from '../core/data-ingestion/orchestrator/ingestion-orchestrator';
-import { ManualOverrideManager } from '../core/data-ingestion/manual-overrides/manual-override-manager';
-import { DataQualityValidator } from '../core/data-ingestion/validation/data-quality-validator';
+import { IngestionOrchestrator, IngestionConfig } from '@domain/data-ingestion/orchestrator/ingestion-orchestrator';
+import { ManualOverrideManager } from '@domain/data-ingestion/manual-overrides/manual-override-manager';
+import { DataQualityValidator } from '@domain/data-ingestion/validation/data-quality-validator';
 import { program } from 'commander';
 
 interface CLIOptions {

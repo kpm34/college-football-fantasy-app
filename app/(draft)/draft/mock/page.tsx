@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from '@lib/hooks/useAuth';
 import DraftCore from '@components/features/draft/DraftCore';
 import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
-import { DraftPlayer } from '@/types/projections';
+import { DraftPlayer } from '@lib/types/projections';
 import {
   ClockIcon,
   UserGroupIcon,
@@ -13,7 +13,7 @@ import {
   ChartBarIcon,
   AdjustmentsHorizontalIcon
 } from "@heroicons/react/24/outline";
-import { leagueColors } from '@/lib/theme/colors';
+import { leagueColors } from '@lib/theme/colors';
 import CFPLoadingScreen from '@components/CFPLoadingScreen';
 
 type DraftType = 'snake' | 'auction';

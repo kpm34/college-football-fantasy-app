@@ -5,7 +5,7 @@
  * Creates mock draft collections if they don't exist (idempotent)
  */
 
-import { serverDatabases as databases, DATABASE_ID } from '../../lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID } from '../../../../lib/appwrite-server';
 import { ID } from 'node-appwrite';
 
 interface CollectionSchema {

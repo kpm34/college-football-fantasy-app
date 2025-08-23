@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { startMockDraft } from '@/lib/draft/mock-engine';
+import { startMockDraft } from '@lib/draft/mock-engine';
 
 export async function POST(request: NextRequest) {
   try {

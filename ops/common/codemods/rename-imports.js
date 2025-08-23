@@ -38,6 +38,24 @@ module.exports = function transform(fileInfo, api, options) {
 
     // hooks/types absolute fallbacks to new aliases
     { from: /^\/(hooks|types)\//, to: '@/$1/' },
+
+    // New minimal alias set: rewrite '@/...' to '@...'
+    { from: /^@\/lib\//, to: '@lib/' },
+    { from: /^@\/domain\//, to: '@domain/' },
+    { from: /^@\/repos\//, to: '@repos/' },
+    { from: /^@\/schema\//, to: '@schema/' },
+    { from: /^@\/functions\//, to: '@functions/' },
+    { from: /^@\/ops\//, to: '@ops/' },
+    { from: /^@\/docs\//, to: '@docs/' },
+    { from: /^@\/future\//, to: '@future/' },
+    { from: /^@\/app\//, to: '@app/' },
+    { from: /^@\/components\//, to: '@components/' },
+
+    // Remove deprecated @hooks and @types aliases → @lib/*
+    { from: /^@hooks\//, to: '@lib/hooks/' },
+    { from: /^@types\//, to: '@lib/types/' },
+    { from: /^@\/hooks\//, to: '@lib/hooks/' },
+    { from: /^@\/types\//, to: '@lib/types/' },
   ];
 
   function rewrite(value) {

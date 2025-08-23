@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { kv } from '@vercel/kv';
-import { RotowireScraper } from '@/lib/rotowire/scraper';
+import { RotowireScraper } from '@lib/rotowire/scraper';
 
 export const runtime = 'nodejs'; // Required for Playwright
 

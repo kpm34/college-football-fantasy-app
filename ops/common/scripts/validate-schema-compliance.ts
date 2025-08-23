@@ -9,7 +9,7 @@
  * Prevents the architectural drift we experienced with the "players" field issue.
  */
 
-import { validateSystemCompliance, SchemaValidator } from '../core/validation/schema-enforcer';
+import { validateSystemCompliance, SchemaValidator } from '@domain/validation/schema-enforcer';
 import { SCHEMA } from '../schema/schema';
 import fs from 'fs';
 import path from 'path';

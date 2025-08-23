@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTeamsByConference, normalizeColors } from '@/lib/conference-data';
-import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { getTeamsByConference, normalizeColors } from '@lib/conference-data';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
 import { Query } from 'node-appwrite';
 
 export async function GET(

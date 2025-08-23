@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases, serverUsers, isServerConfigured, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases, serverUsers, isServerConfigured, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
 import { Query } from 'node-appwrite';
 import { kv } from '@vercel/kv';
 

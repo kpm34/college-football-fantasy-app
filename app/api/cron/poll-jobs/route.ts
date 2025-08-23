@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases as databases } from '@/lib/appwrite-server';
-import { DATABASE_ID } from '@/lib/appwrite';
+import { serverDatabases as databases } from '@lib/appwrite-server';
+import { DATABASE_ID } from '@lib/appwrite';
 import { Query } from 'node-appwrite';
 // import { pollMeshyJob } from '@/vendor/awwwards-rig/src/lib/meshy'; // Removed with vendor directory
-import { pollRunwayJob } from '@/lib/runway';
+import { pollRunwayJob } from '@lib/runway';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { FiWifi, FiWifiOff } from 'react-icons/fi';
-import { DraftPick } from '@/types/draft';
+import { DraftPick } from '@lib/types/draft';
 
 interface DraftRealtimeStatusProps {
   connected: boolean;

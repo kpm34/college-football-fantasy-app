@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { serverStorage as storage } from '@/lib/appwrite-server'
+import { serverStorage as storage } from '@lib/appwrite-server'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'

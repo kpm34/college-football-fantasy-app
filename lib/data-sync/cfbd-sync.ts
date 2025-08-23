@@ -1,4 +1,4 @@
-import { databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite';
 import { ID, Query } from 'appwrite';
 
 const CFBD_API_KEY = process.env.CFBD_API_KEY || process.env.NEXT_PUBLIC_CFBD_API_KEY;

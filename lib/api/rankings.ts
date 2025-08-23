@@ -1,5 +1,5 @@
 import apiClient from './client';
-import type { RankingsResponse, TeamRankingCheck } from '@/types/rankings';
+import type { RankingsResponse, TeamRankingCheck } from '@lib/types/rankings';
 
 export const rankingsAPI = {
   getCurrent: () => 

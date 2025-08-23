@@ -27,42 +27,66 @@ export async function GET(
   // Map slugs to file paths
   const fileMap: Record<string, string> = {
     // Legacy mappings for existing pages
-    'data-flow': 'DATA_FLOW.md',
-    'project-map': 'PROJECT_MAP.md',
-    'system-map': 'SYSTEM_MAP.md',
+    'data-flow': 'diagrams/system-architecture/complete-data-flow.md',
+    // Project Map (split by root folders)
+    'project-map:app': 'diagrams/system-architecture/project-map/app.md',
+    'project-map:app:dashboard': 'diagrams/system-architecture/project-map/app.dashboard.md',
+    'project-map:app:draft': 'diagrams/system-architecture/project-map/app.draft.md',
+    'project-map:app:marketing': 'diagrams/system-architecture/project-map/app.marketing.md',
+    'project-map:app:admin': 'diagrams/system-architecture/project-map/app.admin.md',
+    'project-map:app:api': 'diagrams/system-architecture/project-map/app.api.md',
+    'project-map:components': 'diagrams/system-architecture/project-map/components.md',
+    'project-map:lib': 'diagrams/system-architecture/project-map/lib.md',
+    'project-map:data': 'diagrams/system-architecture/project-map/data.md',
+    'project-map:schema': 'diagrams/system-architecture/project-map/schema.md',
+    'project-map:future': 'diagrams/system-architecture/project-map/future.md',
+    'project-map:functions': 'diagrams/system-architecture/project-map/functions.md',
+    'project-map:docs': 'diagrams/system-architecture/project-map/docs.md',
+    'project-map:ops': 'diagrams/system-architecture/project-map/ops.md',
+    'project-map:public': 'diagrams/system-architecture/project-map/public.md',
+    'system-map': 'diagrams/SYSTEM_MAP.md',
     
     // Projections System Diagrams
-    'projections-overview': 'diagrams/projections-overview.md',
-    'projections-algorithm': 'diagrams/projections-algorithm.md',
-    'depth-multipliers': 'diagrams/depth-multipliers.md',
-    'data-sources': 'diagrams/data-sources.md',
-    'api-flow': 'diagrams/api-flow.md',
-    'troubleshooting': 'diagrams/troubleshooting.md',
+    'projections-overview': 'diagrams/projections/projections-overview.md',
+    'projections-algorithm': 'diagrams/projections/projections-algorithm.md',
+    'depth-multipliers': 'diagrams/projections/depth-multipliers.md',
+    'data-sources': 'diagrams/projections/data-sources.md',
+    'api-flow': 'diagrams/projections/api-flow.md',
+    'troubleshooting': 'diagrams/projections/troubleshooting.md',
     
     // System Architecture Diagrams
-    'repository-structure': 'diagrams/repository-structure.md',
-    'system-architecture': 'diagrams/system-architecture.md',
-    'authentication-flow': 'diagrams/authentication-flow.md',
+    'repository-structure': 'diagrams/system-architecture/repository-structure.md',
+    'system-architecture': 'diagrams/system-architecture/system-architecture.md',
+    'authentication-flow': 'diagrams/system-architecture/authentication-flow.md',
     
     // League & Draft Management
-    'league-management': 'diagrams/league-management.md',
-    'draft-realtime': 'diagrams/draft-realtime.md',
-    'search-filter-flow': 'diagrams/search-filter-flow.md',
+    'league-management': 'diagrams/league-draft/league-management.md',
+    'draft-realtime': 'diagrams/league-draft/draft-realtime.md',
+    'search-filter-flow': 'diagrams/league-draft/search-filter-flow.md',
     
     // Admin & Commissioner Tools
-    'admin-operations': 'diagrams/admin-operations.md',
-    'commissioner-settings': 'diagrams/commissioner-settings.md',
+    'admin-operations': 'diagrams/admin-tools/admin-operations.md',
+    'commissioner-settings': 'diagrams/admin-tools/commissioner-settings.md',
     
     // Catch-all for projections (loads overview)
-    'projections': 'diagrams/projections-overview.md',
+    'projections': 'diagrams/projections/projections-overview.md',
   }
 
-  const fileName = fileMap[slug]
+  let fileName = fileMap[slug]
   if (!fileName) {
-    return NextResponse.json({ 
-      error: 'Not found', 
-      availableSlugs: Object.keys(fileMap) 
-    }, { status: 404 })
+    // Dynamic project-map routing: project-map:root(:group(:sub)?)
+    if (slug.startsWith('project-map:')) {
+      const parts = slug.replace('project-map:', '').split(':')
+      const [root, group, sub] = parts
+      if (root) {
+        if (root && !group) fileName = `diagrams/system-architecture/project-map/${root}.md`
+        if (root && group && !sub) fileName = `diagrams/system-architecture/project-map/${root}.${group}.md`
+        if (root && group && sub) fileName = `diagrams/system-architecture/project-map/${root}.${group}.${sub}.md`
+      }
+    }
+  }
+  if (!fileName) {
+    return NextResponse.json({ error: 'Not found', availableSlugs: Object.keys(fileMap), slug }, { status: 404 })
   }
 
   // Try multiple locations where docs might be
