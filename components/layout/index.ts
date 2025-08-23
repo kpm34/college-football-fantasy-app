@@ -1,4 +1,4 @@
-// AppShell/Sidebar/TopNav stubs removed in reorg; keep only existing exports
-export { default as FeaturesSection } from './FeaturesSection'
-export { default as GamesSection } from './GamesSection'
+// AppShell/Sidebar/TopNav removed in reorg; re-export existing components
+export { FeaturesSection } from './FeaturesSection'
+export { GamesSection } from './GamesSection'
 export { default as LeaguePortal } from './LeaguePortal'

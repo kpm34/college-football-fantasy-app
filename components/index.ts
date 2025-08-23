@@ -6,8 +6,8 @@ export * from './ui/LoadingSpinner'
 export * from './ui/Toast'
 
 // Layout
-export { default as FeaturesSection } from './layout/FeaturesSection'
-export { default as GamesSection } from './layout/GamesSection'
+export { FeaturesSection } from './layout/FeaturesSection'
+export { GamesSection } from './layout/GamesSection'
 export { default as LeaguePortal } from './layout/LeaguePortal'
 
 // Features - Draft
@@ -23,8 +23,8 @@ export { InviteModal } from './features/leagues/InviteModal'
 export { ScheduleNavigation } from './features/leagues/ScheduleNavigation'
 
 // Features - Games
-export { default as GamesGrid } from './features/games/GamesGrid'
-export { default as GameCard } from './features/games/GameCard'
+export { GamesGrid } from './features/games/GamesGrid'
+export { GameCard } from './features/games/GameCard'
 
 // Charts & Tables
 export { default as TeamUsage } from './charts/TeamUsage'
@@ -32,7 +32,7 @@ export { default as PlayersTable } from './tables/PlayersTable'
 
 // Misc
 export { default as Navbar } from './Navbar'
-export { default as ErrorBoundary } from './ErrorBoundary'
-export { default as HeroSection } from './HeroSection'
-export { default as MermaidRenderer } from './docs/MermaidRenderer'
+export { ErrorBoundary } from './ErrorBoundary'
+export { HeroSection } from './HeroSection'
+export { MermaidRenderer } from './docs/MermaidRenderer'
 export { default as CFPLoadingScreen } from './CFPLoadingScreen'
