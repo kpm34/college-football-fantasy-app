@@ -10,14 +10,6 @@ import {
   isAppError, 
   isOperationalError,
   ValidationError 
-} from '../errors/app-error';
-// Updated import path to centralized domain errors
-// eslint-disable-next-line import/no-relative-packages
-import { 
-  AppError as DomainAppError,
-  isAppError as isDomainAppError,
-  isOperationalError as isDomainOperationalError,
-  ValidationError as DomainValidationError
 } from '../domain/errors/app-error';
 
 interface ErrorResponse {
