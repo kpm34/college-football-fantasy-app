@@ -238,7 +238,7 @@ export default function DashboardPage() {
                   <Link
                     href={`/league/${team.leagueId}/locker-room`}
                     className="flex-1 text-center py-2 rounded-lg text-sm font-medium transition-colors"
-                    style={{ background: palette.periwinkle }}
+                    style={{ background: '#8091BB' }}
                   >
                     Locker Room
                   </Link>
