@@ -4,9 +4,9 @@
  */
 
 import { BaseRepository, QueryOptions } from './base.repository';
-import { ValidationError } from '../errors/app-error';
+import { ValidationError } from '../../domain/errors/app-error';
 import { Query } from 'appwrite';
-import { SchemaValidator, enforceSchema } from '../validation/schema-enforcer';
+import { SchemaValidator, enforceSchema } from '../../domain/validation/schema-enforcer';
 import type { Roster } from '../../types/roster';
 
 export interface CreateRosterData {

@@ -30,8 +30,7 @@ const robotoMono = Roboto_Mono({
 })
 
 import Navbar from '@components/Navbar'
-import dynamic from 'next/dynamic'
-const DevCursorOverlay = dynamic(() => import('@components/dev/DevCursorOverlay').then(m=>m.default), { ssr: false })
+// Client overlay imported conditionally via require to avoid Server Component ssr:false restriction
 
 export const metadata: Metadata = {
   title: 'College Football Fantasy App',
@@ -86,7 +85,10 @@ export default function RootLayout({
         </div>
         <Analytics />
         <SpeedInsights />
-        {process.env.NODE_ENV === 'development' ? <DevCursorOverlay /> : null}
+        {process.env.NODE_ENV === 'development' ? (() => {
+          const Overlay = require('@components/dev/DevCursorOverlay').default
+          return <Overlay />
+        })() : null}
       </body>
     </html>
   )

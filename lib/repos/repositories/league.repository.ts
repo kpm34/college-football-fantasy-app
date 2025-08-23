@@ -4,12 +4,12 @@
  */
 
 import { BaseRepository, QueryOptions } from './base.repository';
-import { ValidationError, ForbiddenError } from '../errors/app-error';
+import { ValidationError, ForbiddenError } from '../../domain/errors/app-error';
 import { ID } from 'appwrite';
-import { env } from '../config/environment';
+import { env } from '../../config/environment';
 import type { League } from '../../types/league';
 import { RosterRepository } from './roster.repository';
-import { SchemaValidator, enforceSchema } from '../validation/schema-enforcer';
+import { SchemaValidator, enforceSchema } from '../../domain/validation/schema-enforcer';
 
 export interface CreateLeagueData {
   name: string;

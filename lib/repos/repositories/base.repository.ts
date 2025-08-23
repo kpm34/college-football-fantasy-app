@@ -5,9 +5,9 @@
 
 import { Client, Databases, Query, Models, ID as ClientID } from 'appwrite';
 import { Client as ServerClient, Databases as ServerDatabases, ID as ServerID } from 'node-appwrite';
-import { env } from '../config/environment';
-import { AppError, NotFoundError, ValidationError } from '../errors/app-error';
-import { SchemaValidator } from '../validation/schema-enforcer';
+import { env } from '../../config/environment';
+import { AppError, NotFoundError, ValidationError } from '../../domain/errors/app-error';
+import { SchemaValidator } from '../../domain/validation/schema-enforcer';
 
 // Conditionally import KV only if configured
 let kv: any = null;
