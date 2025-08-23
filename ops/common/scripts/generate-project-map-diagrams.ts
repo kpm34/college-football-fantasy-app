@@ -97,6 +97,11 @@ function ensureDir(p: string) {
   fs.mkdirSync(p, { recursive: true })
 }
 
+function writeFileEnsuringDir(filePath: string, content: string) {
+  ensureDir(path.dirname(filePath))
+  fs.writeFileSync(filePath, content, 'utf8')
+}
+
 function findMatchingDir(parentAbs: string, displayName: string): string | null {
   if (!fs.existsSync(parentAbs)) return null
   const entries = fs.readdirSync(parentAbs, { withFileTypes: true })
@@ -183,11 +188,15 @@ async function main() {
   ensureDir(OUT_DIR)
   const summary: Record<string, number> = {}
   for (const folder of ROOT_FOLDERS) {
-    // Root page
+    // Root page → nested at <OUT_DIR>/<root>/index.md
     const content = buildMermaid(folder)
-    const out = path.join(OUT_DIR, `${folder}.md`)
-    fs.writeFileSync(out, content, 'utf8')
+    const nestedRoot = path.join(OUT_DIR, folder, 'index.md')
+    writeFileEnsuringDir(nestedRoot, content)
     summary[folder] = content.length
+
+    // Also write flat file for backward compatibility
+    const flatRoot = path.join(OUT_DIR, `${folder}.md`)
+    writeFileEnsuringDir(flatRoot, content)
 
     // Generate group pages (second level)
     const absRoot = path.join(ROOT, folder)
@@ -196,9 +205,12 @@ async function main() {
     for (const e of entries) {
       if (!e.isDirectory() || e.name.startsWith('.')) continue
       const groupName = e.name.replace(/[()]/g, '')
-      const groupFile = path.join(OUT_DIR, `${folder}.${groupName}.md`)
       const groupDiagram = buildGroupDiagram(folder, groupName)
-      fs.writeFileSync(groupFile, groupDiagram, 'utf8')
+      const nestedGroup = path.join(OUT_DIR, folder, groupName, 'index.md')
+      writeFileEnsuringDir(nestedGroup, groupDiagram)
+      // Flat fallback
+      const flatGroup = path.join(OUT_DIR, `${folder}.${groupName}.md`)
+      writeFileEnsuringDir(flatGroup, groupDiagram)
 
       // Generate third-level pages for each subfolder inside the group
       const absGroup = path.join(absRoot, e.name)
@@ -206,9 +218,12 @@ async function main() {
       for (const s of subs) {
         if (!s.isDirectory() || s.name.startsWith('.')) continue
         const subName = s.name
-        const subFile = path.join(OUT_DIR, `${folder}.${groupName}.${subName}.md`)
         const subDiagram = buildSubDiagram(folder, groupName, subName)
-        fs.writeFileSync(subFile, subDiagram, 'utf8')
+        const nestedSub = path.join(OUT_DIR, folder, groupName, subName, 'index.md')
+        writeFileEnsuringDir(nestedSub, subDiagram)
+        // Flat fallback
+        const flatSub = path.join(OUT_DIR, `${folder}.${groupName}.${subName}.md`)
+        writeFileEnsuringDir(flatSub, subDiagram)
       }
     }
   }
