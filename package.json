@@ -69,6 +69,7 @@
     "export:players": "ts-node ops/common/scripts/export-college-players.ts --season=2025",
     "export:players:json": "npx tsx ops/common/scripts/export-college-players-json.ts",
     "export:database": "npx tsx ops/common/scripts/export-complete-database.ts",
+    "export:schema:csv": "tsx ops/common/scripts/export-appwrite-schema-csv.ts",
     "compress:prompt": "npx tsx ops/common/scripts/compress-players-for-prompt.ts",
     "check:versions": "ts-node ops/common/scripts/check-file-versions.ts",
     "commit:safe": "npm run check:versions && git add -A && git commit",
