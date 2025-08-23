@@ -1,0 +1,105 @@
+{
+  "week": 2,
+  "startDate": "2025-09-05",
+  "endDate": "2025-09-06",
+  "games": [
+    {
+      "id": "james-madison-louisville-w2",
+      "week": 2,
+      "date": "2025-09-05",
+      "time": "7:00 PM",
+      "homeTeam": "Louisville",
+      "awayTeam": "James Madison",
+      "homeConference": "ACC",
+      "awayConference": "Sun Belt",
+      "tv": "ESPN",
+      "location": "L&N Federal Credit Union Stadium, Louisville, KY"
+    },
+    {
+      "id": "western-illinois-northwestern-w2",
+      "week": 2,
+      "date": "2025-09-05",
+      "time": "7:30 PM",
+      "homeTeam": "Northwestern",
+      "awayTeam": "Western Illinois",
+      "homeConference": "Big Ten",
+      "awayConference": "Missouri Valley",
+      "tv": "BTN",
+      "location": "Martin Stadium, Evanston, IL"
+    },
+    {
+      "id": "northern-illinois-maryland-w2",
+      "week": 2,
+      "date": "2025-09-05",
+      "time": "7:30 PM",
+      "homeTeam": "Maryland",
+      "awayTeam": "Northern Illinois",
+      "homeConference": "Big Ten",
+      "awayConference": "MAC",
+      "tv": "BTN",
+      "location": "SECU Stadium, College Park, MD"
+    },
+    {
+      "id": "eastern-washington-boise-state-w2",
+      "week": 2,
+      "date": "2025-09-05",
+      "time": "9:00 PM",
+      "homeTeam": "Boise State",
+      "awayTeam": "Eastern Washington",
+      "homeConference": "Mountain West",
+      "awayConference": "Big Sky",
+      "tv": "FS1",
+      "location": "Albertsons Stadium, Boise, ID"
+    },
+    {
+      "id": "texas-san-jose-state-w2",
+      "week": 2,
+      "date": "2025-09-06",
+      "time": "12:00 PM",
+      "homeTeam": "Texas",
+      "awayTeam": "San Jose State",
+      "homeConference": "SEC",
+      "awayConference": "Mountain West",
+      "tv": "FOX",
+      "location": "DKR-Texas Memorial Stadium, Austin, TX"
+    },
+    {
+      "id": "florida-international-penn-state-w2",
+      "week": 2,
+      "date": "2025-09-06",
+      "time": "12:00 PM",
+      "homeTeam": "Penn State",
+      "awayTeam": "Florida International",
+      "homeConference": "Big Ten",
+      "awayConference": "Conference USA",
+      "tv": "BTN",
+      "location": "Beaver Stadium, University Park, PA"
+    },
+    {
+      "id": "illinois-duke-w2",
+      "week": 2,
+      "date": "2025-09-06",
+      "time": "12:00 PM",
+      "homeTeam": "Duke",
+      "awayTeam": "Illinois",
+      "homeConference": "ACC",
+      "awayConference": "Big Ten",
+      "tv": "ACC Network",
+      "location": "Wallace Wade Stadium, Durham, NC",
+      "line": "ILL -2.5"
+    },
+    {
+      "id": "baylor-smu-w2",
+      "week": 2,
+      "date": "2025-09-06",
+      "time": "12:00 PM",
+      "homeTeam": "SMU",
+      "awayTeam": "Baylor",
+      "homeConference": "ACC",
+      "awayConference": "Big 12",
+      "tv": "The CW Network",
+      "location": "Gerald J. Ford Stadium, Dallas, TX",
+      "line": "SMU -3"
+    }
+  ]
+}

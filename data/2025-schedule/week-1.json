@@ -1,0 +1,109 @@
+{
+  "week": 1,
+  "startDate": "2025-08-28",
+  "endDate": "2025-08-31",
+  "games": [
+    {
+      "id": "south-florida-boise-state-w1",
+      "week": 1,
+      "date": "2025-08-28",
+      "time": "5:30 PM",
+      "homeTeam": "South Florida",
+      "awayTeam": "Boise State",
+      "homeConference": "AAC",
+      "awayConference": "Mountain West",
+      "tv": "ESPN",
+      "location": "Raymond James Stadium, Tampa, FL"
+    },
+    {
+      "id": "east-carolina-nc-state-w1",
+      "week": 1,
+      "date": "2025-08-28",
+      "time": "7:00 PM",
+      "homeTeam": "NC State",
+      "awayTeam": "East Carolina",
+      "homeConference": "ACC",
+      "awayConference": "AAC",
+      "tv": "ACC Network",
+      "location": "Carter-Finley Stadium, Raleigh, NC",
+      "line": "NC State -12.5"
+    },
+    {
+      "id": "missouri-central-arkansas-w1",
+      "week": 1,
+      "date": "2025-08-28",
+      "time": "7:30 PM",
+      "homeTeam": "Missouri",
+      "awayTeam": "Central Arkansas",
+      "homeConference": "SEC",
+      "awayConference": "ASUN",
+      "tv": "SEC Network",
+      "location": "Memorial Stadium, Columbia, MO"
+    },
+    {
+      "id": "duke-elon-w1",
+      "week": 1,
+      "date": "2025-08-28",
+      "time": "7:30 PM",
+      "homeTeam": "Duke",
+      "awayTeam": "Elon",
+      "homeConference": "ACC",
+      "awayConference": "CAA",
+      "tv": "ESPN",
+      "location": "Wallace Wade Stadium, Durham, NC",
+      "line": "Duke -33.5"
+    },
+    {
+      "id": "oklahoma-state-ut-martin-w1",
+      "week": 1,
+      "date": "2025-08-28",
+      "time": "7:30 PM",
+      "homeTeam": "Oklahoma State",
+      "awayTeam": "UT Martin",
+      "homeConference": "Big 12",
+      "awayConference": "OVC",
+      "tv": "ESPN",
+      "location": "Boone Pickens Stadium, Stillwater, OK",
+      "line": "Oklahoma State -22.5"
+    },
+    {
+      "id": "minnesota-buffalo-w1",
+      "week": 1,
+      "date": "2025-08-28",
+      "time": "8:00 PM",
+      "homeTeam": "Minnesota",
+      "awayTeam": "Buffalo",
+      "homeConference": "Big Ten",
+      "awayConference": "MAC",
+      "tv": "FS1",
+      "location": "Huntington Bank Stadium, Minneapolis, MN",
+      "line": "Minnesota -15"
+    },
+    {
+      "id": "houston-stephen-f-austin-w1",
+      "week": 1,
+      "date": "2025-08-28",
+      "time": "8:00 PM",
+      "homeTeam": "Houston",
+      "awayTeam": "Stephen F. Austin",
+      "homeConference": "Big 12",
+      "awayConference": "WAC",
+      "tv": "ESPN",
+      "location": "TDECU Stadium, Houston, TX",
+      "line": "Houston -22.5"
+    },
+    {
+      "id": "cincinnati-nebraska-w1",
+      "week": 1,
+      "date": "2025-08-28",
+      "time": "9:00 PM",
+      "homeTeam": "Nebraska",
+      "awayTeam": "Cincinnati",
+      "homeConference": "Big Ten",
+      "awayConference": "Big 12",
+      "tv": "ESPN",
+      "location": "GEHA Field at Arrowhead Stadium, Kansas City, MO",
+      "line": "Nebraska -6.5"
+    }
+  ]
+}

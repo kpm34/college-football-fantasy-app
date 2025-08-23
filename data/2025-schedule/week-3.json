@@ -1,0 +1,19 @@
+{
+  "week": 3,
+  "startDate": "2025-09-11",
+  "endDate": "2025-09-13",
+  "games": [
+    {
+      "id": "placeholder-w3-1",
+      "week": 3,
+      "date": "2025-09-11",
+      "time": "TBD",
+      "homeTeam": "TBD",
+      "awayTeam": "TBD",
+      "homeConference": "TBD",
+      "awayConference": "TBD",
+      "tv": "TBD",
+      "location": "TBD"
+    }
+  ]
+}
