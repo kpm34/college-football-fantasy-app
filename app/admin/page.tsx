@@ -242,7 +242,7 @@ export default function AdminDashboard() {
         {/* Diagram Display Modal */}
         {showDiagram && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl shadow-2xl max-w-[95vw] w-full max-h-[90vh] overflow-auto border-2 border-amber-300">
+            <div className="bg-white rounded-xl shadow-2xl max-w-[95vw] w-full max-h-[92vh] overflow-auto border-2 border-amber-300">
               <div className="sticky top-0 bg-gradient-to-r from-amber-100 to-orange-100 px-6 py-4 border-b border-amber-300 flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-amber-900">{showDiagram.title}</h2>
                 <button
