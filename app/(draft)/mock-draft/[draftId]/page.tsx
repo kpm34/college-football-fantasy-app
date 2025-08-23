@@ -94,8 +94,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
     
     // Poll for turn updates
     const poll = setInterval(() => {
-      draftCore.refresh()
-        .catch(() => {});
+      Promise.resolve(draftCore.refresh()).catch(() => {});
       refreshAll(); // Also refresh turn and results
     }, 3000);
     

@@ -580,10 +580,10 @@ export default function MockDraftPage() {
           <DraftCore
             leagueId="mock-draft"
             draftType="mock"
-            onPlayerSelect={setSelectedPlayer}
-            onPlayerDraft={handleMockDraftPlayer}
-            myPicks={myMockPicks}
-            draftedPlayers={Array.from(draftedPlayers).map(id => ({ id } as any))}
+            onPlayerSelect={(p:any)=> setSelectedPlayer(p as Player)}
+            onPlayerDraft={(p:any)=> handleMockDraftPlayer(p as Player)}
+            myPicks={myMockPicks as any}
+            draftedPlayers={Array.from(draftedPlayers).map(id => ({ id } as any)) as any}
             canDraft={isMyTurn}
             timeRemainingSec={timeRemaining}
             currentPickNumber={currentPick}
