@@ -1,136 +1,155 @@
-# Create League Flow
+# Create League Flow (with Draft Scheduling)
 
 ## Overview
-League creation flow with configuration options and automatic commissioner assignment.
+Complete flow for creating a new fantasy football league, including draft scheduling and configuration.
 
-## Related Files
-- `/app/api/leagues/create/route.ts` - League creation API
-- `/app/(dashboard)/league/create/page.tsx` - Create league UI
-- `/lib/db/leagues.ts` - League DAL
-- `/lib/db/league_memberships.ts` - Membership DAL
-- `/schema/zod/leagues.ts` - League validation schema
+## Auth Route Handlers Detected
+- `/api/leagues/create` - Main league creation endpoint
+- `/api/auth/session` - Session validation
+- `/api/leagues/validate` - League settings validation
 
-## User Flow
+## 1. Flowchart
+
 ```mermaid
-flowchart TB
-  classDef user fill:#fef3c7,stroke:#f59e0b,stroke-width:2,color:#92400e
-  classDef form fill:#e0e7ff,stroke:#6366f1,stroke-width:2,color:#312e81
-  classDef api fill:#fce7f3,stroke:#ec4899,stroke-width:2,color:#831843
-  classDef db fill:#d1fae5,stroke:#10b981,stroke-width:2,color:#064e3b
-  classDef validate fill:#fee2e2,stroke:#ef4444,stroke-width:2,color:#7f1d1d
-  
-  Start([User clicks Create League]):::user
-  Form[League Settings Form]:::form
-  
-  subgraph Settings
-    Name[League Name]:::form
-    Type[Game Mode: Power4/Conference]:::form
-    Conf[Select Conference]:::form
-    Draft[Draft Type: Snake/Auction]:::form
-    Teams[Max Teams: 8-12]:::form
-    Privacy[Public/Private]:::form
-    Password[Optional Password]:::form
-  end
-  
-  Validate[Validate Input]:::validate
-  API[POST /api/leagues/create]:::api
-  
-  CreateLeague[Create League Record]:::db
-  CreateMembership[Add Commissioner]:::db
-  CreateTeam[Create Fantasy Team]:::db
-  ActivityLog[Log Creation]:::db
-  
-  Success[League Dashboard]:::user
-  Error[Show Error]:::validate
-  
-  Start --> Form
-  Form --> Settings
-  Settings --> Validate
-  Validate -->|Valid| API
-  Validate -->|Invalid| Error
-  Error --> Form
-  
-  API --> CreateLeague
-  CreateLeague --> CreateMembership
-  CreateMembership --> CreateTeam
-  CreateTeam --> ActivityLog
-  ActivityLog --> Success
+flowchart TD
+    Start([User Clicks Create League]) --> Form[League Creation Form]
+    Form --> Validate{Validate Input}
+    Validate -->|Invalid| ShowError[Show Validation Errors]
+    ShowError --> Form
+    Validate -->|Valid| AuthCheck{Check Auth}
+    AuthCheck -->|Not Authenticated| LoginRedirect[Redirect to Login]
+    AuthCheck -->|Authenticated| APICall[POST /api/leagues/create]
+    
+    APICall --> Normalize[Normalize & Validate Data]
+    Normalize --> CreateLeague[Create League in DB]
+    
+    CreateLeague --> SetSchedule[Set Draft Schedule Fields]
+    SetSchedule --> CalcOpenTime[Calculate draft_room_open_at]
+    CalcOpenTime --> CreateMembership[Create Owner Membership]
+    
+    CreateMembership --> LogActivity[Log to activity_log]
+    LogActivity --> Response[Return League Data]
+    Response --> Redirect[Redirect to League Dashboard]
+    
+    subgraph "Draft Scheduling Fields"
+        SetSchedule --> DS1[draft_type: snake/auction]
+        SetSchedule --> DS2[draft_start_at: ISO datetime]
+        SetSchedule --> DS3[draft_room_open_offset_minutes: 60]
+        SetSchedule --> DS4[pick_time_seconds: per-pick clock]
+        SetSchedule --> DS5[draft_order_json: team order array]
+        SetSchedule --> DS6[scoring_rules: JSON string]
+    end
+    
+    subgraph "Status Gates"
+        CalcOpenTime --> SG1[Room Closed: before open_at]
+        SG1 --> SG2[Room Open: read-only preview]
+        SG2 --> SG3[Live Draft: at start_at]
+    end
+    
+    style Start fill:#e0f2fe
+    style Redirect fill:#dcfce7
+    style LoginRedirect fill:#fee2e2
+    style ShowError fill:#fef3c7
 ```
 
-## Sequence Diagram
+## 2. Sequence Diagram
+
 ```mermaid
 sequenceDiagram
-  participant U as User
-  participant UI as Create Form
-  participant V as Validator
-  participant API as API Route
-  participant DAL as Data Layer
-  participant DB as Appwrite
-  
-  U->>UI: Open create league
-  UI->>U: Show form
-  
-  U->>UI: Fill settings
-  Note over UI: Name, Mode, Conference,<br/>Draft type, Teams,<br/>Privacy, Password
-  
-  U->>UI: Submit form
-  UI->>V: Validate with Zod
-  
-  alt Invalid Data
-    V-->>UI: Validation errors
-    UI-->>U: Show errors
-  else Valid Data
-    V-->>UI: Valid
-    UI->>API: POST /api/leagues/create
-  end
-  
-  API->>DAL: Create league
-  DAL->>DB: INSERT leagues
-  DB-->>DAL: League ID
-  
-  DAL->>DB: INSERT league_memberships
-  Note over DB: Commissioner role
-  
-  DAL->>DB: INSERT fantasy_teams
-  Note over DB: Commissioner team
-  
-  DAL->>DB: INSERT activity_log
-  
-  DAL-->>API: League created
-  API-->>UI: Success + League ID
-  UI-->>U: Redirect to league
+    participant U as User/Browser
+    participant C as CreateLeagueForm
+    participant A as API Route
+    participant V as Validator
+    participant D as DAL
+    participant DB as Appwrite DB
+    participant AL as Activity Logger
+    
+    U->>C: Fill league form
+    C->>C: Client validation
+    C->>A: POST /api/leagues/create
+    
+    A->>V: Validate session
+    V-->>A: User authenticated
+    
+    A->>V: Validate league data
+    Note over V: Check required fields<br/>Validate draft_start_at<br/>Validate scoring_rules JSON
+    V-->>A: Data valid
+    
+    A->>A: Normalize fields
+    Note over A: Map UI fields to DB schema<br/>Calculate draft_room_open_at<br/>UTC conversion
+    
+    A->>D: createLeague(data)
+    D->>DB: Create league document
+    Note over DB: Store with indexes:<br/>(season, draft_start_at)
+    DB-->>D: League created
+    
+    D->>DB: Create owner membership
+    DB-->>D: Membership created
+    
+    D->>AL: Log creation event
+    AL->>DB: Write to activity_log
+    
+    D-->>A: Return league + membership
+    A-->>C: Success response
+    C->>U: Redirect to /league/[id]
 ```
 
-## Data Interactions
+## 3. Data Interaction Table
 
 | Collection | Operation | Attributes Set | Notes |
-|------------|-----------|---------------|-------|
-| `leagues` | CREATE | `name`, `game_mode`, `selected_conference`, `draft_type`, `max_teams`, `is_public`, `password`, `commissioner_id`, `status`, `created_at` | Main league record |
-| `league_memberships` | CREATE | `league_id`, `client_id`, `role=commissioner`, `status=active`, `joined_at` | Add creator as commissioner |
-| `fantasy_teams` | CREATE | `league_id`, `owner_client_id`, `name`, `created_at` | Create commissioner's team |
-| `activity_log` | CREATE | `action=league_created`, `league_id`, `client_id`, `metadata` | Track creation event |
-| `invites` | CREATE* | `league_id`, `invite_code`, `expires_at` | *If private league |
+|------------|-----------|----------------|-------|
+| leagues | WRITE | name, type, max_teams, scoring_settings, draft_type, draft_start_at, draft_room_open_offset_minutes, pick_time_seconds, draft_order_json, scoring_rules, draft_room_open_at, commissioner_id, invite_code, password (if private), season, conference (if mode=conference), created_at | Primary league creation with all scheduling fields |
+| league_memberships | WRITE | league_id, user_id (commissioner), role='commissioner', joined_at | Auto-create owner membership |
+| activity_log | WRITE | user_id, action='league.create', entity_type='league', entity_id, metadata (league details), timestamp | Audit trail for league creation |
 
-## Validation Rules
+## 4. Validation Rules (Zod Schema)
 
-### Required Fields
-- League name (3-50 characters)
-- Game mode (power4 or conference)
-- If conference mode: selected conference (SEC/ACC/Big12/BigTen)
-- Draft type (snake or auction)
-- Max teams (8-12)
+```typescript
+const createLeagueSchema = z.object({
+  name: z.string().min(3).max(50),
+  type: z.enum(['public', 'private']),
+  max_teams: z.number().min(4).max(20),
+  scoring_settings: z.string(),
+  
+  // Draft scheduling (required for real leagues)
+  draft_type: z.enum(['snake', 'auction']),
+  draft_start_at: z.string().datetime(),
+  draft_room_open_offset_minutes: z.number().default(60),
+  pick_time_seconds: z.number().min(30).max(180),
+  draft_order_json: z.array(z.string()).optional(), // Generated if not provided
+  scoring_rules: z.string(), // JSON string with scoring configuration
+  
+  // Optional fields
+  password: z.string().optional(),
+  conference: z.enum(['SEC', 'ACC', 'Big 12', 'Big Ten']).optional()
+})
+```
 
-### Business Rules
-- User must be authenticated
-- User can create max 5 leagues per season
-- League name must be unique within season
-- Private leagues require password (min 6 chars)
-- Draft date must be future date
-- Game mode and conference are immutable after creation
+## 5. Error States
 
-## Error States
-- `400` - Invalid input data
-- `401` - User not authenticated
-- `409` - League name already exists
-- `429` - Too many leagues created
-- `500` - Database error
+- **Validation Errors**: Invalid form data, missing required fields
+- **Authentication Errors**: User not logged in or session expired
+- **Duplicate League Name**: League with same name already exists for user
+- **Invalid Draft Time**: Draft scheduled in the past or conflicting with existing drafts
+- **Database Errors**: Appwrite connection issues or write failures
+- **Rate Limiting**: Too many leagues created in short timeframe
+
+## 6. Server-Side Calculations
+
+```typescript
+// Calculate draft room open time (server-side in UTC)
+const draft_room_open_at = new Date(
+  new Date(draft_start_at).getTime() - 
+  (draft_room_open_offset_minutes * 60 * 1000)
+).toISOString()
+
+// Store timezone if available for display purposes
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+```
+
+## 7. Index Recommendations
+
+- **(season, draft_start_at)** - For querying upcoming drafts by season
+- **(commissioner_id, created_at)** - For user's leagues list
+- **(type, status, draft_start_at)** - For public league discovery
+- **(invite_code)** - Unique index for invite links

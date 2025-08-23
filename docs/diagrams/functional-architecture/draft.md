@@ -1,297 +1,308 @@
-# Draft Flow (Snake & Auction)
+# Draft System Flow (Mock vs Real, Scheduled)
 
 ## Overview
-Comprehensive draft system supporting both snake drafts and auction drafts with real-time updates.
+Comprehensive draft system supporting both mock drafts (practice) and real drafts (scheduled, season commits) with timing gates and room access control.
 
-## Related Files
-- `/app/api/drafts/[id]/start/route.ts` - Start draft
-- `/app/api/drafts/[id]/pick/route.ts` - Make pick (snake)
-- `/app/api/drafts/[id]/bid/route.ts` - Place bid (auction)
-- `/app/api/drafts/[id]/state/route.ts` - Get/update draft state
-- `/app/draft/[leagueId]/page.tsx` - Draft room UI
-- `/lib/draft/engine.ts` - Core draft logic
-- `/lib/db/drafts.ts` - Draft DAL
-- `/lib/realtime/draft.ts` - WebSocket handlers
+## API Endpoints
+- `GET /api/drafts/:id/room-state` - Check room access and timing
+- `POST /api/drafts/mock/create` - Create mock draft
+- `POST /api/drafts/create` - Create real draft
+- `POST /api/drafts/:id/pick` - Make a pick
+- `GET /api/drafts/:id/events` - Get draft events stream
+- `WebSocket /api/drafts/:id/live` - Real-time updates
 
-## Draft Flow
+## A) Mock Draft Flow (No Season Commits)
+
 ```mermaid
-flowchart TB
-  classDef draft fill:#fef3c7,stroke:#d97706,stroke-width:2,color:#451a03
-  classDef snake fill:#dbeafe,stroke:#3b82f6,stroke-width:2,color:#1e3a8a
-  classDef auction fill:#dcfce7,stroke:#16a34a,stroke-width:2,color:#14532d
-  classDef state fill:#fce7f3,stroke:#ec4899,stroke-width:2,color:#831843
-  classDef error fill:#fee2e2,stroke:#ef4444,stroke-width:2,color:#7f1d1d
-  
-  Start([Commissioner Starts Draft]):::draft
-  CheckType{Draft Type?}:::draft
-  
-  %% Snake Draft Path
-  subgraph Snake[Snake Draft]
-    InitOrder[Initialize Draft Order]:::snake
-    NextPick[Determine Next Pick]:::snake
-    OnClock[Team On Clock]:::snake
-    Timer[Start Timer]:::snake
+flowchart TD
+    StartMock([Start Mock Draft]) --> CreateMock[Create Mock Draft]
+    CreateMock --> SetMockFlag[Set is_mock=true]
+    SetMockFlag --> GenerateOrder[Generate Random Order]
+    GenerateOrder --> OpenRoom[Open Draft Room]
     
-    PickChoice{Action?}:::snake
-    MakePick[Make Pick]:::snake
-    AutoPick[Auto Pick]:::snake
+    OpenRoom --> MockBanner[Display "MOCK DRAFT" Banner]
+    MockBanner --> EnablePicks[Enable All Pick Actions]
     
-    ValidatePick{Valid?}:::snake
-    RecordPick[Record Pick]:::snake
-    UpdateRoster[Update Roster]:::snake
-  end
-  
-  %% Auction Draft Path
-  subgraph Auction[Auction Draft]
-    InitBudgets[Initialize Budgets]:::auction
-    NextLot[Next Player Lot]:::auction
-    OpenBidding[Open Bidding]:::auction
-    BidTimer[Bid Timer]:::auction
+    EnablePicks --> UserPick{User's Turn?}
+    UserPick -->|Yes| MakePick[Make Pick]
+    UserPick -->|No| WaitTurn[Wait/Watch]
     
-    BidChoice{Action?}:::auction
-    PlaceBid[Place Bid]:::auction
-    PassLot[Pass on Lot]:::auction
+    MakePick --> WriteMockEvent[Write draft_events<br/>type='pick']
+    WriteMockEvent --> UpdateMockState[Update draft_states]
+    UpdateMockState --> NextPick[Next Pick]
     
-    ValidateBid{Valid?}:::auction
-    RecordBid[Record Bid]:::auction
-    CloseLot[Close Lot]:::auction
-    UpdateBudget[Update Budget]:::auction
-  end
-  
-  %% Common State Management
-  UpdateState[Update Draft State]:::state
-  Broadcast[Broadcast to All]:::state
-  CheckComplete{Draft Complete?}:::state
-  
-  Complete[Draft Complete]:::draft
-  FinalizeRosters[Finalize Rosters]:::draft
-  
-  %% Error Handling
-  NetworkError[Network Retry]:::error
-  TimeoutError[Handle Timeout]:::error
-  PermissionError[Permission Denied]:::error
-  
-  %% Flow connections
-  Start --> CheckType
-  
-  CheckType -->|Snake| InitOrder
-  InitOrder --> NextPick
-  NextPick --> OnClock
-  OnClock --> Timer
-  Timer --> PickChoice
-  PickChoice -->|Manual| MakePick
-  PickChoice -->|Timeout| AutoPick
-  MakePick --> ValidatePick
-  AutoPick --> ValidatePick
-  ValidatePick -->|Yes| RecordPick
-  ValidatePick -->|No| PickChoice
-  RecordPick --> UpdateRoster
-  UpdateRoster --> UpdateState
-  
-  CheckType -->|Auction| InitBudgets
-  InitBudgets --> NextLot
-  NextLot --> OpenBidding
-  OpenBidding --> BidTimer
-  BidTimer --> BidChoice
-  BidChoice -->|Bid| PlaceBid
-  BidChoice -->|Pass| PassLot
-  PlaceBid --> ValidateBid
-  ValidateBid -->|Yes| RecordBid
-  ValidateBid -->|No| BidChoice
-  RecordBid --> CloseLot
-  CloseLot --> UpdateBudget
-  UpdateBudget --> UpdateState
-  PassLot --> UpdateState
-  
-  UpdateState --> Broadcast
-  Broadcast --> CheckComplete
-  CheckComplete -->|No| NextPick
-  CheckComplete -->|No| NextLot
-  CheckComplete -->|Yes| Complete
-  Complete --> FinalizeRosters
-  
-  %% Error paths
-  Broadcast -.->|Network Fail| NetworkError
-  Timer -.->|Timeout| TimeoutError
-  ValidatePick -.->|No Permission| PermissionError
-  ValidateBid -.->|No Permission| PermissionError
-  NetworkError -.-> Broadcast
-  TimeoutError -.-> AutoPick
+    NextPick --> CheckComplete{All Picks Done?}
+    CheckComplete -->|No| UserPick
+    CheckComplete -->|Yes| MockComplete[Mock Draft Complete]
+    
+    MockComplete --> SaveBoard[Save Board<br/>drafts.board_md]
+    SaveBoard --> ShowResults[Show Results]
+    ShowResults --> ResetOption[Offer Reset/Restart]
+    
+    subgraph "Mock Draft Data"
+        WriteMockEvent -.-> NR1[❌ NO roster_slots]
+        WriteMockEvent -.-> NR2[❌ NO transactions]
+        WriteMockEvent -.-> NR3[❌ NO budget updates]
+    end
+    
+    style StartMock fill:#e0f2fe
+    style MockBanner fill:#fef3c7
+    style MockComplete fill:#dcfce7
 ```
 
-## Sequence Diagram
+## B) Real Draft Flow (Scheduled, Season Commits)
+
+```mermaid
+flowchart TD
+    StartReal([Scheduled Draft Time]) --> CheckTime{Current Time?}
+    
+    CheckTime -->|T-60min| RoomOpens[Draft Room Opens]
+    RoomOpens --> ReadOnly[Read-Only Preview Mode]
+    ReadOnly --> ShowPosition[Show Draft Position]
+    ShowPosition --> ShowTimer[Show Countdown Timer]
+    
+    CheckTime -->|T=0| GoLive[Draft Goes Live]
+    GoLive --> EnableClock[Enable Pick Clock]
+    EnableClock --> EnableActions[Enable Pick Actions]
+    
+    EnableActions --> RealPick{User's Turn?}
+    RealPick -->|Yes| PickWindow[Pick Window Open]
+    RealPick -->|No| WatchOnly[Watch Only]
+    
+    PickWindow --> TimerTick{Timer Expired?}
+    TimerTick -->|No| UserSelect[User Selects Player]
+    TimerTick -->|Yes| AutoPick[Auto-Pick BPA]
+    
+    UserSelect --> ValidatePick[Validate Pick]
+    AutoPick --> ValidatePick
+    
+    ValidatePick --> WriteRealEvent[Write draft_events<br/>type='pick']
+    WriteRealEvent --> UpdateRealState[Update draft_states]
+    UpdateRealState --> CommitRoster[Write roster_slots]
+    CommitRoster --> RecordTransaction[Write transactions<br/>type='draft']
+    RecordTransaction --> UpdateBudget[Update auction_budget<br/>(if auction)]
+    
+    UpdateBudget --> NextRealPick[Next Pick]
+    NextRealPick --> CheckRealComplete{Draft Complete?}
+    CheckRealComplete -->|No| RealPick
+    CheckRealComplete -->|Yes| FinalizeDraft[Finalize Draft]
+    
+    FinalizeDraft --> MarkComplete[drafts.status='completed']
+    MarkComplete --> GenerateBoard[Generate Mermaid Board]
+    GenerateBoard --> SaveAssets[Save to draft-boards/]
+    SaveAssets --> UpdateURI[Set board_asset_uri]
+    UpdateURI --> NotifyUsers[Notify All Users]
+    
+    subgraph "Timing Gates"
+        RoomOpens -.-> TG1[draft_room_open_at]
+        GoLive -.-> TG2[draft_start_at]
+        PickWindow -.-> TG3[pick_time_seconds]
+    end
+    
+    style StartReal fill:#e0f2fe
+    style GoLive fill:#fbbf24
+    style FinalizeDraft fill:#dcfce7
+    style AutoPick fill:#fee2e2
+```
+
+## C) Shared UI & Timing Control
+
 ```mermaid
 sequenceDiagram
-  participant U as User/Commissioner
-  participant UI as Draft Room
-  participant WS as WebSocket
-  participant API as API Routes
-  participant Engine as Draft Engine
-  participant DAL as Data Layer
-  participant DB as Appwrite
-  participant RT as Realtime
-  
-  %% Start Draft
-  U->>UI: Start Draft
-  UI->>API: POST /api/drafts/[id]/start
-  API->>Engine: Initialize draft
-  Engine->>DAL: Create draft record
-  DAL->>DB: INSERT drafts
-  DAL->>DB: INSERT draft_states
-  
-  %% WebSocket Connection
-  UI->>WS: Connect to draft room
-  WS->>RT: Subscribe to draft channel
-  
-  %% Snake Draft Pick
-  alt Snake Draft
-    loop Each Pick
-      Engine->>DAL: Get next team
-      DAL->>DB: SELECT draft_states
-      Engine->>RT: Broadcast on-clock
-      RT-->>UI: Update UI (all users)
-      
-      Note over UI: Timer starts (60s)
-      
-      alt Manual Pick
-        U->>UI: Select player
-        UI->>API: POST /api/drafts/[id]/pick
-        API->>Engine: Validate pick
-      else Auto Pick (timeout)
-        Note over Engine: Timer expires
-        Engine->>Engine: Select BPA
-      end
-      
-      Engine->>DAL: Record pick
-      DAL->>DB: INSERT draft_events
-      DAL->>DB: INSERT roster_slots
-      DAL->>DB: UPDATE draft_states
-      
-      Engine->>RT: Broadcast pick
-      RT-->>UI: Update all clients
-    end
-  
-  %% Auction Draft Bid
-  else Auction Draft
-    DAL->>DB: INSERT auctions (lots)
+    participant U as User
+    participant UI as Draft Room UI
+    participant API as API Routes
+    participant WS as WebSocket
+    participant DB as Appwrite
+    participant Clock as Server Clock
     
-    loop Each Lot
-      Engine->>RT: Open bidding
-      RT-->>UI: Show lot
-      
-      Note over UI: Bid timer (30s)
-      
-      par Bidding
-        U->>UI: Place bid
-        UI->>API: POST /api/drafts/[id]/bid
-        API->>Engine: Validate bid
-        Engine->>DAL: Record bid
-        DAL->>DB: INSERT bids
-        DAL->>DB: UPDATE auctions
-      and Broadcast
-        Engine->>RT: Broadcast bid
-        RT-->>UI: Update all clients
-      end
-      
-      Note over Engine: Timer expires
-      Engine->>DAL: Close lot
-      DAL->>DB: UPDATE auctions (winner)
-      DAL->>DB: INSERT roster_slots
-      DAL->>DB: UPDATE fantasy_teams (budget)
+    U->>UI: Enter Draft Room
+    UI->>API: GET /api/drafts/:id/room-state
+    
+    API->>Clock: Get current time
+    API->>DB: Get draft settings
+    DB-->>API: draft_start_at, room_open_at
+    
+    API->>API: Calculate state
+    Note over API: isOpen = now >= room_open_at<br/>isLive = now >= draft_start_at
+    
+    API-->>UI: {isOpen, isLive, timeToStart}
+    
+    alt Room Not Open
+        UI-->>U: Show "Room opens in X minutes"
+    else Room Open, Not Live
+        UI-->>U: Show preview + countdown
+        UI->>WS: Connect WebSocket
+        
+        loop Every Second
+            Clock->>WS: Time update
+            WS-->>UI: Countdown tick
+            UI-->>U: Update timer display
+        end
+        
+        Clock->>WS: Draft start signal
+        WS-->>UI: Enable draft controls
+    else Draft Live
+        UI-->>U: Full draft interface
+        UI->>WS: Connect WebSocket
+        
+        loop On Each Pick
+            WS-->>UI: Pick event
+            UI-->>U: Update board
+        end
     end
-  end
-  
-  %% Complete Draft
-  Engine->>DAL: Finalize draft
-  DAL->>DB: UPDATE drafts (status=completed)
-  DAL->>DB: UPDATE leagues (status=active)
-  DAL->>DB: INSERT transactions (draft picks)
-  Engine->>RT: Broadcast complete
-  RT-->>UI: Draft complete
 ```
 
-## Data Interactions
+## 4. Data Interaction Comparison
 
-| Collection | Read/Write | When | Attributes | Notes |
-|------------|------------|------|------------|-------|
-| **Draft Setup** | | | | |
-| `drafts` | CREATE | Start | `league_id`, `type`, `status`, `start_time` | Initialize draft |
-| `drafts` | READ | Throughout | All | Check draft config |
-| `drafts` | UPDATE | Complete | `status`, `end_time` | Mark as completed |
-| `draft_states` | CREATE | Start | `draft_id`, `round=1`, `pick=1`, `on_clock_team_id` | Initial state |
-| `draft_states` | READ | Each turn | `on_clock_team_id`, `deadline_at` | Get current pick |
-| `draft_states` | UPDATE | Each pick | `round`, `pick`, `on_clock_team_id`, `deadline_at` | Advance draft |
-| **Snake Draft** | | | | |
-| `draft_events` | CREATE | Each pick | `draft_id`, `type=pick`, `round`, `overall`, `fantasy_team_id`, `player_id`, `ts` | Record pick |
-| `draft_events` | READ | UI update | All | Show pick history |
-| `roster_slots` | CREATE | Each pick | `fantasy_team_id`, `player_id`, `position`, `acquisition_type=draft` | Add to roster |
-| `college_players` | READ | Pick validation | `id`, `position`, `eligible` | Validate player |
-| `college_players` | UPDATE | After pick | `drafted=true` | Mark as drafted |
-| **Auction Draft** | | | | |
-| `auctions` | CREATE | Each lot | `league_id`, `player_id`, `status=open`, `current_bid=0` | Open lot |
-| `auctions` | READ | Bidding | `current_bid`, `current_bidder_id`, `ends_at` | Show current bid |
-| `auctions` | UPDATE | Each bid | `current_bid`, `current_bidder_id` | Update high bid |
-| `auctions` | UPDATE | Timer end | `status=closed`, `winner_id`, `final_price` | Close lot |
-| `bids` | CREATE | Each bid | `auction_id`, `fantasy_team_id`, `amount`, `timestamp` | Record bid |
-| `bids` | READ | History | All | Show bid history |
-| `fantasy_teams` | READ | Validation | `auction_budget_remaining` | Check budget |
-| `fantasy_teams` | UPDATE | Won lot | `auction_budget_remaining` | Deduct cost |
-| **Common** | | | | |
-| `transactions` | CREATE | Each action | `type=draft/auction`, `fantasy_team_id`, `player_id` | Audit trail |
-| `activity_log` | CREATE | Key events | `action`, `league_id`, `client_id`, `metadata` | Track activity |
-| `league_memberships` | READ | Validation | `league_id`, `client_id`, `role` | Check permissions |
+| Collection | Mock Draft | Real Draft | Notes |
+|------------|------------|------------|-------|
+| drafts | READ/WRITE | READ/WRITE | is_mock flag differentiates |
+| draft_states | WRITE | WRITE | Current pick state |
+| draft_events | WRITE | WRITE | All pick events |
+| roster_slots | ❌ NO | ✅ WRITE | Only real drafts commit |
+| transactions | ❌ NO | ✅ WRITE | Only real drafts record |
+| fantasy_teams | ❌ NO | ✅ UPDATE | Budget only for auction |
+| activity_log | WRITE | WRITE | Both log activity |
 
-## Points of Failure & Mitigation
+## 5. Room State API Response
 
-### Network Issues
-- **Problem**: WebSocket disconnection during draft
-- **Mitigation**: 
-  - Auto-reconnect with exponential backoff
-  - Persist draft state in DB every action
-  - Allow rejoin with state recovery
-  - Queue actions during disconnect
-
-### Timeouts
-- **Problem**: User doesn't pick in time
-- **Mitigation**:
-  - Auto-pick best available player
-  - Pre-draft rankings per team
-  - Commissioner can pause/extend timer
-  - Warning notifications at 10s remaining
-
-### Permission Errors
-- **Problem**: Wrong user trying to pick
-- **Mitigation**:
-  - Server-side validation of on_clock_team_id
-  - Role-based access (commissioner override)
-  - Signed WebSocket messages
-  - Rate limiting per user
-
-### Data Conflicts
-- **Problem**: Simultaneous picks/bids
-- **Mitigation**:
-  - Database transactions
-  - Optimistic locking on draft_states
-  - Unique constraints on roster_slots
-  - Bid validation against current state
-
-### Recovery Procedures
 ```typescript
-// Automatic retry with backoff
-const retry = async (fn, retries = 3, delay = 1000) => {
-  try {
-    return await fn()
-  } catch (error) {
-    if (retries === 0) throw error
-    await new Promise(r => setTimeout(r, delay))
-    return retry(fn, retries - 1, delay * 2)
+interface RoomStateResponse {
+  now: string // Server time ISO
+  draft_start_at: string
+  draft_room_open_at: string
+  isOpen: boolean // Can enter room
+  isLive: boolean // Can make picks
+  isComplete: boolean
+  server_tz: string // Server timezone
+  timeToOpen?: number // Milliseconds
+  timeToStart?: number // Milliseconds
+}
+
+// GET /api/drafts/:id/room-state
+async function getRoomState(draftId: string) {
+  const draft = await getDraft(draftId)
+  const now = new Date()
+  
+  return {
+    now: now.toISOString(),
+    draft_start_at: draft.draft_start_at,
+    draft_room_open_at: draft.draft_room_open_at,
+    isOpen: now >= new Date(draft.draft_room_open_at),
+    isLive: now >= new Date(draft.draft_start_at),
+    isComplete: draft.status === 'completed',
+    server_tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    timeToOpen: Math.max(0, new Date(draft.draft_room_open_at) - now),
+    timeToStart: Math.max(0, new Date(draft.draft_start_at) - now)
   }
 }
+```
 
-// State recovery on reconnect
-const recoverDraftState = async (draftId) => {
-  const state = await getDraftState(draftId)
-  const events = await getDraftEvents(draftId)
-  return reconstructState(state, events)
+## 6. Pick Validation Middleware
+
+```typescript
+// Middleware to enforce timing gates
+async function validatePickTiming(req: Request) {
+  const { draftId } = req.params
+  const roomState = await getRoomState(draftId)
+  
+  if (!roomState.isLive && !draft.is_mock) {
+    throw new Error('Draft has not started yet')
+  }
+  
+  if (roomState.isComplete) {
+    throw new Error('Draft is already complete')
+  }
+  
+  // Check if it's user's turn
+  const currentPick = await getCurrentPick(draftId)
+  if (currentPick.team_id !== req.user.team_id) {
+    throw new Error('Not your turn to pick')
+  }
+  
+  return true
 }
+```
+
+## 7. Draft Board Generation
+
+```typescript
+// Generate Mermaid board after draft completion
+async function generateDraftBoard(draftId: string) {
+  const events = await getDraftEvents(draftId)
+  const picks = events.filter(e => e.type === 'pick')
+  
+  let mermaid = `graph TD\n`
+  mermaid += `  subgraph "Draft Results"\n`
+  
+  picks.forEach((pick, i) => {
+    const round = Math.floor(i / 12) + 1
+    const pickInRound = (i % 12) + 1
+    mermaid += `    Pick${i}["R${round}P${pickInRound}: ${pick.player_name}\\n${pick.team_name}"]`
+    
+    if (i > 0) {
+      mermaid += ` --> Pick${i + 1}`
+    }
+    mermaid += '\n'
+  })
+  
+  mermaid += `  end\n`
+  
+  // Save to file
+  const filename = `${draftId}-${new Date().getFullYear()}.md`
+  const path = `docs/diagrams/draft-boards/${filename}`
+  await saveFile(path, mermaid)
+  
+  // Update draft record
+  await updateDraft(draftId, { board_asset_uri: path })
+  
+  return path
+}
+```
+
+## 8. Required Indexes
+
+- **draft_events**: `(draft_id, overall)` - For ordered pick retrieval
+- **draft_states**: `(draft_id)` unique - Current state lookup
+- **drafts**: `(league_id, season)` - League's drafts
+- **leagues**: `(season, draft_start_at)` - Upcoming drafts query
+
+## 9. Testing Requirements
+
+```typescript
+describe('Draft Room Timing Gates', () => {
+  it('should deny access before room opens', async () => {
+    const draft = createDraft({
+      draft_start_at: addHours(now, 2),
+      draft_room_open_offset_minutes: 60
+    })
+    
+    const state = await getRoomState(draft.id)
+    expect(state.isOpen).toBe(false)
+    expect(state.isLive).toBe(false)
+  })
+  
+  it('should allow read-only access when room opens', async () => {
+    const draft = createDraft({
+      draft_start_at: addMinutes(now, 30),
+      draft_room_open_offset_minutes: 60
+    })
+    
+    const state = await getRoomState(draft.id)
+    expect(state.isOpen).toBe(true)
+    expect(state.isLive).toBe(false)
+  })
+  
+  it('should enable picks at draft start time', async () => {
+    const draft = createDraft({
+      draft_start_at: now,
+      draft_room_open_offset_minutes: 60
+    })
+    
+    const state = await getRoomState(draft.id)
+    expect(state.isOpen).toBe(true)
+    expect(state.isLive).toBe(true)
+  })
+})
 ```

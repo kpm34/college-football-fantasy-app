@@ -1,171 +1,196 @@
-# Join League Flow
+# Join League Flow (Invite)
 
 ## Overview
-League joining flow with multiple entry points: browse, search, and invite links.
+Complete flow for joining a fantasy league via invite link or browse.
 
-## Related Files
-- `/app/api/leagues/join/route.ts` - Join league API
-- `/app/api/leagues/search/route.ts` - Search leagues API
-- `/app/(dashboard)/league/join/page.tsx` - Join league UI
-- `/app/invite/[leagueId]/page.tsx` - Invite link handler
-- `/lib/db/leagues.ts` - League DAL
-- `/lib/db/league_memberships.ts` - Membership DAL
+## Auth Route Handlers Detected
+- `/api/invites/accept` - Accept invite endpoint
+- `/api/leagues/join` - Direct join endpoint
+- `/api/leagues/search` - Browse public leagues
 
-## User Flow
+## 1. Flowchart
+
 ```mermaid
-flowchart TB
-  classDef user fill:#fef3c7,stroke:#f59e0b,stroke-width:2,color:#92400e
-  classDef search fill:#e0e7ff,stroke:#6366f1,stroke-width:2,color:#312e81
-  classDef validate fill:#fee2e2,stroke:#ef4444,stroke-width:2,color:#7f1d1d
-  classDef api fill:#fce7f3,stroke:#ec4899,stroke-width:2,color:#831843
-  classDef db fill:#d1fae5,stroke:#10b981,stroke-width:2,color:#064e3b
-  
-  Start([User wants to join]):::user
-  
-  subgraph Entry Points
-    Browse[Browse Public]:::search
-    Search[Search by Name]:::search
-    Invite[Invite Link]:::search
-  end
-  
-  LeagueList[League List]:::search
-  SelectLeague[Select League]:::user
-  
-  CheckAuth{Authenticated?}:::validate
-  Login[Redirect to Login]:::user
-  
-  CheckPrivate{Private League?}:::validate
-  PasswordModal[Enter Password]:::user
-  
-  CheckCapacity{Has Space?}:::validate
-  ShowFull[League Full Error]:::validate
-  
-  CheckMember{Already Member?}:::validate
-  ShowMember[Already Joined]:::validate
-  
-  JoinAPI[POST /api/leagues/join]:::api
-  
-  CreateMembership[Create Membership]:::db
-  CreateTeam[Create Fantasy Team]:::db
-  UpdateCount[Update League Count]:::db
-  LogActivity[Log Join Event]:::db
-  
-  Success[League Dashboard]:::user
-  
-  Start --> Entry Points
-  Browse --> LeagueList
-  Search --> LeagueList
-  Invite --> CheckAuth
-  
-  LeagueList --> SelectLeague
-  SelectLeague --> CheckAuth
-  
-  CheckAuth -->|No| Login
-  CheckAuth -->|Yes| CheckPrivate
-  Login --> CheckPrivate
-  
-  CheckPrivate -->|Yes| PasswordModal
-  CheckPrivate -->|No| CheckCapacity
-  PasswordModal --> CheckCapacity
-  
-  CheckCapacity -->|Full| ShowFull
-  CheckCapacity -->|Space| CheckMember
-  
-  CheckMember -->|Yes| ShowMember
-  CheckMember -->|No| JoinAPI
-  
-  JoinAPI --> CreateMembership
-  CreateMembership --> CreateTeam
-  CreateTeam --> UpdateCount
-  UpdateCount --> LogActivity
-  LogActivity --> Success
+flowchart TD
+    Start([User Opens Invite Link]) --> ParseToken[Parse Invite Token]
+    ParseToken --> ValidateToken{Valid Token?}
+    ValidateToken -->|Invalid| ShowError[Show Invalid Link Error]
+    ValidateToken -->|Valid| CheckAuth{User Authenticated?}
+    
+    CheckAuth -->|No| StoreRedirect[Store Redirect URL]
+    StoreRedirect --> LoginPage[Redirect to Login]
+    LoginPage --> AfterLogin[After Login Success]
+    AfterLogin --> RestoreRedirect[Restore Invite URL]
+    RestoreRedirect --> CheckAuth2{Re-check Auth}
+    
+    CheckAuth -->|Yes| FetchInvite[GET /api/invites/verify]
+    CheckAuth2 -->|Yes| FetchInvite
+    
+    FetchInvite --> CheckExpiry{Token Expired?}
+    CheckExpiry -->|Yes| ExpiredError[Show Expired Error]
+    CheckExpiry -->|No| CheckCapacity{League Full?}
+    
+    CheckCapacity -->|Yes| FullError[Show League Full]
+    CheckCapacity -->|No| CheckMember{Already Member?}
+    
+    CheckMember -->|Yes| RedirectLeague[Redirect to League]
+    CheckMember -->|No| AcceptAPI[POST /api/invites/accept]
+    
+    AcceptAPI --> CreateMembership[Create league_membership]
+    CreateMembership --> CreateTeam[Create fantasy_team]
+    CreateTeam --> UpdateInvite[Update invite usage]
+    UpdateInvite --> LogActivity[Log join activity]
+    LogActivity --> Success[Redirect to League Dashboard]
+    
+    style Start fill:#e0f2fe
+    style Success fill:#dcfce7
+    style ShowError fill:#fee2e2
+    style ExpiredError fill:#fee2e2
+    style FullError fill:#fee2e2
 ```
 
-## Sequence Diagram
+## 2. Sequence Diagram
+
 ```mermaid
 sequenceDiagram
-  participant U as User
-  participant UI as Join UI
-  participant API as API Routes
-  participant Auth as Auth Service
-  participant DAL as Data Layer
-  participant DB as Database
-  
-  alt Browse/Search
-    U->>UI: Browse leagues
-    UI->>API: GET /api/leagues/search
-    API->>DAL: Query public leagues
-    DAL->>DB: SELECT leagues
-    DB-->>UI: League list
-    U->>UI: Select league
-  else Invite Link
-    U->>UI: Click invite link
-    UI->>API: GET /api/leagues/invite
-    API->>DAL: Validate invite
-    DAL->>DB: SELECT leagues, invites
-    DB-->>UI: League details
-  end
-  
-  UI->>Auth: Check authentication
-  
-  alt Not Authenticated
-    Auth-->>UI: Not logged in
-    UI-->>U: Redirect to login
-    U->>UI: Login and return
-  end
-  
-  alt Private League
-    UI-->>U: Request password
-    U->>UI: Enter password
-  end
-  
-  UI->>API: POST /api/leagues/join
-  API->>DAL: Validate join request
-  
-  DAL->>DB: Check capacity
-  DAL->>DB: Check membership
-  
-  alt Can Join
-    DAL->>DB: INSERT league_memberships
-    DAL->>DB: INSERT fantasy_teams
-    DAL->>DB: UPDATE leagues.current_teams
-    DAL->>DB: INSERT activity_log
-    DAL-->>API: Success
-    API-->>UI: Joined
-    UI-->>U: Redirect to league
-  else Cannot Join
-    DAL-->>API: Error reason
-    API-->>UI: Error message
-    UI-->>U: Show error
-  end
+    participant U as User/Browser
+    participant C as Invite Page
+    participant A as API Route
+    participant Auth as Auth Service
+    participant D as DAL
+    participant DB as Appwrite DB
+    
+    U->>C: Open invite link
+    C->>C: Parse token from URL
+    
+    C->>Auth: Check authentication
+    
+    alt Not Authenticated
+        Auth-->>C: Not logged in
+        C->>C: Store redirect URL
+        C->>U: Redirect to login
+        U->>Auth: Complete login
+        Auth->>C: Return to invite URL
+    end
+    
+    C->>A: GET /api/invites/verify?token=xxx
+    A->>D: getInviteByToken(token)
+    D->>DB: Query invites
+    DB-->>D: Invite data
+    
+    A->>A: Validate invite
+    Note over A: Check expiry<br/>Check league capacity<br/>Check membership
+    
+    alt Invalid/Expired
+        A-->>C: Error response
+        C-->>U: Show error message
+    else Valid Invite
+        A-->>C: League details
+        C->>U: Show league info
+        
+        U->>C: Click Join
+        C->>A: POST /api/invites/accept
+        
+        A->>D: createMembership(data)
+        D->>DB: INSERT league_memberships
+        DB-->>D: Membership created
+        
+        D->>DB: INSERT fantasy_teams
+        DB-->>D: Team created
+        
+        D->>DB: UPDATE invites
+        Note over DB: Increment uses_count
+        
+        D->>DB: INSERT activity_log
+        
+        D-->>A: Success
+        A-->>C: Join successful
+        C->>U: Redirect to league
+    end
 ```
 
-## Data Interactions
+## 3. Data Interaction Table
 
-| Collection | Operation | Attributes | Notes |
-|------------|-----------|------------|-------|
-| `leagues` | READ | `$id`, `name`, `is_public`, `current_teams`, `max_teams` | Find joinable leagues |
-| `leagues` | UPDATE | `current_teams` | Increment member count |
-| `invites` | READ | `invite_code`, `league_id`, `expires_at` | Validate invite links |
-| `invites` | UPDATE | `uses`, `accepted_at` | Track invite usage |
-| `league_memberships` | READ | `league_id`, `client_id` | Check existing membership |
-| `league_memberships` | CREATE | `league_id`, `client_id`, `role=member`, `status=active` | Add new member |
-| `fantasy_teams` | CREATE | `league_id`, `owner_client_id`, `name` | Create user's team |
-| `activity_log` | CREATE | `action=league_joined`, `league_id`, `client_id` | Track join event |
+| Collection | Operation | Attributes Read/Written | Notes |
+|------------|-----------|------------------------|-------|
+| invites | READ | token, league_id, expires_at, max_uses, uses_count | Verify invite validity |
+| invites | UPDATE | uses_count++ | Track invite usage |
+| leagues | READ | id, max_teams, current_teams, status | Check capacity |
+| league_memberships | READ | league_id, client_id | Check existing membership |
+| league_memberships | WRITE | league_id, client_id, role='member', joined_at, invite_token | Create new membership |
+| fantasy_teams | WRITE | league_id, owner_client_id, name, created_at | Create user's team |
+| activity_log | WRITE | client_id, action='league.joined', entity_type='league', entity_id, metadata (invite_token), timestamp | Audit trail |
 
-## Validation Rules
+## 4. Validation Steps
 
-### Join Requirements
-- User must be authenticated
-- League must have space (current_teams < max_teams)
-- User cannot already be a member
-- Private leagues require valid password or invite
-- League must be in "open" or "drafting" status
-- Invite must not be expired
+```typescript
+// Invite validation logic
+async function validateInvite(token: string) {
+  const invite = await getInviteByToken(token)
+  
+  if (!invite) {
+    throw new Error('Invalid invite link')
+  }
+  
+  if (invite.expires_at && new Date(invite.expires_at) < new Date()) {
+    throw new Error('Invite link has expired')
+  }
+  
+  if (invite.max_uses && invite.uses_count >= invite.max_uses) {
+    throw new Error('Invite link has reached maximum uses')
+  }
+  
+  const league = await getLeague(invite.league_id)
+  
+  if (league.current_teams >= league.max_teams) {
+    throw new Error('League is full')
+  }
+  
+  const membership = await checkMembership(league.id, userId)
+  
+  if (membership) {
+    throw new Error('Already a member of this league')
+  }
+  
+  return { invite, league }
+}
+```
 
-## Error States
-- `401` - User not authenticated
-- `403` - Wrong password / Invalid invite
-- `404` - League not found
-- `409` - Already a member / League full
-- `410` - League closed / Draft completed
+## 5. Error States
+
+- **Invalid Token**: Token doesn't exist or malformed
+- **Expired Invite**: Invite past expiration date
+- **Max Uses Reached**: Invite used maximum times
+- **League Full**: League at capacity
+- **Already Member**: User already in league
+- **Not Authenticated**: User needs to log in first
+- **Database Error**: Connection or write failures
+
+## 6. Authentication Flow
+
+```typescript
+// Store redirect for post-login
+if (!authenticated) {
+  sessionStorage.setItem('redirect_after_login', window.location.href)
+  router.push('/login')
+}
+
+// After successful login
+const redirect = sessionStorage.getItem('redirect_after_login')
+if (redirect) {
+  sessionStorage.removeItem('redirect_after_login')
+  router.push(redirect)
+}
+```
+
+## 7. Alternative Join Methods
+
+### Browse Public Leagues
+- User can browse `/leagues/browse`
+- Filter by conference, draft type, open spots
+- Direct join without invite for public leagues
+
+### Direct League ID
+- Share league ID directly
+- Join via `/league/join?id=xxx`
+- Requires password for private leagues
