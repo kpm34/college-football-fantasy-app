@@ -12,8 +12,8 @@ export { default as LeaguePortal } from './layout/LeaguePortal'
 
 // Features - Draft
 export { default as DraftBoard } from './features/draft/DraftBoard'
-export { default as DraftTimer } from './features/draft/DraftTimer'
-export { default as DraftRealtimeStatus } from './features/draft/DraftRealtimeStatus'
+export { DraftTimer } from './features/draft/DraftTimer'
+export { DraftRealtimeStatus } from './features/draft/DraftRealtimeStatus'
 export { default as DraftCore } from './features/draft/DraftCore'
 
 // Features - Leagues
