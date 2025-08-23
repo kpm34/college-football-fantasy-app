@@ -48,6 +48,9 @@ build/
 # Workers directory (deployed separately to Fly.io)
 workers/
 
+# Operations and tooling scripts (not needed in production)
+ops/
+
 # Local test files
 scoring_example.py
 test_rankings_refresh_local.py
