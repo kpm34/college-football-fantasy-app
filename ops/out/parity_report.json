@@ -1,0 +1,359 @@
+{
+  "summary": {
+    "pairsChecked": 36,
+    "okPairs": 22,
+    "warnPairs": 0,
+    "mergeGroupsOk": 7,
+    "mergeGroupsWarn": 0
+  },
+  "counts": [
+    {
+      "oldId": "activity_log",
+      "targetId": "activity_log",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "auction_bids",
+      "targetId": "bids",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "auction_sessions",
+      "targetId": "drafts",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "auctions",
+      "targetId": "auctions",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "bids",
+      "targetId": "bids",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "college_players",
+      "targetId": "college_players",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "draft_events",
+      "targetId": "draft_events",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "draft_picks",
+      "targetId": "draft_events",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "draft_states",
+      "targetId": "draft_states",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "drafts",
+      "targetId": "drafts",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "games",
+      "targetId": "games",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "invites",
+      "targetId": "invites",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "league_memberships",
+      "targetId": "league_memberships",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "leagues",
+      "targetId": "leagues",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "lineups",
+      "targetId": "lineups",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "matchups",
+      "targetId": "matchups",
+      "action": "keep_define",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "meshy_jobs",
+      "targetId": "meshy_jobs",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "mock_draft_participants",
+      "targetId": "drafts",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "mock_draft_picks",
+      "targetId": "draft_events",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "mock_drafts",
+      "targetId": "drafts",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "model_inputs",
+      "targetId": "model_runs",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "model_versions",
+      "targetId": "model_versions",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "player_projections",
+      "targetId": "projections",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "player_stats",
+      "targetId": "player_stats",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "projection_run_metrics",
+      "targetId": "model_runs",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "projection_runs",
+      "targetId": "model_runs",
+      "action": "keep_rename",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "projections_weekly",
+      "targetId": "projections",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "projections_yearly",
+      "targetId": "projections",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "rankings",
+      "targetId": "rankings",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "scores",
+      "targetId": "matchups",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "team_budgets",
+      "targetId": "fantasy_teams",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "teams",
+      "targetId": "schools",
+      "action": "rename",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "transactions",
+      "targetId": "transactions",
+      "action": "keep",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "user_custom_projections",
+      "targetId": "projections",
+      "action": "merge",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "info"
+    },
+    {
+      "oldId": "user_teams",
+      "targetId": "fantasy_teams",
+      "action": "rename",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "oldId": "users",
+      "targetId": "clients",
+      "action": "rename",
+      "oldCount": 0,
+      "newCount": 0,
+      "status": "ok"
+    }
+  ],
+  "merges": [
+    {
+      "targetId": "bids",
+      "sumOld": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "targetId": "drafts",
+      "sumOld": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "targetId": "draft_events",
+      "sumOld": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "targetId": "model_runs",
+      "sumOld": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "targetId": "projections",
+      "sumOld": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "targetId": "matchups",
+      "sumOld": 0,
+      "newCount": 0,
+      "status": "ok"
+    },
+    {
+      "targetId": "fantasy_teams",
+      "sumOld": 0,
+      "newCount": 0,
+      "status": "ok"
+    }
+  ],
+  "spotChecks": {
+    "playersSchools": {
+      "ok": 0,
+      "total": 0
+    },
+    "lineupsPoints": {
+      "ok": 0,
+      "total": 0,
+      "mismatches": []
+    },
+    "projections": {
+      "ok": 0,
+      "total": 0,
+      "mismatches": []
+    }
+  }
+}

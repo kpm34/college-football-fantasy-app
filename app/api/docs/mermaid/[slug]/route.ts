@@ -93,6 +93,21 @@ export async function GET(
   const possiblePaths = [
     // Consolidated docs first
     path.join(process.cwd(), 'docs', fileName),
+    // Prefer nested index.md if slug matches project-map dynamic forms
+    ...(slug.startsWith('project-map:')
+      ? (() => {
+          const parts = slug.replace('project-map:', '').split(':')
+          const [root, group, sub] = parts
+          const base = ['docs', 'diagrams', 'system-architecture', 'project-map']
+          const nested = !sub
+            ? [
+                path.join(process.cwd(), ...base, root || '', 'index.md'),
+                group ? path.join(process.cwd(), ...base, root || '', group || '', 'index.md') : ''
+              ]
+            : [path.join(process.cwd(), ...base, root || '', group || '', sub || '', 'index.md')]
+          return nested.filter(Boolean) as string[]
+        })()
+      : []),
     // In production, docs are mirrored to public/docs by prebuild
     path.join(process.cwd(), 'public', 'docs', fileName),
     // Alternative: direct in public
