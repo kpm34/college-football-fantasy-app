@@ -1,10 +1,10 @@
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { client } from '@/lib/appwrite';
+import { client } from '@lib/appwrite';
 
 export default function LoginPage() {
   return (
