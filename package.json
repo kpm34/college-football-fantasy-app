@@ -86,6 +86,8 @@
     "db:migrate:modelRuns": "tsx ops/db/projection_runs_to_model_runs.ts",
     "db:migrate:rosterSlots": "tsx ops/db/add_roster_slots_from_user_teams.ts",
     "db:migrate:lineups": "tsx ops/db/lineups_rosterid_to_fantasy_team_id.ts",
+    "db:create": "tsx ops/db/create_collections.ts",
+    "db:migrate": "tsx ops/db/*.ts",
     "db:parity": "tsx ops/db/parity_checks.ts",
     "compress:prompt": "npx tsx ops/common/scripts/compress-players-for-prompt.ts",
     "check:versions": "ts-node ops/common/scripts/check-file-versions.ts",

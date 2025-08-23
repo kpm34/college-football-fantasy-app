@@ -184,7 +184,7 @@ export default function LockerRoomPage({ params, searchParams }: {
       // Set team data
       if (data.team) {
         setTeam(data.team);
-        setTeamName(data.team.teamName || data.team.name || 'My Team');
+        setTeamName(data.team.teamName || data.team.name || 'My Fantasy Team');
         setCanEdit(true);
         setViewingOtherTeam(false);
         
@@ -197,7 +197,7 @@ export default function LockerRoomPage({ params, searchParams }: {
         console.log('Locker room: No team found for user in this league');
         setTeam(null);
         setPlayers([]);
-        setTeamName('My Team');
+        setTeamName('My Fantasy Team');
         setCanEdit(true); // Allow them to set up their team
       }
       

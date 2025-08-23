@@ -1,0 +1,26 @@
+Collection,Attributes,Indexes,Description
+activity_log,21,9,User activity and audit trail
+auctions,6,3,Auction lots for players
+bids,8,4,Auction bid history
+clients,6,2,Authenticated users (mirrors Appwrite Auth)
+college_players,17,7,All college football players
+draft_events,8,2,All draft picks and events
+draft_states,10,2,Current state of active drafts
+drafts,18,1,All draft types (snake/auction/mock)
+fantasy_teams,13,2,User teams within leagues
+games,16,5,College football game schedule
+invites,14,2,League invitation tracking
+league_memberships,5,2,Tracks which users belong to leagues
+leagues,31,4,Fantasy football leagues
+lineups,8,1,Weekly lineup submissions
+matchups,8,1,Weekly head-to-head matchups
+meshy_jobs,17,2,3D model generation jobs
+migrations,3,1,Database migration tracking
+model_runs,12,3,Projection model execution history
+model_versions,15,6,ML model version tracking
+player_stats,11,6,Weekly player performance stats
+projections,20,2,All player projections (consolidated)
+rankings,9,7,AP Top 25 and other rankings
+roster_slots,5,2,Players on fantasy teams
+schools,8,2,College football teams/schools
+transactions,7,3,Waiver wire and trade transactions
