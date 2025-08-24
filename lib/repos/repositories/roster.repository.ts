@@ -61,11 +61,11 @@ export class RosterRepository extends BaseRepository<Roster> {
     const result = await this.find({
       filters: {
         leagueId,
-        client_id
+        owner_client_id: userId  // Using the correct field name from schema
       },
       limit: 1,
       cache: {
-        key: `roster:${leagueId}:${client_id}`,
+        key: `roster:${leagueId}:${userId}`,
         ttl: 300
       }
     });

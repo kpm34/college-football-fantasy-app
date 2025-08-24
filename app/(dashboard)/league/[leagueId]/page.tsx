@@ -278,13 +278,12 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         owner: (t as any).owner 
       }))
     });
-    // Check multiple fields for user match
+    // Check multiple fields for user match (using owner_client_id from fantasy_teams)
     const mine = teams.find(t => 
-      t.client_id === user.$id || 
-      t.client_id === user.email ||
+      t.owner_client_id === user.$id || 
+      t.client_id === user.$id || // fallback for compatibility
       t.email === user.email ||
-      t.userName === user.name ||
-      (t as any).owner === user.$id // legacy field
+      t.userName === user.name
     ) || null;
     if (mine) {
       console.log('Found user team:', mine.name);

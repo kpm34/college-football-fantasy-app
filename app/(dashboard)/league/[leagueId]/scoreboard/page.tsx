@@ -77,7 +77,7 @@ export default function ScoreboardPage({ params }: ScoreboardPageProps) {
             COLLECTIONS.ROSTERS,
             [
               Query.equal('leagueId', leagueId),
-              Query.equal('client_id', user.$id)
+              Query.equal('owner_client_id', user.$id)
             ]
           );
           
