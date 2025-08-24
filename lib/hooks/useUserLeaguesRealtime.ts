@@ -104,7 +104,7 @@ export function useUserLeaguesRealtime() {
       // Subscribe to roster changes (for when user gets kicked from league)
       const unsubscribeRosters = client.subscribe(rostersChannel, (event: RealtimeResponseEvent<any>) => {
         const payload = event.payload as any
-        if (!payload || payload.client_id !== user.$id) return
+        if (!payload || payload.owner_client_id !== user.$id) return
 
         console.log('User roster event:', event.events, payload.leagueId)
 

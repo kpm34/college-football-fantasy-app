@@ -31,6 +31,7 @@ export const COLLECTIONS = {
   LEAGUES: ENV_COLLECTIONS.leagues,
   ROSTERS: ENV_COLLECTIONS.userTeams,
   USER_TEAMS: ENV_COLLECTIONS.userTeams,
+  FANTASY_TEAMS: ENV_COLLECTIONS.userTeams, // Add alias for new schema name
   PLAYERS: ENV_COLLECTIONS.players,
   TEAMS: ENV_COLLECTIONS.teams,
   GAMES: ENV_COLLECTIONS.games,
