@@ -58,27 +58,50 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ leagues: [] });
     }
 
-    // Get league details for each roster
-    const leagueIds = rostersResponse.documents.map(roster => roster.leagueId);
-    const leaguesResponse = await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTIONS.LEAGUES,
-      [
-        Query.equal('$id', leagueIds),
-        Query.limit(50)
-      ]
-    );
+    // Get league details for each roster (schema uses league_id)
+    const leagueIds = rostersResponse.documents.map((roster: any) => roster.league_id).filter(Boolean);
+    // Fetch leagues by IDs. Some Appwrite versions are strict about $id equality values.
+    // Use robust fallback to per-id getDocument when listDocuments fails.
+    let leaguesResponse: any;
+    try {
+      if (leagueIds.length === 1) {
+        const doc = await databases.getDocument(
+          DATABASE_ID,
+          COLLECTIONS.LEAGUES,
+          leagueIds[0]
+        );
+        leaguesResponse = { documents: [doc] };
+      } else {
+        leaguesResponse = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.LEAGUES,
+          [
+            Query.equal('$id', leagueIds as string[]),
+            Query.limit(50)
+          ]
+        );
+      }
+    } catch (err) {
+      // Fallback: fetch each league individually
+      const docs = await Promise.all(
+        leagueIds.map(async (id: string) => {
+          try { return await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, id); }
+          catch { return null; }
+        })
+      );
+      leaguesResponse = { documents: docs.filter(Boolean) };
+    }
 
     // Format leagues for Navbar consumption
-    const leagues = leaguesResponse.documents.map(league => {
-      const userRoster = rostersResponse.documents.find(r => r.leagueId === league.$id);
+    const leagues = leaguesResponse.documents.map((league: any) => {
+      const userRoster = rostersResponse.documents.find((r: any) => r.league_id === league.$id);
       const isCommissioner = league.commissioner === user.$id;
       
       return {
         id: league.$id,
         name: league.name,
         isCommissioner,
-        teamName: userRoster?.teamName || 'My Team',
+        teamName: userRoster?.name || 'My Team',
         status: league.status || 'active'
       };
     });

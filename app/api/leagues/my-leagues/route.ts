@@ -42,20 +42,41 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
     ]
   );
 
-  const leagueIds = memberships.documents.map(m => m.league_id);
+  const leagueIds = memberships.documents.map((m: any) => m.league_id).filter(Boolean);
   if (!leagueIds.length) {
     return NextResponse.json({ leagues: [], teams: [] });
   }
 
   // 2) fetch leagues by ids
-  const leaguesRes = await databases.listDocuments(
-    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-    'leagues',
-    [
-      Query.equal('$id', leagueIds),
-      Query.limit(100)
-    ]
-  );
+  // Robust fetch by IDs with fallback per-id get when strict equality fails
+  let leaguesRes: any;
+  try {
+    if (leagueIds.length === 1) {
+      const doc = await databases.getDocument(
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        'leagues',
+        leagueIds[0]
+      );
+      leaguesRes = { documents: [doc] };
+    } else {
+      leaguesRes = await databases.listDocuments(
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        'leagues',
+        [
+          Query.equal('$id', leagueIds as string[]),
+          Query.limit(100)
+        ]
+      );
+    }
+  } catch (err) {
+    const docs = await Promise.all(
+      leagueIds.map(async (id: string) => {
+        try { return await databases.getDocument(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!, 'leagues', id); }
+        catch { return null; }
+      })
+    );
+    leaguesRes = { documents: docs.filter(Boolean) };
+  }
 
   // TODO: fetch teams if needed later
   return NextResponse.json({
