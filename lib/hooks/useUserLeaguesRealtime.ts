@@ -44,9 +44,22 @@ export function useUserLeaguesRealtime() {
         if (!response.ok) throw new Error('Failed to load leagues')
         
         const data = await response.json()
+        const mapped = (data.leagues || [])
+          .map((l: any) => ({
+            $id: l.$id ?? l.id,
+            name: l.name,
+            status: l.status,
+            commissioner: l.commissioner,
+            maxTeams: l.maxTeams,
+            currentTeams: l.currentTeams,
+            draftDate: l.draftDate,
+            gameMode: l.gameMode,
+          }))
+          .filter((l: any) => Boolean(l.$id))
+
         setState(prev => ({ 
           ...prev, 
-          leagues: data.leagues || [],
+          leagues: mapped,
           loading: false 
         }))
       } catch (error) {
@@ -77,7 +90,7 @@ export function useUserLeaguesRealtime() {
         setState(prev => ({ ...prev, connected: true }))
         
         const payload = event.payload as any
-        if (!payload) return
+        if (!payload || !payload.$id) return
 
         console.log('League realtime event:', event.events, payload.$id)
 

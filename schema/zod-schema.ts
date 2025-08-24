@@ -348,7 +348,8 @@ export const ProjectionRunMetrics = z.object({
  * Matchups (weekly head-to-head)
  */
 export const Drafts = z.object({
-  leagueId: z.string().min(1).max(50),
+  // League association is optional to support mock drafts and practice rooms
+  leagueId: z.string().min(1).max(50).optional(),
   status: z.string().min(1).max(20),
   currentRound: z.number().int().min(1).optional(),
   currentPick: z.number().int().min(1).optional(),
