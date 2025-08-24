@@ -40,26 +40,32 @@ export async function GET(request: NextRequest) {
 
     // Get user's rosters to find their leagues (fantasy_teams uses owner_client_id)
     console.log('[/api/leagues/mine] Querying fantasy_teams with owner_client_id:', user.$id);
-    console.log('[/api/leagues/mine] Collection name:', COLLECTIONS.FANTASY_TEAMS);
-    
     const rostersResponse = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
-      [
-        Query.equal('owner_client_id', user.$id),
-        Query.limit(50)
-      ]
+      [Query.equal('owner_client_id', user.$id), Query.limit(100)]
     );
 
-    console.log('[/api/leagues/mine] Found rosters:', rostersResponse.documents.length);
-    
-    if (rostersResponse.documents.length === 0) {
-      console.log('[/api/leagues/mine] No rosters found for user');
-      return NextResponse.json({ leagues: [] });
-    }
+    // Also consider league_memberships as a fallback/source of truth
+    let membershipsResponse: any = { documents: [] };
+    try {
+      membershipsResponse = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUE_MEMBERSHIPS,
+        [Query.equal('client_id', user.$id), Query.equal('status', 'active'), Query.limit(100)]
+      );
+    } catch {}
 
-    // Get league details for each roster (schema uses league_id)
-    const leagueIds = rostersResponse.documents.map((roster: any) => roster.league_id).filter(Boolean);
+    // Union league ids from rosters and memberships
+    const leagueIdSet = new Set<string>();
+    for (const r of rostersResponse.documents || []) if (r?.league_id) leagueIdSet.add(String(r.league_id));
+    for (const m of membershipsResponse.documents || []) if (m?.league_id) leagueIdSet.add(String(m.league_id));
+    const leagueIds = Array.from(leagueIdSet);
+
+    if (leagueIds.length === 0) {
+      console.log('[/api/leagues/mine] No leagues found for user via rosters or memberships');
+      return NextResponse.json({ leagues: [], teams: [] });
+    }
     // Fetch leagues by IDs. Some Appwrite versions are strict about $id equality values.
     // Use robust fallback to per-id getDocument when listDocuments fails.
     let leaguesResponse: any;
@@ -111,7 +117,7 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    // Also provide teams to support dashboard expectations
+    // Also provide teams (roster-backed entries only) to support dashboard expectations
     const teams = rostersResponse.documents.map((r: any) => ({
       $id: r.$id,
       leagueId: r.league_id || r.leagueId,
