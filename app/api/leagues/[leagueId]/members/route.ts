@@ -24,7 +24,7 @@ export async function GET(
       DATABASE_ID,
       COLLECTIONS.ROSTERS,
       [
-        Query.equal('leagueId', leagueId),
+        Query.equal('league_id', leagueId),
         Query.limit(100)
       ]
     );
@@ -33,7 +33,7 @@ export async function GET(
     const uniqueUserIds = Array.from(
       new Set(
         (rosters.documents || [])
-          .map((d: any) => d.client_id || d.owner)
+          .map((d: any) => d.owner_client_id || d.client_id || d.owner)
           .filter(Boolean)
       )
     );
@@ -52,13 +52,13 @@ export async function GET(
 
     // Map to consistent format with resolved manager name
     const teams = rosters.documents.map((doc: any) => {
-      const ownerId = doc.client_id || doc.owner || '';
+      const ownerId = doc.owner_client_id || doc.client_id || doc.owner || '';
       const managerName = idToName.get(ownerId) || doc.userName || 'Unknown';
       return {
         $id: doc.$id,
-        leagueId: doc.leagueId,
+        leagueId: doc.league_id,
         userId: ownerId,
-        name: doc.teamName || doc.name || 'Team',
+        name: doc.name || doc.teamName || 'Team',
         userName: managerName,
         email: doc.email,
         wins: doc.wins ?? 0,
