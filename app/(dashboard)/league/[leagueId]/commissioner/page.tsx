@@ -578,37 +578,41 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
               <div>
                 <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>Available Members</div>
                 <div className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900" style={{ border: `1px solid ${leagueColors.border.light}` }}>
-                  {members.map(m => (
-                    <div key={m.$id} className="flex items-center justify-between px-3 py-2 rounded border" style={{ borderColor: leagueColors.border.light }}>
-                      <div className="truncate" title={m.name || m.teamName || m.$id}>
-                        {m.name || m.teamName || m.$id}
-                      </div>
+                  {members.map((m, idx) => {
+                    const mid = (m as any).client_id || m.$id;
+                    const selectedIdx = draftOrder.findIndex(id => id === mid);
+                    const selected = selectedIdx !== -1;
+                    return (
                       <button
+                        key={m.$id}
                         onClick={() => {
-                          const mid = (m as any).client_id || m.$id;
-                          const target = maxTeams || 12;
-                          setDraftOrder(prev => {
-                            const clean = prev.filter(id => id);
-                            const next = clean.includes(mid) ? clean : [...clean, mid];
-                            let i = 1;
-                            while (next.length < target) {
-                              const bot = `BOT-${i++}`;
-                              if (!next.includes(bot)) next.push(bot);
-                            }
-                            return next;
-                          });
+                          setDraftOrder(prev => (prev.includes(mid) ? prev : [...prev, mid]));
                         }}
-                        className="text-sm px-3 py-1 rounded"
-                        style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
-                      >Add</button>
-                    </div>
-                  ))}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded border text-left ${selected ? 'opacity-60 cursor-not-allowed' : 'hover:bg-gray-50'}`}
+                        style={{ borderColor: leagueColors.border.light }}
+                        disabled={selected}
+                        title={m.name || m.teamName || m.$id}
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          {selected && (
+                            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-200 text-gray-700 text-xs">
+                              {selectedIdx + 1}
+                            </span>
+                          )}
+                          <span className="truncate">{m.name || m.teamName || m.$id}</span>
+                        </div>
+                        {!selected && (
+                          <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}>Add</span>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
               <div>
                 <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>Order (1..N)</div>
                 <div className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900" style={{ border: `1px solid ${leagueColors.border.light}` }}>
-                  {draftOrder.map((id, idx) => {
+                  {draftOrder.filter(Boolean).map((id, idx) => {
                     const m = members.find(mm => mm.$id === id || (mm as any).client_id === id);
                     return (
                       <div key={`${id}-${idx}`} className="flex items-center gap-3 px-3 py-2 rounded border" style={{ borderColor: leagueColors.border.light }}>

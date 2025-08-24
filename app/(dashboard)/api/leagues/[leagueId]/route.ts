@@ -64,11 +64,33 @@ export async function GET(
       return new NextResponse(null, { status: 304, headers: { ETag: etag } });
     }
 
-    // commissioner display name
+    // commissioner display name (owner_client_id preferred; fallback to commissioner)
+    const commissionerId = (league as any).owner_client_id || (league as any).commissioner || (league as any).commissioner_id || (league as any).commissionerId;
     let commissionerName = 'Unknown Commissioner';
     try {
-      const cu: any = await serverUsers.get(league.commissioner);
-      commissionerName = cu.name || cu.email || commissionerName;
+      if (commissionerId) {
+        try {
+          const cu: any = await serverUsers.get(String(commissionerId));
+          commissionerName = cu.name || cu.email || commissionerName;
+        } catch {
+          // Fallback via clients collection (auth_user_id or $id)
+          try {
+            const clients = await databases.listDocuments(
+              databaseId,
+              'clients',
+              [Query.equal('auth_user_id', [String(commissionerId)]), Query.limit(1)]
+            );
+            const c = clients.documents?.[0];
+            if (c) commissionerName = (c as any).display_name || (c as any).email || commissionerName;
+            else {
+              try {
+                const c2 = await databases.getDocument(databaseId, 'clients', String(commissionerId));
+                if (c2) commissionerName = (c2 as any).display_name || (c2 as any).email || commissionerName;
+              } catch {}
+            }
+          } catch {}
+        }
+      }
     } catch {}
 
     return NextResponse.json({
@@ -82,7 +104,7 @@ export async function GET(
         currentTeams: league.members?.length || 0,
         members: league.members || [],
         status: league.status,
-        commissioner: league.commissioner,
+        commissioner: commissionerId,
         commissionerName,
         lineupProfileId: league.lineup_profile_id,
         scoringProfileId: league.scoring_profile_id,
