@@ -12,22 +12,44 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const results: any = { fantasyTeamsUpdated: 0, membershipsUpdated: 0, missingUsers: 0 }
+    const results: any = { fantasyTeamsUpdated: 0, fantasyTeamOwnerIdsUpdated: 0, membershipsUpdated: 0, missingUsers: 0 }
 
-    // 1) fantasy_teams: ensure display_name from Auth users when owner_client_id is present
+    // 1) fantasy_teams: ensure owner_client_id is Auth user id and display_name hydrated
     const teams = await databases.listDocuments(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, [Query.limit(1000)])
     for (const t of teams.documents as any[]) {
-      const ownerId: string | undefined = t.owner_client_id || t.client_id || t.owner
-      if (!ownerId || String(ownerId).startsWith('BOT-')) continue
+      const currentOwner: string | undefined = t.owner_client_id || t.client_id || t.owner
+      if (!currentOwner || String(currentOwner).startsWith('BOT-')) continue
+
+      let desiredId: string | undefined = currentOwner
+      let display: string | undefined
+
+      // Try as Auth user id
       try {
-        const u: any = await serverUsers.get(ownerId)
-        const display = u.name || u.email || 'Unknown User'
-        if (t.display_name !== display) {
-          await databases.updateDocument(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, t.$id, { display_name: display })
-          results.fantasyTeamsUpdated++
-        }
+        const u: any = await serverUsers.get(currentOwner)
+        desiredId = u.$id
+        display = u.name || u.email || 'Unknown User'
       } catch {
-        results.missingUsers++
+        // Fallback: treat as clients doc id
+        try {
+          const clientDoc: any = await databases.getDocument(DATABASE_ID, COLLECTIONS.CLIENTS, currentOwner)
+          if (clientDoc?.auth_user_id) {
+            desiredId = clientDoc.auth_user_id
+            display = clientDoc.display_name || clientDoc.email || 'Unknown User'
+          }
+        } catch {}
+      }
+
+      const payload: Record<string, any> = {}
+      if (desiredId && t.owner_client_id !== desiredId) {
+        payload.owner_client_id = desiredId
+        results.fantasyTeamOwnerIdsUpdated++
+      }
+      if (display && t.display_name !== display) {
+        payload.display_name = display
+        results.fantasyTeamsUpdated++
+      }
+      if (Object.keys(payload).length > 0) {
+        await databases.updateDocument(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, t.$id, payload)
       }
     }
 
