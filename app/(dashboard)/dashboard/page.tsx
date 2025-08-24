@@ -75,7 +75,7 @@ export default function DashboardPage() {
   const fetchUserLeagues = async () => {
     try {
       // Teams are still fetched separately since they're not part of the real-time hook yet
-      const response = await fetch('/api/leagues/my-leagues');
+      const response = await fetch('/api/leagues/mine');
       if (!response.ok) {
         throw new Error('Failed to fetch leagues');
       }
