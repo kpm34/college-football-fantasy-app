@@ -108,7 +108,7 @@ export class LeagueRepository extends BaseRepository<League> {
         $id: leagueIds
       },
       cache: {
-        key: `league:user:${client_id}:list`,
+        key: `league:user:${userId}:list`,
         ttl: 300
       }
     });
@@ -178,7 +178,7 @@ export class LeagueRepository extends BaseRepository<League> {
     const existingRoster = await rosterRepo.find({
       filters: {
         leagueId,
-        client_id
+        owner_client_id: userId
       }
     });
 
@@ -217,7 +217,7 @@ export class LeagueRepository extends BaseRepository<League> {
     }, {
       invalidateCache: [
         'league:public:*',
-        `league:user:${client_id}:*`
+        `league:user:${userId}:*`
       ]
     });
 
@@ -237,7 +237,7 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('League not found');
     }
 
-    if (league.commissioner !== client_id) {
+    if (league.commissioner !== userId) {
       throw new ForbiddenError('Only the commissioner can update league settings');
     }
 
