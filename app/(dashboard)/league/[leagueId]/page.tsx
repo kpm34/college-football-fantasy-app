@@ -161,17 +161,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         
         // Get commissioner name if we have commissioner ID
         let commissionerName = 'Unknown Commissioner';
-        if (l.commissioner) {
-          try {
-            const nameRes = await fetch(`/api/users/${l.commissioner}/name`, { cache: 'no-store' });
-            if (nameRes.ok) {
-              const nameData = await nameRes.json();
-              commissionerName = nameData.name;
-            }
-          } catch (error) {
-            console.error('Failed to fetch commissioner name:', error);
-          }
-        }
+        // commissionerName will be resolved elsewhere if needed
         
         mapped = {
           $id: l.id,
