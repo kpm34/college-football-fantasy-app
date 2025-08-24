@@ -174,23 +174,30 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       setPrimaryColor(league.primaryColor || '#8C1818');
       setSecondaryColor(league.secondaryColor || '#DAA520');
       setLeagueTrophyName(league.leagueTrophyName || 'Championship Trophy');
-      // Draft order
+      // Draft order – default EMPTY unless an explicit saved order exists
       try {
         const rawOrder = (league as any).draftOrder;
         if (rawOrder) {
           const parsed = Array.isArray(rawOrder) ? rawOrder : JSON.parse(rawOrder);
           if (Array.isArray(parsed)) setDraftOrder(parsed);
+          else setDraftOrder([]);
         } else if (league.scoringRules) {
           try {
             const parsedRules = JSON.parse(league.scoringRules);
             if (Array.isArray(parsedRules?.draftOrderOverride)) {
               setDraftOrder(parsedRules.draftOrderOverride);
+            } else {
+              setDraftOrder([]);
             }
-          } catch {}
-        } else if (Array.isArray((league as any).members)) {
-          setDraftOrder((league as any).members);
+          } catch {
+            setDraftOrder([]);
+          }
+        } else {
+          setDraftOrder([]);
         }
-      } catch {}
+      } catch {
+        setDraftOrder([]);
+      }
       setOrderMode(((league as any).orderMode as any) || 'custom');
       
       // Parse draft date/time
