@@ -171,6 +171,22 @@ export const ActivityLog = z.object({
 });
 
 /**
+ * Meshy Jobs (placeholder schema for build/runtime)
+ * Aligns with live DB: meshy_jobs
+ */
+export const MeshyJobs = z.object({
+  user_id: z.string().optional(),
+  prompt: z.string().optional(),
+  mode: z.string().optional(),
+  image_url: z.string().optional(),
+  result_url: z.string().optional(),
+  status: z.string().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
+  webhook_secret: z.string().optional(),
+});
+
+/**
  * Draft & Mock Draft Collections (in use but missing from SSOT)
  */
 export const DraftPicks = z.object({
@@ -500,6 +516,7 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.PROJECTIONS]: PlayerProjections,
   [COLLECTIONS.MODEL_RUNS]: ProjectionRuns,
   // [COLLECTIONS.MODEL_VERSIONS]: ModelVersions, // removed: no schema defined
+  [COLLECTIONS.MESHY_JOBS]: MeshyJobs,
   [COLLECTIONS.MESHY_JOBS]: MeshyJobs,
   [COLLECTIONS.INVITES]: ActivityLog, // temporary placeholder schema
   [COLLECTIONS.MIGRATIONS]: Migrations,
