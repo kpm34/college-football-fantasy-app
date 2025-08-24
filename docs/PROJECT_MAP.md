@@ -16,11 +16,67 @@ graph TD
     
     %% Core Application
     ROOT --> APP[app/<br/>Next.js 15 App Router<br/>Pages and API Routes]
-    APP --> SEG_MKT[app/(marketing)]
     APP --> SEG_DASH[app/(dashboard)]
-    APP --> SEG_DRAFT[app/(draft)]
+    APP --> SEG_LEAGUE[app/(league)]
+    APP --> DRAFT[app/draft]
+    APP --> MOCKDRAFT[app/mock-draft]
+    APP --> SCOREBOARD[app/scoreboard]
+    APP --> STANDINGS[app/standings]
     APP --> ADMIN[app/admin]
-    APP --> API_IDX[app/api/* index routes]
+    APP --> API_ROOT[app/api]
+    API_ROOT --> API_FE[app/api/(frontend)]
+    API_ROOT --> API_BE[app/api/(backend)]
+    API_ROOT --> API_EXT[app/api/(external)]
+
+    %% App Route Groups and Key Pages (groups do not affect URLs)
+    SEG_DASH --> DASH_DIR[app/(dashboard)/dashboard]
+    SEG_DASH --> LEAGUE_DIR[app/(dashboard)/league]
+    SEG_DASH --> ACCT_DIR[app/(dashboard)/account-settings]
+
+    LEAGUE_DIR --> L_CREATE[create]
+    LEAGUE_DIR --> L_JOIN[join]
+    LEAGUE_DIR --> L_ID[...[leagueId]]
+    L_ID --> L_LOCKER[locker-room]
+    L_ID --> L_COMM[commissioner]
+    L_ID --> L_SCHED[schedule]
+    L_ID --> L_SCORE[scoreboard]
+    L_ID --> L_STAND[standings]
+
+    SEG_LEAGUE --> MKT_LAUNCH[app/(league)/launch]
+    SEG_LEAGUE --> MKT_LOGIN[app/(league)/login]
+    SEG_LEAGUE --> MKT_INVITE[app/(league)/invite/[leagueId]]
+    SEG_LEAGUE --> MKT_SHOWCASE[app/(league)/projection-showcase]
+    SEG_LEAGUE --> MKT_VIDEOS[app/(league)/videos]
+    SEG_LEAGUE --> MKT_SIGNUP[app/(league)/signup]
+    SEG_LEAGUE --> MKT_OFFLINE[app/(league)/offline]
+
+    DRAFT --> DRAFT_LEAGUE[...[leagueId]]
+    MOCKDRAFT --> MD_ID[...[draftId]]
+    MD_ID --> MD_RESULTS[results]
+
+    %% API groups (URLs unchanged)
+    API_FE --> FE_AUTH[auth/*]
+    API_FE --> FE_LEAGUES[leagues/*]
+    API_FE --> FE_DRAFT[draft/*]
+    API_FE --> FE_DRAFTS[drafts/*]
+    API_FE --> FE_PLAYERS[players/*]
+    API_FE --> FE_GAMES[games/*]
+    API_FE --> FE_RANKINGS[rankings/*]
+    API_FE --> FE_ROSTERS[rosters]
+    API_FE --> FE_SCHEDULE[schedule]
+    API_FE --> FE_SEARCH[search]
+    API_FE --> FE_USERS[users/*]
+    API_BE --> BE_ADMIN[admin/*]
+    API_BE --> BE_CRON[cron/*]
+    API_BE --> BE_WEBHOOKS[webhooks/*]
+    API_BE --> BE_MIGRATIONS[migrations/*]
+    API_BE --> BE_MONITORING[monitoring/*]
+    API_BE --> BE_SYNC[sync]
+    API_EXT --> EXT_CLAUDE[claude]
+    API_EXT --> EXT_MESHY[meshy/*]
+    API_EXT --> EXT_RUNWAY[runway/*]
+    API_EXT --> EXT_BLENDER[blender/*]
+    API_EXT --> EXT_CFBD[cfbd/*]
     ROOT --> COMPONENTS[components/<br/>Reusable UI Library]
     ROOT --> SCHEMA[schema/<br/>SINGLE SOURCE OF TRUTH<br/>zod-schema.ts]
     
@@ -181,6 +237,75 @@ graph TB
     style VALIDATION fill:#f8cecc,stroke:#b85450,stroke-width:3px,color:#000000
     style REALTIME fill:#e1d5e7,stroke:#9673a6,stroke-width:3px,color:#000000
     style WEBSOCKETS fill:#e1d5e7,stroke:#9673a6,stroke-width:3px,color:#000000
+```
+
+### App Directory (3-level tree, folders vs files)
+
+```mermaid
+flowchart TB
+
+  %% Styles
+  classDef folder fill:#2563eb,stroke:#1e40af,color:#ffffff;
+  classDef file fill:#059669,stroke:#047857,color:#ffffff;
+
+  %% Legend
+  legend_folder[Folder]:::folder
+  legend_file[File]:::file
+  legend_folder --- legend_file
+
+  %% Root
+  app["app/"]:::folder
+
+  %% Level 1
+  app --> dash["(dashboard)/"]:::folder
+  app --> leaguegrp["(league)/"]:::folder
+  app --> draft["draft/"]:::folder
+  app --> mock["mock-draft/"]:::folder
+  app --> scoreboard["scoreboard/page.tsx"]:::file
+  app --> standings["standings/page.tsx"]:::file
+  app --> admin["admin/page.tsx"]:::file
+  app --> api["api/"]:::folder
+
+  %% (dashboard)
+  dash --> dashDashboard["dashboard/page.tsx"]:::file
+  dash --> account["account-settings/page.tsx"]:::file
+  dash --> league["league/"]:::folder
+
+  %% (dashboard)/league
+  league --> lcreate["create/page.tsx"]:::file
+  league --> ljoin["join/page.tsx"]:::file
+  league --> lid["[leagueId]/"]:::folder
+
+  %% (dashboard)/league/[leagueId]
+  lid --> lid_page["page.tsx"]:::file
+  lid --> lid_comm["commissioner/page.tsx"]:::file
+  lid --> lid_locker["locker-room/page.tsx"]:::file
+  lid --> lid_sched["schedule/page.tsx"]:::file
+  lid --> lid_score["scoreboard/page.tsx"]:::file
+  lid --> lid_stand["standings/page.tsx"]:::file
+
+  %% (league)
+  leaguegrp --> l_launch["launch/page.tsx"]:::file
+  leaguegrp --> l_login["login/page.tsx"]:::file
+  leaguegrp --> l_invite["invite/[leagueId] (page.tsx + layout.tsx)"]:::file
+  leaguegrp --> l_showcase["projection-showcase/page.tsx"]:::file
+  leaguegrp --> l_videos_page["videos/page.tsx"]:::file
+  leaguegrp --> l_videos_guide["videos/guide/page.tsx"]:::file
+  leaguegrp --> l_videos_program["videos/[program]/page.tsx"]:::file
+  leaguegrp --> l_signup["signup/page.tsx"]:::file
+  leaguegrp --> l_offline["offline/page.tsx"]:::file
+  leaguegrp --> l_rootpage["page.tsx"]:::file
+
+  %% draft & mock-draft
+  draft --> dr_league["[leagueId]/page.tsx"]:::file
+  mock --> md_draft["[draftId]/page.tsx"]:::file
+  mock --> md_results["[draftId]/results/page.tsx"]:::file
+
+  %% api (first level only)
+  api --> api_fe["(frontend)/"]:::folder
+  api --> api_be["(backend)/"]:::folder
+  api --> api_ext["(external)/"]:::folder
+  api --> api_lib["_lib/"]:::folder
 ```
 
 ---
