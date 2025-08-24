@@ -54,10 +54,10 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
     new Map(allLeagues.map(league => [league.$id, league])).values()
   );
 
-  // Get user's rosters/teams
+  // Get user's rosters/teams (fantasy_teams collection uses owner_client_id)
   const userRosters = await rosters.find({
     filters: {
-      userId: user.$id
+      owner_client_id: user.$id
     },
     cache: {
       key: `roster:user:${user.$id}:all`,

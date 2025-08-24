@@ -124,7 +124,7 @@ export default function AccountSettingsPage() {
 
       // Save other preferences to database
       const prefsData = {
-        userId: user.$id,
+        client_id: user.$id,  // Using client_id to match schema
         favoriteTeam,
         fantasyExperience,
         notificationPrefs,

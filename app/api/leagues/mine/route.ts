@@ -37,12 +37,12 @@ export async function GET(request: NextRequest) {
 
     const user = await userResponse.json();
 
-    // Get user's rosters to find their leagues
+    // Get user's rosters to find their leagues (fantasy_teams uses owner_client_id)
     const rostersResponse = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
       [
-        Query.equal('client_id', user.$id),
+        Query.equal('owner_client_id', user.$id),
         Query.limit(50)
       ]
     );
