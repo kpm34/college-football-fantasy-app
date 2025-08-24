@@ -468,7 +468,7 @@ export const COLLECTIONS = {
   PLAYER_STATS: 'player_stats',
   PROJECTIONS: 'projections',
   MODEL_RUNS: 'model_runs',
-  MODEL_VERSIONS: 'model_versions',
+  // MODEL_VERSIONS: 'model_versions', // removed: no schema defined
   
   // System
   ACTIVITY_LOG: 'activity_log',
@@ -499,7 +499,7 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.SCORES]: Scores,
   [COLLECTIONS.PROJECTIONS]: PlayerProjections,
   [COLLECTIONS.MODEL_RUNS]: ProjectionRuns,
-  [COLLECTIONS.MODEL_VERSIONS]: ModelVersions,
+  // [COLLECTIONS.MODEL_VERSIONS]: ModelVersions, // removed: no schema defined
   [COLLECTIONS.MESHY_JOBS]: MeshyJobs,
   [COLLECTIONS.INVITES]: ActivityLog, // temporary placeholder schema
   [COLLECTIONS.MIGRATIONS]: Migrations,

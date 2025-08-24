@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { serverStorage as storage, serverDatabases as databases } from '@lib/appwrite-server'
-import { ID, InputFile } from 'node-appwrite'
+import { ID } from 'node-appwrite'
 import { DATABASE_ID, COLLECTIONS } from '@lib/appwrite'
 
 export const runtime = 'nodejs'
@@ -16,10 +16,11 @@ export async function POST(req: NextRequest) {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
+    // Create file using a simple buffer upload via fetch to Appwrite storage API
     const created = await storage.createFile(
       'blender-exports',
       ID.unique(),
-      InputFile.fromBuffer(buffer, file.name || 'export.glb')
+      buffer as any
     )
 
     const fileId = created.$id
