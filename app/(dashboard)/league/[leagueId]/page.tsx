@@ -310,7 +310,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             <thead>
               <tr className="border-b border-white/10">
                 <th className="text-left py-4 px-6">Team</th>
-                <th className="text-left py-4 px-6">Manager</th>
+                <th className="text-left py-4 px-6">Name</th>
                 <th className="text-center py-4 px-6">Record</th>
                 <th className="text-center py-4 px-6">Points</th>
                 <th className="text-center py-4 px-6">Status</th>

@@ -144,7 +144,9 @@ export const Bids = z.object({
   userId: z.string().min(1).max(50),
   playerId: z.string().min(1).max(50),
   bidAmount: z.number().min(1),
-  timestamp: z.date()
+  timestamp: z.date(),
+  auctionId: z.string().min(1).max(50).optional(),
+  teamId: z.string().min(1).max(50).optional()
 });
 
 export const PlayerStats = z.object({
@@ -314,9 +316,12 @@ export const UserCustomProjections = z.object({
  * League Memberships (normalized user membership with role)
  */
 export const LeagueMemberships = z.object({
-  leagueId: z.string().min(1).max(50),
-  userId: z.string().min(1).max(50),
+  league_id: z.string().min(1).max(50),
+  client_id: z.string().min(1).max(50),
   role: z.enum(['commissioner', 'member', 'viewer']).default('member'),
+  status: z.enum(['active','inactive','pending']).default('active'),
+  joined_at: z.string().optional(),
+  display_name: z.string().optional()
 });
 
 /**
@@ -354,9 +359,20 @@ export const Drafts = z.object({
   currentRound: z.number().int().min(1).optional(),
   currentPick: z.number().int().min(1).optional(),
   maxRounds: z.number().int().min(1).optional(),
-  draftOrder: z.string().max(1000).optional(), // JSON array of team IDs
+  draftOrder: z.string().max(5000).optional(), // JSON array of team IDs
   startTime: z.date().optional(),
-  endTime: z.date().optional()
+  endTime: z.date().optional(),
+  type: z.enum(['snake','auction','mock']).optional(),
+  settings: z.string().max(10000).optional(),
+  participants: z.string().max(10000).optional(),
+  pickTimeSeconds: z.number().int().optional(),
+  autoPickEnabled: z.boolean().optional(),
+  commissioner: z.string().optional(),
+  season: z.number().int().optional(),
+  maxTeams: z.number().int().optional(),
+  currentTeams: z.number().int().optional(),
+  created: z.date().optional(),
+  updated: z.date().optional()
 });
 
 export const Matchups = z.object({
@@ -391,6 +407,13 @@ export const TeamBudgets = z.object({
   budget: z.number().min(0),
   spent: z.number().min(0).optional(),
   remaining: z.number().min(0).optional()
+});
+
+/** System collections present in live DB */
+export const Migrations = z.object({
+  version: z.string().min(1).max(100),
+  applied: z.date(),
+  checksum: z.string().max(200)
 });
 
 /**
@@ -429,35 +452,29 @@ export const COLLECTIONS = {
   CLIENTS: 'clients',  // Renamed from 'users'
   
   // Draft & auction
-  DRAFTS: 'drafts',  // Consolidated mock_drafts + auction_sessions
-  DRAFT_EVENTS: 'draft_events',  // Consolidated draft_picks + mock_draft_picks
+  DRAFTS: 'drafts',
+  DRAFT_EVENTS: 'draft_events',
   DRAFT_STATES: 'draft_states',
   AUCTIONS: 'auctions',
-  BIDS: 'bids',  // Consolidated auction_bids
+  BIDS: 'bids',
   
   // Gameplay
   LINEUPS: 'lineups',
-  MATCHUPS: 'matchups',  // Consolidated scores
+  MATCHUPS: 'matchups',
   TRANSACTIONS: 'transactions',
   ROSTER_SLOTS: 'roster_slots',
   
   // Projections & stats
   PLAYER_STATS: 'player_stats',
-  PROJECTIONS: 'projections',  // Consolidated all projection tables
-  MODEL_RUNS: 'model_runs',  // Renamed from projection_runs
+  PROJECTIONS: 'projections',
+  MODEL_RUNS: 'model_runs',
   MODEL_VERSIONS: 'model_versions',
   
   // System
   ACTIVITY_LOG: 'activity_log',
   INVITES: 'invites',
   MESHY_JOBS: 'meshy_jobs',
-  
-  // Legacy (to be removed)
-  MOCK_DRAFTS: 'mock_drafts',  // Use DRAFTS instead
-  MOCK_DRAFT_PICKS: 'mock_draft_picks',  // Use DRAFT_EVENTS instead
-  MOCK_DRAFT_PARTICIPANTS: 'mock_draft_participants',  // Use DRAFT_EVENTS instead
-  PROJECTION_RUN_METRICS: 'projection_run_metrics',
-  TEAM_BUDGETS: 'team_budgets',
+  MIGRATIONS: 'migrations',
 } as const;
 
 /**
@@ -465,37 +482,27 @@ export const COLLECTIONS = {
  */
 export const SCHEMA_REGISTRY = {
   [COLLECTIONS.COLLEGE_PLAYERS]: CollegePlayers,
-  [COLLECTIONS.TEAMS]: Teams,
+  [COLLECTIONS.SCHOOLS]: Teams,
   [COLLECTIONS.GAMES]: Games, 
   [COLLECTIONS.RANKINGS]: Rankings,
   [COLLECTIONS.LEAGUES]: Leagues,
-  [COLLECTIONS.USER_TEAMS]: Rosters,  // Updated key to use user_teams
+  [COLLECTIONS.FANTASY_TEAMS]: Rosters,
   [COLLECTIONS.LINEUPS]: Lineups,
   [COLLECTIONS.AUCTIONS]: Auctions,
-  [COLLECTIONS.AUCTION_SESSIONS]: Auctions, // Same schema as auctions
   [COLLECTIONS.BIDS]: Bids,
-  [COLLECTIONS.AUCTION_BIDS]: Bids, // Same schema as bids
   [COLLECTIONS.PLAYER_STATS]: PlayerStats,
-  // [COLLECTIONS.USERS]: Users, // Deprecated - use Appwrite Auth Users
   [COLLECTIONS.ACTIVITY_LOG]: ActivityLog,
-  [COLLECTIONS.DRAFT_PICKS]: DraftPicks,
-  [COLLECTIONS.MOCK_DRAFTS]: MockDrafts,
-  [COLLECTIONS.MOCK_DRAFT_PICKS]: MockDraftPicks,
-  [COLLECTIONS.MOCK_DRAFT_PARTICIPANTS]: MockDraftParticipants,
   [COLLECTIONS.DRAFTS]: Drafts,
-  [COLLECTIONS.MATCHUPS]: Matchups,
-  [COLLECTIONS.SCORES]: Scores,
-  [COLLECTIONS.PLAYER_PROJECTIONS]: PlayerProjections,
-  [COLLECTIONS.PROJECTIONS_YEARLY]: ProjectionsYearly,
-  [COLLECTIONS.PROJECTIONS_WEEKLY]: ProjectionsWeekly,
-  [COLLECTIONS.MODEL_INPUTS]: ModelInputs,
-  [COLLECTIONS.USER_CUSTOM_PROJECTIONS]: UserCustomProjections,
   [COLLECTIONS.DRAFT_EVENTS]: DraftEvents,
   [COLLECTIONS.DRAFT_STATES]: DraftStates,
-  [COLLECTIONS.LEAGUE_MEMBERSHIPS]: LeagueMemberships,
-  [COLLECTIONS.PROJECTION_RUNS]: ProjectionRuns,
-  [COLLECTIONS.PROJECTION_RUN_METRICS]: ProjectionRunMetrics,
-  [COLLECTIONS.TEAM_BUDGETS]: TeamBudgets,
+  [COLLECTIONS.MATCHUPS]: Matchups,
+  [COLLECTIONS.SCORES]: Scores,
+  [COLLECTIONS.PROJECTIONS]: PlayerProjections,
+  [COLLECTIONS.MODEL_RUNS]: ProjectionRuns,
+  [COLLECTIONS.MODEL_VERSIONS]: ModelVersions,
+  [COLLECTIONS.MESHY_JOBS]: MeshyJobs,
+  [COLLECTIONS.INVITES]: ActivityLog, // temporary placeholder schema
+  [COLLECTIONS.MIGRATIONS]: Migrations,
 } as const;
 
 /**

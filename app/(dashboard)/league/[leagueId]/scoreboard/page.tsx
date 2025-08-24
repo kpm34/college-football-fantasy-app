@@ -76,7 +76,7 @@ export default function ScoreboardPage({ params }: ScoreboardPageProps) {
             DATABASE_ID,
             COLLECTIONS.ROSTERS,
             [
-              Query.equal('leagueId', leagueId),
+              Query.equal('league_id', leagueId),
               Query.equal('owner_client_id', user.$id)
             ]
           );
@@ -102,7 +102,7 @@ export default function ScoreboardPage({ params }: ScoreboardPageProps) {
         const rosters = await databases.listDocuments(
           DATABASE_ID,
           COLLECTIONS.ROSTERS,
-          [Query.equal('leagueId', leagueId)]
+          [Query.equal('league_id', leagueId)]
         );
 
         // Create mock matchups by pairing teams

@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const rosterCountPage = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
-      [Query.equal('leagueId', leagueId), Query.limit(1)]
+      [Query.equal('league_id', leagueId), Query.limit(1)]
     );
     const rosterCount = (rosterCountPage as any).total ?? (rosterCountPage.documents?.length || 0);
     const maxTeams = (league as any).maxTeams ?? 12;
@@ -59,8 +59,8 @@ export async function POST(request: NextRequest) {
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
       [
-        Query.equal('leagueId', leagueId),
-        Query.equal('client_id', user.$id)
+        Query.equal('league_id', leagueId),
+        Query.equal('owner_client_id', user.$id)
       ]
     );
     
@@ -82,9 +82,16 @@ export async function POST(request: NextRequest) {
     
     // Create roster for the user (only include attributes that exist in `user_teams`)
     const rosterData: Record<string, any> = {
+      // Preferred fields
+      name: teamName || `${user.name || user.email}'s Team`,
+      league_id: leagueId,
+      owner_client_id: user.$id,
+      display_name: user.name || user.email,
+      // Back-compat synonyms used around the codebase
       teamName: teamName || `${user.name || user.email}'s Team`,
-      userId: user.$id,
       leagueId: leagueId,
+      client_id: user.$id,
+      userId: user.$id,
       wins: 0,
       losses: 0,
       ties: 0,
@@ -115,9 +122,9 @@ export async function POST(request: NextRequest) {
     const allRosters = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
-      [Query.equal('leagueId', leagueId), Query.limit(1000)]
+      [Query.equal('league_id', leagueId), Query.limit(1000)]
     );
-    const updatedMembers = Array.from(new Set((allRosters.documents || []).map((r: any) => r.client_id))).filter(Boolean);
+    const updatedMembers = Array.from(new Set((allRosters.documents || []).map((r: any) => r.owner_client_id || r.client_id))).filter(Boolean);
     const currentTeams = (allRosters as any).total ?? updatedMembers.length;
 
     // Only include attributes that actually exist in the leagues collection to avoid

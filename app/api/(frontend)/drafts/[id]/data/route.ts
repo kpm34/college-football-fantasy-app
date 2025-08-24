@@ -35,7 +35,7 @@ export async function GET(
     try {
       const membership = await databases.listDocuments(
         DATABASE_ID,
-        'league_memberships',
+        COLLECTIONS.LEAGUE_MEMBERSHIPS,
         [Query.equal('league_id', leagueId), Query.equal('client_id', user.$id), Query.limit(1)]
       );
       isMember = (membership.total || membership.documents.length) > 0;
@@ -45,7 +45,7 @@ export async function GET(
       try {
         const teams = await databases.listDocuments(
           DATABASE_ID,
-          'fantasy_teams',
+          COLLECTIONS.FANTASY_TEAMS,
           [Query.equal('league_id', leagueId), Query.equal('owner_client_id', user.$id), Query.limit(1)]
         );
         isMember = (teams.total || teams.documents.length) > 0;
@@ -67,7 +67,7 @@ export async function GET(
     try {
       const teamDocs = await databases.listDocuments(
         DATABASE_ID,
-        'fantasy_teams',
+        COLLECTIONS.FANTASY_TEAMS,
         [Query.equal('league_id', leagueId), Query.equal('owner_client_id', user.$id)]
       );
       userTeams = teamDocs.documents;
