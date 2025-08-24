@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { databases } from '@/lib/server-appwrite';
+import { serverDatabases as databases } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
-import { withErrorHandler } from '@lib/utils/error-handler';
+import { withErrorHandler } from '@/lib/utils/error-handler';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
