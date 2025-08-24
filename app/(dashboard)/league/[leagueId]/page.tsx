@@ -159,15 +159,14 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         const data = await res.json();
         const l = data.league;
         
-        // Get commissioner name if we have commissioner ID
-        let commissionerName = 'Unknown Commissioner';
-        // commissionerName will be resolved elsewhere if needed
+        // Commissioner name provided by API (server resolves via users/clients)
+        const commissionerName = data.league?.commissionerName || 'Unknown Commissioner';
         
         mapped = {
           $id: l.id,
           name: l.name,
-          commissioner: l.commissioner, // Always use the primary field
-          commissionerId: l.commissioner || (l as any).commissioner_id || (l as any).commissionerId,
+          commissioner: l.commissioner || (l as any).commissioner_id || (l as any).owner_client_id,
+          commissionerId: l.commissioner || (l as any).commissioner_id || (l as any).commissionerId || (l as any).owner_client_id,
           commissionerName,
           season: l.seasonStartWeek ? new Date().getFullYear() : (l.season || new Date().getFullYear()),
           scoringType: 'PPR',
