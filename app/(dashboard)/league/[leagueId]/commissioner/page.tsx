@@ -322,7 +322,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         updates.draftDate = new Date(`${draftDate}T${draftTime}`).toISOString();
       }
       updates.pickTimeSeconds = pickTimeSeconds;
-      // Persist draft order inside scoringRules payload to avoid schema drift
+      // Persist draft order inside scoringRules payload (schema-safe)
       const mergedRules = { ...scoringRules, draftOrderOverride: draftOrder.filter(Boolean) } as any;
       updates.scoringRules = JSON.stringify(mergedRules);
       
