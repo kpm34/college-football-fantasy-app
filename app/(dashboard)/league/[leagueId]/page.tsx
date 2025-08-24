@@ -409,234 +409,30 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     </div>
   );
 
-  const renderSettingsTab = () => {
-    const updateScoringSettings = async (key: string, value: number) => {
-      if (!isCommissioner || !league) return;
-
-      const newSettings = { ...scoringSettings, [key]: value };
-      setScoringSettings(newSettings);
-      setSavingSettings(true);
-
-      try {
-        const response = await fetch(`/api/leagues/${league.$id}/update-settings`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ scoringRules: JSON.stringify(newSettings) })
-        });
-        
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-          throw new Error(errorData.error || `HTTP ${response.status}`);
-        }
-        
-        console.log('Scoring settings saved successfully');
-        
-      } catch (error: any) {
-        console.error('Error saving scoring settings:', error);
-        alert(`Failed to save scoring settings: ${error.message || 'Unknown error'}`);
-        
-        // Revert the UI state on error
-        const originalValue = (league as any).scoringRules ? 
-          JSON.parse((league as any).scoringRules)[key] || 0 : 0;
-        setScoringSettings(prev => ({ ...prev, [key]: originalValue }));
-      } finally {
-        setSavingSettings(false);
-      }
-    };
-
-    const updateDraftSettings = async (key: string, value: string | number) => {
-      if (!isCommissioner || !league) return;
-
-      const newSettings = { ...draftSettings, [key]: value };
-      setDraftSettings(newSettings);
-      setSavingSettings(true);
-
-      try {
-        const updates: Record<string, any> = {};
-        
-        if (key === 'type') updates.draftType = value;
-        if (key === 'pickTimeSeconds') updates.pickTimeSeconds = value;
-        if (key === 'orderMode') updates.orderMode = value;
-        if (key === 'date' || key === 'time') {
-          const date = key === 'date' ? value : draftSettings.date;
-          const time = key === 'time' ? value : draftSettings.time;
-          if (date && time) {
-            updates.draftDate = new Date(`${date}T${time}`).toISOString();
-          }
-        }
-
-        const response = await fetch(`/api/leagues/${league.$id}/update-settings`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updates)
-        });
-        
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-          throw new Error(errorData.error || `HTTP ${response.status}`);
-        }
-        
-        const result = await response.json();
-        console.log('Settings saved successfully:', result);
-        
-      } catch (error: any) {
-        console.error('Error saving draft settings:', error);
-        alert(`Failed to save settings: ${error.message || 'Unknown error'}`);
-        
-        // Revert the UI state on error
-        const originalValue = key === 'type' ? (league as any).draftType || 'snake' :
-                             key === 'pickTimeSeconds' ? (league as any).pickTimeSeconds || 90 :
-                             key === 'orderMode' ? (league as any).orderMode || 'random' :
-                             key === 'date' ? (league.draftDate ? new Date(league.draftDate).toISOString().split('T')[0] : '') :
-                             key === 'time' ? (league.draftDate ? new Date(league.draftDate).toTimeString().slice(0, 5) : '') : value;
-        
-        setDraftSettings(prev => ({ ...prev, [key]: originalValue }));
-      } finally {
-        setSavingSettings(false);
-      }
-    };
-
-    return (
-      <div className="space-y-6">
-        <h3 className="text-2xl font-bold mb-6">League Settings</h3>
-        {/* Scoring Settings */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 border border-gray-200 shadow-lg">
-          <h4 className="text-xl font-bold mb-4 text-gray-800">Scoring Settings</h4>
-          {savingSettings && (
-            <p className="text-sm text-green-400 mb-2">Saving changes...</p>
-          )}
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {Object.entries(scoringSettings).map(([key, value]) => (
-              <div key={key} className="flex items-center justify-between">
-                <label className="text-sm capitalize font-medium text-gray-700">
-                  {key.replace(/([A-Z])/g, ' $1').trim()}
-                </label>
-                {isCommissioner ? (
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={value}
-                    onChange={(e) => updateScoringSettings(key, parseFloat(e.target.value))}
-                    className="w-20 px-2 py-1 bg-white border-2 border-blue-300 rounded text-gray-800 text-center font-medium focus:border-blue-500 focus:outline-none"
-                  />
-                ) : (
-                  <span className="font-semibold text-gray-700">{value}</span>
-                )}
-              </div>
-            ))}
+  const renderSettingsTab = () => (
+    <div className="space-y-6">
+      <h3 className="text-2xl font-bold mb-6">League Settings</h3>
+      {/* Static summary for all players; commissioner edits are on the Commissioner page */}
+      <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 border border-gray-200 shadow-lg">
+        <h4 className="text-xl font-bold mb-4 text-gray-800">Summary</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-800">
+          <div><span className="text-gray-600">Draft Type:</span> <span className="font-semibold">{(league as any)?.draftType || 'snake'}</span></div>
+          <div><span className="text-gray-600">Pick Time (s):</span> <span className="font-semibold">{(league as any)?.pickTimeSeconds ?? 90}</span></div>
+          <div><span className="text-gray-600">Draft Date:</span> <span className="font-semibold">{league?.draftDate ? new Date(league.draftDate).toLocaleString() : 'Not set'}</span></div>
+          <div><span className="text-gray-600">Order Mode:</span> <span className="font-semibold">{(league as any)?.orderMode || 'random'}</span></div>
+          <div className="md:col-span-2">
+            <span className="text-gray-600">Scoring:</span>
+            <pre className="mt-2 p-3 bg-gray-50 rounded border text-xs overflow-auto" style={{maxHeight: 200}}>
+              {JSON.stringify(scoringSettings, null, 2)}
+            </pre>
           </div>
         </div>
-        {/* Draft Settings */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-          <h4 className="text-xl font-bold mb-4">Draft Settings</h4>
-          
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <label className="text-sm">Draft Type</label>
-              {isCommissioner ? (
-                <select
-                  value={draftSettings.type}
-                  onChange={(e) => updateDraftSettings('type', e.target.value)}
-                  className="px-3 py-1 bg-white/10 border border-white/20 rounded"
-                >
-                  <option value="snake">Snake</option>
-                  <option value="auction">Auction</option>
-                </select>
-              ) : (
-                <span className="font-semibold capitalize">{draftSettings.type}</span>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="text-sm">Pick Time (seconds)</label>
-              {isCommissioner ? (
-                <input
-                  type="number"
-                  value={draftSettings.pickTimeSeconds}
-                  onChange={(e) => updateDraftSettings('pickTimeSeconds', parseInt(e.target.value))}
-                  className="w-20 px-2 py-1 bg-white/10 border border-white/20 rounded text-right"
-                />
-              ) : (
-                <span className="font-semibold">{draftSettings.pickTimeSeconds}s</span>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="text-sm">Draft Date</label>
-              {isCommissioner ? (
-                <input
-                  type="date"
-                  value={draftSettings.date}
-                  onChange={(e) => updateDraftSettings('date', e.target.value)}
-                  className="px-2 py-1 bg-white/10 border border-white/20 rounded"
-                />
-              ) : (
-                <span className="font-semibold">
-                  {draftSettings.date ? new Date(draftSettings.date).toLocaleDateString() : 'Not set'}
-                </span>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="text-sm">Draft Time</label>
-              {isCommissioner ? (
-                <input
-                  type="time"
-                  value={draftSettings.time}
-                  onChange={(e) => updateDraftSettings('time', e.target.value)}
-                  className="px-2 py-1 bg-white/10 border border-white/20 rounded"
-                />
-              ) : (
-                <span className="font-semibold">{draftSettings.time || 'Not set'}</span>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="text-sm">Draft Order</label>
-              {isCommissioner ? (
-                <select
-                  value={draftSettings.orderMode}
-                  onChange={(e) => updateDraftSettings('orderMode', e.target.value)}
-                  className="px-3 py-1 bg-white/10 border border-white/20 rounded"
-                >
-                  <option value="random">Random</option>
-                  <option value="manual">Manual</option>
-                  <option value="lastYear">Last Year's Standings</option>
-                </select>
-              ) : (
-                <span className="font-semibold capitalize">{draftSettings.orderMode}</span>
-              )}
-            </div>
-          </div>
-        </div>
-        {/* Commissioner Tools */}
         {isCommissioner && (
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-            <h4 className="text-xl font-bold mb-4">Commissioner Tools</h4>
-            
-            <div className="space-y-3">
-              <button className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
-                Pause/Resume League
-              </button>
-              <button className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
-                Reset Draft
-              </button>
-              <button className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
-                Edit Team Rosters
-              </button>
-              <button className="w-full text-left px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
-                Process Waivers
-              </button>
-              <button className="w-full text-left px-4 py-3 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors">
-                Delete League
-              </button>
-            </div>
-          </div>
+          <p className="text-sm text-gray-600 mt-3">To edit settings, use the Commissioner page.</p>
         )}
       </div>
-    );
-  };
+    </div>
+  );
 
   const renderDraftTab = () => (
     <div className="space-y-6">
