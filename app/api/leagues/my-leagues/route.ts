@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverRepositories } from '@domain/repositories';
+import { databases } from '@/lib/server-appwrite';
+import { Query } from 'node-appwrite';
 import { withErrorHandler } from '@lib/utils/error-handler';
 
 export const runtime = 'nodejs';
@@ -29,61 +30,36 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
   const user = await userResponse.json();
   console.log('[/api/leagues/my-leagues] User authenticated:', user.$id, user.email);
 
-  // Use repositories to get user's leagues and teams
-  const { leagues, rosters } = serverRepositories;
-
-  // Get all leagues the user is part of (either as player or commissioner)
-  const [userLeagues, commissionerLeagues] = await Promise.all([
-    // Get leagues where user has a roster
-    leagues.findUserLeagues(user.$id),
-    
-    // Get leagues where user is commissioner
-    leagues.find({
-      filters: {
-        commissioner: user.$id  // Database uses 'commissioner' not 'commissionerId'
-      },
-      cache: {
-        key: `league:commissioner:${user.$id}`,
-        ttl: 300
-      }
-    })
-  ]);
-
-  // Merge and deduplicate leagues
-  const allLeagues = [...userLeagues.leagues, ...commissionerLeagues.documents];
-  const uniqueLeagues = Array.from(
-    new Map(allLeagues.map(league => [league.$id, league])).values()
+  // --- Direct Appwrite queries -----------------------------------------
+  // 1) active memberships for this user
+  const memberships = await databases.listDocuments(
+    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+    'league_memberships',
+    [
+      Query.equal('client_id', [user.$id]),
+      Query.equal('status', ['active']),
+      Query.limit(100)
+    ]
   );
 
-  // Get user's rosters/teams (fantasy_teams collection uses owner_client_id)
-  console.log('[/api/leagues/my-leagues] Fetching rosters for user:', user.$id);
-  const userRosters = await rosters.find({
-    filters: {
-      owner_client_id: user.$id
-    },
-    cache: {
-      key: `roster:user:${user.$id}:all`,
-      ttl: 300
-    }
-  });
-  console.log('[/api/leagues/my-leagues] Found rosters:', userRosters.documents.length);
+  const leagueIds = memberships.documents.map(m => m.league_id);
+  if (!leagueIds.length) {
+    return NextResponse.json({ leagues: [], teams: [] });
+  }
 
-  // Transform rosters to teams format for backward compatibility
-  const teams = userRosters.documents.map(roster => ({
-    $id: roster.$id,
-    leagueId: roster.leagueId,
-    name: roster.teamName,
-    abbreviation: roster.abbreviation,
-    wins: roster.wins || 0,
-    losses: roster.losses || 0,
-    ties: roster.ties || 0,
-    pointsFor: roster.pointsFor || 0,
-    pointsAgainst: roster.pointsAgainst || 0,
-    logoUrl: roster.logoUrl
-  }));
+  // 2) fetch leagues by ids
+  const leaguesRes = await databases.listDocuments(
+    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+    'leagues',
+    [
+      Query.equal('$id', leagueIds),
+      Query.limit(100)
+    ]
+  );
 
-  return NextResponse.json({ 
-    leagues: uniqueLeagues,
-    teams
+  // TODO: fetch teams if needed later
+  return NextResponse.json({
+    leagues: leaguesRes.documents,
+    teams: []
   });
 });
