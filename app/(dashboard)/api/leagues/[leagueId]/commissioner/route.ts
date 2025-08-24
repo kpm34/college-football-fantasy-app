@@ -271,6 +271,14 @@ export async function PUT(
       }
     }
 
+    // Ensure required attributes from schema are preserved (Appwrite strict update)
+    if ((league as any).owner_client_id && !('owner_client_id' in safePayload)) {
+      safePayload['owner_client_id'] = (league as any).owner_client_id;
+    }
+    if ((league as any).season && !('season' in safePayload)) {
+      safePayload['season'] = (league as any).season;
+    }
+
     console.log('Updating league with payload:', JSON.stringify(safePayload, null, 2));
 
     // Update league with filtered settings
