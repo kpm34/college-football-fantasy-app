@@ -136,10 +136,23 @@ export abstract class BaseRepository<T extends Models.Document> {
       // Add custom filters
       if (options?.filters) {
         Object.entries(options.filters).forEach(([key, value]) => {
+          // 👇 Translate camelCase keys used in code to the snake_case attributes stored in Appwrite
+          // Add any additional mappings your schema needs in this same switch.
+          const fieldName = (() => {
+            switch (key) {
+              case 'userId':
+                return 'client_id';
+              case 'leagueId':
+                return 'league_id';
+              default:
+                return key; // fall back to whatever the repo asked for
+            }
+          })();
+
           if (Array.isArray(value)) {
-            queries.push(Query.equal(key, value));
+            queries.push(Query.equal(fieldName, value));
           } else if (value !== null && value !== undefined) {
-            queries.push(Query.equal(key, [value]));
+            queries.push(Query.equal(fieldName, [value]));
           }
         });
       }
