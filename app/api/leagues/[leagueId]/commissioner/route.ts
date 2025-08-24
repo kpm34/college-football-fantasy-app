@@ -45,19 +45,22 @@ export async function GET(
       );
     }
     
-    // Get members
-    const [rosters, teams] = await Promise.all([
-      databases.listDocuments(
+    // Get members from fantasy_teams with correct schema fields
+    const rosters = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.FANTASY_TEAMS,
+      [Query.equal('league_id', params.leagueId), Query.limit(200)]
+    );
+
+    // Optionally fetch league_memberships for display names
+    let memberships: any = { documents: [] };
+    try {
+      memberships = await databases.listDocuments(
         DATABASE_ID,
-        COLLECTIONS.userTeams,
-        [Query.equal('leagueId', params.leagueId)]
-      ),
-      databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.SCHOOLS,
-        [Query.equal('leagueId', params.leagueId)]
-      ).catch(() => ({ documents: [] }))
-    ]);
+        'league_memberships',
+        [Query.equal('league_id', params.leagueId), Query.equal('status', 'active'), Query.limit(200)]
+      );
+    } catch {}
     
     // Format league response to ensure camelCase fields
     const formattedLeague = {
@@ -77,11 +80,29 @@ export async function GET(
       isPublic: league.isPublic ?? true
     };
 
-    return NextResponse.json({
-      success: true,
-      league: formattedLeague,
-      members: [...rosters.documents, ...teams.documents]
-    });
+    // Build display name map
+    const membershipName = new Map<string, string>();
+    try {
+      for (const m of memberships.documents || []) {
+        if (m?.client_id && m?.display_name) {
+          membershipName.set(String(m.client_id), String(m.display_name));
+        }
+      }
+    } catch {}
+
+    // Map roster docs to a consistent member shape expected by UI
+    const members = (rosters.documents || []).map((doc: any) => ({
+      $id: doc.$id,
+      teamName: doc.name || doc.teamName || 'Team',
+      name: membershipName.get(doc.owner_client_id) || doc.display_name || undefined,
+      owner: doc.owner_client_id || doc.client_id || doc.owner,
+      email: doc.email,
+      wins: doc.wins ?? 0,
+      losses: doc.losses ?? 0,
+      client_id: doc.owner_client_id || doc.client_id || doc.owner // back-compat for UI lookups
+    }));
+
+    return NextResponse.json({ success: true, league: formattedLeague, members });
   } catch (error: any) {
     console.error('Get commissioner settings error:', error);
     return NextResponse.json(
