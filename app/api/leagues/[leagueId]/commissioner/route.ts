@@ -8,12 +8,16 @@ export async function GET(
   { params }: { params: { leagueId: string } }
 ) {
   try {
-    // Get user from session
-    const sessionCookie = request.cookies.get('appwrite-session')?.value;
+    // Get user from session (support both proxy cookie and native Appwrite cookie)
+    let sessionCookie = request.cookies.get('appwrite-session')?.value as string | undefined;
+    if (!sessionCookie) {
+      const native = request.cookies.get('a_session_college-football-fantasy-app')?.value as string | undefined;
+      if (native) sessionCookie = native;
+    }
     if (!sessionCookie) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
-    
+
     const cookieHeader = `a_session_college-football-fantasy-app=${sessionCookie}`;
     const userRes = await fetch('https://nyc.cloud.appwrite.io/v1/account', {
       headers: {
@@ -118,12 +122,16 @@ export async function PUT(
   { params }: { params: { leagueId: string } }
 ) {
   try {
-    // Get user from session
-    const sessionCookie = request.cookies.get('appwrite-session')?.value;
+    // Get user from session (support both proxy cookie and native Appwrite cookie)
+    let sessionCookie = request.cookies.get('appwrite-session')?.value as string | undefined;
+    if (!sessionCookie) {
+      const native = request.cookies.get('a_session_college-football-fantasy-app')?.value as string | undefined;
+      if (native) sessionCookie = native;
+    }
     if (!sessionCookie) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
-    
+
     const cookieHeader = `a_session_college-football-fantasy-app=${sessionCookie}`;
     const userRes = await fetch('https://nyc.cloud.appwrite.io/v1/account', {
       headers: {
