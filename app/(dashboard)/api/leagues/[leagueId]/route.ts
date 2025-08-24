@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Query } from 'node-appwrite';
-import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
+import { serverDatabases as databases, serverUsers, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
 
 const databaseId = DATABASE_ID;
 
@@ -60,6 +60,13 @@ export async function GET(
       return new NextResponse(null, { status: 304, headers: { ETag: etag } });
     }
 
+    // commissioner display name
+    let commissionerName = 'Unknown Commissioner';
+    try {
+      const cu: any = await serverUsers.get(league.commissioner);
+      commissionerName = cu.name || cu.email || commissionerName;
+    } catch {}
+
     return NextResponse.json({
       success: true,
       league: {
@@ -72,6 +79,7 @@ export async function GET(
         members: league.members || [],
         status: league.status,
         commissioner: league.commissioner,
+        commissionerName,
         lineupProfileId: league.lineup_profile_id,
         scoringProfileId: league.scoring_profile_id,
         // Support both legacy snake_case and current camelCase field names
