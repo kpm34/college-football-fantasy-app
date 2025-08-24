@@ -46,7 +46,7 @@ export async function GET(
     try {
       memberships = await databases.listDocuments(
         DATABASE_ID,
-        'league_memberships',
+        COLLECTIONS.LEAGUE_MEMBERSHIPS,
         [
           Query.equal('league_id', leagueId),
           Query.equal('status', 'active'),
@@ -56,7 +56,7 @@ export async function GET(
       if (!memberships || memberships.documents.length === 0) {
         memberships = await databases.listDocuments(
           DATABASE_ID,
-          'league_memberships',
+          COLLECTIONS.LEAGUE_MEMBERSHIPS,
           [
             Query.equal('leagueId', leagueId),
             Query.equal('status', 'active'),
@@ -85,26 +85,30 @@ export async function GET(
         }
       }
     } catch {}
-    // Resolve names via clients collection (auth_user_id -> display_name)
+    // Resolve names via clients collection (auth_user_id -> display_name) with fallbacks
     try {
       if (uniqueUserIds.length > 0) {
-        let clientsRes: any;
-        if (uniqueUserIds.length === 1) {
-          clientsRes = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.CLIENTS,
-            [Query.equal('auth_user_id', uniqueUserIds[0]), Query.limit(50)]
-          );
-        } else {
-          clientsRes = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.CLIENTS,
-            [Query.equal('auth_user_id', uniqueUserIds as string[]), Query.limit(200)]
-          );
-        }
+        const clientsRes = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.CLIENTS,
+          [Query.equal('auth_user_id', uniqueUserIds as string[]), Query.limit(200)]
+        );
         for (const c of clientsRes.documents || []) {
           if (c?.auth_user_id) {
             idToName.set(String(c.auth_user_id), String(c.display_name || c.email || 'Unknown'));
+          }
+        }
+
+        // Fallback: some legacy rosters may store clients document IDs in owner_client_id
+        const unresolved = uniqueUserIds.filter(uid => !idToName.has(String(uid)));
+        if (unresolved.length > 0) {
+          const clientsById = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.CLIENTS,
+            [Query.equal('$id', unresolved as string[]), Query.limit(200)]
+          );
+          for (const c of clientsById.documents || []) {
+            idToName.set(String((c as any).$id), String((c as any).display_name || (c as any).email || 'Unknown'));
           }
         }
       }

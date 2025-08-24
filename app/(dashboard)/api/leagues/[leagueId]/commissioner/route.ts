@@ -112,6 +112,19 @@ export async function GET(
             idToName.set(String((c as any).auth_user_id), String((c as any).display_name || (c as any).email || 'Unknown'));
           }
         }
+
+        // Fallback: treat unresolved ownerIds as potential clients doc IDs
+        const unresolved = ownerIds.filter(uid => !idToName.has(String(uid)));
+        if (unresolved.length > 0) {
+          const clientsById = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.CLIENTS,
+            [Query.equal('$id', unresolved as string[]), Query.limit(200)]
+          );
+          for (const c of (clientsById.documents || [])) {
+            idToName.set(String((c as any).$id), String((c as any).display_name || (c as any).email || 'Unknown'));
+          }
+        }
       }
     } catch {}
     await Promise.all(ownerIds.map(async (uid) => {
