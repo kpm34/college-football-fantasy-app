@@ -40,7 +40,7 @@ export function useUserLeaguesRealtime() {
       try {
         setState(prev => ({ ...prev, loading: true }))
         
-        const response = await fetch('/api/leagues/my-leagues')
+        const response = await fetch('/api/leagues/mine')
         if (!response.ok) throw new Error('Failed to load leagues')
         
         const data = await response.json()
@@ -106,14 +106,14 @@ export function useUserLeaguesRealtime() {
         const payload = event.payload as any
         if (!payload || payload.owner_client_id !== user.$id) return
 
-        console.log('User roster event:', event.events, payload.leagueId)
+        console.log('User roster event:', event.events, payload.league_id || payload.leagueId)
 
         // Handle roster deletion (user removed from league)
         if (event.events.some(e => e.endsWith('.delete'))) {
-          console.log('User removed from league:', payload.leagueId)
+          console.log('User removed from league:', payload.league_id || payload.leagueId)
           setState(prev => ({
             ...prev,
-            leagues: prev.leagues.filter(league => league.$id !== payload.leagueId)
+            leagues: prev.leagues.filter(league => league.$id !== (payload.league_id || payload.leagueId))
           }))
         }
       })

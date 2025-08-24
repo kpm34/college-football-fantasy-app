@@ -92,21 +92,35 @@ export async function GET(request: NextRequest) {
       leaguesResponse = { documents: docs.filter(Boolean) };
     }
 
-    // Format leagues for Navbar consumption
+    // Format leagues for UI consumption (sidebar + dashboard)
     const leagues = leaguesResponse.documents.map((league: any) => {
-      const userRoster = rostersResponse.documents.find((r: any) => r.league_id === league.$id);
+      const userRoster = rostersResponse.documents.find((r: any) => (r.league_id || r.leagueId) === league.$id);
       const isCommissioner = league.commissioner === user.$id;
-      
+
       return {
         id: league.$id,
         name: league.name,
+        status: league.status || 'active',
         isCommissioner,
-        teamName: userRoster?.name || 'My Team',
-        status: league.status || 'active'
+        teamName: userRoster?.name || userRoster?.teamName || 'My Team',
+        commissioner: league.commissioner,
+        maxTeams: league.maxTeams ?? 0,
+        currentTeams: league.currentTeams ?? (league.members?.length ?? undefined),
+        draftDate: league.draftDate
       };
     });
 
-    return NextResponse.json({ leagues });
+    // Also provide teams to support dashboard expectations
+    const teams = rostersResponse.documents.map((r: any) => ({
+      $id: r.$id,
+      leagueId: r.league_id || r.leagueId,
+      name: r.name || r.teamName || 'Team',
+      wins: r.wins ?? 0,
+      losses: r.losses ?? 0,
+      pointsFor: r.pointsFor ?? r.points ?? 0,
+    }));
+
+    return NextResponse.json({ leagues, teams });
 
   } catch (error: any) {
     console.error('Error fetching user leagues:', error);
