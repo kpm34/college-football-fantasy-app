@@ -51,11 +51,13 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Group picks by client_id to build each member's roster
+    // Group picks by client (owner) id to build each member's roster
     const rostersByUser: Record<string, any[]> = {};
     for (const pick of picks) {
-      if (!rostersByUser[pick.client_id]) {
-        rostersByUser[pick.client_id] = [];
+      const ownerId = (pick as any).client_id || (pick as any).owner_client_id || (pick as any).userId;
+      if (!ownerId) continue;
+      if (!rostersByUser[ownerId]) {
+        rostersByUser[ownerId] = [];
       }
       
       // Add player info to the roster
@@ -82,8 +84,8 @@ export async function POST(request: NextRequest) {
           DATABASE_ID,
           COLLECTIONS.FANTASY_TEAMS,
           [
-            Query.equal('leagueId', leagueId),
-            Query.equal('client_id', client_id),
+            Query.equal('league_id', leagueId),
+            Query.equal('owner_client_id', client_id),
             Query.limit(1)
           ]
         );

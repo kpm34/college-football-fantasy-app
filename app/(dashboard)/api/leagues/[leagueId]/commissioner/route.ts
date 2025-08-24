@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, serverUsers, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
 
+export const dynamic = 'force-dynamic';
 // GET commissioner settings and members
 export async function GET(
   request: NextRequest,
@@ -41,7 +42,7 @@ export async function GET(
     );
     
     // Check if user is commissioner (support multiple field variants)
-    const commissionerId = (league as any).commissioner || (league as any).commissionerId || (league as any).commissioner_id;
+    const commissionerId = (league as any).owner_client_id || (league as any).commissioner || (league as any).commissionerId || (league as any).commissioner_id;
     if (commissionerId !== user.$id) {
       return NextResponse.json(
         { error: 'Only the commissioner can access these settings' },
@@ -84,8 +85,9 @@ export async function GET(
       isPublic: league.isPublic ?? true
     };
 
-    // Build display name map
+    // Build display name maps
     const membershipName = new Map<string, string>();
+    const idToName = new Map<string, string>();
     try {
       for (const m of memberships.documents || []) {
         if (m?.client_id && m?.display_name) {
@@ -94,17 +96,46 @@ export async function GET(
       }
     } catch {}
 
+    // Resolve owner IDs from rosters
+    const ownerIds = Array.from(new Set((rosters.documents || []).map((d: any) => d.owner_client_id || d.client_id || d.owner).filter(Boolean)));
+    // Resolve from Auth Users first
+    // Prefer clients collection by auth_user_id; fallback to Auth Users
+    try {
+      if (ownerIds.length > 0) {
+        const clientsRes = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.CLIENTS,
+          [Query.equal('auth_user_id', ownerIds as string[]), Query.limit(200)]
+        );
+        for (const c of (clientsRes.documents || [])) {
+          if ((c as any)?.auth_user_id) {
+            idToName.set(String((c as any).auth_user_id), String((c as any).display_name || (c as any).email || 'Unknown'));
+          }
+        }
+      }
+    } catch {}
+    await Promise.all(ownerIds.map(async (uid) => {
+      if (idToName.has(String(uid))) return;
+      try {
+        const u: any = await serverUsers.get(String(uid));
+        idToName.set(String(uid), u.name || u.email || 'Unknown');
+      } catch {}
+    }));
+
     // Map roster docs to a consistent member shape expected by UI
-    const members = (rosters.documents || []).map((doc: any) => ({
+    const members = (rosters.documents || []).map((doc: any) => {
+      const ownerId = doc.owner_client_id || doc.client_id || doc.owner;
+      const resolvedName = membershipName.get(ownerId) || idToName.get(ownerId) || doc.display_name || undefined;
+      return {
       $id: doc.$id,
       teamName: doc.name || doc.teamName || 'Team',
-      name: membershipName.get(doc.owner_client_id) || doc.display_name || undefined,
-      owner: doc.owner_client_id || doc.client_id || doc.owner,
+      name: resolvedName,
+      owner: ownerId,
       email: doc.email,
       wins: doc.wins ?? 0,
       losses: doc.losses ?? 0,
-      client_id: doc.owner_client_id || doc.client_id || doc.owner // back-compat for UI lookups
-    }));
+      client_id: ownerId // back-compat for UI lookups
+    }});
 
     return NextResponse.json({ success: true, league: formattedLeague, members });
   } catch (error: any) {

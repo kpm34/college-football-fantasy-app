@@ -1,26 +1,26 @@
 Collection,Attributes,Indexes,Description
-activity_log,21,9,User activity and audit trail
-auctions,6,3,Auction lots for players
-bids,8,4,Auction bid history
-clients,6,2,Authenticated users (mirrors Appwrite Auth)
-college_players,17,7,All college football players
-draft_events,8,2,All draft picks and events
-draft_states,10,2,Current state of active drafts
-drafts,18,1,All draft types (snake/auction/mock)
-fantasy_teams,13,2,User teams within leagues
-games,16,5,College football game schedule
-invites,14,2,League invitation tracking
-league_memberships,5,2,Tracks which users belong to leagues
-leagues,31,4,Fantasy football leagues
-lineups,8,1,Weekly lineup submissions
-matchups,8,1,Weekly head-to-head matchups
-meshy_jobs,17,2,3D model generation jobs
-migrations,3,1,Database migration tracking
-model_runs,12,3,Projection model execution history
-model_versions,15,6,ML model version tracking
-player_stats,11,6,Weekly player performance stats
-projections,20,2,All player projections (consolidated)
-rankings,9,7,AP Top 25 and other rankings
-roster_slots,5,2,Players on fantasy teams
-schools,8,2,College football teams/schools
-transactions,7,3,Waiver wire and trade transactions
+activity_log,"userId (string), action (string), details (string), timestamp (datetime), ip_address (string), user_agent (string)","user_idx, timestamp_idx, action_idx",User activity and audit trail
+auctions,"leagueId (string), status (string), currentPlayerId (string), currentBid (integer), currentBidder (string), startTime (datetime)","league_auction_idx, active_auctions_idx, status_idx",Auction lots for players
+bids,"leagueId (string), sessionId (string), userId (string), playerId (string), bidAmount (integer), timestamp (datetime), auctionId (string), teamId (string)","player_bid_history_idx, auction_timeline_idx, user_bids_idx, timestamp_idx",Auction bid history
+clients,"userId (string), email (string), name (string), avatar (string), preferences (string), lastLogin (datetime)","email_unique_idx, user_lookup_idx",Authenticated users (mirrors Appwrite Auth)
+college_players,"name (string), position (enum: QB|RB|WR|TE|K|DEF), team (string), conference (enum: SEC|ACC|Big 12|Big Ten), fantasy_points (float), depth_chart_order (integer), eligible (boolean), year (enum: FR|SO|JR|SR), jerseyNumber (string), height (string), weight (integer), external_id (string), image_url (string), stats (string), season_fantasy_points (float), last_projection_update (datetime), draftable (boolean)","draft_availability_idx, name_search_idx, team_depth_chart_idx, conference_rankings_idx, eligibility_projections_idx, external_id_lookup_idx, position_idx",All college football players
+draft_events,"draftId (string), ts (datetime), type (enum: pick|autopick|undo|pause|resume), teamId (string), playerId (string), round (integer), overall (integer), by (string)","draft_ts_idx, draft_overall_idx",All draft picks and events
+draft_states,"draftId (string), onClockTeamId (string), deadlineAt (datetime), round (integer), pickIndex (integer), status (enum: active|paused|complete)","draft_unique_idx, deadline_scan_idx",Current state of active drafts
+drafts,"leagueId (string), status (string), currentRound (integer), currentPick (integer), maxRounds (integer), draftOrder (string), startTime (datetime), endTime (datetime), type (enum: snake|auction|mock), settings (string), participants (string), pickTimeSeconds (integer), autoPickEnabled (boolean), commissioner (string), season (integer), maxTeams (integer), currentTeams (integer), created (datetime), updated (datetime)","league_draft_idx",All draft types (snake/auction/mock)
+fantasy_teams,"leagueId (string), userId (string), teamName (string), abbreviation (string), draftPosition (integer), wins (integer), losses (integer), ties (integer), pointsFor (float), pointsAgainst (float), players (string), lineup (string), bench (string)","league_standings_idx, user_teams_idx",User teams within leagues
+games,"week (integer), season (integer), season_type (enum: regular|postseason), home_team (string), away_team (string), home_score (integer), away_score (integer), start_date (datetime), completed (boolean), venue (string), tv_network (string), weather (string), external_id (string), eligible_game (boolean), status (string), updated (datetime)","weekly_schedule_idx, eligible_scoring_idx, team_schedule_idx, away_schedule_idx, external_game_idx",College football game schedule
+invites,"leagueId (string), inviteToken (string), createdBy (string), email (string), status (enum: pending|accepted|expired), expiresAt (datetime), createdAt (datetime), acceptedAt (datetime), acceptedBy (string), maxUses (integer), currentUses (integer), isPublic (boolean), metadata (string), notes (string)","token_lookup_idx, league_invites_idx",League invitation tracking
+league_memberships,"leagueId (string), userId (string), role (enum: commissioner|member|viewer), joinedAt (datetime), displayName (string)","league_user_idx, user_idx",Tracks which users belong to leagues
+leagues,"name (string), commissioner (string), season (integer), maxTeams (integer), currentTeams (integer), draftType (enum: snake|auction), gameMode (enum: power4|sec|acc|big12|bigten), selectedConference (string), status (enum: open|full|drafting|active|complete), isPublic (boolean), pickTimeSeconds (integer), scoringRules (string), draftDate (datetime), seasonStartWeek (integer), playoffTeams (integer), playoffStartWeek (integer), waiverType (string), waiverBudget (integer), password (string), created (datetime), updated (datetime), settings (string), inviteCode (string), logo (string), description (string), tags (string), featured (boolean), region (string), timezone (string), chatEnabled (boolean), tradeDeadline (datetime), rosterLocks (string), customPositions (string)","public_browsing_idx, commissioner_leagues_idx, draft_ready_idx, league_search_idx",Fantasy football leagues
+lineups,"rosterId (string), week (integer), season (integer), lineup (string), bench (string), points (float), locked (boolean), submitted (datetime)","weekly_lineups_idx, roster_week_unique_idx",Weekly lineup submissions
+matchups,"leagueId (string), week (integer), season (integer), homeRosterId (string), awayRosterId (string), homePoints (float), awayPoints (float), status (enum: scheduled|active|final)","league_week_matchups_idx",Weekly head-to-head matchups
+meshy_jobs,"jobId (string), userId (string), status (enum: pending|processing|completed|failed), taskType (enum: text_to_3d|image_to_3d|refine), prompt (string), modelUrl (string), thumbnailUrl (string), progress (integer), errorMessage (string), metadata (string), createdAt (datetime), updatedAt (datetime), completedAt (datetime), cost (float), priority (integer), retryCount (integer), externalJobId (string)","user_jobs_idx, status_idx",3D model generation jobs
+migrations,"version (string), applied (datetime), checksum (string)","version_unique_idx",Database migration tracking
+model_runs,"runId (string), version (integer), scope (enum: season|week), season (integer), week (integer), sources (string), weights (string), metrics (string), status (enum: running|success|failed), startedAt (datetime), finishedAt (datetime), modelType (string)","season_week_idx, run_unique_idx, version_idx",Projection model execution history
+model_versions,"version (string), name (string), description (string), algorithm (string), features (string), hyperparams (string), trainingData (string), performance (string), status (enum: training|active|deprecated), createdAt (datetime), updatedAt (datetime), createdBy (string), tags (string), isDefault (boolean), validationScore (float)","version_unique_idx, status_idx, default_idx, performance_idx, created_idx, tags_idx",ML model version tracking
+player_stats,"playerId (string), gameId (string), week (integer), season (integer), stats (string), fantasy_points (float), updated (datetime), position (string), team (string), opponent (string), home_away (enum: H|A|N)","player_weekly_idx, weekly_performances_idx, player_game_unique_idx, game_stats_idx, team_week_idx, position_weekly_idx",Weekly player performance stats
+projections,"playerId (string), season (integer), week (integer), version (integer), points (float), components (string), fantasy_points (float), data (string), modelType (string), confidence (float), lastUpdated (datetime), source (string), metadata (string), floor (float), ceiling (float), median (float), volatility (float), injury_risk (float), usage_rate (float), pace_adj (float)","season_week_version_idx, player_season_week_version_idx",All player projections (consolidated)
+rankings,"week (integer), season (integer), poll_type (string), team (string), rank (integer), points (integer), first_place_votes (integer), source (string), updated (datetime)","weekly_rankings_idx, team_ranking_history_idx, poll_weekly_idx, rank_idx, team_idx, season_poll_idx, updated_idx",AP Top 25 and other rankings
+roster_slots,"rosterId (string), playerId (string), position (string), slotType (enum: starter|bench|ir), weekAdded (integer), isLocked (boolean)","roster_players_idx, player_roster_idx",Players on fantasy teams
+schools,"name (string), abbreviation (string), conference (string), mascot (string), logo_url (string), primary_color (string), secondary_color (string), external_id (string)","conference_idx, external_id_unique_idx",College football teams/schools
+transactions,"leagueId (string), rosterId (string), playerId (string), type (enum: add|drop|trade), status (enum: pending|completed|cancelled), processDate (datetime), details (string)","league_transactions_idx, roster_transactions_idx, pending_transactions_idx",Waiver wire and trade transactions

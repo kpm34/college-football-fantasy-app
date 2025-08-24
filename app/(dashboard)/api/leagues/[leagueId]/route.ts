@@ -27,7 +27,11 @@ export async function GET(
         const rosters = await databases.listDocuments(
           databaseId,
           COLLECTIONS.FANTASY_TEAMS,
-          [Query.equal('leagueId', leagueId), Query.equal('client_id', client_id), Query.limit(1)]
+          [
+            Query.equal('league_id', leagueId),
+            Query.equal('owner_client_id', client_id),
+            Query.limit(1)
+          ]
         );
         if (rosters.total === 0 && league.commissioner !== client_id) {
           return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

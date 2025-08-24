@@ -62,8 +62,8 @@ export class EnvironmentConfig {
       draftEvents: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_EVENTS || 'draft_events',
       draftStates: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_STATES || 'draft_states',
       drafts: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFTS || 'drafts',
-      auctions: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_AUCTIONS || 'auction_sessions',
-      bids: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_BIDS || 'auction_bids',
+      auctions: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_AUCTIONS || 'auctions',
+      bids: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_BIDS || 'bids',
       scores: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_SCORES || 'scores',
       teamBudgets: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_TEAM_BUDGETS || 'team_budgets',
       

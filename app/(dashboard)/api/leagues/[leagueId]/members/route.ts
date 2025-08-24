@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serverDatabases as databases, serverUsers, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
 
 export const runtime = 'nodejs';
@@ -19,8 +19,8 @@ export async function GET(
       );
     }
 
-    // Fetch all rosters/teams in this league
-    const rosters = await databases.listDocuments(
+    // Fetch all rosters/teams in this league (support both league_id and leagueId)
+    let rosters = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.ROSTERS,
       [
@@ -28,6 +28,18 @@ export async function GET(
         Query.limit(100)
       ]
     );
+    if (!rosters || rosters.documents.length === 0) {
+      try {
+        rosters = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.ROSTERS,
+          [
+            Query.equal('leagueId', leagueId),
+            Query.limit(100)
+          ]
+        );
+      } catch {}
+    }
 
     // Fetch memberships to leverage per-league member display names
     let memberships: any = { documents: [] };
@@ -41,13 +53,24 @@ export async function GET(
           Query.limit(200)
         ]
       );
+      if (!memberships || memberships.documents.length === 0) {
+        memberships = await databases.listDocuments(
+          DATABASE_ID,
+          'league_memberships',
+          [
+            Query.equal('leagueId', leagueId),
+            Query.equal('status', 'active'),
+            Query.limit(200)
+          ]
+        );
+      }
     } catch {}
 
     // Resolve owner display names using Appwrite Users service
     const uniqueUserIds = Array.from(
       new Set(
         (rosters.documents || [])
-          .map((d: any) => d.owner_client_id || d.client_id || d.owner)
+          .map((d: any) => d.owner_client_id || d.client_id || d.owner || d.userId)
           .filter(Boolean)
       )
     );
@@ -62,25 +85,38 @@ export async function GET(
         }
       }
     } catch {}
-    await Promise.all(
-      uniqueUserIds.map(async (uid) => {
-        try {
-          const u: any = await serverUsers.get(uid as string);
-          idToName.set(uid as string, u.name || u.email || 'Unknown');
-        } catch {
-          // Fallback to unknown if user lookup fails
-          idToName.set(uid as string, 'Unknown');
+    // Resolve names via clients collection (auth_user_id -> display_name)
+    try {
+      if (uniqueUserIds.length > 0) {
+        let clientsRes: any;
+        if (uniqueUserIds.length === 1) {
+          clientsRes = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.CLIENTS,
+            [Query.equal('auth_user_id', uniqueUserIds[0]), Query.limit(50)]
+          );
+        } else {
+          clientsRes = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.CLIENTS,
+            [Query.equal('auth_user_id', uniqueUserIds as string[]), Query.limit(200)]
+          );
         }
-      })
-    );
+        for (const c of clientsRes.documents || []) {
+          if (c?.auth_user_id) {
+            idToName.set(String(c.auth_user_id), String(c.display_name || c.email || 'Unknown'));
+          }
+        }
+      }
+    } catch {}
 
     // Map to consistent format with resolved manager name
     const teams = rosters.documents.map((doc: any) => {
       const ownerId = doc.owner_client_id || doc.client_id || doc.owner || '';
       const managerName =
-        doc.display_name ||
         membershipName.get(ownerId) ||
         idToName.get(ownerId) ||
+        doc.display_name ||
         doc.userName ||
         'Unknown';
       return {
