@@ -86,9 +86,9 @@ export class LeagueRepository extends BaseRepository<League> {
     // First get all rosters for the user
     const rosterRepo = new RosterRepository(this.isServer, this.client);
     const { documents: rosters } = await rosterRepo.find({
-      filters: { client_id },
+      filters: { owner_client_id: userId },
       cache: {
-        key: `roster:user:${client_id}`,
+        key: `roster:user:${userId}`,
         ttl: 300
       }
     });

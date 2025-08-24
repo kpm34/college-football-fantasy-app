@@ -36,8 +36,12 @@ export async function GET(request: NextRequest) {
     }
 
     const user = await userResponse.json();
+    console.log('[/api/leagues/mine] User authenticated:', user.$id, user.email);
 
     // Get user's rosters to find their leagues (fantasy_teams uses owner_client_id)
+    console.log('[/api/leagues/mine] Querying fantasy_teams with owner_client_id:', user.$id);
+    console.log('[/api/leagues/mine] Collection name:', COLLECTIONS.FANTASY_TEAMS);
+    
     const rostersResponse = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
@@ -47,7 +51,10 @@ export async function GET(request: NextRequest) {
       ]
     );
 
+    console.log('[/api/leagues/mine] Found rosters:', rostersResponse.documents.length);
+    
     if (rostersResponse.documents.length === 0) {
+      console.log('[/api/leagues/mine] No rosters found for user');
       return NextResponse.json({ leagues: [] });
     }
 

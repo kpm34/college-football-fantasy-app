@@ -27,6 +27,7 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
   }
 
   const user = await userResponse.json();
+  console.log('[/api/leagues/my-leagues] User authenticated:', user.$id, user.email);
 
   // Use repositories to get user's leagues and teams
   const { leagues, rosters } = serverRepositories;
@@ -55,6 +56,7 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
   );
 
   // Get user's rosters/teams (fantasy_teams collection uses owner_client_id)
+  console.log('[/api/leagues/my-leagues] Fetching rosters for user:', user.$id);
   const userRosters = await rosters.find({
     filters: {
       owner_client_id: user.$id
@@ -64,6 +66,7 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
       ttl: 300
     }
   });
+  console.log('[/api/leagues/my-leagues] Found rosters:', userRosters.documents.length);
 
   // Transform rosters to teams format for backward compatibility
   const teams = userRosters.documents.map(roster => ({
