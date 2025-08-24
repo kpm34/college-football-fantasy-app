@@ -98,6 +98,7 @@ export async function GET(request: NextRequest) {
       const isCommissioner = league.commissioner === user.$id;
 
       return {
+        $id: league.$id,
         id: league.$id,
         name: league.name,
         status: league.status || 'active',

@@ -116,7 +116,7 @@ export default function Navbar() {
               </Link>
             </div>
             <div className="ml-auto hidden md:flex items-center gap-3">
-              <UserMenu user={user} loading={authLoading} />
+              <UserMenu user={user} loading={authLoading} onLogout={handleLogout} />
             </div>
           </div>
         </div>
@@ -294,7 +294,7 @@ export default function Navbar() {
           ) : (
             <div className="flex items-center gap-2 px-1">
               <Link
-                href="/account/settings"
+                href="/account-settings"
                 onClick={() => setOpen(false)}
                 className="flex-1 text-center rounded-md px-3 py-2 bg-white/10 hover:bg-white/15 transition-colors"
               >
@@ -319,16 +319,22 @@ export default function Navbar() {
 function UserMenu({
   user,
   loading,
+  onLogout,
 }: {
   user: any;
   loading: boolean;
+  onLogout?: () => Promise<void> | void;
 }) {
   const router = useRouter();
   const { logout } = useAuth();
   
   const handleLogout = async () => {
     try {
-      await logout();
+      if (onLogout) {
+        await onLogout();
+      } else {
+        await logout();
+      }
     } catch (e) {
       console.error("Logout failed", e);
       // Even if logout fails, redirect to home
@@ -348,12 +354,13 @@ function UserMenu({
     return (
       <div className="flex items-center gap-2">
         <Link 
-          href="/account/settings" 
+          href="/account-settings" 
           className="text-sm px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-white/90 hover:text-white transition-colors"
         >
           {user.name || user.email}
         </Link>
         <button
+          type="button"
           onClick={handleLogout}
           className="text-sm px-3 py-1.5 rounded-md bg-red-600/80 hover:bg-red-600 text-white transition-colors"
           title="Logout"

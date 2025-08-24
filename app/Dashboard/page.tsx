@@ -100,7 +100,10 @@ export default function DashboardPage() {
   }
 
   const getTeamForLeague = (leagueId: string) => {
-    return teams.find(team => team.leagueId === leagueId);
+    return teams.find(team => {
+      const teamLeagueId = (team as any).leagueId ?? (team as any).league_id ?? (team as any).leagueID ?? (team as any).league;
+      return teamLeagueId === leagueId;
+    });
   };
 
   return (
@@ -112,7 +115,7 @@ export default function DashboardPage() {
             <p style={{ color: palette.brown }}>Welcome back, {user?.name || user?.email}!</p>
           </div>
           <Link
-            href="/account/settings"
+            href="/account-settings"
             className="px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
             style={{ backgroundColor: palette.accent, color: '#fff' }}
           >
@@ -215,44 +218,51 @@ export default function DashboardPage() {
           </div>
         ) : leagues.length === 0 && teams.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {teams.map((team) => (
-              <div
-                key={team.$id}
-                className="rounded-2xl p-6 transition-all hover:shadow-md hover:-translate-y-0.5"
-                style={{ background: palette.card, border: `1px solid ${palette.border}` }}
-              >
-                <div className="mb-4 p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}>
-                  <p className="text-sm text-white/80 mb-1">{team.name}</p>
-                  <div className="flex gap-4 text-sm text-white/60">
-                    <span>{team.wins}-{team.losses}</span>
-                    <span>{Number(team.pointsFor || 0).toFixed(1)} PF</span>
+            {teams.map((team) => {
+              const teamLeagueId = (team as any).leagueId ?? (team as any).league_id ?? (team as any).leagueID ?? (team as any).league;
+              return (
+                <div
+                  key={team.$id}
+                  className="rounded-2xl p-6 transition-all hover:shadow-md hover:-translate-y-0.5"
+                  style={{ background: palette.card, border: `1px solid ${palette.border}` }}
+                >
+                  <div className="mb-4 p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                    <p className="text-sm text-white/80 mb-1">{team.name}</p>
+                    <div className="flex gap-4 text-sm text-white/60">
+                      <span>{team.wins}-{team.losses}</span>
+                      <span>{Number(team.pointsFor || 0).toFixed(1)} PF</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Link
+                      href={`/league/${teamLeagueId}`}
+                      className="flex-1 text-center py-2 rounded-lg text-sm font-medium transition-colors text-white bg-gradient-to-r from-[#DAA520] to-[#B8860B] hover:opacity-90"
+                    >
+                      League Home
+                    </Link>
+                    <Link
+                      href={`/league/${teamLeagueId}/locker-room`
+                      }
+                      className="flex-1 text-center py-2 rounded-lg text-sm font-medium transition-colors"
+                      style={{ background: '#8091BB' }}
+                    >
+                      Locker Room
+                    </Link>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <Link
-                    href={`/league/${team.leagueId}`}
-                    className="flex-1 text-center py-2 rounded-lg text-sm font-medium transition-colors text-white bg-gradient-to-r from-[#DAA520] to-[#B8860B] hover:opacity-90"
-                  >
-                    League Home
-                  </Link>
-                  <Link
-                    href={`/league/${team.leagueId}/locker-room`}
-                    className="flex-1 text-center py-2 rounded-lg text-sm font-medium transition-colors"
-                    style={{ background: '#8091BB' }}
-                  >
-                    Locker Room
-                  </Link>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {leagues.map((league) => {
-              const team = getTeamForLeague(league.$id);
+            {leagues
+              .filter(l => Boolean((l as any).$id ?? (l as any).id))
+              .map((league) => {
+              const leagueId = (league as any).$id ?? (league as any).id;
+              const team = getTeamForLeague(leagueId);
               return (
                 <div
-                  key={league.$id}
+                  key={leagueId}
                   className="rounded-2xl p-6 transition-all hover:shadow-md hover:-translate-y-0.5 backdrop-blur-sm"
                   style={{ background: 'rgba(30, 144, 255, 0.15)', border: '1px solid rgba(30, 144, 255, 0.25)' }}
                 >
@@ -292,14 +302,14 @@ export default function DashboardPage() {
 
                   <div className="flex gap-2">
                     <Link
-                      href={`/league/${league.$id}`}
+                      href={`/league/${leagueId}`}
                       className="flex-1 text-center py-2 rounded-lg text-sm font-medium transition-colors"
                       style={{ backgroundColor: palette.accent, color: '#fff' }}
                     >
                       League Home
                     </Link>
                     <Link
-                      href={`/league/${league.$id}/locker-room`}
+                      href={`/league/${leagueId}/locker-room`}
                       className="flex-1 text-center py-2 rounded-lg text-sm font-medium transition-colors"
                       style={{ background: palette.secondary, color: '#fff' }}
                     >

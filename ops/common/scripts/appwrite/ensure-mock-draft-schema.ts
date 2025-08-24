@@ -32,6 +32,7 @@ const COLLECTIONS: CollectionSchema[] = [
     id: 'mock_drafts',
     name: 'Mock Drafts',
     attributes: [
+      // leagueId optional to allow practice drafts without a league
       { key: 'leagueId', type: 'string', size: 255, required: false },
       { key: 'draftName', type: 'string', size: 255, required: true },
       { key: 'numTeams', type: 'integer', required: true },
