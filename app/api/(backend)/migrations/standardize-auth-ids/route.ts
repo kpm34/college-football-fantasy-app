@@ -6,7 +6,10 @@ export const runtime = 'nodejs'
 
 export async function POST(request: NextRequest) {
   try {
-    const provided = request.headers.get('x-cron-secret') || new URL(request.url).searchParams.get('secret') || ''
+    const provided = request.headers.get('x-cron-secret') 
+      || (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '') 
+      || new URL(request.url).searchParams.get('secret') 
+      || ''
     const expected = process.env.CRON_SECRET || ''
     if (!expected || provided !== expected) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
