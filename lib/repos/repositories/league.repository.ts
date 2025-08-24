@@ -190,7 +190,7 @@ export class LeagueRepository extends BaseRepository<League> {
     // Explicitly define clean roster data to avoid schema conflicts
     const cleanRosterData = {
       leagueId: String(leagueId),
-      userId: String(client_id),
+      owner_client_id: String(userId),  // Auth user ID is the owner
       teamName: String(teamName),
       abbreviation: String(abbreviation || teamName.substring(0, 3).toUpperCase()),
       draftPosition: Number(league.currentTeams + 1),
@@ -267,7 +267,7 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('League not found');
     }
 
-    if (league.commissioner !== client_id) {
+    if (league.commissioner !== userId) {
       throw new ForbiddenError('Only the commissioner can start the draft');
     }
 
