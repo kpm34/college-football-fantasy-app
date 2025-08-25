@@ -347,9 +347,10 @@ export default function MockDraftPage() {
           participants: Array.from({ length: settings.numTeams }, (_, i) => {
             const slot = i + 1;
             if (slot === settings.userPosition) {
-              const displayName = (user as any)?.name || (user as any)?.email || 'Guest';
-              const client_id = (user as any)?.$id || (user as any)?.id || `user-${Date.now()}`;
-              return { slot, userType: 'human', displayName, client_id };
+              // Use auth user info if available, otherwise guest mode
+              const displayName = user?.name || user?.email || `Guest Player ${slot}`;
+              const auth_user_id = user?.$id || null; // This is the Appwrite auth ID
+              return { slot, userType: 'human', displayName, client_id: auth_user_id };
             }
             return { slot, userType: 'bot', displayName: `Bot Team ${slot}` };
           })
@@ -365,10 +366,11 @@ export default function MockDraftPage() {
 
       if (data?.draftId) {
         try {
-          const displayName = (user as any)?.name || (user as any)?.email || 'Guest';
-          const client_id = (user as any)?.$id || (user as any)?.id || `user-${Date.now()}`;
+          // Store user info for the draft room
+          const displayName = user?.name || user?.email || `Guest Player ${settings.userPosition}`;
+          const auth_user_id = user?.$id || `guest-${Date.now()}`;
           localStorage.setItem('mockDraftUserName', displayName);
-          localStorage.setItem('mockDraftUserId', client_id);
+          localStorage.setItem('mockDraftUserId', auth_user_id);
         } catch {}
         // Navigate to the new mock draft room
         router.push(`/mock-draft/${data.draftId}`);
