@@ -1,7 +1,7 @@
 # College Football Fantasy App - Database Schema
 
 ## Overview
-The application uses Appwrite as the backend database with 24 collections organized into logical groups. All collection and field names follow snake_case convention.
+The application uses Appwrite as the backend database with 24 collections organized into logical groups. Field naming is standardizing on camelCase. During the transition, some legacy snake_case attributes may still exist in the live schema for backward compatibility. Code should always prefer camelCase attributes, and migrations will remove snake_case variants over time.
 
 ## Collections
 
@@ -49,24 +49,25 @@ Represents authenticated users (mirrors Appwrite Auth).
 
 #### `leagues`
 Fantasy football leagues.
-- **Fields**: name, owner_client_id (FK), season, draft_type, is_public, status, draft_date, pick_time_seconds, playoff_start_week, playoff_teams, max_teams, selected_conference, scoring_rules, waiver_budget, waiver_type
+- **Fields**: name, commissioner_auth_user_id (FK), season, draftType, isPublic, status, draftDate, pickTimeSeconds, playoffStartWeek, playoffTeams, maxTeams, selectedConference, scoringRules, waiverBudget, waiverType, currentTeams
 - **Indexes**:
-  - `owner_idx`: owner_client_id
+  - `commissioner_idx`: commissioner_auth_user_id
   - `season_idx`: season
+  - `status_idx`: status
 
 #### `league_memberships`
 Tracks which users belong to which leagues.
-- **Fields**: league_id (FK), client_id (FK), role, status, joined_at
+- **Fields**: league_id (FK), auth_user_id (FK), role, status, joined_at
 - **Indexes**:
-  - `league_client_unique` (unique): league_id, client_id
-  - `client_idx`: client_id
+  - `league_member_unique` (unique): league_id, auth_user_id
+  - `member_idx`: auth_user_id
 
 #### `fantasy_teams` (formerly user_teams)
 User teams within leagues.
-- **Fields**: league_id (FK), owner_client_id (FK), name, abbrev, logo_url, wins, losses, ties, points_for, points_against, draft_position, auction_budget_total, auction_budget_remaining
+- **Fields**: league_id (FK), owner_auth_user_id (FK), name, abbrev, display_name, logo_url, wins, losses, ties, points_for, points_against, draft_position, auction_budget_total, auction_budget_remaining
 - **Indexes**:
   - `league_idx`: league_id
-  - `league_owner_idx`: league_id, owner_client_id
+  - `owner_idx`: owner_auth_user_id
 
 #### `roster_slots`
 Players on fantasy teams.
@@ -215,10 +216,16 @@ User activity and audit trail.
 - `projection_run_metrics` (merged into model_runs)
 
 ## Field Naming Conventions
-All fields use snake_case:
-- `rosterId` → `fantasy_team_id`
-- `userId` → `client_id`
-- `teamId` → `fantasy_team_id` or `school_id` (context dependent)
+CamelCase is canonical for new and refactored attributes. Legacy snake_case attributes may still be present during migration windows but should not be introduced in new code. Examples:
+- `owner_client_id` → `owner_auth_user_id`
+- `commissioner` → `commissioner_auth_user_id`
+- `selected_conference` → `selectedConference`
+- `is_public` → `isPublic`
+- `draft_date` → `draftDate`
+- `pick_time_seconds` → `pickTimeSeconds`
+- `playoff_start_week` → `playoffStartWeek`
+
+When referencing identifiers in code and queries, always prefer the camelCase versions listed above. Queries can temporarily include legacy names with OR conditions where necessary, but those will be removed as backfills complete.
 
 ## Environment Variables
 All collection names are prefixed with `NEXT_PUBLIC_APPWRITE_COLLECTION_`:
