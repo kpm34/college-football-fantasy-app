@@ -1,27 +1,18 @@
 import { z } from 'zod';
 
-export const fantasyTeamsSchema = z.object({
-  id: z.string(),
-  league_id: z.string(),
-  owner_client_id: z.string(),
-  name: z.string(),
-  logo_url: z.string().optional(),
-  
-  // Stats
-  wins: z.number().int().default(0),
-  losses: z.number().int().default(0),
-  ties: z.number().int().default(0),
-  points_for: z.number().default(0),
-  points_against: z.number().default(0),
-  
-  // Auction/budget (consolidated from team_budgets)
-  auction_budget_total: z.number().default(200),
-  auction_budget_remaining: z.number().default(200),
-  waiver_priority: z.number().int().optional(),
-  faab_remaining: z.number().optional(),
-  
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime()
+export const FantasyTeams = z.object({
+  league_id: z.string().min(1).max(64),
+  owner_auth_user_id: z.string().min(1).max(64).optional(),
+  name: z.string().min(1).max(128).optional(),
+  abbrev: z.string().max(8).optional(),
+  logo_url: z.string().max(512).optional(),
+  wins: z.number().int().optional(),
+  losses: z.number().int().optional(),
+  ties: z.number().int().optional(),
+  points_for: z.number().optional(),
+  points_against: z.number().optional(),
+  draft_position: z.number().int().optional(),
+  auction_budget_total: z.number().optional(),
+  auction_budget_remaining: z.number().optional(),
+  display_name: z.string().max(255).optional()
 });
-
-export type FantasyTeam = z.infer<typeof fantasyTeamsSchema>;
