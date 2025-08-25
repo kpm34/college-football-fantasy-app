@@ -1,15 +1,24 @@
 import { z } from 'zod'
 
-export const LeagueSchema = z.object({
-  name: z.string(),
-  commissioner: z.string(),
-  season: z.number(),
-  maxTeams: z.number().min(2).max(24),
-  draftType: z.enum(['snake','auction']).default('snake'),
-  gameMode: z.enum(['power4','sec','acc','big12','bigten','conference']),
-  selectedConference: z.string().optional(),
-  draftDate: z.string().datetime().optional(),
-  status: z.enum(['open','active','complete','drafting','full']).default('open'),
-})
+// Canonical leagues schema (subset for SSOT import)
+export const Leagues = z.object({
+  name: z.string().min(1).max(100),
+  commissioner_auth_user_id: z.string().min(1).max(64).optional(),
+  season: z.number().int().min(2020).max(2035),
+  maxTeams: z.number().int().min(2).max(32).optional(),
+  currentTeams: z.number().int().min(0).max(32).optional(),
+  status: z.string().max(20).optional(),
+  isPublic: z.boolean().optional(),
+  scoringRules: z.string().max(8192).optional(),
+  draftDate: z.string().optional(),
+  selectedConference: z.string().max(50).optional(),
+  draftType: z.string().max(20).optional(),
+  gameMode: z.string().max(20).optional(),
+  pickTimeSeconds: z.number().int().optional(),
+  playoffStartWeek: z.number().int().optional(),
+  playoffTeams: z.number().int().optional(),
+  waiverType: z.string().max(20).optional(),
+  waiverBudget: z.number().int().optional(),
+});
 
-export type League = z.infer<typeof LeagueSchema>
+export type League = z.infer<typeof Leagues>
