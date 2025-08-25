@@ -48,13 +48,51 @@ flowchart TB
   R --> app_api_
   click app_api_ "/admin/project-map/app/api" "Open API routes"
 
-  %% Legend
-  subgraph legend["🎨 Color Legend"]
+```
+
+---
+
+## 🎨 Color Legend
+
+```mermaid
+flowchart TD
+  classDef folder fill:#dbeafe,stroke:#2563eb,stroke-width:2,color:#1e293b,rx:8,ry:8
+  classDef file fill:#fed7aa,stroke:#ea580c,stroke-width:1.5,color:#431407,rx:4,ry:4
+  classDef highlight fill:#fef3c7,stroke:#d97706,stroke-width:3,color:#451a03,rx:8,ry:8
+  
+  subgraph spacer1[" "]
+    invisible1[" "]
+    style invisible1 fill:transparent,stroke:transparent
+  end
+  
+  subgraph spacer2[" "]
+    invisible2[" "]
+    style invisible2 fill:transparent,stroke:transparent
+  end
+  
+  subgraph spacer3[" "]
+    invisible3[" "]
+    style invisible3 fill:transparent,stroke:transparent
+  end
+  
+  spacer1 --> spacer2
+  spacer2 --> spacer3
+  
+  subgraph legend_section[" "]
     folder_legend["📁 Folder (Blue)"]
     class folder_legend folder
+    
     file_legend["📄 File (Orange)"]
     class file_legend file
+    
     highlight_legend["🗂️ Root/Important (Yellow)"]
     class highlight_legend highlight
   end
+  
+  spacer3 --> legend_section
+  
+  style spacer1 fill:transparent,stroke:transparent
+  style spacer2 fill:transparent,stroke:transparent
+  style spacer3 fill:transparent,stroke:transparent
+  style legend_section fill:transparent,stroke:transparent
 ```

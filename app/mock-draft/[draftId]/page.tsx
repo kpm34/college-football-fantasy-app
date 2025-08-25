@@ -12,6 +12,24 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+// Position color mapping for backgrounds
+function getPositionBgColor(position: string): string {
+  switch (position?.toUpperCase()) {
+    case 'QB':
+      return '#3B82F6'; // Blue
+    case 'RB':
+      return '#10B981'; // Green  
+    case 'WR':
+      return '#EF4444'; // Red
+    case 'TE':
+      return '#8B5CF6'; // Purple
+    case 'K':
+      return '#6B7280'; // Gray
+    default:
+      return '#9CA3AF'; // Default gray
+  }
+}
+
 type TurnResp = { 
   ok: boolean; 
   turn?: { 
@@ -358,14 +376,23 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
                       {Array.from({ length: count }, (_, i) => {
                         const pick = takenByPos[key][i];
                         return (
-                          <div key={i} className="px-2 py-2 rounded border text-xs" style={{ borderColor: leagueColors.border.light, backgroundColor: pick ? leagueColors.background.overlay : 'transparent' }}>
+                          <div key={i} className="px-2 py-2 rounded border text-xs" 
+                               style={{ 
+                                 borderColor: pick ? 'transparent' : leagueColors.border.light,
+                                 backgroundColor: pick ? getPositionBgColor(key) : 'transparent',
+                                 color: pick ? '#FFFFFF' : leagueColors.text.muted
+                               }}>
                             {pick ? (
                               <div>
-                                <div className="font-medium" style={{ color: leagueColors.text.primary }}>{pick.playerName || pick.name || idToName.get(pick.playerId) || pick.playerId}</div>
-                                <div style={{ color: leagueColors.text.muted }}>#{pick.overall} • R{pick.round}</div>
+                                <div className="font-bold text-white truncate">
+                                  {pick.playerName || pick.name || idToName.get(pick.playerId) || 'Unknown'}
+                                </div>
+                                <div className="text-white/80 text-xs truncate">
+                                  {pick.team || 'Team'}
+                                </div>
                               </div>
                             ) : (
-                              <span style={{ color: leagueColors.text.muted }}>Empty</span>
+                              <span>Empty</span>
                             )}
                           </div>
                         );
