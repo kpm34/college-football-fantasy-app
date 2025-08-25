@@ -44,7 +44,7 @@ export function DraftBoard({ picks, numTeams, rounds, currentOverall, slotLabels
       case 'RB':
         return '#10B981'; // green
       case 'WR':
-        return '#F59E0B'; // amber
+        return '#EF4444'; // red (changed from amber)
       case 'TE':
         return '#8B5CF6'; // purple
       case 'K':

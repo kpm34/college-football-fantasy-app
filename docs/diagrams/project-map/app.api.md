@@ -164,13 +164,22 @@ flowchart TB
   class readme_file file
   app_api --> readme_file
 
-  %% Legend
-  subgraph legend["🎨 Color Legend"]
-    folder_legend["📁 Folder (Blue)"]
-    class folder_legend folder
-    file_legend["📄 File (Orange)"]
-    class file_legend file
-    highlight_legend["🗂️ Root/Important (Yellow)"]
-    class highlight_legend highlight
-  end
+```
+
+## 🎨 Color Legend
+
+```mermaid
+flowchart LR
+  classDef folder fill:#dbeafe,stroke:#2563eb,stroke-width:2,color:#1e293b,rx:8,ry:8
+  classDef file fill:#fed7aa,stroke:#ea580c,stroke-width:1.5,color:#431407,rx:4,ry:4
+  classDef highlight fill:#fef3c7,stroke:#d97706,stroke-width:3,color:#451a03,rx:8,ry:8
+  
+  folder_legend["📁 Folder (Blue)"]
+  class folder_legend folder
+  
+  file_legend["📄 File (Orange)"]
+  class file_legend file
+  
+  highlight_legend["🗂️ Root/Important (Yellow)"]
+  class highlight_legend highlight
 ```
