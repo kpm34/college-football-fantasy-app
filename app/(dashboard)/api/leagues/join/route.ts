@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       COLLECTIONS.FANTASY_TEAMS,
       [
         Query.equal('league_id', leagueId),
-        Query.equal('owner_client_id', user.$id)
+        Query.equal('owner_auth_user_id', user.$id)
       ]
     );
     
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
       // Preferred fields
       name: teamName || `${user.name || user.email}'s Team`,
       league_id: leagueId,
-      owner_client_id: user.$id,
+      owner_auth_user_id: user.$id,
       display_name: user.name || user.email,
       // Back-compat synonyms used around the codebase
       teamName: teamName || `${user.name || user.email}'s Team`,
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
       COLLECTIONS.FANTASY_TEAMS,
       [Query.equal('league_id', leagueId), Query.limit(1000)]
     );
-    const updatedMembers = Array.from(new Set((allRosters.documents || []).map((r: any) => r.owner_client_id || r.client_id))).filter(Boolean);
+    const updatedMembers = Array.from(new Set((allRosters.documents || []).map((r: any) => r.owner_auth_user_id))).filter(Boolean);
     const currentTeams = (allRosters as any).total ?? updatedMembers.length;
 
     // Only include attributes that actually exist in the leagues collection to avoid

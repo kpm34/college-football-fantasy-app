@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     // Group picks by client (owner) id to build each member's roster
     const rostersByUser: Record<string, any[]> = {};
     for (const pick of picks) {
-      const ownerId = (pick as any).client_id || (pick as any).owner_client_id || (pick as any).userId;
+      const ownerId = (pick as any).owner_auth_user_id || (pick as any).userId;
       if (!ownerId) continue;
       if (!rostersByUser[ownerId]) {
         rostersByUser[ownerId] = [];
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
           COLLECTIONS.FANTASY_TEAMS,
           [
             Query.equal('league_id', leagueId),
-            Query.equal('owner_client_id', client_id),
+            Query.equal('owner_auth_user_id', client_id as string),
             Query.limit(1)
           ]
         );

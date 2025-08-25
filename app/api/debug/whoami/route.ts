@@ -32,14 +32,23 @@ export async function GET(request: NextRequest) {
     const fantasyTeams = await databases.listDocuments(
       DATABASE_ID,
       'fantasy_teams',
-      [Query.equal('owner_client_id', user.$id)]
+      [Query.or([
+        Query.equal('owner_auth_user_id', user.$id),
+        Query.equal('owner_client_id', user.$id),
+        Query.equal('auth_user_id', user.$id),
+        Query.equal('teammanager_id', user.$id)
+      ])]
     );
     
     // Check leagues where user is commissioner
     const commissionerLeagues = await databases.listDocuments(
       DATABASE_ID,
       'leagues',
-      [Query.equal('commissioner', user.$id)]
+      [Query.or([
+        Query.equal('commissioner_auth_user_id', user.$id),
+        Query.equal('commissioner', user.$id),
+        Query.equal('owner_client_id', user.$id)
+      ])]
     );
     
     return NextResponse.json({

@@ -38,21 +38,27 @@ export async function GET(request: NextRequest) {
     const user = await userResponse.json();
     console.log('[/api/leagues/mine] User authenticated:', user.$id, user.email);
 
-    // Get user's rosters to find their leagues (fantasy_teams uses owner_client_id)
-    console.log('[/api/leagues/mine] Querying fantasy_teams with owner_client_id:', user.$id);
+    // Get user's rosters to find their leagues (canonical owner_auth_user_id)
+    console.log('[/api/leagues/mine] Querying fantasy_teams with owner_auth_user_id:', user.$id);
     const rostersResponse = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
-      [Query.equal('owner_client_id', user.$id), Query.limit(100)]
+      [
+        Query.equal('owner_auth_user_id', user.$id),
+        Query.limit(100)
+      ]
     );
 
-    // Also consider league_memberships as a fallback/source of truth
+    // Also consider league_memberships as a fallback/source of truth (auth_user_id standard)
     let membershipsResponse: any = { documents: [] };
     try {
       membershipsResponse = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.LEAGUE_MEMBERSHIPS,
-        [Query.equal('client_id', user.$id), Query.equal('status', 'active'), Query.limit(100)]
+        [
+          Query.equal('auth_user_id', user.$id),
+          Query.limit(100)
+        ]
       );
     } catch {}
 
@@ -100,8 +106,9 @@ export async function GET(request: NextRequest) {
 
     // Format leagues for UI consumption (sidebar + dashboard)
     const leagues = leaguesResponse.documents.map((league: any) => {
-      const userRoster = rostersResponse.documents.find((r: any) => (r.league_id || r.leagueId) === league.$id);
-      const isCommissioner = league.commissioner === user.$id;
+      const userRoster = rostersResponse.documents.find((r: any) => r.league_id === league.$id);
+      const commishId = (league as any).commissioner_auth_user_id || (league as any).commissioner;
+      const isCommissioner = commishId === user.$id;
 
       return {
         $id: league.$id,
@@ -110,7 +117,7 @@ export async function GET(request: NextRequest) {
         status: league.status || 'active',
         isCommissioner,
         teamName: userRoster?.name || userRoster?.teamName || 'My Team',
-        commissioner: league.commissioner,
+        commissioner: commishId,
         maxTeams: league.maxTeams ?? 0,
         currentTeams: league.currentTeams ?? (league.members?.length ?? undefined),
         draftDate: league.draftDate

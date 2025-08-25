@@ -1,14 +1,4 @@
-// Barrel exports for per-collection schemas
-export * from './zod/leagues'
-export * from './zod/fantasy_teams'
-export * from './zod/college_players'
-export * from './zod/games'
-export * from './zod/player_stats'
-export * from './zod/rankings'
-export * from './zod/roster_slots'
-export * from './zod/lineups'
-export * from './zod/drafts'
-export * from './zod/draft_events'
+// Single Source of Truth: all schemas defined in this file
 /**
  * ZOD-FIRST SINGLE SOURCE OF TRUTH
  * 
@@ -55,19 +45,19 @@ export const Teams = z.object({
 });
 
 export const Games = z.object({
+  season: z.number().int().min(2020).max(2035),
   week: z.number().int().min(1).max(20),
-  season: z.number().int().min(2020).max(2030),
   season_type: z.enum(['regular', 'postseason']),
   home_team: z.string().min(2).max(50),
   away_team: z.string().min(2).max(50),
+  home_school_id: z.string().optional(),
+  away_school_id: z.string().optional(),
   home_score: z.number().int().min(0).optional(),
   away_score: z.number().int().min(0).optional(),
-  start_date: z.date(),
+  kickoff_at: z.date(),
   completed: z.boolean().default(false),
-  venue: z.string().max(100).optional(),
-  tv_network: z.string().max(20).optional(),
-  weather: z.string().max(200).optional(),
-  external_id: z.string().max(50).optional()
+  eligible_game: z.boolean().optional(),
+  status: z.string().optional(),
 });
 
 export const Rankings = z.object({
@@ -82,7 +72,8 @@ export const Rankings = z.object({
 
 export const Leagues = z.object({
   name: z.string().min(1).max(100),
-  commissioner: z.string().min(1).max(50), // User ID
+  // New canonical commissioner pointer (auth user id). Keep legacy commissioner for back-compat at runtime.
+  commissioner_auth_user_id: z.string().min(1).max(64).optional(),
   season: z.number().int().min(2020).max(2030),
   maxTeams: z.number().int().min(2).max(32),
   currentTeams: z.number().int().min(0).max(32).default(0),
@@ -103,27 +94,28 @@ export const Leagues = z.object({
 });
 
 export const Rosters = z.object({
-  leagueId: z.string().min(1).max(50),
-  userId: z.string().min(1).max(50),
-  teamName: z.string().min(1).max(100),
-  abbreviation: z.string().max(10).optional(),
-  draftPosition: z.number().int().min(1).optional(),
-  wins: z.number().int().min(0).default(0),
-  losses: z.number().int().min(0).default(0),
-  ties: z.number().int().min(0).default(0),
-  pointsFor: z.number().min(0).default(0),
-  pointsAgainst: z.number().min(0).default(0),
-  players: z.string().max(5000).default('[]'), // JSON array of player IDs
-  lineup: z.string().max(5000).optional(), // JSON lineup
-  bench: z.string().max(5000).optional() // JSON bench players
+  league_id: z.string().min(1).max(64),
+  owner_auth_user_id: z.string().min(1).max(64).optional(),
+  name: z.string().min(1).max(128).optional(),
+  abbrev: z.string().max(8).optional(),
+  logo_url: z.string().max(512).optional(),
+  wins: z.number().int().optional(),
+  losses: z.number().int().optional(),
+  ties: z.number().int().optional(),
+  points_for: z.number().optional(),
+  points_against: z.number().optional(),
+  draft_position: z.number().int().optional(),
+  auction_budget_total: z.number().optional(),
+  auction_budget_remaining: z.number().optional(),
+  display_name: z.string().max(255).optional()
 });
 
 export const Lineups = z.object({
   rosterId: z.string().min(1).max(50),
-  week: z.number().int().min(1).max(20),
   season: z.number().int().min(2020).max(2030),
-  lineup: z.string().max(5000).optional(), // JSON starting lineup
-  bench: z.string().max(5000).optional(), // JSON bench players
+  week: z.number().int().min(1).max(20),
+  lineup: z.string().max(5000).optional(),
+  bench: z.string().max(5000).optional(),
   points: z.number().min(0).default(0),
   locked: z.boolean().default(false)
 });
@@ -333,9 +325,9 @@ export const UserCustomProjections = z.object({
  */
 export const LeagueMemberships = z.object({
   league_id: z.string().min(1).max(50),
-  client_id: z.string().min(1).max(50),
-  role: z.enum(['commissioner', 'member', 'viewer']).default('member'),
-  status: z.enum(['active','inactive','pending']).default('active'),
+  auth_user_id: z.string().min(1).max(64),
+  role: z.enum(['COMMISSIONER', 'MEMBER']).default('MEMBER'),
+  status: z.enum(['ACTIVE','INVITED','LEFT','KICKED']).default('ACTIVE'),
   joined_at: z.string().optional(),
   display_name: z.string().optional()
 });
@@ -425,6 +417,19 @@ export const TeamBudgets = z.object({
   remaining: z.number().min(0).optional()
 });
 
+/** Invites (aligns with live DB: invites) */
+export const Invites = z.object({
+  leagueId: z.string().min(1).max(64),
+  inviteCode: z.string().min(1).max(128),
+  createdAt: z.string().optional(),
+  email: z.string().email().optional(),
+  expiresAt: z.string().optional(),
+  invited_by_auth_user_id: z.string().optional(),
+  status: z.string().optional(),
+  token: z.string().optional(),
+  acceptedAt: z.string().optional(),
+});
+
 /** System collections present in live DB */
 export const Migrations = z.object({
   version: z.string().min(1).max(100),
@@ -512,13 +517,11 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.DRAFT_EVENTS]: DraftEvents,
   [COLLECTIONS.DRAFT_STATES]: DraftStates,
   [COLLECTIONS.MATCHUPS]: Matchups,
-  [COLLECTIONS.SCORES]: Scores,
   [COLLECTIONS.PROJECTIONS]: PlayerProjections,
   [COLLECTIONS.MODEL_RUNS]: ProjectionRuns,
   // [COLLECTIONS.MODEL_VERSIONS]: ModelVersions, // removed: no schema defined
   [COLLECTIONS.MESHY_JOBS]: MeshyJobs,
-  [COLLECTIONS.MESHY_JOBS]: MeshyJobs,
-  [COLLECTIONS.INVITES]: ActivityLog, // temporary placeholder schema
+  [COLLECTIONS.INVITES]: Invites,
   [COLLECTIONS.MIGRATIONS]: Migrations,
 } as const;
 

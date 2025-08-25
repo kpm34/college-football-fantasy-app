@@ -29,7 +29,7 @@ export async function GET(
           COLLECTIONS.FANTASY_TEAMS,
           [
             Query.equal('league_id', leagueId),
-            Query.equal('owner_client_id', client_id),
+            Query.equal('owner_auth_user_id', client_id),
             Query.limit(1)
           ]
         );
@@ -64,8 +64,8 @@ export async function GET(
       return new NextResponse(null, { status: 304, headers: { ETag: etag } });
     }
 
-    // commissioner display name (owner_client_id preferred; fallback to commissioner)
-    const commissionerId = (league as any).owner_client_id || (league as any).commissioner || (league as any).commissioner_id || (league as any).commissionerId;
+    // Commissioner id (canonical)
+    const commissionerId = (league as any).commissioner_auth_user_id || (league as any).commissioner;
     let commissionerName = 'Unknown Commissioner';
     try {
       if (commissionerId) {
@@ -93,6 +93,20 @@ export async function GET(
       }
     } catch {}
 
+    // Derive members and team count from fantasy_teams (canonical)
+    let derivedMembers: string[] = []
+    let teamCount = 0
+    try {
+      const rosterDocs = await databases.listDocuments(
+        databaseId,
+        COLLECTIONS.FANTASY_TEAMS,
+        [Query.equal('league_id', leagueId), Query.limit(500)]
+      )
+      const docs = rosterDocs.documents as any[]
+      teamCount = docs.length
+      derivedMembers = Array.from(new Set(docs.map(d => d.owner_auth_user_id).filter(Boolean)))
+    } catch {}
+
     return NextResponse.json({
       success: true,
       league: {
@@ -101,16 +115,16 @@ export async function GET(
         mode: league.mode,
         conf: league.conf,
         maxTeams: league.maxTeams,
-        currentTeams: league.members?.length || 0,
-        members: league.members || [],
+        currentTeams: teamCount,
+        members: derivedMembers,
         status: league.status,
         commissioner: commissionerId,
         commissionerName,
         lineupProfileId: league.lineup_profile_id,
         scoringProfileId: league.scoring_profile_id,
         // Support both legacy snake_case and current camelCase field names
-        draftDate: (league as any).draftDate || (league as any).draft_date,
-        seasonStartWeek: league.season_start_week,
+        draftDate: (league as any).draftDate,
+        seasonStartWeek: (league as any).seasonStartWeek,
         createdAt: league.created_at,
         updatedAt: league.updated_at,
         lineupProfile: lineupProfile ? {

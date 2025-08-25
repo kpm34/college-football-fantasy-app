@@ -165,8 +165,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         mapped = {
           $id: l.id,
           name: l.name,
-          commissioner: l.commissioner || (l as any).commissioner_id || (l as any).owner_client_id,
-          commissionerId: l.commissioner || (l as any).commissioner_id || (l as any).commissionerId || (l as any).owner_client_id,
+          commissioner: l.commissioner || (l as any).commissioner_id || (l as any).auth_user_id || (l as any).owner_client_id,
+          commissionerId: l.commissioner || (l as any).commissioner_id || (l as any).commissionerId || (l as any).auth_user_id || (l as any).owner_client_id,
           commissionerName,
           season: l.seasonStartWeek ? new Date().getFullYear() : (l.season || new Date().getFullYear()),
           scoringType: 'PPR',
@@ -269,10 +269,12 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     });
     // Check multiple fields for user match (using owner_client_id from fantasy_teams)
     const mine = teams.find(t => 
-      t.owner_client_id === user.$id || 
-      t.client_id === user.$id || // fallback for compatibility
-      t.email === user.email ||
-      t.userName === user.name
+      (t as any).teammanager_id === user.$id ||
+      (t as any).auth_user_id === user.$id ||
+      (t as any).owner_client_id === user.$id || 
+      (t as any).client_id === user.$id || // fallback for compatibility
+      (t as any).email === user.email ||
+      (t as any).userName === user.name
     ) || null;
     if (mine) {
       console.log('Found user team:', mine.name);
