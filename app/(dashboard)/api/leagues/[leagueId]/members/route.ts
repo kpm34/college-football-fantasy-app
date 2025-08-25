@@ -49,7 +49,8 @@ export async function GET(
         COLLECTIONS.LEAGUE_MEMBERSHIPS,
         [
           Query.equal('league_id', leagueId),
-          Query.equal('status', 'active'),
+          // Status is canonicalized to uppercase 'ACTIVE'
+          Query.equal('status', 'ACTIVE'),
           Query.limit(200)
         ]
       );
@@ -59,7 +60,7 @@ export async function GET(
           COLLECTIONS.LEAGUE_MEMBERSHIPS,
           [
             Query.equal('leagueId', leagueId),
-            Query.equal('status', 'active'),
+            Query.equal('status', 'ACTIVE'),
             Query.limit(200)
           ]
         );
@@ -70,19 +71,19 @@ export async function GET(
     const uniqueUserIds = Array.from(
       new Set(
         (rosters.documents || [])
-          .map((d: any) => d.teammanager_id || d.auth_user_id || d.owner_client_id || d.client_id || d.owner || d.userId)
+          .map((d: any) => d.owner_auth_user_id || d.teammanager_id || d.auth_user_id || d.owner_client_id || d.client_id || d.owner || d.userId)
           .filter(Boolean)
       )
     );
     const idToName = new Map<string, string>();
     const membershipName = new Map<string, string>();
 
-    // Build membership display name map (client_id -> display_name)
+    // Build membership display name map (auth_user_id -> display_name)
     try {
       for (const m of memberships.documents || []) {
-        if (m?.client_id && m?.display_name) {
-          membershipName.set(String(m.client_id), String(m.display_name));
-        }
+        // Prefer auth_user_id, but retain client_id fallback if present
+        const key = (m as any).auth_user_id || (m as any).client_id;
+        if (key && m?.display_name) membershipName.set(String(key), String(m.display_name));
       }
     } catch {}
     // Resolve names via clients collection (auth_user_id -> display_name) with fallbacks
@@ -116,7 +117,7 @@ export async function GET(
 
     // Map to consistent format with resolved manager name
     const teams = rosters.documents.map((doc: any) => {
-      const ownerId = doc.teammanager_id || doc.auth_user_id || doc.owner_client_id || doc.client_id || doc.owner || '';
+      const ownerId = doc.owner_auth_user_id || doc.teammanager_id || doc.auth_user_id || doc.owner_client_id || doc.client_id || doc.owner || '';
       const managerName =
         membershipName.get(ownerId) ||
         idToName.get(ownerId) ||
