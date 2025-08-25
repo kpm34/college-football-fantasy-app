@@ -113,13 +113,13 @@ sequenceDiagram
 
 | Collection | Operation | Attributes Read/Written | Notes |
 |------------|-----------|------------------------|-------|
-| invites | READ | token, league_id, expires_at, max_uses, uses_count | Verify invite validity |
+| invites | READ | inviteCode/token, leagueId, expiresAt, max_uses, uses_count | Verify invite validity |
 | invites | UPDATE | uses_count++ | Track invite usage |
-| leagues | READ | id, max_teams, current_teams, status | Check capacity |
-| league_memberships | READ | league_id, client_id | Check existing membership |
-| league_memberships | WRITE | league_id, client_id, role='member', joined_at, invite_token | Create new membership |
-| fantasy_teams | WRITE | league_id, owner_client_id, name, created_at | Create user's team |
-| activity_log | WRITE | client_id, action='league.joined', entity_type='league', entity_id, metadata (invite_token), timestamp | Audit trail |
+| leagues | READ | $id, maxTeams, currentTeams, status | Check capacity |
+| league_memberships | READ | league_id, auth_user_id | Check existing membership |
+| league_memberships | WRITE | league_id, auth_user_id, role='MEMBER', status='ACTIVE', joined_at | Create new membership |
+| fantasy_teams | WRITE | league_id, owner_auth_user_id, name, created_at | Create user's team for visibility |
+| activity_log | WRITE | actor_client_id/auth_user_id, action='league.joined', object_type='league', object_id, payload_json (invite), ts | Audit trail |
 
 ## 4. Validation Steps
 
