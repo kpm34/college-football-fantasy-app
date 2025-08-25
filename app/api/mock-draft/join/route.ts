@@ -8,22 +8,32 @@ export async function POST(req: Request) {
   try {
     const { draftId, client_id, displayName } = await req.json();
     
-    if (!draftId || !client_id) {
+    if (!draftId) {
       return NextResponse.json(
-        { ok: false, error: 'draftId and client_id required' }, 
+        { ok: false, error: 'draftId required' }, 
         { status: 400 }
       );
     }
 
     // Get all participants for this draft
     const parts = await serverDatabases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
-      Query.equal('draftId', draftId),
-      Query.orderAsc('slot'),
+      Query.equal('draft_id', draftId),
+      Query.equal('type', 'participant'),
+      Query.orderAsc('overall'),
       Query.limit(100)
     ]);
 
+    // Parse participant data from payload_json
+    const participants = parts.documents.map((doc: any) => {
+      if (doc.payload_json) {
+        const data = JSON.parse(doc.payload_json);
+        return { ...doc, ...data };
+      }
+      return doc;
+    });
+
     // Check if user is already in the draft (using displayName)
-    const already = parts.documents.find(p => p.displayName === displayName);
+    const already = participants.find(p => p.displayName === displayName);
     if (already) {
       return NextResponse.json({ 
         ok: true, 
@@ -33,7 +43,7 @@ export async function POST(req: Request) {
     }
 
     // Find an open bot slot to claim
-    const open = parts.documents.find(p => p.userType === 'bot');
+    const open = participants.find(p => p.userType === 'bot');
     if (!open) {
       return NextResponse.json(
         { ok: false, error: 'No open slots available' }, 
@@ -42,20 +52,26 @@ export async function POST(req: Request) {
     }
 
     // Claim the slot by converting bot to human
+    const updatedData = {
+      userType: 'human',
+      displayName: displayName || 'Guest Player',
+      slot: open.slot,
+      client_id: client_id || null
+    };
+    
     const upd = await serverDatabases.updateDocument(
       DATABASE_ID, 
       COLLECTIONS.DRAFT_EVENTS, 
       open.$id, 
       {
-        userType: 'human',
-        displayName: displayName || `User ${client_id.slice(0, 8)}`
+        payload_json: JSON.stringify(updatedData)
       }
     );
     
     return NextResponse.json({ 
       ok: true, 
       participantId: upd.$id, 
-      slot: upd.slot 
+      slot: updatedData.slot // Use slot from updatedData since it's in payload_json
     });
   } catch (e: any) {
     return NextResponse.json(
