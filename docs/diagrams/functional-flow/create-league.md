@@ -98,9 +98,9 @@ sequenceDiagram
 
 | Collection | Operation | Attributes Set | Notes |
 |------------|-----------|----------------|-------|
-| leagues | WRITE | name, type, max_teams, scoring_settings, draft_type, draft_start_at, draft_room_open_offset_minutes, pick_time_seconds, draft_order_json, scoring_rules, draft_room_open_at, commissioner_id, invite_code, password (if private), season, conference (if mode=conference), created_at | Primary league creation with all scheduling fields |
-| league_memberships | WRITE | league_id, user_id (commissioner), role='commissioner', joined_at | Auto-create owner membership |
-| activity_log | WRITE | user_id, action='league.create', entity_type='league', entity_id, metadata (league details), timestamp | Audit trail for league creation |
+| leagues | WRITE | name, draftType, pickTimeSeconds, scoringRules, draftDate, commissioner_auth_user_id, isPublic, season, selectedConference (if mode=conference) | Primary league creation with scheduling |
+| league_memberships | WRITE | league_id, auth_user_id (commissioner), role='COMMISSIONER', status='ACTIVE', joined_at | Auto-create owner membership |
+| activity_log | WRITE | actor_client_id/auth_user_id, action='league.create', object_type='league', object_id, payload_json, ts | Audit trail for league creation |
 
 ## 4. Validation Rules (Zod Schema)
 
