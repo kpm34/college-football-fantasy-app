@@ -70,7 +70,7 @@ export async function GET(
     const uniqueUserIds = Array.from(
       new Set(
         (rosters.documents || [])
-          .map((d: any) => d.owner_client_id || d.client_id || d.owner || d.userId)
+          .map((d: any) => d.teammanager_id || d.auth_user_id || d.owner_client_id || d.client_id || d.owner || d.userId)
           .filter(Boolean)
       )
     );
@@ -116,7 +116,7 @@ export async function GET(
 
     // Map to consistent format with resolved manager name
     const teams = rosters.documents.map((doc: any) => {
-      const ownerId = doc.owner_client_id || doc.client_id || doc.owner || '';
+      const ownerId = doc.teammanager_id || doc.auth_user_id || doc.owner_client_id || doc.client_id || doc.owner || '';
       const managerName =
         membershipName.get(ownerId) ||
         idToName.get(ownerId) ||

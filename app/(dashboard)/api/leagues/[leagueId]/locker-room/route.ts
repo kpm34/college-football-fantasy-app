@@ -41,20 +41,35 @@ export async function GET(
       leagueId
     );
 
-    // Determine commissioner
-    const isCommissioner = Boolean(league?.commissioner && league.commissioner === user.$id);
+    // Determine commissioner (new canonical + fallbacks)
+    const commishId = (league as any).commissioner_auth_user_id || (league as any).commissioner || (league as any).owner_client_id;
+    const isCommissioner = Boolean(commishId && commishId === user.$id);
 
     // Load team from ROSTERS (TEAMS collection deprecated)
     let team = null;
     try {
-      const teamQuery = [AwQuery.equal('league_id', leagueId), AwQuery.equal('owner_client_id', user.$id), AwQuery.limit(1)];
+      const teamQuery = [
+        AwQuery.equal('league_id', leagueId),
+        AwQuery.or([
+          AwQuery.equal('owner_auth_user_id', user.$id),
+          AwQuery.equal('owner_client_id', user.$id),
+          AwQuery.equal('auth_user_id', user.$id),
+          AwQuery.equal('teammanager_id', user.$id)
+        ]),
+        AwQuery.limit(1)
+      ];
       const rostersRes = await serverDb.listDocuments(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, teamQuery);
       team = rostersRes.documents[0] || null;
     } catch (error: any) {
       console.error('Error loading roster:', error);
       // If leagueId doesn't exist in rosters, try without it
       try {
-        const userQuery = [AwQuery.equal('owner_client_id', user.$id)];
+        const userQuery = [AwQuery.or([
+          AwQuery.equal('owner_auth_user_id', user.$id),
+          AwQuery.equal('owner_client_id', user.$id),
+          AwQuery.equal('auth_user_id', user.$id),
+          AwQuery.equal('teammanager_id', user.$id)
+        ])];
         const allRosters = await serverDb.listDocuments(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, userQuery);
         // Filter by leagueId manually
         team = allRosters.documents.find((r: any) => (r.league_id || r.leagueId) === leagueId) || null;

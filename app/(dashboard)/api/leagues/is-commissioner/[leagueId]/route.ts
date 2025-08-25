@@ -34,8 +34,9 @@ export async function GET(
       leagueId
     );
 
-    // Check commissioner using the actual database field name: 'commissioner'
-    const isComm = Boolean(league?.commissioner && user?.$id && league.commissioner === user.$id);
+    // Check commissioner using new canonical with fallbacks
+    const commishId = (league as any).commissioner_auth_user_id || (league as any).commissioner || (league as any).owner_client_id;
+    const isComm = Boolean(commishId && user?.$id && commishId === user.$id);
     return NextResponse.json({ isCommissioner: isComm });
   } catch (error) {
     console.error('is-commissioner error:', error);

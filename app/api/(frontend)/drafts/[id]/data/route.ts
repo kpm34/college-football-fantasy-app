@@ -36,7 +36,7 @@ export async function GET(
       const membership = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.LEAGUE_MEMBERSHIPS,
-        [Query.equal('league_id', leagueId), Query.equal('client_id', user.$id), Query.limit(1)]
+        [Query.equal('league_id', leagueId), Query.equal('auth_user_id', user.$id), Query.limit(1)]
       );
       isMember = (membership.total || membership.documents.length) > 0;
     } catch {}
@@ -46,7 +46,7 @@ export async function GET(
         const teams = await databases.listDocuments(
           DATABASE_ID,
           COLLECTIONS.FANTASY_TEAMS,
-          [Query.equal('league_id', leagueId), Query.equal('owner_client_id', user.$id), Query.limit(1)]
+          [Query.equal('league_id', leagueId), Query.equal('owner_auth_user_id', user.$id), Query.limit(1)]
         );
         isMember = (teams.total || teams.documents.length) > 0;
       } catch {}
@@ -68,7 +68,7 @@ export async function GET(
       const teamDocs = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.FANTASY_TEAMS,
-        [Query.equal('league_id', leagueId), Query.equal('owner_client_id', user.$id)]
+        [Query.equal('league_id', leagueId), Query.equal('owner_auth_user_id', user.$id)]
       );
       userTeams = teamDocs.documents;
     } catch {}

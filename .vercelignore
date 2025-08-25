@@ -50,6 +50,13 @@ workers/
 
 # Operations and tooling scripts (not needed in production)
 ops/
+functions/
+ops/**
+scripts/migrations/**
+ops/common/**
+ops/attic/**
+ops/diagrams/**
+ops/cursor-ops/**
 
 # Local test files
 scoring_example.py

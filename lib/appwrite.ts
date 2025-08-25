@@ -1,5 +1,8 @@
-import { Client, Databases, Avatars, Storage, Functions } from 'appwrite';
+import { Client, Databases, Avatars, Storage, Functions, ID, Query, Permission, Role } from 'appwrite';
 import { env, COLLECTIONS as ENV_COLLECTIONS } from '@lib/config/environment';
+
+// Re-export SDK utilities for easy access
+export { ID, Query, Permission, Role };
 
 // Initialize Appwrite client for frontend (NO API KEY - uses session auth)
 const client = new Client();

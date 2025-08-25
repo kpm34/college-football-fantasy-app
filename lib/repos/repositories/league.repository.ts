@@ -51,11 +51,13 @@ export class LeagueRepository extends BaseRepository<League> {
       gameMode: String(data.gameMode) as 'power4' | 'sec' | 'acc' | 'big12' | 'bigten',
       isPublic: Boolean(data.isPublic),
       pickTimeSeconds: Number(data.pickTimeSeconds),
-      commissioner: String(data.commissionerId), // Database has 'commissioner' field only
+      commissioner: String(data.commissionerId), // legacy compatibility
+      commissioner_auth_user_id: String(data.commissionerId),
       status: 'open' as const,
       currentTeams: 0,
       season: Number(data.season || new Date().getFullYear()),
-      scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules())
+      scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules()),
+      owner_client_id: String(data.commissionerId) // TEMP legacy required attr
     };
 
     // Add selectedConference if provided (for conference mode leagues)
@@ -86,7 +88,7 @@ export class LeagueRepository extends BaseRepository<League> {
     // First get all rosters for the user
     const rosterRepo = new RosterRepository(this.isServer, this.client);
     const { documents: rosters } = await rosterRepo.find({
-      filters: { owner_client_id: userId },
+      filters: { auth_user_id: userId }, // use new field
       cache: {
         key: `roster:user:${userId}`,
         ttl: 300
@@ -178,7 +180,7 @@ export class LeagueRepository extends BaseRepository<League> {
     const existingRoster = await rosterRepo.find({
       filters: {
         leagueId,
-        owner_client_id: userId
+        auth_user_id: userId // canonical filter
       }
     });
 
@@ -190,7 +192,9 @@ export class LeagueRepository extends BaseRepository<League> {
     // Explicitly define clean roster data to avoid schema conflicts
     const cleanRosterData = {
       leagueId: String(leagueId),
-      owner_client_id: String(userId),  // Auth user ID is the owner
+      owner_auth_user_id: String(userId),
+      auth_user_id: String(userId),
+      owner_client_id: String(userId),
       teamName: String(teamName),
       abbreviation: String(abbreviation || teamName.substring(0, 3).toUpperCase()),
       draftPosition: Number(league.currentTeams + 1),

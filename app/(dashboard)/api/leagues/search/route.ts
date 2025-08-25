@@ -11,7 +11,9 @@ export async function GET(request: NextRequest) {
     const mode = searchParams.get('mode') || '';
     const limit = parseInt(searchParams.get('limit') || '20');
     const offset = parseInt(searchParams.get('offset') || '0');
-    const includePrivate = searchParams.get('includePrivate') === 'true';
+    // By default, include private leagues in search (private means password required to join)
+    // Allow overriding with includePrivate=false
+    const includePrivate = searchParams.get('includePrivate') !== 'false';
     // includeClosed=true means include FULL leagues; default false excludes full leagues
     const includeClosed = searchParams.get('includeClosed') === 'true';
 
@@ -83,7 +85,7 @@ export async function GET(request: NextRequest) {
             type: isPrivate ? 'private' : 'public',
             hasPassword,
             status: computedStatus,
-            commissionerId: league.commissioner ?? league.commissioner_id ?? league.commissionerId,
+            commissionerId: (league as any).commissioner_auth_user_id ?? league.commissioner ?? league.commissioner_id ?? league.commissionerId,
             createdAt: league.created_at ?? league.$createdAt,
             updatedAt: league.updated_at ?? league.$updatedAt
           };
@@ -137,7 +139,7 @@ export async function GET(request: NextRequest) {
             type: isPrivate ? 'private' : 'public',
             hasPassword,
             status: currentTeams >= maxTeams ? 'closed' : 'open',
-            commissionerId: league.commissioner ?? league.commissioner_id,
+            commissionerId: (league as any).commissioner_auth_user_id ?? league.commissioner ?? league.commissioner_id,
             createdAt: league.created_at ?? league.$createdAt,
             updatedAt: league.updated_at ?? league.$updatedAt
           };

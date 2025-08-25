@@ -42,7 +42,7 @@ export async function GET(
     );
     
     // Check if user is commissioner (support multiple field variants)
-    const commissionerId = (league as any).owner_client_id || (league as any).commissioner || (league as any).commissionerId || (league as any).commissioner_id;
+    const commissionerId = (league as any).auth_user_id || (league as any).owner_client_id || (league as any).commissioner || (league as any).commissionerId || (league as any).commissioner_id;
     if (commissionerId !== user.$id) {
       return NextResponse.json(
         { error: 'Only the commissioner can access these settings' },
@@ -97,7 +97,7 @@ export async function GET(
     } catch {}
 
     // Resolve owner IDs from rosters
-    const ownerIds = Array.from(new Set((rosters.documents || []).map((d: any) => d.owner_client_id || d.client_id || d.owner).filter(Boolean)));
+    const ownerIds = Array.from(new Set((rosters.documents || []).map((d: any) => d.teammanager_id || d.auth_user_id || d.owner_client_id || d.client_id || d.owner).filter(Boolean)));
     // Resolve from Auth Users first
     // Prefer clients collection by auth_user_id; fallback to Auth Users
     try {
@@ -137,7 +137,7 @@ export async function GET(
 
     // Map roster docs to a consistent member shape expected by UI
     const members = (rosters.documents || []).map((doc: any) => {
-      const ownerId = doc.owner_client_id || doc.client_id || doc.owner;
+      const ownerId = doc.teammanager_id || doc.auth_user_id || doc.owner_client_id || doc.client_id || doc.owner;
       const resolvedName = membershipName.get(ownerId) || idToName.get(ownerId) || doc.display_name || undefined;
       return {
       $id: doc.$id,

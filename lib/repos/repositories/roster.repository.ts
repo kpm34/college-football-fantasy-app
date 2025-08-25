@@ -61,7 +61,7 @@ export class RosterRepository extends BaseRepository<Roster> {
     const result = await this.find({
       filters: {
         leagueId,
-        owner_client_id: userId  // Using the correct field name from schema
+        auth_user_id: userId  // use canonical field
       },
       limit: 1,
       cache: {
