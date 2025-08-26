@@ -24,8 +24,8 @@ export interface CollegePlayersDoc {
   position: 'QB' | 'RB' | 'WR' | 'TE' | 'K'
   team: string
   conference: string
-  fantasy_points: number
-  depth_chart_order?: number
+  fantasyPoints: number
+  depthChartOrder?: number
   eligible: boolean
   draftable?: boolean
   year?: number
@@ -34,10 +34,10 @@ export interface CollegePlayersDoc {
 export interface GamesDoc {
   week: number
   season: number
-  season_type: 'regular' | 'postseason'
-  home_team: string
-  away_team: string
-  start_date: string
+  seasonType: 'regular' | 'postseason'
+  homeTeam: string
+  awayTeam: string
+  startDate: string
   status?: string
 }
 
@@ -54,7 +54,7 @@ export interface RostersDoc {
 }
 
 export interface LineupsDoc {
-  fantasy_team_id: string
+  fantasyTeamId: string
   week: number
   season: number
   starters?: any[]

@@ -74,7 +74,7 @@ export default function AccountSettingsPage() {
       const docs = await databases.listDocuments(
         DATABASE_ID,
         USER_PREFS_COLLECTION,
-        [`equal("client_id", "${client_id}")`]
+        [`equal("clientId", "${clientId}")`]
       );
       
       if (docs.documents.length > 0) {
@@ -124,7 +124,7 @@ export default function AccountSettingsPage() {
 
       // Save other preferences to database
       const prefsData = {
-        client_id: user.$id,  // Using client_id to match schema
+        clientId: user.$id,  // Using client_id to match schema
         favoriteTeam,
         fantasyExperience,
         notificationPrefs,
@@ -136,7 +136,7 @@ export default function AccountSettingsPage() {
         const docs = await databases.listDocuments(
           DATABASE_ID,
           USER_PREFS_COLLECTION,
-          [`equal("client_id", "${user.$id}")`]
+          [`equal("clientId", "${user.$id}")`]
         );
         
         if (docs.documents.length > 0) {

@@ -72,7 +72,7 @@ export const SCHEMA: Record<string, SchemaCollection> = {
       { key: 'draftable', type: 'boolean', default: true, description: 'Available for fantasy draft' },
       
       // Enhanced Projection Fields (Essential Only)
-      { key: 'fantasy_points', type: 'double', default: 0, description: 'Enhanced fantasy points with depth chart logic' },
+      { key: 'fantasyPoints', type: 'double', default: 0, description: 'Enhanced fantasy points with depth chart logic' },
       { key: 'projection', type: 'double', default: 0, description: 'Legacy projection field' },
       { key: 'rushing_projection', type: 'double', default: 0, description: 'Projected rushing yards' },
       { key: 'receiving_projection', type: 'double', default: 0, description: 'Projected receiving yards' },
@@ -90,7 +90,7 @@ export const SCHEMA: Record<string, SchemaCollection> = {
       { key: 'player_team', type: 'key', attributes: ['team'], description: 'Team roster queries' },
       { key: 'player_position', type: 'key', attributes: ['position'], description: 'Position-based queries' },
       { key: 'player_conference', type: 'key', attributes: ['conference'], description: 'Conference filtering' },
-      { key: 'player_projections', type: 'key', attributes: ['fantasy_points'], orders: ['DESC'], description: 'Projection rankings' }
+      { key: 'player_projections', type: 'key', attributes: ['fantasyPoints'], orders: ['DESC'], description: 'Projection rankings' }
     ],
     permissions: {
       read: ['any'],
@@ -444,7 +444,7 @@ export const SCHEMA: Record<string, SchemaCollection> = {
       { key: 'week', type: 'integer', required: true, description: 'Week number' },
       { key: 'season', type: 'integer', required: true, description: 'Season year' },
       { key: 'opponent', type: 'string', size: 50, description: 'Opponent team abbreviation' },
-      { key: 'fantasy_points', type: 'double', default: 0, description: 'Fantasy points earned' },
+      { key: 'fantasyPoints', type: 'double', default: 0, description: 'Fantasy points earned' },
       { key: 'stats', type: 'string', size: 5000, description: 'Detailed game statistics JSON' },
       { key: 'eligible', type: 'boolean', default: true, description: 'Counts toward fantasy scoring' }
     ],

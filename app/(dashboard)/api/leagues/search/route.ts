@@ -85,9 +85,9 @@ export async function GET(request: NextRequest) {
             type: isPrivate ? 'private' : 'public',
             hasPassword,
             status: computedStatus,
-            commissionerId: (league as any).commissioner_auth_user_id ?? league.commissioner ?? league.commissioner_id ?? league.commissionerId,
-            createdAt: league.created_at ?? league.$createdAt,
-            updatedAt: league.updated_at ?? league.$updatedAt
+            commissionerId: (league as any).commissionerAuthUserId ?? league.commissioner ?? league.commissioner_id ?? league.commissionerId,
+            createdAt: league.createdAt ?? league.$createdAt,
+            updatedAt: league.updatedAt ?? league.$updatedAt
           };
         }),
         total: filteredByCapacity.length
@@ -139,9 +139,9 @@ export async function GET(request: NextRequest) {
             type: isPrivate ? 'private' : 'public',
             hasPassword,
             status: currentTeams >= maxTeams ? 'closed' : 'open',
-            commissionerId: (league as any).commissioner_auth_user_id ?? league.commissioner ?? league.commissioner_id,
-            createdAt: league.created_at ?? league.$createdAt,
-            updatedAt: league.updated_at ?? league.$updatedAt
+            commissionerId: (league as any).commissionerAuthUserId ?? league.commissioner ?? league.commissioner_id,
+            createdAt: league.createdAt ?? league.$createdAt,
+            updatedAt: league.updatedAt ?? league.$updatedAt
           };
         }),
         total: filtered.length

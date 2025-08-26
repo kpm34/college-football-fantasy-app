@@ -31,13 +31,14 @@ export function isUserCommissioner(league: any, user: any): boolean {
 
   const leagueCandidates = [
     // Canonical Appwrite schema (preferred)
+    league.commissionerAuthUserId,
     league.commissioner,
     // Backward-compat fields
     league.commissionerId,
     league.commissioner_id,
     league.commissionerEmail,
     league.commissioner_email,
-    league.client_id,
+    league.clientId,
     league.ownerId,
     league.owner,
     league.createdBy,
@@ -61,6 +62,7 @@ export function debugCommissionerMatch(league: any, user: any) {
     const norm = (s: any) => String(s ?? '').trim().toLowerCase();
     const leagueCandidates = [
       // Canonical first
+      league?.commissionerAuthUserId,
       league?.commissioner,
       // Back-compat
       league?.commissionerId,
@@ -70,7 +72,6 @@ export function debugCommissionerMatch(league: any, user: any) {
       league?.ownerId,
       league?.owner,
       league?.createdBy,
-      league?.created_by,
     ].filter(Boolean);
     const userCandidates = [user?.$id, user?.email, user?.name].filter(Boolean) as string[];
     // eslint-disable-next-line no-console

@@ -137,7 +137,7 @@ export class RotowireSync {
               COLLECTIONS.PLAYERS,
               player.$id,
               {
-                injury_status: injury.status,
+                injuryStatus: injury.status,
                 injury_details: injury.injury,
                 injury_updated: injury.lastUpdate
               }

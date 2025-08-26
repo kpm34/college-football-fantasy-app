@@ -38,13 +38,13 @@ export async function GET(request: NextRequest) {
     const user = await userResponse.json();
     console.log('[/api/leagues/mine] User authenticated:', user.$id, user.email);
 
-    // Get user's rosters to find their leagues (canonical owner_auth_user_id)
-    console.log('[/api/leagues/mine] Querying fantasy_teams with owner_auth_user_id:', user.$id);
+    // Get user's rosters to find their leagues (canonical ownerAuthUserId)
+    console.log('[/api/leagues/mine] Querying fantasy_teams with ownerAuthUserId:', user.$id);
     const rostersResponse = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
       [
-        Query.equal('owner_auth_user_id', user.$id),
+        Query.equal('ownerAuthUserId', user.$id),
         Query.limit(100)
       ]
     );
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
         DATABASE_ID,
         COLLECTIONS.LEAGUE_MEMBERSHIPS,
         [
-          Query.equal('auth_user_id', user.$id),
+          Query.equal('authUserId', user.$id),
           Query.limit(100)
         ]
       );
@@ -64,8 +64,8 @@ export async function GET(request: NextRequest) {
 
     // Union league ids from rosters and memberships
     const leagueIdSet = new Set<string>();
-    for (const r of rostersResponse.documents || []) if (r?.league_id) leagueIdSet.add(String(r.league_id));
-    for (const m of membershipsResponse.documents || []) if (m?.league_id) leagueIdSet.add(String(m.league_id));
+    for (const r of rostersResponse.documents || []) if (r?.leagueId) leagueIdSet.add(String(r.leagueId));
+    for (const m of membershipsResponse.documents || []) if (m?.leagueId) leagueIdSet.add(String(m.leagueId));
     const leagueIds = Array.from(leagueIdSet);
 
     if (leagueIds.length === 0) {
@@ -106,8 +106,8 @@ export async function GET(request: NextRequest) {
 
     // Format leagues for UI consumption (sidebar + dashboard)
     const leagues = leaguesResponse.documents.map((league: any) => {
-      const userRoster = rostersResponse.documents.find((r: any) => r.league_id === league.$id);
-      const commishId = (league as any).commissioner_auth_user_id || (league as any).commissioner;
+      const userRoster = rostersResponse.documents.find((r: any) => r.leagueId === league.$id);
+      const commishId = (league as any).commissionerAuthUserId || (league as any).commissioner;
       const isCommissioner = commishId === user.$id;
 
       return {
@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
     // Also provide teams (roster-backed entries only) to support dashboard expectations
     const teams = rostersResponse.documents.map((r: any) => ({
       $id: r.$id,
-      leagueId: r.league_id || r.leagueId,
+      leagueId: r.leagueId || r.leagueId,
       name: r.name || r.teamName || 'Team',
       wins: r.wins ?? 0,
       losses: r.losses ?? 0,

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases, serverUsers, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
-import { Query } from 'node-appwrite';
+import { Query, ID } from 'node-appwrite';
 
 export const dynamic = 'force-dynamic';
 // GET commissioner settings and members
@@ -42,30 +42,35 @@ export async function GET(
     );
     
     // Check if user is commissioner (support multiple field variants)
-    const commissionerId = (league as any).auth_user_id || (league as any).owner_client_id || (league as any).commissioner || (league as any).commissionerId || (league as any).commissioner_id;
-    if (commissionerId !== user.$id) {
+    // Use the actual DB field name: commissionerAuthUserId (now camelCase!)
+    const commissionerId = (league as any).commissionerAuthUserId;
+    if (!commissionerId || commissionerId !== user.$id) {
       return NextResponse.json(
         { error: 'Only the commissioner can access these settings' },
         { status: 403 }
       );
     }
     
-    // Get members from fantasy_teams with correct schema fields
-    const rosters = await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTIONS.FANTASY_TEAMS,
-      [Query.equal('league_id', params.leagueId), Query.limit(200)]
-    );
-
-    // Optionally fetch league_memberships for display names
+    // Get league_memberships - primary source of truth for members
     let memberships: any = { documents: [] };
     try {
       memberships = await databases.listDocuments(
         DATABASE_ID,
         'league_memberships',
-        [Query.equal('league_id', params.leagueId), Query.equal('status', 'active'), Query.limit(200)]
+        [Query.equal('leagueId', params.leagueId), Query.equal('status', 'active'), Query.limit(200)]
       );
-    } catch {}
+      console.log(`Found ${memberships.documents.length} league memberships`);
+    } catch (e) {
+      console.error('Error fetching league_memberships:', e);
+    }
+    
+    // Get fantasy_teams for team names and stats
+    const fantasyTeams = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.FANTASY_TEAMS,
+      [Query.equal('leagueId', params.leagueId), Query.limit(200)]
+    );
+    console.log(`Found ${fantasyTeams.documents.length} fantasy teams`);
     
     // Format league response to ensure camelCase fields
     const formattedLeague = {
@@ -85,70 +90,117 @@ export async function GET(
       isPublic: league.isPublic ?? true
     };
 
-    // Build display name maps
-    const membershipName = new Map<string, string>();
-    const idToName = new Map<string, string>();
-    try {
-      for (const m of memberships.documents || []) {
-        if (m?.client_id && m?.display_name) {
-          membershipName.set(String(m.client_id), String(m.display_name));
-        }
+    // Build member map from league_memberships (uses authUserId as per schema)
+    const authUserToName = new Map<string, string>();
+    const authUserToMembership = new Map<string, any>();
+    
+    for (const membership of memberships.documents || []) {
+      const authUserId = membership.authUserId; // Now camelCase!
+      if (authUserId) {
+        authUserToName.set(authUserId, membership.displayName || 'Unknown Member');
+        authUserToMembership.set(authUserId, membership);
+        console.log(`Membership: authUserId=${authUserId}, displayName=${membership.displayName}`);
       }
-    } catch {}
+    }
 
-    // Resolve owner IDs from rosters
-    const ownerIds = Array.from(new Set((rosters.documents || []).map((d: any) => d.teammanager_id || d.auth_user_id || d.owner_client_id || d.client_id || d.owner).filter(Boolean)));
-    // Resolve from Auth Users first
-    // Prefer clients collection by auth_user_id; fallback to Auth Users
-    try {
-      if (ownerIds.length > 0) {
+    // Get additional display names from clients collection if needed
+    const authUserIds = Array.from(authUserToName.keys());
+    if (authUserIds.length > 0) {
+      try {
         const clientsRes = await databases.listDocuments(
           DATABASE_ID,
           COLLECTIONS.CLIENTS,
-          [Query.equal('auth_user_id', ownerIds as string[]), Query.limit(200)]
+          [Query.equal('authUserId', authUserIds), Query.limit(200)]
         );
-        for (const c of (clientsRes.documents || [])) {
-          if ((c as any)?.auth_user_id) {
-            idToName.set(String((c as any).auth_user_id), String((c as any).display_name || (c as any).email || 'Unknown'));
+        
+        for (const client of clientsRes.documents || []) {
+          const authUserId = client.authUserId;
+          // Only override if membership didn't have a displayName
+          if (!authUserToName.get(authUserId) || authUserToName.get(authUserId) === 'Unknown Member') {
+            authUserToName.set(authUserId, client.displayName || client.email || 'Unknown');
           }
         }
+      } catch (e) {
+        console.error('Error fetching clients:', e);
+      }
+    }
 
-        // Fallback: treat unresolved ownerIds as potential clients doc IDs
-        const unresolved = ownerIds.filter(uid => !idToName.has(String(uid)));
-        if (unresolved.length > 0) {
-          const clientsById = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.CLIENTS,
-            [Query.equal('$id', unresolved as string[]), Query.limit(200)]
-          );
-          for (const c of (clientsById.documents || [])) {
-            idToName.set(String((c as any).$id), String((c as any).display_name || (c as any).email || 'Unknown'));
+    // Create members list with consistent naming
+    const memberMap = new Map();
+    
+    // Add all members from league_memberships (primary source)
+    for (const membership of memberships.documents || []) {
+      const authUserId = membership.authUserId; // Now camelCase!
+      if (authUserId) {
+        const displayName = authUserToName.get(authUserId) || membership.displayName || 'Unknown Member';
+        console.log(`Adding member: authUserId=${authUserId}, name=${displayName}`);
+        
+        memberMap.set(authUserId, {
+          $id: authUserId,  // Use authUserId as the primary ID
+          authUserId: authUserId,  // Keep the actual field name
+          clientId: authUserId,  // Keep for backwards compatibility (frontend may still use this)
+          name: displayName,
+          teamName: `${displayName}'s Team`,  // Default team name format
+          owner: authUserId,
+          email: '',
+          wins: 0,
+          losses: 0
+        });
+      }
+    }
+    
+    // Update with fantasy_teams data if available
+    console.log('Processing fantasy teams:', fantasyTeams.documents?.length || 0);
+    for (const team of fantasyTeams.documents || []) {
+      const authUserId = team.ownerAuthUserId; // Now using camelCase!
+      if (authUserId) {
+        console.log(`Updating member from fantasy team: ownerAuthUserId=${authUserId}, teamName=${team.teamName}`);
+        const existing = memberMap.get(authUserId) || {};
+        memberMap.set(authUserId, {
+          ...existing,
+          $id: authUserId,
+          authUserId: authUserId,
+          clientId: authUserId,  // Keep for backwards compatibility
+          teamName: team.teamName || team.displayName || existing.teamName || 'Team',
+          name: existing.name || authUserToName.get(authUserId) || team.displayName || 'Unknown',
+          owner: authUserId,
+          email: existing.email || '',
+          wins: team.wins ?? 0,
+          losses: team.losses ?? 0
+        });
+      }
+    }
+    
+    // If no members found from memberships or fantasy_teams, try to get from league.members array
+    if (memberMap.size === 0 && Array.isArray(league.members)) {
+      console.log('No members from collections, using league.members:', league.members);
+      for (const authUserId of league.members) {
+        if (authUserId) {
+          // Try to get display name from auth user map
+          let displayName = authUserToName.get(authUserId) || authUserId;
+          
+          // If it's a BOT, keep the BOT name
+          if (authUserId.startsWith('BOT-')) {
+            displayName = authUserId;
           }
+          
+          memberMap.set(authUserId, {
+            $id: authUserId,
+            authUserId: authUserId,
+            clientId: authUserId,  // Keep for backwards compatibility
+            name: displayName,
+            teamName: '',
+            owner: authUserId,
+            email: '',
+            wins: 0,
+            losses: 0
+          });
         }
       }
-    } catch {}
-    await Promise.all(ownerIds.map(async (uid) => {
-      if (idToName.has(String(uid))) return;
-      try {
-        const u: any = await serverUsers.get(String(uid));
-        idToName.set(String(uid), u.name || u.email || 'Unknown');
-      } catch {}
-    }));
-
-    // Map roster docs to a consistent member shape expected by UI
-    const members = (rosters.documents || []).map((doc: any) => {
-      const ownerId = doc.teammanager_id || doc.auth_user_id || doc.owner_client_id || doc.client_id || doc.owner;
-      const resolvedName = membershipName.get(ownerId) || idToName.get(ownerId) || doc.display_name || undefined;
-      return {
-      $id: doc.$id,
-      teamName: doc.name || doc.teamName || 'Team',
-      name: resolvedName,
-      owner: ownerId,
-      email: doc.email,
-      wins: doc.wins ?? 0,
-      losses: doc.losses ?? 0,
-      client_id: ownerId // back-compat for UI lookups
-    }});
+    }
+    
+    const members = Array.from(memberMap.values());
+    console.log('Final members list:', members.length, 'members:', members.map(m => ({ id: m.authUserId, name: m.name })));
 
     return NextResponse.json({ success: true, league: formattedLeague, members });
   } catch (error: any) {
@@ -198,8 +250,9 @@ export async function PUT(
       params.leagueId
     );
     
-    const commissionerId = (league as any).commissioner || (league as any).commissionerId || (league as any).commissioner_id;
-    if (commissionerId !== user.$id) {
+    // Use the actual DB field name: commissionerAuthUserId (now camelCase!)
+    const commissionerId = (league as any).commissionerAuthUserId;
+    if (!commissionerId || commissionerId !== user.$id) {
       return NextResponse.json(
         { error: 'Only the commissioner can update league settings' },
         { status: 403 }
@@ -235,6 +288,19 @@ export async function PUT(
     if ('secondaryColor' in updates) setIfPresent('secondaryColor', updates.secondaryColor);
     if ('leagueTrophyName' in updates) setIfPresent('leagueTrophyName', updates.leagueTrophyName);
     if ('draftType' in updates) setIfPresent('draftType', updates.draftType);
+    if ('draftOrder' in updates) {
+      // Ensure draftOrder is a JSON string and not too long
+      let draftOrderValue = updates.draftOrder;
+      if (typeof draftOrderValue !== 'string') {
+        draftOrderValue = JSON.stringify(draftOrderValue);
+      }
+      // Validate it's not too long (Appwrite limit is 65535)
+      if (draftOrderValue.length <= 65535) {
+        setIfPresent('draftOrder', draftOrderValue);
+      } else {
+        console.warn('[Commissioner] Draft order too long, will store in draft document only');
+      }
+    }
     if ('isPublic' in updates) setIfPresent('isPublic', Boolean(updates.isPublic));
 
     // Fallback: if no mapped keys found, pass original (for backwards compatibility)
@@ -272,8 +338,8 @@ export async function PUT(
     }
 
     // Ensure required attributes from schema are preserved (Appwrite strict update)
-    if ((league as any).owner_client_id && !('owner_client_id' in safePayload)) {
-      safePayload['owner_client_id'] = (league as any).owner_client_id;
+    if ((league as any).ownerClientId && !('owner_client_id' in safePayload)) {
+      safePayload['ownerClientId'] = (league as any).ownerClientId;
     }
     if ((league as any).season && !('season' in safePayload)) {
       safePayload['season'] = (league as any).season;
@@ -288,6 +354,110 @@ export async function PUT(
       params.leagueId,
       safePayload
     );
+    
+    // Also update the draft document if it exists
+    try {
+      // Find the draft document for this league
+      const drafts = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.DRAFTS,
+        [Query.equal('leagueId', params.leagueId), Query.limit(1)]
+      );
+      
+      if (drafts.documents.length > 0) {
+        const draftDoc = drafts.documents[0];
+        const draftUpdates: Record<string, any> = {};
+        
+        // Update draft-related fields
+        if ('draftDate' in safePayload) {
+          draftUpdates.startTime = safePayload.draftDate;
+        }
+        if ('pickTimeSeconds' in safePayload) {
+          draftUpdates.clockSeconds = safePayload.pickTimeSeconds;
+        }
+        if ('draftType' in safePayload) {
+          draftUpdates.type = safePayload.draftType;
+        }
+        
+        // Update orderJson with new settings
+        let orderJson: any = {};
+        try {
+          orderJson = draftDoc.orderJson ? JSON.parse(draftDoc.orderJson) : {};
+        } catch {}
+        
+        if ('draftOrder' in safePayload) {
+          // Parse the draftOrder if it's a string
+          let draftOrderData = safePayload.draftOrder;
+          if (typeof draftOrderData === 'string') {
+            try {
+              draftOrderData = JSON.parse(draftOrderData);
+            } catch {
+              // If it fails to parse, keep as string
+            }
+          }
+          orderJson.draftOrder = draftOrderData;
+        }
+        if ('pickTimeSeconds' in safePayload) {
+          orderJson.pickTimeSeconds = safePayload.pickTimeSeconds;
+        }
+        if ('maxTeams' in safePayload) {
+          orderJson.totalTeams = safePayload.maxTeams;
+        }
+        if ('draftType' in safePayload) {
+          orderJson.draftType = safePayload.draftType;
+        }
+        
+        draftUpdates.orderJson = JSON.stringify(orderJson);
+        
+        // Add league name and game mode to draft updates
+        draftUpdates.leagueName = result.name || league.name;
+        draftUpdates.gameMode = result.gameMode || league.gameMode;
+        draftUpdates.selectedConference = result.selectedConference || league.selectedConference;
+        draftUpdates.maxTeams = result.maxTeams || league.maxTeams;
+        
+        // Update draft document
+        await databases.updateDocument(
+          DATABASE_ID,
+          COLLECTIONS.DRAFTS,
+          draftDoc.$id,
+          draftUpdates
+        );
+        console.log('Draft document updated:', draftDoc.$id);
+      } else {
+        // Create draft document if it doesn't exist
+        const draftOrder = safePayload.draftOrder || [user.$id];
+        const draftDoc = await databases.createDocument(
+          DATABASE_ID,
+          COLLECTIONS.DRAFTS,
+          ID.unique(),
+          {
+            leagueId: params.leagueId,
+            leagueName: result.name || league.name,
+            gameMode: result.gameMode || league.gameMode,
+            selectedConference: result.selectedConference || league.selectedConference,
+            maxTeams: result.maxTeams || league.maxTeams,
+            status: 'scheduled',
+            type: safePayload.draftType || 'snake',
+            currentRound: 0,
+            currentPick: 0,
+            maxRounds: 15,
+            startTime: safePayload.draftDate || null,
+            isMock: false,
+            clockSeconds: safePayload.pickTimeSeconds || 90,
+            orderJson: JSON.stringify({
+              draftOrder,
+              draftType: safePayload.draftType || 'snake',
+              totalTeams: safePayload.maxTeams || 12,
+              pickTimeSeconds: safePayload.pickTimeSeconds || 90,
+            }),
+          }
+        );
+        console.log('Draft document created:', draftDoc.$id);
+      }
+    } catch (draftError) {
+      // Log but don't fail the update if draft sync fails
+      console.error('Failed to sync draft document:', draftError);
+    }
     
     return NextResponse.json({ success: true, league: result });
   } catch (error: any) {
@@ -320,3 +490,4 @@ export async function PUT(
     );
   }
 }
+

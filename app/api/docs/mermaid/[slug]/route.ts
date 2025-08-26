@@ -68,23 +68,27 @@ export async function GET(
     'report:route-status': 'diagrams/runtime/route-status.json',
   }
 
-  // Handle dynamic 3-level project map paths
+  // Handle dynamic multi-level project map paths
   if (slug.startsWith('project-map:app:')) {
     const parts = slug.split(':')
-    if (parts.length === 3) {
-      const [, root, group] = parts
-      // First check for index.md in the group folder
-      const indexPath = `diagrams/project-map/${root}.${group}/index.md`
-      const groupPath = `diagrams/project-map/${root}.${group}.md`
+    if (parts.length >= 3) {
+      // Convert slug parts to file path
+      // project-map:app:api:admin -> diagrams/project-map/app.api.admin.md
+      const pathParts = parts.slice(1) // Remove 'project-map'
+      const filePath = `diagrams/project-map/${pathParts.join('.')}.md`
       
-      // Prioritize index.md if it exists
+      // Also check for index.md in folder structure
+      const folderIndexPath = `diagrams/project-map/${pathParts.join('.')}/index.md`
+      
       const docsPath = path.join(process.cwd(), 'docs')
-      const fullIndexPath = path.join(docsPath, indexPath)
+      const fullFilePath = path.join(docsPath, filePath)
+      const fullIndexPath = path.join(docsPath, folderIndexPath)
       
+      // Prioritize index.md if it exists, otherwise use direct file
       if (fs.existsSync(fullIndexPath)) {
-        fileMap[slug] = indexPath
-      } else {
-        fileMap[slug] = groupPath
+        fileMap[slug] = folderIndexPath
+      } else if (fs.existsSync(fullFilePath)) {
+        fileMap[slug] = filePath
       }
     }
   }

@@ -141,9 +141,9 @@ export abstract class BaseRepository<T extends Models.Document> {
           const fieldName = (() => {
             switch (key) {
               case 'userId':
-                return 'client_id';
+                return 'clientId';
               case 'leagueId':
-                return 'league_id';
+                return 'leagueId';
               default:
                 return key; // fall back to whatever the repo asked for
             }

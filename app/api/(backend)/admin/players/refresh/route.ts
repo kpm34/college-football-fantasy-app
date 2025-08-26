@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
             existing = await databases.listDocuments(
               DATABASE_ID,
               COLLECTIONS.PLAYERS || 'college_players',
-              [Query.equal('cfbd_id', cfbdId), Query.limit(1)]
+              [Query.equal('cfbdId', cfbdId), Query.limit(1)]
             );
           } catch {
             // If index missing, fallback to name+team+pos (best effort)
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
           }
 
           const playerData = {
-            cfbd_id: cfbdId,
+            cfbdId: cfbdId,
             first_name: p.first_name || '',
             last_name: p.last_name || '',
             name: `${p.first_name || ''} ${p.last_name || ''}`.trim(),
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
       if (docs.length === 0) break;
       for (const doc of docs) {
         scanned++;
-        const cfbdId = String(doc.cfbd_id || '');
+        const cfbdId = String(doc.cfbdId || '');
         const isCurrentSeason = Number(doc.season) === season;
         if (!cfbdId || !seenIds.has(cfbdId) || !isCurrentSeason) {
           try {

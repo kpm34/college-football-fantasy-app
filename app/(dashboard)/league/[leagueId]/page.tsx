@@ -17,6 +17,7 @@ interface League {
   $id: string;
   name: string;
   commissioner: string; // User ID of commissioner
+  commissionerAuthUserId?: string; // Canonical commissioner auth user ID
   commissionerName?: string; // Commissioner display name
   commissionerId?: string; // Optional legacy compatibility
   season: number;
@@ -134,7 +135,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     console.log('Commissioner check data:', {
       league_commissioner: league.commissioner,
       league_commissionerId: league.commissionerId,
-      user_id: user.$id,
+      userId: user.$id,
       user_email: user.email,
       user_name: user.name
     });
@@ -165,8 +166,9 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         mapped = {
           $id: l.id,
           name: l.name,
-          commissioner: l.commissioner || (l as any).commissioner_id || (l as any).auth_user_id || (l as any).owner_client_id,
-          commissionerId: l.commissioner || (l as any).commissioner_id || (l as any).commissionerId || (l as any).auth_user_id || (l as any).owner_client_id,
+          commissioner: l.commissioner || (l as any).commissioner_id || (l as any).authUserId || (l as any).ownerClientId,
+          commissionerAuthUserId: l.commissioner || (l as any).commissionerAuthUserId,
+          commissionerId: l.commissioner || (l as any).commissioner_id || (l as any).commissionerId || (l as any).authUserId || (l as any).ownerClientId,
           commissionerName,
           season: l.seasonStartWeek ? new Date().getFullYear() : (l.season || new Date().getFullYear()),
           scoringType: 'PPR',
@@ -261,7 +263,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       userName: user.name,
       teams: teams.map(t => ({ 
         teamId: t.$id, 
-        userId: t.client_id, 
+        userId: t.clientId, 
         email: t.email, 
         userName: t.userName,
         owner: (t as any).owner 
@@ -270,9 +272,9 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     // Check multiple fields for user match (using owner_client_id from fantasy_teams)
     const mine = teams.find(t => 
       (t as any).teammanager_id === user.$id ||
-      (t as any).auth_user_id === user.$id ||
-      (t as any).owner_client_id === user.$id || 
-      (t as any).client_id === user.$id || // fallback for compatibility
+      (t as any).authUserId === user.$id ||
+      (t as any).ownerClientId === user.$id || 
+      (t as any).clientId === user.$id || // fallback for compatibility
       (t as any).email === user.email ||
       (t as any).userName === user.name
     ) || null;
@@ -322,7 +324,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               <tr key={team.$id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                 <td className="py-4 px-6">
                   <span className="font-semibold">{team.name}</span>
-                  {team.client_id === league?.commissioner && (
+                  {team.clientId === league?.commissioner && (
                     <span className="ml-2 text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Commissioner</span>
                   )}
                 </td>
@@ -380,7 +382,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                     <td className="py-4 px-6 font-bold">{index + 1}</td>
                     <td className="py-4 px-6">
                       <span className="font-semibold">{team.name}</span>
-                      {team.client_id === user?.$id && (
+                      {team.clientId === user?.$id && (
                         <span className="ml-2 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">You</span>
                       )}
                     </td>
@@ -578,15 +580,15 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="backdrop-blur-sm" style={{ backgroundColor: leagueColors.interactive.hover, borderBottom: `1px solid ${leagueColors.border.medium}` }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-8">
+      {/* Navigation Tabs - Mobile Optimized */}
+      <div className="backdrop-blur-sm sticky top-0 z-10" style={{ backgroundColor: leagueColors.interactive.hover, borderBottom: `1px solid ${leagueColors.border.medium}` }}>
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+          <nav className="flex gap-1 sm:gap-4 overflow-x-auto scrollbar-hide">
             {['overview', 'members', 'standings', 'schedule', 'draft', ...(isCommissioner ? ['settings'] : [])].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`py-4 px-1 border-b-2 font-semibold text-sm transition-colors`}
+                className={`py-3 sm:py-4 px-3 sm:px-4 border-b-2 font-semibold text-xs sm:text-sm transition-colors whitespace-nowrap flex-shrink-0`}
                 style={{
                   borderColor: activeTab === tab ? leagueColors.primary.crimson : 'transparent',
                   color: activeTab === tab ? leagueColors.text.primary : leagueColors.text.secondary
@@ -599,14 +601,14 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Content - Mobile Optimized */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
         {activeTab === 'overview' && (
-          <div className="space-y-6">
-            {/* League Info */}
-            <div className="backdrop-blur-sm rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
-              <h3 className="text-xl font-bold mb-4">League Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-4 sm:space-y-6">
+            {/* League Info - Mobile Optimized */}
+            <div className="backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+              <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">League Information</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <p className="text-sm" style={{ color: leagueColors.text.muted }}>Commissioner</p>
                   <p className="font-semibold">
@@ -647,7 +649,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
               
               {/* Draft Button - Shows for all members based on draft timing */}
               <DraftButton 

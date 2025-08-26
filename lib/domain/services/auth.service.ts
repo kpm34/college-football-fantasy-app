@@ -240,7 +240,7 @@ export class AuthService {
    * @param password - New password
    */
   async resetPassword(userId: string, secret: string, password: string): Promise<void> {
-    if (!client_id || !secret || !password) {
+    if (!clientId || !secret || !password) {
       throw new ValidationError('Invalid password reset link');
     }
     

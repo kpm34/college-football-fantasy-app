@@ -21,9 +21,9 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   } catch {}
 
   try {
-    const { playerId, fantasy_team_id, by } = await request.json();
-    if (!playerId || !fantasy_team_id) {
-      return NextResponse.json({ error: 'Missing playerId or fantasy_team_id' }, { status: 400 });
+    const { playerId, fantasyTeamId, by } = await request.json();
+    if (!playerId || !fantasyTeamId) {
+      return NextResponse.json({ error: 'Missing playerId or fantasyTeamId' }, { status: 400 });
     }
 
     // Load ephemeral state from KV; fallback to latest draft_states when KV missing
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       }
     } catch {}
 
-    if (!state || state.onClockTeamId !== fantasy_team_id) {
+    if (!state || state.onClockTeamId !== fantasyTeamId) {
       return NextResponse.json({ error: 'Not your turn' }, { status: 400 });
     }
     if (state.deadlineAt) {
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         draftId,
         ts: new Date().toISOString(),
         type: 'pick',
-        fantasy_team_id,
+        fantasyTeamId,
         playerId,
         round: state.round,
         overall,
@@ -120,6 +120,20 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const idx = (next.round % 2 === 1) ? next.pickIndex - 1 : next.picksPerRound - next.pickIndex;
     next.onClockTeamId = next.draftOrder[idx];
     next.deadlineAt = new Date(Date.now() + (next.pickTimeSeconds || 90) * 1000).toISOString();
+    
+    // Track picked player
+    if (!next.pickedPlayerIds) next.pickedPlayerIds = [];
+    next.pickedPlayerIds.push(playerId);
+    
+    // Update available players lists if they exist
+    if (next.availablePlayers) {
+      next.availablePlayers = next.availablePlayers.filter((id: string) => id !== playerId);
+    }
+    if (next.availablePlayersWithADP) {
+      next.availablePlayersWithADP = next.availablePlayersWithADP.filter((p: any) => 
+        p.id !== playerId && p.$id !== playerId
+      );
+    }
 
     // Persist state mirror
     await databases.createDocument(
@@ -149,7 +163,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       ID.unique(),
       {
         leagueId: draftId,
-        userId: fantasy_team_id,
+        userId: fantasyTeamId,
         playerId,
         playerName: undefined,
         playerPosition: undefined,

@@ -93,8 +93,8 @@ export async function GET(request: NextRequest) {
     if (orderBy === 'name') {
       queries.push(Query.orderAsc('name'));
     } else {
-      // Default: Order by fantasy_points descending (highest projections first)
-      queries.push(Query.orderDesc('fantasy_points'));
+      // Default: Order by fantasyPoints descending (highest projections first)
+      queries.push(Query.orderDesc('fantasyPoints'));
     }
 
     console.log('Draft players API - Simplified queries:', queries.map(q => q.toString()));
@@ -134,7 +134,7 @@ export async function GET(request: NextRequest) {
       }
       
       // Simple ordering for fallback
-      fallbackQueries.push(Query.orderDesc('fantasy_points'));
+      fallbackQueries.push(Query.orderDesc('fantasyPoints'));
       
       response = await databases.listDocuments(
         DATABASE_ID,
@@ -188,7 +188,7 @@ export async function GET(request: NextRequest) {
     // Optional: load manual overrides from model_inputs to correct teams/draftable flags
     let overrides: Record<string, any> | null = null;
     let depthIndex: Map<string, string> | null = null; // name|pos -> team_id
-    let fantasy_team_idToName: Record<string, string> = {};
+    let fantasyTeamIdToName: Record<string, string> = {};
     let depth: any = null; // Declare depth in outer scope
     // Note: do not use CFBD here; rely solely on our database (depth_chart_json + overrides)
     try {
@@ -206,11 +206,11 @@ export async function GET(request: NextRequest) {
           depth = JSON.parse(depth);
           // Convert compact format back to full format if needed
           if (depth && typeof depth === 'object') {
-            for (const [fantasy_team_id, positions] of Object.entries(depth)) {
+            for (const [fantasyTeamId, positions] of Object.entries(depth)) {
               for (const [pos, players] of Object.entries(positions as any)) {
                 if (Array.isArray(players) && players.length > 0 && typeof players[0] === 'string') {
                   // Convert "name:rank" format back to object format
-                  (depth[fantasy_team_id] as any)[pos] = players.map((p: string) => {
+                  (depth[fantasyTeamId] as any)[pos] = players.map((p: string) => {
                     const [name, rank] = p.split(':');
                     return { player_name: name, pos_rank: parseInt(rank) || 1 };
                   });
@@ -222,24 +222,24 @@ export async function GET(request: NextRequest) {
       }
       if (depth && typeof depth === 'object') {
         depthIndex = new Map<string, string>();
-        // Load team map to translate team_id -> team name
+        // Load team map to translate teamId -> team name
         try {
           const file = path.join(process.cwd(), 'data/teams_map.json');
           if (fs.existsSync(file)) {
             const map = JSON.parse(fs.readFileSync(file, 'utf8')) as Record<string, string>;
             // invert
             for (const [name, id] of Object.entries(map)) {
-              fantasy_team_idToName[id] = name;
+              fantasyTeamIdToName[id] = name;
             }
           }
         } catch {}
-        for (const [fantasy_team_id, posMap] of Object.entries(depth)) {
+        for (const [fantasyTeamId, posMap] of Object.entries(depth)) {
           for (const pos of Object.keys(posMap as any)) {
             const arr = (posMap as any)[pos] as Array<any>;
             if (!Array.isArray(arr)) continue;
             for (const entry of arr) {
               const key = `${(entry.player_name || '').toString().trim().toLowerCase()}|${pos}`;
-              depthIndex.set(key, fantasy_team_id);
+              depthIndex.set(key, fantasyTeamId);
             }
           }
         }
@@ -268,11 +268,11 @@ export async function GET(request: NextRequest) {
     let players = response.documents.map((player: any, index: number) => {
       const position = player.position || 'RB';
       const conference = player.conference || 'Other';
-      const rating = player.fantasy_points ? Math.min(99, Math.round(60 + (player.fantasy_points / 10))) : 80;
+      const rating = player.fantasyPoints ? Math.min(99, Math.round(60 + (player.fantasyPoints / 10))) : 80;
       
-      // Use fantasy_points from database (calculated by comprehensive pipeline)
+      // Use fantasyPoints from database (calculated by comprehensive pipeline)
       // Pipeline includes: pace, efficiency, depth charts, usage priors, injury risk, NFL draft capital
-      const fantasyPoints = player.fantasy_points || 0;
+      const fantasyPoints = player.fantasyPoints || 0;
       
       return {
         id: player.$id,
@@ -449,7 +449,7 @@ export async function GET(request: NextRequest) {
 }
 
 // PROJECTIONS: Now handled entirely by comprehensive pipeline scripts
-// Data flow: functions/project-yearly-simple/ → college_players.fantasy_points → API → UI
+// Data flow: functions/project-yearly-simple/ → college_players.fantasyPoints → API → UI
 // Pipeline includes: team pace, efficiency, depth charts, usage priors, injury risk, NFL draft capital
 
 function calculateADP(position: string, rating: number, index: number): number {

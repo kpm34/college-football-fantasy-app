@@ -42,11 +42,11 @@ async function checkAuthUser() {
     const ownerToTeams: Record<string, string[]> = {};
     
     for (const team of fantasyTeams.documents) {
-      ownerIds.add(team.owner_client_id);
-      if (!ownerToTeams[team.owner_client_id]) {
-        ownerToTeams[team.owner_client_id] = [];
+      ownerIds.add(team.ownerClientId);
+      if (!ownerToTeams[team.ownerClientId]) {
+        ownerToTeams[team.ownerClientId] = [];
       }
-      ownerToTeams[team.owner_client_id].push(team.name);
+      ownerToTeams[team.ownerClientId].push(team.name);
     }
     
     console.log('\nUnique owner_client_ids and their teams:');

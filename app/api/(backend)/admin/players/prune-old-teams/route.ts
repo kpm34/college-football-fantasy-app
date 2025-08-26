@@ -13,7 +13,7 @@ type PlayerDoc = {
     conference?: string;
     draftable?: boolean;
     season?: number;
-    fantasy_points?: number;
+    fantasyPoints?: number;
     $updatedAt?: string;
 };
 
@@ -25,7 +25,7 @@ function computePriority(doc: PlayerDoc, currentSeason: number): number {
     let score = 0;
     if (Number(doc.season) === currentSeason) score += 1000;
     if (doc.draftable) score += 100;
-    if (typeof doc.fantasy_points === 'number') score += Math.max(0, Math.min(500, Math.round(doc.fantasy_points)));
+    if (typeof doc.fantasyPoints === 'number') score += Math.max(0, Math.min(500, Math.round(doc.fantasyPoints)));
     if (doc.$updatedAt) {
         // newer updates slightly preferred
         try { score += Math.floor(new Date(doc.$updatedAt).getTime() / 1_000_000); } catch {}

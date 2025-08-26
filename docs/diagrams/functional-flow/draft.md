@@ -3,6 +3,7 @@
 ## Overview
 Comprehensive draft system supporting both mock drafts (practice) and real drafts (scheduled, season commits) with timing gates and room access control.
 
+
 ## API Endpoints
 - `GET /api/drafts/:id/room-state` - Check room access and timing
 - `POST /api/drafts/mock/create` - Create mock draft

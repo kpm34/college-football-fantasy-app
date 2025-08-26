@@ -76,7 +76,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
       const r = await api<{ ok: boolean; participantId: string; slot: number }>('/api/mock-draft/join', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ draftId, client_id: userId, displayName })
+        body: JSON.stringify({ draftId, clientId: userId, displayName })
       });
       setMe({ participantId: r.participantId, slot: r.slot });
       await refreshAll();
@@ -469,7 +469,7 @@ export default function DraftPage({ params }: { params: { draftId: string } }) {
                         })()}
                       </td>
                       <td className="py-2 px-2" style={{ color: leagueColors.text.secondary }}>{pl.team || '-'}</td>
-                      <td className="py-2 px-1 text-center font-semibold">{pl.projectedPoints ?? pl.fantasy_points ?? '-'}</td>
+                      <td className="py-2 px-1 text-center font-semibold">{pl.projectedPoints ?? pl.fantasyPoints ?? '-'}</td>
                       <td className="py-2 px-1 text-center" style={{ color: leagueColors.text.secondary }}>{pl.adp?.toFixed ? pl.adp.toFixed(1) : '-'}</td>
                       <td className="py-2 px-2 text-center">
                         <button

@@ -28,8 +28,8 @@ export async function GET(
           databaseId,
           COLLECTIONS.FANTASY_TEAMS,
           [
-            Query.equal('league_id', leagueId),
-            Query.equal('owner_auth_user_id', client_id),
+            Query.equal('leagueId', leagueId),
+            Query.equal('ownerAuthUserId', client_id),
             Query.limit(1)
           ]
         );
@@ -58,14 +58,14 @@ export async function GET(
       );
     } catch {}
 
-    const etag = `W/"${(league as any).$updatedAt || (league as any).updated_at || league.$id}-${(league as any).members?.length || 0}"`;
+    const etag = `W/"${(league as any).$updatedAt || (league as any).updatedAt || league.$id}-${(league as any).members?.length || 0}"`;
     const ifNoneMatch = request.headers.get('if-none-match') || '';
     if (ifNoneMatch && ifNoneMatch === etag) {
       return new NextResponse(null, { status: 304, headers: { ETag: etag } });
     }
 
     // Commissioner id (canonical)
-    const commissionerId = (league as any).commissioner_auth_user_id || (league as any).commissioner;
+    const commissionerId = (league as any).commissionerAuthUserId || (league as any).commissioner;
     let commissionerName = 'Unknown Commissioner';
     try {
       if (commissionerId) {
@@ -73,19 +73,19 @@ export async function GET(
           const cu: any = await serverUsers.get(String(commissionerId));
           commissionerName = cu.name || cu.email || commissionerName;
         } catch {
-          // Fallback via clients collection (auth_user_id or $id)
+          // Fallback via clients collection (authUserId or $id)
           try {
             const clients = await databases.listDocuments(
               databaseId,
               'clients',
-              [Query.equal('auth_user_id', [String(commissionerId)]), Query.limit(1)]
+              [Query.equal('authUserId', [String(commissionerId)]), Query.limit(1)]
             );
             const c = clients.documents?.[0];
-            if (c) commissionerName = (c as any).display_name || (c as any).email || commissionerName;
+            if (c) commissionerName = (c as any).displayName || (c as any).email || commissionerName;
             else {
               try {
                 const c2 = await databases.getDocument(databaseId, 'clients', String(commissionerId));
-                if (c2) commissionerName = (c2 as any).display_name || (c2 as any).email || commissionerName;
+                if (c2) commissionerName = (c2 as any).displayName || (c2 as any).email || commissionerName;
               } catch {}
             }
           } catch {}
@@ -100,11 +100,11 @@ export async function GET(
       const rosterDocs = await databases.listDocuments(
         databaseId,
         COLLECTIONS.FANTASY_TEAMS,
-        [Query.equal('league_id', leagueId), Query.limit(500)]
+        [Query.equal('leagueId', leagueId), Query.limit(500)]
       )
       const docs = rosterDocs.documents as any[]
       teamCount = docs.length
-      derivedMembers = Array.from(new Set(docs.map(d => d.owner_auth_user_id).filter(Boolean)))
+      derivedMembers = Array.from(new Set(docs.map(d => d.ownerAuthUserId).filter(Boolean)))
     } catch {}
 
     return NextResponse.json({
@@ -125,8 +125,8 @@ export async function GET(
         // Support both legacy snake_case and current camelCase field names
         draftDate: (league as any).draftDate,
         seasonStartWeek: (league as any).seasonStartWeek,
-        createdAt: league.created_at,
-        updatedAt: league.updated_at,
+        createdAt: league.createdAt,
+        updatedAt: league.updatedAt,
         lineupProfile: lineupProfile ? {
           name: lineupProfile.name,
           description: lineupProfile.description,
@@ -159,12 +159,12 @@ export async function PATCH(
   try {
     const { leagueId } = params;
     const body = await request.json();
-    const { fantasy_team_id, name } = body;
-    if (!fantasy_team_id || !name) {
-      return NextResponse.json({ error: 'fantasy_team_id and name required' }, { status: 400 });
+    const { fantasyTeamId, name } = body;
+    if (!fantasyTeamId || !name) {
+      return NextResponse.json({ error: 'fantasyTeamId and name required' }, { status: 400 });
     }
 
-    await databases.updateDocument(databaseId, COLLECTIONS.SCHOOLS, fantasy_team_id, { name, updated_at: new Date().toISOString() });
+    await databases.updateDocument(databaseId, COLLECTIONS.SCHOOLS, fantasyTeamId, { name, updatedAt: new Date().toISOString() });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating team name:', error);

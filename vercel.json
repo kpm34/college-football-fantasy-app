@@ -24,6 +24,18 @@
     {
       "path": "/api/cron/synthetic-monitoring",
       "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/cron/assign-draft-orders",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/start-drafts",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/draft-autopick",
+      "schedule": "* * * * *"
     }
   ],
   "functions": {

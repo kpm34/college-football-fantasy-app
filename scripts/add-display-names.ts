@@ -20,7 +20,7 @@ async function addDisplayNames() {
   console.log('🏷️ Adding display names to fantasy_teams and league_memberships...\n');
   
   try {
-    // First, let's add the display_name attribute to the collections if they don't exist
+    // First, let's add the displayName attribute to the collections if they don't exist
     console.log('📝 Adding display_name attributes to collections...\n');
     
     // Add to fantasy_teams
@@ -28,14 +28,14 @@ async function addDisplayNames() {
       await databases.createStringAttribute(
         DATABASE_ID,
         'fantasy_teams',
-        'display_name',
+        'displayName',
         255,
         false // not required
       );
       console.log('✅ Added display_name to fantasy_teams');
     } catch (e: any) {
       if (e.message?.includes('Attribute already exists')) {
-        console.log('ℹ️ display_name already exists in fantasy_teams');
+        console.log('ℹ️ displayName already exists in fantasy_teams');
       } else {
         console.error('Error adding to fantasy_teams:', e.message);
       }
@@ -46,14 +46,14 @@ async function addDisplayNames() {
       await databases.createStringAttribute(
         DATABASE_ID,
         'league_memberships',
-        'display_name',
+        'displayName',
         255,
         false // not required
       );
       console.log('✅ Added display_name to league_memberships');
     } catch (e: any) {
       if (e.message?.includes('Attribute already exists')) {
-        console.log('ℹ️ display_name already exists in league_memberships');
+        console.log('ℹ️ displayName already exists in league_memberships');
       } else {
         console.error('Error adding to league_memberships:', e.message);
       }
@@ -75,8 +75,8 @@ async function addDisplayNames() {
     
     const ownerIds = new Set<string>();
     for (const team of fantasyTeams.documents) {
-      if (team.owner_client_id && !team.owner_client_id.startsWith('BOT-')) {
-        ownerIds.add(team.owner_client_id);
+      if (team.ownerClientId && !team.ownerClientId.startsWith('BOT-')) {
+        ownerIds.add(team.ownerClientId);
       }
     }
     
@@ -96,15 +96,15 @@ async function addDisplayNames() {
     // Update fantasy_teams with display names
     console.log('\n📝 Updating fantasy_teams...');
     for (const team of fantasyTeams.documents) {
-      if (team.owner_client_id && !team.owner_client_id.startsWith('BOT-')) {
-        const displayName = userDisplayNames[team.owner_client_id] || 'Unknown User';
+      if (team.ownerClientId && !team.ownerClientId.startsWith('BOT-')) {
+        const displayName = userDisplayNames[team.ownerClientId] || 'Unknown User';
         try {
           await databases.updateDocument(
             DATABASE_ID,
             'fantasy_teams',
             team.$id,
             {
-              display_name: displayName
+              displayName: displayName
             }
           );
           console.log(`  Updated ${team.name} - Owner: ${displayName}`);
@@ -123,20 +123,20 @@ async function addDisplayNames() {
     );
     
     for (const membership of memberships.documents) {
-      if (membership.client_id && !membership.client_id.startsWith('BOT-')) {
+      if (membership.clientId && !membership.clientId.startsWith('BOT-')) {
         try {
-          const user = await users.get(membership.client_id);
-          const displayName = user.name || user.email || membership.client_id;
+          const user = await users.get(membership.clientId);
+          const displayName = user.name || user.email || membership.clientId;
           
           await databases.updateDocument(
             DATABASE_ID,
             'league_memberships',
             membership.$id,
             {
-              display_name: displayName
+              displayName: displayName
             }
           );
-          console.log(`  Updated membership for ${displayName} in league ${membership.league_id}`);
+          console.log(`  Updated membership for ${displayName} in league ${membership.leagueId}`);
         } catch (e: any) {
           console.error(`  Error updating membership:`, e.message);
         }

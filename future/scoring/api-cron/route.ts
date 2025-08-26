@@ -22,7 +22,7 @@ interface PlayerStats {
   receptions: number;
   field_goals: number;
   extra_points: number;
-  fantasy_points: number;
+  fantasyPoints: number;
 }
 
 export async function POST(request: NextRequest) {

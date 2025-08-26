@@ -99,12 +99,12 @@ export const INDEX_SCHEMA: Record<string, IndexProfile> = {
       {
         key: 'draft_availability_idx',
         type: 'key',
-        attributes: ['eligible', 'position', 'fantasy_points'],
+        attributes: ['eligible', 'position', 'fantasyPoints'],
         orders: ['ASC', 'ASC', 'DESC'],
         description: 'Draft board: eligible players by position, ranked by fantasy points',
         queryPatterns: [
-          'eligible = true AND position = ? ORDER BY fantasy_points DESC',
-          'eligible = true ORDER BY fantasy_points DESC'
+          'eligible = true AND position = ? ORDER BY fantasyPoints DESC',
+          'eligible = true ORDER BY fantasyPoints DESC'
         ],
         estimatedUsage: 'high'
       },
@@ -122,12 +122,12 @@ export const INDEX_SCHEMA: Record<string, IndexProfile> = {
       {
         key: 'conference_rankings_idx',
         type: 'key',
-        attributes: ['conference', 'position', 'fantasy_points'],
+        attributes: ['conference', 'position', 'fantasyPoints'],
         orders: ['ASC', 'ASC', 'DESC'],
         description: 'Conference-specific player rankings',
         queryPatterns: [
-          'conference = ? AND position = ? ORDER BY fantasy_points DESC',
-          'conference IN [...] ORDER BY fantasy_points DESC'
+          'conference = ? AND position = ? ORDER BY fantasyPoints DESC',
+          'conference IN [...] ORDER BY fantasyPoints DESC'
         ],
         estimatedUsage: 'high'
       },
@@ -419,11 +419,11 @@ export const INDEX_SCHEMA: Record<string, IndexProfile> = {
       {
         key: 'weekly_performances_idx',
         type: 'key',
-        attributes: ['season', 'week', 'fantasy_points'],
+        attributes: ['season', 'week', 'fantasyPoints'],
         orders: ['DESC', 'ASC', 'DESC'],
         description: 'Top weekly performances',
         queryPatterns: [
-          'season = ? AND week = ? ORDER BY fantasy_points DESC'
+          'season = ? AND week = ? ORDER BY fantasyPoints DESC'
         ],
         estimatedUsage: 'medium'
       }
@@ -577,7 +577,7 @@ export const QUERY_PATTERNS = {
   // Draft board - most common query
   draft_board: {
     description: 'Get available players for draft',
-    query: 'eligible = true AND position = ? ORDER BY fantasy_points DESC LIMIT 50',
+    query: 'eligible = true AND position = ? ORDER BY fantasyPoints DESC LIMIT 50',
     requiredIndex: 'draft_availability_idx',
     estimatedQPS: 100 // queries per second during draft
   },

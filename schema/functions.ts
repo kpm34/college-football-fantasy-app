@@ -174,7 +174,7 @@ export const FUNCTIONS_SCHEMA: Record<string, AppwriteFunction> = {
     trigger: {
       type: 'database',
       events: ['update'],
-      collections: ['college_players'] // When player fantasy_points update
+      collections: ['college_players'] // When player fantasyPoints update
     },
     execution: {
       timeout: 180, // 3 minutes

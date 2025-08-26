@@ -35,7 +35,7 @@ export async function GET(
     );
 
     // Check commissioner using new canonical with fallbacks
-    const commishId = (league as any).commissioner_auth_user_id || (league as any).commissioner || (league as any).owner_client_id;
+    const commishId = (league as any).commissionerAuthUserId || (league as any).commissioner || (league as any).ownerClientId;
     const isComm = Boolean(commishId && user?.$id && commishId === user.$id);
     return NextResponse.json({ isCommissioner: isComm });
   } catch (error) {

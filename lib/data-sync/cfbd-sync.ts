@@ -38,14 +38,14 @@ interface CFBDGame {
   id: number;
   season: number;
   week: number;
-  season_type: string;
-  start_date: string;
-  home_team: string;
+  seasonType: string;
+  startDate: string;
+  homeTeam: string;
   home_conference?: string;
-  home_points?: number;
-  away_team: string;
+  homePoints?: number;
+  awayTeam: string;
   away_conference?: string;
-  away_points?: number;
+  awayPoints?: number;
   venue?: string;
   completed: boolean;
   neutral_site: boolean;
@@ -182,11 +182,11 @@ export class CFBDSync {
             const existing = await databases.listDocuments(
               DATABASE_ID,
               'college_players', // Use correct collection name
-              [Query.equal('cfbd_id', player.id.toString())]
+              [Query.equal('cfbdId', player.id.toString())]
             );
             
             const playerData = {
-              cfbd_id: player.id.toString(),
+              cfbdId: player.id.toString(),
               first_name: player.first_name || '',
               last_name: player.last_name || '',
               name: `${player.first_name || ''} ${player.last_name || ''}`.trim(),
@@ -252,21 +252,21 @@ export class CFBDSync {
           const existing = await databases.listDocuments(
             DATABASE_ID,
             COLLECTIONS.GAMES,
-            [Query.equal('cfbd_id', game.id.toString())]
+            [Query.equal('cfbdId', game.id.toString())]
           );
           
           const gameData = {
-            cfbd_id: game.id.toString(),
+            cfbdId: game.id.toString(),
             season: game.season,
             week: game.week,
-            season_type: game.season_type,
-            start_date: game.start_date,
-            home_team: game.home_team,
+            seasonType: game.seasonType,
+            startDate: game.startDate,
+            homeTeam: game.homeTeam,
             home_conference: game.home_conference || '',
-            home_points: game.home_points || 0,
-            away_team: game.away_team,
+            homePoints: game.homePoints || 0,
+            awayTeam: game.awayTeam,
             away_conference: game.away_conference || '',
-            away_points: game.away_points || 0,
+            awayPoints: game.awayPoints || 0,
             venue: game.venue || '',
             completed: game.completed || false,
             neutral_site: game.neutral_site || false
@@ -337,7 +337,7 @@ export class CFBDSync {
               conference: ranking.conference || '',
               rank: ranking.rank,
               points: ranking.points || 0,
-              first_place_votes: ranking.firstPlaceVotes || 0,
+              firstPlaceVotes: ranking.firstPlaceVotes || 0,
               season: apPoll.season,
               week: apPoll.week,
               poll: 'AP Top 25'

@@ -48,7 +48,7 @@ export function queryExamples() {
   const activeStatusQuery = AppwriteQuery.isActive();
   
   // Sorting queries
-  const sortByPointsDesc = AppwriteQuery.sortBy('fantasy_points', 'desc');
+  const sortByPointsDesc = AppwriteQuery.sortBy('fantasyPoints', 'desc');
   const sortByCreatedDesc = AppwriteQuery.sortByCreated('desc');
   
   // Pagination queries
@@ -256,7 +256,7 @@ export async function advancedQueryExamples() {
       AppwriteQuery.isEligible(),
       AppwriteQuery.byPosition('QB'),
       AppwriteQuery.byConference('SEC'),
-      AppwriteQuery.sortBy('fantasy_points', 'desc'),
+      AppwriteQuery.sortBy('fantasyPoints', 'desc'),
       AppwriteQuery.limit(50)
     ]);
     console.log('Top SEC QBs:', topSecQBs);
@@ -276,7 +276,7 @@ export async function advancedQueryExamples() {
     const searchResults = await PlayersCollection.list([
       AppwriteQuery.search('name', 'Smith'),
       AppwriteQuery.isEligible(),
-      AppwriteQuery.sortBy('fantasy_points', 'desc'),
+      AppwriteQuery.sortBy('fantasyPoints', 'desc'),
       AppwriteQuery.limit(20)
     ]);
     console.log('Players named Smith:', searchResults);

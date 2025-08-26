@@ -95,9 +95,9 @@ export interface DraftPlayer extends PlayerProjection {
 // New typed shapes for projections_yearly and projections_weekly collections
 export interface ProjectionsYearly {
   $id: string;
-  player_id: string;
+  playerId: string;
   season: number;
-  team_id?: string;
+  teamId?: string;
   position: 'QB' | 'RB' | 'WR' | 'TE';
   model_version: string;
   // Simple
@@ -105,7 +105,7 @@ export interface ProjectionsYearly {
   usage_rate?: number;
   pace_adj?: number;
   statline_simple?: Record<string, number>;
-  fantasy_points_simple?: number;
+  fantasyPointsSimple?: number;
   // Pro
   range_floor?: number;
   range_median?: number;
@@ -125,26 +125,26 @@ export interface ProjectionsYearly {
 
 export interface ProjectionsWeekly {
   $id: string;
-  player_id: string;
+  playerId: string;
   season: number;
   week: number;
   opponent_team_id?: string;
-  home_away?: 'H' | 'A' | 'N';
-  team_total_est?: number;
+  homeAway?: 'H' | 'A' | 'N';
+  teamTotalEst?: number;
   pace_matchup_adj?: number;
   // Simple
   statline_simple?: Record<string, number>;
-  fantasy_points_simple?: number;
+  fantasyPointsSimple?: number;
   // Pro
   statline_median?: Record<string, number>;
   statline_floor?: Record<string, number>;
   statline_ceiling?: Record<string, number>;
-  boom_prob?: number;
-  bust_prob?: number;
-  defense_vs_pos_grade?: number; // 0-100
-  injury_status?: 'Healthy' | 'Questionable' | 'Doubtful' | 'Out';
-  utilization_trend?: '+' | '=' | '-';
-  rank_pro?: number;
-  start_sit_color?: 'Green' | 'Yellow' | 'Red';
+  boomProb?: number;
+  bustProb?: number;
+  defenseVsPosGrade?: number; // 0-100
+  injuryStatus?: 'Healthy' | 'Questionable' | 'Doubtful' | 'Out';
+  utilizationTrend?: '+' | '=' | '-';
+  rankPro?: number;
+  startSitColor?: 'Green' | 'Yellow' | 'Red';
   updatedAt?: string;
 }

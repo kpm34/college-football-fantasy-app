@@ -76,12 +76,12 @@ export async function GET(request: NextRequest) {
           COLLECTIONS.players,
           [
             // Query by CFBD ID if we have it, otherwise by name + team
-            (await import('appwrite')).Query.equal('cfbd_id', cfbdPlayer.id.toString())
+            (await import('appwrite')).Query.equal('cfbdId', cfbdPlayer.id.toString())
           ]
         );
 
         const playerData = {
-          cfbd_id: cfbdPlayer.id.toString(),
+          cfbdId: cfbdPlayer.id.toString(),
           first_name: cfbdPlayer.first_name,
           last_name: cfbdPlayer.last_name,
           name: `${cfbdPlayer.first_name} ${cfbdPlayer.last_name}`,
@@ -95,8 +95,8 @@ export async function GET(request: NextRequest) {
           season: cfbdPlayer.season,
           draftable: cfbdPlayer.year && cfbdPlayer.year >= 3,
           power_4: false, // Will be updated based on conference
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         };
 
         if (existingPlayers.documents.length > 0) {
@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
             existingPlayers.documents[0].$id,
             {
               ...playerData,
-              updated_at: new Date().toISOString()
+              updatedAt: new Date().toISOString()
             }
           );
           updatedCount++;

@@ -40,7 +40,7 @@ export interface CollegePlayers {
   /** Available for fantasy draft */
   draftable: boolean | undefined;
   /** Enhanced fantasy points with depth chart logic */
-  fantasy_points: number | undefined;
+  fantasyPoints: number | undefined;
   /** Legacy projection field */
   projection: number | undefined;
   /** Projected rushing yards */
@@ -56,9 +56,9 @@ export interface CollegePlayers {
   /** Projected extra points */
   extra_points_projection: number | undefined;
   /** Record creation timestamp */
-  created_at: string | undefined;
+  createdAt: string | undefined;
   /** Last update timestamp */
-  updated_at: string | undefined;
+  updatedAt: string | undefined;
 }
 
 /**
@@ -82,9 +82,9 @@ export interface CreateCollegePlayers {
   /** Academic year (FR, SO, JR, SR) */
   year: string | undefined;
   /** Record creation timestamp */
-  created_at: string | undefined;
+  createdAt: string | undefined;
   /** Last update timestamp */
-  updated_at: string | undefined;
+  updatedAt: string | undefined;
 }
 
 /**
@@ -112,7 +112,7 @@ export interface UpdateCollegePlayers {
   /** Available for fantasy draft */
   draftable?: boolean | undefined;
   /** Enhanced fantasy points with depth chart logic */
-  fantasy_points?: number | undefined;
+  fantasyPoints?: number | undefined;
   /** Legacy projection field */
   projection?: number | undefined;
   /** Projected rushing yards */
@@ -128,9 +128,9 @@ export interface UpdateCollegePlayers {
   /** Projected extra points */
   extra_points_projection?: number | undefined;
   /** Record creation timestamp */
-  created_at?: string | undefined;
+  createdAt?: string | undefined;
   /** Last update timestamp */
-  updated_at?: string | undefined;
+  updatedAt?: string | undefined;
 }
 
 /**
@@ -234,29 +234,29 @@ export interface Games {
   /** Season year */
   season: number;
   /** regular, postseason, etc. */
-  season_type: string;
+  seasonType: string;
   /** Home team abbreviation */
-  home_team: string;
+  homeTeam: string;
   /** Away team abbreviation */
-  away_team: string;
+  awayTeam: string;
   /** Home team final score */
-  home_score: number | undefined;
+  homeScore: number | undefined;
   /** Away team final score */
-  away_score: number | undefined;
+  awayScore: number | undefined;
   /** Game start time */
-  start_date: Date | string;
+  startDate: Date | string;
   /** Game completion status */
   completed: boolean | undefined;
   /** Both teams in same conference */
   conference_game: boolean | undefined;
   /** Fantasy scoring eligibility */
-  eligible_game: boolean | undefined;
+  eligibleGame: boolean | undefined;
   /** Stadium/venue name */
   venue: string | undefined;
   /** TV network broadcasting */
   tv_coverage: string | undefined;
   /** CFBD/ESPN game ID */
-  external_id: string | undefined;
+  externalId: string | undefined;
 }
 
 /**
@@ -268,23 +268,23 @@ export interface CreateGames {
   /** Season year */
   season: number;
   /** regular, postseason, etc. */
-  season_type: string;
+  seasonType: string;
   /** Home team abbreviation */
-  home_team: string;
+  homeTeam: string;
   /** Away team abbreviation */
-  away_team: string;
+  awayTeam: string;
   /** Home team final score */
-  home_score: number | undefined;
+  homeScore: number | undefined;
   /** Away team final score */
-  away_score: number | undefined;
+  awayScore: number | undefined;
   /** Game start time */
-  start_date: Date | string;
+  startDate: Date | string;
   /** Stadium/venue name */
   venue: string | undefined;
   /** TV network broadcasting */
   tv_coverage: string | undefined;
   /** CFBD/ESPN game ID */
-  external_id: string | undefined;
+  externalId: string | undefined;
 }
 
 /**
@@ -296,29 +296,29 @@ export interface UpdateGames {
   /** Season year */
   season?: number | undefined;
   /** regular, postseason, etc. */
-  season_type?: string | undefined;
+  seasonType?: string | undefined;
   /** Home team abbreviation */
-  home_team?: string | undefined;
+  homeTeam?: string | undefined;
   /** Away team abbreviation */
-  away_team?: string | undefined;
+  awayTeam?: string | undefined;
   /** Home team final score */
-  home_score?: number | undefined;
+  homeScore?: number | undefined;
   /** Away team final score */
-  away_score?: number | undefined;
+  awayScore?: number | undefined;
   /** Game start time */
-  start_date?: Date | string | undefined;
+  startDate?: Date | string | undefined;
   /** Game completion status */
   completed?: boolean | undefined;
   /** Both teams in same conference */
   conference_game?: boolean | undefined;
   /** Fantasy scoring eligibility */
-  eligible_game?: boolean | undefined;
+  eligibleGame?: boolean | undefined;
   /** Stadium/venue name */
   venue?: string | undefined;
   /** TV network broadcasting */
   tv_coverage?: string | undefined;
   /** CFBD/ESPN game ID */
-  external_id?: string | undefined;
+  externalId?: string | undefined;
 }
 
 /**
@@ -337,7 +337,7 @@ export interface Rankings {
   /** Season year */
   season: number;
   /** AP, Coaches, CFP, etc. */
-  poll_type: string;
+  pollType: string;
   /** Team abbreviation */
   team: string;
   /** Ranking position */
@@ -345,7 +345,7 @@ export interface Rankings {
   /** Poll points received */
   points: number | undefined;
   /** Number of first place votes */
-  first_place_votes: number | undefined;
+  firstPlaceVotes: number | undefined;
 }
 
 /**
@@ -357,7 +357,7 @@ export interface CreateRankings {
   /** Season year */
   season: number;
   /** AP, Coaches, CFP, etc. */
-  poll_type: string;
+  pollType: string;
   /** Team abbreviation */
   team: string;
   /** Ranking position */
@@ -365,7 +365,7 @@ export interface CreateRankings {
   /** Poll points received */
   points: number | undefined;
   /** Number of first place votes */
-  first_place_votes: number | undefined;
+  firstPlaceVotes: number | undefined;
 }
 
 /**
@@ -377,7 +377,7 @@ export interface UpdateRankings {
   /** Season year */
   season?: number | undefined;
   /** AP, Coaches, CFP, etc. */
-  poll_type?: string | undefined;
+  pollType?: string | undefined;
   /** Team abbreviation */
   team?: string | undefined;
   /** Ranking position */
@@ -385,7 +385,7 @@ export interface UpdateRankings {
   /** Poll points received */
   points?: number | undefined;
   /** Number of first place votes */
-  first_place_votes?: number | undefined;
+  firstPlaceVotes?: number | undefined;
 }
 
 /**
@@ -442,7 +442,7 @@ export interface UpdateUserTeams {
   /** League document ID */
   leagueId?: string | undefined;
   /** Team owner user ID */
-  client_id?: string | undefined;
+  clientId?: string | undefined;
   /** Fantasy team name */
   teamName?: string | undefined;
   /** Draft order position */
@@ -570,7 +570,7 @@ export interface Lineups {
   $permissions: string[];
 
   /** Roster document ID */
-  fantasy_team_id: string;
+  fantasyTeamId: string;
   /** Week number */
   week: number;
   /** Season year */
@@ -590,7 +590,7 @@ export interface Lineups {
  */
 export interface CreateLineups {
   /** Roster document ID */
-  fantasy_team_id: string;
+  fantasyTeamId: string;
   /** Week number */
   week: number;
   /** Season year */
@@ -606,7 +606,7 @@ export interface CreateLineups {
  */
 export interface UpdateLineups {
   /** Roster document ID */
-  fantasy_team_id?: string | undefined;
+  fantasyTeamId?: string | undefined;
   /** Week number */
   week?: number | undefined;
   /** Season year */
@@ -829,7 +829,7 @@ export interface UpdateDraftPicks {
   /** League document ID */
   leagueId?: string | undefined;
   /** Drafting user ID */
-  client_id?: string | undefined;
+  clientId?: string | undefined;
   /** Selected player ID */
   playerId?: string | undefined;
   /** Draft round number */
@@ -963,7 +963,7 @@ export interface UpdateBids {
   /** Player being bid on */
   playerId?: string | undefined;
   /** Bidding team roster ID */
-  fantasy_team_id?: string | undefined;
+  fantasyTeamId?: string | undefined;
   /** Bid amount */
   amount?: number | undefined;
   /** When bid was placed */
@@ -994,7 +994,7 @@ export interface PlayerStats {
   /** Opponent team abbreviation */
   opponent: string | undefined;
   /** Fantasy points earned */
-  fantasy_points: number | undefined;
+  fantasyPoints: number | undefined;
   /** Detailed game statistics JSON */
   stats: string | undefined;
   /** Counts toward fantasy scoring */
@@ -1034,7 +1034,7 @@ export interface UpdatePlayerStats {
   /** Opponent team abbreviation */
   opponent?: string | undefined;
   /** Fantasy points earned */
-  fantasy_points?: number | undefined;
+  fantasyPoints?: number | undefined;
   /** Detailed game statistics JSON */
   stats?: string | undefined;
   /** Counts toward fantasy scoring */
@@ -1239,9 +1239,9 @@ export interface ActivityLog {
   /** When action occurred */
   timestamp: Date | string;
   /** User IP address */
-  ip_address: string | undefined;
+  ipAddress: string | undefined;
   /** User browser/client info */
-  user_agent: string | undefined;
+  userAgent: string | undefined;
 }
 
 /**
@@ -1259,9 +1259,9 @@ export interface CreateActivityLog {
   /** When action occurred */
   timestamp: Date | string;
   /** User IP address */
-  ip_address: string | undefined;
+  ipAddress: string | undefined;
   /** User browser/client info */
-  user_agent: string | undefined;
+  userAgent: string | undefined;
 }
 
 /**
@@ -1269,7 +1269,7 @@ export interface CreateActivityLog {
  */
 export interface UpdateActivityLog {
   /** Acting user ID */
-  client_id?: string | undefined;
+  clientId?: string | undefined;
   /** Related league ID */
   leagueId?: string | undefined;
   /** Action performed */
@@ -1279,9 +1279,9 @@ export interface UpdateActivityLog {
   /** When action occurred */
   timestamp?: Date | string | undefined;
   /** User IP address */
-  ip_address?: string | undefined;
+  ipAddress?: string | undefined;
   /** User browser/client info */
-  user_agent?: string | undefined;
+  userAgent?: string | undefined;
 }
 
 /**
@@ -1296,9 +1296,9 @@ export interface PlayerDepthCharts {
   $permissions: string[];
 
   /** Reference to college_players.$id */
-  player_id: string;
+  playerId: string;
   /** Team identifier */
-  team_id: string;
+  teamId: string;
   /** Player position (QB, RB, WR, TE, K) */
   position: string;
   /** Season year */
@@ -1312,7 +1312,7 @@ export interface PlayerDepthCharts {
   /** Projected snap share percentage */
   snap_share_proj: number | undefined;
   /** OUT, QUESTIONABLE, or ACTIVE */
-  injury_status: string;
+  injuryStatus: string;
   /** Injury detail note */
   injury_note: string | undefined;
   /** Injury status timestamp */
@@ -1354,9 +1354,9 @@ export interface PlayerDepthCharts {
   /** JSON array of manual overrides */
   manual_overrides: string | undefined;
   /** Record creation timestamp */
-  created_at: Date | string;
+  createdAt: Date | string;
   /** Last update timestamp */
-  updated_at: Date | string;
+  updatedAt: Date | string;
 }
 
 /**
@@ -1364,9 +1364,9 @@ export interface PlayerDepthCharts {
  */
 export interface CreatePlayerDepthCharts {
   /** Reference to college_players.$id */
-  player_id: string;
+  playerId: string;
   /** Team identifier */
-  team_id: string;
+  teamId: string;
   /** Player position (QB, RB, WR, TE, K) */
   position: string;
   /** Season year */
@@ -1378,7 +1378,7 @@ export interface CreatePlayerDepthCharts {
   /** Probability of starting (0.0-1.0) */
   starter_prob: number;
   /** OUT, QUESTIONABLE, or ACTIVE */
-  injury_status: string;
+  injuryStatus: string;
   /** Injury detail note */
   injury_note: string | undefined;
   /** Injury status timestamp */
@@ -1396,9 +1396,9 @@ export interface CreatePlayerDepthCharts {
   /** JSON array of manual overrides */
   manual_overrides: string | undefined;
   /** Record creation timestamp */
-  created_at: Date | string;
+  createdAt: Date | string;
   /** Last update timestamp */
-  updated_at: Date | string;
+  updatedAt: Date | string;
 }
 
 /**
@@ -1406,9 +1406,9 @@ export interface CreatePlayerDepthCharts {
  */
 export interface UpdatePlayerDepthCharts {
   /** Reference to college_players.$id */
-  player_id?: string | undefined;
+  playerId?: string | undefined;
   /** Team identifier */
-  team_id?: string | undefined;
+  teamId?: string | undefined;
   /** Player position (QB, RB, WR, TE, K) */
   position?: string | undefined;
   /** Season year */
@@ -1422,7 +1422,7 @@ export interface UpdatePlayerDepthCharts {
   /** Projected snap share percentage */
   snap_share_proj?: number | undefined;
   /** OUT, QUESTIONABLE, or ACTIVE */
-  injury_status?: string | undefined;
+  injuryStatus?: string | undefined;
   /** Injury detail note */
   injury_note?: string | undefined;
   /** Injury status timestamp */
@@ -1464,9 +1464,9 @@ export interface UpdatePlayerDepthCharts {
   /** JSON array of manual overrides */
   manual_overrides?: string | undefined;
   /** Record creation timestamp */
-  created_at?: Date | string | undefined;
+  createdAt?: Date | string | undefined;
   /** Last update timestamp */
-  updated_at?: Date | string | undefined;
+  updatedAt?: Date | string | undefined;
 }
 
 /**
@@ -1481,7 +1481,7 @@ export interface TeamContext {
   $permissions: string[];
 
   /** Team identifier */
-  team_id: string;
+  teamId: string;
   /** Opponent team identifier */
   opponent_team_id: string | undefined;
   /** Season year */
@@ -1523,7 +1523,7 @@ export interface TeamContext {
   /** Game total over/under */
   over_under: number | undefined;
   /** HOME or AWAY */
-  home_away: string | undefined;
+  homeAway: string | undefined;
   /** Game temperature (Fahrenheit) */
   temperature: number | undefined;
   /** Wind speed in MPH */
@@ -1539,9 +1539,9 @@ export interface TeamContext {
   /** Data confidence score */
   confidence: number;
   /** Record creation timestamp */
-  created_at: Date | string;
+  createdAt: Date | string;
   /** Last update timestamp */
-  updated_at: Date | string;
+  updatedAt: Date | string;
 }
 
 /**
@@ -1549,7 +1549,7 @@ export interface TeamContext {
  */
 export interface CreateTeamContext {
   /** Team identifier */
-  team_id: string;
+  teamId: string;
   /** Opponent team identifier */
   opponent_team_id: string | undefined;
   /** Season year */
@@ -1585,7 +1585,7 @@ export interface CreateTeamContext {
   /** Game total over/under */
   over_under: number | undefined;
   /** HOME or AWAY */
-  home_away: string | undefined;
+  homeAway: string | undefined;
   /** Game temperature (Fahrenheit) */
   temperature: number | undefined;
   /** Wind speed in MPH */
@@ -1599,9 +1599,9 @@ export interface CreateTeamContext {
   /** Data confidence score */
   confidence: number;
   /** Record creation timestamp */
-  created_at: Date | string;
+  createdAt: Date | string;
   /** Last update timestamp */
-  updated_at: Date | string;
+  updatedAt: Date | string;
 }
 
 /**
@@ -1609,7 +1609,7 @@ export interface CreateTeamContext {
  */
 export interface UpdateTeamContext {
   /** Team identifier */
-  team_id?: string | undefined;
+  teamId?: string | undefined;
   /** Opponent team identifier */
   opponent_team_id?: string | undefined;
   /** Season year */
@@ -1651,7 +1651,7 @@ export interface UpdateTeamContext {
   /** Game total over/under */
   over_under?: number | undefined;
   /** HOME or AWAY */
-  home_away?: string | undefined;
+  homeAway?: string | undefined;
   /** Game temperature (Fahrenheit) */
   temperature?: number | undefined;
   /** Wind speed in MPH */
@@ -1667,9 +1667,9 @@ export interface UpdateTeamContext {
   /** Data confidence score */
   confidence?: number | undefined;
   /** Record creation timestamp */
-  created_at?: Date | string | undefined;
+  createdAt?: Date | string | undefined;
   /** Last update timestamp */
-  updated_at?: Date | string | undefined;
+  updatedAt?: Date | string | undefined;
 }
 
 /**
@@ -1684,7 +1684,7 @@ export interface IngestionLog {
   $permissions: string[];
 
   /** Unique run identifier */
-  run_id: string;
+  runId: string;
   /** Target season */
   season: number;
   /** Target week */
@@ -1696,7 +1696,7 @@ export interface IngestionLog {
   /** SUCCESS, FAILED, or PARTIAL */
   status: string;
   /** Execution start time */
-  started_at: Date | string;
+  startedAt: Date | string;
   /** Execution completion time */
   completed_at: Date | string | undefined;
   /** Execution duration in milliseconds */
@@ -1738,7 +1738,7 @@ export interface IngestionLog {
  */
 export interface CreateIngestionLog {
   /** Unique run identifier */
-  run_id: string;
+  runId: string;
   /** Target season */
   season: number;
   /** Target week */
@@ -1750,7 +1750,7 @@ export interface CreateIngestionLog {
   /** SUCCESS, FAILED, or PARTIAL */
   status: string;
   /** Execution start time */
-  started_at: Date | string;
+  startedAt: Date | string;
   /** Execution completion time */
   completed_at: Date | string | undefined;
   /** Execution duration in milliseconds */
@@ -1774,7 +1774,7 @@ export interface CreateIngestionLog {
  */
 export interface UpdateIngestionLog {
   /** Unique run identifier */
-  run_id?: string | undefined;
+  runId?: string | undefined;
   /** Target season */
   season?: number | undefined;
   /** Target week */
@@ -1786,7 +1786,7 @@ export interface UpdateIngestionLog {
   /** SUCCESS, FAILED, or PARTIAL */
   status?: string | undefined;
   /** Execution start time */
-  started_at?: Date | string | undefined;
+  startedAt?: Date | string | undefined;
   /** Execution completion time */
   completed_at?: Date | string | undefined;
   /** Execution duration in milliseconds */
@@ -1835,7 +1835,7 @@ export interface ManualOverrides {
   $permissions: string[];
 
   /** Target player ID */
-  player_id: string;
+  playerId: string;
   /** Season year */
   season: number;
   /** Week number (0 = season-long) */
@@ -1859,9 +1859,9 @@ export interface ManualOverrides {
   /** When override takes effect */
   effective_from: Date | string;
   /** When override expires (null = permanent) */
-  expires_at: Date | string | undefined;
+  expiresAt: Date | string | undefined;
   /** Override creation time */
-  created_at: Date | string;
+  createdAt: Date | string;
   /** When override was deactivated */
   deactivated_at: Date | string | undefined;
   /** Admin who deactivated override */
@@ -1879,7 +1879,7 @@ export interface ManualOverrides {
  */
 export interface CreateManualOverrides {
   /** Target player ID */
-  player_id: string;
+  playerId: string;
   /** Season year */
   season: number;
   /** Week number (0 = season-long) */
@@ -1899,9 +1899,9 @@ export interface CreateManualOverrides {
   /** When override takes effect */
   effective_from: Date | string;
   /** When override expires (null = permanent) */
-  expires_at: Date | string | undefined;
+  expiresAt: Date | string | undefined;
   /** Override creation time */
-  created_at: Date | string;
+  createdAt: Date | string;
   /** When override was deactivated */
   deactivated_at: Date | string | undefined;
   /** Admin who deactivated override */
@@ -1917,7 +1917,7 @@ export interface CreateManualOverrides {
  */
 export interface UpdateManualOverrides {
   /** Target player ID */
-  player_id?: string | undefined;
+  playerId?: string | undefined;
   /** Season year */
   season?: number | undefined;
   /** Week number (0 = season-long) */
@@ -1941,9 +1941,9 @@ export interface UpdateManualOverrides {
   /** When override takes effect */
   effective_from?: Date | string | undefined;
   /** When override expires (null = permanent) */
-  expires_at?: Date | string | undefined;
+  expiresAt?: Date | string | undefined;
   /** Override creation time */
-  created_at?: Date | string | undefined;
+  createdAt?: Date | string | undefined;
   /** When override was deactivated */
   deactivated_at?: Date | string | undefined;
   /** Admin who deactivated override */
@@ -2012,11 +2012,11 @@ export interface DataSourceRegistry {
   /** Duration of last request */
   last_request_duration_ms: number | undefined;
   /** Source registration time */
-  created_at: Date | string;
+  createdAt: Date | string;
   /** Last configuration update */
-  updated_at: Date | string;
+  updatedAt: Date | string;
   /** Admin who registered source */
-  created_by: string;
+  createdBy: string;
   /** Administrative notes */
   notes: string | undefined;
 }
@@ -2048,11 +2048,11 @@ export interface CreateDataSourceRegistry {
   /** Duration of last request */
   last_request_duration_ms: number | undefined;
   /** Source registration time */
-  created_at: Date | string;
+  createdAt: Date | string;
   /** Last configuration update */
-  updated_at: Date | string;
+  updatedAt: Date | string;
   /** Admin who registered source */
-  created_by: string;
+  createdBy: string;
   /** Administrative notes */
   notes: string | undefined;
 }
@@ -2106,11 +2106,11 @@ export interface UpdateDataSourceRegistry {
   /** Duration of last request */
   last_request_duration_ms?: number | undefined;
   /** Source registration time */
-  created_at?: Date | string | undefined;
+  createdAt?: Date | string | undefined;
   /** Last configuration update */
-  updated_at?: Date | string | undefined;
+  updatedAt?: Date | string | undefined;
   /** Admin who registered source */
-  created_by?: string | undefined;
+  createdBy?: string | undefined;
   /** Administrative notes */
   notes?: string | undefined;
 }

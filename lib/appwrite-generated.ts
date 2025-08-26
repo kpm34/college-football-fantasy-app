@@ -68,7 +68,7 @@ export const COLLECTION_METADATA = {
     description: 'College football game schedule and results',
     attributeCount: 14,
     indexCount: 6,
-    requiredAttributes: ['week', 'season', 'season_type', 'home_team', 'away_team', 'start_date'],
+    requiredAttributes: ['week', 'season', 'seasonType', 'homeTeam', 'awayTeam', 'startDate'],
   },
   rankings: {
     id: 'rankings',
@@ -76,7 +76,7 @@ export const COLLECTION_METADATA = {
     description: 'AP Top 25 and other poll rankings',
     attributeCount: 7,
     indexCount: 5,
-    requiredAttributes: ['week', 'season', 'poll_type', 'team', 'rank'],
+    requiredAttributes: ['week', 'season', 'pollType', 'team', 'rank'],
   },
   user_teams: {
     id: 'fantasy_teams',
@@ -84,7 +84,7 @@ export const COLLECTION_METADATA = {
     description: 'Fantasy team rosters within leagues',
     attributeCount: 9,
     indexCount: 3,
-    requiredAttributes: ['leagueId', 'client_id', 'teamName', 'players'],
+    requiredAttributes: ['leagueId', 'clientId', 'teamName', 'players'],
   },
   leagues: {
     id: 'leagues',
@@ -100,7 +100,7 @@ export const COLLECTION_METADATA = {
     description: 'Weekly fantasy lineups',
     attributeCount: 7,
     indexCount: 3,
-    requiredAttributes: ['fantasy_team_id', 'week', 'season'],
+    requiredAttributes: ['fantasyTeamId', 'week', 'season'],
   },
   matchups: {
     id: COLLECTIONS.MATCHUPS,
@@ -124,7 +124,7 @@ export const COLLECTION_METADATA = {
     description: 'Individual draft picks and selections',
     attributeCount: 8,
     indexCount: 4,
-    requiredAttributes: ['leagueId', 'client_id', 'playerId', 'round', 'pick', 'timestamp'],
+    requiredAttributes: ['leagueId', 'clientId', 'playerId', 'round', 'pick', 'timestamp'],
   },
   auctions: {
     id: 'auctions',
@@ -140,7 +140,7 @@ export const COLLECTION_METADATA = {
     description: 'Auction bid history',
     attributeCount: 6,
     indexCount: 4,
-    requiredAttributes: ['auctionId', 'playerId', 'fantasy_team_id', 'amount', 'timestamp'],
+    requiredAttributes: ['auctionId', 'playerId', 'fantasyTeamId', 'amount', 'timestamp'],
   },
   player_stats: {
     id: COLLECTIONS.PLAYER_STATS,
@@ -180,7 +180,7 @@ export const COLLECTION_METADATA = {
     description: 'Weekly depth chart positions and starter probabilities',
     attributeCount: 31,
     indexCount: 6,
-    requiredAttributes: ['player_id', 'team_id', 'position', 'season', 'week', 'depth_chart_rank', 'starter_prob', 'injury_status', 'injury_as_of', 'injury_source', 'as_of', 'source', 'confidence', 'created_at', 'updated_at'],
+    requiredAttributes: ['playerId', 'teamId', 'position', 'season', 'week', 'depth_chart_rank', 'starter_prob', 'injuryStatus', 'injury_as_of', 'injury_source', 'as_of', 'source', 'confidence', 'createdAt', 'updatedAt'],
   },
   team_context: {
     id: 'team_context',
@@ -188,7 +188,7 @@ export const COLLECTION_METADATA = {
     description: 'Weekly team pace, play-calling, and opponent strength data',
     attributeCount: 31,
     indexCount: 5,
-    requiredAttributes: ['team_id', 'season', 'week', 'estimated_plays_per_game', 'run_rate', 'pass_rate', 'as_of', 'source', 'confidence', 'created_at', 'updated_at'],
+    requiredAttributes: ['teamId', 'season', 'week', 'estimated_plays_per_game', 'run_rate', 'pass_rate', 'as_of', 'source', 'confidence', 'createdAt', 'updatedAt'],
   },
   ingestion_log: {
     id: 'ingestion_log',
@@ -196,7 +196,7 @@ export const COLLECTION_METADATA = {
     description: 'Data pipeline execution and change tracking',
     attributeCount: 24,
     indexCount: 5,
-    requiredAttributes: ['run_id', 'season', 'week', 'adapter', 'source', 'status', 'started_at'],
+    requiredAttributes: ['runId', 'season', 'week', 'adapter', 'source', 'status', 'startedAt'],
   },
   manual_overrides: {
     id: 'manual_overrides',
@@ -204,7 +204,7 @@ export const COLLECTION_METADATA = {
     description: 'Admin manual overrides for data corrections',
     attributeCount: 19,
     indexCount: 6,
-    requiredAttributes: ['player_id', 'season', 'week', 'field_name', 'override_value', 'admin_user_id', 'reason', 'effective_from', 'created_at'],
+    requiredAttributes: ['playerId', 'season', 'week', 'field_name', 'override_value', 'admin_user_id', 'reason', 'effective_from', 'createdAt'],
   },
   data_source_registry: {
     id: 'data_source_registry',
@@ -212,7 +212,7 @@ export const COLLECTION_METADATA = {
     description: 'External data source configuration and health monitoring',
     attributeCount: 26,
     indexCount: 5,
-    requiredAttributes: ['source_id', 'source_name', 'source_type', 'adapter_class', 'created_at', 'updated_at', 'created_by'],
+    requiredAttributes: ['source_id', 'source_name', 'source_type', 'adapter_class', 'createdAt', 'updatedAt', 'createdBy'],
   },
 };
 

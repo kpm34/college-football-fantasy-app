@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     const queries: string[] = [
       Query.limit(limit),
       Query.offset(offset),
-      Query.orderDesc('fantasy_points'),
+      Query.orderDesc('fantasyPoints'),
     ];
 
     if (position && position !== 'ALL') {

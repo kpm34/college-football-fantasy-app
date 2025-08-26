@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { name, category, modelUrl, thumbnailUrl, presets, client_id } = body
+    const { name, category, modelUrl, thumbnailUrl, presets, clientId } = body
 
     if (!name || !category || !modelUrl) {
       return NextResponse.json(

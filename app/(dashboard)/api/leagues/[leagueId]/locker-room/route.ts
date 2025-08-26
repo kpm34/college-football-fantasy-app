@@ -42,18 +42,18 @@ export async function GET(
     );
 
     // Determine commissioner (new canonical + fallbacks)
-    const commishId = (league as any).commissioner_auth_user_id || (league as any).commissioner || (league as any).owner_client_id;
+    const commishId = (league as any).commissionerAuthUserId || (league as any).commissioner || (league as any).ownerClientId;
     const isCommissioner = Boolean(commishId && commishId === user.$id);
 
     // Load team from ROSTERS (TEAMS collection deprecated)
     let team = null;
     try {
       const teamQuery = [
-        AwQuery.equal('league_id', leagueId),
+        AwQuery.equal('leagueId', leagueId),
         AwQuery.or([
-          AwQuery.equal('owner_auth_user_id', user.$id),
-          AwQuery.equal('owner_client_id', user.$id),
-          AwQuery.equal('auth_user_id', user.$id),
+          AwQuery.equal('ownerAuthUserId', user.$id),
+          AwQuery.equal('ownerClientId', user.$id),
+          AwQuery.equal('authUserId', user.$id),
           AwQuery.equal('teammanager_id', user.$id)
         ]),
         AwQuery.limit(1)
@@ -65,14 +65,14 @@ export async function GET(
       // If leagueId doesn't exist in rosters, try without it
       try {
         const userQuery = [AwQuery.or([
-          AwQuery.equal('owner_auth_user_id', user.$id),
-          AwQuery.equal('owner_client_id', user.$id),
-          AwQuery.equal('auth_user_id', user.$id),
+          AwQuery.equal('ownerAuthUserId', user.$id),
+          AwQuery.equal('ownerClientId', user.$id),
+          AwQuery.equal('authUserId', user.$id),
           AwQuery.equal('teammanager_id', user.$id)
         ])];
         const allRosters = await serverDb.listDocuments(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, userQuery);
         // Filter by leagueId manually
-        team = allRosters.documents.find((r: any) => (r.league_id || r.leagueId) === leagueId) || null;
+        team = allRosters.documents.find((r: any) => (r.leagueId || r.leagueId) === leagueId) || null;
       } catch (fallbackError) {
         console.error('Fallback roster query failed:', fallbackError);
       }

@@ -279,7 +279,7 @@ export class PlayerRepository extends BaseRepository<Player> {
             // Check if player exists
             const existing = await this.find({
               filters: {
-                external_id: transformedData.external_id
+                externalId: transformedData.externalId
               },
               limit: 1
             });

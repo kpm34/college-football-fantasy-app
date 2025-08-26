@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { serverRepositories } from '@domain/repositories';
 import { withErrorHandler } from '@lib/utils/error-handler';
 import { ValidationError } from '@domain/errors/app-error';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
+import { ID } from 'node-appwrite';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -81,7 +83,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     gameMode,
     isPublic: !isPrivate,
     pickTimeSeconds,
-    commissionerId: user.$id,
+    commissionerAuthUserId: user.$id,
     scoringRules: requestData.scoringRules,
     draftDate: requestData.draftDate,
     season: requestData.season || new Date().getFullYear(),
@@ -90,17 +92,52 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   });
 
   // Automatically join the commissioner to the league
-  const { fantasy_team_id } = await leagues.joinLeague(
+  const { fantasyTeamId } = await leagues.joinLeague(
     league.$id,
     user.$id,
     requestData.teamName || `${user.name || user.email}'s Team`,
     requestData.teamAbbreviation
   );
 
+  // Create a draft document for this league
+  try {
+    const draftOrder = [user.$id]; // Start with just the commissioner
+    const draftDoc = await databases.createDocument(
+      DATABASE_ID,
+      COLLECTIONS.DRAFTS,
+      ID.unique(),
+      {
+        leagueId: league.$id,
+        leagueName: name,  // Direct attribute for easy querying
+        gameMode: gameMode,
+        selectedConference: selectedConference || null,
+        maxTeams: maxTeams,
+        status: 'scheduled', // Will change to 'active' when draft starts
+        type: draftType || 'snake', // Default to snake draft
+        currentRound: 0,
+        currentPick: 0,
+        maxRounds: requestData.draftRounds || 15,
+        startTime: requestData.draftDate || null,
+        isMock: false,
+        clockSeconds: pickTimeSeconds,
+        orderJson: JSON.stringify({
+          draftOrder,
+          draftType: draftType,
+          totalTeams: maxTeams,
+          pickTimeSeconds,
+        }),
+      }
+    );
+    console.log('Draft document created:', draftDoc.$id);
+  } catch (error) {
+    // Log but don't fail league creation if draft doc fails
+    console.error('Failed to create draft document:', error);
+  }
+
   return NextResponse.json({
     success: true,
     league,
-    fantasy_team_id,
+    fantasyTeamId,
     message: 'League created successfully!'
   });
 });

@@ -129,11 +129,11 @@ export default function MockDraftPage() {
           class: player.year,
           height: player.height,
           weight: typeof player.weight === 'string' ? parseInt(player.weight) : player.weight,
-          projectedPoints: player.projectedPoints || player.fantasy_points || 0, // Use enhanced projections
+          projectedPoints: player.projectedPoints || player.fantasyPoints || 0, // Use enhanced projections
           adp: player.adp,
           projections: player.projections || {
             season: {
-              total: player.projectedPoints || player.fantasy_points || 0,
+              total: player.projectedPoints || player.fantasyPoints || 0,
               passing: 0,
               rushing: 0,
               receiving: 0,
@@ -350,7 +350,7 @@ export default function MockDraftPage() {
               // Use auth user info if available, otherwise guest mode
               const displayName = user?.name || user?.email || `Guest Player ${slot}`;
               const auth_user_id = user?.$id || null; // This is the Appwrite auth ID
-              return { slot, userType: 'human', displayName, client_id: auth_user_id };
+              return { slot, userType: 'human', displayName, clientId: authUserId };
             }
             return { slot, userType: 'bot', displayName: `Bot Team ${slot}` };
           })

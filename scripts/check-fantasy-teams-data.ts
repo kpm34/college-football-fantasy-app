@@ -33,8 +33,8 @@ async function checkFantasyTeamsData() {
     for (const team of fantasyTeams.documents) {
       console.log(`\nTeam: ${team.name}`);
       console.log(`  ID: ${team.$id}`);
-      console.log(`  League ID: ${team.league_id}`);
-      console.log(`  Owner Client ID: ${team.owner_client_id}`);
+      console.log(`  League ID: ${team.leagueId}`);
+      console.log(`  Owner Client ID: ${team.ownerClientId}`);
       console.log(`  Created: ${team.$createdAt}`);
     }
     
@@ -54,7 +54,7 @@ async function checkFantasyTeamsData() {
       console.log(`\nLeague: ${league.name}`);
       console.log(`  ID: ${league.$id}`);
       console.log(`  Commissioner: ${league.commissioner}`);
-      console.log(`  Owner Client ID: ${league.owner_client_id}`);
+      console.log(`  Owner Client ID: ${league.ownerClientId}`);
       console.log(`  Season: ${league.season}`);
       console.log(`  Status: ${league.status}`);
       
@@ -62,7 +62,7 @@ async function checkFantasyTeamsData() {
       const teams = await databases.listDocuments(
         DATABASE_ID,
         'fantasy_teams',
-        [Query.equal('league_id', league.$id)]
+        [Query.equal('leagueId', league.$id)]
       );
       console.log(`  Teams in league: ${teams.total}`);
     }

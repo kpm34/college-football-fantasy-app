@@ -10,7 +10,7 @@ interface DraftRealtimeState {
   picks: DraftPick[];
   currentPick: number;
   currentRound: number;
-  onTheClock: string | null; // client_id who is currently picking
+  onTheClock: string | null; // clientId who is currently picking
   isMyTurn: boolean;
   connected: boolean;
   loading: boolean;
@@ -34,6 +34,8 @@ export function useDraftRealtime(leagueId: string) {
   });
   // Track IDs that represent "me" for turn checks (auth user id + roster doc ids)
   const myIdsRef = useRef<Set<string>>(new Set());
+  // Cache the user's fantasy team ID for this league
+  const myFantasyTeamIdRef = useRef<string | null>(null);
 
   // Initialize draft data
   useEffect(() => {
@@ -50,12 +52,19 @@ export function useDraftRealtime(leagueId: string) {
         }
         
         const { data } = await response.json();
-        const { league, userTeams, picks: picksData, client_id, draftState } = data as any;
+        const { league, userTeams, picks: picksData, userId, draftState } = data as any;
 
-        // Load my roster ids within this league (some data paths use roster $id instead of client_id)
-        myIdsRef.current = new Set([client_id]);
+        // Load my roster ids within this league (some data paths use roster $id instead of authUserId)
+        myIdsRef.current = new Set([userId]);
         for (const d of userTeams as any[]) {
-          if (d?.$id) myIdsRef.current.add(String(d.$id));
+          if (d?.$id) {
+            myIdsRef.current.add(String(d.$id));
+            // Cache the fantasy team ID for this user
+            if (d.ownerAuthUserId === userId || d.userId === userId || d.clientId === userId) {
+              myFantasyTeamIdRef.current = d.$id;
+            }
+          }
+          if (d?.ownerAuthUserId) myIdsRef.current.add(String(d.ownerAuthUserId));
         }
 
         // Use picks from API response
@@ -66,7 +75,7 @@ export function useDraftRealtime(leagueId: string) {
           leagueId: doc.leagueId,
           round: doc.round,
           pickNumber: typeof doc.pickNumber === 'number' ? doc.pickNumber : (doc.pick as number),
-          userId: doc.client_id,
+          userId: doc.authUserId || doc.userId || doc.teamId,  // Support multiple field names
           playerId: doc.playerId,
           playerName: doc.playerName,
           playerPosition: doc.playerPosition,
@@ -189,7 +198,7 @@ export function useDraftRealtime(leagueId: string) {
         leagueId: src.leagueId,
         round: src.round,
         pickNumber: typeof src.pickNumber === 'number' ? src.pickNumber : (src.pick as number),
-        userId: src.client_id,
+        userId: src.clientId,
         playerId: src.playerId,
         playerName: src.playerName,
         playerPosition: src.playerPosition,
@@ -283,7 +292,7 @@ export function useDraftRealtime(leagueId: string) {
         leagueId: src.leagueId,
         round: src.round,
         pickNumber: typeof src.pickNumber === 'number' ? src.pickNumber : (src.pick as number),
-        userId: src.client_id,
+        userId: src.clientId,
         playerId: src.playerId,
         playerName: src.playerName,
         playerPosition: src.playerPosition,
@@ -323,11 +332,30 @@ export function useDraftRealtime(leagueId: string) {
     }
 
     try {
+      // Use the cached fantasy team ID or fall back to onTheClock
+      const fantasyTeamId = myFantasyTeamIdRef.current || state.onTheClock;
+      
+      if (!fantasyTeamId) {
+        throw new Error('Could not determine fantasy team ID');
+      }
+
+      console.log('[Draft] Making pick:', {
+        playerId,
+        fantasyTeamId,
+        userId: user.$id,
+        onTheClock: state.onTheClock
+      });
+
       const res = await fetch(`/api/drafts/${leagueId}/pick`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId, teamId: (state as any).league?.myTeamId || state.onTheClock, by: user.$id })
+        body: JSON.stringify({ 
+          playerId, 
+          fantasyTeamId,
+          by: user.$id 
+        })
       });
+      
       if (!res.ok) {
         const t = await res.text();
         throw new Error(t || 'Failed to make pick');

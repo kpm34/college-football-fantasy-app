@@ -22,7 +22,7 @@ function generateSeed(): string {
 export async function createDraft(
   draftName: string,
   config: DraftConfig,
-  participants?: Array<{ slot: number; userType: UserType; displayName: string; client_id?: string }>,
+  participants?: Array<{ slot: number; userType: UserType; displayName: string; clientId?: string }>,
   numTeams: number = 8
 ): Promise<string> {
   try {
@@ -39,17 +39,17 @@ export async function createDraft(
         COLLECTIONS.DRAFTS,
         ID.unique(),
         {
-          leagueId: 'mock-draft', // Use a special league ID for mock drafts
+          leagueId: config.leagueId || 'mock-draft', // Prefer real league when provided
           status: 'active',
           type: 'mock', // Mark as mock draft type
           currentRound: 1,
           currentPick: 1,
           maxRounds: config.rounds,
           startTime: new Date().toISOString(),
-          is_mock: true,
-          clock_seconds: config.timerPerPickSec || 0,
-          // Store draft metadata in order_json field
-          order_json: JSON.stringify({
+          isMock: true,
+          clockSeconds: config.timerPerPickSec || 0,
+          // Store draft metadata in orderJson field
+          orderJson: JSON.stringify({
             draftName: draftName,
             numTeams,
             snake: config.snake || true,
@@ -77,12 +77,12 @@ export async function createDraft(
 
     for (const p of participantsToCreate) {
       try {
-        // Store participant data in payload_json field since draft_events doesn't have userType/displayName fields
+        // Store participant data in payloadJson field since draft_events doesn't have userType/displayName fields
         const participantData = {
           userType: p.userType,
           displayName: p.displayName,
           slot: p.slot,
-          client_id: p.client_id || null
+          clientId: p.clientId || null
         };
         
         const participant = await databases.createDocument(
@@ -90,10 +90,10 @@ export async function createDraft(
           COLLECTIONS.DRAFT_EVENTS,
           ID.unique(),
           {
-            draft_id: draft.$id,
+            draftId: draft.$id,
             type: 'participant', // Mark as participant type
             overall: p.slot, // Use overall field to store slot number
-            payload_json: JSON.stringify(participantData),
+            payloadJson: JSON.stringify(participantData),
             ts: new Date().toISOString()
           }
         );
@@ -172,13 +172,13 @@ export async function startDraft(draftId: string): Promise<void> {
     const participantsResponse = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.DRAFT_EVENTS,
-      [Query.equal('draft_id', draftId), Query.equal('type', 'participant'), Query.orderAsc('overall')]
+      [Query.equal('draftId', draftId), Query.equal('type', 'participant'), Query.orderAsc('overall')]
     );
     
     // Parse participant data from payload_json
     const participants = participantsResponse.documents.map((doc: any) => {
-      if (doc.payload_json) {
-        const data = JSON.parse(doc.payload_json);
+      if (doc.payloadJson) {
+        const data = JSON.parse(doc.payloadJson);
         return { ...doc, ...data };
       }
       return doc;
@@ -258,7 +258,7 @@ export async function startDraft(draftId: string): Promise<void> {
           const existingPicks = await databases.listDocuments(
             DATABASE_ID,
             COLLECTIONS.DRAFT_EVENTS,
-            [Query.equal('draft_id', draftId), Query.equal('type', 'pick'), Query.orderAsc('overall')]
+            [Query.equal('draftId', draftId), Query.equal('type', 'pick'), Query.orderAsc('overall')]
           );
           
           if (existingPicks.total !== overall - 1) {
@@ -287,12 +287,12 @@ export async function startDraft(draftId: string): Promise<void> {
             COLLECTIONS.DRAFT_EVENTS,
             ID.unique(),
             {
-              draft_id: draftId,
+              draftId: draftId,
               type: 'pick',
               round,
               overall,
-              player_id: selectedPlayer.id,
-              payload_json: JSON.stringify(pickData),
+              playerId: selectedPlayer.id,
+              payloadJson: JSON.stringify(pickData),
               ts: new Date().toISOString()
             }
           );
@@ -383,13 +383,13 @@ export async function getDraftResults(draftId: string): Promise<any> {
   try {
     // Get draft
     const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId);
-    // Parse config - for mock drafts it's in order_json
+    // Parse config - for mock drafts it's in orderJson
     let config = {};
-    if (draft.order_json && typeof draft.order_json === 'string') {
+    if (draft.orderJson && typeof draft.orderJson === 'string') {
       try {
-        config = JSON.parse(draft.order_json);
+        config = JSON.parse(draft.orderJson);
       } catch (e) {
-        console.error('Error parsing order_json:', e);
+        console.error('Error parsing orderJson:', e);
       }
     } else if (draft.config && typeof draft.config === 'string') {
       try {
@@ -404,7 +404,7 @@ export async function getDraftResults(draftId: string): Promise<any> {
     const participantsResponse = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.DRAFT_EVENTS,
-      [Query.equal('draft_id', draftId), Query.equal('type', 'participant'), Query.orderAsc('overall')]
+      [Query.equal('draftId', draftId), Query.equal('type', 'participant'), Query.orderAsc('overall')]
     );
     
     // Get picks (ensure we get all picks, not just default limit)
@@ -412,7 +412,7 @@ export async function getDraftResults(draftId: string): Promise<any> {
       DATABASE_ID,
       COLLECTIONS.DRAFT_EVENTS,
       [
-        Query.equal('draft_id', draftId),
+        Query.equal('draftId', draftId),
         Query.equal('type', 'pick'), 
         Query.orderAsc('overall'),
         Query.limit(500) // Increase limit to ensure we get all picks
@@ -425,8 +425,8 @@ export async function getDraftResults(draftId: string): Promise<any> {
     
     // Parse participant data from payload_json
     const participants = participantsResponse.documents.map((doc: any) => {
-      if (doc.payload_json) {
-        const data = JSON.parse(doc.payload_json);
+      if (doc.payloadJson) {
+        const data = JSON.parse(doc.payloadJson);
         return { ...doc, ...data };
       }
       return doc;
@@ -434,8 +434,8 @@ export async function getDraftResults(draftId: string): Promise<any> {
     
     // Parse pick data from payload_json
     const picks = picksResponse.documents.map((doc: any) => {
-      if (doc.payload_json) {
-        const data = JSON.parse(doc.payload_json);
+      if (doc.payloadJson) {
+        const data = JSON.parse(doc.payloadJson);
         return { ...doc, ...data };
       }
       return doc;
@@ -446,7 +446,7 @@ export async function getDraftResults(draftId: string): Promise<any> {
       const teamPicks = picks.filter((pick: any) => pick.slot === participant.slot);
       
       const players = teamPicks.map((pick: any) => {
-        const player = playerMap.get(pick.playerId || pick.player_id);
+        const player = playerMap.get(pick.playerId || pick.playerId);
         return {
           name: pick.playerName || player?.name || 'Unknown',
           position: pick.position || player?.position || 'Unknown',
@@ -497,13 +497,13 @@ function computeSlotFor(overall: number, numTeams: number): { round: number; slo
 
 async function getDraftDoc(draftId: string) {
   const d = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId);
-  // For mock drafts, config is stored in order_json
+  // For mock drafts, config is stored in orderJson
   let cfg = {};
-  if (d.order_json && typeof d.order_json === 'string') {
+  if (d.orderJson && typeof d.orderJson === 'string') {
     try {
-      cfg = JSON.parse(d.order_json);
+      cfg = JSON.parse(d.orderJson);
     } catch (e) {
-      console.error('Error parsing order_json:', e);
+      console.error('Error parsing orderJson:', e);
     }
   } else if (d.config && typeof d.config === 'string') {
     // Fallback to old config field if it exists
@@ -544,7 +544,7 @@ export async function getTurn(draftId: string): Promise<TurnState> {
   }
 
   const picks = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
-    Query.equal('draft_id', draftId),
+    Query.equal('draftId', draftId),
     Query.equal('type', 'pick'),
     Query.orderAsc('overall'),
     Query.limit(500)
@@ -555,7 +555,7 @@ export async function getTurn(draftId: string): Promise<TurnState> {
   const { round, slot } = computeSlotFor(nextOverall, numTeams);
 
   const parts = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
-    Query.equal('draft_id', draftId),
+    Query.equal('draftId', draftId),
     Query.equal('type', 'participant'),
     Query.equal('overall', slot), // slot is stored in overall field for participants
     Query.limit(1)
@@ -564,7 +564,7 @@ export async function getTurn(draftId: string): Promise<TurnState> {
   // Parse participant data from payload_json
   const participant = participantDoc ? {
     ...participantDoc,
-    ...(participantDoc.payload_json ? JSON.parse(participantDoc.payload_json) : {})
+    ...(participantDoc.payloadJson ? JSON.parse(participantDoc.payloadJson) : {})
   } : null;
   if (!participant) throw new Error('Participant not found for slot');
 
@@ -584,7 +584,7 @@ export async function getTurn(draftId: string): Promise<TurnState> {
 async function selectBestAvailablePlayer(draftId: string, seed: string | undefined) {
   // Uses your existing playerPool + ranker; falls back to first available
   const picked = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
-    Query.equal('draft_id', draftId),
+    Query.equal('draftId', draftId),
     Query.equal('type', 'pick'),
     Query.select(['playerId']),
     Query.limit(500)
@@ -625,9 +625,9 @@ export async function applyPick(draftId: string, participantId: string, playerId
 
   // Prevent duplicate player
   const existing = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
-    Query.equal('draft_id', draftId),
+    Query.equal('draftId', draftId),
     Query.equal('type', 'pick'),
-    Query.equal('player_id', playerId),
+    Query.equal('playerId', playerId),
     Query.limit(1)
   ]);
   if (existing.total > 0) {
@@ -648,19 +648,19 @@ export async function applyPick(draftId: string, participantId: string, playerId
   };
   
   await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, ID.unique(), {
-    draft_id: draftId,
+    draftId: draftId,
     type: 'pick',
     round: turn.round,
     overall: turn.overall,
-    player_id: playerId,
-    payload_json: JSON.stringify(pickData),
+    playerId: playerId,
+    payloadJson: JSON.stringify(pickData),
     ts: now.toISOString()
   });
 
   // Update lastPickAt in order_json for mock drafts
   const nextCfg = { ...cfg, lastPickAt: now.toISOString() };
   await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
-    order_json: JSON.stringify(nextCfg),
+    orderJson: JSON.stringify(nextCfg),
     currentPick: turn.overall + 1,
     currentRound: turn.round
   });

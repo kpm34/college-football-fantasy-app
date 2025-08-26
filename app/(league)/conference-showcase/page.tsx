@@ -21,7 +21,7 @@ interface ConferenceTeam {
   established?: number;
   conference_id?: string;
   power_4?: boolean;
-  created_at?: string;
+  createdAt?: string;
 }
 
 export default function ConferenceShowcasePage() {

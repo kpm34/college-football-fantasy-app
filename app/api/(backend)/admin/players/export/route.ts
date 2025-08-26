@@ -13,7 +13,7 @@ function csvEscape(value: any): string {
 }
 
 function toCsv(rows: any[]): string {
-  const headers = ['id','name','position','team','conference','season','cfbd_id','rating','draftable','power_4'];
+  const headers = ['id','name','position','team','conference','season','cfbdId','rating','draftable','power_4'];
   return [
     headers.join(','),
     ...rows.map((r) => headers.map((h) => csvEscape(r[h])).join(',')),
@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
           team: d.team,
           conference: d.conference,
           season: Number(d.season),
-          cfbd_id: d.cfbd_id,
+          cfbdId: d.cfbdId,
           rating: Number(d.rating ?? d.ea_rating ?? 0) || undefined,
           draftable: Boolean(d.draftable),
           power_4: Boolean(d.power_4),

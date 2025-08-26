@@ -44,7 +44,7 @@ export const COLLECTIONS: Record<string, CollectionDef> = {
       position: { type: 'enum', required: true, enumValues: ['QB','RB','WR','TE','K'] },
       team: { type: 'string', required: true },
       conference: { type: 'string', required: true },
-      fantasy_points: { type: 'number', required: true },
+      fantasyPoints: { type: 'number', required: true },
       depth_chart_order: { type: 'number', required: false },
       eligible: { type: 'boolean', required: true },
       draftable: { type: 'boolean', required: false },

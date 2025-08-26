@@ -25,8 +25,8 @@ export interface LeagueTeam {
 function mapRosterToTeam(doc: any): LeagueTeam {
   return {
     $id: doc.$id,
-    leagueId: doc.league_id || doc.leagueId,
-    userId: doc.owner_client_id || doc.client_id || doc.owner || '',
+    leagueId: doc.leagueId || doc.leagueId,
+    userId: doc.ownerClientId || doc.clientId || doc.owner || '',
     name: doc.name || doc.teamName || 'Team',
     userName: doc.userName,
     email: doc.email,
@@ -89,7 +89,7 @@ export function useLeagueMembersRealtime(leagueId: string) {
       const unsubscribe = client.subscribe(channel, (event: RealtimeResponseEvent<any>) => {
         setConnected(true)
         const payload = event.payload as any
-        if (!payload || (payload.league_id || payload.leagueId) !== leagueId) return
+        if (!payload || (payload.leagueId || payload.leagueId) !== leagueId) return
 
         // Handle create/update/delete
         if (event.events.some(e => e.endsWith('.create'))) {

@@ -62,14 +62,14 @@ export async function POST(request: NextRequest) {
       try {
         const rosterInfo = {
           teamName: roster.teamName,
-          userId: roster.client_id,
+          userId: roster.clientId,
           leagueId: roster.leagueId,
           status: 'ok'
         };
 
         // Verify user exists and can access
         try {
-          const userCheck = await fetch(`https://nyc.cloud.appwrite.io/v1/users/${roster.client_id}`, {
+          const userCheck = await fetch(`https://nyc.cloud.appwrite.io/v1/users/${roster.clientId}`, {
             headers: {
               'X-Appwrite-Project': 'college-football-fantasy-app',
               'X-Appwrite-Key': process.env.APPWRITE_API_KEY || '',
@@ -94,9 +94,9 @@ export async function POST(request: NextRequest) {
             roster.$id,
             {
               // Refresh the roster record with current data (only valid fields)
-              teamName: roster.teamName || `Team ${roster.client_id.slice(-4)}`,
+              teamName: roster.teamName || `Team ${roster.clientId.slice(-4)}`,
               leagueId: roster.leagueId,
-              userId: roster.client_id,
+              userId: roster.clientId,
               wins: roster.wins || 0,
               losses: roster.losses || 0,
               ties: roster.ties || 0,
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
         errors++;
         results.push({
           teamName: roster.teamName,
-          userId: roster.client_id,
+          userId: roster.clientId,
           status: 'processing_failed',
           error: error.message
         });

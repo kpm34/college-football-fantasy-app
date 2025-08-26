@@ -54,14 +54,14 @@ export async function POST(request: NextRequest) {
     // Group picks by client (owner) id to build each member's roster
     const rostersByUser: Record<string, any[]> = {};
     for (const pick of picks) {
-      const ownerId = (pick as any).owner_auth_user_id || (pick as any).userId;
+      const ownerId = (pick as any).ownerAuthUserId || (pick as any).userId;
       if (!ownerId) continue;
       if (!rostersByUser[ownerId]) {
         rostersByUser[ownerId] = [];
       }
       
       // Add player info to the roster
-      rostersByUser[pick.client_id].push({
+      rostersByUser[pick.clientId].push({
         playerId: pick.playerId,
         playerName: pick.playerName,
         playerPosition: pick.playerPosition,
@@ -84,17 +84,17 @@ export async function POST(request: NextRequest) {
           DATABASE_ID,
           COLLECTIONS.FANTASY_TEAMS,
           [
-            Query.equal('league_id', leagueId),
-            Query.equal('owner_auth_user_id', client_id as string),
+            Query.equal('leagueId', leagueId),
+            Query.equal('ownerAuthUserId', clientId as string),
             Query.limit(1)
           ]
         );
 
         if (rostersResponse.documents.length === 0) {
-          console.warn(`No roster found for user ${client_id} in league ${leagueId}`);
+          console.warn(`No roster found for user ${clientId} in league ${leagueId}`);
           errors++;
           results.push({
-            client_id,
+            clientId,
             status: 'error',
             message: 'No roster found for user'
           });
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
 
         processed++;
         results.push({
-          client_id,
+          clientId,
           teamName: roster.teamName,
           status: 'success',
           playersCount: draftedPlayers.length,
@@ -129,10 +129,10 @@ export async function POST(request: NextRequest) {
         console.log(`✅ Updated roster for ${roster.teamName}: ${draftedPlayers.length} players`);
 
       } catch (error) {
-        console.error(`❌ Failed to update roster for user ${client_id}:`, error);
+        console.error(`❌ Failed to update roster for user ${clientId}:`, error);
         errors++;
         results.push({
-          client_id,
+          clientId,
           status: 'error',
           message: error.message
         });

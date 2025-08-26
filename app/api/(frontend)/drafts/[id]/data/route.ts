@@ -36,7 +36,7 @@ export async function GET(
       const membership = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.LEAGUE_MEMBERSHIPS,
-        [Query.equal('league_id', leagueId), Query.equal('auth_user_id', user.$id), Query.limit(1)]
+        [Query.equal('leagueId', leagueId), Query.equal('authUserId', user.$id), Query.limit(1)]
       );
       isMember = (membership.total || membership.documents.length) > 0;
     } catch {}
@@ -46,7 +46,7 @@ export async function GET(
         const teams = await databases.listDocuments(
           DATABASE_ID,
           COLLECTIONS.FANTASY_TEAMS,
-          [Query.equal('league_id', leagueId), Query.equal('owner_auth_user_id', user.$id), Query.limit(1)]
+          [Query.equal('leagueId', leagueId), Query.equal('ownerAuthUserId', user.$id), Query.limit(1)]
         );
         isMember = (teams.total || teams.documents.length) > 0;
       } catch {}
@@ -61,6 +61,32 @@ export async function GET(
       COLLECTIONS.LEAGUES,
       leagueId
     );
+    
+    // Load draft document - this is the source of truth for draft data
+    let draftDoc: any = null;
+    try {
+      const drafts = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.DRAFTS,
+        [Query.limit(100)]
+      );
+      draftDoc = drafts.documents.find((d: any) => 
+        d.leagueId === leagueId || d.league_id === leagueId
+      );
+      
+      // Parse orderJson to get draft order
+      if (draftDoc?.orderJson) {
+        try {
+          const orderJson = JSON.parse(draftDoc.orderJson);
+          // Add draft order to league object for backward compatibility
+          (league as any).draftOrder = orderJson.draftOrder || [];
+        } catch (e) {
+          console.error('Error parsing orderJson:', e);
+        }
+      }
+    } catch (e) {
+      console.error('Error loading draft document:', e);
+    }
 
     // Load user's fantasy team(s)
     let userTeams: any[] = [];
@@ -68,7 +94,7 @@ export async function GET(
       const teamDocs = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.FANTASY_TEAMS,
-        [Query.equal('league_id', leagueId), Query.equal('owner_auth_user_id', user.$id)]
+        [Query.equal('leagueId', leagueId), Query.equal('ownerAuthUserId', user.$id)]
       );
       userTeams = teamDocs.documents;
     } catch {}

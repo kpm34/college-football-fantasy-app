@@ -4,7 +4,7 @@ import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/ap
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   const { id: draftId } = params;
-  const { by, fantasy_team_id } = await request.json().catch(() => ({}));
+  const { by, fantasyTeamId } = await request.json().catch(() => ({}));
 
   // TODO: verify commissioner auth if needed
 
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     DATABASE_ID,
     COLLECTIONS.draftEvents,
     ID.unique(),
-    { draftId, ts: new Date().toISOString(), type: 'resume', teamId: fantasy_team_id || 'system', round: 0, overall: 0, by: by || undefined }
+    { draftId, ts: new Date().toISOString(), type: 'resume', teamId: fantasyTeamId || 'system', round: 0, overall: 0, by: by || undefined }
   );
 
   // Update state

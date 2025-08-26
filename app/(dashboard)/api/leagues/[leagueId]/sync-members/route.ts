@@ -27,7 +27,7 @@ export async function POST(
     );
 
     // Extract user IDs from rosters (actual count)
-    const memberIds = rosters.documents.map((roster: any) => roster.client_id).filter(Boolean);
+    const memberIds = rosters.documents.map((roster: any) => roster.clientId).filter(Boolean);
     const actualTeamCount = rosters.total || rosters.documents.length;
     const maxTeams = (league as any).maxTeams || 12;
 

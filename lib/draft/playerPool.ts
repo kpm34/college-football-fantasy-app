@@ -19,7 +19,7 @@ export async function loadEligiblePlayers(): Promise<Player[]> {
         Query.equal('eligible', true),
         Query.equal('conference', ['SEC', 'ACC', 'Big 12', 'Big Ten']),
         Query.equal('position', ['QB', 'RB', 'WR', 'TE', 'K']),
-        Query.orderDesc('fantasy_points'),
+        Query.orderDesc('fantasyPoints'),
         Query.limit(1000) // Get top 1000 players for draft
       ]
     );
@@ -46,8 +46,8 @@ export async function loadEligiblePlayers(): Promise<Player[]> {
     }
 
     const players: Player[] = playersResponse.documents.map((player: any, index: number) => {
-      // Calculate base rank from fantasy_points and position
-      let baseRank = index + 1; // Use fantasy_points ordering as primary rank
+      // Calculate base rank from fantasyPoints and position
+      let baseRank = index + 1; // Use fantasyPoints ordering as primary rank
       
       // Adjust for team ranking if available
       const teamRank = rankingsMap.get(player.team);
@@ -74,7 +74,7 @@ export async function loadEligiblePlayers(): Promise<Player[]> {
         team: player.team || 'Unknown Team',
         baseRank,
         adp,
-        fantasyPoints: player.fantasy_points || 0
+        fantasyPoints: player.fantasyPoints || 0
       };
     });
 

@@ -112,7 +112,7 @@ async function main() {
         Query.limit(1) as any
       ])
       const old = (candidates as any).documents[0]
-      if (old && Number(old.fantasy_points || old.points || 0) === Number(pr.fantasy_points || 0)) spot.projections.ok++
+      if (old && Number(old.fantasyPoints || old.points || 0) === Number(pr.fantasyPoints || 0)) spot.projections.ok++
       else spot.projections.mismatches.push({ projection: pr.$id, foundIn: sourceCol })
     } catch {}
   }

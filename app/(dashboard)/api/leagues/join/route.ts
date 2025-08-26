@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const rosterCountPage = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
-      [Query.equal('league_id', leagueId), Query.limit(1)]
+      [Query.equal('leagueId', leagueId), Query.limit(1)]
     );
     const rosterCount = (rosterCountPage as any).total ?? (rosterCountPage.documents?.length || 0);
     const maxTeams = (league as any).maxTeams ?? 12;
@@ -59,8 +59,8 @@ export async function POST(request: NextRequest) {
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
       [
-        Query.equal('league_id', leagueId),
-        Query.equal('owner_auth_user_id', user.$id)
+        Query.equal('leagueId', leagueId),
+        Query.equal('ownerAuthUserId', user.$id)
       ]
     );
     
@@ -84,13 +84,13 @@ export async function POST(request: NextRequest) {
     const rosterData: Record<string, any> = {
       // Preferred fields
       name: teamName || `${user.name || user.email}'s Team`,
-      league_id: leagueId,
-      owner_auth_user_id: user.$id,
-      display_name: user.name || user.email,
+      leagueId: leagueId,
+      ownerAuthUserId: user.$id,
+      displayName: user.name || user.email,
       // Back-compat synonyms used around the codebase
       teamName: teamName || `${user.name || user.email}'s Team`,
       leagueId: leagueId,
-      client_id: user.$id,
+      clientId: user.$id,
       userId: user.$id,
       wins: 0,
       losses: 0,
@@ -122,9 +122,9 @@ export async function POST(request: NextRequest) {
     const allRosters = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
-      [Query.equal('league_id', leagueId), Query.limit(1000)]
+      [Query.equal('leagueId', leagueId), Query.limit(1000)]
     );
-    const updatedMembers = Array.from(new Set((allRosters.documents || []).map((r: any) => r.owner_auth_user_id))).filter(Boolean);
+    const updatedMembers = Array.from(new Set((allRosters.documents || []).map((r: any) => r.ownerAuthUserId))).filter(Boolean);
     const currentTeams = (allRosters as any).total ?? updatedMembers.length;
 
     // Only include attributes that actually exist in the leagues collection to avoid
@@ -165,6 +165,53 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    // Create or update league membership record
+    try {
+      // Check if membership already exists
+      const existingMemberships = await databases.listDocuments(
+        DATABASE_ID,
+        'league_memberships',
+        [
+          Query.equal('leagueId', leagueId),
+          Query.equal('authUserId', user.$id),
+          Query.limit(1)
+        ]
+      );
+
+      if (existingMemberships.documents.length === 0) {
+        // Create new membership
+        await databases.createDocument(
+          DATABASE_ID,
+          'league_memberships',
+          ID.unique(),
+          {
+            leagueId: leagueId,
+            leagueName: league.name, // Include league name for display
+            authUserId: user.$id,
+            role: 'MEMBER',
+            status: 'ACTIVE',
+            joinedAt: new Date().toISOString(),
+            displayName: user.name || user.email
+          }
+        );
+      } else {
+        // Update existing membership to ACTIVE status and add league name
+        await databases.updateDocument(
+          DATABASE_ID,
+          'league_memberships',
+          existingMemberships.documents[0].$id,
+          {
+            status: 'ACTIVE',
+            leagueName: league.name,
+            joinedAt: new Date().toISOString()
+          }
+        );
+      }
+    } catch (error) {
+      console.error('Failed to create/update league membership:', error);
+      // Don't fail the join operation if membership tracking fails
+    }
+
     // Log activity
     try {
       await databases.createDocument(
@@ -188,7 +235,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Successfully joined league',
-      fantasy_team_id: roster.$id,
+      fantasyTeamId: roster.$id,
       leagueId: leagueId
     });
     

@@ -101,7 +101,7 @@ export default function DashboardPage() {
 
   const getTeamForLeague = (leagueId: string) => {
     return teams.find(team => {
-      const teamLeagueId = (team as any).leagueId ?? (team as any).league_id ?? (team as any).leagueID ?? (team as any).league;
+      const teamLeagueId = (team as any).leagueId ?? (team as any).leagueId ?? (team as any).leagueID ?? (team as any).league;
       return teamLeagueId === leagueId;
     });
   };
@@ -219,7 +219,7 @@ export default function DashboardPage() {
         ) : leagues.length === 0 && teams.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {teams.map((team) => {
-              const teamLeagueId = (team as any).leagueId ?? (team as any).league_id ?? (team as any).leagueID ?? (team as any).league;
+              const teamLeagueId = (team as any).leagueId ?? (team as any).leagueId ?? (team as any).leagueID ?? (team as any).league;
               return (
                 <div
                   key={team.$id}

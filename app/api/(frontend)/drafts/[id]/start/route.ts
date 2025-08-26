@@ -104,6 +104,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       if (order.length === 0 && Array.isArray((league as any).members)) {
         order = [...(league as any).members];
       }
+      // Do NOT auto-append bots here. Bots are only added when the commissioner clicks "Fill With Bots".
     } catch {}
 
     if (order.length === 0) {
@@ -127,6 +128,9 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       onClockTeamId: order[0],
       deadlineAt: new Date(now + pickTimeSeconds * 1000).toISOString(),
       pickTimeSeconds,
+      pickedPlayerIds: [], // Track picked players
+      availablePlayers: [], // Will be populated by draft UI
+      availablePlayersWithADP: [], // Will be populated with ADP data
     } as any;
 
     // Persist KV snapshot
