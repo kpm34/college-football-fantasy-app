@@ -205,7 +205,7 @@ export default function DraftResultsPage({ params }: { params: { draftId: string
             const slot = idx + 1;
             const team = perTeam[slot] || { picks: [] };
             const name = data.participants.find((p) => p.slot === slot)?.displayName || `Team ${slot}`;
-            const client_id = data.participants.find((p) => p.slot === slot)?.client_id;
+            const client_id = data.participants.find((p) => p.slot === slot)?.clientId;
             const userType = data.participants.find((p) => p.slot === slot)?.userType;
             return (
               <div key={slot} className="rounded-xl border p-4">
@@ -213,7 +213,7 @@ export default function DraftResultsPage({ params }: { params: { draftId: string
                   Team {slot}: {name}
                 </div>
                 <div className="text-xs text-gray-500 mb-2">
-                  {team.picks.length} picks • {userType === 'human' ? `Human${client_id ? ` (${client_id})` : ''}` : 'Bot'}
+                  {team.picks.length} picks • {userType === 'human' ? `Human${clientId ? ` (${clientId})` : ''}` : 'Bot'}
                 </div>
                 <div className="flex flex-col gap-1 max-h-[220px] overflow-auto text-sm">
                   {team.picks

@@ -24,7 +24,7 @@ export async function GET(
       DATABASE_ID,
       COLLECTIONS.ROSTERS,
       [
-        Query.equal('league_id', leagueId),
+        Query.equal('leagueId', leagueId),
         Query.limit(100)
       ]
     );
@@ -48,7 +48,7 @@ export async function GET(
         DATABASE_ID,
         COLLECTIONS.LEAGUE_MEMBERSHIPS,
         [
-          Query.equal('league_id', leagueId),
+          Query.equal('leagueId', leagueId),
           // Status is canonicalized to uppercase 'ACTIVE'
           Query.equal('status', 'ACTIVE'),
           Query.limit(200)
@@ -71,7 +71,7 @@ export async function GET(
     const uniqueUserIds = Array.from(
       new Set(
         (rosters.documents || [])
-          .map((d: any) => d.owner_auth_user_id || d.teammanager_id || d.auth_user_id || d.owner_client_id || d.client_id || d.owner || d.userId)
+          .map((d: any) => d.ownerAuthUserId || d.teammanager_id || d.authUserId || d.ownerClientId || d.clientId || d.owner || d.userId)
           .filter(Boolean)
       )
     );
@@ -81,9 +81,9 @@ export async function GET(
     // Build membership display name map (auth_user_id -> display_name)
     try {
       for (const m of memberships.documents || []) {
-        // Prefer auth_user_id, but retain client_id fallback if present
-        const key = (m as any).auth_user_id || (m as any).client_id;
-        if (key && m?.display_name) membershipName.set(String(key), String(m.display_name));
+        // Prefer authUserId, but retain clientId fallback if present
+        const key = (m as any).authUserId || (m as any).clientId;
+        if (key && m?.displayName) membershipName.set(String(key), String(m.displayName));
       }
     } catch {}
     // Resolve names via clients collection (auth_user_id -> display_name) with fallbacks
@@ -92,11 +92,11 @@ export async function GET(
         const clientsRes = await databases.listDocuments(
           DATABASE_ID,
           COLLECTIONS.CLIENTS,
-          [Query.equal('auth_user_id', uniqueUserIds as string[]), Query.limit(200)]
+          [Query.equal('authUserId', uniqueUserIds as string[]), Query.limit(200)]
         );
         for (const c of clientsRes.documents || []) {
-          if (c?.auth_user_id) {
-            idToName.set(String(c.auth_user_id), String(c.display_name || c.email || 'Unknown'));
+          if (c?.authUserId) {
+            idToName.set(String(c.authUserId), String(c.displayName || c.email || 'Unknown'));
           }
         }
 
@@ -109,7 +109,7 @@ export async function GET(
             [Query.equal('$id', unresolved as string[]), Query.limit(200)]
           );
           for (const c of clientsById.documents || []) {
-            idToName.set(String((c as any).$id), String((c as any).display_name || (c as any).email || 'Unknown'));
+            idToName.set(String((c as any).$id), String((c as any).displayName || (c as any).email || 'Unknown'));
           }
         }
       }
@@ -117,16 +117,16 @@ export async function GET(
 
     // Map to consistent format with resolved manager name
     const teams = rosters.documents.map((doc: any) => {
-      const ownerId = doc.owner_auth_user_id || doc.teammanager_id || doc.auth_user_id || doc.owner_client_id || doc.client_id || doc.owner || '';
+      const ownerId = doc.ownerAuthUserId || doc.teammanager_id || doc.authUserId || doc.ownerClientId || doc.clientId || doc.owner || '';
       const managerName =
         membershipName.get(ownerId) ||
         idToName.get(ownerId) ||
-        doc.display_name ||
+        doc.displayName ||
         doc.userName ||
         'Unknown';
       return {
         $id: doc.$id,
-        leagueId: doc.league_id,
+        leagueId: doc.leagueId,
         userId: ownerId,
         name: doc.name || doc.teamName || 'Team',
         userName: managerName,

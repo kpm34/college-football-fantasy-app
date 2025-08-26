@@ -85,6 +85,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
   const [draftDate, setDraftDate] = useState('');
   const [draftTime, setDraftTime] = useState('');
   const [pickTimeSeconds, setPickTimeSeconds] = useState(90);
+  const [draftType, setDraftType] = useState('snake');
   const [gameMode, setGameMode] = useState('power4');
   const [selectedConference, setSelectedConference] = useState('');
   const [seasonStartWeek, setSeasonStartWeek] = useState(1);
@@ -164,6 +165,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       setMaxTeams(league.maxTeams || 12);
       setIsPublic(league.isPublic ?? true);
       setPickTimeSeconds(league.pickTimeSeconds || 90);
+      setDraftType(league.draftType || 'snake');
       setGameMode(league.gameMode || 'power4');
       setSelectedConference(league.selectedConference || '');
       setSeasonStartWeek(league.seasonStartWeek || 1);
@@ -176,16 +178,17 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       setLeagueTrophyName(league.leagueTrophyName || 'Championship Trophy');
       // Draft order – default EMPTY unless an explicit saved order exists
       try {
+        const isHuman = (id: unknown) => typeof id === 'string' && !/^BOT-/i.test(id);
         const rawOrder = (league as any).draftOrder;
         if (rawOrder) {
           const parsed = Array.isArray(rawOrder) ? rawOrder : JSON.parse(rawOrder);
-          if (Array.isArray(parsed)) setDraftOrder(parsed);
+          if (Array.isArray(parsed)) setDraftOrder(parsed.filter(isHuman));
           else setDraftOrder([]);
         } else if (league.scoringRules) {
           try {
             const parsedRules = JSON.parse(league.scoringRules);
             if (Array.isArray(parsedRules?.draftOrderOverride)) {
-              setDraftOrder(parsedRules.draftOrderOverride);
+              setDraftOrder(parsedRules.draftOrderOverride.filter(isHuman));
             } else {
               setDraftOrder([]);
             }
@@ -200,11 +203,18 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       }
       setOrderMode(((league as any).orderMode as any) || 'custom');
       
-      // Parse draft date/time
+      // Parse draft date/time (handle local timezone correctly)
       if (league.draftDate) {
         const date = new Date(league.draftDate);
-        setDraftDate(date.toISOString().split('T')[0]);
-        setDraftTime(date.toTimeString().slice(0, 5));
+        // Use local date components to avoid timezone shifts
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        setDraftDate(`${year}-${month}-${day}`);
+        
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        setDraftTime(`${hours}:${minutes}`);
       }
       
       // Parse scoring rules
@@ -252,7 +262,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ draftDate: draftDateTime, pickTimeSeconds })
+        body: JSON.stringify({ draftDate: draftDateTime, pickTimeSeconds, draftType })
       });
       
       const result = await response.json();
@@ -322,9 +332,12 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         updates.draftDate = new Date(`${draftDate}T${draftTime}`).toISOString();
       }
       updates.pickTimeSeconds = pickTimeSeconds;
-      // Persist draft order inside scoringRules payload (schema-safe)
-      const mergedRules = { ...scoringRules, draftOrderOverride: draftOrder.filter(Boolean) } as any;
-      updates.scoringRules = JSON.stringify(mergedRules);
+      updates.draftType = draftType;
+      // Save draft order as a separate field
+      // Only save human entries; bots are ephemeral and filled at draft start
+      const humanOrder = draftOrder.filter((id) => typeof id === 'string' && !/^BOT-/i.test(id)).filter(Boolean);
+      updates.draftOrder = humanOrder;
+      updates.scoringRules = JSON.stringify(scoringRules);
       
       console.log('Saving settings with updates:', updates);
       
@@ -518,11 +531,28 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                   className="w-full px-3 py-2 rounded-lg"
                   style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
                 >
-                  <option value="30">30 seconds</option>
-                  <option value="60">60 seconds</option>
-                  <option value="90">90 seconds</option>
+                  <option value="60">1 minute</option>
+                  <option value="90">1.5 minutes</option>
                   <option value="120">2 minutes</option>
+                  <option value="150">2.5 minutes</option>
                   <option value="180">3 minutes</option>
+                  <option value="210">3.5 minutes</option>
+                  <option value="240">4 minutes</option>
+                  <option value="270">4.5 minutes</option>
+                  <option value="300">5 minutes</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Draft Type</label>
+                <select
+                  value={draftType}
+                  onChange={(e) => setDraftType(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg"
+                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                >
+                  <option value="snake">Snake Draft</option>
+                  {/* <option value="auction">Auction Draft</option> - Add when implemented */}
                 </select>
               </div>
             </div>
@@ -554,7 +584,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
               <button
                 onClick={() => {
                   if (members.length === 0) return;
-                  const base = members.map(m => (m as any).client_id || m.$id);
+                  const base = members.map(m => (m as any).clientId || (m as any).authUserId || m.$id);
                   const shuffled = [...base].sort(() => Math.random() - 0.5);
                   setDraftOrder(shuffled);
                   setOrderMode('custom');
@@ -586,7 +616,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                 <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>Available Members</div>
                 <div className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900" style={{ border: `1px solid ${leagueColors.border.light}` }}>
                   {members.map((m, idx) => {
-                    const mid = (m as any).client_id || m.$id;
+                    const mid = (m as any).clientId || (m as any).authUserId || m.$id;
                     const selectedIdx = draftOrder.findIndex(id => id === mid);
                     const selected = selectedIdx !== -1;
                     return (
@@ -606,7 +636,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                               {selectedIdx + 1}
                             </span>
                           )}
-                          <span className="truncate">{m.name || m.teamName || m.$id}</span>
+                          <span className="truncate">{m.teamName || `${m.name}'s Team` || m.$id}</span>
                         </div>
                         {!selected && (
                           <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}>Add</span>
@@ -617,15 +647,19 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                 </div>
               </div>
               <div>
-                <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>Order (1..N)</div>
+                <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>Order</div>
                 <div className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900" style={{ border: `1px solid ${leagueColors.border.light}` }}>
                   {draftOrder.filter(Boolean).map((id, idx) => {
-                    const m = members.find(mm => mm.$id === id || (mm as any).client_id === id);
+                    const m = members.find(mm => mm.$id === id || (mm as any).clientId === id || (mm as any).authUserId === id);
+                    // Get display name - prefer teamName for consistency
+                    const displayName = id.startsWith('BOT-') 
+                      ? id 
+                      : (m?.teamName || (m?.name ? `${m.name}'s Team` : `User ${idx + 1}`));
                     return (
                       <div key={`${id}-${idx}`} className="flex items-center gap-3 px-3 py-2 rounded border" style={{ borderColor: leagueColors.border.light }}>
                         <div className="w-6 text-center font-medium">{idx+1}</div>
-                        <div className="flex-1 truncate" title={m?.name || m?.teamName || id}>
-                          {m?.name || m?.teamName || id}
+                        <div className="flex-1 truncate" title={displayName}>
+                          {displayName}
                         </div>
                         <div className="flex items-center gap-2">
                           <button onClick={() => setDraftOrder(prev => {

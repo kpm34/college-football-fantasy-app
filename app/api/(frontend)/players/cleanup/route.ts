@@ -62,11 +62,11 @@ export async function POST(request: NextRequest) {
     // 1) Load all players
     const players = await fetchAllPlayers(100);
 
-    // 2) Deduplicate by cfbd_id first
+    // 2) Deduplicate by cfbdId first
     const byCfbd: Map<string, AnyDoc[]> = new Map();
     const noCfbd: AnyDoc[] = [];
     for (const p of players) {
-      const cfbdId = normalizeString(p.cfbd_id || p.cfbdId);
+      const cfbdId = normalizeString(p.cfbdId || p.cfbdId);
       if (cfbdId) {
         const arr = byCfbd.get(cfbdId) || [];
         arr.push(p);

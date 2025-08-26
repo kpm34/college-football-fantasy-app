@@ -1,7 +1,7 @@
 // Core Player Types
 export interface Player {
   $id: string;
-  player_id: number;
+  playerId: number;
   name: string;
   pos: string;
   team: string;
@@ -56,7 +56,7 @@ export interface PlayerStats {
 
 // Season Projection
 export interface SeasonProjection {
-  player_id: number;
+  playerId: number;
   proj_pts_total: number;
   ceiling: number;
   floor: number;
@@ -68,7 +68,7 @@ export interface SeasonProjection {
 
 // Weekly Projection
 export interface WeeklyProjection {
-  player_id: number;
+  playerId: number;
   week: number;
   opponent: string;
   is_conf_game: boolean;
@@ -131,8 +131,8 @@ export interface PlayerComparison {
 export interface DraftBoardState {
   available_players: DraftablePlayer[];
   drafted_players: DraftedPlayer[];
-  current_pick: number;
-  current_round: number;
+  currentPick: number;
+  currentRound: number;
   time_remaining: number;
   is_user_turn: boolean;
   filters: PlayerFilters;
@@ -145,14 +145,14 @@ export interface DraftedPlayer {
   player: Player;
   pick_number: number;
   round: number;
-  team_id: string;
-  team_name: string;
+  teamId: string;
+  teamName: string;
   timestamp: Date;
 }
 
 // Team Needs Analysis
 export interface TeamNeeds {
-  team_id: string;
+  teamId: string;
   current_roster: Player[];
   needs: {
     position: string;

@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     // 1) fantasy_teams: ensure owner_client_id is Auth user id and display_name hydrated
     const teams = await databases.listDocuments(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, [Query.limit(1000)])
     for (const t of teams.documents as any[]) {
-      const currentOwner: string | undefined = t.owner_client_id || t.client_id || t.owner
+      const currentOwner: string | undefined = t.ownerClientId || t.clientId || t.owner
       if (!currentOwner || String(currentOwner).startsWith('BOT-')) continue
 
       let desiredId: string | undefined = currentOwner
@@ -35,20 +35,20 @@ export async function POST(request: NextRequest) {
         // Fallback: treat as clients doc id
         try {
           const clientDoc: any = await databases.getDocument(DATABASE_ID, COLLECTIONS.CLIENTS, currentOwner)
-          if (clientDoc?.auth_user_id) {
-            desiredId = clientDoc.auth_user_id
-            display = clientDoc.display_name || clientDoc.email || 'Unknown User'
+          if (clientDoc?.authUserId) {
+            desiredId = clientDoc.authUserId
+            display = clientDoc.displayName || clientDoc.email || 'Unknown User'
           }
         } catch {}
       }
 
       const payload: Record<string, any> = {}
-      if (desiredId && t.owner_client_id !== desiredId) {
-        payload.owner_client_id = desiredId
+      if (desiredId && t.ownerClientId !== desiredId) {
+        payload.ownerClientId = desiredId
         results.fantasyTeamOwnerIdsUpdated++
       }
-      if (display && t.display_name !== display) {
-        payload.display_name = display
+      if (display && t.displayName !== display) {
+        payload.displayName = display
         results.fantasyTeamsUpdated++
       }
       if (Object.keys(payload).length > 0) {
@@ -60,31 +60,31 @@ export async function POST(request: NextRequest) {
     try {
       const memberships = await databases.listDocuments(DATABASE_ID, 'league_memberships', [Query.limit(1000)])
       for (const m of memberships.documents as any[]) {
-        const currentClientId: string | undefined = m.client_id
+        const currentClientId: string | undefined = m.clientId
         let desiredId = currentClientId
         try {
           if (!currentClientId) continue
           let display = 'Unknown User'
 
-          // If client_id is already an Auth user id, use it
+          // If clientId is already an Auth user id, use it
           try {
             const u: any = await serverUsers.get(currentClientId)
             desiredId = u.$id
             display = u.name || u.email || display
           } catch {
-            // Otherwise, try to resolve via clients collection (id -> auth_user_id)
+            // Otherwise, try to resolve via clients collection (id -> authUserId)
             try {
               const clientDoc = await databases.getDocument(DATABASE_ID, COLLECTIONS.CLIENTS, currentClientId)
-              if (clientDoc?.auth_user_id) {
-                desiredId = clientDoc.auth_user_id
-                display = clientDoc.display_name || display
+              if (clientDoc?.authUserId) {
+                desiredId = clientDoc.authUserId
+                display = clientDoc.displayName || display
               }
             } catch {}
           }
 
           const payload: any = {}
-          if (desiredId && m.client_id !== desiredId) payload.client_id = desiredId
-          if (display && m.display_name !== display) payload.display_name = display
+          if (desiredId && m.clientId !== desiredId) payload.clientId = desiredId
+          if (display && m.displayName !== display) payload.displayName = display
           if (Object.keys(payload).length > 0) {
             await databases.updateDocument(DATABASE_ID, 'league_memberships', m.$id, payload)
             results.membershipsUpdated++

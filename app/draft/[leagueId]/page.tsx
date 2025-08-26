@@ -8,6 +8,8 @@ import DraftCore from '@components/features/draft/DraftCore';
 import { DraftPlayer } from '@lib/types/projections';
 import { FiStar, FiClock } from 'react-icons/fi';
 import DraftBoard from '@components/features/draft/DraftBoard';
+import MobileDraftInterface from '@components/features/draft/MobileDraftInterface';
+import MobileDraftErrorBoundary from '@components/features/draft/MobileDraftErrorBoundary';
 import { databases, DATABASE_ID } from '@lib/appwrite';
 import { Query } from 'appwrite';
 import { leagueColors } from '@lib/theme/colors';
@@ -40,6 +42,19 @@ export default function DraftRoom({ params }: Props) {
   const [deadlineTs, setDeadlineTs] = useState<number | null>(null);
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
   const [draftHasStarted, setDraftHasStarted] = useState<boolean>(false);
+  
+  // Mobile detection
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Resolve params
   useEffect(() => {
@@ -101,7 +116,7 @@ export default function DraftRoom({ params }: Props) {
   // Update my picks when draft picks change
   useEffect(() => {
     if (user && draft.picks.length > 0) {
-      const myDraftPicks = draft.picks.filter(pick => pick.client_id === user.$id);
+      const myDraftPicks = draft.picks.filter(pick => pick.authUserId === user.$id || pick.userId === user.$id);
       setMyPicks(
         myDraftPicks.map(pick => ({
           $id: pick.playerId,
@@ -110,7 +125,7 @@ export default function DraftRoom({ params }: Props) {
           team: pick.playerTeam,
           draftPosition: pick.pickNumber,
           isDrafted: true,
-          draftedBy: pick.client_id,
+          draftedBy: pick.authUserId || pick.userId,
           // Add other required fields with defaults
           projections: { fantasyPoints: 0 },
           rankings: { overall: 0, position: 0, adp: 0 },
@@ -303,6 +318,30 @@ export default function DraftRoom({ params }: Props) {
     }
   };
 
+  // Mobile interface for small screens
+  if (isMobile) {
+    // Ensure we have valid data before rendering mobile interface
+    const safeAvailablePlayers = availablePlayers || [];
+    const safeDraftOrder = draft?.league?.draftOrder || [];
+    const safeMyPicks = myPicks || [];
+    
+    return (
+      <MobileDraftErrorBoundary leagueId={leagueId}>
+        <MobileDraftInterface
+          players={safeAvailablePlayers}
+          myPicks={safeMyPicks}
+          draftOrder={safeDraftOrder}
+          currentPick={draft?.currentPick || null}
+          timeRemaining={secondsLeft}
+          onPickPlayer={handlePick}
+          isMyTurn={isMyTurn || false}
+          draftStarted={draftHasStarted || false}
+          leagueColors={leagueColors}
+        />
+      </MobileDraftErrorBoundary>
+    );
+  }
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main, color: leagueColors.text.primary }}>
       {/* Pre-draft banner */}
@@ -363,7 +402,20 @@ export default function DraftRoom({ params }: Props) {
       {interfaceMode==='dashboard' && (
         <div className="mx-auto px-2 lg:px-4 mt-3 w-full overflow-x-auto whitespace-nowrap py-2 rounded-md" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
           {draft.picks.length === 0 ? (
-            <span className="px-3 text-sm" style={{ color: leagueColors.text.secondary }}>No picks yet</span>
+            <div className="flex items-center gap-4">
+              <span className="px-3 text-sm font-semibold" style={{ color: leagueColors.text.primary }}>Draft Order:</span>
+              {(draft.league?.draftOrder || []).map((uid: string, idx: number) => (
+                <span key={uid} className="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full" 
+                  style={{ 
+                    backgroundColor: idx === 0 && draftHasStarted ? leagueColors.primary : leagueColors.background.overlay, 
+                    border: `1px solid ${idx === 0 && draftHasStarted ? leagueColors.primary : leagueColors.border.light}`, 
+                    color: idx === 0 && draftHasStarted ? '#fff' : leagueColors.text.primary 
+                  }}>
+                  <span className="font-bold">#{idx + 1}</span>
+                  <span>{users[uid]?.name || (uid.startsWith('BOT-') ? uid : 'Team')}</span>
+                </span>
+              ))}
+            </div>
           ) : (
             draft.picks.slice(-12).map((p, i) => {
               const pos = (p.playerPosition || '').toUpperCase();
@@ -373,7 +425,7 @@ export default function DraftRoom({ params }: Props) {
                 <span key={`${p.$id || p.playerId}-${i}`} className="inline-flex items-center gap-2 text-xs px-3 py-1 m-1 rounded-full" style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
                   <span className="inline-flex items-center justify-center w-8 h-5 rounded text-[10px] font-bold" style={{ backgroundColor: bg, color: fg }}>{pos || '—'}</span>
                   <span>{p.playerName || p.playerId}</span>
-                  <span className="text-[10px]" style={{ color: leagueColors.text.secondary }}>{users[p.client_id]?.name ? users[p.client_id].name : 'Team'}</span>
+                  <span className="text-[10px]" style={{ color: leagueColors.text.secondary }}>{users[p.authUserId || p.userId]?.name ? users[p.authUserId || p.userId].name : 'Team'}</span>
                 </span>
               );
             })
@@ -413,7 +465,7 @@ export default function DraftRoom({ params }: Props) {
                 overall: p.pickNumber,
                 round: p.round,
                 slot: undefined,
-                userId: p.client_id,
+                userId: p.authUserId || p.userId,
                 playerName: p.playerName,
                 playerId: p.playerId,
                 position: p.playerPosition,
@@ -433,10 +485,10 @@ export default function DraftRoom({ params }: Props) {
           <aside className="lg:col-span-3 rounded-none p-4" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
             <h2 className="font-medium text-sm mb-2" style={{ color: leagueColors.text.primary }}>My Team</h2>
             <div className="space-y-2">
-              {draft.picks.filter(p=>p.client_id===user?.$id).length===0 ? (
+              {draft.picks.filter(p=>(p.authUserId===user?.$id || p.userId===user?.$id)).length===0 ? (
                 <div className="text-xs" style={{ color: leagueColors.text.muted }}>No players drafted yet</div>
               ) : (
-                draft.picks.filter(p=>p.client_id===user?.$id).map((p,i)=> (
+                draft.picks.filter(p=>(p.authUserId===user?.$id || p.userId===user?.$id)).map((p,i)=> (
                   <div key={`${p.playerId}-${i}`} className="flex items-center justify-between text-sm py-1" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
                     <span className="font-medium">{p.playerName || idToName.get(p.playerId) || p.playerId}</span>
                     <span className="text-gray-500">{String(p.playerPosition||'').toUpperCase()}</span>
@@ -509,14 +561,28 @@ export default function DraftRoom({ params }: Props) {
                           })()}
                         </td>
                         <td className="py-2 px-2" style={{ color: leagueColors.text.secondary }}>{pl.team || '-'}</td>
-                        <td className="py-2 px-1 text-center font-semibold">{pl.projectedPoints ?? pl.fantasy_points ?? '-'}</td>
+                        <td className="py-2 px-1 text-center font-semibold">{pl.projectedPoints ?? pl.fantasyPoints ?? '-'}</td>
                         <td className="py-2 px-1 text-center" style={{ color: leagueColors.text.secondary }}>{pl.adp?.toFixed ? pl.adp.toFixed(1) : '-'}</td>
                         <td className="py-2 px-2 text-center">
                           <button
-                            onClick={() => handleDraftPlayer({ $id: pl.id || pl.$id } as any)}
-                            disabled={!draftHasStarted || !draft.isMyTurn}
+                            onClick={() => {
+                              const playerId = pl.id || pl.$id || pl.playerId;
+                              console.log('[Draft] Selecting player:', { 
+                                playerId, 
+                                playerName: pl.name,
+                                playerData: pl 
+                              });
+                              handleDraftPlayer({ 
+                                $id: playerId,
+                                playerId: playerId,
+                                playerName: pl.name,
+                                position: pl.position,
+                                team: pl.team
+                              } as any);
+                            }}
+                            disabled={!draftHasStarted || (!draft.isMyTurn && draft.onTheClock !== user?.$id)}
                             className={`px-3 py-1.5 rounded text-xs font-bold transition-all ${
-                              (!draftHasStarted || !draft.isMyTurn) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'
+                              (!draftHasStarted || (!draft.isMyTurn && draft.onTheClock !== user?.$id)) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'
                             }`}
                             style={{ backgroundColor: '#B41F24', color: '#fff', border: '1px solid #8B0000' }}
                           >
@@ -543,7 +609,7 @@ export default function DraftRoom({ params }: Props) {
                       overall: p.pickNumber,
                       round: p.round,
                       slot: undefined,
-                      userId: p.client_id,
+                      userId: p.authUserId || p.userId,
                       playerName: p.playerName,
                       playerId: p.playerId,
                       position: p.playerPosition,
@@ -572,7 +638,7 @@ export default function DraftRoom({ params }: Props) {
             </div>
             {teamView && (
               <div className="space-y-2 max-h-[60vh] overflow-auto">
-                {draft.picks.filter((p:any)=> String(((draft.league?.draftOrder || []).indexOf(p.client_id))+1)===teamView).map((p:any, i:number)=> (
+                {draft.picks.filter((p:any)=> String(((draft.league?.draftOrder || []).indexOf(p.authUserId || p.userId))+1)===teamView).map((p:any, i:number)=> (
                   <div key={`${p.playerId}-${i}`} className="flex items-center justify-between text-sm py-1" style={{ borderBottom: `1px solid ${leagueColors.border.light}` }}>
                     <span>#{p.pickNumber}</span>
                     <span className="font-medium">{p.playerName||idToName.get(p.playerId)||p.playerId}</span>

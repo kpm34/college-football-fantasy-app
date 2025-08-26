@@ -211,8 +211,8 @@ export interface PlayerDocument extends Models.Document {
   position: 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF';
   team: string;
   conference: 'SEC' | 'ACC' | 'Big 12' | 'Big Ten';
-  fantasy_points: number;
-  depth_chart_order?: number;
+  fantasyPoints: number;
+  depthChartOrder?: number;
   eligible: boolean;
   year?: 'FR' | 'SO' | 'JR' | 'SR';
 }
@@ -220,12 +220,12 @@ export interface PlayerDocument extends Models.Document {
 export interface GameDocument extends Models.Document {
   week: number;
   season: number;
-  season_type: 'regular' | 'postseason';
-  home_team: string;
-  away_team: string;
-  home_score?: number;
-  away_score?: number;
-  start_date: string;
+  seasonType: 'regular' | 'postseason';
+  homeTeam: string;
+  awayTeam: string;
+  homeScore?: number;
+  awayScore?: number;
+  startDate: string;
   completed: boolean;
 }
 
@@ -284,7 +284,7 @@ export const AppwriteOperations = {
   async getAvailablePlayers(position?: string, limit: number = 50): Promise<Models.DocumentList<PlayerDocument>> {
     const queries = [
       AppwriteQuery.isEligible(),
-      AppwriteQuery.sortBy('fantasy_points', 'desc'),
+      AppwriteQuery.sortBy('fantasyPoints', 'desc'),
       AppwriteQuery.limit(limit)
     ];
     
@@ -302,7 +302,7 @@ export const AppwriteOperations = {
     return await GamesCollection.list([
       AppwriteQuery.bySeason(season),
       AppwriteQuery.byWeek(week),
-      AppwriteQuery.sortBy('start_date')
+      AppwriteQuery.sortBy('startDate')
     ]);
   }
 };

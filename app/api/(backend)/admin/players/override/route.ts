@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       ...(overrides[playerId] || {}),
       ...(team ? { team } : {}),
       ...(typeof draftable === 'boolean' ? { draftable } : {}),
-      updated_at: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     await databases.updateDocument(

@@ -140,7 +140,7 @@ export async function analyzeImage(
           role: 'user',
           content: [
             { type: 'text', text: prompt },
-            { type: 'image_url', image_url: { url: imageUrl } },
+            { type: 'imageUrl', image_url: { url: imageUrl } },
           ],
         },
       ],

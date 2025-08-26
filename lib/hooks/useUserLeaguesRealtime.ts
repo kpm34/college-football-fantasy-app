@@ -117,16 +117,16 @@ export function useUserLeaguesRealtime() {
       // Subscribe to roster changes (for when user gets kicked from league)
       const unsubscribeRosters = client.subscribe(rostersChannel, (event: RealtimeResponseEvent<any>) => {
         const payload = event.payload as any
-        if (!payload || payload.owner_client_id !== user.$id) return
+        if (!payload || payload.ownerClientId !== user.$id) return
 
-        console.log('User roster event:', event.events, payload.league_id || payload.leagueId)
+        console.log('User roster event:', event.events, payload.leagueId || payload.leagueId)
 
         // Handle roster deletion (user removed from league)
         if (event.events.some(e => e.endsWith('.delete'))) {
-          console.log('User removed from league:', payload.league_id || payload.leagueId)
+          console.log('User removed from league:', payload.leagueId || payload.leagueId)
           setState(prev => ({
             ...prev,
-            leagues: prev.leagues.filter(league => league.$id !== (payload.league_id || payload.leagueId))
+            leagues: prev.leagues.filter(league => league.$id !== (payload.leagueId || payload.leagueId))
           }))
         }
       })

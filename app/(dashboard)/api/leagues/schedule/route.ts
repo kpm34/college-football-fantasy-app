@@ -11,16 +11,16 @@ interface ScheduleRequest {
 }
 
 interface Matchup {
-  league_id: string;
+  leagueId: string;
   week: number;
-  home_team_id: string;
-  away_team_id: string;
-  home_score: number;
-  away_score: number;
+  homeTeamId: string;
+  awayTeamId: string;
+  homeScore: number;
+  awayScore: number;
   status: 'scheduled' | 'in_progress' | 'final';
   game_time?: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const teamsResponse = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.SCHOOLS,
-      [Query.equal('league_id', leagueId)]
+      [Query.equal('leagueId', leagueId)]
     );
 
     const teams = teamsResponse.documents;
@@ -63,16 +63,16 @@ export async function POST(request: NextRequest) {
           COLLECTIONS.MATCHUPS,
           ID.unique(),
           {
-            league_id: leagueId,
+            leagueId: leagueId,
             week: matchup.week,
-            home_team_id: matchup.home_team_id,
-            away_team_id: matchup.away_team_id,
-            home_score: 0,
-            away_score: 0,
+            homeTeamId: matchup.homeTeamId,
+            awayTeamId: matchup.awayTeamId,
+            homeScore: 0,
+            awayScore: 0,
             status: 'scheduled',
             season_year: seasonYear,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
           }
         );
         createdCount++;
@@ -89,17 +89,17 @@ export async function POST(request: NextRequest) {
       leagueId,
       {
         schedule_generated: true,
-        season_start_week: startWeek,
+        seasonStartWeek: startWeek,
         season_end_week: endWeek,
         total_weeks: endWeek - startWeek + 1,
-        updated_at: new Date().toISOString()
+        updatedAt: new Date().toISOString()
       }
     );
 
     return NextResponse.json({
       success: true,
       summary: {
-        league_id: leagueId,
+        leagueId: leagueId,
         teams: teamCount,
         weeks: endWeek - startWeek + 1,
         matchups_created: createdCount,
@@ -119,12 +119,12 @@ export async function POST(request: NextRequest) {
 }
 
 function generateSchedule(teams: any[], startWeek: number, endWeek: number): Matchup[] {
-  const fantasy_team_ids = teams.map(team => team.$id);
-  const teamCount = fantasy_team_ids.length;
+  const fantasyTeamIds = teams.map(team => team.$id);
+  const teamCount = fantasyTeamIds.length;
   const schedule: Matchup[] = [];
 
   // For odd number of teams, add a "BYE" team
-  const teamsWithBye = teamCount % 2 === 1 ? [...fantasy_team_ids, 'BYE'] : [...fantasy_team_ids];
+  const teamsWithBye = teamCount % 2 === 1 ? [...fantasyTeamIds, 'BYE'] : [...fantasyTeamIds];
   const adjustedTeamCount = teamsWithBye.length;
 
   // Generate round-robin schedule
@@ -136,12 +136,12 @@ function generateSchedule(teams: any[], startWeek: number, endWeek: number): Mat
   return schedule;
 }
 
-function generateWeekMatchups(fantasy_team_ids: string[], week: number): Matchup[] {
+function generateWeekMatchups(fantasyTeamIds: string[], week: number): Matchup[] {
   const matchups: Matchup[] = [];
-  const teamCount = fantasy_team_ids.length;
+  const teamCount = fantasyTeamIds.length;
   
   // Rotate teams for round-robin (except first team stays in place)
-  const rotatedTeams = [...fantasy_team_ids];
+  const rotatedTeams = [...fantasyTeamIds];
   if (week > 1) {
     // Rotate all teams except the first one
     const firstTeam = rotatedTeams[0];
@@ -165,15 +165,15 @@ function generateWeekMatchups(fantasy_team_ids: string[], week: number): Matchup
     }
 
     matchups.push({
-      league_id: '', // Will be set by caller
+      leagueId: '', // Will be set by caller
       week,
-      home_team_id: homeTeam,
-      away_team_id: awayTeam,
-      home_score: 0,
-      away_score: 0,
+      homeTeamId: homeTeam,
+      awayTeamId: awayTeam,
+      homeScore: 0,
+      awayScore: 0,
       status: 'scheduled',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     });
   }
 
@@ -194,7 +194,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let queries = [Query.equal('league_id', leagueId)];
+    let queries = [Query.equal('leagueId', leagueId)];
     if (week) {
       queries.push(Query.equal('week', parseInt(week)));
     }

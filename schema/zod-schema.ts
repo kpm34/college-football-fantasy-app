@@ -22,12 +22,12 @@ export const CollegePlayers = z.object({
   weight: z.number().int().min(150).max(400).optional(),
   year: z.enum(['FR', 'SO', 'JR', 'SR']).optional(),
   eligible: z.boolean().default(true),
-  fantasy_points: z.number().default(0),
-  season_fantasy_points: z.number().default(0),
-  depth_chart_order: z.number().int().optional(),
-  last_projection_update: z.date().optional(),
-  external_id: z.string().max(50).optional(),
-  image_url: z.string().url().optional(),
+  fantasyPoints: z.number().default(0),
+  seasonFantasyPoints: z.number().default(0),
+  depthChartOrder: z.number().int().optional(),
+  lastProjectionUpdate: z.date().optional(),
+  externalId: z.string().max(50).optional(),
+  imageUrl: z.string().url().optional(),
   stats: z.string().max(5000).optional() // JSON string
 });
 
@@ -36,44 +36,44 @@ export const Teams = z.object({
   abbreviation: z.string().min(2).max(10),
   conference: z.enum(['SEC', 'ACC', 'Big 12', 'Big Ten']),
   mascot: z.string().max(50).optional(),
-  logo_url: z.string().url().optional(),
-  primary_color: z.string().max(7).optional(), // hex color
-  secondary_color: z.string().max(7).optional(),
+  logoUrl: z.string().url().optional(),
+  primaryColor: z.string().max(7).optional(), // hex color
+  secondaryColor: z.string().max(7).optional(),
   venue: z.string().max(100).optional(),
   founded: z.number().int().min(1800).max(2100).optional(),
-  external_id: z.string().max(50).optional()
+  externalId: z.string().max(50).optional()
 });
 
 export const Games = z.object({
   season: z.number().int().min(2020).max(2035),
   week: z.number().int().min(1).max(20),
-  season_type: z.enum(['regular', 'postseason']),
-  home_team: z.string().min(2).max(50),
-  away_team: z.string().min(2).max(50),
-  home_school_id: z.string().optional(),
-  away_school_id: z.string().optional(),
-  home_score: z.number().int().min(0).optional(),
-  away_score: z.number().int().min(0).optional(),
-  kickoff_at: z.date(),
+  seasonType: z.enum(['regular', 'postseason']),
+  homeTeam: z.string().min(2).max(50),
+  awayTeam: z.string().min(2).max(50),
+  homeSchoolId: z.string().optional(),
+  awaySchoolId: z.string().optional(),
+  homeScore: z.number().int().min(0).optional(),
+  awayScore: z.number().int().min(0).optional(),
+  kickoffAt: z.date(),
   completed: z.boolean().default(false),
-  eligible_game: z.boolean().optional(),
+  eligibleGame: z.boolean().optional(),
   status: z.string().optional(),
 });
 
 export const Rankings = z.object({
   week: z.number().int().min(1).max(20),
   season: z.number().int().min(2020).max(2030),
-  poll_type: z.enum(['AP Top 25', 'Coaches Poll']),
+  pollType: z.enum(['AP Top 25', 'Coaches Poll']),
   team: z.string().min(2).max(50),
   rank: z.number().int().min(1).max(25),
   points: z.number().int().min(0).optional(),
-  first_place_votes: z.number().int().min(0).optional()
+  firstPlaceVotes: z.number().int().min(0).optional()
 });
 
 export const Leagues = z.object({
   name: z.string().min(1).max(100),
   // New canonical commissioner pointer (auth user id). Keep legacy commissioner for back-compat at runtime.
-  commissioner_auth_user_id: z.string().min(1).max(64).optional(),
+  commissionerAuthUserId: z.string().min(1).max(64).optional(),
   season: z.number().int().min(2020).max(2030),
   maxTeams: z.number().int().min(2).max(32),
   currentTeams: z.number().int().min(0).max(32).default(0),
@@ -94,20 +94,20 @@ export const Leagues = z.object({
 });
 
 export const Rosters = z.object({
-  league_id: z.string().min(1).max(64),
-  owner_auth_user_id: z.string().min(1).max(64).optional(),
+  leagueId: z.string().min(1).max(64),
+  ownerAuthUserId: z.string().min(1).max(64).optional(),
   name: z.string().min(1).max(128).optional(),
   abbrev: z.string().max(8).optional(),
-  logo_url: z.string().max(512).optional(),
+  logoUrl: z.string().max(512).optional(),
   wins: z.number().int().optional(),
   losses: z.number().int().optional(),
   ties: z.number().int().optional(),
-  points_for: z.number().optional(),
-  points_against: z.number().optional(),
-  draft_position: z.number().int().optional(),
-  auction_budget_total: z.number().optional(),
-  auction_budget_remaining: z.number().optional(),
-  display_name: z.string().max(255).optional()
+  pointsFor: z.number().optional(),
+  pointsAgainst: z.number().optional(),
+  draftPosition: z.number().int().optional(),
+  auctionBudgetTotal: z.number().optional(),
+  auctionBudgetRemaining: z.number().optional(),
+  displayName: z.string().max(255).optional()
 });
 
 export const Lineups = z.object({
@@ -147,7 +147,7 @@ export const PlayerStats = z.object({
   week: z.number().int().min(1).max(20),
   season: z.number().int().min(2020).max(2030),
   stats: z.string().max(2000), // JSON stats object
-  fantasy_points: z.number().default(0),
+  fantasyPoints: z.number().default(0),
   updated: z.date().default(() => new Date())
 });
 
@@ -158,8 +158,8 @@ export const ActivityLog = z.object({
   action: z.string().min(1).max(100),
   details: z.string().max(1000).optional(),
   timestamp: z.date().default(() => new Date()),
-  ip_address: z.string().max(45).optional(),
-  user_agent: z.string().max(500).optional()
+  ipAddress: z.string().max(45).optional(),
+  userAgent: z.string().max(500).optional()
 });
 
 /**
@@ -167,15 +167,15 @@ export const ActivityLog = z.object({
  * Aligns with live DB: meshy_jobs
  */
 export const MeshyJobs = z.object({
-  user_id: z.string().optional(),
+  userId: z.string().optional(),
   prompt: z.string().optional(),
   mode: z.string().optional(),
-  image_url: z.string().optional(),
-  result_url: z.string().optional(),
+  imageUrl: z.string().optional(),
+  resultUrl: z.string().optional(),
   status: z.string().optional(),
-  created_at: z.string().optional(),
-  updated_at: z.string().optional(),
-  webhook_secret: z.string().optional(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+  webhookSecret: z.string().optional(),
 });
 
 /**
@@ -248,67 +248,67 @@ export const PlayerProjections = z.object({
   version: z.number().int().min(1).default(1),
   points: z.number().optional(),
   components: z.string().max(10000).optional(), // JSON payload with base, multipliers, etc.
-  fantasy_points: z.number().optional(),
+  fantasyPoints: z.number().optional(),
   data: z.string().max(10000).optional() // legacy JSON payload
 });
 
 export const ProjectionsYearly = z.object({
   // Live DB: projections_yearly
-  player_id: z.string().min(1).max(64),
+  playerId: z.string().min(1).max(64),
   season: z.number().int().min(2020).max(2035),
-  team_id: z.string().max(64).optional(),
+  teamId: z.string().max(64).optional(),
   position: z.enum(['QB', 'RB', 'WR', 'TE']),
-  model_version: z.string().min(1).max(50),
-  games_played_est: z.number().optional(),
-  usage_rate: z.number().optional(),
-  pace_adj: z.number().optional(),
-  fantasy_points_simple: z.number().optional(),
-  range_floor: z.number().optional(),
-  range_median: z.number().optional(),
-  range_ceiling: z.number().optional(),
-  injury_risk: z.number().optional(),
-  volatility_score: z.number().optional(),
-  replacement_value: z.number().optional(),
-  adp_est: z.number().optional(),
-  ecr_rank: z.number().int().optional(),
-  statline_simple_json: z.string().optional()
+  modelVersion: z.string().min(1).max(50),
+  gamesPlayedEst: z.number().optional(),
+  usageRate: z.number().optional(),
+  paceAdj: z.number().optional(),
+  fantasyPointsSimple: z.number().optional(),
+  rangeFloor: z.number().optional(),
+  rangeMedian: z.number().optional(),
+  rangeCeiling: z.number().optional(),
+  injuryRisk: z.number().optional(),
+  volatilityScore: z.number().optional(),
+  replacementValue: z.number().optional(),
+  adpEst: z.number().optional(),
+  ecrRank: z.number().int().optional(),
+  statlineSimpleJson: z.string().optional()
 });
 
 export const ProjectionsWeekly = z.object({
   // Live DB: projections_weekly
-  player_id: z.string().min(1).max(64),
+  playerId: z.string().min(1).max(64),
   season: z.number().int().min(2020).max(2035),
   week: z.number().int().min(1).max(20),
-  opponent_team_id: z.string().max(64).optional(),
-  home_away: z.enum(['H', 'A', 'N']).optional(),
-  team_total_est: z.number().optional(),
-  pace_matchup_adj: z.number().optional(),
-  fantasy_points_simple: z.number().optional(),
-  boom_prob: z.number().optional(),
-  bust_prob: z.number().optional(),
-  defense_vs_pos_grade: z.number().optional(),
-  injury_status: z.enum(['Healthy', 'Questionable', 'Doubtful', 'Out']).optional(),
-  utilization_trend: z.enum(['+', '=', '-']).optional(),
-  rank_pro: z.number().int().optional(),
-  start_sit_color: z.enum(['Green', 'Yellow', 'Red']).optional()
+  opponentTeamId: z.string().max(64).optional(),
+  homeAway: z.enum(['H', 'A', 'N']).optional(),
+  teamTotalEst: z.number().optional(),
+  paceMatchupAdj: z.number().optional(),
+  fantasyPointsSimple: z.number().optional(),
+  boomProb: z.number().optional(),
+  bustProb: z.number().optional(),
+  defenseVsPosGrade: z.number().optional(),
+  injuryStatus: z.enum(['Healthy', 'Questionable', 'Doubtful', 'Out']).optional(),
+  utilizationTrend: z.enum(['+', '=', '-']).optional(),
+  rankPro: z.number().int().optional(),
+  startSitColor: z.enum(['Green', 'Yellow', 'Red']).optional()
 });
 
 export const ModelInputs = z.object({
   // Live DB: model_inputs
   season: z.number().int().min(2020).max(2035),
   week: z.number().int().min(1).max(20).optional(),
-  depth_chart: z.string().optional(),
-  team_pace: z.string().optional(),
-  pass_rate: z.string().optional(),
-  rush_rate: z.string().optional(),
-  depth_chart_json: z.string().optional(),
-  usage_priors_json: z.string().optional(),
-  team_efficiency_json: z.string().optional(),
-  pace_estimates_json: z.string().optional(),
-  opponent_grades_by_pos_json: z.string().optional(),
-  manual_overrides_json: z.string().optional(),
-  ea_ratings_json: z.string().optional(),
-  nfl_draft_capital_json: z.string().optional()
+  depthChart: z.string().optional(),
+  teamPace: z.string().optional(),
+  passRate: z.string().optional(),
+  rushRate: z.string().optional(),
+  depthChartJson: z.string().optional(),
+  usagePriorsJson: z.string().optional(),
+  teamEfficiencyJson: z.string().optional(),
+  paceEstimatesJson: z.string().optional(),
+  opponentGradesByPosJson: z.string().optional(),
+  manualOverridesJson: z.string().optional(),
+  eaRatingsJson: z.string().optional(),
+  nflDraftCapitalJson: z.string().optional()
 });
 
 export const UserCustomProjections = z.object({
@@ -316,7 +316,7 @@ export const UserCustomProjections = z.object({
   playerId: z.string().min(1).max(50),
   season: z.number().int().min(2020).max(2035),
   week: z.number().int().min(1).max(20).optional(),
-  fantasy_points: z.number().optional(),
+  fantasyPoints: z.number().optional(),
   notes: z.string().max(2000).optional()
 });
 
@@ -324,12 +324,13 @@ export const UserCustomProjections = z.object({
  * League Memberships (normalized user membership with role)
  */
 export const LeagueMemberships = z.object({
-  league_id: z.string().min(1).max(50),
-  auth_user_id: z.string().min(1).max(64),
+  leagueId: z.string().min(1).max(50),
+  leagueName: z.string().min(1).max(100).optional(), // Add league name for display
+  authUserId: z.string().min(1).max(64),
   role: z.enum(['COMMISSIONER', 'MEMBER']).default('MEMBER'),
   status: z.enum(['ACTIVE','INVITED','LEFT','KICKED']).default('ACTIVE'),
-  joined_at: z.string().optional(),
-  display_name: z.string().optional()
+  joinedAt: z.string().optional(),
+  displayName: z.string().optional()
 });
 
 /**
@@ -424,7 +425,7 @@ export const Invites = z.object({
   createdAt: z.string().optional(),
   email: z.string().email().optional(),
   expiresAt: z.string().optional(),
-  invited_by_auth_user_id: z.string().optional(),
+  invitedByAuthUserId: z.string().optional(),
   status: z.string().optional(),
   token: z.string().optional(),
   acceptedAt: z.string().optional(),
@@ -489,7 +490,7 @@ export const COLLECTIONS = {
   PLAYER_STATS: 'player_stats',
   PROJECTIONS: 'projections',
   MODEL_RUNS: 'model_runs',
-  // MODEL_VERSIONS: 'model_versions', // removed: no schema defined
+  // MODEL_VERSIONS: 'modelVersions', // removed: no schema defined
   
   // System
   ACTIVITY_LOG: 'activity_log',

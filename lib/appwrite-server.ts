@@ -79,7 +79,7 @@ export const COLLECTION_METADATA = {
     description: 'College football game schedule and results',
     attributeCount: 14,
     indexCount: 6,
-    requiredAttributes: ['week', 'season', 'season_type', 'home_team', 'away_team', 'start_date'],
+    requiredAttributes: ['week', 'season', 'seasonType', 'homeTeam', 'awayTeam', 'startDate'],
   },
   rankings: {
     id: 'rankings',
@@ -87,7 +87,7 @@ export const COLLECTION_METADATA = {
     description: 'AP Top 25 and other poll rankings',
     attributeCount: 7,
     indexCount: 5,
-    requiredAttributes: ['week', 'season', 'poll_type', 'team', 'rank'],
+    requiredAttributes: ['week', 'season', 'pollType', 'team', 'rank'],
   },
   leagues: {
     id: 'leagues',
@@ -103,7 +103,7 @@ export const COLLECTION_METADATA = {
     description: 'Fantasy team rosters within leagues',
     attributeCount: 13,
     indexCount: 4,
-    requiredAttributes: ['leagueId', 'client_id', 'teamName'],
+    requiredAttributes: ['leagueId', 'clientId', 'teamName'],
   },
   lineups: {
     id: 'lineups',
@@ -111,7 +111,7 @@ export const COLLECTION_METADATA = {
     description: 'Weekly fantasy lineups',
     attributeCount: 7,
     indexCount: 3,
-    requiredAttributes: ['fantasy_team_id', 'week', 'season'],
+    requiredAttributes: ['fantasyTeamId', 'week', 'season'],
   },
   auctions: {
     id: 'auctions',
@@ -127,7 +127,7 @@ export const COLLECTION_METADATA = {
     description: 'Auction bid history',
     attributeCount: 6,
     indexCount: 4,
-    requiredAttributes: ['auctionId', 'playerId', 'fantasy_team_id', 'amount', 'timestamp'],
+    requiredAttributes: ['auctionId', 'playerId', 'fantasyTeamId', 'amount', 'timestamp'],
   },
   player_stats: {
     id: 'player_stats',

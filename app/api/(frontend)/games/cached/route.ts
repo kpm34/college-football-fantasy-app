@@ -44,17 +44,17 @@ export async function GET(request: NextRequest) {
         const processedGames = response.documents.map(game => ({
           $id: game.$id,
           week: game.week,
-          homeTeam: game.homeTeam || game.home_team || 'TBD',
-          awayTeam: game.awayTeam || game.away_team || 'TBD',
-          homeScore: game.homeScore || game.home_score || 0,
-          awayScore: game.awayScore || game.away_score || 0,
-          startTime: game.startTime || game.start_time || game.start_date,
+          homeTeam: game.homeTeam || game.homeTeam || 'TBD',
+          awayTeam: game.awayTeam || game.awayTeam || 'TBD',
+          homeScore: game.homeScore || game.homeScore || 0,
+          awayScore: game.awayScore || game.awayScore || 0,
+          startTime: game.startTime || game.startTime || game.startDate,
           status: game.status || 'scheduled',
-          isConferenceGame: game.isConferenceGame || game.is_conference_game || game.eligible_game || false,
+          isConferenceGame: game.isConferenceGame || game.is_conference_game || game.eligibleGame || false,
           homeTeamRanked: game.homeTeamRanked || game.home_team_ranked || false,
           awayTeamRanked: game.awayTeamRanked || game.away_team_ranked || false,
           // Players are eligible if it's a conference game OR if either team is ranked
-          eligibleGame: game.eligible_game || game.isConferenceGame || game.is_conference_game || game.homeTeamRanked || game.home_team_ranked || game.awayTeamRanked || game.away_team_ranked || false,
+          eligibleGame: game.eligibleGame || game.isConferenceGame || game.is_conference_game || game.homeTeamRanked || game.home_team_ranked || game.awayTeamRanked || game.away_team_ranked || false,
         }));
 
         return {

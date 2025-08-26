@@ -33,7 +33,7 @@ export async function GET(
         const normalizedTeams = teams.map(team => ({
           ...team,
           colors: normalizeColors(team),
-          created_at: new Date().toISOString()
+          createdAt: new Date().toISOString()
         }));
 
         return NextResponse.json({
@@ -109,8 +109,8 @@ export async function GET(
           // Filter games for this conference
           const conferenceGames = gamesResponse.documents.filter(game => 
             teamNames.some(team => 
-              game.home_team?.includes(team) || 
-              game.away_team?.includes(team) ||
+              game.homeTeam?.includes(team) || 
+              game.awayTeam?.includes(team) ||
               game.homeTeam?.includes(team) || 
               game.awayTeam?.includes(team)
             )
@@ -118,13 +118,13 @@ export async function GET(
 
           const games = conferenceGames.map(game => ({
             id: game.$id,
-            homeTeam: game.home_team || game.homeTeam,
-            awayTeam: game.away_team || game.awayTeam,
+            homeTeam: game.homeTeam || game.homeTeam,
+            awayTeam: game.awayTeam || game.awayTeam,
             week: game.week,
-            date: game.date || game.start_date,
-            time: game.time || game.start_time,
-            homeScore: game.home_score || game.homeScore || null,
-            awayScore: game.away_score || game.awayScore || null,
+            date: game.date || game.startDate,
+            time: game.time || game.startTime,
+            homeScore: game.homeScore || game.homeScore || null,
+            awayScore: game.awayScore || game.awayScore || null,
             status: game.status || 'scheduled'
           }));
 

@@ -61,7 +61,7 @@ export class RosterRepository extends BaseRepository<Roster> {
     const result = await this.find({
       filters: {
         leagueId,
-        auth_user_id: userId  // use canonical field
+        authUserId: userId  // use canonical field
       },
       limit: 1,
       cache: {
@@ -101,10 +101,10 @@ export class RosterRepository extends BaseRepository<Roster> {
    * Add player to roster
    */
   async addPlayer(
-    fantasy_team_id: string,
+    fantasyTeamId: string,
     playerData: AddPlayerData
   ): Promise<Roster> {
-    const roster = await this.findById(fantasy_team_id);
+    const roster = await this.findById(fantasyTeamId);
     if (!roster) {
       throw new ValidationError('Roster not found');
     }
@@ -146,7 +146,7 @@ export class RosterRepository extends BaseRepository<Roster> {
    * Remove player from roster
    */
   async removePlayer(fantasy_team_id: string, playerId: string): Promise<Roster> {
-    const roster = await this.findById(fantasy_team_id);
+    const roster = await this.findById(fantasyTeamId);
     if (!roster) {
       throw new ValidationError('Roster not found');
     }
@@ -184,10 +184,10 @@ export class RosterRepository extends BaseRepository<Roster> {
    * Update lineup
    */
   async updateLineup(
-    fantasy_team_id: string,
+    fantasyTeamId: string,
     lineup: Record<string, string>
   ): Promise<Roster> {
-    const roster = await this.findById(fantasy_team_id);
+    const roster = await this.findById(fantasyTeamId);
     if (!roster) {
       throw new ValidationError('Roster not found');
     }
@@ -225,7 +225,7 @@ export class RosterRepository extends BaseRepository<Roster> {
    * Update roster stats (usually after games)
    */
   async updateStats(
-    fantasy_team_id: string,
+    fantasyTeamId: string,
     stats: {
       wins?: number;
       losses?: number;
@@ -234,7 +234,7 @@ export class RosterRepository extends BaseRepository<Roster> {
       pointsAgainst?: number;
     }
   ): Promise<Roster> {
-    return this.update(fantasy_team_id, {
+    return this.update(fantasyTeamId, {
       ...stats,
       updatedAt: new Date().toISOString()
     }, {

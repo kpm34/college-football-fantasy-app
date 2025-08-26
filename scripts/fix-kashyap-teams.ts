@@ -22,19 +22,19 @@ async function fixKashyapTeams() {
   const CORRECT_ID = '689728660623e03830fc'; // Your actual Auth ID
   
   try {
-    // Find teams with the wrong owner_client_id
+    // Find teams with the wrong ownerClientId
     const teamsToFix = await databases.listDocuments(
       DATABASE_ID,
       'fantasy_teams',
-      [Query.equal('owner_client_id', WRONG_ID)]
+      [Query.equal('ownerClientId', WRONG_ID)]
     );
     
     console.log(`Found ${teamsToFix.documents.length} teams to fix:`);
     
     for (const team of teamsToFix.documents) {
       console.log(`\nFixing team: ${team.name} (${team.$id})`);
-      console.log(`  League: ${team.league_id}`);
-      console.log(`  Old owner_client_id: ${team.owner_client_id}`);
+      console.log(`  League: ${team.leagueId}`);
+      console.log(`  Old owner_client_id: ${team.ownerClientId}`);
       console.log(`  New owner_client_id: ${CORRECT_ID}`);
       
       // Update the team
@@ -43,7 +43,7 @@ async function fixKashyapTeams() {
         'fantasy_teams',
         team.$id,
         {
-          owner_client_id: CORRECT_ID
+          ownerClientId: CORRECT_ID
         }
       );
       
@@ -55,12 +55,12 @@ async function fixKashyapTeams() {
     const fixedTeams = await databases.listDocuments(
       DATABASE_ID,
       'fantasy_teams',
-      [Query.equal('owner_client_id', CORRECT_ID)]
+      [Query.equal('ownerClientId', CORRECT_ID)]
     );
     
     console.log(`\nKashyap now has ${fixedTeams.documents.length} teams:`);
     for (const team of fixedTeams.documents) {
-      console.log(`  - ${team.name} in league ${team.league_id}`);
+      console.log(`  - ${team.name} in league ${team.leagueId}`);
     }
     
   } catch (error) {

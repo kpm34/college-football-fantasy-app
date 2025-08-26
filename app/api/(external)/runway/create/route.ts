@@ -11,7 +11,7 @@ const COLLECTION_ID = 'runway_jobs';
 
 export async function POST(req: NextRequest) {
   try {
-    const { prompt, model, duration, aspectRatio, client_id, metadata, webhookSecret } = await req.json();
+    const { prompt, model, duration, aspectRatio, clientId, metadata, webhookSecret } = await req.json();
     
     if (!prompt) {
       return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       duration: duration || 5,
       aspectRatio: aspectRatio || '16:9',
       resultUrl: '',
-      userId: client_id || null,
+      userId: clientId || null,
       webhookSecret: webhookSecret || null,
       createdAt: new Date().toISOString(),
       metadata,

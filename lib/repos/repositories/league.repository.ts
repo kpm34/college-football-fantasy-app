@@ -18,7 +18,7 @@ export interface CreateLeagueData {
   gameMode: 'power4' | 'sec' | 'acc' | 'big12' | 'bigten';
   isPublic: boolean;
   pickTimeSeconds: number;
-  commissionerId: string;
+  commissionerAuthUserId: string;
   scoringRules?: Record<string, number>;
   draftDate?: string;
   season?: number;
@@ -51,13 +51,11 @@ export class LeagueRepository extends BaseRepository<League> {
       gameMode: String(data.gameMode) as 'power4' | 'sec' | 'acc' | 'big12' | 'bigten',
       isPublic: Boolean(data.isPublic),
       pickTimeSeconds: Number(data.pickTimeSeconds),
-      commissioner: String(data.commissionerId), // legacy compatibility
-      commissioner_auth_user_id: String(data.commissionerId),
+      commissionerAuthUserId: String(data.commissionerAuthUserId),
       status: 'open' as const,
       currentTeams: 0,
       season: Number(data.season || new Date().getFullYear()),
-      scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules()),
-      owner_client_id: String(data.commissionerId) // TEMP legacy required attr
+      scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules())
     };
 
     // Add selectedConference if provided (for conference mode leagues)
@@ -77,7 +75,7 @@ export class LeagueRepository extends BaseRepository<League> {
     }
 
     return this.create(validation.data, {
-      invalidateCache: ['league:public:*', `league:user:${data.commissionerId}:*`]
+      invalidateCache: ['league:public:*', `league:user:${data.commissionerAuthUserId}:*`]
     });
   }
 
@@ -88,7 +86,7 @@ export class LeagueRepository extends BaseRepository<League> {
     // First get all rosters for the user
     const rosterRepo = new RosterRepository(this.isServer, this.client);
     const { documents: rosters } = await rosterRepo.find({
-      filters: { auth_user_id: userId }, // use new field
+      filters: { authUserId: userId }, // use new field
       cache: {
         key: `roster:user:${userId}`,
         ttl: 300
@@ -159,7 +157,7 @@ export class LeagueRepository extends BaseRepository<League> {
     userId: string, 
     teamName: string,
     abbreviation?: string
-  ): Promise<{ league: League; fantasy_team_id: string }> {
+  ): Promise<{ league: League; fantasyTeamId: string }> {
     // Get league with fresh data (bypass cache)
     const league = await this.findById(leagueId, { cache: { bypass: true } });
     if (!league) {
@@ -180,7 +178,7 @@ export class LeagueRepository extends BaseRepository<League> {
     const existingRoster = await rosterRepo.find({
       filters: {
         leagueId,
-        auth_user_id: userId // canonical filter
+        ownerAuthUserId: userId // Use correct field name from Appwrite schema
       }
     });
 
@@ -188,22 +186,21 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('You are already in this league');
     }
 
-    // Create roster entry (only attributes guaranteed in schema)
-    // Explicitly define clean roster data to avoid schema conflicts
+    // Create roster entry (using field names that exist in Appwrite collection)
+    // Based on Appwrite console: leagueId, teamName, abbrev, logoUrl, wins, losses, ties, 
+    // pointsFor, pointsAgainst, draftPosition, auctionBudgetTotal, auctionBudgetRemaining, 
+    // displayName, ownerAuthUserId
     const cleanRosterData = {
       leagueId: String(leagueId),
-      owner_auth_user_id: String(userId),
-      auth_user_id: String(userId),
-      owner_client_id: String(userId),
+      ownerAuthUserId: String(userId),
       teamName: String(teamName),
-      abbreviation: String(abbreviation || teamName.substring(0, 3).toUpperCase()),
+      abbrev: String(abbreviation || teamName.substring(0, 3).toUpperCase()),
       draftPosition: Number(league.currentTeams + 1),
       wins: 0,
       losses: 0,
       ties: 0,
       pointsFor: 0,
-      pointsAgainst: 0,
-      players: JSON.stringify([])  // JSON string as per schema
+      pointsAgainst: 0
     };
 
     // Schema validation for roster data
@@ -225,7 +222,7 @@ export class LeagueRepository extends BaseRepository<League> {
       ]
     });
 
-    return { league: updatedLeague, fantasy_team_id: roster.$id };
+    return { league: updatedLeague, fantasyTeamId: roster.$id };
   }
 
   /**

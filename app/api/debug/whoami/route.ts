@@ -33,9 +33,9 @@ export async function GET(request: NextRequest) {
       DATABASE_ID,
       'fantasy_teams',
       [Query.or([
-        Query.equal('owner_auth_user_id', user.$id),
-        Query.equal('owner_client_id', user.$id),
-        Query.equal('auth_user_id', user.$id),
+        Query.equal('ownerAuthUserId', user.$id),
+        Query.equal('ownerClientId', user.$id),
+        Query.equal('authUserId', user.$id),
         Query.equal('teammanager_id', user.$id)
       ])]
     );
@@ -45,9 +45,9 @@ export async function GET(request: NextRequest) {
       DATABASE_ID,
       'leagues',
       [Query.or([
-        Query.equal('commissioner_auth_user_id', user.$id),
+        Query.equal('commissionerAuthUserId', user.$id),
         Query.equal('commissioner', user.$id),
-        Query.equal('owner_client_id', user.$id)
+        Query.equal('ownerClientId', user.$id)
       ])]
     );
     
@@ -60,8 +60,8 @@ export async function GET(request: NextRequest) {
       fantasy_teams: fantasyTeams.documents.map(t => ({
         id: t.$id,
         name: t.name,
-        league_id: t.league_id,
-        owner_client_id: t.owner_client_id
+        leagueId: t.leagueId,
+        ownerClientId: t.ownerClientId
       })),
       commissioner_of: commissionerLeagues.documents.map(l => ({
         id: l.$id,

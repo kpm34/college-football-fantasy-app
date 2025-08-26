@@ -224,9 +224,8 @@ SKIP_ENV_VALIDATION=true npm run build
 - **Collection Config**: `lib/appwrite-generated.ts` - Generated from SSOT
 - **Environment Template**: `.env.template.generated` - Generated from SSOT
 
-### Collections
+### some Collections
 - `leagues` - Fantasy leagues
-- `rosters` - Team rosters (was teams)
 - `college_players` - Player database
 - `player_stats` - Weekly stats
 - `games` - Game schedule/scores

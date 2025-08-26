@@ -6,7 +6,7 @@ import { COLLECTIONS } from '@schema/zod-schema';
 
 export async function POST(req: Request) {
   try {
-    const { draftId, client_id, displayName } = await req.json();
+    const { draftId, clientId, displayName } = await req.json();
     
     if (!draftId) {
       return NextResponse.json(
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
     // Get all participants for this draft
     const parts = await serverDatabases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
-      Query.equal('draft_id', draftId),
+      Query.equal('draftId', draftId),
       Query.equal('type', 'participant'),
       Query.orderAsc('overall'),
       Query.limit(100)
@@ -25,8 +25,8 @@ export async function POST(req: Request) {
 
     // Parse participant data from payload_json
     const participants = parts.documents.map((doc: any) => {
-      if (doc.payload_json) {
-        const data = JSON.parse(doc.payload_json);
+      if (doc.payloadJson) {
+        const data = JSON.parse(doc.payloadJson);
         return { ...doc, ...data };
       }
       return doc;
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       userType: 'human',
       displayName: displayName || 'Guest Player',
       slot: open.slot,
-      client_id: client_id || null
+      clientId: client_id || null
     };
     
     const upd = await serverDatabases.updateDocument(
@@ -64,14 +64,14 @@ export async function POST(req: Request) {
       COLLECTIONS.DRAFT_EVENTS, 
       open.$id, 
       {
-        payload_json: JSON.stringify(updatedData)
+        payloadJson: JSON.stringify(updatedData)
       }
     );
     
     return NextResponse.json({ 
       ok: true, 
       participantId: upd.$id, 
-      slot: updatedData.slot // Use slot from updatedData since it's in payload_json
+      slot: updatedData.slot // Use slot from updatedData since it's in payloadJson
     });
   } catch (e: any) {
     return NextResponse.json(

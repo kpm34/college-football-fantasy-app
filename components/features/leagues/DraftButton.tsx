@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FiClock, FiPlay, FiCheckCircle } from 'react-icons/fi';
+import { client, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite';
+import { type RealtimeResponseEvent } from 'appwrite';
 
 interface League {
   $id: string;
@@ -23,28 +25,69 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
   const [isDraftTime, setIsDraftTime] = useState(false);
   const [isDraftActive, setIsDraftActive] = useState(false);
   const [isDraftComplete, setIsDraftComplete] = useState(false);
+  const [currentLeague, setCurrentLeague] = useState<League>(league);
+
+  // Subscribe to real-time updates for this league
+  useEffect(() => {
+    if (!league.$id) return;
+
+    try {
+      const channel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.LEAGUES}.documents.${league.$id}`;
+      console.log('[DraftButton] Subscribing to league updates:', channel);
+      
+      const unsubscribe = client.subscribe(channel, (event: RealtimeResponseEvent<any>) => {
+        const payload = event.payload as any;
+        
+        // Handle league updates
+        if (event.events.some(e => e.endsWith('.update'))) {
+          console.log('[DraftButton] League updated, new draft date:', payload.draftDate);
+          setCurrentLeague(payload);
+        }
+      });
+
+      return () => {
+        console.log('[DraftButton] Unsubscribing from league updates');
+        unsubscribe();
+      };
+    } catch (error) {
+      console.error('[DraftButton] Error subscribing to league updates:', error);
+    }
+  }, [league.$id]);
+
+  // Update current league when prop changes
+  useEffect(() => {
+    setCurrentLeague(league);
+  }, [league]);
 
   useEffect(() => {
-    if (!league.draftDate) return;
+    if (!currentLeague.draftDate) {
+      setTimeUntilDraft('');
+      setIsDraftTime(false);
+      setIsDraftActive(false);
+      setIsDraftComplete(false);
+      return;
+    }
 
     const updateDraftStatus = () => {
       const now = new Date();
-      const draftDate = new Date(league.draftDate!);
+      const draftDate = new Date(currentLeague.draftDate!);
       const timeDiff = draftDate.getTime() - now.getTime();
       
       // Draft is complete if status is active or complete
-      if (league.status === 'active' || league.status === 'complete' || league.status === 'complete') {
+      if (currentLeague.status === 'active' || currentLeague.status === 'complete') {
         setIsDraftComplete(true);
         setIsDraftActive(false);
         setIsDraftTime(false);
+        setTimeUntilDraft('');
         return;
       }
       
       // Draft is currently active if status is 'drafting'
-      if (league.status === 'drafting') {
+      if (currentLeague.status === 'drafting') {
         setIsDraftActive(true);
         setIsDraftTime(true);
         setIsDraftComplete(false);
+        setTimeUntilDraft('In Progress');
         return;
       }
       
@@ -59,18 +102,21 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
       setIsDraftActive(false);
       setIsDraftComplete(false);
       
-      // Calculate time until draft
+      // Calculate time until draft with seconds for more precise countdown
       if (timeDiff > 0) {
         const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
         
         if (days > 0) {
-          setTimeUntilDraft(`${days}d ${hours}h`);
+          setTimeUntilDraft(`${days}d ${hours}h ${minutes}m`);
         } else if (hours > 0) {
           setTimeUntilDraft(`${hours}h ${minutes}m`);
+        } else if (minutes > 0) {
+          setTimeUntilDraft(`${minutes}m ${seconds}s`);
         } else {
-          setTimeUntilDraft(`${minutes}m`);
+          setTimeUntilDraft(`${seconds}s`);
         }
       } else if (isInDraftWindow) {
         setTimeUntilDraft('Draft time!');
@@ -79,11 +125,20 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
       }
     };
 
+    // Initial update
     updateDraftStatus();
-    const interval = setInterval(updateDraftStatus, 60000); // Update every minute
+    
+    // Update more frequently based on time remaining
+    const now = new Date();
+    const draftDate = new Date(currentLeague.draftDate);
+    const timeDiff = draftDate.getTime() - now.getTime();
+    
+    // Update every second if less than 5 minutes away, otherwise every 30 seconds
+    const updateInterval = timeDiff > 0 && timeDiff < 5 * 60 * 1000 ? 1000 : 30000;
+    const interval = setInterval(updateDraftStatus, updateInterval);
     
     return () => clearInterval(interval);
-  }, [league.draftDate, league.status]);
+  }, [currentLeague.draftDate, currentLeague.status]);
 
   const handleDraftClick = () => {
     router.push(`/draft/${league.$id}`);
@@ -137,7 +192,7 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
   }
 
   // Commissioner can always start the draft if it's scheduled
-  if (isCommissioner && league.draftDate) {
+  if (isCommissioner && currentLeague.draftDate) {
     return (
       <button
         onClick={handleDraftClick}
@@ -153,7 +208,7 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
   }
 
   // Show countdown for members when draft is scheduled but not yet time
-  if (league.draftDate && timeUntilDraft) {
+  if (currentLeague.draftDate && timeUntilDraft) {
     return (
       <div className="p-4 rounded-xl flex items-center justify-center gap-3 bg-gray-700 text-gray-300">
         <FiClock className="text-xl" />

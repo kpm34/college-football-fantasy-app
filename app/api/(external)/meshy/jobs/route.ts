@@ -10,7 +10,7 @@ const COLLECTION_ID = 'meshy_jobs'
 
 export async function POST(req: NextRequest) {
   try {
-    const { mode, prompt, imageUrl, baseModelUrl, client_id, metadata, webhookSecret } = await req.json()
+    const { mode, prompt, imageUrl, baseModelUrl, clientId, metadata, webhookSecret } = await req.json()
     if (!prompt && !imageUrl && !baseModelUrl) {
       return NextResponse.json({ error: 'Provide prompt, imageUrl, or baseModelUrl' }, { status: 400 })
     }
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       imageUrl: imageUrl || '',
       baseModelUrl: baseModelUrl || '',
       resultUrl: '',
-      userId: client_id || null,
+      userId: clientId || null,
       webhookSecret: webhookSecret || null,
       createdAt: new Date().toISOString(),
       // metadata intentionally omitted unless attribute exists

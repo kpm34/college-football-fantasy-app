@@ -23,9 +23,9 @@ interface Player {
   team: string;
   conference?: string;
   year?: string;
-  cfbd_id?: string;
+  cfbdId?: string;
   projection?: number;
-  fantasy_points?: number;
+  fantasyPoints?: number;
   isStarter?: boolean;
   slotPosition?: string;
 }
@@ -72,7 +72,7 @@ const DEFAULT_ROSTER_CONFIG: SlotConfig[] = [
 
 export default function LockerRoomPage({ params, searchParams }: {
   params: Promise<{ leagueId: string }>;
-  searchParams?: Promise<{ fantasy_team_id?: string }>;
+  searchParams?: Promise<{ fantasyTeamId?: string }>;
 }) {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
@@ -122,7 +122,7 @@ export default function LockerRoomPage({ params, searchParams }: {
       const resolvedParams = await params;
       setLeagueId(resolvedParams.leagueId);
       const resolvedSearchParams = await searchParams;
-      setTeamIdParam(resolvedSearchParams?.fantasy_team_id || '');
+      setTeamIdParam(resolvedSearchParams?.fantasyTeamId || '');
     };
     resolveParams();
   }, [params, searchParams]);

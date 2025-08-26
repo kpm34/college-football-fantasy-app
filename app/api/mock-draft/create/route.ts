@@ -13,7 +13,8 @@ export async function POST(request: NextRequest) {
       timerPerPickSec = 0,
       seed,
       participants,
-      numTeams = 8
+      numTeams = 8,
+      leagueId
     } = body;
     
     // Input validation
@@ -51,7 +52,9 @@ export async function POST(request: NextRequest) {
       snake: true, // Always snake for mock drafts
       timerPerPickSec,
       positionLimits: DEFAULT_POSITION_LIMITS,
-      seed
+      seed,
+      // @ts-expect-error: allow passing through optional leagueId used internally by engine
+      leagueId
     };
     
     // Create the mock draft in Appwrite so realtime/turn/results work consistently

@@ -31,7 +31,7 @@ interface PlayerGameStats {
   routes?: number;
   carries?: number;
   targets?: number;
-  fantasy_points: number;
+  fantasyPoints: number;
   game_participation: number; // 0.0-1.0
 }
 
@@ -182,7 +182,7 @@ export class StatsInferenceAdapter extends BaseAdapter<StatsInferenceRecord> {
         routes: this.parseNumeric(doc.routes),
         carries: this.parseNumeric(doc.carries),
         targets: this.parseNumeric(doc.targets),
-        fantasy_points: this.parseNumeric(doc.fantasy_points || doc.fantasyPoints),
+        fantasyPoints: this.parseNumeric(doc.fantasyPoints),
         game_participation: this.calculateParticipation(doc)
       }));
 
@@ -332,7 +332,7 @@ export class StatsInferenceAdapter extends BaseAdapter<StatsInferenceRecord> {
         game.game_participation * 2.0 + // Participation is key indicator
         (game.carries || 0) * 0.3 +
         (game.targets || 0) * 0.3 +
-        (game.fantasy_points || 0) * 0.1
+        (game.fantasyPoints || 0) * 0.1
       ) * recencyWeight;
       
       return sum + gameValue;

@@ -34,7 +34,7 @@ export function scorePlayer(
 ): number {
   const seededRandom = createSeededRandom(seed + player.id + teamNeeds.slot);
   
-  // 1. Base ranking score (higher fantasy_points = better)
+  // 1. Base ranking score (higher fantasyPoints = better)
   const rankScore = player.fantasyPoints ? player.fantasyPoints / 1000 : 
                     player.baseRank ? 1000 / Math.max(1, player.baseRank) : 0.1;
   

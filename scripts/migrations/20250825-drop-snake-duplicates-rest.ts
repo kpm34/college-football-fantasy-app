@@ -20,38 +20,38 @@ type Pair = [snake: string, camel: string]
 
 const targets: Record<string, Pair[]> = {
   drafts: [
-    ['league_id','leagueId'],
-    ['start_time','startTime'],
-    ['end_time','endTime'],
-    ['current_round','currentRound'],
-    ['current_pick','currentPick'],
-    ['max_rounds','maxRounds']
+    ['leagueId','leagueId'],
+    ['startTime','startTime'],
+    ['endTime','endTime'],
+    ['currentRound','currentRound'],
+    ['currentPick','currentPick'],
+    ['maxRounds','maxRounds']
   ],
   draft_states: [
-    ['draft_id','draftId'],
-    ['on_clock_team_id','onClockTeamId'],
-    ['pick_index','pickIndex'],
-    ['deadline_at','deadlineAt']
+    ['draftId','draftId'],
+    ['onClockTeamId','onClockTeamId'],
+    ['pickIndex','pickIndex'],
+    ['deadlineAt','deadlineAt']
   ],
   invites: [
-    ['created_at','createdAt'],
-    ['accepted_at','acceptedAt'],
-    ['expires_at','expiresAt'],
+    ['createdAt','createdAt'],
+    ['acceptedAt','acceptedAt'],
+    ['expiresAt','expiresAt'],
     ['league_id','leagueId'],
-    ['invited_by','invited_by_auth_user_id']
+    ['invited_by','invitedByAuthUserId']
   ],
   activity_log: [
     ['createdAt','createdAt'], // normalize: prefer camel createdAt; if snake exists it's created_at
   ],
   model_versions: [
     ['created_at','createdAt'],
-    ['created_by','createdBy'],
-    ['thumbnail_url','thumbnailUrl'],
-    ['version_id','versionId']
+    ['createdBy','createdBy'],
+    ['thumbnailUrl','thumbnailUrl'],
+    ['versionId','versionId']
   ],
   player_stats: [
-    ['game_id','gameId'],
-    ['player_id','playerId']
+    ['gameId','gameId'],
+    ['playerId','playerId']
   ]
 }
 
@@ -70,9 +70,9 @@ async function listAttrKeys(collection: string): Promise<Set<string>> {
 
 async function dropAttributeIfDuplicate(collection: string, snake: string, camel: string): Promise<boolean> {
   const keys = await listAttrKeys(collection)
-  // special case: activity_log listed pair incorrectly above; handle snake created_at
+  // special case: activity_log listed pair incorrectly above; handle snake createdAt
   if (collection === 'activity_log' && snake === 'createdAt') {
-    // treat snake as created_at here
+    // treat snake as createdAt here
     snake = 'created_at'
   }
   if (keys.has(snake) && keys.has(camel)) {

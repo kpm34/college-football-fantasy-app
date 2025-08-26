@@ -17,12 +17,57 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
     return NextResponse.json({ skipped: true });
   }
 
-  // Select top available by projections/ADP (placeholder: first available)
-  const available: string[] = Array.isArray(state.availablePlayers) ? state.availablePlayers : [];
-  const playerId = available[0];
+  // Get available players and select highest ADP (or projection)
+  let playerId: string | null = null;
+  
+  try {
+    // First try to get from pre-loaded available players with ADP
+    if (state.availablePlayersWithADP && Array.isArray(state.availablePlayersWithADP)) {
+      // Sort by ADP (lower is better) or projection (higher is better)
+      const sorted = [...state.availablePlayersWithADP].sort((a, b) => {
+        // If both have ADP, use that (lower is better)
+        if (a.adp && b.adp) return a.adp - b.adp;
+        // Otherwise use projection (higher is better)
+        return (b.projection || 0) - (a.projection || 0);
+      });
+      playerId = sorted[0]?.id || sorted[0]?.$id;
+    }
+    
+    // Fallback to simple available list
+    if (!playerId) {
+      const available: string[] = Array.isArray(state.availablePlayers) ? state.availablePlayers : [];
+      playerId = available[0];
+    }
+    
+    // If still no player, try to fetch best available from database
+    if (!playerId && state.pickedPlayerIds) {
+      const { Query } = await import('node-appwrite');
+      const players = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.PLAYERS,
+        [
+          Query.equal('draftable', true),
+          Query.orderAsc('adp_rank'),
+          Query.limit(200)
+        ]
+      );
+      
+      const pickedSet = new Set(state.pickedPlayerIds);
+      const bestAvailable = players.documents.find(p => !pickedSet.has(p.$id));
+      if (bestAvailable) {
+        playerId = bestAvailable.$id;
+      }
+    }
+  } catch (e) {
+    console.error('Error finding best player:', e);
+    // Use simple fallback
+    const available: string[] = Array.isArray(state.availablePlayers) ? state.availablePlayers : [];
+    playerId = available[0];
+  }
+  
   if (!playerId) return NextResponse.json({ error: 'No players available' }, { status: 400 });
 
-  const fantasy_team_id = state.onClockTeamId;
+  const fantasyTeamId = state.onClockTeamId;
 
   const overall = state.overall ?? (state.round - 1) * state.totalTeams + state.pickIndex;
 
@@ -34,7 +79,7 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
       draftId,
       ts: new Date().toISOString(),
       type: 'autopick',
-      fantasy_team_id,
+      fantasyTeamId,
       playerId,
       round: state.round,
       overall,
