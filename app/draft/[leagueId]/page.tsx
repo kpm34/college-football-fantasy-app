@@ -181,6 +181,13 @@ export default function DraftRoom({ params }: Props) {
     }
     
     const timeLimitSec = Number((draft.league as any)?.settings?.draftTimeLimit || (draft.league as any)?.pickTimeSeconds || 90);
+    // Require on-the-clock assignment before showing a timer
+    const hasOnClock = Boolean(draft.onTheClock);
+    if (!hasOnClock) {
+      setDeadlineTs(null);
+      setSecondsLeft(null);
+      return;
+    }
     // Prefer server-provided deadline if available (late joiners)
     const serverDeadline = (draft as any)?.deadlineAt ? new Date((draft as any).deadlineAt).getTime() : null;
     if (serverDeadline && serverDeadline > Date.now() - 5000) {

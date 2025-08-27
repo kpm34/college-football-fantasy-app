@@ -117,7 +117,7 @@ export function useDraftRealtime(leagueId: string) {
           : pickIndex;
         const onTheClock = orderArray[actualIndex] || league.draftOrder?.[actualIndex];
         const draftStartMs = (league as any)?.draftDate ? new Date((league as any).draftDate).getTime() : 0;
-        // Live only when status is drafting and time has reached or passed
+        // Live when status is drafting AND time reached (do not go live early just due to a deadline)
         const leagueDraftStatus = String((league as any)?.draftStatus || (league as any)?.status || '');
         const isDraftLive = (leagueDraftStatus === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
         const isMyTurn = isDraftLive && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
