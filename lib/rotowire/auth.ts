@@ -1,4 +1,5 @@
 // Use Web Crypto API for Edge compatibility
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const crypto = globalThis.crypto || require('crypto');
 
 export class RotowireAuth {

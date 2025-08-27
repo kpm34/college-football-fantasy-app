@@ -34,7 +34,7 @@ function NavLink({ href, label }: { href: string; label: string }) {
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
-  const [leagues, setLeagues] = useState<Array<{ id: string; name: string; isCommissioner?: boolean }>>(
+  const [leagues, setLeagues] = useState<Array<{ id: string; name: string; leagueName?: string; isCommissioner?: boolean }>>(
     []
   );
   const router = useRouter();
@@ -200,7 +200,7 @@ export default function Navbar() {
                       >
                         <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
                         <RectangleGroupIcon className="h-5 w-5 shrink-0" />
-                        <span className="font-medium">{lg.name}</span>
+                        <span className="font-medium">{lg.leagueName || lg.name}</span>
                       </button>
                       <div className="ml-8 mt-1 flex gap-2">
                         <button

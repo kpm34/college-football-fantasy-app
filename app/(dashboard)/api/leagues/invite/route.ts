@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         valid: true,
         league: {
           id: league.$id,
-          name: league.name,
+          name: league.leagueName,
           commissioner: league.commissioner,
           maxTeams: league.maxTeams,
           currentTeams: league.currentTeams || league.members?.length || 0
@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
         valid: true,
         league: {
           id: league.$id,
-          name: league.name,
+          name: league.leagueName,
           commissioner: league.commissioner,
           maxTeams: league.maxTeams,
           currentTeams: league.currentTeams || league.members?.length || 0
@@ -242,7 +242,7 @@ export async function POST(request: NextRequest) {
         type: 'league_invite',
         userId: user.$id,
         leagueId: leagueId,
-        description: `${user.name || user.email} invited ${email} to join ${league.name}`,
+        description: `${user.name || user.email} invited ${email} to join ${league.leagueName}`,
         data: JSON.stringify(inviteData),
         inviteToken: inviteToken,
         status: 'pending',
@@ -267,7 +267,7 @@ export async function POST(request: NextRequest) {
           },
           body: JSON.stringify({
             email: email,
-            leagueName: league.name,
+            leagueName: league.leagueName,
             inviteLink: inviteLink,
             inviterName: user.name || user.email,
             expiresAt: expiresAt.toISOString()

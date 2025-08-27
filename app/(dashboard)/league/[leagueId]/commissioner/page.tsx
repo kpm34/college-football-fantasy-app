@@ -161,7 +161,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       setMembers(data.members || []);
       
       // Initialize form with league data
-      setLeagueName(league.name || '');
+      setLeagueName(league.leagueName || league.name || '');
       setMaxTeams(league.maxTeams || 12);
       setIsPublic(league.isPublic ?? true);
       setPickTimeSeconds(league.pickTimeSeconds || 90);
@@ -1052,7 +1052,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
           isOpen={showInviteModal}
           onClose={() => setShowInviteModal(false)}
           leagueId={league.$id}
-          leagueName={league.name}
+          leagueName={league.leagueName || league.name}
         />
       )}
     </div>

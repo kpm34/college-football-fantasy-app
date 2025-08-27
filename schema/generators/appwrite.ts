@@ -4,7 +4,7 @@
  * Generates Appwrite collection creation scripts and configuration from the canonical schema
  */
 
-import { SCHEMA, type SchemaCollection, type SchemaAttribute } from '../schema';
+import { COLLECTIONS, SCHEMA_REGISTRY } from '../zod-schema';
 import { Client, Databases, Permission, Role } from 'node-appwrite';
 import fs from 'fs';
 import path from 'path';

@@ -1,0 +1,117 @@
+{
+  "testRunId": 1756251708937,
+  "timestamp": "2025-08-26T23:41:48.937Z",
+  "environment": {
+    "endpoint": "https://nyc.cloud.appwrite.io/v1\n",
+    "project": "college-football-fantasy-app\n",
+    "database": "college-football-fantasy\n"
+  },
+  "testUser": {
+    "id": "68ae463b0004300ff851",
+    "email": "test1756251707067@cfbfantasy.app"
+  },
+  "testLeague": {},
+  "results": [
+    {
+      "step": "Account Creation",
+      "status": "success",
+      "details": {
+        "userId": "68ae463b0004300ff851",
+        "email": "test1756251707067@cfbfantasy.app",
+        "name": "Test User E2E"
+      },
+      "appwriteVerification": {
+        "userAccount": {
+          "$id": "68ae463b0004300ff851",
+          "$createdAt": "2025-08-26T23:41:47.611+00:00",
+          "$updatedAt": "2025-08-26T23:41:47.611+00:00",
+          "name": "Test User E2E",
+          "registration": "2025-08-26T23:41:47.610+00:00",
+          "status": true,
+          "labels": [],
+          "passwordUpdate": "2025-08-26T23:41:47.610+00:00",
+          "email": "test1756251707067@cfbfantasy.app",
+          "phone": "",
+          "emailVerification": false,
+          "phoneVerification": false,
+          "mfa": false,
+          "prefs": {},
+          "targets": [
+            {
+              "$id": "68ae463b9fcccdc4d39f",
+              "$createdAt": "2025-08-26T23:41:47.654+00:00",
+              "$updatedAt": "2025-08-26T23:41:47.654+00:00",
+              "name": "",
+              "userId": "68ae463b0004300ff851",
+              "providerId": null,
+              "providerType": "email",
+              "identifier": "test1756251707067@cfbfantasy.app",
+              "expired": false
+            }
+          ],
+          "accessedAt": "2025-08-26T23:41:47.610+00:00"
+        },
+        "clientDocument": {
+          "authUserId": "68ae463b0004300ff851",
+          "email": "test1756251707067@cfbfantasy.app",
+          "displayName": "Test User E2E",
+          "createdAt": "2025-08-26T23:41:48.169+00:00",
+          "$id": "68ae463c000a9ac44bf8",
+          "$permissions": [],
+          "$createdAt": "2025-08-26T23:41:48.397+00:00",
+          "$updatedAt": "2025-08-26T23:41:48.397+00:00",
+          "avatarUrl": null,
+          "lastLogin": null,
+          "$databaseId": "college-football-fantasy",
+          "$collectionId": "clients"
+        }
+      },
+      "timestamp": "2025-08-26T23:41:48.315Z"
+    },
+    {
+      "step": "League Creation",
+      "status": "failure",
+      "details": {
+        "error": "Invalid document structure: Unknown attribute: \"Leaguestatus\""
+      },
+      "timestamp": "2025-08-26T23:41:48.453Z"
+    },
+    {
+      "step": "Commissioner Settings",
+      "status": "failure",
+      "details": {
+        "error": "Missing required parameter: \"documentId\""
+      },
+      "timestamp": "2025-08-26T23:41:48.454Z"
+    },
+    {
+      "step": "Draft Start",
+      "status": "failure",
+      "details": {
+        "error": "Missing required parameter: \"documentId\""
+      },
+      "timestamp": "2025-08-26T23:41:48.454Z"
+    },
+    {
+      "step": "Player Selection",
+      "status": "failure",
+      "details": {
+        "error": "Invalid document structure: Missing required attribute \"leagueId\""
+      },
+      "timestamp": "2025-08-26T23:41:48.805Z"
+    },
+    {
+      "step": "Roster Save",
+      "status": "failure",
+      "details": {
+        "error": "Invalid query: Equal queries require at least one value."
+      },
+      "timestamp": "2025-08-26T23:41:48.937Z"
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 1,
+    "failed": 5
+  }
+}

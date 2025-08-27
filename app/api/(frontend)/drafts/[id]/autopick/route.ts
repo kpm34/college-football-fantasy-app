@@ -113,7 +113,7 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
       deadlineAt: next.deadlineAt,
       round: next.round,
       pickIndex: next.pickIndex,
-      status: 'active',
+      draftStatus: 'drafting',
     }
   );
 

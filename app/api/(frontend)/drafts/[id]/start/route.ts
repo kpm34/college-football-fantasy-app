@@ -76,7 +76,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
                   deadlineAt: existing.deadlineAt,
                   round: existing.round || 1,
                   pickIndex: existing.pickIndex || 1,
-                  status: 'active',
+                  draftStatus: 'drafting',
                   picksPerRound: existing.picksPerRound || existing.totalTeams || 12,
                 } as any);
               } catch {}
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     const state = {
       leagueId,
-      status: 'active',
+      draftStatus: 'drafting',
       round: 1,
       pickIndex: 1,
       picksPerRound: order.length,
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         deadlineAt: state.deadlineAt,
         round: state.round,
         pickIndex: state.pickIndex,
-        status: 'active',
+        draftStatus: 'drafting',
         // helpful for fallback reconstruction
         picksPerRound: state.picksPerRound,
       } as any);

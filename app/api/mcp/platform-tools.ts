@@ -451,8 +451,8 @@ export function registerGoHighLevelTools(server: any) {
     'Checks if GoHighLevel webhook endpoints exist',
     {},
     async () => {
-      const fs = require('fs/promises');
-      const path = require('path');
+      const fs = await import('fs/promises');
+      const path = await import('path');
       
       const webhookPaths = [
         'app/api/webhooks/ghl/route.ts',

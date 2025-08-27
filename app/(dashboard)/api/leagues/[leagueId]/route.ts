@@ -111,7 +111,7 @@ export async function GET(
       success: true,
       league: {
         id: league.$id,
-        name: league.name,
+        name: league.leagueName,
         mode: league.mode,
         conf: league.conf,
         maxTeams: league.maxTeams,

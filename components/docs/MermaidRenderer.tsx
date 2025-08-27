@@ -269,9 +269,11 @@ export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
                 slider.addEventListener('input', () => {
                   const pct = Number(slider.value)
                   const next = pct / 100
-                  ;(controller as any).setScaleAbsolute
-                    ? (controller as any).setScaleAbsolute(next)
-                    : controller.setScaleRelative(next / controller.getScale())
+                  if ((controller as any).setScaleAbsolute) {
+                    (controller as any).setScaleAbsolute(next)
+                  } else {
+                    controller.setScaleRelative(next / controller.getScale())
+                  }
                   syncSlider()
                 })
               }
@@ -287,9 +289,11 @@ export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
                     const scale = Math.max(0.3, Math.min(0.6, base * 0.85))
                     controller.reset()
                     // absolute set if supported; else relative from 1
-                    ;(controller as any).setScaleAbsolute
-                      ? (controller as any).setScaleAbsolute(scale)
-                      : controller.setScaleRelative(scale)
+                    if ((controller as any).setScaleAbsolute) {
+                      (controller as any).setScaleAbsolute(scale)
+                    } else {
+                      controller.setScaleRelative(scale)
+                    }
                   }
                   return
                 }

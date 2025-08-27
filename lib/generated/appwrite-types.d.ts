@@ -1,5 +1,5 @@
 // AUTO-GENERATED. Do not edit by hand.
-export type CollectionId = 'leagues' | 'fantasy_teams' | 'college_players' | 'games' | 'rankings' | 'rosters' | 'lineups' | 'drafts' | 'draft_picks'
+export type CollectionId = 'leagues' | 'user_teams' | 'college_players' | 'games' | 'rankings' | 'rosters' | 'lineups' | 'drafts' | 'draft_picks'
 
 export interface LeaguesDoc {
   name: string
@@ -25,7 +25,7 @@ export interface CollegePlayersDoc {
   team: string
   conference: string
   fantasyPoints: number
-  depthChartOrder?: number
+  depth_chart_order?: number
   eligible: boolean
   draftable?: boolean
   year?: number
@@ -34,10 +34,10 @@ export interface CollegePlayersDoc {
 export interface GamesDoc {
   week: number
   season: number
-  seasonType: 'regular' | 'postseason'
-  homeTeam: string
-  awayTeam: string
-  startDate: string
+  season_type: 'regular' | 'postseason'
+  home_team: string
+  away_team: string
+  start_date: string
   status?: string
 }
 
@@ -54,7 +54,7 @@ export interface RostersDoc {
 }
 
 export interface LineupsDoc {
-  fantasyTeamId: string
+  rosterId: string
   week: number
   season: number
   starters?: any[]

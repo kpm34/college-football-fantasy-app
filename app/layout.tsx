@@ -86,6 +86,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         {process.env.NODE_ENV === 'development' ? (() => {
+          // eslint-disable-next-line @typescript-eslint/no-require-imports
           const Overlay = require('@components/dev/DevCursorOverlay').default
           return <Overlay />
         })() : null}

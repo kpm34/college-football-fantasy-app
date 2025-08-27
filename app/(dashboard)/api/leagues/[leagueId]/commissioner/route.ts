@@ -410,7 +410,7 @@ export async function PUT(
         draftUpdates.orderJson = JSON.stringify(orderJson);
         
         // Add league name and game mode to draft updates
-        draftUpdates.leagueName = result.name || league.name;
+        draftUpdates.leagueName = result.leagueName || league.leagueName;
         draftUpdates.gameMode = result.gameMode || league.gameMode;
         draftUpdates.selectedConference = result.selectedConference || league.selectedConference;
         draftUpdates.maxTeams = result.maxTeams || league.maxTeams;
@@ -432,7 +432,7 @@ export async function PUT(
           ID.unique(),
           {
             leagueId: params.leagueId,
-            leagueName: result.name || league.name,
+            leagueName: result.leagueName || league.leagueName,
             gameMode: result.gameMode || league.gameMode,
             selectedConference: result.selectedConference || league.selectedConference,
             maxTeams: result.maxTeams || league.maxTeams,

@@ -19,11 +19,11 @@ export async function generateMetadata({ params }: InvitePageProps): Promise<Met
     );
     
     return {
-      title: `Join ${league.name} - CFB Fantasy`,
-      description: `You've been invited to join ${league.name} fantasy football league. ${league.currentTeams || 0}/${league.maxTeams} teams.`,
+      title: `Join ${league.leagueName || league.name} - CFB Fantasy`,
+      description: `You've been invited to join ${league.leagueName || league.name} fantasy football league. ${league.currentTeams || 0}/${league.maxTeams} teams.`,
       openGraph: {
-        title: `Join ${league.name}`,
-        description: `You've been invited to join ${league.name} fantasy football league. ${league.currentTeams || 0}/${league.maxTeams} teams.`,
+        title: `Join ${league.leagueName || league.name}`,
+        description: `You've been invited to join ${league.leagueName || league.name} fantasy football league. ${league.currentTeams || 0}/${league.maxTeams} teams.`,
         images: ['https://cfbfantasy.app/api/og/league-invite'],
         url: `https://cfbfantasy.app/invite/${leagueId}`,
         siteName: 'CFB Fantasy',
@@ -31,8 +31,8 @@ export async function generateMetadata({ params }: InvitePageProps): Promise<Met
       },
       twitter: {
         card: 'summary_large_image',
-        title: `Join ${league.name}`,
-        description: `You've been invited to join ${league.name} fantasy football league.`,
+        title: `Join ${league.leagueName || league.name}`,
+        description: `You've been invited to join ${league.leagueName || league.name} fantasy football league.`,
         images: ['https://cfbfantasy.app/api/og/league-invite'],
       },
     };

@@ -22,7 +22,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const raw = await kv.get(`draft:${draftId}:state`);
     state = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : null;
     if (state) {
-      state.status = 'active';
+      state.draftStatus = 'drafting';
       state.deadlineAt = new Date(Date.now() + (state.pickTimeSeconds || 90) * 1000).toISOString();
       await kv.set(`draft:${draftId}:state`, JSON.stringify(state));
     }
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     DATABASE_ID,
     COLLECTIONS.DRAFT_STATES,
     ID.unique(),
-    { draftId, onClockTeamId: state?.onClockTeamId || '', deadlineAt: state?.deadlineAt || new Date().toISOString(), round: state?.round || 1, pickIndex: state?.pickIndex || 1, status: 'active' }
+    { draftId, onClockTeamId: state?.onClockTeamId || '', deadlineAt: state?.deadlineAt || new Date().toISOString(), round: state?.round || 1, pickIndex: state?.pickIndex || 1, draftStatus: 'drafting' }
   );
 
   return NextResponse.json({ success: true, state });

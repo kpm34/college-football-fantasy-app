@@ -19,7 +19,8 @@ interface League {
   description: string;
   type: 'public' | 'private';
   password?: string;
-  status: 'open' | 'full' | 'drafting' | 'active' | 'complete';
+  leagueStatus: 'open' | 'closed';
+  draftStatus: 'pre-draft' | 'drafting' | 'post-draft';
   createdAt: string;
 }
 
@@ -105,7 +106,7 @@ function JoinLeagueContent() {
           if (response.ok && data.valid) {
             const normalized: League = {
               $id: data.league.id,
-              name: data.league.name,
+              name: data.league.leagueName || data.league.name,
               owner: data.league.commissioner || 'Commissioner',
               teams: data.league.currentTeams || 0,
               maxTeams: data.league.maxTeams || 12,
@@ -115,7 +116,8 @@ function JoinLeagueContent() {
               draftTime: '19:00',
               description: '',
               type: 'private',
-              status: 'drafting',
+              leagueStatus: 'open' as const,
+              draftStatus: 'drafting' as const,
               createdAt: new Date().toISOString(),
             };
             setSelectedLeague(normalized);
@@ -164,7 +166,8 @@ function JoinLeagueContent() {
             description: leagueDoc.description || '',
             type: (leagueDoc.isPublic === false || !!leagueDoc.password) ? 'private' : 'public',
             password: leagueDoc.password,
-            status: (leagueDoc.status || 'open') as any,
+            leagueStatus: (leagueDoc.leagueStatus || 'open') as any,
+            draftStatus: (leagueDoc.draftStatus || 'pre-draft') as any,
             createdAt: leagueDoc.$createdAt
           };
           setSelectedLeague(league);
@@ -191,7 +194,7 @@ function JoinLeagueContent() {
         // Normalize API response (which uses `id`) to expected League shape (which uses `$id`)
         const normalized: League = {
           $id: data.league.id,
-          name: data.league.name,
+          name: data.league.leagueName || data.league.name,
           owner: data.league.commissioner || 'Commissioner',
           teams: data.league.currentTeams || 0,
           maxTeams: data.league.maxTeams || 12,
@@ -201,7 +204,8 @@ function JoinLeagueContent() {
           draftTime: '19:00',
           description: '',
           type: 'private',
-          status: 'drafting',
+          leagueStatus: 'open' as const,
+              draftStatus: 'drafting' as const,
           createdAt: new Date().toISOString(),
         };
         setSelectedLeague(normalized);
@@ -258,7 +262,8 @@ function JoinLeagueContent() {
           draftTime: '19:00',
           description: 'Competitive league for Power 4 conference fans',
           type: 'public',
-          status: 'drafting',
+          leagueStatus: 'open' as const,
+              draftStatus: 'drafting' as const,
           createdAt: new Date().toISOString()
         },
         {
@@ -274,7 +279,8 @@ function JoinLeagueContent() {
           description: 'SEC-focused league with auction draft',
           type: 'private',
           password: 'sec2025',
-          status: 'drafting',
+          leagueStatus: 'open' as const,
+              draftStatus: 'drafting' as const,
           createdAt: new Date().toISOString()
         }
       ]);
@@ -344,7 +350,7 @@ function JoinLeagueContent() {
         throw new Error(data.error || 'Failed to join league');
       }
 
-      console.log('Successfully joined league:', league.name);
+      console.log('Successfully joined league:', league.leagueName || league.name);
       
       // Redirect to the league home page
       router.push(`/league/${league.$id}`);
@@ -477,7 +483,7 @@ function JoinLeagueContent() {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-xl font-semibold text-[#5E2B8A]">{league.name}</h3>
+                    <h3 className="text-xl font-semibold text-[#5E2B8A]">{league.leagueName || league.name}</h3>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#FF0080]/20 text-[#FF0080] border border-[#FF0080]/30">
                       {((league as any).members?.length ?? league.teams)}/{league.maxTeams} Teams
                     </span>
@@ -489,11 +495,11 @@ function JoinLeagueContent() {
                       {league.type === 'private' ? '🔒 Private' : '🌐 Public'}
                     </span>
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      league.status === 'drafting' ? 'bg-[#FF0080]/20 text-[#FF0080] border border-[#FF0080]/30' :
-                      league.status === 'active' ? 'bg-[#8A5EAA]/20 text-[#8A5EAA] border border-[#8A5EAA]/30' :
+                      league.draftStatus === 'drafting' ? 'bg-[#FF0080]/20 text-[#FF0080] border border-[#FF0080]/30' :
+                      league.draftStatus === 'post-draft' ? 'bg-[#8A5EAA]/20 text-[#8A5EAA] border border-[#8A5EAA]/30' :
                       'bg-[#8A6B4D]/20 text-[#8A6B4D] border border-[#8A6B4D]/30'
                     }`}>
-                      {league.status.charAt(0).toUpperCase() + league.status.slice(1)}
+                      {league.draftStatus?.replace('-', ' ').toUpperCase() || 'PRE-DRAFT'}
                     </span>
                   </div>
                   

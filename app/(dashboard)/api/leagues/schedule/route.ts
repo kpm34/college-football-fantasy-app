@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     // Get all teams in the league
     const teamsResponse = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.SCHOOLS,
+      COLLECTIONS.FANTASY_TEAMS,
       [Query.equal('leagueId', leagueId)]
     );
 
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
           }
         );
         createdCount++;
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(`Error creating matchup for week ${matchup.week}:`, error);
         errorCount++;
       }
@@ -109,10 +109,10 @@ export async function POST(request: NextRequest) {
       message: `Successfully generated schedule with ${createdCount} matchups`
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error generating schedule:', error);
     return NextResponse.json(
-      { error: 'Failed to generate schedule', details: error.message },
+      { error: 'Failed to generate schedule', details: (error instanceof Error ? error.message : String(error)) },
       { status: 500 }
     );
   }
@@ -194,7 +194,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let queries = [Query.equal('leagueId', leagueId)];
+    const queries = [Query.equal('leagueId', leagueId)];
     if (week) {
       queries.push(Query.equal('week', parseInt(week)));
     }
@@ -214,7 +214,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching schedule:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch schedule', details: error.message },
+      { error: 'Failed to fetch schedule', details: (error instanceof Error ? error.message : String(error)) },
       { status: 500 }
     );
   }

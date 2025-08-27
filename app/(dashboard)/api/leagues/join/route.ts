@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
 import { ID, Query } from 'node-appwrite';
+import { determineLeagueStatus, determineDraftStatus } from '@lib/utils/status-helpers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -50,8 +51,17 @@ export async function POST(request: NextRequest) {
     );
     const rosterCount = (rosterCountPage as any).total ?? (rosterCountPage.documents?.length || 0);
     const maxTeams = (league as any).maxTeams ?? 12;
-    if (rosterCount >= maxTeams) {
-      return NextResponse.json({ error: 'League is full' }, { status: 400 });
+    
+    // Check league status
+    const leagueStatus = determineLeagueStatus(rosterCount, maxTeams);
+    if (leagueStatus === 'closed') {
+      return NextResponse.json({ error: 'League is closed (full)' }, { status: 400 });
+    }
+    
+    // Check draft status
+    const draftStatus = determineDraftStatus((league as any).draftDate, (league as any).draftCompleted, (league as any).isDrafting);
+    if (draftStatus !== 'pre-draft') {
+      return NextResponse.json({ error: 'Cannot join league after draft has started' }, { status: 400 });
     }
     
     // Check if user is already in the league
@@ -80,18 +90,15 @@ export async function POST(request: NextRequest) {
       }
     }
     
-    // Create roster for the user (only include attributes that exist in `user_teams`)
+    // Create roster for the user (only include attributes that exist in `fantasy_teams`)
     const rosterData: Record<string, any> = {
-      // Preferred fields
+      // Core fields as per SSOT
       name: teamName || `${user.name || user.email}'s Team`,
       leagueId: leagueId,
-      ownerAuthUserId: user.$id,
+      leagueName: (league as any).leagueName || (league as any).name, // Include league name
+      ownerAuthUserId: user.$id, // Correct field name for fantasy_teams
       displayName: user.name || user.email,
-      // Back-compat synonyms used around the codebase
-      teamName: teamName || `${user.name || user.email}'s Team`,
-      leagueId: leagueId,
-      clientId: user.$id,
-      userId: user.$id,
+      // Initialize stats
       wins: 0,
       losses: 0,
       ties: 0,
@@ -116,6 +123,27 @@ export async function POST(request: NextRequest) {
       ID.unique(),
       rosterData
     );
+    
+    // Create league membership record
+    try {
+      await databases.createDocument(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUE_MEMBERSHIPS,
+        ID.unique(),
+        {
+          leagueId: leagueId,
+          leagueName: (league as any).leagueName || (league as any).name,
+          authUserId: user.$id, // Correct field name for league_memberships
+          role: 'MEMBER',
+          status: 'ACTIVE',
+          joinedAt: new Date().toISOString(),
+          displayName: user.name || user.email
+        }
+      );
+    } catch (membershipError) {
+      console.warn('Failed to create league membership record:', membershipError);
+      // Non-fatal: continue even if membership record fails
+    }
     
     // Update league members and team count
     // Rebuild members/currentTeams from rosters to keep schema in sync
@@ -142,15 +170,13 @@ export async function POST(request: NextRequest) {
       if (attributes.includes('currentTeams')) {
         updatePayload.currentTeams = currentTeams;
       }
-      // Optionally set status to full when we hit capacity, but only if field exists
+      // Update league status based on team count
       const nextTeams = currentTeams; // already authoritative
-      if (attributes.includes('status') && typeof maxTeams === 'number') {
-        if (nextTeams >= maxTeams) {
-          updatePayload.status = 'full';
-        } else if (league.status === 'full') {
-          updatePayload.status = 'open';
-        }
+      if (attributes.includes('leagueStatus') && typeof maxTeams === 'number') {
+        const newLeagueStatus = determineLeagueStatus(nextTeams, maxTeams);
+        updatePayload.leagueStatus = newLeagueStatus;
       }
+      // Keep draftStatus unchanged (still pre-draft when joining)
     } catch {
       // If schema lookup fails, fall back to safest minimal update (members only)
       updatePayload = { members: updatedMembers };
@@ -186,7 +212,7 @@ export async function POST(request: NextRequest) {
           ID.unique(),
           {
             leagueId: leagueId,
-            leagueName: league.name, // Include league name for display
+            leagueName: league.leagueName, // Include league name for display
             authUserId: user.$id,
             role: 'MEMBER',
             status: 'ACTIVE',
@@ -202,7 +228,7 @@ export async function POST(request: NextRequest) {
           existingMemberships.documents[0].$id,
           {
             status: 'ACTIVE',
-            leagueName: league.name,
+            leagueName: league.leagueName,
             joinedAt: new Date().toISOString()
           }
         );
@@ -223,7 +249,7 @@ export async function POST(request: NextRequest) {
           userId: user.$id,
           leagueId: leagueId,
           teamId: roster.$id,
-          description: `${user.name || user.email} joined ${league.name}`,
+          description: `${user.name || user.email} joined ${league.leagueName}`,
           createdAt: new Date().toISOString()
         }
       );

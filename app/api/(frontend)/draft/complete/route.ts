@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       }
       
       // Add player info to the roster
-      rostersByUser[pick.clientId].push({
+      rostersByUser[pick.client_id].push({
         playerId: pick.playerId,
         playerName: pick.playerName,
         playerPosition: pick.playerPosition,
@@ -85,16 +85,16 @@ export async function POST(request: NextRequest) {
           COLLECTIONS.FANTASY_TEAMS,
           [
             Query.equal('leagueId', leagueId),
-            Query.equal('ownerAuthUserId', clientId as string),
+            Query.equal('ownerAuthUserId', client_id as string),
             Query.limit(1)
           ]
         );
 
         if (rostersResponse.documents.length === 0) {
-          console.warn(`No roster found for user ${clientId} in league ${leagueId}`);
+          console.warn(`No roster found for user ${client_id} in league ${leagueId}`);
           errors++;
           results.push({
-            clientId,
+            client_id,
             status: 'error',
             message: 'No roster found for user'
           });
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
 
         processed++;
         results.push({
-          clientId,
+          client_id,
           teamName: roster.teamName,
           status: 'success',
           playersCount: draftedPlayers.length,
@@ -129,28 +129,28 @@ export async function POST(request: NextRequest) {
         console.log(`✅ Updated roster for ${roster.teamName}: ${draftedPlayers.length} players`);
 
       } catch (error) {
-        console.error(`❌ Failed to update roster for user ${clientId}:`, error);
+        console.error(`❌ Failed to update roster for user ${client_id}:`, error);
         errors++;
         results.push({
-          clientId,
+          client_id,
           status: 'error',
           message: error.message
         });
       }
     }
 
-    // Update league status to 'active' since draft is complete
+    // Update draft status to 'post-draft' since draft is complete
     try {
       await databases.updateDocument(
         DATABASE_ID,
         COLLECTIONS.LEAGUES,
         leagueId,
         {
-          status: 'active',
+          draftStatus: 'post-draft',
           draftCompletedAt: new Date().toISOString()
         }
       );
-      console.log(`✅ Updated league ${leagueId} status to active`);
+      console.log(`✅ Updated league ${leagueId} draft status to post-draft`);
     } catch (error) {
       console.error(`⚠️ Failed to update league status:`, error);
     }

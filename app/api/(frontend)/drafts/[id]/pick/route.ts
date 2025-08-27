@@ -146,7 +146,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         deadlineAt: next.deadlineAt,
         round: next.round,
         pickIndex: next.pickIndex,
-        status: 'active',
+        draftStatus: 'drafting',
       }
     );
 

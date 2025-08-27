@@ -188,7 +188,7 @@ export async function GET(request: NextRequest) {
     // Optional: load manual overrides from model_inputs to correct teams/draftable flags
     let overrides: Record<string, any> | null = null;
     let depthIndex: Map<string, string> | null = null; // name|pos -> team_id
-    let fantasyTeamIdToName: Record<string, string> = {};
+    const fantasyTeamIdToName: Record<string, string> = {};
     let depth: any = null; // Declare depth in outer scope
     // Note: do not use CFBD here; rely solely on our database (depth_chart_json + overrides)
     try {

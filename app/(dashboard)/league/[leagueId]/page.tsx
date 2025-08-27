@@ -262,8 +262,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
       userEmail: user.email,
       userName: user.name,
       teams: teams.map(t => ({ 
-        teamId: t.$id, 
-        userId: t.clientId, 
+               teamId: t.$id, 
+       userId: t.ownerAuthUserId, 
         email: t.email, 
         userName: t.userName,
         owner: (t as any).owner 
@@ -324,7 +324,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               <tr key={team.$id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                 <td className="py-4 px-6">
                   <span className="font-semibold">{team.name}</span>
-                  {team.clientId === league?.commissioner && (
+                  {team.ownerAuthUserId === league?.commissionerAuthUserId && (
                     <span className="ml-2 text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Commissioner</span>
                   )}
                 </td>
@@ -382,7 +382,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                     <td className="py-4 px-6 font-bold">{index + 1}</td>
                     <td className="py-4 px-6">
                       <span className="font-semibold">{team.name}</span>
-                      {team.clientId === user?.$id && (
+                      {team.ownerAuthUserId === user?.$id && (
                         <span className="ml-2 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">You</span>
                       )}
                     </td>
@@ -529,7 +529,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold" style={{ color: leagueColors.text.primary }}>{league.name}</h1>
+              <h1 className="text-3xl font-bold" style={{ color: leagueColors.text.primary }}>{league.leagueName || league.name}</h1>
               <p className="mt-1" style={{ color: leagueColors.text.muted }}>
                 {league.gameMode} • {league.selectedConference || 'All Conferences'}
               </p>
@@ -709,7 +709,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           isOpen={showInviteModal}
           onClose={() => setShowInviteModal(false)}
           leagueId={league.$id}
-          leagueName={league.name}
+          leagueName={league.leagueName || league.name}
         />
       )}
     </div>

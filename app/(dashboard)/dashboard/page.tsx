@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserGroupIcon, CalendarIcon } from "@heroicons/react/24/outline";
@@ -9,11 +9,13 @@ import { useUserLeaguesRealtime } from '@lib/hooks/useUserLeaguesRealtime';
 
 type League = {
   $id: string;
-  name: string;
-  status: string;
-  maxTeams: number;
+  name?: string;
+  leagueName?: string;
+  status?: string;
+  draftStatus?: 'pre-draft' | 'drafting' | 'post-draft';
+  maxTeams?: number;
   currentTeams?: number;
-  commissioner: string;
+  commissioner?: string;
   draftDate?: string;
 };
 
@@ -47,6 +49,23 @@ export default function DashboardPage() {
     muted: 'rgba(94,43,138,0.55)'
   } as const;
 
+  const fetchUserLeagues = useCallback(async () => {
+    try {
+      const response = await fetch('/api/leagues/mine');
+      if (!response.ok) {
+        throw new Error('Failed to fetch leagues');
+      }
+      const data = await response.json();
+      setTeams(data.teams || []);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    } finally {
+      if (!userLeaguesRealtime.loading) {
+        setLoading(false);
+      }
+    }
+  }, [userLeaguesRealtime.loading]);
+
   useEffect(() => {
     if (authLoading) return;
     
@@ -65,31 +84,12 @@ export default function DashboardPage() {
       // Remove param from URL
       window.history.replaceState({}, '', window.location.pathname);
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading, router, fetchUserLeagues]);
 
   // Update loading state based on real-time hook
   useEffect(() => {
     setLoading(userLeaguesRealtime.loading);
   }, [userLeaguesRealtime.loading]);
-
-  const fetchUserLeagues = async () => {
-    try {
-      // Teams are still fetched separately since they're not part of the real-time hook yet
-      const response = await fetch('/api/leagues/mine');
-      if (!response.ok) {
-        throw new Error('Failed to fetch leagues');
-      }
-      
-      const data = await response.json();
-      setTeams(data.teams || []);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    } finally {
-      if (!userLeaguesRealtime.loading) {
-        setLoading(false);
-      }
-    }
-  };
 
   if (authLoading || loading) {
     return (
@@ -267,13 +267,13 @@ export default function DashboardPage() {
                   style={{ background: 'rgba(30, 144, 255, 0.15)', border: '1px solid rgba(30, 144, 255, 0.25)' }}
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-semibold" style={{ color: palette.primary }}>{league.name}</h3>
+                    <h3 className="text-xl font-semibold" style={{ color: palette.primary }}>{league.leagueName || league.name}</h3>
                     <span className={`text-xs px-2 py-1 rounded-full ${
-                      league.status === 'active' ? 'bg-green-500/20 text-green-400' :
-                      league.status === 'draft' ? 'bg-yellow-500/20 text-yellow-400' :
+                      league.draftStatus === 'post-draft' ? 'bg-green-500/20 text-green-400' :
+                      league.draftStatus === 'drafting' ? 'bg-yellow-500/20 text-yellow-400' :
                       'bg-blue-500/20 text-blue-400'
                     }`}>
-                      {league.status.replace('-', ' ').toUpperCase()}
+                      {league.draftStatus?.replace('-', ' ').toUpperCase() || 'PRE-DRAFT'}
                     </span>
                   </div>
 

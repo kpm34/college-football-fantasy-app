@@ -2123,7 +2123,7 @@ export const COLLECTIONS = {
   TEAMS: 'schools' as const,
   GAMES: 'games' as const,
   RANKINGS: 'rankings' as const,
-  USER_TEAMS: 'fantasy_teams' as const,
+  FANTASY_TEAMS: 'fantasy_teams' as const,
   LEAGUES: 'leagues' as const,
   LINEUPS: 'lineups' as const,
   MATCHUPS: 'matchups' as const,

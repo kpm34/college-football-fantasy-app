@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       await databases.updateDocument(DATABASE_ID, COLLECTION_ID, id, update)
     } catch {
       // Upsert: if doc doesn't exist, create it with allowed attributes only
-      let allowedKeys = new Set<string>()
+      const allowedKeys = new Set<string>()
       try {
         const col: any = await databases.getCollection(DATABASE_ID, COLLECTION_ID)
         for (const attr of col?.attributes || []) if (attr?.key) allowedKeys.add(attr.key as string)

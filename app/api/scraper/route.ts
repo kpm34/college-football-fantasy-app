@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
         case 'extract': {
           const { url, type } = ExtractRequestSchema.parse(body);
           
-          let data: any = {};
+          const data: any = {};
           
           if (type === 'tables' || type === 'all') {
             data.tables = await scraper.extractTables(url);
