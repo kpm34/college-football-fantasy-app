@@ -12,7 +12,7 @@ import { RosterRepository } from './roster.repository';
 import { SchemaValidator, enforceSchema } from '../../domain/validation/schema-enforcer';
 
 export interface CreateLeagueData {
-  name: string;
+  leagueName: string;
   maxTeams: number;
   draftType: 'snake' | 'auction';
   gameMode: 'power4' | 'sec' | 'acc' | 'big12' | 'bigten';
@@ -45,14 +45,15 @@ export class LeagueRepository extends BaseRepository<League> {
     // Set defaults and map fields to match database schema
     // Explicitly clean and type-cast all data to prevent schema conflicts
     const leagueData: any = {
-      name: String(data.name).trim(),
+      leagueName: String(data.leagueName).trim(),
       maxTeams: Number(data.maxTeams),
       draftType: String(data.draftType) as 'snake' | 'auction',
       gameMode: String(data.gameMode) as 'power4' | 'sec' | 'acc' | 'big12' | 'bigten',
       isPublic: Boolean(data.isPublic),
       pickTimeSeconds: Number(data.pickTimeSeconds),
       commissionerAuthUserId: String(data.commissionerAuthUserId),
-      status: 'open' as const,
+      leagueStatus: 'open' as const,
+      draftStatus: 'pre-draft' as const,
       currentTeams: 0,
       season: Number(data.season || new Date().getFullYear()),
       scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules())
@@ -128,7 +129,7 @@ export class LeagueRepository extends BaseRepository<League> {
       filters: {
         ...options?.filters,
         isPublic: true,
-        status: 'open'
+        leagueStatus: 'open'
       },
       orderBy: 'createdAt',
       orderDirection: 'desc',

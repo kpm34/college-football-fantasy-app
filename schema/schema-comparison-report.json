@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-08-26T22:08:52.131Z",
+  "ssotCollections": 24,
+  "liveCollections": 25,
+  "matched": [
+    "✅ college_players",
+    "✅ schools",
+    "✅ games",
+    "✅ rankings",
+    "✅ leagues",
+    "✅ fantasy_teams",
+    "✅ league_memberships",
+    "✅ clients",
+    "✅ drafts",
+    "✅ draft_events",
+    "✅ draft_states",
+    "✅ auctions",
+    "✅ bids",
+    "✅ lineups",
+    "✅ matchups",
+    "✅ transactions",
+    "✅ roster_slots",
+    "✅ player_stats",
+    "✅ projections",
+    "✅ model_runs",
+    "✅ activity_log",
+    "✅ invites",
+    "✅ meshy_jobs",
+    "✅ migrations"
+  ],
+  "missingInLive": [],
+  "missingInSSOT": [
+    "⚠️  model_versions (exists in Appwrite but not in SSOT)"
+  ],
+  "fantasyTeamsStatus": "exists"
+}

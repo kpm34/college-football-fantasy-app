@@ -1,0 +1,338 @@
+{
+  "testRunId": 1756254939899,
+  "timestamp": "2025-08-27T00:35:39.899Z",
+  "environment": {
+    "endpoint": "https://nyc.cloud.appwrite.io/v1",
+    "project": "college-football-fantasy-app",
+    "database": "college-football-fantasy"
+  },
+  "testUser": {
+    "id": "68ae52d60037c376d548",
+    "email": "test1756254934892@cfbfantasy.app"
+  },
+  "testLeague": {
+    "id": "68ae52d700385179d45a"
+  },
+  "results": [
+    {
+      "step": "Account Creation",
+      "status": "success",
+      "details": {
+        "userId": "68ae52d60037c376d548",
+        "email": "test1756254934892@cfbfantasy.app",
+        "name": "Test User E2E"
+      },
+      "appwriteVerification": {
+        "userAccount": {
+          "$id": "68ae52d60037c376d548",
+          "$createdAt": "2025-08-27T00:35:35.229+00:00",
+          "$updatedAt": "2025-08-27T00:35:35.229+00:00",
+          "name": "Test User E2E",
+          "registration": "2025-08-27T00:35:35.228+00:00",
+          "status": true,
+          "labels": [],
+          "passwordUpdate": "2025-08-27T00:35:35.228+00:00",
+          "email": "test1756254934892@cfbfantasy.app",
+          "phone": "",
+          "emailVerification": false,
+          "phoneVerification": false,
+          "mfa": false,
+          "prefs": {},
+          "targets": [
+            {
+              "$id": "68ae52d74377ca94a177",
+              "$createdAt": "2025-08-27T00:35:35.276+00:00",
+              "$updatedAt": "2025-08-27T00:35:35.276+00:00",
+              "name": "",
+              "userId": "68ae52d60037c376d548",
+              "providerId": null,
+              "providerType": "email",
+              "identifier": "test1756254934892@cfbfantasy.app",
+              "expired": false
+            }
+          ],
+          "accessedAt": "2025-08-27T00:35:35.228+00:00"
+        }
+      },
+      "timestamp": "2025-08-27T00:35:35.900Z"
+    },
+    {
+      "step": "League Creation",
+      "status": "success",
+      "details": {
+        "leagueId": "68ae52d700385179d45a",
+        "leagueName": "Test League 1756254935900",
+        "draftTime": "2025-08-27T00:40:35.900Z"
+      },
+      "appwriteVerification": {
+        "league": {
+          "leagueName": "Test League 1756254935900",
+          "commissionerAuthUserId": "68ae52d60037c376d548",
+          "season": 2025,
+          "maxTeams": 8,
+          "currentTeams": 1,
+          "draftType": "snake",
+          "gameMode": "power4",
+          "leagueStatus": "open",
+          "isPublic": true,
+          "pickTimeSeconds": 30,
+          "draftDate": "2025-08-27T00:40:35.900+00:00",
+          "$id": "68ae52d700385179d45a",
+          "$permissions": [],
+          "$createdAt": "2025-08-27T00:35:36.051+00:00",
+          "$updatedAt": "2025-08-27T00:35:36.051+00:00",
+          "selectedConference": null,
+          "seasonStartWeek": null,
+          "playoffTeams": null,
+          "playoffStartWeek": null,
+          "waiverType": null,
+          "waiverBudget": null,
+          "password": null,
+          "scoringRules": null,
+          "draftOrder": null,
+          "$databaseId": "college-football-fantasy",
+          "$collectionId": "leagues"
+        },
+        "fantasyTeam": {
+          "leagueId": "68ae52d700385179d45a",
+          "teamName": "Commissioner Team",
+          "leagueName": "Test League 1756254935900",
+          "ownerAuthUserId": "68ae52d60037c376d548",
+          "displayName": "Test User E2E",
+          "wins": 0,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 0,
+          "pointsAgainst": 0,
+          "$id": "68ae52d80002be486701",
+          "$permissions": [],
+          "$createdAt": "2025-08-27T00:35:36.202+00:00",
+          "$updatedAt": "2025-08-27T00:35:36.202+00:00",
+          "abbrev": null,
+          "logoUrl": null,
+          "draftPosition": null,
+          "auctionBudgetTotal": null,
+          "auctionBudgetRemaining": null,
+          "players": null,
+          "$databaseId": "college-football-fantasy",
+          "$collectionId": "fantasy_teams"
+        },
+        "membership": {
+          "leagueId": "68ae52d700385179d45a",
+          "leagueName": "Test League 1756254935900",
+          "authUserId": "68ae52d60037c376d548",
+          "role": "COMMISSIONER",
+          "status": "ACTIVE",
+          "joinedAt": "2025-08-27T00:35:36.195+00:00",
+          "displayName": "Test User E2E",
+          "$id": "68ae52d8000c39c28a20",
+          "$permissions": [],
+          "$createdAt": "2025-08-27T00:35:36.338+00:00",
+          "$updatedAt": "2025-08-27T00:35:36.338+00:00",
+          "$databaseId": "college-football-fantasy",
+          "$collectionId": "league_memberships"
+        },
+        "draft": {
+          "leagueId": "68ae52d700385179d45a",
+          "leagueName": "Test League 1756254935900",
+          "gameMode": "power4",
+          "maxTeams": 8,
+          "draftStatus": "pre-draft",
+          "type": "snake",
+          "currentRound": 0,
+          "currentPick": 0,
+          "maxRounds": 15,
+          "startTime": "2025-08-27T00:40:35.900+00:00",
+          "isMock": false,
+          "clockSeconds": 30,
+          "orderJson": "{\"draftOrder\":[\"68ae52d60037c376d548\"],\"draftType\":\"snake\",\"totalTeams\":8,\"pickTimeSeconds\":30}",
+          "$id": "68ae52d80014b2922d1b",
+          "$permissions": [],
+          "$createdAt": "2025-08-27T00:35:36.504+00:00",
+          "$updatedAt": "2025-08-27T00:35:36.504+00:00",
+          "draftOrder": null,
+          "endTime": null,
+          "selectedConference": null,
+          "scoringRules": null,
+          "stateJson": null,
+          "eventsJson": null,
+          "picksJson": null,
+          "onTheClock": null,
+          "lastPickTime": null,
+          "$databaseId": "college-football-fantasy",
+          "$collectionId": "drafts"
+        }
+      },
+      "timestamp": "2025-08-27T00:35:36.501Z"
+    },
+    {
+      "step": "Commissioner Settings",
+      "status": "success",
+      "details": {
+        "pickTimeSeconds": 45,
+        "draftOrder": [
+          "68ae52d60037c376d548"
+        ]
+      },
+      "appwriteVerification": {
+        "updatedLeague": {
+          "leagueName": "Test League 1756254935900",
+          "season": 2025,
+          "maxTeams": 8,
+          "leagueStatus": "open",
+          "gameMode": "power4",
+          "draftType": "snake",
+          "isPublic": true,
+          "currentTeams": 1,
+          "pickTimeSeconds": 45,
+          "draftDate": "2025-08-27T00:40:35.900+00:00",
+          "selectedConference": null,
+          "seasonStartWeek": null,
+          "playoffTeams": null,
+          "playoffStartWeek": null,
+          "waiverType": null,
+          "waiverBudget": null,
+          "password": null,
+          "commissionerAuthUserId": "68ae52d60037c376d548",
+          "scoringRules": "{\"passingYards\":0.04,\"passingTD\":4,\"rushingYards\":0.1,\"rushingTD\":6,\"receivingYards\":0.1,\"receivingTD\":6}",
+          "draftOrder": null,
+          "$id": "68ae52d700385179d45a",
+          "$createdAt": "2025-08-27T00:35:36.051+00:00",
+          "$updatedAt": "2025-08-27T00:35:36.665+00:00",
+          "$permissions": [],
+          "$databaseId": "college-football-fantasy",
+          "$collectionId": "leagues"
+        },
+        "updatedDraft": {
+          "leagueId": "68ae52d700385179d45a",
+          "draftStatus": "pre-draft",
+          "currentRound": 0,
+          "currentPick": 0,
+          "maxRounds": 15,
+          "draftOrder": null,
+          "startTime": "2025-08-27T00:40:35.900+00:00",
+          "endTime": null,
+          "type": "snake",
+          "clockSeconds": 45,
+          "orderJson": "{\"draftOrder\":[\"68ae52d60037c376d548\"],\"draftType\":\"snake\",\"totalTeams\":8,\"pickTimeSeconds\":45}",
+          "isMock": false,
+          "leagueName": "Test League 1756254935900",
+          "gameMode": "power4",
+          "selectedConference": null,
+          "maxTeams": 8,
+          "scoringRules": null,
+          "stateJson": null,
+          "eventsJson": null,
+          "picksJson": null,
+          "onTheClock": null,
+          "lastPickTime": null,
+          "$id": "68ae52d80014b2922d1b",
+          "$createdAt": "2025-08-27T00:35:36.504+00:00",
+          "$updatedAt": "2025-08-27T00:35:36.979+00:00",
+          "$permissions": [],
+          "$databaseId": "college-football-fantasy",
+          "$collectionId": "drafts"
+        }
+      },
+      "timestamp": "2025-08-27T00:35:36.980Z"
+    },
+    {
+      "step": "Draft Start",
+      "status": "failure",
+      "details": {
+        "error": "Document with the requested ID already exists. Try again with a different ID or use ID.unique() to generate a unique ID."
+      },
+      "timestamp": "2025-08-27T00:35:37.686Z"
+    },
+    {
+      "step": "Player Selection",
+      "status": "success",
+      "details": {
+        "playersSelected": 3,
+        "players": [
+          {
+            "name": "Dylan Lonergan",
+            "position": "QB",
+            "team": "Boston College"
+          },
+          {
+            "name": "Enzo Arjona",
+            "position": "QB",
+            "team": "Boston College"
+          },
+          {
+            "name": "Grayson James",
+            "position": "QB",
+            "team": "Boston College"
+          }
+        ]
+      },
+      "appwriteVerification": {
+        "draftPicks": [
+          {
+            "draftId": "68ae52d80014b2922d1b",
+            "type": "pick",
+            "round": 1,
+            "overall": 1,
+            "fantasyTeamId": "68ae52d80002be486701",
+            "playerId": "68a5506e0028dc3e666d",
+            "ts": "2025-08-27T00:35:38.141+00:00",
+            "payloadJson": "{\"playerName\":\"Dylan Lonergan\",\"playerPosition\":\"QB\",\"playerTeam\":\"Boston College\",\"timeRemaining\":30}",
+            "$id": "68ae52da0008de637083",
+            "$permissions": [],
+            "$createdAt": "2025-08-27T00:35:38.290+00:00",
+            "$updatedAt": "2025-08-27T00:35:38.290+00:00",
+            "$databaseId": "college-football-fantasy",
+            "$collectionId": "draft_events"
+          },
+          {
+            "draftId": "68ae52d80014b2922d1b",
+            "type": "pick",
+            "round": 1,
+            "overall": 2,
+            "fantasyTeamId": "68ae52d80002be486701",
+            "playerId": "68a5506e003423d4f2fd",
+            "ts": "2025-08-27T00:35:38.577+00:00",
+            "payloadJson": "{\"playerName\":\"Enzo Arjona\",\"playerPosition\":\"QB\",\"playerTeam\":\"Boston College\",\"timeRemaining\":30}",
+            "$id": "68ae52da0024010d635a",
+            "$permissions": [],
+            "$createdAt": "2025-08-27T00:35:38.838+00:00",
+            "$updatedAt": "2025-08-27T00:35:38.838+00:00",
+            "$databaseId": "college-football-fantasy",
+            "$collectionId": "draft_events"
+          },
+          {
+            "draftId": "68ae52d80014b2922d1b",
+            "type": "pick",
+            "round": 1,
+            "overall": 3,
+            "fantasyTeamId": "68ae52d80002be486701",
+            "playerId": "68a5506f00011f24406c",
+            "ts": "2025-08-27T00:35:39.129+00:00",
+            "payloadJson": "{\"playerName\":\"Grayson James\",\"playerPosition\":\"QB\",\"playerTeam\":\"Boston College\",\"timeRemaining\":30}",
+            "$id": "68ae52db000816cc0be8",
+            "$permissions": [],
+            "$createdAt": "2025-08-27T00:35:39.318+00:00",
+            "$updatedAt": "2025-08-27T00:35:39.318+00:00",
+            "$databaseId": "college-football-fantasy",
+            "$collectionId": "draft_events"
+          }
+        ]
+      },
+      "timestamp": "2025-08-27T00:35:39.308Z"
+    },
+    {
+      "step": "Roster Save",
+      "status": "failure",
+      "details": {
+        "error": "Invalid document structure: Attribute \"players\" has invalid type. Value must be a valid string and no longer than 64 chars"
+      },
+      "timestamp": "2025-08-27T00:35:39.899Z"
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 4,
+    "failed": 2
+  }
+}

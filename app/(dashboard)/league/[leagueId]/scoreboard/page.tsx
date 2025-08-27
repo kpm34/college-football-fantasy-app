@@ -68,7 +68,7 @@ export default function ScoreboardPage({ params }: ScoreboardPageProps) {
       try {
         // Fetch league info
         const league = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, leagueId);
-        setLeagueName(league.name);
+        setLeagueName(league.leagueName || league.name);
 
         // Find user's team
         if (user) {

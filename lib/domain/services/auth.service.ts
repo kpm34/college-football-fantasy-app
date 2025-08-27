@@ -10,9 +10,8 @@ import type { NextRequest, NextResponse } from 'next/server';
 import { env } from '../../config/environment';
 import { UnauthorizedError, ValidationError } from '../errors/app-error';
 
-export interface AuthUser extends Models.User<Models.Preferences> {
-  // Add any custom user properties here
-}
+// AuthUser type is just an alias for the Appwrite User model
+export type AuthUser = Models.User<Models.Preferences>;
 
 export class AuthService {
   private client: Client | ServerClient;
@@ -240,7 +239,7 @@ export class AuthService {
    * @param password - New password
    */
   async resetPassword(userId: string, secret: string, password: string): Promise<void> {
-    if (!clientId || !secret || !password) {
+    if (!userId || !secret || !password) {
       throw new ValidationError('Invalid password reset link');
     }
     
@@ -248,7 +247,7 @@ export class AuthService {
       throw new ValidationError('Password must be at least 8 characters');
     }
     
-    await this.account.updateRecovery(client_id, secret, password);
+    await this.account.updateRecovery(userId, secret, password);
   }
   
   /**

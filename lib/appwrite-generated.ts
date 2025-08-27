@@ -25,7 +25,7 @@ export const COLLECTIONS = {
   TEAMS: 'schools',
   GAMES: 'games',
   RANKINGS: 'rankings',
-  USER_TEAMS: 'fantasy_teams',
+  FANTASY_TEAMS: 'fantasy_teams',
   LEAGUES: 'leagues',
   LINEUPS: 'lineups',
   MATCHUPS: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MATCHUPS || 'matchups',
@@ -78,9 +78,9 @@ export const COLLECTION_METADATA = {
     indexCount: 5,
     requiredAttributes: ['week', 'season', 'pollType', 'team', 'rank'],
   },
-  user_teams: {
+  fantasy_teams: {
     id: 'fantasy_teams',
-    name: 'User Teams',
+    name: 'Fantasy Teams',
     description: 'Fantasy team rosters within leagues',
     attributeCount: 9,
     indexCount: 3,

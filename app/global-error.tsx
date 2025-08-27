@@ -2,6 +2,7 @@
 
 import * as Sentry from '@sentry/nextjs';
 import NextError from 'next/error';
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 export default function GlobalError({
@@ -44,12 +45,12 @@ export default function GlobalError({
               >
                 Try again
               </button>
-              <a
+              <Link
                 href="/"
-                className="flex-1 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition text-center"
+                className="flex-1 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition text-center inline-block"
               >
                 Go home
-              </a>
+              </Link>
             </div>
           </div>
         </div>

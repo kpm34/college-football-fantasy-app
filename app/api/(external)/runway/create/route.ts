@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Build payload only with attributes that exist in the collection
-    let allowedKeys = new Set<string>();
+    const allowedKeys = new Set<string>();
     try {
       const col: any = await databases.getCollection(DATABASE_ID, COLLECTION_ID);
       for (const attr of col?.attributes || []) {

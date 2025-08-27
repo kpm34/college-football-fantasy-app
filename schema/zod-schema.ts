@@ -71,7 +71,7 @@ export const Rankings = z.object({
 });
 
 export const Leagues = z.object({
-  name: z.string().min(1).max(100),
+  leagueName: z.string().min(1).max(100),
   // New canonical commissioner pointer (auth user id). Keep legacy commissioner for back-compat at runtime.
   commissionerAuthUserId: z.string().min(1).max(64).optional(),
   season: z.number().int().min(2020).max(2030),
@@ -80,7 +80,8 @@ export const Leagues = z.object({
   draftType: z.enum(['snake', 'auction']),
   gameMode: z.enum(['power4', 'sec', 'acc', 'big12', 'bigten']),
   selectedConference: z.string().max(50).optional(),
-  status: z.enum(['open', 'full', 'drafting', 'active', 'complete']).default('open'),
+  leagueStatus: z.enum(['open', 'closed']).default('open'),
+  draftStatus: z.enum(['pre-draft', 'drafting', 'post-draft']).default('pre-draft'),
   isPublic: z.boolean().default(true),
   pickTimeSeconds: z.number().int().min(30).max(600).default(90),
   scoringRules: z.string().max(2000).optional(), // JSON string
@@ -93,8 +94,9 @@ export const Leagues = z.object({
   password: z.string().max(50).optional()
 });
 
-export const Rosters = z.object({
+export const FantasyTeams = z.object({
   leagueId: z.string().min(1).max(64),
+  leagueName: z.string().min(1).max(100).optional(),
   ownerAuthUserId: z.string().min(1).max(64).optional(),
   name: z.string().min(1).max(128).optional(),
   abbrev: z.string().max(8).optional(),
@@ -235,7 +237,7 @@ export const DraftStates = z.object({
   deadlineAt: z.date(),
   round: z.number().int().min(1),
   pickIndex: z.number().int().min(1),
-  status: z.enum(['active', 'paused', 'complete']).default('active'),
+  draftStatus: z.enum(['pre-draft', 'drafting', 'post-draft']).default('pre-draft'),
 });
 
 /**
@@ -334,6 +336,19 @@ export const LeagueMemberships = z.object({
 });
 
 /**
+ * Clients collection (user profiles)
+ * Maps authUserId from Appwrite Auth to user profile data
+ */
+export const Clients = z.object({
+  authUserId: z.string().min(1).max(64), // Primary key linking to Appwrite Auth
+  email: z.string().email().optional(),
+  displayName: z.string().max(255).optional(),
+  avatarUrl: z.string().max(512).optional(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional()
+});
+
+/**
  * Projection Run Records (versioning/reproducibility)
  */
 export const ProjectionRuns = z.object({
@@ -364,7 +379,7 @@ export const ProjectionRunMetrics = z.object({
 export const Drafts = z.object({
   // League association is optional to support mock drafts and practice rooms
   leagueId: z.string().min(1).max(50).optional(),
-  status: z.string().min(1).max(20),
+  draftStatus: z.enum(['pre-draft', 'drafting', 'post-draft']).default('pre-draft'),
   currentRound: z.number().int().min(1).optional(),
   currentPick: z.number().int().min(1).optional(),
   maxRounds: z.number().int().min(1).optional(),
@@ -446,11 +461,12 @@ export type Team = z.infer<typeof Teams>;
 export type Game = z.infer<typeof Games>;
 export type Ranking = z.infer<typeof Rankings>;
 export type League = z.infer<typeof Leagues>;
-export type Roster = z.infer<typeof Rosters>;
+export type FantasyTeam = z.infer<typeof FantasyTeams>;
 export type Lineup = z.infer<typeof Lineups>;
 export type Auction = z.infer<typeof Auctions>;
 export type Bid = z.infer<typeof Bids>;
 export type PlayerStat = z.infer<typeof PlayerStats>;
+export type Client = z.infer<typeof Clients>;
 // User type deprecated - use Appwrite User type instead
 export type ActivityLogEntry = z.infer<typeof ActivityLog>;
 export type Draft = z.infer<typeof Drafts>;
@@ -508,7 +524,7 @@ export const SCHEMA_REGISTRY = {
   [COLLECTIONS.GAMES]: Games, 
   [COLLECTIONS.RANKINGS]: Rankings,
   [COLLECTIONS.LEAGUES]: Leagues,
-  [COLLECTIONS.FANTASY_TEAMS]: Rosters,
+  [COLLECTIONS.FANTASY_TEAMS]: FantasyTeams,
   [COLLECTIONS.LINEUPS]: Lineups,
   [COLLECTIONS.AUCTIONS]: Auctions,
   [COLLECTIONS.BIDS]: Bids,

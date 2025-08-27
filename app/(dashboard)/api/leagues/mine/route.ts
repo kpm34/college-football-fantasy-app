@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
       return {
         $id: league.$id,
         id: league.$id,
-        name: league.name,
+        name: league.leagueName,
         status: league.status || 'active',
         isCommissioner,
         teamName: userRoster?.name || userRoster?.teamName || 'My Team',

@@ -97,7 +97,7 @@ export default function LeagueStandingsPage({ params }: PageProps) {
                 <FiArrowLeft className="text-xl" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold">{league.name} - Standings</h1>
+                <h1 className="text-3xl font-bold">{league.leagueName || league.name} - Standings</h1>
                 <p className="mt-1" style={{ color: leagueColors.text.muted }}>
                   Season {league.season || new Date().getFullYear()}
                 </p>

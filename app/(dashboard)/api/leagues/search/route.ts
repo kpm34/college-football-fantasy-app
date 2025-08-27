@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     // includeClosed=true means include FULL leagues; default false excludes full leagues
     const includeClosed = searchParams.get('includeClosed') === 'true';
 
-    let queries = [] as string[];
+    const queries = [] as string[];
     
     // Add search query if provided
     if (search) {
@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
             // Provide both id styles for compatibility with client code
             id: league.$id,
             $id: league.$id,
-            name: league.name,
+            name: league.leagueName,
             mode: league.mode,
             conf: league.conf,
             maxTeams,
@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
           return {
             id: league.$id,
             $id: league.$id,
-            name: league.name,
+            name: league.leagueName,
             mode: league.mode,
             conf: league.conf,
             maxTeams,
@@ -138,7 +138,8 @@ export async function GET(request: NextRequest) {
             teams: currentTeams,
             type: isPrivate ? 'private' : 'public',
             hasPassword,
-            status: currentTeams >= maxTeams ? 'closed' : 'open',
+            leagueStatus: currentTeams >= maxTeams ? 'closed' : 'open',
+            draftStatus: league.draftStatus || 'pre-draft',
             commissionerId: (league as any).commissionerAuthUserId ?? league.commissioner ?? league.commissioner_id,
             createdAt: league.createdAt ?? league.$createdAt,
             updatedAt: league.updatedAt ?? league.$updatedAt

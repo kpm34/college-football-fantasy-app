@@ -25,7 +25,7 @@ export async function loadEligiblePlayers(): Promise<Player[]> {
     );
 
     // Load rankings for base ranking (optional)
-    let rankingsMap: Map<string, number> = new Map();
+    const rankingsMap: Map<string, number> = new Map();
     try {
       const rankingsResponse = await databases.listDocuments(
         DATABASE_ID,

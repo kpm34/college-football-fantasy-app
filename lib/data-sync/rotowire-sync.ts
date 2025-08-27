@@ -78,7 +78,8 @@ export class RotowireSync {
     await kv.setex('rotowire:news:latest', 3600, JSON.stringify(news));
     
     // Store significant news in Appwrite
-    let created = 0, updated = 0;
+    let created = 0;
+    const updated = 0;
     
     for (const item of news.filter(n => n.impact === 'high')) {
       try {
@@ -114,7 +115,8 @@ export class RotowireSync {
       await kv.setex('rotowire:injuries:latest', 1800, JSON.stringify(injuries));
       
       // Update player statuses in database
-      let created = 0, updated = 0;
+      const created = 0;
+      let updated = 0;
       
       for (const injury of injuries) {
         try {
@@ -189,7 +191,8 @@ export class RotowireSync {
       await kv.setex('rotowire:depthcharts:latest', 3600, JSON.stringify(depthCharts));
       
       // Update player depth in database
-      let created = 0, updated = 0;
+      const created = 0;
+      let updated = 0;
       
       for (const entry of depthCharts) {
         try {

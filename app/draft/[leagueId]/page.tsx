@@ -186,7 +186,7 @@ export default function DraftRoom({ params }: Props) {
       const lastTs = lastPick?.timestamp ? new Date(lastPick.timestamp).getTime() : Date.now();
       setDeadlineTs(lastTs + timeLimitSec * 1000);
     }
-  }, [draft.currentPick, draft.onTheClock, draftHasStarted, (draft.league as any)?.settings?.draftTimeLimit, (draft.league as any)?.pickTimeSeconds]);
+  }, [draft]);
 
   // Countdown from the locked deadline
   useEffect(() => {

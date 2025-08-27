@@ -1,0 +1,3482 @@
+{
+  "database": "college-football-fantasy\n",
+  "timestamp": "2025-08-26T22:07:55.050Z",
+  "collections": [
+    {
+      "id": "rankings",
+      "name": "AP Rankings",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-04T01:49:36.307+00:00",
+      "updatedAt": "2025-08-04T01:49:36.307+00:00",
+      "attributes": [
+        {
+          "key": "week",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "season",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "pollType",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 20,
+          "default": null
+        },
+        {
+          "key": "team",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "rank",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "points",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "firstPlaceVotes",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "source",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 24,
+          "default": null
+        },
+        {
+          "key": "schoolId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "ranking_week",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "week",
+            "season"
+          ],
+          "orders": []
+        },
+        {
+          "key": "ranking_season",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "season"
+          ],
+          "orders": []
+        },
+        {
+          "key": "ranking_team",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "team"
+          ],
+          "orders": []
+        },
+        {
+          "key": "ranking_ap",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "pollType"
+          ],
+          "orders": []
+        },
+        {
+          "key": "ranking_order",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "rank"
+          ],
+          "orders": [
+            "ASC"
+          ]
+        },
+        {
+          "key": "by_source",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "season",
+            "week",
+            "source"
+          ],
+          "orders": []
+        },
+        {
+          "key": "by_school",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "season",
+            "week",
+            "schoolId"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "matchups",
+      "name": "Matchups",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-04T07:17:56.345+00:00",
+      "updatedAt": "2025-08-04T07:17:56.345+00:00",
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "season",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "week",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "homeTeamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "awayTeamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "homePoints",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "awayPoints",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "league_season_week",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "leagueId",
+            "season",
+            "week"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "player_stats",
+      "name": "Player Stats",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-04T07:17:58.118+00:00",
+      "updatedAt": "2025-08-04T07:17:58.118+00:00",
+      "attributes": [
+        {
+          "key": "playerId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "gameId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "week",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": 1,
+          "max": 20,
+          "default": null
+        },
+        {
+          "key": "season",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": 2020,
+          "max": 2030,
+          "default": null
+        },
+        {
+          "key": "stats",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 2000,
+          "default": null
+        },
+        {
+          "key": "opponent",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "eligible",
+          "type": "boolean",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": true
+        },
+        {
+          "key": "fantasyPoints",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "statlineJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 65535,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "stats_player",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "playerId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "stats_game",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "gameId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "stats_week",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "week",
+            "season"
+          ],
+          "orders": []
+        },
+        {
+          "key": "stats_player_week",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "playerId",
+            "week",
+            "season"
+          ],
+          "orders": []
+        },
+        {
+          "key": "player_season_week",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "season",
+            "week"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "drafts",
+      "name": "drafts",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-07T23:33:45.302+00:00",
+      "updatedAt": "2025-08-07T23:33:45.302+00:00",
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "currentRound",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "currentPick",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "maxRounds",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "draftOrder",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "startTime",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "endTime",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "type",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "clockSeconds",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "orderJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 8192,
+          "default": null
+        },
+        {
+          "key": "isMock",
+          "type": "boolean",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "leagueName",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "gameMode",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "selectedConference",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "maxTeams",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 4,
+          "max": 24,
+          "default": null
+        },
+        {
+          "key": "scoringRules",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 65535,
+          "default": null
+        },
+        {
+          "key": "stateJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 1000000,
+          "default": null
+        },
+        {
+          "key": "eventsJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 1000000,
+          "default": null
+        },
+        {
+          "key": "picksJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 1000000,
+          "default": null
+        },
+        {
+          "key": "onTheClock",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "lastPickTime",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "id": "activity_log",
+      "name": "activity_log",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-07T23:33:49.115+00:00",
+      "updatedAt": "2025-08-07T23:33:49.115+00:00",
+      "attributes": [
+        {
+          "key": "userId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "action",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "details",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "timestamp",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "type",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "teamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "description",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 1000,
+          "default": null
+        },
+        {
+          "key": "data",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 5000,
+          "default": null
+        },
+        {
+          "key": "createdAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "inviteToken",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 50,
+          "default": "pending"
+        },
+        {
+          "key": "expiresAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "ipAddress",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 45,
+          "default": null
+        },
+        {
+          "key": "userAgent",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 500,
+          "default": null
+        },
+        {
+          "key": "actorClientId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "objectType",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 24,
+          "default": null
+        },
+        {
+          "key": "objectId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "leagueId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "ts",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "payloadJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16384,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "idx_type",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "type"
+          ],
+          "orders": []
+        },
+        {
+          "key": "idx_user",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "userId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "idx_created",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "createdAt"
+          ],
+          "orders": []
+        },
+        {
+          "key": "idx_invite_token",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "inviteToken"
+          ],
+          "orders": []
+        },
+        {
+          "key": "idx_status",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "status"
+          ],
+          "orders": []
+        },
+        {
+          "key": "actor_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "actorClientId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "object_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "objectType",
+            "objectId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "league_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "leagueId"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "invites",
+      "name": "invites",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-08T06:54:26.863+00:00",
+      "updatedAt": "2025-08-08T06:54:26.863+00:00",
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "email",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "inviteCode",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "token",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "expiresAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "createdAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "acceptedAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "invitedByAuthUserId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 255,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "league_email",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "email"
+          ],
+          "orders": []
+        },
+        {
+          "key": "token_unique",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "token"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "transactions",
+      "name": "Transactions",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-13T21:47:49.938+00:00",
+      "updatedAt": "2025-08-13T21:47:49.938+00:00",
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "fantasyTeamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "type",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 24,
+          "default": null
+        },
+        {
+          "key": "payloadJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 8192,
+          "default": null
+        },
+        {
+          "key": "season",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "week",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "ts",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "league_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "leagueId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "league_season_week",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "leagueId",
+            "season",
+            "week"
+          ],
+          "orders": []
+        },
+        {
+          "key": "team_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "fantasyTeamId"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "meshy_jobs",
+      "name": "meshy_jobs",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-15T03:47:05.665+00:00",
+      "updatedAt": "2025-08-15T03:47:05.665+00:00",
+      "attributes": [
+        {
+          "key": "resultUrl",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 1024,
+          "default": null
+        },
+        {
+          "key": "mode",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 32,
+          "default": null
+        },
+        {
+          "key": "prompt",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 2048,
+          "default": null
+        },
+        {
+          "key": "userId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 128,
+          "default": null
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 1024,
+          "default": null
+        },
+        {
+          "key": "webhookSecret",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 256,
+          "default": null
+        },
+        {
+          "key": "createdAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "imageUrl",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 1024,
+          "default": null
+        },
+        {
+          "key": "baseModelUrl",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 1024,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "updatedAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "id": "model_versions",
+      "name": "Model Versions",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-16T23:50:16.682+00:00",
+      "updatedAt": "2025-08-16T23:50:16.682+00:00",
+      "attributes": [
+        {
+          "key": "versionId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "modelPath",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 1000,
+          "default": null
+        },
+        {
+          "key": "version",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "changes",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 65536,
+          "default": null
+        },
+        {
+          "key": "createdAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "createdBy",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "description",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 1000,
+          "default": null
+        },
+        {
+          "key": "glbUrl",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "thumbnailUrl",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "bucketFileId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "artifactUri",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 512,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "versionId_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "versionId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "version_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "version"
+          ],
+          "orders": []
+        },
+        {
+          "key": "createdAt_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "createdAt"
+          ],
+          "orders": []
+        },
+        {
+          "key": "createdBy_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "createdBy"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "auctions",
+      "name": "Auctions",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-17T02:37:52.156+00:00",
+      "updatedAt": "2025-08-17T02:37:52.156+00:00",
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "draftId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "playerId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "winnerTeamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "winningBid",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "auction_league",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "leagueId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "draft_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "draftId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "lot_unique",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "draftId",
+            "playerId"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "bids",
+      "name": "Bids",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-17T02:37:52.771+00:00",
+      "updatedAt": "2025-08-17T02:37:52.771+00:00",
+      "attributes": [
+        {
+          "key": "auctionId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "playerId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "teamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "amount",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "timestamp",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "isWinning",
+          "type": "boolean",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": false
+        },
+        {
+          "key": "fantasyTeamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "bid_auction",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "auctionId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "bid_player",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "playerId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "auction_amount",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "amount"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "lineups",
+      "name": "Lineups",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-17T02:37:54.124+00:00",
+      "updatedAt": "2025-08-17T02:37:54.124+00:00",
+      "attributes": [
+        {
+          "key": "rosterId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "week",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "season",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "lineup",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 5000,
+          "default": null
+        },
+        {
+          "key": "bench",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 5000,
+          "default": null
+        },
+        {
+          "key": "points",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": 0
+        },
+        {
+          "key": "locked",
+          "type": "boolean",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": false
+        },
+        {
+          "key": "fantasyTeamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "team_season_week_unique",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "fantasyTeamId",
+            "season",
+            "week"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "migrations",
+      "name": "Database Migrations",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-17T23:48:33.645+00:00",
+      "updatedAt": "2025-08-17T23:48:33.645+00:00",
+      "attributes": [
+        {
+          "key": "migrationId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "name",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "appliedAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "migration_id_unique",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "migrationId"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "draft_states",
+      "name": "Draft States",
+      "enabled": true,
+      "documentSecurity": true,
+      "createdAt": "2025-08-18T23:32:59.301+00:00",
+      "updatedAt": "2025-08-18T23:32:59.301+00:00",
+      "attributes": [
+        {
+          "key": "draftId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "onClockTeamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "deadlineAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "round",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "pickIndex",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "draft_unique_idx",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "draftId"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "leagues",
+      "name": "Leagues",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-19T21:06:06.773+00:00",
+      "updatedAt": "2025-08-19T21:06:06.773+00:00",
+      "attributes": [
+        {
+          "key": "name",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "season",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": 2020,
+          "max": 2030,
+          "default": null
+        },
+        {
+          "key": "maxTeams",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 4,
+          "max": 20,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 20,
+          "default": null
+        },
+        {
+          "key": "gameMode",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 20,
+          "default": null
+        },
+        {
+          "key": "draftType",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 20,
+          "default": null
+        },
+        {
+          "key": "isPublic",
+          "type": "boolean",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "currentTeams",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 0,
+          "max": 20,
+          "default": null
+        },
+        {
+          "key": "pickTimeSeconds",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 30,
+          "max": 600,
+          "default": null
+        },
+        {
+          "key": "draftDate",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "selectedConference",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "seasonStartWeek",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 1,
+          "max": 20,
+          "default": null
+        },
+        {
+          "key": "playoffTeams",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 0,
+          "max": 20,
+          "default": null
+        },
+        {
+          "key": "playoffStartWeek",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 1,
+          "max": 20,
+          "default": null
+        },
+        {
+          "key": "waiverType",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 20,
+          "default": null
+        },
+        {
+          "key": "waiverBudget",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 0,
+          "max": 1000,
+          "default": null
+        },
+        {
+          "key": "password",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "commissionerAuthUserId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "scoringRules",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 65535,
+          "default": null
+        },
+        {
+          "key": "draftOrder",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 65535,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "status_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "status"
+          ],
+          "orders": []
+        },
+        {
+          "key": "public_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "isPublic"
+          ],
+          "orders": []
+        },
+        {
+          "key": "season_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "season"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "college_players",
+      "name": "College Players",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-19T21:12:38.495+00:00",
+      "updatedAt": "2025-08-19T22:06:06.489+00:00",
+      "attributes": [
+        {
+          "key": "name",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "position",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 10,
+          "default": null
+        },
+        {
+          "key": "team",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "conference",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 20,
+          "default": null
+        },
+        {
+          "key": "year",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 10,
+          "default": null
+        },
+        {
+          "key": "jerseyNumber",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 0,
+          "max": 99,
+          "default": null
+        },
+        {
+          "key": "height",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 10,
+          "default": null
+        },
+        {
+          "key": "weight",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 150,
+          "max": 400,
+          "default": null
+        },
+        {
+          "key": "eligible",
+          "type": "boolean",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "fantasyPoints",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "seasonFantasyPoints",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "depthChartOrder",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "schoolId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "classYear",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "cfbdId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 32,
+          "default": null
+        },
+        {
+          "key": "espnId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 32,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "position_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "position"
+          ],
+          "orders": []
+        },
+        {
+          "key": "team_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "team"
+          ],
+          "orders": []
+        },
+        {
+          "key": "points_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "fantasyPoints"
+          ],
+          "orders": []
+        },
+        {
+          "key": "name_search",
+          "type": "fulltext",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "name"
+          ],
+          "orders": []
+        },
+        {
+          "key": "school_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "schoolId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "cfbd_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "cfbdId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "espn_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "espnId"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "games",
+      "name": "Games",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-19T21:12:46.659+00:00",
+      "updatedAt": "2025-08-19T21:12:46.659+00:00",
+      "attributes": [
+        {
+          "key": "week",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": 1,
+          "max": 20,
+          "default": null
+        },
+        {
+          "key": "season",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": 2020,
+          "max": 2030,
+          "default": null
+        },
+        {
+          "key": "seasonType",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 20,
+          "default": null
+        },
+        {
+          "key": "date",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "homeTeam",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "awayTeam",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "homeScore",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 0,
+          "max": 200,
+          "default": null
+        },
+        {
+          "key": "awayScore",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": 0,
+          "max": 200,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 20,
+          "default": null
+        },
+        {
+          "key": "eligible",
+          "type": "boolean",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "startDate",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "completed",
+          "type": "boolean",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "eligibleGame",
+          "type": "boolean",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "homeSchoolId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "awaySchoolId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "kickoffAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "week_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "week",
+            "season"
+          ],
+          "orders": []
+        },
+        {
+          "key": "eligible_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "eligibleGame"
+          ],
+          "orders": []
+        },
+        {
+          "key": "season_week",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "season",
+            "week"
+          ],
+          "orders": []
+        },
+        {
+          "key": "home_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "homeSchoolId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "away_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "awaySchoolId"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "draft_events",
+      "name": "draft_events",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-23T19:59:08.665+00:00",
+      "updatedAt": "2025-08-23T19:59:08.665+00:00",
+      "attributes": [
+        {
+          "key": "draftId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "type",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 24,
+          "default": null
+        },
+        {
+          "key": "round",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "overall",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "fantasyTeamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "playerId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "ts",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "payloadJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 8192,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "by_overall",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "draftId",
+            "overall"
+          ],
+          "orders": []
+        },
+        {
+          "key": "by_ts",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "draftId",
+            "ts"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "clients",
+      "name": "clients",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-23T19:59:53.937+00:00",
+      "updatedAt": "2025-08-23T19:59:53.937+00:00",
+      "attributes": [
+        {
+          "key": "authUserId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "displayName",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 128,
+          "default": null
+        },
+        {
+          "key": "email",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 256,
+          "default": null
+        },
+        {
+          "key": "avatarUrl",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 512,
+          "default": null
+        },
+        {
+          "key": "createdAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "default": null
+        },
+        {
+          "key": "lastLogin",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "auth_user_id_unique",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "authUserId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "email_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "email"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "fantasy_teams",
+      "name": "fantasy_teams",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-23T19:59:59.620+00:00",
+      "updatedAt": "2025-08-23T19:59:59.620+00:00",
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "teamName",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 128,
+          "default": null
+        },
+        {
+          "key": "abbrev",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 8,
+          "default": null
+        },
+        {
+          "key": "logoUrl",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 512,
+          "default": null
+        },
+        {
+          "key": "wins",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "losses",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "ties",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "pointsFor",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "pointsAgainst",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "draftPosition",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "auctionBudgetTotal",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "auctionBudgetRemaining",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "displayName",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "ownerAuthUserId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "league_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "leagueId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "owner_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "ownerAuthUserId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "league_owner_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "leagueId",
+            "ownerAuthUserId"
+          ],
+          "orders": [
+            "ASC",
+            "ASC"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "roster_slots",
+      "name": "roster_slots",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-23T20:00:03.062+00:00",
+      "updatedAt": "2025-08-23T20:00:03.062+00:00",
+      "attributes": [
+        {
+          "key": "fantasyTeamId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "playerId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "position",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 8,
+          "default": null
+        },
+        {
+          "key": "acquiredVia",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "acquiredAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "team_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "fantasyTeamId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "team_player_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "fantasyTeamId",
+            "playerId"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "schools",
+      "name": "schools",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-23T20:00:16.762+00:00",
+      "updatedAt": "2025-08-23T20:00:16.762+00:00",
+      "attributes": [
+        {
+          "key": "name",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 128,
+          "default": null
+        },
+        {
+          "key": "conference",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "slug",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "abbreviation",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "logoUrl",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 512,
+          "default": null
+        },
+        {
+          "key": "primaryColor",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "secondaryColor",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "mascot",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "slug_unique",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "slug"
+          ],
+          "orders": []
+        },
+        {
+          "key": "conference_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "conference"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "projections",
+      "name": "projections",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-23T20:00:23.846+00:00",
+      "updatedAt": "2025-08-23T20:00:23.846+00:00",
+      "attributes": [
+        {
+          "key": "playerId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "season",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "week",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "period",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "version",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "model",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 32,
+          "default": null
+        },
+        {
+          "key": "source",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "clientId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "fantasyPoints",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "componentsJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16384,
+          "default": null
+        },
+        {
+          "key": "boomProb",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "bustProb",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "homeAway",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 8,
+          "default": null
+        },
+        {
+          "key": "injuryStatus",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "opponentSchoolId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "rankPro",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "startSit_color",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 8,
+          "default": null
+        },
+        {
+          "key": "utilizationTrend",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "defenseVsPosGrade",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        },
+        {
+          "key": "startSitColor",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 20,
+          "default": null
+        },
+        {
+          "key": "teamTotalEst",
+          "type": "double",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -1.7976931348623157e+308,
+          "max": 1.7976931348623157e+308,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "season_week_version",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "season",
+            "week",
+            "version"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "model_runs",
+      "name": "model_runs",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-23T20:00:28.504+00:00",
+      "updatedAt": "2025-08-23T20:00:28.504+00:00",
+      "attributes": [
+        {
+          "key": "season",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "week",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "min": -9223372036854776000,
+          "max": 9223372036854776000,
+          "default": null
+        },
+        {
+          "key": "scope",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 32,
+          "default": null
+        },
+        {
+          "key": "sources",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 512,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "runId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "modelVersionId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "startedAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "finishedAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "inputsJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 65535,
+          "default": null
+        },
+        {
+          "key": "metricsJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 65535,
+          "default": null
+        },
+        {
+          "key": "weightsJson",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 65535,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "season_week",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "season",
+            "week"
+          ],
+          "orders": []
+        }
+      ]
+    },
+    {
+      "id": "league_memberships",
+      "name": "league_memberships",
+      "enabled": true,
+      "documentSecurity": false,
+      "createdAt": "2025-08-23T20:09:03.493+00:00",
+      "updatedAt": "2025-08-23T20:09:03.493+00:00",
+      "attributes": [
+        {
+          "key": "leagueId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "authUserId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "role",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "size": 16,
+          "default": null
+        },
+        {
+          "key": "joinedAt",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "default": null
+        },
+        {
+          "key": "displayName",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "leagueName",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "league_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "leagueId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "member_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "authUserId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "league_member_unique",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "leagueId",
+            "authUserId"
+          ],
+          "orders": []
+        }
+      ]
+    }
+  ]
+}

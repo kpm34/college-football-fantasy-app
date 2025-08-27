@@ -1,7 +1,7 @@
 "use client"
 import { useState, type PropsWithChildren } from 'react'
 
-export default function Dialog({ children }: PropsWithChildren<{}>) {
+export default function Dialog({ children }: PropsWithChildren) {
   const [open, setOpen] = useState(false)
   return (
     <div>

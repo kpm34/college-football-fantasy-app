@@ -32,13 +32,15 @@ export const COLLECTIONS = {
   ...ENV_COLLECTIONS,
   // Backwards-compatible UPPERCASE aliases
   LEAGUES: ENV_COLLECTIONS.leagues,
-  ROSTERS: ENV_COLLECTIONS.userTeams,
-  USER_TEAMS: ENV_COLLECTIONS.userTeams,
-  FANTASY_TEAMS: ENV_COLLECTIONS.userTeams, // Add alias for new schema name
+  ROSTERS: ENV_COLLECTIONS.fantasyTeams, // Deprecated alias, use FANTASY_TEAMS
+  USER_TEAMS: ENV_COLLECTIONS.fantasyTeams, // Deprecated alias, use FANTASY_TEAMS
+  FANTASY_TEAMS: ENV_COLLECTIONS.fantasyTeams,
   CLIENTS: 'clients',
   LEAGUE_MEMBERSHIPS: 'league_memberships',
   PLAYERS: ENV_COLLECTIONS.players,
   TEAMS: ENV_COLLECTIONS.teams,
+  // Legacy alias: some code refers to SCHOOLS, map it to teams collection
+  SCHOOLS: ENV_COLLECTIONS.teams,
   GAMES: ENV_COLLECTIONS.games,
   RANKINGS: ENV_COLLECTIONS.rankings,
   DRAFT_PICKS: ENV_COLLECTIONS.draftPicks,
@@ -48,6 +50,8 @@ export const COLLECTIONS = {
   MATCHUPS: ENV_COLLECTIONS.matchups,
   LINEUPS: ENV_COLLECTIONS.lineups,
   PLAYER_PROJECTIONS: ENV_COLLECTIONS.playerProjections,
+  // Some code refers to a generic PROJECTIONS collection; map if present in Appwrite
+  PROJECTIONS: (ENV_COLLECTIONS as any).projections || 'projections',
   PROJECTIONS_YEARLY: ENV_COLLECTIONS.playerProjectionsYearly,
   PROJECTIONS_WEEKLY: ENV_COLLECTIONS.playerProjectionsWeekly,
   MODEL_INPUTS: ENV_COLLECTIONS.modelInputs,

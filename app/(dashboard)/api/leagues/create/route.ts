@@ -33,7 +33,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   const requestData = await request.json();
 
   // Normalize incoming fields from Create League page
-  const name: string | undefined = requestData.name || requestData.leagueName;
+  const leagueName: string | undefined = requestData.leagueName || requestData.name;
   const rawGameMode: string | undefined = requestData.gameMode;
   const selectedConference: string | undefined = requestData.selectedConference;
   const maxTeams: number | undefined = typeof requestData.maxTeams === 'number'
@@ -68,8 +68,8 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   const gameMode = normalizeGameMode(rawGameMode, selectedConference);
 
   // Validate required fields
-  if (!name || !maxTeams || !gameMode) {
-    throw new ValidationError('Missing required fields: name, maxTeams, gameMode');
+  if (!leagueName || !maxTeams || !gameMode) {
+    throw new ValidationError('Missing required fields: leagueName, maxTeams, gameMode');
   }
 
   // Use repositories
@@ -77,7 +77,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
 
   // Create the league using repository
   const league = await leagues.createLeague({
-    name,
+    leagueName,
     maxTeams,
     draftType: draftType as any,
     gameMode,
@@ -108,11 +108,11 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
       ID.unique(),
       {
         leagueId: league.$id,
-        leagueName: name,  // Direct attribute for easy querying
+        leagueName: leagueName,  // Direct attribute for easy querying
         gameMode: gameMode,
         selectedConference: selectedConference || null,
         maxTeams: maxTeams,
-        status: 'scheduled', // Will change to 'active' when draft starts
+        draftStatus: 'pre-draft', // Will change to 'drafting' when draft starts
         type: draftType || 'snake', // Default to snake draft
         currentRound: 0,
         currentPick: 0,
@@ -132,6 +132,28 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   } catch (error) {
     // Log but don't fail league creation if draft doc fails
     console.error('Failed to create draft document:', error);
+  }
+  
+  // Create league membership for commissioner
+  try {
+    await databases.createDocument(
+      DATABASE_ID,
+      COLLECTIONS.LEAGUE_MEMBERSHIPS,
+      ID.unique(),
+      {
+        leagueId: league.$id,
+        leagueName: leagueName,
+        authUserId: user.$id, // Correct field name for league_memberships
+        role: 'COMMISSIONER',
+        status: 'ACTIVE',
+        joinedAt: new Date().toISOString(),
+        displayName: user.name || user.email
+      }
+    );
+    console.log('Commissioner membership created');
+  } catch (membershipError) {
+    console.warn('Failed to create commissioner membership record:', membershipError);
+    // Non-fatal: continue even if membership record fails
   }
 
   return NextResponse.json({

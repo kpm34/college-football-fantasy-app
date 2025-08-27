@@ -1,17 +1,23 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "app/**/*",
+    "app/(dashboard)/**/*",
+    "app/draft/**/*",
+    "app/(league)/**/*",
     "components/**/*",
-    "functions/**/*",
-    "lib/**/*",
-    "schema/**/*",
-    "docs/**/*",
+    "lib/hooks/**/*",
+    "lib/realtime/**/*",
+    "lib/appwrite.ts",
+    "lib/config/environment.ts",
     "types/**/*"
   ],
   "exclude": [
     "node_modules",
     ".next",
+    ".next/types/**/*",
+    "app/api/mcp/**/*",
+    "app/api/(backend)/**/*",
+    "app/api/(external)/**/*",
     "ops/attic/**/*",
     "ops/common/scripts/**/*",
     "ops/common/prompts/**/*",
