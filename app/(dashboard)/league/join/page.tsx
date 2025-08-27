@@ -222,7 +222,7 @@ function JoinLeagueContent() {
     }
   };
 
-  // Search leagues by name
+  // Search leagues by name (public endpoint; no auth required)
   const searchLeagues = async (searchQuery: string) => {
     if (!searchQuery.trim()) {
       setAvailableLeagues([]);
@@ -231,21 +231,34 @@ function JoinLeagueContent() {
 
     setSearchLoading(true);
     try {
-      // Use the API endpoint to search leagues
+      // Use the public search endpoint which exposes leagueName safely
       const params = new URLSearchParams();
-      params.append('search', searchQuery);
-      params.append('includePrivate', 'true'); // Include private leagues in search
-      params.append('includeClosed', 'true'); // Show full leagues too so users can find specific leagues like Jawn
-      
-      const response = await fetch(`/api/leagues/search?${params}`);
+      params.append('type', 'leagues');
+      params.append('q', searchQuery);
+      params.append('limit', '20');
+
+      const response = await fetch(`/api/search?${params}`);
       const data = await response.json();
 
-      if (data.success) {
-        setAvailableLeagues(data.leagues);
-      } else {
-        console.error('Error searching leagues:', data.error);
-        setAvailableLeagues([]);
-      }
+      const suggestions = Array.isArray(data?.suggestions) ? data.suggestions : [];
+      const mapped: League[] = suggestions.map((s: any) => ({
+        $id: s.id,
+        name: s.name, // This is leagueName from the search API
+        owner: 'Commissioner',
+        teams: s.teams ?? 0,
+        maxTeams: 12,
+        draftType: 'snake',
+        entryFee: 0,
+        draftDate: new Date().toISOString(),
+        draftTime: '',
+        description: '',
+        type: 'public',
+        leagueStatus: 'open',
+        draftStatus: 'pre-draft',
+        createdAt: new Date().toISOString(),
+      }));
+
+      setAvailableLeagues(mapped);
     } catch (error) {
       console.error('Error searching leagues:', error);
       // Fallback to sample data for demo

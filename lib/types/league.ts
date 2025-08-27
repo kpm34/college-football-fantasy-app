@@ -2,6 +2,7 @@ import { Models } from 'appwrite';
 
 export interface League extends Models.Document {
   name: string;
+  leagueName?: string;
   commissioner: string; // Database uses 'commissioner'
   commissionerId?: string; // Legacy field - for backwards compatibility
   season: number;
@@ -10,6 +11,7 @@ export interface League extends Models.Document {
   draftType: 'snake' | 'auction';
   gameMode: 'power4' | 'sec' | 'acc' | 'big12' | 'bigten';
   status: 'open' | 'full' | 'drafting' | 'active' | 'complete';
+  draftStatus?: 'pre-draft' | 'drafting' | 'post-draft' | 'paused';
   isPublic: boolean;
   pickTimeSeconds: number;
   scoringRules: Record<string, number>;

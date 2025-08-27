@@ -25,15 +25,45 @@ export async function GET(request: NextRequest) {
       );
       results = res.documents.map((d: any) => ({ id: d.$id, name: d.name, team: d.team, position: d.position }));
     } else if (type === 'leagues') {
-      const res = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.LEAGUES,
-        [
-          Query.search('leagueName', q),
-          Query.limit(limit)
-        ]
-      );
-      results = res.documents.map((d: any) => ({ id: d.$id, name: d.leagueName, teams: d.currentTeams ?? 0 }));
+      let docs: any[] = [];
+      // Try fulltext on canonical attribute first
+      try {
+        const res = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.LEAGUES,
+          [Query.search('leagueName', q), Query.limit(limit)]
+        );
+        docs = res.documents || [];
+      } catch {}
+
+      // Fallback: try legacy 'name' attribute
+      if (docs.length === 0) {
+        try {
+          const res2 = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.LEAGUES,
+            [Query.search('name', q), Query.limit(limit)]
+          );
+          docs = res2.documents || [];
+        } catch {}
+      }
+
+      // Last resort: fetch a page and filter in-memory (works without fulltext index)
+      if (docs.length === 0) {
+        try {
+          const res3 = await databases.listDocuments(
+            DATABASE_ID,
+            COLLECTIONS.LEAGUES,
+            [Query.limit(100)]
+          );
+          const ql = q.toLowerCase();
+          docs = (res3.documents || []).filter((d: any) =>
+            String(d.leagueName || d.name || '').toLowerCase().includes(ql)
+          ).slice(0, limit);
+        } catch {}
+      }
+
+      results = docs.map((d: any) => ({ id: d.$id, name: d.leagueName || d.name, teams: d.currentTeams ?? (d.members?.length ?? 0) }));
     }
 
     const ms = Date.now() - start;

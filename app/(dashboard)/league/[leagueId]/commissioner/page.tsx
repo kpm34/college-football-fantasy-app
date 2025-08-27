@@ -315,7 +315,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
     
     try {
       const updates: any = {
-        name: leagueName,
+        leagueName: leagueName,
         maxTeams,
         isPublic,
         // gameMode and selectedConference are immutable after creation
@@ -333,10 +333,9 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
       }
       updates.pickTimeSeconds = pickTimeSeconds;
       updates.draftType = draftType;
-      // Save draft order as a separate field
-      // Only save human entries; bots are ephemeral and filled at draft start
-      const humanOrder = draftOrder.filter((id) => typeof id === 'string' && !/^BOT-/i.test(id)).filter(Boolean);
-      updates.draftOrder = humanOrder;
+      // Save draft order as a separate field (include BOT-* entries when user clicks Fill With Bots)
+      const finalOrder = draftOrder.filter((id) => typeof id === 'string').filter(Boolean);
+      updates.draftOrder = finalOrder;
       updates.scoringRules = JSON.stringify(scoringRules);
       
       console.log('Saving settings with updates:', updates);

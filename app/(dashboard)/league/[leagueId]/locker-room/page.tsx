@@ -632,7 +632,7 @@ export default function LockerRoomPage({ params, searchParams }: {
                               <td className="py-3 px-4 text-center text-white/60">-</td>
                               <td className="py-3 px-4 text-center">
                                 <span className="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400">
-                                  ACTIVE
+                                  Active
                                 </span>
                               </td>
                               <td className="py-3 px-4 text-center text-white/60">-</td>

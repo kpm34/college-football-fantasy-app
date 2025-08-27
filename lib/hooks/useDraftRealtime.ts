@@ -118,7 +118,8 @@ export function useDraftRealtime(leagueId: string) {
         const onTheClock = orderArray[actualIndex] || league.draftOrder?.[actualIndex];
         const draftStartMs = (league as any)?.draftDate ? new Date((league as any).draftDate).getTime() : 0;
         // Live only when status is drafting and time has reached or passed
-        const isDraftLive = (String((league as any)?.draftStatus) === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
+        const leagueDraftStatus = String((league as any)?.draftStatus || (league as any)?.status || '');
+        const isDraftLive = (leagueDraftStatus === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
         const isMyTurn = isDraftLive && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
 
         setState({
@@ -132,7 +133,7 @@ export function useDraftRealtime(leagueId: string) {
           loading: false,
           error: null,
           deadlineAt: draftState?.deadlineAt || null,
-          draftStatus: draftState?.draftStatus || (league as any)?.draftStatus || null,
+          draftStatus: draftState?.draftStatus || leagueDraftStatus || null,
         });
       } catch (error) {
         console.error('Error loading draft data:', error);
@@ -159,7 +160,9 @@ export function useDraftRealtime(leagueId: string) {
         // Subscribe to draft picks
         `databases.${DATABASE_ID}.collections.${COLLECTIONS.DRAFT_PICKS}.documents`,
         // Subscribe to league updates (for draft status changes)
-        `databases.${DATABASE_ID}.collections.${COLLECTIONS.LEAGUES}.documents.${leagueId}`
+        `databases.${DATABASE_ID}.collections.${COLLECTIONS.LEAGUES}.documents.${leagueId}`,
+        // Subscribe to draft state snapshots (pause/resume, deadlines)
+        `databases.${DATABASE_ID}.collections.${COLLECTIONS.DRAFT_STATES}.documents`
       ],
       (response: RealtimeResponseEvent<any>) => {
         console.log('[Draft Realtime] Received event:', response);
@@ -172,6 +175,11 @@ export function useDraftRealtime(leagueId: string) {
         // Handle league update events
         if (response.channels.includes(`databases.${DATABASE_ID}.collections.${COLLECTIONS.LEAGUES}.documents.${leagueId}`)) {
           handleLeagueEvent(response);
+        }
+
+        // Handle draft state events (filter to this league)
+        if (response.channels.includes(`databases.${DATABASE_ID}.collections.${COLLECTIONS.DRAFT_STATES}.documents`)) {
+          handleDraftStateEvent(response);
         }
 
         // Mark as connected when we receive any event
@@ -263,7 +271,8 @@ export function useDraftRealtime(leagueId: string) {
           const fallbackMembers: string[] = Array.isArray((prev.league as any)?.members) ? (prev.league as any).members : [];
           const onTheClock = parsedOrder[actualIndex] || fallbackMembers[actualIndex] || prev.league.draftOrder?.[actualIndex];
           const draftStartMs = (prev.league as any)?.draftDate ? new Date((prev.league as any).draftDate).getTime() : 0;
-          const isDraftLive = (String((prev.league as any)?.draftStatus) === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
+          const leagueDraftStatus = String((prev.league as any)?.draftStatus || (prev.league as any)?.status || '');
+          const isDraftLive = (leagueDraftStatus === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
           const isMyTurn = isDraftLive && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
 
           return {
@@ -327,6 +336,34 @@ export function useDraftRealtime(leagueId: string) {
       }));
     }
   }, []);
+
+  // Handle draft state events (pause/resume, deadline changes)
+  const handleDraftStateEvent = useCallback((response: RealtimeResponseEvent<any>) => {
+    const { events, payload } = response;
+    const doc = payload as any;
+    // Only react to this league's draftId
+    if (!doc || (doc.draftId !== leagueId)) return;
+
+    if (
+      events.includes('databases.*.collections.*.documents.*.create') ||
+      events.includes('databases.*.collections.*.documents.*.update')
+    ) {
+      setState(prev => {
+        const draftStartMs = (prev.league as any)?.draftDate ? new Date((prev.league as any).draftDate).getTime() : 0;
+        const effectiveStatus = String(doc.draftStatus || (prev.league as any)?.draftStatus || (prev.league as any)?.status || '');
+        const isDraftLive = (effectiveStatus === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : true);
+        const onClock = doc.onClockTeamId || prev.onTheClock;
+        const isMyTurn = isDraftLive && (onClock ? myIdsRef.current.has(String(onClock)) : false);
+        return {
+          ...prev,
+          onTheClock: onClock,
+          isMyTurn,
+          deadlineAt: doc.deadlineAt || null,
+          draftStatus: effectiveStatus || prev.draftStatus,
+        };
+      });
+    }
+  }, [leagueId]);
 
   // Make a draft pick
   const makePick = async (playerId: string) => {

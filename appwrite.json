@@ -57,6 +57,28 @@
             "commands": "npm install",
             "specification": "s-1vcpu-512mb",
             "path": "functions/appwrite/import-players"
+        },
+        {
+            "$id": "on-league-membership-change",
+            "execute": [
+                "any"
+            ],
+            "name": "On League Membership Change",
+            "enabled": true,
+            "logging": true,
+            "runtime": "node-18.0",
+            "scopes": [],
+            "events": [
+                "databases.*.collections.fantasy_teams.documents.*.create",
+                "databases.*.collections.fantasy_teams.documents.*.update",
+                "databases.*.collections.fantasy_teams.documents.*.delete"
+            ],
+            "schedule": "",
+            "timeout": 60,
+            "entrypoint": "index.js",
+            "commands": "npm install",
+            "specification": "s-1vcpu-512mb",
+            "path": "functions/appwrite/on-league-membership-change"
         }
     ],
     "sites": [

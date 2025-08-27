@@ -271,7 +271,11 @@ export async function PUT(
         }
       }
     };
-    setIfPresent('name', updates.name);
+    // Normalize incoming league name to `leagueName`
+    const incomingLeagueName = updates.leagueName ?? updates.name;
+    if (incomingLeagueName !== undefined) {
+      setIfPresent('leagueName', String(incomingLeagueName));
+    }
     if ('maxTeams' in updates) setIfPresent('maxTeams', Number(updates.maxTeams));
     if ('pickTimeSeconds' in updates) setIfPresent('pickTimeSeconds', Number(updates.pickTimeSeconds));
     if ('draftDate' in updates) setIfPresent('draftDate', updates.draftDate); // ISO string
@@ -323,7 +327,7 @@ export async function PUT(
 
     // Filter payload to only attributes that exist on the document (or are known safe)
     const knownSafeKeys = new Set([
-      'name', 'maxTeams', 'isPublic', 'draftDate', 'pickTimeSeconds',
+      'leagueName', 'maxTeams', 'isPublic', 'draftDate', 'pickTimeSeconds',
       'orderMode', 'draftOrder', 'gameMode', 'selectedConference', 'scoringRules',
       'draftType', 'seasonStartWeek', 'playoffTeams', 'playoffStartWeek',
       'waiverType', 'waiverBudget', 'primaryColor', 'secondaryColor',

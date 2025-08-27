@@ -16,6 +16,7 @@ import { DraftButton } from '@components/features/leagues/DraftButton';
 interface League {
   $id: string;
   name: string;
+  leagueName?: string;
   commissioner: string; // User ID of commissioner
   commissionerAuthUserId?: string; // Canonical commissioner auth user ID
   commissionerName?: string; // Commissioner display name
@@ -27,6 +28,7 @@ interface League {
   draftDate: string;
   draftStartedAt?: string;
   status: string;
+  draftStatus?: 'pre-draft' | 'drafting' | 'post-draft' | 'paused';
   gameMode?: string;
   selectedConference?: string;
   isPrivate?: boolean;
@@ -43,6 +45,7 @@ interface Team {
   $id: string;
   leagueId: string;
   userId: string;
+  ownerAuthUserId?: string;
   name: string;
   userName?: string;
   email?: string;
@@ -176,7 +179,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           teams: l.members?.length || 0,
           draftDate: l.draftDate || '',
           draftStartedAt: (l as any).draftStartedAt || undefined,
-          status: l.status || 'ACTIVE',
+          status: l.status || 'open',
+          draftStatus: (l as any).draftStatus || 'pre-draft',
           gameMode: l.mode,
           selectedConference: l.conf || undefined,
           draftType: (l as any).draftType,
@@ -316,7 +320,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                 <th className="text-left py-4 px-6">Name</th>
                 <th className="text-center py-4 px-6">Record</th>
                 <th className="text-center py-4 px-6">Points</th>
-                <th className="text-center py-4 px-6">Status</th>
+                <th className="text-center py-4 px-6">Draft Status</th>
               </tr>
             </thead>
             <tbody>
@@ -637,10 +641,10 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
                   )}
                 </div>
                 <div>
-                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>Status</p>
+                  <p className="text-sm" style={{ color: leagueColors.text.muted }}>Draft Status</p>
                   <div className="flex items-center gap-2">
-                    <p className="font-semibold capitalize">{league?.status || 'Pre-Draft'}</p>
-                    {league?.status === 'drafting' && (
+                    <p className="font-semibold capitalize">{(league?.draftStatus === 'pre-draft' && 'Pre-draft') || (league?.draftStatus === 'drafting' && 'Drafting') || (league?.draftStatus === 'post-draft' && 'Post-draft') || 'Pre-draft'}</p>
+                    {league?.draftStatus === 'drafting' && (
                       <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                     )}
                   </div>
