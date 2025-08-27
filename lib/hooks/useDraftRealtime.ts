@@ -117,9 +117,9 @@ export function useDraftRealtime(leagueId: string) {
           : pickIndex;
         const onTheClock = orderArray[actualIndex] || league.draftOrder?.[actualIndex];
         const draftStartMs = (league as any)?.draftDate ? new Date((league as any).draftDate).getTime() : 0;
-        // Live when status is drafting AND time reached (do not go live early just due to a deadline)
-        const leagueDraftStatus = String((league as any)?.draftStatus || (league as any)?.status || '');
-        const isDraftLive = (leagueDraftStatus === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
+        // Live when draftStatus (from draft_state) is drafting AND time reached
+        const effectiveDraftStatus = String(draftState?.draftStatus || '');
+        const isDraftLive = (effectiveDraftStatus === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
         const isMyTurn = isDraftLive && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
 
         setState({
@@ -133,7 +133,7 @@ export function useDraftRealtime(leagueId: string) {
           loading: false,
           error: null,
           deadlineAt: draftState?.deadlineAt || null,
-          draftStatus: draftState?.draftStatus || leagueDraftStatus || null,
+          draftStatus: draftState?.draftStatus || null,
         });
       } catch (error) {
         console.error('Error loading draft data:', error);
@@ -271,8 +271,7 @@ export function useDraftRealtime(leagueId: string) {
           const fallbackMembers: string[] = Array.isArray((prev.league as any)?.members) ? (prev.league as any).members : [];
           const onTheClock = parsedOrder[actualIndex] || fallbackMembers[actualIndex] || prev.league.draftOrder?.[actualIndex];
           const draftStartMs = (prev.league as any)?.draftDate ? new Date((prev.league as any).draftDate).getTime() : 0;
-          const leagueDraftStatus = String((prev.league as any)?.draftStatus || (prev.league as any)?.status || '');
-          const isDraftLive = (leagueDraftStatus === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
+          const isDraftLive = (String(prev.draftStatus || '') === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
           const isMyTurn = isDraftLive && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
 
           return {
@@ -350,7 +349,7 @@ export function useDraftRealtime(leagueId: string) {
     ) {
       setState(prev => {
         const draftStartMs = (prev.league as any)?.draftDate ? new Date((prev.league as any).draftDate).getTime() : 0;
-        const effectiveStatus = String(doc.draftStatus || (prev.league as any)?.draftStatus || (prev.league as any)?.status || '');
+        const effectiveStatus = String(doc.draftStatus || '');
         const isDraftLive = (effectiveStatus === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : true);
         const onClock = doc.onClockTeamId || prev.onTheClock;
         const isMyTurn = isDraftLive && (onClock ? myIdsRef.current.has(String(onClock)) : false);

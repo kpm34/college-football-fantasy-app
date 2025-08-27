@@ -292,17 +292,16 @@ export async function PUT(
     if ('secondaryColor' in updates) setIfPresent('secondaryColor', updates.secondaryColor);
     if ('leagueTrophyName' in updates) setIfPresent('leagueTrophyName', updates.leagueTrophyName);
     if ('draftType' in updates) setIfPresent('draftType', updates.draftType);
+    // Capture incoming draftOrder but do NOT persist it to leagues (canonical lives in drafts.orderJson)
+    let draftOrderToApply: string | string[] | undefined = undefined;
     if ('draftOrder' in updates) {
-      // Ensure draftOrder is a JSON string and not too long
-      let draftOrderValue = updates.draftOrder;
-      if (typeof draftOrderValue !== 'string') {
-        draftOrderValue = JSON.stringify(draftOrderValue);
+      draftOrderToApply = updates.draftOrder;
+      if (typeof draftOrderToApply !== 'string') {
+        try { draftOrderToApply = JSON.stringify(draftOrderToApply); } catch {}
       }
-      // Validate it's not too long (Appwrite limit is 65535)
-      if (draftOrderValue.length <= 65535) {
-        setIfPresent('draftOrder', draftOrderValue);
-      } else {
-        console.warn('[Commissioner] Draft order too long, will store in draft document only');
+      if (typeof draftOrderToApply === 'string' && draftOrderToApply.length > 65535) {
+        console.warn('[Commissioner] Draft order too long, truncating to 65535 chars for draft document');
+        draftOrderToApply = draftOrderToApply.slice(0, 65535);
       }
     }
     if ('isPublic' in updates) setIfPresent('isPublic', Boolean(updates.isPublic));
@@ -328,7 +327,7 @@ export async function PUT(
     // Filter payload to only attributes that exist on the document (or are known safe)
     const knownSafeKeys = new Set([
       'leagueName', 'maxTeams', 'isPublic', 'draftDate', 'pickTimeSeconds',
-      'orderMode', 'draftOrder', 'gameMode', 'selectedConference', 'scoringRules',
+      'orderMode', 'gameMode', 'selectedConference', 'scoringRules',
       'draftType', 'seasonStartWeek', 'playoffTeams', 'playoffStartWeek',
       'waiverType', 'waiverBudget', 'primaryColor', 'secondaryColor',
       'leagueTrophyName', 'scoringType', 'tradeDeadline', 'rosterSize'
@@ -389,15 +388,10 @@ export async function PUT(
           orderJson = draftDoc.orderJson ? JSON.parse(draftDoc.orderJson) : {};
         } catch {}
         
-        if ('draftOrder' in safePayload) {
-          // Parse the draftOrder if it's a string
-          let draftOrderData = safePayload.draftOrder;
+        if (draftOrderToApply !== undefined) {
+          let draftOrderData: any = draftOrderToApply;
           if (typeof draftOrderData === 'string') {
-            try {
-              draftOrderData = JSON.parse(draftOrderData);
-            } catch {
-              // If it fails to parse, keep as string
-            }
+            try { draftOrderData = JSON.parse(draftOrderData); } catch {}
           }
           orderJson.draftOrder = draftOrderData;
         }
@@ -429,7 +423,15 @@ export async function PUT(
         console.log('Draft document updated:', draftDoc.$id);
       } else {
         // Create draft document if it doesn't exist
-        const draftOrder = safePayload.draftOrder || [user.$id];
+        const draftOrder = (() => {
+          if (draftOrderToApply !== undefined) {
+            if (typeof draftOrderToApply === 'string') {
+              try { return JSON.parse(draftOrderToApply); } catch { return [user.$id]; }
+            }
+            return draftOrderToApply;
+          }
+          return [user.$id];
+        })();
         const draftDoc = await databases.createDocument(
           DATABASE_ID,
           COLLECTIONS.DRAFTS,

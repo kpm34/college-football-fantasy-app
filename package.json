@@ -8,7 +8,7 @@
     "schema:pull": "appwrite pull collections",
     "schema:push": "appwrite push collections --force",
     "schema:types": "appwrite types -l ts ./src/types/appwrite",
-    "schema:sync": "npx tsx ops/common/scripts/sync-appwrite-simple.ts",
+    
     "schema:all": "npm run schema:push && npm run schema:types",
     "schema:list": "ts-node ops/common/scripts/list-appwrite-collections.ts",
     "schema:validate": "npx tsx ops/common/scripts/validate-schema-compliance.ts",
@@ -28,6 +28,8 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,json}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,md,json}\"",
     "preview": "vercel",
+    "schema:export:csv": "tsx ops/common/scripts/export-appwrite-schema-csv.ts",
+    "schema:export:mermaid": "tsx ops/diagrams/export-live-schema-mermaid.ts",
     "deploy": "vercel --prod",
     "clean": "rm -rf .next node_modules package-lock.json && npm install",
     "test": "jest -c ops/config/jest.config.js",

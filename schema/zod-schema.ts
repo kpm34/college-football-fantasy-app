@@ -81,7 +81,6 @@ export const Leagues = z.object({
   gameMode: z.enum(['power4', 'sec', 'acc', 'big12', 'bigten']),
   selectedConference: z.string().max(50).optional(),
   leagueStatus: z.enum(['open', 'closed']).default('open'),
-  draftStatus: z.enum(['pre-draft', 'drafting', 'post-draft']).default('pre-draft'),
   isPublic: z.boolean().default(true),
   pickTimeSeconds: z.number().int().min(30).max(600).default(90),
   scoringRules: z.string().max(2000).optional(), // JSON string

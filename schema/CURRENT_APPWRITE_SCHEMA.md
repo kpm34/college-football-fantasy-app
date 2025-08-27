@@ -1,8 +1,7 @@
 # Current Appwrite Schema
 
 **Database:** college-football-fantasy
-
-**Updated:** 2025-08-27T00:07:52.814Z
+**Updated:** 2025-08-27T17:56:07.654Z
 
 ## AP Rankings (rankings)
 

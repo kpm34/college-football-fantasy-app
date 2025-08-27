@@ -210,7 +210,7 @@ flowchart TB
   ops_common_scripts_setup_vercel_env_sh["setup-vercel-env.sh"]
   class ops_common_scripts_setup_vercel_env_sh file
   ops_common_scripts --> ops_common_scripts_setup_vercel_env_sh
-  ops_common_scripts_sync_appwrite_simple_ts["sync-appwrite-simple.ts"]
+  %% Removed: sync-appwrite-simple.ts (deprecated)
   class ops_common_scripts_sync_appwrite_simple_ts file
   ops_common_scripts --> ops_common_scripts_sync_appwrite_simple_ts
   ops_common_scripts_sync_college_players_from_csv_ts["sync-college-players-from-csv.ts"]

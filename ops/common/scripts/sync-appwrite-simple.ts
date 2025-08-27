@@ -148,11 +148,12 @@ async function main() {
     await ensureIntegerAttr("leagues", "maxTeams", true, 2, 32, 12);
     await ensureEnumAttr("leagues", "draftType", ["snake", "auction"], true);
     await ensureEnumAttr("leagues", "gameMode", ["power4", "sec", "acc", "big12", "bigten"], true);
-    await ensureEnumAttr("leagues", "status", ["open", "drafting", "active", "complete"], true, "open");
+    // Drop legacy 'status' attribute in favor of 'leagueStatus' (open/closed) and 'draftStatus'
     await ensureBooleanAttr("leagues", "isPublic", true, true);
     
     // Useful indexes
-    await ensureIndex("leagues", "status_idx", "key", ["status"]);
+    // Index now targets leagueStatus
+    await ensureIndex("leagues", "status_idx", "key", ["leagueStatus"]);
     await ensureIndex("leagues", "public_idx", "key", ["isPublic"]);
 
     // Sync Teams collection

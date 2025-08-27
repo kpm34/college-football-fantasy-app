@@ -501,7 +501,7 @@ graph LR
 npx tsx ops/common/scripts/validate-ssot-schema.ts
 
 # Sync SSOT to Appwrite  
-npx tsx ops/common/scripts/sync-appwrite-simple.ts
+// Removed: sync-appwrite-simple.ts (deprecated)
 ```
 
 ---
