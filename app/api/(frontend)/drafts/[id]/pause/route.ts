@@ -24,6 +24,13 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     state = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : null;
     if (state) {
       state.draftStatus = 'paused';
+      // Preserve remaining time by clearing deadlineAt (clients will treat as paused)
+      // Optionally store remaining seconds for resume, if needed in future
+      if (state.deadlineAt) {
+        const remaining = Math.max(0, Math.floor((new Date(state.deadlineAt).getTime() - Date.now()) / 1000));
+        state.remainingSeconds = remaining;
+      }
+      state.deadlineAt = undefined;
       await kv.set(`draft:${draftId}:state`, JSON.stringify(state));
     }
   } catch {}
@@ -32,7 +39,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     DATABASE_ID,
     COLLECTIONS.DRAFT_STATES,
     ID.unique(),
-    { draftId, onClockTeamId: state?.onClockTeamId || '', deadlineAt: state?.deadlineAt || new Date().toISOString(), round: state?.round || 1, pickIndex: state?.pickIndex || 1, draftStatus: 'paused' }
+    { draftId, onClockTeamId: state?.onClockTeamId || '', deadlineAt: state?.deadlineAt || null, round: state?.round || 1, pickIndex: state?.pickIndex || 1, draftStatus: 'paused' }
   );
 
   return NextResponse.json({ success: true, state });

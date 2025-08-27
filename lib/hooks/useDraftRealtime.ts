@@ -16,6 +16,7 @@ interface DraftRealtimeState {
   loading: boolean;
   error: string | null;
   deadlineAt: string | null;
+  draftStatus: string | null;
 }
 
 export function useDraftRealtime(leagueId: string) {
@@ -31,6 +32,7 @@ export function useDraftRealtime(leagueId: string) {
     loading: true,
     error: null,
     deadlineAt: null,
+    draftStatus: null,
   });
   // Track IDs that represent "me" for turn checks (auth user id + roster doc ids)
   const myIdsRef = useRef<Set<string>>(new Set());
@@ -130,6 +132,7 @@ export function useDraftRealtime(leagueId: string) {
           loading: false,
           error: null,
           deadlineAt: draftState?.deadlineAt || null,
+          draftStatus: draftState?.draftStatus || (league as any)?.draftStatus || null,
         });
       } catch (error) {
         console.error('Error loading draft data:', error);
@@ -222,7 +225,7 @@ export function useDraftRealtime(leagueId: string) {
         const currentRound = Math.ceil(currentPick / totalTeams);
         
         // Check if draft is complete
-        const totalRounds = prev.league?.draftRounds || 15;
+        const totalRounds = (prev.league as any)?.draftRounds || 15;
         // parsedOrder already computed
         const totalPicks = totalRounds * totalTeams;
         

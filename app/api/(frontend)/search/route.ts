@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite';
-import { Query } from 'appwrite';
+import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
+import { Query } from 'node-appwrite';
 
-export const runtime = 'edge';
-export const preferredRegion = ['iad1', 'sfo1'];
+export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -29,9 +28,12 @@ export async function GET(request: NextRequest) {
       const res = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.LEAGUES,
-        [Query.search('name', q), Query.limit(limit)]
+        [
+          Query.search('leagueName', q),
+          Query.limit(limit)
+        ]
       );
-      results = res.documents.map((d: any) => ({ id: d.$id, name: d.name, teams: d.members?.length || 0 }));
+      results = res.documents.map((d: any) => ({ id: d.$id, name: d.leagueName, teams: d.currentTeams ?? 0 }));
     }
 
     const ms = Date.now() - start;

@@ -156,11 +156,9 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       console.log('[Draft Start] Could not create draft state document:', error.message);
     }
     
-    // Update the league status to indicate draft has started
+    // Update the league draft status to indicate draft has started
     try {
-      await databases.updateDocument(DATABASE_ID, COLLECTIONS.LEAGUES, leagueId, {
-        status: 'drafting'
-      });
+      await databases.updateDocument(DATABASE_ID, COLLECTIONS.LEAGUES, leagueId, { draftStatus: 'drafting' } as any);
     } catch (error: any) {
       console.log('[Draft Start] Could not update league status:', error.message);
     }

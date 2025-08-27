@@ -188,10 +188,12 @@ export default function DraftRoom({ params }: Props) {
     }
   }, [draft]);
 
-  // Countdown from the locked deadline
+  // Countdown from the locked deadline (paused when draft is paused)
   useEffect(() => {
     const id = setInterval(() => {
-      if (!deadlineTs || !draftHasStarted) {
+      // Pause countdown when server state indicates paused
+      const isPaused = String((draft as any)?.deadlineAt) === 'paused' || String((draft.league as any)?.draftStatus) === 'paused' || String((draft as any)?.draftStatus) === 'paused';
+      if (!deadlineTs || !draftHasStarted || isPaused) {
         setSecondsLeft(null);
         return;
       }
@@ -201,6 +203,20 @@ export default function DraftRoom({ params }: Props) {
     }, 1000);
     return () => clearInterval(id);
   }, [deadlineTs, draftHasStarted]);
+
+  // When timer hits zero, trigger server-side autopick for the current on-clock team (skip when paused)
+  useEffect(() => {
+    if (!leagueId || secondsLeft === null) return;
+    if (secondsLeft > 0) return;
+    if (String((draft.league as any)?.draftStatus) === 'paused' || String((draft as any)?.draftStatus) === 'paused') return;
+    // Small debounce to avoid duplicate calls while state settles
+    const t = setTimeout(async () => {
+      try {
+        await fetch(`/api/drafts/${leagueId}/autopick`, { method: 'POST' });
+      } catch {}
+    }, 500);
+    return () => clearTimeout(t);
+  }, [secondsLeft, leagueId]);
 
   // Derived helpers to match mock UI behavior
   const idToName = useMemo(() => {
@@ -333,8 +349,8 @@ export default function DraftRoom({ params }: Props) {
           draftOrder={safeDraftOrder}
           currentPick={draft?.currentPick || null}
           timeRemaining={secondsLeft}
-          onPickPlayer={handlePick}
-          isMyTurn={isMyTurn || false}
+          onPickPlayer={handleDraftPlayer}
+          isMyTurn={draft?.isMyTurn || false}
           draftStarted={draftHasStarted || false}
           leagueColors={leagueColors}
         />
@@ -397,6 +413,25 @@ export default function DraftRoom({ params }: Props) {
             </div>
           )}
         </div>
+        {/* Commissioner controls for pause/resume */}
+        {draft.league && (draft.league as any).commissionerAuthUserId && user?.$id === (draft.league as any).commissionerAuthUserId && (
+          <div className="flex items-center gap-2">
+            <button
+              className="px-3 py-1 rounded text-xs border"
+              style={{ backgroundColor: leagueColors.background.card, borderColor: leagueColors.border.light }}
+              onClick={async () => {
+                try { await fetch(`/api/drafts/${leagueId}/pause`, { method: 'POST' }); } catch {}
+              }}
+            >Pause</button>
+            <button
+              className="px-3 py-1 rounded text-xs border"
+              style={{ backgroundColor: leagueColors.background.card, borderColor: leagueColors.border.light }}
+              onClick={async () => {
+                try { await fetch(`/api/drafts/${leagueId}/resume`, { method: 'POST' }); } catch {}
+              }}
+            >Resume</button>
+          </div>
+        )}
       </header>
       {/* Recent picks ticker (match mock layout) */}
       {interfaceMode==='dashboard' && (
@@ -407,8 +442,8 @@ export default function DraftRoom({ params }: Props) {
               {(draft.league?.draftOrder || []).map((uid: string, idx: number) => (
                 <span key={uid} className="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full" 
                   style={{ 
-                    backgroundColor: idx === 0 && draftHasStarted ? leagueColors.primary : leagueColors.background.overlay, 
-                    border: `1px solid ${idx === 0 && draftHasStarted ? leagueColors.primary : leagueColors.border.light}`, 
+                    backgroundColor: idx === 0 && draftHasStarted ? (leagueColors.primary as any).crimson : leagueColors.background.overlay, 
+                    border: `1px solid ${idx === 0 && draftHasStarted ? (leagueColors.primary as any).crimson : leagueColors.border.light}`, 
                     color: idx === 0 && draftHasStarted ? '#fff' : leagueColors.text.primary 
                   }}>
                   <span className="font-bold">#{idx + 1}</span>
