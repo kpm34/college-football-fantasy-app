@@ -23,7 +23,9 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     state = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : null;
     if (state) {
       state.draftStatus = 'drafting';
-      state.deadlineAt = new Date(Date.now() + (state.pickTimeSeconds || 90) * 1000).toISOString();
+      const baseSeconds = typeof state.remainingSeconds === 'number' ? state.remainingSeconds : (state.pickTimeSeconds || 90);
+      state.deadlineAt = new Date(Date.now() + baseSeconds * 1000).toISOString();
+      delete state.remainingSeconds;
       await kv.set(`draft:${draftId}:state`, JSON.stringify(state));
     }
   } catch {}

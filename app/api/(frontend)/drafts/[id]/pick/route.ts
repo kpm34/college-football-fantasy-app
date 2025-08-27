@@ -77,7 +77,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       }
     } catch {}
 
-    if (!state || state.onClockTeamId !== fantasyTeamId) {
+    if (!state || state.draftStatus === 'paused' || state.onClockTeamId !== fantasyTeamId) {
       return NextResponse.json({ error: 'Not your turn' }, { status: 400 });
     }
     if (state.deadlineAt) {

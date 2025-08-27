@@ -15,12 +15,12 @@ export async function GET(request: NextRequest) {
 
     const nowIso = new Date().toISOString();
 
-    // Find active drafts with expired deadlines
+    // Find active (drafting) drafts with expired deadlines
     const res = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.DRAFT_STATES,
       [
-        Query.equal('status', 'active'),
+        Query.equal('draftStatus', 'drafting'),
         Query.lessThanEqual('deadlineAt', nowIso),
         Query.limit(100),
       ]

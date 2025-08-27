@@ -8,7 +8,9 @@ import { useAuth } from '@lib/hooks/useAuth'
 export interface UserLeague {
   $id: string
   name: string
+  leagueName?: string
   status: string
+  draftStatus?: 'pre-draft' | 'drafting' | 'post-draft' | 'paused'
   commissioner: string
   maxTeams: number
   currentTeams: number
@@ -47,8 +49,10 @@ export function useUserLeaguesRealtime() {
         const mapped = (data.leagues || [])
           .map((l: any) => ({
             $id: l.$id ?? l.id,
-            name: l.name,
+            name: l.name || l.leagueName,
+            leagueName: l.leagueName,
             status: l.status,
+            draftStatus: l.draftStatus,
             commissioner: l.commissioner,
             maxTeams: l.maxTeams,
             currentTeams: l.currentTeams,
