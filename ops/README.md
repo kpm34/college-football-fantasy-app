@@ -20,7 +20,6 @@ Rules:
 
 Schema & Guards
 ```bash
-npx tsx ops/common/scripts/sync-appwrite-simple.ts
 npx tsx ops/common/scripts/validate-ssot-schema.ts
 npx tsx ops/common/scripts/guards/validate-ssot-integrity.ts
 npx tsx ops/common/scripts/guards/forbid-legacy-collections.ts

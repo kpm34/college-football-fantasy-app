@@ -87,6 +87,25 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
     }
   );
 
+  // Also create a draft_picks entry to mirror human picks feed
+  try {
+    await databases.createDocument(
+      DATABASE_ID,
+      COLLECTIONS.DRAFT_PICKS,
+      ID.unique(),
+      {
+        leagueId: draftId,
+        userId: fantasyTeamId, // even if BOT-*
+        playerId,
+        round: state.round,
+        pick: overall,
+        timestamp: new Date().toISOString(),
+      } as any
+    );
+  } catch (e) {
+    console.warn('[autopick] failed to write draft_picks mirror:', e);
+  }
+
   // Advance minimal state
   const next = { ...state };
   next.pickIndex += 1;

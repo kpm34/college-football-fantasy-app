@@ -96,11 +96,11 @@ export default function AdminDashboard() {
             </button>
             
             <button
-              onClick={() => loadDiagram('project-map:schema', '🗄️ Schema')}
+              onClick={() => loadDiagram('project-map:schema', '🗄️ Schema (Live)')}
               className="px-4 py-3 rounded-lg bg-stone-600 text-white transition-all hover:bg-stone-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
             >
-              <div className="font-semibold">🗄️ Schema</div>
-              <div className="text-sm text-stone-100">Data schemas</div>
+              <div className="font-semibold">🗄️ Schema (Live)</div>
+              <div className="text-sm text-stone-100">From Appwrite API</div>
             </button>
             
             <button
@@ -109,6 +109,29 @@ export default function AdminDashboard() {
             >
               <div className="font-semibold">⚙️ Operations</div>
               <div className="text-sm text-sky-100">Ops & scripts</div>
+            </button>
+
+            {/* App API diagrams */}
+            <button
+              onClick={() => loadDiagram('project-map:app:api', '🔌 App API Overview')}
+              className="px-4 py-3 rounded-lg bg-violet-600 text-white transition-all hover:bg-violet-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">🔌 App API Overview</div>
+              <div className="text-sm text-violet-100">Route groups and structure</div>
+            </button>
+            <button
+              onClick={() => loadDiagram('project-map:app:api:admin', '🔐 App API — Admin')}
+              className="px-4 py-3 rounded-lg bg-emerald-600 text-white transition-all hover:bg-emerald-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">🔐 App API — Admin</div>
+              <div className="text-sm text-emerald-100">app/api/(backend)/admin</div>
+            </button>
+            <button
+              onClick={() => loadDiagram('project-map:app:api:docs', '📄 App API — Docs')}
+              className="px-4 py-3 rounded-lg bg-indigo-600 text-white transition-all hover:bg-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
+            >
+              <div className="font-semibold">📄 App API — Docs</div>
+              <div className="text-sm text-indigo-100">Documentation maps</div>
             </button>
           </div>
         </div>

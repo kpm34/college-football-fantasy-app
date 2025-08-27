@@ -166,7 +166,7 @@ export class LeagueRepository extends BaseRepository<League> {
     }
 
     // Validate join conditions
-    if (league.status !== 'open') {
+    if (league.leagueStatus !== 'open') {
       throw new ValidationError('League is not open for joining');
     }
 
@@ -215,7 +215,7 @@ export class LeagueRepository extends BaseRepository<League> {
     // Update league team count
     const updatedLeague = await this.update(leagueId, {
       currentTeams: league.currentTeams + 1,
-      status: league.currentTeams + 1 >= league.maxTeams ? 'full' : 'open'
+      leagueStatus: league.currentTeams + 1 >= league.maxTeams ? 'closed' : 'open'
     }, {
       invalidateCache: [
         'league:public:*',
@@ -244,7 +244,7 @@ export class LeagueRepository extends BaseRepository<League> {
     }
 
     // Don't allow certain changes after draft starts
-    if (league.status === 'drafting' || league.status === 'active') {
+    if ((league as any).draftStatus === 'drafting') {
       delete updates.maxTeams;
       delete updates.scoringRules;
     }
@@ -273,7 +273,7 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ForbiddenError('Only the commissioner can start the draft');
     }
 
-    if (league.status !== 'full') {
+    if (league.currentTeams < league.maxTeams) {
       throw new ValidationError('League must be full to start draft');
     }
 
@@ -303,7 +303,7 @@ export class LeagueRepository extends BaseRepository<League> {
     }
 
     return this.update(leagueId, {
-      status: 'drafting',
+      draftStatus: 'drafting',
       draftStartedAt: new Date().toISOString()
     }, {
       partial: true,

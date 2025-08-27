@@ -1,94 +1,120 @@
 #!/usr/bin/env tsx
 
 /**
- * Schema Drift Detection Guard
- * Detects misalignment between SSOT and deployed database schema
+ * Schema Drift Detection Guard (deep diff)
+ * Compares SSOT (schema/schema.ts) against live Appwrite dump (schema/appwrite-current-schema.json)
+ * Reports missing/mismatched collections, attributes, and indexes by name and shape.
  */
 
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-const SSOT_PATH = join(process.cwd(), 'schema', 'zod-schema.ts');
+async function main() {
+	const livePath = join(process.cwd(), 'schema', 'appwrite-current-schema.json');
+	const ssotModulePath = join(process.cwd(), 'schema', 'schema.ts');
 
-export function detectSchemaDrift(): void {
-  console.log('🔍 Schema Drift Detection Guard');
-  console.log('===============================');
+	if (!existsSync(livePath)) {
+		console.error('❌ Live schema file not found:', livePath);
+		console.error('   Run: node scripts/fetch-current-appwrite-schema.ts');
+		process.exit(1);
+	}
+	if (!existsSync(ssotModulePath)) {
+		console.error('❌ SSOT module not found:', ssotModulePath);
+		process.exit(1);
+	}
 
-  // 1. Check if SSOT file exists
-  if (!existsSync(SSOT_PATH)) {
-    console.error('❌ SSOT file not found at:', SSOT_PATH);
-    process.exit(1);
-  }
+	const liveJson = JSON.parse(readFileSync(livePath, 'utf-8'));
+	const mod = await import(ssotModulePath);
+	const SCHEMA: Record<string, any> = (mod as any).SCHEMA;
 
-  console.log(`📍 SSOT Location: ${SSOT_PATH}`);
+	const liveCollections: Record<string, any> = {};
+	const colObj = liveJson.collections || {};
+	for (const key of Object.keys(colObj)) {
+		const c = colObj[key];
+		liveCollections[(c && (c.id || c.$id)) || key] = {
+			attributes: (c?.attributes || []).map((a: any) => ({
+				key: a.key,
+				type: a.type,
+				required: !!a.required,
+				array: !!a.array,
+				size: a.size,
+				min: a.min,
+				max: a.max,
+				default: a.default,
+				elements: a.elements,
+			})),
+			indexes: (c?.indexes || []).map((i: any) => ({
+				key: i.key,
+				type: i.type,
+				attributes: i.attributes,
+				orders: i.orders,
+			})),
+		};
+	}
 
-  // 2. Read SSOT content
-  let ssotContent: string;
-  try {
-    ssotContent = readFileSync(SSOT_PATH, 'utf-8');
-  } catch (error) {
-    console.error('❌ Failed to read SSOT file:', error);
-    process.exit(1);
-  }
+	const diffs: any = { collections_missing_in_live: [], collections_missing_in_ssot: [], per_collection: {} };
+	const ssotIds = Object.keys(SCHEMA);
+	const liveIds = Object.keys(liveCollections);
 
-  // 3. Extract collections from SSOT
-  const collectionMatches = ssotContent.match(/([A-Z_]+):\s*['"]([a-z_]+)['"]/g);
-  const collections = new Set<string>();
-  const schemas = new Set<string>();
+	for (const id of ssotIds) if (!liveIds.includes(id)) diffs.collections_missing_in_live.push(id);
+	for (const id of liveIds) if (!ssotIds.includes(id)) diffs.collections_missing_in_ssot.push(id);
 
-  if (collectionMatches) {
-    for (const match of collectionMatches) {
-      const [, key, value] = match.match(/([A-Z_]+):\s*['"]([a-z_]+)['"]/) || [];
-      if (key && value) {
-        collections.add(value);
-      }
-    }
-  }
+	function attrKey(a: any) {
+		return `${a.key}|${a.type}|${a.required}|${a.array || false}|${a.size ?? ''}|${a.min ?? ''}|${a.max ?? ''}|${(a.elements || []).join(',')}|${a.default ?? ''}`;
+	}
+	function indexKey(i: any) {
+		return `${i.key}|${i.type}|${(i.attributes || []).join(',')}`;
+	}
 
-  // 4. Extract schema definitions (match pattern: export const <Name> = z.object({ ... }))
-  const schemaRegex = /export\s+const\s+([A-Za-z0-9_]+)\s*=\s*z\.object\s*\(/g;
-  let m: RegExpExecArray | null;
-  while ((m = schemaRegex.exec(ssotContent)) !== null) {
-    const schemaName = m[1];
-    schemas.add(schemaName);
-  }
+	for (const id of ssotIds) {
+		const ssot = SCHEMA[id];
+		const liveC = liveCollections[id];
+		if (!liveC) continue;
 
-  console.log(`🔍 Collections: ${collections.size}`);
-  console.log(`📋 Schemas: ${schemas.size}`);
+		const per: any = { missing_attrs_in_live: [], missing_attrs_in_ssot: [], mismatched_attrs: [], missing_indexes_in_live: [], missing_indexes_in_ssot: [], mismatched_indexes: [] };
 
-  // 5. Basic validation
-  if (collections.size < 10) {
-    console.error(`❌ Insufficient collections in SSOT (found ${collections.size})`);
-    process.exit(1);
-  }
+		// Attributes
+		const ssotAttrMap: Record<string, any> = Object.fromEntries((ssot.attributes || []).map((a: any) => [a.key, a]));
+		const liveAttrMap: Record<string, any> = Object.fromEntries((liveC.attributes || []).map((a: any) => [a.key, a]));
+		for (const k of Object.keys(ssotAttrMap)) {
+			if (!liveAttrMap[k]) per.missing_attrs_in_live.push(k);
+			else if (attrKey(ssotAttrMap[k]) !== attrKey(liveAttrMap[k])) per.mismatched_attrs.push({ key: k, ssot: ssotAttrMap[k], live: liveAttrMap[k] });
+		}
+		for (const k of Object.keys(liveAttrMap)) if (!ssotAttrMap[k]) per.missing_attrs_in_ssot.push(k);
 
-  if (schemas.size < 10) {
-    console.error(`❌ Insufficient schemas in SSOT (found ${schemas.size})`);
-    process.exit(1);
-  }
+		// Indexes
+		const ssotIdxMap: Record<string, any> = Object.fromEntries((ssot.indexes || []).map((i: any) => [i.key, i]));
+		const liveIdxMap: Record<string, any> = Object.fromEntries((liveC.indexes || []).map((i: any) => [i.key, i]));
+		for (const k of Object.keys(ssotIdxMap)) {
+			if (!liveIdxMap[k]) per.missing_indexes_in_live.push(k);
+			else if (indexKey(ssotIdxMap[k]) !== indexKey(liveIdxMap[k])) per.mismatched_indexes.push({ key: k, ssot: ssotIdxMap[k], live: liveIdxMap[k] });
+		}
+		for (const k of Object.keys(liveIdxMap)) if (!ssotIdxMap[k]) per.missing_indexes_in_ssot.push(k);
 
-  // 6. Check for common issues
-  const commonIssues: string[] = [];
+		diffs.per_collection[id] = per;
+	}
 
-  // Check for hardcoded collection names
-  if (ssotContent.includes('"leagues"') && !ssotContent.includes('LEAGUES:')) {
-    commonIssues.push('Hardcoded "leagues" string found');
-  }
+	const outPath = join(process.cwd(), 'schema', 'DRIFT_REPORT.json');
+	writeFileSync(outPath, JSON.stringify(diffs, null, 2));
 
-  if (ssotContent.includes('"college_players"') && !ssotContent.includes('COLLEGE_PLAYERS:')) {
-    commonIssues.push('Hardcoded "college_players" string found');
-  }
+	const hasDrift = (
+		diffs.collections_missing_in_live.length > 0 ||
+		diffs.collections_missing_in_ssot.length > 0 ||
+		Object.values(diffs.per_collection).some((p: any) => (
+			p.missing_attrs_in_live.length || p.missing_attrs_in_ssot.length || p.mismatched_attrs.length || p.missing_indexes_in_live.length || p.missing_indexes_in_ssot.length || p.mismatched_indexes.length
+		))
+	);
 
-  if (commonIssues.length > 0) {
-    console.warn('⚠️ Potential issues detected:');
-    commonIssues.forEach(issue => console.warn(`  - ${issue}`));
-  }
+	if (hasDrift) {
+		console.error('❌ Schema drift detected. See schema/DRIFT_REPORT.json');
+		process.exit(1);
+	}
 
-  console.log('✅ No Schema Drift Detected');
-  console.log('📊 SSOT and database schemas are aligned');
+	console.log('✅ No Schema Drift Detected');
+	console.log('📊 SSOT and database schemas are aligned');
 }
 
-// Run detection if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  detectSchemaDrift();
+	// eslint-disable-next-line @typescript-eslint/no-floating-promises
+	main();
 }

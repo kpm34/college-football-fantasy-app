@@ -9,9 +9,10 @@ const TEST_TIMEOUT = 300000; // 5 minutes for the full flow
 const generateTestData = () => {
   const uniqueId = randomBytes(4).toString('hex');
   return {
+    firstName: `Test`,
+    lastName: `User_${uniqueId}`,
     email: `test_${uniqueId}@example.com`,
     password: 'TestPass123!',
-    displayName: `TestUser_${uniqueId}`,
     leagueName: `Test League ${uniqueId}`,
     uniqueId
   };
@@ -40,14 +41,14 @@ test.describe('Full Draft Flow E2E Test', () => {
     await page.click('text=Sign up');
     await expect(page).toHaveURL(/.*signup/);
     
-    // Fill signup form
-    await page.fill('input[name="email"]', testData.email);
-    await page.fill('input[name="password"]', testData.password);
-    await page.fill('input[name="confirmPassword"]', testData.password);
-    await page.fill('input[name="displayName"]', testData.displayName);
+    // Fill signup form (First/Last/Email/Password)
+    await page.fill('input[placeholder="First Name"]', testData.firstName);
+    await page.fill('input[placeholder="Last Name"]', testData.lastName);
+    await page.fill('input[type="email"]', testData.email);
+    await page.fill('input[type="password"]', testData.password);
     
     // Submit signup
-    await page.click('button[type="submit"]:has-text("Sign Up")');
+    await page.click('button:has-text("Sign Up")');
     
     // Wait for redirect to dashboard or home
     await page.waitForURL(url => 
@@ -262,11 +263,11 @@ test.describe('Full Draft Flow E2E Test', () => {
     
     // Quick account creation
     await page.goto(`${BASE_URL}/signup`);
-    await page.fill('input[name="email"]', testData.email);
-    await page.fill('input[name="password"]', testData.password);
-    await page.fill('input[name="confirmPassword"]', testData.password);
-    await page.fill('input[name="displayName"]', testData.displayName);
-    await page.click('button[type="submit"]');
+    await page.fill('input[placeholder="First Name"]', testData.firstName);
+    await page.fill('input[placeholder="Last Name"]', testData.lastName);
+    await page.fill('input[type="email"]', testData.email);
+    await page.fill('input[type="password"]', testData.password);
+    await page.click('button:has-text("Sign Up")');
     await page.waitForURL(url => !url.includes('/signup'), { timeout: 15000 });
     
     // Quick league creation

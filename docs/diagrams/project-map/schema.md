@@ -1,3 +1,4 @@
+<!-- Auto-updated schema overview. For live view on Admin page, uses Appwrite API. -->
 # Project Map — schema
 
 ```mermaid
@@ -11,55 +12,32 @@ flowchart TB
   class R folder
   
   %% SSOT - Single Source of Truth
-  zod_schema["zod-schema.ts<br/>🎯 SINGLE SOURCE OF TRUTH<br/>All collection schemas<br/>(consolidated from zod/)"]
+  zod_schema["zod-schema.ts<br/>🎯 SINGLE SOURCE OF TRUTH<br/>All collections & types"]
   class zod_schema ssot
   R --> zod_schema
   
-  %% Core schema files
-  schema_table["Schema Table.csv<br/>Live Appwrite export"]
+  %% Live exports and generators
+  schema_table["Schema Table.csv<br/>Appwrite export (generated)"]
   class schema_table file
   R --> schema_table
   
-  schema_ts["schema.ts<br/>Schema utilities"]
-  class schema_ts file
-  R --> schema_ts
+  appwrite_schema["appwrite-schema.md<br/>Mermaid from Appwrite (generated)"]
+  class appwrite_schema file
+  R --> appwrite_schema
   
-  schemas_registry["schemas.registry.ts<br/>Collection registry"]
-  class schemas_registry file
-  R --> schemas_registry
+  generators["generators/<br/>appwrite.ts • types.ts • env.ts"]
+  class generators folder
+  R --> generators
+  click generators "/admin/project-map/schema/generators" "Open generators"
   
-  indexes_ts["indexes.ts<br/>Database indexes"]
-  class indexes_ts file
-  R --> indexes_ts
+  snapshots["snapshots/<br/>appwrite-live-schema.json"]
+  class snapshots folder
+  R --> snapshots
   
-  permissions_ts["permissions.ts<br/>Access control"]
-  class permissions_ts file
-  R --> permissions_ts
-  
-  functions_ts["functions.ts<br/>Appwrite functions"]
-  class functions_ts file
-  R --> functions_ts
-  
-  storage_ts["storage.ts<br/>Storage buckets"]
-  class storage_ts file
-  R --> storage_ts
-  
-  %% Folders
-  schema_generators_["generators/<br/>• appwrite.ts<br/>• env.ts<br/>• types.ts<br/>• seed-appwrite.ts"]
-  class schema_generators_ folder
-  R --> schema_generators_
-  click schema_generators_ "/admin/project-map/schema/generators" "Open generators"
-  
-  schema_sites_["sites/<br/>college-football-fantasy-app/"]
-  class schema_sites_ folder
-  R --> schema_sites_
-  
-  schema_snapshots_["snapshots/<br/>appwrite-schema.json"]
-  class schema_snapshots_ folder
-  R --> schema_snapshots_
-  
-  %% Deleted folder (for reference)
-  schema_zod_deleted["zod/ (DELETED)<br/>Individual schemas<br/>now in zod-schema.ts"]
+  %% Reference (deprecated structure)
+  schema_zod_deleted["zod/ (DEPRECATED)<br/>Use zod-schema.ts"]
   class schema_zod_deleted deleted
   R -.-> schema_zod_deleted
 ```
+
+Last updated: auto via ops/diagrams/export-live-schema-mermaid.ts

@@ -179,7 +179,7 @@ export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
             if (host) {
               host.style.display = 'block'
               host.style.overflow = 'hidden'
-              host.style.background = '#111827'
+              host.style.background = 'transparent'
               host.style.borderRadius = '0.5rem'
               host.style.padding = '0.5rem'
               host.style.width = '100%'

@@ -81,7 +81,6 @@ export const SCHEMA: Record<string, SchemaCollection> = {
       { key: 'maxTeams', type: 'integer', required: false, min: 2, max: 32 },
       { key: 'currentTeams', type: 'integer', required: false, min: 0, max: 32, default: 0 },
       { key: 'leagueStatus', type: 'string', required: false, size: 20, default: 'open' },
-      { key: 'draftStatus', type: 'string', required: false, size: 20, default: 'pre-draft' },
       { key: 'gameMode', type: 'string', required: false, size: 20 },
       { key: 'draftType', type: 'string', required: false, size: 20 },
       { key: 'isPublic', type: 'boolean', required: false, default: true },
@@ -99,7 +98,7 @@ export const SCHEMA: Record<string, SchemaCollection> = {
       { key: 'draftOrder', type: 'string', required: false, size: 2000 },
     ],
     indexes: [
-      { key: 'status_idx', type: 'key', attributes: ['status'] },
+      { key: 'status_idx', type: 'key', attributes: ['leagueStatus'] },
       { key: 'public_idx', type: 'key', attributes: ['isPublic'] },
       { key: 'season_idx', type: 'key', attributes: ['season'] },
     ]

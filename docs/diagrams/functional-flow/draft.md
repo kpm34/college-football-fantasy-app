@@ -15,30 +15,44 @@ Comprehensive draft system supporting both mock drafts (practice) and real draft
 ## A) Mock Draft Flow (No Season Commits)
 
 ```mermaid
+%%{init: {
+%%  'theme': 'base',
+%%  'themeVariables': {
+%%    'background': '#ffffff',
+%%    'primaryTextColor': '#0f172a',
+%%    'lineColor': '#64748b',
+%%    'fontFamily': 'system-ui, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"'
+%%  }
+%%}}%%
 flowchart TD
-    StartMock([Start Mock Draft]) --> CreateMock[Create Mock Draft]
-    CreateMock --> SetMockFlag[Set is_mock=true]
-    SetMockFlag --> GenerateOrder[Generate Random Order]
-    GenerateOrder --> OpenRoom[Open Draft Room]
+    classDef ui fill:#eaf3ff,stroke:#2b6cb0,color:#1a365d,rx:6,ry:6
+    classDef api fill:#e7fff3,stroke:#117a37,color:#0f5132,rx:6,ry:6
+    classDef db fill:#fff7e6,stroke:#b45309,color:#7c2d12,rx:6,ry:6
+    classDef decision fill:#fef3c7,stroke:#b45309,color:#7c2d12,rx:6,ry:6
+    classDef action fill:#eef2ff,stroke:#3730a3,color:#1e293b,rx:6,ry:6
+    StartMock([Start Mock Draft]):::ui --> CreateMock[Create Mock Draft]:::api
+    CreateMock --> SetMockFlag[Set is_mock=true]:::db
+    SetMockFlag --> GenerateOrder[Generate Random Order]:::action
+    GenerateOrder --> OpenRoom[Open Draft Room]:::ui
     
-    OpenRoom --> MockBanner[Display MOCK DRAFT Banner]
-    MockBanner --> EnablePicks[Enable All Pick Actions]
+    OpenRoom --> MockBanner[Display MOCK DRAFT Banner]:::ui
+    MockBanner --> EnablePicks[Enable All Pick Actions]:::ui
     
-    EnablePicks --> UserPick{User's Turn?}
-    UserPick -->|Yes| MakePick[Make Pick]
-    UserPick -->|No| WaitTurn[Wait/Watch]
+    EnablePicks --> UserPick{User's Turn?}:::decision
+    UserPick -->|Yes| MakePick[Make Pick]:::action
+    UserPick -->|No| WaitTurn[Wait/Watch]:::ui
     
-    MakePick --> WriteMockEvent[Write draft_events<br/>type=pick]
-    WriteMockEvent --> UpdateMockState[Update draft_states]
-    UpdateMockState --> NextPick[Next Pick]
+    MakePick --> WriteMockEvent[Write draft_events<br/>type=pick]:::db
+    WriteMockEvent --> UpdateMockState[Update draft_states]:::db
+    UpdateMockState --> NextPick[Next Pick]:::action
     
-    NextPick --> CheckComplete{All Picks Done?}
+    NextPick --> CheckComplete{All Picks Done?}:::decision
     CheckComplete -->|No| UserPick
-    CheckComplete -->|Yes| MockComplete[Mock Draft Complete]
+    CheckComplete -->|Yes| MockComplete[Mock Draft Complete]:::action
     
-    MockComplete --> SaveBoard[Save Board<br/>drafts.board_md]
-    SaveBoard --> ShowResults[Show Results]
-    ShowResults --> ResetOption[Offer Reset/Restart]
+    MockComplete --> SaveBoard[Save Board<br/>drafts.board_md]:::api
+    SaveBoard --> ShowResults[Show Results]:::ui
+    ShowResults --> ResetOption[Offer Reset/Restart]:::ui
     
     subgraph "Mock Draft Data"
         WriteMockEvent -.-> NR1[❌ NO roster_slots]
@@ -46,6 +60,15 @@ flowchart TD
         WriteMockEvent -.-> NR3[❌ NO budget updates]
     end
     
+    %% Legend
+    subgraph "Legend — Data Flow"
+      UI[UI Layer]:::ui
+      API[API Routes / Server Logic]:::api
+      DB[Appwrite Collections]:::db
+      DEC[Decision]:::decision
+      ACT[Action]:::action
+    end
+
     style StartMock fill:#e0f2fe
     style MockBanner fill:#fef3c7
     style MockComplete fill:#dcfce7
@@ -54,50 +77,73 @@ flowchart TD
 ## B) Real Draft Flow (Scheduled, Season Commits)
 
 ```mermaid
+%%{init: {
+%%  'theme': 'base',
+%%  'themeVariables': {
+%%    'background': '#ffffff',
+%%    'primaryTextColor': '#0f172a',
+%%    'lineColor': '#64748b',
+%%    'fontFamily': 'system-ui, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"'
+%%  }
+%%}}%%
 flowchart TD
-    StartReal([Scheduled Draft Time]) --> CheckTime{Current Time?}
+    classDef ui fill:#eaf3ff,stroke:#2b6cb0,color:#1a365d,rx:6,ry:6
+    classDef api fill:#e7fff3,stroke:#117a37,color:#0f5132,rx:6,ry:6
+    classDef db fill:#fff7e6,stroke:#b45309,color:#7c2d12,rx:6,ry:6
+    classDef decision fill:#fef3c7,stroke:#b45309,color:#7c2d12,rx:6,ry:6
+    classDef action fill:#eef2ff,stroke:#3730a3,color:#1e293b,rx:6,ry:6
+    StartReal([Scheduled Draft Time]):::ui --> CheckTime{Current Time?}:::decision
     
-    CheckTime -->|T-60min| RoomOpens[Draft Room Opens]
-    RoomOpens --> ReadOnly[Read-Only Preview Mode]
-    ReadOnly --> ShowPosition[Show Draft Position]
-    ShowPosition --> ShowTimer[Show Countdown Timer]
+    CheckTime -->|T-60min| RoomOpens[Draft Room Opens]:::ui
+    RoomOpens --> ReadOnly[Read-Only Preview Mode]:::ui
+    ReadOnly --> ShowPosition[Show Draft Position]:::ui
+    ShowPosition --> ShowTimer[Show Countdown Timer]:::ui
     
-    CheckTime -->|T=0| GoLive[Draft Goes Live]
-    GoLive --> EnableClock[Enable Pick Clock]
-    EnableClock --> EnableActions[Enable Pick Actions]
+    CheckTime -->|T=0| GoLive[Draft Goes Live]:::api
+    GoLive --> EnableClock[Enable Pick Clock]:::api
+    EnableClock --> EnableActions[Enable Pick Actions]:::ui
     
-    EnableActions --> RealPick{User's Turn?}
-    RealPick -->|Yes| PickWindow[Pick Window Open]
-    RealPick -->|No| WatchOnly[Watch Only]
+    EnableActions --> RealPick{User's Turn?}:::decision
+    RealPick -->|Yes| PickWindow[Pick Window Open]:::action
+    RealPick -->|No| WatchOnly[Watch Only]:::ui
     
-    PickWindow --> TimerTick{Timer Expired?}
-    TimerTick -->|No| UserSelect[User Selects Player]
-    TimerTick -->|Yes| AutoPick[Auto-Pick BPA]
+    PickWindow --> TimerTick{Timer Expired?}:::decision
+    TimerTick -->|No| UserSelect[User Selects Player]:::ui
+    TimerTick -->|Yes| AutoPick[Auto-Pick BPA]:::api
     
-    UserSelect --> ValidatePick[Validate Pick]
-    AutoPick --> ValidatePick
+    UserSelect --> ValidatePick[Validate Pick]:::api
+    AutoPick --> ValidatePick:::api
     
-    ValidatePick --> WriteRealEvent[Write draft_events<br/>type=pick]
-    WriteRealEvent --> UpdateRealState[Update draft_states]
-    UpdateRealState --> CommitRoster[Write roster_slots]
-    CommitRoster --> RecordTransaction[Write transactions<br/>type=draft]
-    RecordTransaction --> UpdateBudget[Update auction_budget<br/>if auction]
+    ValidatePick --> WriteRealEvent[Write draft_events<br/>type=pick]:::db
+    WriteRealEvent --> UpdateRealState[Update draft_states]:::db
+    UpdateRealState --> CommitRoster[Write roster_slots]:::db
+    CommitRoster --> RecordTransaction[Write transactions<br/>type=draft]:::db
+    RecordTransaction --> UpdateBudget[Update auction_budget<br/>if auction]:::db
     
-    UpdateBudget --> NextRealPick[Next Pick]
-    NextRealPick --> CheckRealComplete{Draft Complete?}
+    UpdateBudget --> NextRealPick[Next Pick]:::action
+    NextRealPick --> CheckRealComplete{Draft Complete?}:::decision
     CheckRealComplete -->|No| RealPick
-    CheckRealComplete -->|Yes| FinalizeDraft[Finalize Draft]
+    CheckRealComplete -->|Yes| FinalizeDraft[Finalize Draft]:::action
     
-    FinalizeDraft --> MarkComplete[drafts.status=completed]
-    MarkComplete --> GenerateBoard[Generate Mermaid Board]
-    GenerateBoard --> SaveAssets[Save to draft-boards/]
-    SaveAssets --> UpdateURI[Set board_asset_uri]
-    UpdateURI --> NotifyUsers[Notify All Users]
+    FinalizeDraft --> MarkComplete[drafts.status=completed]:::db
+    MarkComplete --> GenerateBoard[Generate Mermaid Board]:::api
+    GenerateBoard --> SaveAssets[Save to draft-boards/]:::api
+    SaveAssets --> UpdateURI[Set board_asset_uri]:::db
+    UpdateURI --> NotifyUsers[Notify All Users]:::api
     
     subgraph "Timing Gates"
         RoomOpens -.-> TG1[draft_room_open_at]
         GoLive -.-> TG2[draft_start_at]
         PickWindow -.-> TG3[pick_time_seconds]
+    end
+
+    %% Legend
+    subgraph "Legend — Data Flow"
+      UI[UI Layer]:::ui
+      API[API Routes / Server Logic]:::api
+      DB[Appwrite Collections]:::db
+      DEC[Decision]:::decision
+      ACT[Action]:::action
     end
     
     style StartReal fill:#e0f2fe
