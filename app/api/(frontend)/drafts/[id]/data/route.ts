@@ -114,13 +114,13 @@ export async function GET(
       picks = picksResponse.documents;
     } catch {}
 
-    // Load draft state if exists
+    // Load latest draft state snapshot if exists
     let draftState: any = null;
     try {
       const statesResponse = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.DRAFT_STATES,
-        [Query.equal('draftId', leagueId), Query.limit(1)]
+        [Query.equal('draftId', leagueId), Query.orderDesc('$createdAt'), Query.limit(1)]
       );
       if (statesResponse.documents.length > 0) {
         draftState = statesResponse.documents[0];

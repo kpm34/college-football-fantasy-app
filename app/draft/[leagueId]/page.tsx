@@ -28,6 +28,7 @@ export default function DraftRoom({ params }: Props) {
   
   // User data
   const [users, setUsers] = useState<Record<string, any>>({});
+  const [teamNames, setTeamNames] = useState<Record<string, string>>({});
   const [myPicks, setMyPicks] = useState<DraftPlayer[]>([]);
   const [interfaceMode, setInterfaceMode] = useState<'dashboard'|'board'>('dashboard');
   // Mock-like players and filters to mirror mock draft UI
@@ -139,23 +140,27 @@ export default function DraftRoom({ params }: Props) {
   const isDraftComplete = draft.league && draft.picks.length >= 
     (draft.league.draftRounds || 15) * (draft.league.draftOrder?.length || 12);
 
-  // Check if draft has started based on status + time (isDraftLive)
+  // Check if draft has started based on scheduled time OR server state
   useEffect(() => {
     if (!draft.league) return;
-    
+
     const draftDate = (draft.league as any)?.draftDate;
-    if (!draftDate) {
-      setDraftHasStarted(false);
-      return;
-    }
-    
-    const draftStartMs = new Date(draftDate).getTime();
-    const now = Date.now();
-    const hasStarted = String((draft.league as any)?.status) === 'drafting' && now >= draftStartMs;
+    const draftStatus = String((draft.league as any)?.draftStatus || (draft as any)?.draftStatus || '');
+
+    // Started if: time reached OR server says drafting/paused OR picks/deadline exist
+    const hasReachedTime = draftDate ? Date.now() >= new Date(draftDate).getTime() : false;
+    const serverIndicatesStarted =
+      draftStatus === 'drafting' ||
+      draftStatus === 'paused' ||
+      (Array.isArray(draft.picks) && draft.picks.length > 0) ||
+      Boolean((draft as any)?.deadlineAt);
+
+    const hasStarted = hasReachedTime || serverIndicatesStarted;
     setDraftHasStarted(hasStarted);
-    
-    // Check every second if draft hasn't started yet
-    if (!hasStarted) {
+
+    // If not yet started by server but time has arrived, poll every second until time
+    if (!hasStarted && draftDate) {
+      const draftStartMs = new Date(draftDate).getTime();
       const checkInterval = setInterval(() => {
         if (Date.now() >= draftStartMs) {
           setDraftHasStarted(true);
@@ -164,7 +169,7 @@ export default function DraftRoom({ params }: Props) {
       }, 1000);
       return () => clearInterval(checkInterval);
     }
-  }, [draft.league]);
+  }, [draft.league, draft.picks, (draft as any)?.deadlineAt]);
 
   // Derive and lock a deadline when the turn changes (use server draftState when present)
   useEffect(() => {
@@ -188,11 +193,12 @@ export default function DraftRoom({ params }: Props) {
     }
   }, [draft]);
 
-  // Countdown from the locked deadline (paused when draft is paused)
+  // Countdown from the locked deadline (paused when draftStatus is paused)
   useEffect(() => {
     const id = setInterval(() => {
       // Pause countdown when server state indicates paused
-      const isPaused = String((draft as any)?.deadlineAt) === 'paused' || String((draft.league as any)?.draftStatus) === 'paused' || String((draft as any)?.draftStatus) === 'paused';
+      const draftStatus = String(((draft as any)?.draftStatus) || ((draft.league as any)?.draftStatus) || '');
+      const isPaused = draftStatus === 'paused';
       if (!deadlineTs || !draftHasStarted || isPaused) {
         setSecondsLeft(null);
         return;
@@ -208,7 +214,8 @@ export default function DraftRoom({ params }: Props) {
   useEffect(() => {
     if (!leagueId || secondsLeft === null) return;
     if (secondsLeft > 0) return;
-    if (String((draft.league as any)?.draftStatus) === 'paused' || String((draft as any)?.draftStatus) === 'paused') return;
+    const draftStatus = String(((draft as any)?.draftStatus) || ((draft.league as any)?.draftStatus) || '');
+    if (draftStatus === 'paused') return;
     // Small debounce to avoid duplicate calls while state settles
     const t = setTimeout(async () => {
       try {
@@ -261,19 +268,32 @@ export default function DraftRoom({ params }: Props) {
 
   const loadInitialData = async () => {
     try {
-      // Load users
-      if (draft.league?.members) {
-        const userDocs = await databases.listDocuments(
-          DATABASE_ID,
-          'clients',
-          [Query.equal('$id', draft.league.members)]
-        );
-        
-        const userMap: Record<string, any> = {};
-        userDocs.documents.forEach(doc => {
-          userMap[doc.$id] = doc;
-        });
-        setUsers(userMap);
+      // Load users via server API so we can resolve display names correctly
+      if (leagueId) {
+        const res = await fetch(`/api/leagues/${leagueId}/members`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          const userMap: Record<string, any> = {};
+          for (const t of (data.teams || [])) {
+            if (t?.$id) userMap[t.$id] = { name: t.userName || t.name };
+            if (t?.userId) userMap[t.userId] = { name: t.userName || t.name };
+          }
+          setUsers(userMap);
+        }
+      }
+
+      // Load fantasy teams to map teamId -> teamName for display
+      if (leagueId) {
+        try {
+          const teamDocs = await databases.listDocuments(
+            DATABASE_ID,
+            'fantasy_teams',
+            [Query.equal('leagueId', leagueId), Query.limit(200)]
+          );
+          const names: Record<string, string> = {};
+          teamDocs.documents.forEach((t: any) => { names[t.$id] = t.teamName || t.name || 'Team'; });
+          setTeamNames(names);
+        } catch {}
       }
     } catch (error) {
       console.error('Error loading initial data:', error);
@@ -447,7 +467,7 @@ export default function DraftRoom({ params }: Props) {
                     color: idx === 0 && draftHasStarted ? '#fff' : leagueColors.text.primary 
                   }}>
                   <span className="font-bold">#{idx + 1}</span>
-                  <span>{users[uid]?.name || (uid.startsWith('BOT-') ? uid : 'Team')}</span>
+                  <span>{teamNames[uid] || users[uid]?.name || (uid.startsWith('BOT-') ? uid : 'Team')}</span>
                 </span>
               ))}
             </div>
@@ -460,7 +480,7 @@ export default function DraftRoom({ params }: Props) {
                 <span key={`${p.$id || p.playerId}-${i}`} className="inline-flex items-center gap-2 text-xs px-3 py-1 m-1 rounded-full" style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
                   <span className="inline-flex items-center justify-center w-8 h-5 rounded text-[10px] font-bold" style={{ backgroundColor: bg, color: fg }}>{pos || '—'}</span>
                   <span>{p.playerName || p.playerId}</span>
-                  <span className="text-[10px]" style={{ color: leagueColors.text.secondary }}>{users[p.authUserId || p.userId]?.name ? users[p.authUserId || p.userId].name : 'Team'}</span>
+                  <span className="text-[10px]" style={{ color: leagueColors.text.secondary }}>{teamNames[p.userId as any] || users[p.authUserId || p.userId]?.name || 'Team'}</span>
                 </span>
               );
             })
@@ -472,7 +492,7 @@ export default function DraftRoom({ params }: Props) {
         <div className="mx-auto px-4 mt-2 mb-2 flex items-center justify-between text-xs text-gray-700">
           <div>
             {draftHasStarted ? (
-              <>Round {draft.currentRound} • Overall #{draft.currentPick} • On the clock: {draft.onTheClock ? (users[draft.onTheClock]?.name || 'Team') : '-'}</>
+              <>Round {draft.currentRound} • Overall #{draft.currentPick} • On the clock: {draft.onTheClock ? (teamNames[draft.onTheClock as any] || users[draft.onTheClock]?.name || 'Team') : '-'}</>
             ) : (
               <span style={{ color: leagueColors.text.secondary }}>Draft has not started yet</span>
             )}
@@ -509,7 +529,7 @@ export default function DraftRoom({ params }: Props) {
               numTeams={draft.league?.draftOrder?.length || 12}
               rounds={draft.league?.draftRounds || 15}
               currentOverall={draft.currentPick}
-              slotLabels={(draft.league?.draftOrder||[]).map((uid: string)=> users[uid]?.name || 'Team')}
+              slotLabels={(draft.league?.draftOrder||[]).map((uid: string)=> teamNames[uid] || users[uid]?.name || 'Team')}
             />
           </div>
         </div>
@@ -615,7 +635,10 @@ export default function DraftRoom({ params }: Props) {
                                 team: pl.team
                               } as any);
                             }}
-                            disabled={!draftHasStarted || (!draft.isMyTurn && draft.onTheClock !== user?.$id)}
+                            disabled={
+                              !draftHasStarted ||
+                              !(draft.isMyTurn || draft.onTheClock === user?.$id)
+                            }
                             className={`px-3 py-1.5 rounded text-xs font-bold transition-all ${
                               (!draftHasStarted || (!draft.isMyTurn && draft.onTheClock !== user?.$id)) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'
                             }`}
@@ -653,7 +676,7 @@ export default function DraftRoom({ params }: Props) {
                     numTeams={draft.league?.draftOrder?.length || 12}
                     rounds={draft.league?.draftRounds || 15}
                     currentOverall={draft.currentPick}
-                    slotLabels={(draft.league?.draftOrder||[]).map((uid: string)=> users[uid]?.name || 'Team')}
+                    slotLabels={(draft.league?.draftOrder||[]).map((uid: string)=> teamNames[uid] || users[uid]?.name || 'Team')}
                   />
                 </div>
               )}
