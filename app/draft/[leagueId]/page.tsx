@@ -357,8 +357,18 @@ export default function DraftRoom({ params }: Props) {
   if (isMobile) {
     // Ensure we have valid data before rendering mobile interface
     const safeAvailablePlayers = availablePlayers || [];
-    const safeDraftOrder = draft?.league?.draftOrder || [];
+    const safeDraftOrder = Array.isArray((draft as any)?.league?.draftOrder) ? ((draft as any).league.draftOrder as any[]) : [];
     const safeMyPicks = myPicks || [];
+    const teamsWithPicks = (safeDraftOrder || []).map((uid: string) => ({
+      $id: uid,
+      teamName: teamNames[uid] || users[uid]?.name || (uid?.startsWith('BOT-') ? uid : 'Team'),
+      picks: (draft.picks || []).filter((p: any) => String(p.authUserId || p.userId) === String(uid))
+    }));
+    const currentPickMeta = draft?.onTheClock ? {
+      teamId: draft.onTheClock,
+      teamName: teamNames[draft.onTheClock as any] || users[draft.onTheClock as any]?.name || 'Team',
+      pickNumber: draft.currentPick
+    } : null;
     
     return (
       <MobileDraftErrorBoundary leagueId={leagueId}>
@@ -366,7 +376,9 @@ export default function DraftRoom({ params }: Props) {
           players={safeAvailablePlayers}
           myPicks={safeMyPicks}
           draftOrder={safeDraftOrder}
-          currentPick={draft?.currentPick || null}
+          currentPick={currentPickMeta}
+          recentPicks={draft?.picks || []}
+          teams={teamsWithPicks}
           timeRemaining={secondsLeft}
           onPickPlayer={handleDraftPlayer}
           isMyTurn={draft?.isMyTurn || false}
