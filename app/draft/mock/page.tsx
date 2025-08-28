@@ -350,7 +350,7 @@ export default function MockDraftPage() {
               // Use auth user info if available, otherwise guest mode
               const displayName = user?.name || user?.email || `Guest Player ${slot}`;
               const auth_user_id = user?.$id || null; // This is the Appwrite auth ID
-              return { slot, userType: 'human', displayName, clientId: authUserId };
+              return { slot, userType: 'human', displayName, clientId: auth_user_id };
             }
             return { slot, userType: 'bot', displayName: `Bot Team ${slot}` };
           })
