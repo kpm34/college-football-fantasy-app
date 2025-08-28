@@ -2,7 +2,7 @@
   "database": "college-football-fantasy",
   "endpoint": "https://nyc.cloud.appwrite.io/v1",
   "project": "college-football-fantasy-app",
-  "timestamp": "2025-08-27T17:56:04.027Z",
+  "timestamp": "2025-08-28T18:04:24.067Z",
   "collections": {
     "rankings": {
       "name": "AP Rankings",
@@ -679,7 +679,32 @@
           "format": ""
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "key": "league_idx",
+          "type": "key",
+          "status": "failed",
+          "error": "Index already exists",
+          "attributes": [
+            "leagueId"
+          ],
+          "orders": []
+        },
+        {
+          "key": "status_start_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "draftStatus",
+            "startTime"
+          ],
+          "orders": [
+            "ASC",
+            "ASC"
+          ]
+        }
+      ]
     },
     "activity_log": {
       "name": "activity_log",
@@ -1938,6 +1963,20 @@
             "draftId"
           ],
           "orders": []
+        },
+        {
+          "key": "deadline_scan_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "draftStatus",
+            "deadlineAt"
+          ],
+          "orders": [
+            "ASC",
+            "ASC"
+          ]
         }
       ]
     },
@@ -1976,8 +2015,8 @@
           "required": false,
           "array": false,
           "default": null,
-          "min": 4,
-          "max": 20
+          "min": 2,
+          "max": 32
         },
         {
           "key": "leagueStatus",
@@ -2913,8 +2952,8 @@
           "required": false,
           "array": false,
           "default": null,
-          "min": -9223372036854776000,
-          "max": 9223372036854776000
+          "min": 0,
+          "max": 25
         },
         {
           "key": "losses",
@@ -2924,8 +2963,8 @@
           "required": false,
           "array": false,
           "default": null,
-          "min": -9223372036854776000,
-          "max": 9223372036854776000
+          "min": 0,
+          "max": 25
         },
         {
           "key": "ties",
@@ -3068,6 +3107,31 @@
             "ASC",
             "ASC"
           ]
+        },
+        {
+          "key": "owner_teams_idx",
+          "type": "key",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "ownerAuthUserId",
+            "leagueId"
+          ],
+          "orders": [
+            "ASC",
+            "ASC"
+          ]
+        },
+        {
+          "key": "league_owner_unique_idx",
+          "type": "unique",
+          "status": "available",
+          "error": "",
+          "attributes": [
+            "leagueId",
+            "ownerAuthUserId"
+          ],
+          "orders": []
         }
       ]
     },

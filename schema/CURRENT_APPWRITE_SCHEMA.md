@@ -1,7 +1,7 @@
 # Current Appwrite Schema
 
 **Database:** college-football-fantasy
-**Updated:** 2025-08-27T17:56:07.654Z
+**Updated:** 2025-08-28T18:04:26.754Z
 
 ## AP Rankings (rankings)
 
@@ -112,6 +112,13 @@
 | picksJson | string | ❌ | `null` | 1000000 | ✅ |
 | onTheClock | string | ❌ | `null` | 255 | ✅ |
 | lastPickTime | datetime | ❌ | `null` | - | ✅ |
+
+### Indexes
+
+| Key | Type | Attributes | Status |
+|-----|------|------------|--------|
+| league_idx | key | leagueId | failed |
+| status_start_idx | key | draftStatus, startTime | ✅ |
 
 ---
 
@@ -361,6 +368,7 @@
 | Key | Type | Attributes | Status |
 |-----|------|------------|--------|
 | draft_unique_idx | unique | draftId | ✅ |
+| deadline_scan_idx | key | draftStatus, deadlineAt | ✅ |
 
 ---
 
@@ -549,6 +557,8 @@
 | league_idx | key | leagueId | ✅ |
 | owner_idx | key | ownerAuthUserId | ✅ |
 | league_owner_idx | key | leagueId, ownerAuthUserId | ✅ |
+| owner_teams_idx | key | ownerAuthUserId, leagueId | ✅ |
+| league_owner_unique_idx | unique | leagueId, ownerAuthUserId | ✅ |
 
 ---
 
