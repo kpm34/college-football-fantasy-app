@@ -4,7 +4,7 @@
  * Generates environment variable configurations from the canonical schema
  */
 
-import { SCHEMA, ENV_VARS } from '../schema';
+import { SCHEMA } from '../schema';
 import fs from 'fs';
 import path from 'path';
 
@@ -32,10 +32,12 @@ NEXT_PUBLIC_APPWRITE_DATABASE_ID=college-football-fantasy
 # =====================================
 `;
 
-  // Generate collection environment variables from schema
-  for (const [envVarName, collectionId] of Object.entries(ENV_VARS)) {
-    const collection = SCHEMA[collectionId];
-    envContent += `${envVarName}=${collectionId}  # ${collection.description}\n`;
+  // Generate NEXT_PUBLIC_APPWRITE_COLLECTION_* variables from SCHEMA keys
+  for (const collectionId of Object.keys(SCHEMA)) {
+    const envVarName = `NEXT_PUBLIC_APPWRITE_COLLECTION_${collectionId.toUpperCase()}`;
+    const collection: any = (SCHEMA as any)[collectionId];
+    const desc = (collection && (collection.description || collection.name)) || '';
+    envContent += `${envVarName}=${collectionId}  # ${desc}\n`;
   }
 
   envContent += `
@@ -105,7 +107,8 @@ echo "🗑️ Removing deprecated variables..."
 `;
 
   // Add modern collection variables
-  for (const [envVarName, collectionId] of Object.entries(ENV_VARS)) {
+  for (const collectionId of Object.keys(SCHEMA)) {
+    const envVarName = `NEXT_PUBLIC_APPWRITE_COLLECTION_${collectionId.toUpperCase()}`;
     scriptContent += `
 echo "Setting ${envVarName}=${collectionId}"
 echo "${collectionId}" | vercel env add ${envVarName} production
@@ -119,7 +122,8 @@ echo "✅ Vercel environment variables updated successfully!"
 echo "📋 Variables set:"
 `;
 
-  for (const [envVarName, collectionId] of Object.entries(ENV_VARS)) {
+  for (const collectionId of Object.keys(SCHEMA)) {
+    const envVarName = `NEXT_PUBLIC_APPWRITE_COLLECTION_${collectionId.toUpperCase()}`;
     scriptContent += `echo "  ${envVarName}=${collectionId}"\n`;
   }
 

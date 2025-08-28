@@ -6,7 +6,7 @@ import { useDraftCoreLive } from '@lib/draft/core';
 import { useAuth } from '@lib/hooks/useAuth';
 import DraftCore from '@components/features/draft/DraftCore';
 import { DraftPlayer } from '@lib/types/projections';
-import { FiStar, FiClock } from 'react-icons/fi';
+import { FiStar, FiClock, FiPause, FiPlay } from 'react-icons/fi';
 import DraftBoard from '@components/features/draft/DraftBoard';
 import MobileDraftInterface from '@components/features/draft/MobileDraftInterface';
 import MobileDraftErrorBoundary from '@components/features/draft/MobileDraftErrorBoundary';
@@ -140,22 +140,14 @@ export default function DraftRoom({ params }: Props) {
   const isDraftComplete = draft.league && draft.picks.length >= 
     (draft.league.draftRounds || 15) * (draft.league.draftOrder?.length || 12);
 
-  // Check if draft has started based on scheduled time OR server state
+  // Check if draft has started (only at/after time, or when server marks drafting/paused)
   useEffect(() => {
     if (!draft.league) return;
 
     const draftDate = (draft.league as any)?.draftDate;
-    const draftStatus = String((draft.league as any)?.draftStatus || (draft as any)?.draftStatus || '');
-
-    // Started if: time reached OR server says drafting/paused OR picks/deadline exist
+    const effectiveStatus = String((draft as any)?.draftStatus || (draft.league as any)?.draftStatus || '');
     const hasReachedTime = draftDate ? Date.now() >= new Date(draftDate).getTime() : false;
-    const serverIndicatesStarted =
-      draftStatus === 'drafting' ||
-      draftStatus === 'paused' ||
-      (Array.isArray(draft.picks) && draft.picks.length > 0) ||
-      Boolean((draft as any)?.deadlineAt);
-
-    const hasStarted = hasReachedTime || serverIndicatesStarted;
+    const hasStarted = hasReachedTime || effectiveStatus === 'drafting' || effectiveStatus === 'paused';
     setDraftHasStarted(hasStarted);
 
     // If not yet started by server but time has arrived, poll every second until time
@@ -404,7 +396,7 @@ export default function DraftRoom({ params }: Props) {
       {/* Header - match mock styling */}
       <header className="flex items-center justify-between px-2 lg:px-4 py-2 border-b" style={{ backgroundColor: leagueColors.background.secondary, borderColor: leagueColors.border.medium }}>
         <div className="flex items-center gap-3">
-          <h1 className="text-sm font-semibold" style={{ color: leagueColors.text.primary }}>Live Draft</h1>
+          <h1 className="text-sm font-semibold" style={{ color: leagueColors.text.primary }}>{draftHasStarted ? 'Live Draft' : 'Draft (Scheduled)'}</h1>
           {isDraftComplete && (
             <div className="flex items-center gap-2 px-2 py-0.5 rounded-full text-xs" style={{ backgroundColor: '#F59E0B', color: '#111' }}>
               <FiStar className="text-xs" />
@@ -440,23 +432,29 @@ export default function DraftRoom({ params }: Props) {
             </div>
           )}
         </div>
-        {/* Commissioner controls for pause/resume */}
+        {/* Commissioner pause/resume toggle (icon-only) */}
         {draft.league && (draft.league as any).commissionerAuthUserId && user?.$id === (draft.league as any).commissionerAuthUserId && (
           <div className="flex items-center gap-2">
-            <button
-              className="px-3 py-1 rounded text-xs border"
-              style={{ backgroundColor: leagueColors.background.card, borderColor: leagueColors.border.light }}
-              onClick={async () => {
-                try { await fetch(`/api/drafts/${leagueId}/pause`, { method: 'POST' }); } catch {}
-              }}
-            >Pause</button>
-            <button
-              className="px-3 py-1 rounded text-xs border"
-              style={{ backgroundColor: leagueColors.background.card, borderColor: leagueColors.border.light }}
-              onClick={async () => {
-                try { await fetch(`/api/drafts/${leagueId}/resume`, { method: 'POST' }); } catch {}
-              }}
-            >Resume</button>
+            {(() => {
+              const status = String(((draft as any)?.draftStatus) || ((draft.league as any)?.draftStatus) || '');
+              const isPaused = status === 'paused';
+              const Icon = isPaused ? FiPlay : FiPause;
+              const label = isPaused ? 'Resume' : 'Pause';
+              const endpoint = isPaused ? 'resume' : 'pause';
+              return (
+                <button
+                  aria-label={label}
+                  title={label}
+                  className="p-2 rounded border"
+                  style={{ backgroundColor: leagueColors.background.card, borderColor: leagueColors.border.light }}
+                  onClick={async () => {
+                    try { await fetch(`/api/drafts/${leagueId}/${endpoint}`, { method: 'POST' }); } catch {}
+                  }}
+                >
+                  <Icon size={14} />
+                </button>
+              );
+            })()}
           </div>
         )}
       </header>
@@ -487,7 +485,7 @@ export default function DraftRoom({ params }: Props) {
                 <span key={`${p.$id || p.playerId}-${i}`} className="inline-flex items-center gap-2 text-xs px-3 py-1 m-1 rounded-full" style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}>
                   <span className="inline-flex items-center justify-center w-8 h-5 rounded text-[10px] font-bold" style={{ backgroundColor: bg, color: fg }}>{pos || '—'}</span>
                   <span>{p.playerName || p.playerId}</span>
-                  <span className="text-[10px]" style={{ color: leagueColors.text.secondary }}>{teamNames[p.userId as any] || users[p.authUserId || p.userId]?.name || 'Team'}</span>
+                  <span className="text-[10px]" style={{ color: leagueColors.text.secondary }}>{teamNames[(p as any).userId as any] || users[(p as any).authUserId || (p as any).userId]?.name || 'Team'}</span>
                 </span>
               );
             })

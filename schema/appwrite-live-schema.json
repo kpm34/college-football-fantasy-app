@@ -1,6 +1,6 @@
 {
-  "database": "college-football-fantasy\n",
-  "timestamp": "2025-08-26T22:07:55.050Z",
+  "database": "college-football-fantasy",
+  "timestamp": "2025-08-27T20:03:59.165Z",
   "collections": [
     {
       "id": "rankings",
@@ -444,7 +444,7 @@
           "default": null
         },
         {
-          "key": "status",
+          "key": "draftStatus",
           "type": "string",
           "status": "available",
           "error": "",
@@ -1783,12 +1783,12 @@
           "default": null
         },
         {
-          "key": "status",
+          "key": "draftStatus",
           "type": "string",
           "status": "available",
           "error": "",
           "required": false,
-          "default": null
+          "default": "pre-draft"
         }
       ],
       "indexes": [
@@ -1813,7 +1813,7 @@
       "updatedAt": "2025-08-19T21:06:06.773+00:00",
       "attributes": [
         {
-          "key": "name",
+          "key": "leagueName",
           "type": "string",
           "status": "available",
           "error": "",
@@ -1837,12 +1837,12 @@
           "status": "available",
           "error": "",
           "required": false,
-          "min": 4,
-          "max": 20,
+          "min": 2,
+          "max": 32,
           "default": null
         },
         {
-          "key": "status",
+          "key": "leagueStatus",
           "type": "string",
           "status": "available",
           "error": "",
@@ -2006,7 +2006,7 @@
           "status": "available",
           "error": "",
           "attributes": [
-            "status"
+            "leagueStatus"
           ],
           "orders": []
         },
@@ -2794,6 +2794,24 @@
         },
         {
           "key": "ownerAuthUserId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "leagueName",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "players",
           "type": "string",
           "status": "available",
           "error": "",

@@ -1,3 +1,5 @@
+// Duplicate GET removed; see single implementation below
+
 import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
 import { Query } from 'node-appwrite';
@@ -68,18 +70,16 @@ export async function GET(
       const drafts = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.DRAFTS,
-        [Query.limit(100)]
+        [Query.equal('leagueId', leagueId), Query.limit(1)]
       );
-      draftDoc = drafts.documents.find((d: any) => 
-        d.leagueId === leagueId || d.league_id === leagueId
-      );
-      
+      draftDoc = drafts.documents?.[0] || null;
       // Parse orderJson to get draft order
       if (draftDoc?.orderJson) {
         try {
           const orderJson = JSON.parse(draftDoc.orderJson);
-          // Add draft order to league object for backward compatibility
           (league as any).draftOrder = orderJson.draftOrder || [];
+          // Surface draftStatus from drafts to the client for consistency
+          (league as any).draftStatus = draftDoc.draftStatus || (league as any).draftStatus;
         } catch (e) {
           console.error('Error parsing orderJson:', e);
         }

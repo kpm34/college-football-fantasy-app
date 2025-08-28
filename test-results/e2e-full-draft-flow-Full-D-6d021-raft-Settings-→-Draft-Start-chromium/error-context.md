@@ -36,6 +36,10 @@
   - paragraph: "Endpoint: https://nyc.cloud.appwrite.io/v1"
   - paragraph: "Project: college-football-fantasy-app"
   - paragraph: "Domain: localhost"
+- img
+- text: 1 error
+- button "Hide Errors":
+  - img
 - status:
   - img
   - text: Static route

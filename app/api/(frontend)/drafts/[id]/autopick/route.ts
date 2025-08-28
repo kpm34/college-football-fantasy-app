@@ -45,7 +45,7 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
       const { Query } = await import('node-appwrite');
       const players = await databases.listDocuments(
         DATABASE_ID,
-        COLLECTIONS.PLAYERS,
+        COLLECTIONS.COLLEGE_PLAYERS,
         [
           Query.equal('draftable', true),
           Query.orderAsc('adp_rank'),
@@ -74,7 +74,7 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
 
   await databases.createDocument(
     DATABASE_ID,
-    COLLECTIONS.draftEvents,
+    (COLLECTIONS as any).DRAFT_EVENTS || 'draft_events',
     ID.unique(),
     {
       draftId,
@@ -87,21 +87,89 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
     }
   );
 
-  // Also create a draft_picks entry to mirror human picks feed
+  // Also create a draft_picks entry to mirror human picks feed (normalize fields and enrich)
   try {
+    // Try to enrich from players
+    let playerName: string | undefined = undefined;
+    let playerPosition: string | undefined = undefined;
+    let playerTeam: string | undefined = undefined;
+    try {
+      const pl = await databases.getDocument(DATABASE_ID, COLLECTIONS.COLLEGE_PLAYERS, playerId);
+      playerName = (pl as any).name;
+      playerPosition = (pl as any).position;
+      playerTeam = String((pl as any).team || '');
+    } catch {}
+
     await databases.createDocument(
       DATABASE_ID,
       COLLECTIONS.DRAFT_PICKS,
       ID.unique(),
       {
         leagueId: draftId,
-        userId: fantasyTeamId, // even if BOT-*
+        userId: fantasyTeamId,
+        authUserId: undefined,
+        teamId: fantasyTeamId,
         playerId,
+        playerName,
+        playerPosition,
+        playerTeam,
         round: state.round,
         pick: overall,
         timestamp: new Date().toISOString(),
       } as any
     );
+    // Roster + lineup updates (same as human picks)
+    try {
+      await databases.createDocument(
+        DATABASE_ID,
+        COLLECTIONS.ROSTER_SLOTS,
+        ID.unique(),
+        {
+          fantasyTeamId,
+          playerId,
+          position: playerPosition || 'FLEX',
+          acquiredVia: 'draft',
+          acquiredAt: new Date().toISOString(),
+        } as any
+      );
+    } catch {}
+    try {
+      const leagueDoc = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, draftId);
+      const season = Number((leagueDoc as any)?.season || new Date().getFullYear());
+      const week = Number((leagueDoc as any)?.seasonStartWeek || 1);
+      const existing = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.LINEUPS,
+        [Query.equal('fantasyTeamId', fantasyTeamId), Query.equal('season', season), Query.equal('week', week), Query.limit(1)]
+      );
+      if (existing.documents.length === 0) {
+        await databases.createDocument(
+          DATABASE_ID,
+          COLLECTIONS.LINEUPS,
+          ID.unique(),
+          {
+            fantasyTeamId,
+            season,
+            week,
+            lineup: JSON.stringify({}),
+            bench: JSON.stringify([playerId]),
+            points: 0,
+            locked: false,
+          } as any
+        );
+      } else {
+        const doc = existing.documents[0];
+        let bench: string[] = [];
+        try { bench = Array.isArray((doc as any).bench) ? (doc as any).bench : JSON.parse((doc as any).bench || '[]'); } catch {}
+        if (!bench.includes(playerId)) bench.push(playerId);
+        await databases.updateDocument(
+          DATABASE_ID,
+          COLLECTIONS.LINEUPS,
+          doc.$id,
+          { bench: JSON.stringify(bench) } as any
+        );
+      }
+    } catch {}
   } catch (e) {
     console.warn('[autopick] failed to write draft_picks mirror:', e);
   }

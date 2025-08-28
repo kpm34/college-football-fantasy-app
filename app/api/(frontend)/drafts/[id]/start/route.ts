@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/appwrite-server';
-import { Query } from 'node-appwrite';
+import { Query, ID } from 'node-appwrite';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   const { id: leagueId } = params;
@@ -27,7 +27,9 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         });
         if (userRes.ok) {
           const user = await userRes.json();
-          isCommissioner = String((league as any)?.commissioner) === String(user.$id);
+          // Use commissionerAuthUserId as canonical field
+          const comm = (league as any)?.commissionerAuthUserId || (league as any)?.commissioner;
+          isCommissioner = String(comm || '') === String(user.$id);
         }
       }
     } catch {}
@@ -87,8 +89,29 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       }
     } catch {}
 
-    // Build draft order
+    // Build draft order (prefer drafts.orderJson; fallback to league/scoringRules/members)
     let order: string[] = [];
+    try {
+      // Find the draft record for this league
+      let draftDoc: any = null;
+      try {
+        const drafts = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.DRAFTS,
+          [Query.equal('leagueId', leagueId), Query.limit(1)]
+        );
+        draftDoc = drafts.documents?.[0] || null;
+      } catch {}
+
+      if (draftDoc?.orderJson) {
+        try {
+          const parsed = JSON.parse(draftDoc.orderJson);
+          if (Array.isArray(parsed?.draftOrder)) {
+            order = parsed.draftOrder;
+          }
+        } catch {}
+      }
+    } catch {}
     try {
       const rawOrder = (league as any).draftOrder;
       if (Array.isArray(rawOrder)) order = rawOrder as any;
@@ -141,7 +164,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     // Mirror to DRAFT_STATES collection for observability (if it exists)
     try {
-      await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_STATES, 'unique()', {
+      await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_STATES, ID.unique(), {
         draftId: leagueId,
         onClockTeamId: state.onClockTeamId,
         deadlineAt: state.deadlineAt,
@@ -152,16 +175,26 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         picksPerRound: state.picksPerRound,
       } as any);
     } catch (error: any) {
-      // DRAFT_STATES collection might not exist, that's okay
       console.log('[Draft Start] Could not create draft state document:', error.message);
     }
-    
-    // Record draft status in drafts/draft_states only; leagues no longer carries draftStatus
+
+    // Also update the DRAFTS collection status for cron/consumers parity
     try {
-      await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draft.$id, { draftStatus: 'drafting' } as any);
-    } catch (error: any) {
-      console.log('[Draft Start] Could not update drafts.draftStatus:', error.message);
-    }
+      const drafts = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.DRAFTS,
+        [Query.equal('leagueId', leagueId), Query.limit(1)]
+      );
+      if (drafts.documents.length > 0) {
+        const doc = drafts.documents[0];
+        await databases.updateDocument(
+          DATABASE_ID,
+          COLLECTIONS.DRAFTS,
+          doc.$id,
+          { draftStatus: 'drafting', currentRound: 1, currentPick: 1 } as any
+        );
+      }
+    } catch {}
 
     return NextResponse.json({ success: true, state });
   } catch (error: any) {

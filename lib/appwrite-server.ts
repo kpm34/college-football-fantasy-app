@@ -1,5 +1,5 @@
 import { Client, Databases, Users, Storage, Functions, Messaging } from 'node-appwrite';
-import { DATABASE_ID, COLLECTIONS } from './appwrite';
+import { DATABASE_ID, COLLECTIONS } from './appwrite-generated';
 
 // Server-side Appwrite client configuration (with API key)
 // This should only be used in API routes, never exposed to client

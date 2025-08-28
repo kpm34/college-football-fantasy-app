@@ -4,7 +4,7 @@
  * Generates Appwrite collection creation scripts and configuration from the canonical schema
  */
 
-import { COLLECTIONS, SCHEMA_REGISTRY } from '../zod-schema';
+import { SCHEMA } from '../schema';
 import { Client, Databases, Permission, Role } from 'node-appwrite';
 import fs from 'fs';
 import path from 'path';
@@ -50,7 +50,7 @@ export const COLLECTIONS = {
     configCode += `  ${collectionId}: {\n`;
     configCode += `    id: '${collection.id}',\n`;
     configCode += `    name: '${collection.name}',\n`;
-    configCode += `    description: '${collection.description}',\n`;
+    configCode += `    description: '${(collection as any).description || ''}',\n`;
     configCode += `    attributeCount: ${collection.attributes.length},\n`;
     configCode += `    indexCount: ${collection.indexes.length},\n`;
     configCode += `    requiredAttributes: [${collection.attributes.filter(a => a.required).map(a => `'${a.key}'`).join(', ')}],\n`;
@@ -264,10 +264,7 @@ export async function seedAppwriteSchema(): Promise<void> {
     const existingIds = new Set(existingCollections.collections.map(c => c.$id));
     
     // Create collections in dependency order
-    const collectionOrder = [
-      'users', 'teams', 'college_players', 'games', 'rankings', 'player_stats',
-      'leagues', 'user_teams', 'lineups', 'auctions', 'bids', 'activity_log'
-    ];
+    const collectionOrder = Object.keys(SCHEMA);
     
     for (const collectionId of collectionOrder) {
       if (!SCHEMA[collectionId]) continue;
@@ -278,7 +275,7 @@ export async function seedAppwriteSchema(): Promise<void> {
       // Create collection if it doesn't exist
       if (!existingIds.has(collectionId)) {
         try {
-          const permissions = convertPermissions(collection.permissions);
+          const permissions = convertPermissions((collection as any).permissions || {});
           
           await databases.createCollection(
             DATABASE_ID,

@@ -27,6 +27,18 @@ export interface IndexProfile {
  * PERFORMANCE-OPTIMIZED INDEX DEFINITIONS
  */
 export const INDEX_SCHEMA: Record<string, IndexProfile> = {
+  draft_picks: {
+    collectionId: 'draft_picks',
+    description: 'UI pick feed optimized for ordered retrieval',
+    commonQueries: [
+      'Picks by league ordered by pick',
+      'Recent picks by created time'
+    ],
+    compoundIndexes: [
+      { key: 'league_pick_idx', type: 'key', attributes: ['leagueId', 'pick'], orders: ['ASC', 'ASC'], description: 'Ordered picks per league', queryPatterns: ['leagueId = ? ORDER BY pick ASC'], estimatedUsage: 'high' }
+    ],
+    singleIndexes: []
+  },
   draft_events: {
     collectionId: 'draft_events',
     description: 'Canonical draft event log',
@@ -45,7 +57,7 @@ export const INDEX_SCHEMA: Record<string, IndexProfile> = {
     description: 'Persisted draft state snapshot',
     commonQueries: ['Get current state by draftId', 'Find expired deadlines for autopick'],
     compoundIndexes: [
-      { key: 'deadline_scan_idx', type: 'key', attributes: ['status', 'deadlineAt'], orders: ['ASC', 'ASC'], description: 'Scan for expired deadlines', queryPatterns: ['status = "active" AND deadlineAt <= now()'], estimatedUsage: 'high' }
+      { key: 'deadline_scan_idx', type: 'key', attributes: ['draftStatus', 'deadlineAt'], orders: ['ASC', 'ASC'], description: 'Scan for expired deadlines', queryPatterns: ['draftStatus = "drafting" AND deadlineAt <= now()'], estimatedUsage: 'high' }
     ],
     singleIndexes: [
       { key: 'draft_unique_idx', type: 'unique', attributes: ['draftId'], description: 'One state per draft', queryPatterns: ['draftId = ?'], estimatedUsage: 'high' }
@@ -223,8 +235,8 @@ export const INDEX_SCHEMA: Record<string, IndexProfile> = {
   },
 
   // User Teams - League standings and team management
-  user_teams: {
-    collectionId: 'user_teams',
+  fantasy_teams: {
+    collectionId: 'fantasy_teams',
     description: 'Fantasy team rosters and standings',
     commonQueries: [
       'Get league standings (wins/losses)',
@@ -244,14 +256,14 @@ export const INDEX_SCHEMA: Record<string, IndexProfile> = {
         estimatedUsage: 'high'
       },
       {
-        key: 'user_teams_idx',
+        key: 'owner_teams_idx',
         type: 'key',
-        attributes: ['userId', 'leagueId'],
+        attributes: ['ownerAuthUserId', 'leagueId'],
         orders: ['ASC', 'ASC'],
         description: 'User\'s teams across multiple leagues',
         queryPatterns: [
-          'userId = ?',
-          'userId = ? AND leagueId = ?'
+          'ownerAuthUserId = ?',
+          'ownerAuthUserId = ? AND leagueId = ?'
         ],
         estimatedUsage: 'high'
       },
@@ -269,11 +281,11 @@ export const INDEX_SCHEMA: Record<string, IndexProfile> = {
     ],
     singleIndexes: [
       {
-        key: 'league_user_unique_idx',
+        key: 'league_owner_unique_idx',
         type: 'unique',
-        attributes: ['leagueId', 'userId'],
+        attributes: ['leagueId', 'ownerAuthUserId'],
         description: 'Prevent duplicate team per user per league',
-        queryPatterns: ['leagueId = ? AND userId = ?'],
+        queryPatterns: ['leagueId = ? AND ownerAuthUserId = ?'],
         estimatedUsage: 'medium'
       }
     ]

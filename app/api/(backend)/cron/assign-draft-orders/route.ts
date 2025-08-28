@@ -26,26 +26,28 @@ export async function GET(request: NextRequest) {
     const now = Date.now();
     const oneHourFromNow = now + 60 * 60 * 1000; // 1 hour in milliseconds
 
-    // Find leagues with drafts starting within the next hour that don't have draft orders set
-    const leaguesRes = await databases.listDocuments(
+    // Find drafts starting within the next hour that don't have draft order set in orderJson
+    const draftsRes = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.LEAGUES,
+      COLLECTIONS.DRAFTS,
       [
-        Query.lessThanEqual('draftDate', new Date(oneHourFromNow).toISOString()),
-        Query.greaterThan('draftDate', new Date(now).toISOString()),
+        Query.lessThanEqual('startTime', new Date(oneHourFromNow).toISOString()),
+        Query.greaterThan('startTime', new Date(now).toISOString()),
         Query.limit(100),
       ]
     );
 
     const results: any[] = [];
     
-    for (const league of leaguesRes.documents) {
+    for (const draft of draftsRes.documents) {
       try {
-        // Check if league already has a draft order
-        const existingOrder = (league as any).draftOrder;
+        // Check existing order in draft.orderJson
+        let orderJson: any = {};
+        try { orderJson = draft.orderJson ? JSON.parse(draft.orderJson) : {}; } catch {}
+        const existingOrder = orderJson.draftOrder;
         if (existingOrder && Array.isArray(existingOrder) && existingOrder.length > 0) {
           results.push({ 
-            leagueId: league.$id, 
+            leagueId: draft.leagueId, 
             status: 'skipped', 
             reason: 'already has draft order' 
           });
@@ -57,15 +59,15 @@ export async function GET(request: NextRequest) {
           DATABASE_ID,
           COLLECTIONS.LEAGUE_MEMBERSHIPS || 'league_memberships',
           [
-            Query.equal('leagueId', league.$id),
-            Query.equal('status', 'active'),
+            Query.equal('leagueId', draft.leagueId),
+            Query.equal('status', 'ACTIVE'),
             Query.limit(100),
           ]
         );
 
         if (membersRes.documents.length === 0) {
           results.push({ 
-            leagueId: league.$id, 
+            leagueId: draft.leagueId, 
             status: 'skipped', 
             reason: 'no active members' 
           });
@@ -73,73 +75,38 @@ export async function GET(request: NextRequest) {
         }
 
         // Create random order from member IDs
-        const memberIds = membersRes.documents.map((m: any) => m.clientId || m.userId);
+        const memberIds = membersRes.documents.map((m: any) => m.authUserId || m.clientId || m.userId).filter(Boolean);
         const randomOrder = shuffleArray(memberIds);
 
-        // Update league with random draft order
+        // Update the draft document with randomized order
+        orderJson.draftOrder = randomOrder;
         await databases.updateDocument(
           DATABASE_ID,
-          COLLECTIONS.LEAGUES,
-          league.$id,
-          {
-            draftOrder: randomOrder,
-            orderMode: 'random',
-          }
+          COLLECTIONS.DRAFTS,
+          draft.$id,
+          { orderJson: JSON.stringify(orderJson) }
         );
 
-        // Also update the draft document if it exists
-        try {
-          const draftsRes = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.DRAFTS,
-            [Query.equal('leagueId', league.$id), Query.limit(1)]
-          );
-
-          if (draftsRes.documents.length > 0) {
-            const draftDoc = draftsRes.documents[0];
-            
-            // Parse existing orderJson
-            let orderJson: any = {};
-            try {
-              orderJson = draftDoc.orderJson ? JSON.parse(draftDoc.orderJson) : {};
-            } catch {}
-            
-            // Update with random order
-            orderJson.draftOrder = randomOrder;
-            
-            await databases.updateDocument(
-              DATABASE_ID,
-              COLLECTIONS.DRAFTS,
-              draftDoc.$id,
-              {
-                orderJson: JSON.stringify(orderJson),
-              }
-            );
-          }
-        } catch (draftError) {
-          console.error(`Failed to update draft document for league ${league.$id}:`, draftError);
-        }
-
         results.push({ 
-          leagueId: league.$id, 
+          leagueId: draft.leagueId, 
           status: 'success', 
           membersCount: randomOrder.length,
-          draftTime: (league as any).draftDate,
+          draftTime: (draft as any).startTime,
         });
 
-        console.log(`Assigned random draft order to league ${league.$id} with ${randomOrder.length} members`);
+        console.log(`Assigned random draft order to league ${draft.leagueId} with ${randomOrder.length} members`);
       } catch (error: any) {
         results.push({ 
-          leagueId: league.$id, 
+          leagueId: draft.leagueId, 
           status: 'error', 
           error: error?.message 
         });
-        console.error(`Failed to assign draft order for league ${league.$id}:`, error);
+        console.error(`Failed to assign draft order for league ${draft.leagueId}:`, error);
       }
     }
 
     return NextResponse.json({ 
-      processed: leaguesRes.documents.length,
+      processed: draftsRes.documents.length,
       assigned: results.filter(r => r.status === 'success').length,
       results 
     });
