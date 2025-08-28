@@ -26,6 +26,27 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       return NextResponse.json({ error: 'Missing playerId or fantasyTeamId' }, { status: 400 });
     }
 
+    // Normalize incoming fantasyTeamId to a Fantasy Team document ID
+    // Some clients may send ownerAuthUserId; map it to team $id for consistency
+    let normalizedFantasyTeamId = String(fantasyTeamId);
+    const ownerToTeam = new Map<string, string>();
+    const teamIdSet = new Set<string>();
+    try {
+      const teamDocs = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.FANTASY_TEAMS,
+        [Query.equal('leagueId', draftId), Query.limit(200)]
+      );
+      for (const t of teamDocs.documents as any[]) {
+        if (t?.$id) teamIdSet.add(String(t.$id));
+        if (t?.ownerAuthUserId) ownerToTeam.set(String(t.ownerAuthUserId), String(t.$id));
+      }
+      if (!teamIdSet.has(normalizedFantasyTeamId)) {
+        const mapped = ownerToTeam.get(normalizedFantasyTeamId);
+        if (mapped) normalizedFantasyTeamId = mapped;
+      }
+    } catch {}
+
     // Load ephemeral state from KV; fallback to latest draft_states when KV missing
     let state: any = null;
     try {
@@ -82,21 +103,12 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       return NextResponse.json({ error: 'Not your turn' }, { status: 400 });
     }
 
-    let isOnClockForThisTeam = String(state.onClockTeamId) === String(fantasyTeamId);
+    let isOnClockForThisTeam = String(state.onClockTeamId) === String(normalizedFantasyTeamId);
     if (!isOnClockForThisTeam) {
       try {
-        const teamDocs = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTIONS.FANTASY_TEAMS,
-          [Query.equal('leagueId', draftId), Query.limit(200)]
-        );
-        const ownerToTeam = new Map<string, string>();
-        for (const t of teamDocs.documents as any[]) {
-          if (t?.ownerAuthUserId) ownerToTeam.set(String(t.ownerAuthUserId), String(t.$id));
-        }
         // If onClock is an ownerAuthUserId, translate to teamId and compare
         const mappedTeamId = ownerToTeam.get(String(state.onClockTeamId));
-        if (mappedTeamId && String(mappedTeamId) === String(fantasyTeamId)) {
+        if (mappedTeamId && String(mappedTeamId) === String(normalizedFantasyTeamId)) {
           isOnClockForThisTeam = true;
         }
       } catch {}
@@ -128,7 +140,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
           draftId,
           ts: new Date().toISOString(),
           type: 'pick',
-          fantasyTeamId,
+          fantasyTeamId: normalizedFantasyTeamId,
           playerId,
           round: state.round,
           overall,
@@ -203,9 +215,9 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         ID.unique(),
         {
           leagueId: draftId,
-          userId: fantasyTeamId,
+          userId: normalizedFantasyTeamId,
           authUserId: by || undefined,
-          teamId: fantasyTeamId,
+          teamId: normalizedFantasyTeamId,
           playerId,
           playerName,
           playerPosition,
@@ -222,7 +234,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
           COLLECTIONS.ROSTER_SLOTS,
           ID.unique(),
           {
-            fantasyTeamId,
+            fantasyTeamId: normalizedFantasyTeamId,
             playerId,
             position: playerPosition || 'FLEX',
             acquiredVia: 'draft',
@@ -239,7 +251,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         const existing = await databases.listDocuments(
           DATABASE_ID,
           COLLECTIONS.LINEUPS,
-          [Query.equal('fantasyTeamId', fantasyTeamId), Query.equal('season', season), Query.equal('week', week), Query.limit(1)]
+          [Query.equal('fantasyTeamId', normalizedFantasyTeamId), Query.equal('season', season), Query.equal('week', week), Query.limit(1)]
         );
         if (existing.documents.length === 0) {
           await databases.createDocument(
@@ -247,7 +259,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
             COLLECTIONS.LINEUPS,
             ID.unique(),
             {
-              fantasyTeamId,
+              fantasyTeamId: normalizedFantasyTeamId,
               season,
               week,
               lineup: JSON.stringify({}),

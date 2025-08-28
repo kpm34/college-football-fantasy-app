@@ -278,7 +278,9 @@ export default function DraftRoom({ params }: Props) {
           const userMap: Record<string, any> = {};
           for (const t of (data.teams || [])) {
             if (t?.$id) userMap[t.$id] = { name: t.userName || t.name };
+            // Support both legacy userId and canonical ownerAuthUserId for mapping
             if (t?.userId) userMap[t.userId] = { name: t.userName || t.name };
+            if (t?.ownerAuthUserId) userMap[t.ownerAuthUserId] = { name: t.userName || t.name };
           }
           setUsers(userMap);
         }
