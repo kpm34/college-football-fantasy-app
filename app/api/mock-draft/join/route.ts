@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       userType: 'human',
       displayName: displayName || 'Guest Player',
       slot: open.slot,
-      clientId: client_id || null
+      clientId: clientId || null
     };
     
     const upd = await serverDatabases.updateDocument(
