@@ -157,3 +157,111 @@ export async function GET(
     );
   }
 }
+
+// DELETE remove a member (commissioner only): cascade delete memberships, fantasy teams, roster slots, lineups; update league currentTeams and draft order
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ leagueId: string }> }
+) {
+  try {
+    const { leagueId } = await context.params;
+    const { searchParams } = new URL(request.url);
+    const targetAuthUserId = searchParams.get('authUserId');
+    if (!leagueId || !targetAuthUserId) {
+      return NextResponse.json({ error: 'leagueId and authUserId are required' }, { status: 400 });
+    }
+
+    // Auth check via session cookie
+    let sessionCookie = request.cookies.get('appwrite-session')?.value as string | undefined;
+    if (!sessionCookie) sessionCookie = request.cookies.get('a_session_college-football-fantasy-app')?.value as string | undefined;
+    if (!sessionCookie) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    const cookieHeader = `a_session_college-football-fantasy-app=${sessionCookie}`;
+    const userRes = await fetch('https://nyc.cloud.appwrite.io/v1/account', {
+      headers: {
+        'X-Appwrite-Project': 'college-football-fantasy-app',
+        'X-Appwrite-Response-Format': '1.4.0',
+        'Cookie': cookieHeader,
+      },
+    });
+    if (!userRes.ok) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    const me = await userRes.json();
+
+    // Verify commissioner
+    const league = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, leagueId);
+    const commissionerId = (league as any).commissionerAuthUserId;
+    if (!commissionerId || commissionerId !== me.$id) {
+      return NextResponse.json({ error: 'Only the commissioner can remove members' }, { status: 403 });
+    }
+
+    // Remove league_membership
+    const memberships = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.LEAGUE_MEMBERSHIPS,
+      [Query.equal('leagueId', leagueId), Query.equal('authUserId', targetAuthUserId), Query.limit(10)]
+    );
+    for (const m of memberships.documents || []) {
+      try { await databases.deleteDocument(DATABASE_ID, COLLECTIONS.LEAGUE_MEMBERSHIPS, m.$id); } catch {}
+    }
+
+    // Remove fantasy team(s)
+    const teams = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.FANTASY_TEAMS,
+      [Query.equal('leagueId', leagueId), Query.equal('ownerAuthUserId', targetAuthUserId), Query.limit(10)]
+    );
+    for (const t of teams.documents || []) {
+      // Remove roster slots for team
+      try {
+        const slots = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.ROSTER_SLOTS,
+          [Query.equal('fantasyTeamId', t.$id), Query.limit(200)]
+        );
+        for (const s of slots.documents || []) {
+          try { await databases.deleteDocument(DATABASE_ID, COLLECTIONS.ROSTER_SLOTS, s.$id); } catch {}
+        }
+      } catch {}
+      // Remove lineups for team
+      try {
+        const lineups = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.LINEUPS,
+          [Query.equal('fantasyTeamId', t.$id), Query.limit(200)]
+        );
+        for (const l of lineups.documents || []) {
+          try { await databases.deleteDocument(DATABASE_ID, COLLECTIONS.LINEUPS, l.$id); } catch {}
+        }
+      } catch {}
+      // Delete the fantasy team
+      try { await databases.deleteDocument(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, t.$id); } catch {}
+    }
+
+    // Update league counts and leagueStatus
+    const newCount = Math.max(0, (league as any).currentTeams ? (league as any).currentTeams - 1 : 0);
+    await databases.updateDocument(
+      DATABASE_ID,
+      COLLECTIONS.LEAGUES,
+      leagueId,
+      { currentTeams: newCount, leagueStatus: newCount >= (league as any).maxTeams ? 'closed' : 'open' } as any
+    );
+
+    // Update draft.orderJson: remove this authUserId if present
+    try {
+      const drafts = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFTS, [Query.equal('leagueId', leagueId), Query.limit(1)]);
+      if (drafts.documents.length > 0) {
+        const draft = drafts.documents[0];
+        let orderJson: any = {};
+        try { orderJson = draft.orderJson ? JSON.parse(draft.orderJson) : {}; } catch {}
+        if (Array.isArray(orderJson.draftOrder)) {
+          orderJson.draftOrder = orderJson.draftOrder.filter((id: any) => String(id) !== String(targetAuthUserId));
+          await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draft.$id, { orderJson: JSON.stringify(orderJson) } as any);
+        }
+      }
+    } catch {}
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error('Error removing member:', error);
+    return NextResponse.json({ error: error.message || 'Failed to remove member' }, { status: 500 });
+  }
+}

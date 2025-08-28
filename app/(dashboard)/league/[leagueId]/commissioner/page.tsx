@@ -1038,6 +1038,30 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                   <div className="text-sm" style={{ color: leagueColors.text.muted }}>
                     {member.wins || 0}-{member.losses || 0}
                   </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={async () => {
+                        if (!confirm('Remove this member from the league? This will delete their team, lineups, and membership.')) return;
+                        try {
+                          const res = await fetch(`/api/leagues/${params.leagueId}/members?authUserId=${encodeURIComponent((member as any).authUserId || member.$id)}`, {
+                            method: 'DELETE',
+                            credentials: 'include'
+                          });
+                          if (!res.ok) {
+                            const t = await res.text();
+                            throw new Error(t || 'Failed to remove member');
+                          }
+                          await loadSettings();
+                        } catch (e: any) {
+                          alert(e.message || 'Failed to remove member');
+                        }
+                      }}
+                      className="px-3 py-1 rounded text-sm"
+                      style={{ backgroundColor: '#991b1b', color: '#fff', border: `1px solid ${leagueColors.border.light}` }}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

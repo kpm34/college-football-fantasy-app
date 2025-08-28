@@ -62,7 +62,7 @@ export function useDraftRealtime(leagueId: string) {
           if (d?.$id) {
             myIdsRef.current.add(String(d.$id));
             // Cache the fantasy team ID for this user
-            if (d.ownerAuthUserId === userId || d.userId === userId || d.clientId === userId) {
+            if (d.ownerAuthUserId === userId) {
               myFantasyTeamIdRef.current = d.$id;
             }
           }
@@ -117,9 +117,9 @@ export function useDraftRealtime(leagueId: string) {
           : pickIndex;
         const onTheClock = orderArray[actualIndex] || league.draftOrder?.[actualIndex];
         const draftStartMs = (league as any)?.draftDate ? new Date((league as any).draftDate).getTime() : 0;
-        // Live when draftStatus (from draft_state) is drafting AND time reached
+        // Treat server draftStatus as source of truth; also allow time-reached fallback
         const effectiveDraftStatus = String(draftState?.draftStatus || '');
-        const isDraftLive = (effectiveDraftStatus === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
+        const isDraftLive = (effectiveDraftStatus === 'drafting') || (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
         const isMyTurn = isDraftLive && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
 
         setState({
@@ -209,7 +209,7 @@ export function useDraftRealtime(leagueId: string) {
         leagueId: src.leagueId,
         round: src.round,
         pickNumber: typeof src.pickNumber === 'number' ? src.pickNumber : (src.pick as number),
-        userId: src.clientId,
+        userId: src.authUserId || src.userId || src.teamId,
         playerId: src.playerId,
         playerName: src.playerName,
         playerPosition: src.playerPosition,
@@ -271,7 +271,7 @@ export function useDraftRealtime(leagueId: string) {
           const fallbackMembers: string[] = Array.isArray((prev.league as any)?.members) ? (prev.league as any).members : [];
           const onTheClock = parsedOrder[actualIndex] || fallbackMembers[actualIndex] || prev.league.draftOrder?.[actualIndex];
           const draftStartMs = (prev.league as any)?.draftDate ? new Date((prev.league as any).draftDate).getTime() : 0;
-          const isDraftLive = (String(prev.draftStatus || '') === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
+          const isDraftLive = (String(prev.draftStatus || '') === 'drafting') || (draftStartMs > 0 ? Date.now() >= draftStartMs : false);
           const isMyTurn = isDraftLive && (onTheClock ? myIdsRef.current.has(String(onTheClock)) : false);
 
           return {
@@ -303,7 +303,7 @@ export function useDraftRealtime(leagueId: string) {
         leagueId: src.leagueId,
         round: src.round,
         pickNumber: typeof src.pickNumber === 'number' ? src.pickNumber : (src.pick as number),
-        userId: src.clientId,
+        userId: src.authUserId || src.userId || src.teamId,
         playerId: src.playerId,
         playerName: src.playerName,
         playerPosition: src.playerPosition,
@@ -350,7 +350,7 @@ export function useDraftRealtime(leagueId: string) {
       setState(prev => {
         const draftStartMs = (prev.league as any)?.draftDate ? new Date((prev.league as any).draftDate).getTime() : 0;
         const effectiveStatus = String(doc.draftStatus || '');
-        const isDraftLive = (effectiveStatus === 'drafting') && (draftStartMs > 0 ? Date.now() >= draftStartMs : true);
+        const isDraftLive = (effectiveStatus === 'drafting') || (draftStartMs > 0 ? Date.now() >= draftStartMs : true);
         const onClock = doc.onClockTeamId || prev.onTheClock;
         const isMyTurn = isDraftLive && (onClock ? myIdsRef.current.has(String(onClock)) : false);
         return {

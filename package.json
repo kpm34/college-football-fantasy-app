@@ -85,9 +85,9 @@
     "check:versions": "ts-node ops/common/scripts/check-file-versions.ts",
     "commit:safe": "npm run check:versions && git add -A && git commit",
     "generate:types:legacy": "node schema/generators/types.ts",
-    "generate:appwrite": "node schema/generators/appwrite.ts",
-    "generate:env": "node schema/generators/env.ts",
-    "generate:docs": "npx tsx ops/common/scripts/generate-schema-docs.ts",
+    "generate:appwrite": "tsx schema/generators/appwrite.ts",
+    "generate:env": "tsx schema/generators/env.ts",
+    "generate:docs": "tsx ops/common/scripts/generate-schema-docs.ts",
     "generate:all": "npm run generate:types && npm run generate:appwrite && npm run generate:env && npm run generate:docs",
     "seed:appwrite": "node schema/generators/seed-appwrite.ts",
     "cleanup:schema": "node ops/common/scripts/cleanup-old-schema-references.js",
@@ -112,7 +112,9 @@
     "demo:glob:basic": "npx tsx ops/common/scripts/demo-enhanced-glob.ts --basic",
     "ingest:run": "npx tsx ops/common/scripts/run-data-ingestion.ts",
     "ops:cursor:open": "tsx ops/common/scripts/open-latest-context.ts",
-    "generate:project-map": "tsx ops/common/scripts/generate-project-map-diagrams.ts"
+    "generate:project-map": "tsx ops/common/scripts/generate-project-map-diagrams.ts",
+    "indexes:ensure": "tsx scripts/guards/ensure-indexes.ts",
+    "validate:relationships": "tsx scripts/guards/validate-relationships.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",

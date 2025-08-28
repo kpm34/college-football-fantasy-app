@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
-import { Query } from 'node-appwrite';
+import { Query, ID } from 'node-appwrite';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -23,12 +23,12 @@ export async function GET(request: NextRequest) {
 
     const now = Date.now();
 
-    // Find drafts that are scheduled and ready to start
+    // Find drafts that are pre-draft and ready to start
     const draftsRes = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.DRAFTS,
       [
-        Query.equal('status', 'scheduled'),
+        Query.equal('draftStatus', 'pre-draft'),
         Query.lessThanEqual('startTime', new Date(now).toISOString()),
         Query.limit(100),
       ]
@@ -42,36 +42,65 @@ export async function GET(request: NextRequest) {
       console.log('[CRON] Drafts to start:', toStart.map((d: any) => ({ 
         leagueName: d.leagueName,
         startTime: d.startTime,
-        status: d.status 
+        status: d.draftStatus 
       })));
     }
 
     for (const draft of toStart) {
       try {
-        // Update the draft status to active
+        // Compute on-the-clock and deadline from orderJson + clockSeconds
+        let orderJson: any = {};
+        try { orderJson = draft.orderJson ? JSON.parse(draft.orderJson) : {}; } catch {}
+        const draftOrder: string[] = Array.isArray(orderJson.draftOrder) ? orderJson.draftOrder : [];
+        const onClockTeamId: string | null = draftOrder.length > 0 ? String(draftOrder[0]) : null;
+        const clockSeconds = Number((draft as any).clockSeconds || orderJson.pickTimeSeconds || 90);
+        const deadlineAt = new Date(Date.now() + clockSeconds * 1000).toISOString();
+
+        // Update the draft status to drafting
         await databases.updateDocument(
           DATABASE_ID,
           COLLECTIONS.DRAFTS,
           draft.$id,
           {
-            status: 'active',
+            draftStatus: 'drafting',
             currentRound: 1,
             currentPick: 1
           }
         );
-        
-        // Update the associated league status to drafting
+
+        // Create or update a draft_state snapshot for this draft/league
         const leagueId = draft.leagueId || draft.league_id;
-        if (leagueId) {
+        if (leagueId && onClockTeamId) {
           try {
-            await databases.updateDocument(
+            await databases.createDocument(
               DATABASE_ID,
-              COLLECTIONS.LEAGUES,
-              leagueId,
-              { status: 'drafting' }
+              COLLECTIONS.DRAFT_STATES,
+              ID.unique(),
+              {
+                draftId: String(leagueId),
+                onClockTeamId,
+                deadlineAt,
+                round: 1,
+                pickIndex: 1,
+                draftStatus: 'drafting'
+              }
             );
-          } catch (leagueError: any) {
-            console.error(`[CRON] Failed to update league ${leagueId}:`, leagueError.message);
+          } catch (e: any) {
+            try {
+              const existing = await databases.listDocuments(
+                DATABASE_ID,
+                COLLECTIONS.DRAFT_STATES,
+                [Query.equal('draftId', String(leagueId)), Query.limit(1)]
+              );
+              if (existing.documents.length > 0) {
+                await databases.updateDocument(
+                  DATABASE_ID,
+                  COLLECTIONS.DRAFT_STATES,
+                  existing.documents[0].$id,
+                  { onClockTeamId, deadlineAt, round: 1, pickIndex: 1, draftStatus: 'drafting' }
+                );
+              }
+            } catch {}
           }
         }
         

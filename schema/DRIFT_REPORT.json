@@ -1,30 +1,10 @@
 {
   "collections_missing_in_live": [],
-  "collections_missing_in_ssot": [
-    "matchups",
-    "player_stats",
-    "drafts",
-    "activity_log",
-    "invites",
-    "transactions",
-    "meshy_jobs",
-    "model_versions",
-    "auctions",
-    "bids",
-    "lineups",
-    "migrations",
-    "clients",
-    "schools",
-    "projections",
-    "model_runs",
-    "league_memberships"
-  ],
+  "collections_missing_in_ssot": [],
   "per_collection": {
     "fantasy_teams": {
       "missing_attrs_in_live": [],
-      "missing_attrs_in_ssot": [
-        "players"
-      ],
+      "missing_attrs_in_ssot": [],
       "mismatched_attrs": [
         {
           "key": "wins",
@@ -32,7 +12,8 @@
             "key": "wins",
             "type": "integer",
             "required": false,
-            "min": 0
+            "min": 0,
+            "max": 25
           },
           "live": {
             "key": "wins",
@@ -50,7 +31,8 @@
             "key": "losses",
             "type": "integer",
             "required": false,
-            "min": 0
+            "min": 0,
+            "max": 25
           },
           "live": {
             "key": "losses",
@@ -68,7 +50,8 @@
             "key": "ties",
             "type": "integer",
             "required": false,
-            "min": 0
+            "min": 0,
+            "max": 25
           },
           "live": {
             "key": "ties",
@@ -85,8 +68,7 @@
           "ssot": {
             "key": "pointsFor",
             "type": "double",
-            "required": false,
-            "min": 0
+            "required": false
           },
           "live": {
             "key": "pointsFor",
@@ -103,8 +85,7 @@
           "ssot": {
             "key": "pointsAgainst",
             "type": "double",
-            "required": false,
-            "min": 0
+            "required": false
           },
           "live": {
             "key": "pointsAgainst",
@@ -170,6 +151,23 @@
             "max": 1.7976931348623157e+308,
             "default": null
           }
+        },
+        {
+          "key": "players",
+          "ssot": {
+            "key": "players",
+            "type": "string",
+            "required": false,
+            "size": 65535
+          },
+          "live": {
+            "key": "players",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
         }
       ],
       "missing_indexes_in_live": [],
@@ -177,9 +175,7 @@
       "mismatched_indexes": []
     },
     "leagues": {
-      "missing_attrs_in_live": [
-        "draftStatus"
-      ],
+      "missing_attrs_in_live": [],
       "missing_attrs_in_ssot": [],
       "mismatched_attrs": [
         {
@@ -274,64 +270,11 @@
             "max": 600,
             "default": null
           }
-        },
-        {
-          "key": "scoringRules",
-          "ssot": {
-            "key": "scoringRules",
-            "type": "string",
-            "required": false,
-            "size": 2000
-          },
-          "live": {
-            "key": "scoringRules",
-            "type": "string",
-            "required": false,
-            "array": false,
-            "size": 65535,
-            "default": null
-          }
-        },
-        {
-          "key": "draftOrder",
-          "ssot": {
-            "key": "draftOrder",
-            "type": "string",
-            "required": false,
-            "size": 2000
-          },
-          "live": {
-            "key": "draftOrder",
-            "type": "string",
-            "required": false,
-            "array": false,
-            "size": 65535,
-            "default": null
-          }
         }
       ],
       "missing_indexes_in_live": [],
       "missing_indexes_in_ssot": [],
-      "mismatched_indexes": [
-        {
-          "key": "status_idx",
-          "ssot": {
-            "key": "status_idx",
-            "type": "key",
-            "attributes": [
-              "status"
-            ]
-          },
-          "live": {
-            "key": "status_idx",
-            "type": "key",
-            "attributes": [
-              "leagueStatus"
-            ],
-            "orders": []
-          }
-        }
-      ]
+      "mismatched_indexes": []
     },
     "college_players": {
       "missing_attrs_in_live": [],
@@ -751,40 +694,6 @@
       "missing_attrs_in_ssot": [],
       "mismatched_attrs": [
         {
-          "key": "draftId",
-          "ssot": {
-            "key": "draftId",
-            "type": "string",
-            "required": true,
-            "size": 50
-          },
-          "live": {
-            "key": "draftId",
-            "type": "string",
-            "required": true,
-            "array": false,
-            "size": 64,
-            "default": null
-          }
-        },
-        {
-          "key": "type",
-          "ssot": {
-            "key": "type",
-            "type": "string",
-            "required": true,
-            "size": 20
-          },
-          "live": {
-            "key": "type",
-            "type": "string",
-            "required": true,
-            "array": false,
-            "size": 24,
-            "default": null
-          }
-        },
-        {
           "key": "round",
           "ssot": {
             "key": "round",
@@ -821,40 +730,6 @@
           }
         },
         {
-          "key": "fantasyTeamId",
-          "ssot": {
-            "key": "fantasyTeamId",
-            "type": "string",
-            "required": false,
-            "size": 50
-          },
-          "live": {
-            "key": "fantasyTeamId",
-            "type": "string",
-            "required": false,
-            "array": false,
-            "size": 64,
-            "default": null
-          }
-        },
-        {
-          "key": "playerId",
-          "ssot": {
-            "key": "playerId",
-            "type": "string",
-            "required": false,
-            "size": 50
-          },
-          "live": {
-            "key": "playerId",
-            "type": "string",
-            "required": false,
-            "array": false,
-            "size": 64,
-            "default": null
-          }
-        },
-        {
           "key": "payloadJson",
           "ssot": {
             "key": "payloadJson",
@@ -880,40 +755,6 @@
       "missing_attrs_in_live": [],
       "missing_attrs_in_ssot": [],
       "mismatched_attrs": [
-        {
-          "key": "draftId",
-          "ssot": {
-            "key": "draftId",
-            "type": "string",
-            "required": true,
-            "size": 50
-          },
-          "live": {
-            "key": "draftId",
-            "type": "string",
-            "required": true,
-            "array": false,
-            "size": 255,
-            "default": null
-          }
-        },
-        {
-          "key": "onClockTeamId",
-          "ssot": {
-            "key": "onClockTeamId",
-            "type": "string",
-            "required": true,
-            "size": 50
-          },
-          "live": {
-            "key": "onClockTeamId",
-            "type": "string",
-            "required": true,
-            "array": false,
-            "size": 255,
-            "default": null
-          }
-        },
         {
           "key": "round",
           "ssot": {
@@ -957,7 +798,14 @@
             "type": "string",
             "required": false,
             "size": 20,
-            "default": "drafting"
+            "default": "pre-draft",
+            "elements": [
+              "pre-draft",
+              "drafting",
+              "post-draft",
+              "predraft",
+              "postdraft"
+            ]
           },
           "live": {
             "key": "draftStatus",
@@ -982,17 +830,1422 @@
     "roster_slots": {
       "missing_attrs_in_live": [],
       "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "schools": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
       "mismatched_attrs": [
+        {
+          "key": "name",
+          "ssot": {
+            "key": "name",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "name",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 128,
+            "default": null
+          }
+        },
+        {
+          "key": "conference",
+          "ssot": {
+            "key": "conference",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "conference",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "slug",
+          "ssot": {
+            "key": "slug",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "slug",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "abbreviation",
+          "ssot": {
+            "key": "abbreviation",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "abbreviation",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "logoUrl",
+          "ssot": {
+            "key": "logoUrl",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "logoUrl",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 512,
+            "default": null
+          }
+        },
+        {
+          "key": "primaryColor",
+          "ssot": {
+            "key": "primaryColor",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "primaryColor",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "secondaryColor",
+          "ssot": {
+            "key": "secondaryColor",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "secondaryColor",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "mascot",
+          "ssot": {
+            "key": "mascot",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "mascot",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "clients": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "authUserId",
+          "ssot": {
+            "key": "authUserId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "authUserId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "displayName",
+          "ssot": {
+            "key": "displayName",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "displayName",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 128,
+            "default": null
+          }
+        },
+        {
+          "key": "email",
+          "ssot": {
+            "key": "email",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "email",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 256,
+            "default": null
+          }
+        },
+        {
+          "key": "avatarUrl",
+          "ssot": {
+            "key": "avatarUrl",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "avatarUrl",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 512,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "league_memberships": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "leagueId",
+          "ssot": {
+            "key": "leagueId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "leagueId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "authUserId",
+          "ssot": {
+            "key": "authUserId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "authUserId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "role",
+          "ssot": {
+            "key": "role",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "role",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "status",
+          "ssot": {
+            "key": "status",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "status",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "displayName",
+          "ssot": {
+            "key": "displayName",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "displayName",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 255,
+            "default": null
+          }
+        },
+        {
+          "key": "leagueName",
+          "ssot": {
+            "key": "leagueName",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "leagueName",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "lineups": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "rosterId",
+          "ssot": {
+            "key": "rosterId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "rosterId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
         {
           "key": "fantasyTeamId",
           "ssot": {
             "key": "fantasyTeamId",
             "type": "string",
-            "required": true,
-            "size": 50
+            "required": true
           },
           "live": {
             "key": "fantasyTeamId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "week",
+          "ssot": {
+            "key": "week",
+            "type": "integer",
+            "required": true
+          },
+          "live": {
+            "key": "week",
+            "type": "integer",
+            "required": true,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "season",
+          "ssot": {
+            "key": "season",
+            "type": "integer",
+            "required": true
+          },
+          "live": {
+            "key": "season",
+            "type": "integer",
+            "required": true,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "lineup",
+          "ssot": {
+            "key": "lineup",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "lineup",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 5000,
+            "default": null
+          }
+        },
+        {
+          "key": "bench",
+          "ssot": {
+            "key": "bench",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "bench",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 5000,
+            "default": null
+          }
+        },
+        {
+          "key": "points",
+          "ssot": {
+            "key": "points",
+            "type": "double",
+            "required": false
+          },
+          "live": {
+            "key": "points",
+            "type": "double",
+            "required": false,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": 0
+          }
+        },
+        {
+          "key": "locked",
+          "ssot": {
+            "key": "locked",
+            "type": "boolean",
+            "required": false
+          },
+          "live": {
+            "key": "locked",
+            "type": "boolean",
+            "required": false,
+            "array": false,
+            "default": false
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "matchups": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "leagueId",
+          "ssot": {
+            "key": "leagueId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "leagueId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "season",
+          "ssot": {
+            "key": "season",
+            "type": "integer",
+            "required": true
+          },
+          "live": {
+            "key": "season",
+            "type": "integer",
+            "required": true,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "week",
+          "ssot": {
+            "key": "week",
+            "type": "integer",
+            "required": true
+          },
+          "live": {
+            "key": "week",
+            "type": "integer",
+            "required": true,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "homeTeamId",
+          "ssot": {
+            "key": "homeTeamId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "homeTeamId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "awayTeamId",
+          "ssot": {
+            "key": "awayTeamId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "awayTeamId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "homePoints",
+          "ssot": {
+            "key": "homePoints",
+            "type": "double",
+            "required": false
+          },
+          "live": {
+            "key": "homePoints",
+            "type": "double",
+            "required": false,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": null
+          }
+        },
+        {
+          "key": "awayPoints",
+          "ssot": {
+            "key": "awayPoints",
+            "type": "double",
+            "required": false
+          },
+          "live": {
+            "key": "awayPoints",
+            "type": "double",
+            "required": false,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": null
+          }
+        },
+        {
+          "key": "status",
+          "ssot": {
+            "key": "status",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "status",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "player_stats": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "playerId",
+          "ssot": {
+            "key": "playerId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "playerId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
+        {
+          "key": "gameId",
+          "ssot": {
+            "key": "gameId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "gameId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
+        {
+          "key": "week",
+          "ssot": {
+            "key": "week",
+            "type": "integer",
+            "required": true
+          },
+          "live": {
+            "key": "week",
+            "type": "integer",
+            "required": true,
+            "array": false,
+            "min": 1,
+            "max": 20,
+            "default": null
+          }
+        },
+        {
+          "key": "season",
+          "ssot": {
+            "key": "season",
+            "type": "integer",
+            "required": true
+          },
+          "live": {
+            "key": "season",
+            "type": "integer",
+            "required": true,
+            "array": false,
+            "min": 2020,
+            "max": 2030,
+            "default": null
+          }
+        },
+        {
+          "key": "stats",
+          "ssot": {
+            "key": "stats",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "stats",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 2000,
+            "default": null
+          }
+        },
+        {
+          "key": "opponent",
+          "ssot": {
+            "key": "opponent",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "opponent",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
+        {
+          "key": "eligible",
+          "ssot": {
+            "key": "eligible",
+            "type": "boolean",
+            "required": false
+          },
+          "live": {
+            "key": "eligible",
+            "type": "boolean",
+            "required": false,
+            "array": false,
+            "default": true
+          }
+        },
+        {
+          "key": "fantasyPoints",
+          "ssot": {
+            "key": "fantasyPoints",
+            "type": "double",
+            "required": false
+          },
+          "live": {
+            "key": "fantasyPoints",
+            "type": "double",
+            "required": false,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": null
+          }
+        },
+        {
+          "key": "statlineJson",
+          "ssot": {
+            "key": "statlineJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "statlineJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 65535,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "projections": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "playerId",
+          "ssot": {
+            "key": "playerId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "playerId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "season",
+          "ssot": {
+            "key": "season",
+            "type": "integer",
+            "required": true
+          },
+          "live": {
+            "key": "season",
+            "type": "integer",
+            "required": true,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "week",
+          "ssot": {
+            "key": "week",
+            "type": "integer",
+            "required": false
+          },
+          "live": {
+            "key": "week",
+            "type": "integer",
+            "required": false,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "period",
+          "ssot": {
+            "key": "period",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "period",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "version",
+          "ssot": {
+            "key": "version",
+            "type": "integer",
+            "required": true
+          },
+          "live": {
+            "key": "version",
+            "type": "integer",
+            "required": true,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "model",
+          "ssot": {
+            "key": "model",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "model",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 32,
+            "default": null
+          }
+        },
+        {
+          "key": "source",
+          "ssot": {
+            "key": "source",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "source",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "clientId",
+          "ssot": {
+            "key": "clientId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "clientId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "fantasyPoints",
+          "ssot": {
+            "key": "fantasyPoints",
+            "type": "double",
+            "required": false
+          },
+          "live": {
+            "key": "fantasyPoints",
+            "type": "double",
+            "required": false,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": null
+          }
+        },
+        {
+          "key": "componentsJson",
+          "ssot": {
+            "key": "componentsJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "componentsJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 16384,
+            "default": null
+          }
+        },
+        {
+          "key": "boomProb",
+          "ssot": {
+            "key": "boomProb",
+            "type": "double",
+            "required": false
+          },
+          "live": {
+            "key": "boomProb",
+            "type": "double",
+            "required": false,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": null
+          }
+        },
+        {
+          "key": "bustProb",
+          "ssot": {
+            "key": "bustProb",
+            "type": "double",
+            "required": false
+          },
+          "live": {
+            "key": "bustProb",
+            "type": "double",
+            "required": false,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": null
+          }
+        },
+        {
+          "key": "homeAway",
+          "ssot": {
+            "key": "homeAway",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "homeAway",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 8,
+            "default": null
+          }
+        },
+        {
+          "key": "injuryStatus",
+          "ssot": {
+            "key": "injuryStatus",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "injuryStatus",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "opponentSchoolId",
+          "ssot": {
+            "key": "opponentSchoolId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "opponentSchoolId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "rankPro",
+          "ssot": {
+            "key": "rankPro",
+            "type": "integer",
+            "required": false
+          },
+          "live": {
+            "key": "rankPro",
+            "type": "integer",
+            "required": false,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "startSit_color",
+          "ssot": {
+            "key": "startSit_color",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "startSit_color",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 8,
+            "default": null
+          }
+        },
+        {
+          "key": "utilizationTrend",
+          "ssot": {
+            "key": "utilizationTrend",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "utilizationTrend",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "defenseVsPosGrade",
+          "ssot": {
+            "key": "defenseVsPosGrade",
+            "type": "double",
+            "required": false
+          },
+          "live": {
+            "key": "defenseVsPosGrade",
+            "type": "double",
+            "required": false,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": null
+          }
+        },
+        {
+          "key": "startSitColor",
+          "ssot": {
+            "key": "startSitColor",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "startSitColor",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 20,
+            "default": null
+          }
+        },
+        {
+          "key": "teamTotalEst",
+          "ssot": {
+            "key": "teamTotalEst",
+            "type": "double",
+            "required": false
+          },
+          "live": {
+            "key": "teamTotalEst",
+            "type": "double",
+            "required": false,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "model_runs": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "season",
+          "ssot": {
+            "key": "season",
+            "type": "integer",
+            "required": true
+          },
+          "live": {
+            "key": "season",
+            "type": "integer",
+            "required": true,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "week",
+          "ssot": {
+            "key": "week",
+            "type": "integer",
+            "required": false
+          },
+          "live": {
+            "key": "week",
+            "type": "integer",
+            "required": false,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "scope",
+          "ssot": {
+            "key": "scope",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "scope",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 32,
+            "default": null
+          }
+        },
+        {
+          "key": "sources",
+          "ssot": {
+            "key": "sources",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "sources",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 512,
+            "default": null
+          }
+        },
+        {
+          "key": "status",
+          "ssot": {
+            "key": "status",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "status",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "runId",
+          "ssot": {
+            "key": "runId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "runId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 255,
+            "default": null
+          }
+        },
+        {
+          "key": "modelVersionId",
+          "ssot": {
+            "key": "modelVersionId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "modelVersionId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 255,
+            "default": null
+          }
+        },
+        {
+          "key": "inputsJson",
+          "ssot": {
+            "key": "inputsJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "inputsJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 65535,
+            "default": null
+          }
+        },
+        {
+          "key": "metricsJson",
+          "ssot": {
+            "key": "metricsJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "metricsJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 65535,
+            "default": null
+          }
+        },
+        {
+          "key": "weightsJson",
+          "ssot": {
+            "key": "weightsJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "weightsJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 65535,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "transactions": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "leagueId",
+          "ssot": {
+            "key": "leagueId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "leagueId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "fantasyTeamId",
+          "ssot": {
+            "key": "fantasyTeamId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "fantasyTeamId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "type",
+          "ssot": {
+            "key": "type",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "type",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 24,
+            "default": null
+          }
+        },
+        {
+          "key": "payloadJson",
+          "ssot": {
+            "key": "payloadJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "payloadJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 8192,
+            "default": null
+          }
+        },
+        {
+          "key": "season",
+          "ssot": {
+            "key": "season",
+            "type": "integer",
+            "required": false
+          },
+          "live": {
+            "key": "season",
+            "type": "integer",
+            "required": false,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "week",
+          "ssot": {
+            "key": "week",
+            "type": "integer",
+            "required": false
+          },
+          "live": {
+            "key": "week",
+            "type": "integer",
+            "required": false,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "auctions": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "leagueId",
+          "ssot": {
+            "key": "leagueId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "leagueId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
+        {
+          "key": "draftId",
+          "ssot": {
+            "key": "draftId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "draftId",
             "type": "string",
             "required": true,
             "array": false,
@@ -1005,8 +2258,7 @@
           "ssot": {
             "key": "playerId",
             "type": "string",
-            "required": true,
-            "size": 50
+            "required": true
           },
           "live": {
             "key": "playerId",
@@ -1018,36 +2270,1160 @@
           }
         },
         {
-          "key": "position",
+          "key": "status",
           "ssot": {
-            "key": "position",
+            "key": "status",
             "type": "string",
-            "required": true,
-            "size": 10
+            "required": true
           },
           "live": {
-            "key": "position",
+            "key": "status",
             "type": "string",
             "required": true,
             "array": false,
-            "size": 8,
+            "size": 16,
             "default": null
           }
         },
         {
-          "key": "acquiredVia",
+          "key": "winnerTeamId",
           "ssot": {
-            "key": "acquiredVia",
+            "key": "winnerTeamId",
             "type": "string",
-            "required": false,
-            "size": 20
+            "required": false
           },
           "live": {
-            "key": "acquiredVia",
+            "key": "winnerTeamId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "winningBid",
+          "ssot": {
+            "key": "winningBid",
+            "type": "double",
+            "required": false
+          },
+          "live": {
+            "key": "winningBid",
+            "type": "double",
+            "required": false,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "bids": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "auctionId",
+          "ssot": {
+            "key": "auctionId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "auctionId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
+        {
+          "key": "playerId",
+          "ssot": {
+            "key": "playerId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "playerId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
+        {
+          "key": "teamId",
+          "ssot": {
+            "key": "teamId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "teamId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
+        {
+          "key": "amount",
+          "ssot": {
+            "key": "amount",
+            "type": "double",
+            "required": true
+          },
+          "live": {
+            "key": "amount",
+            "type": "double",
+            "required": true,
+            "array": false,
+            "min": -1.7976931348623157e+308,
+            "max": 1.7976931348623157e+308,
+            "default": null
+          }
+        },
+        {
+          "key": "isWinning",
+          "ssot": {
+            "key": "isWinning",
+            "type": "boolean",
+            "required": false
+          },
+          "live": {
+            "key": "isWinning",
+            "type": "boolean",
+            "required": false,
+            "array": false,
+            "default": false
+          }
+        },
+        {
+          "key": "fantasyTeamId",
+          "ssot": {
+            "key": "fantasyTeamId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "fantasyTeamId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "activity_log": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "userId",
+          "ssot": {
+            "key": "userId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "userId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "action",
+          "ssot": {
+            "key": "action",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "action",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "details",
+          "ssot": {
+            "key": "details",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "details",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "type",
+          "ssot": {
+            "key": "type",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "type",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
+        {
+          "key": "teamId",
+          "ssot": {
+            "key": "teamId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "teamId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 255,
+            "default": null
+          }
+        },
+        {
+          "key": "description",
+          "ssot": {
+            "key": "description",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "description",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 1000,
+            "default": null
+          }
+        },
+        {
+          "key": "data",
+          "ssot": {
+            "key": "data",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "data",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 5000,
+            "default": null
+          }
+        },
+        {
+          "key": "inviteToken",
+          "ssot": {
+            "key": "inviteToken",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "inviteToken",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 255,
+            "default": null
+          }
+        },
+        {
+          "key": "status",
+          "ssot": {
+            "key": "status",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "status",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 50,
+            "default": "pending"
+          }
+        },
+        {
+          "key": "ipAddress",
+          "ssot": {
+            "key": "ipAddress",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "ipAddress",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 45,
+            "default": null
+          }
+        },
+        {
+          "key": "userAgent",
+          "ssot": {
+            "key": "userAgent",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "userAgent",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 500,
+            "default": null
+          }
+        },
+        {
+          "key": "actorClientId",
+          "ssot": {
+            "key": "actorClientId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "actorClientId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "objectType",
+          "ssot": {
+            "key": "objectType",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "objectType",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 24,
+            "default": null
+          }
+        },
+        {
+          "key": "objectId",
+          "ssot": {
+            "key": "objectId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "objectId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "leagueId",
+          "ssot": {
+            "key": "leagueId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "leagueId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 64,
+            "default": null
+          }
+        },
+        {
+          "key": "payloadJson",
+          "ssot": {
+            "key": "payloadJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "payloadJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 16384,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "invites": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "leagueId",
+          "ssot": {
+            "key": "leagueId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "leagueId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "email",
+          "ssot": {
+            "key": "email",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "email",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "inviteCode",
+          "ssot": {
+            "key": "inviteCode",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "inviteCode",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "token",
+          "ssot": {
+            "key": "token",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "token",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "status",
+          "ssot": {
+            "key": "status",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "status",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "invitedByAuthUserId",
+          "ssot": {
+            "key": "invitedByAuthUserId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "invitedByAuthUserId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 255,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "meshy_jobs": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "resultUrl",
+          "ssot": {
+            "key": "resultUrl",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "resultUrl",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 1024,
+            "default": null
+          }
+        },
+        {
+          "key": "mode",
+          "ssot": {
+            "key": "mode",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "mode",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 32,
+            "default": null
+          }
+        },
+        {
+          "key": "prompt",
+          "ssot": {
+            "key": "prompt",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "prompt",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 2048,
+            "default": null
+          }
+        },
+        {
+          "key": "userId",
+          "ssot": {
+            "key": "userId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "userId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 128,
+            "default": null
+          }
+        },
+        {
+          "key": "error",
+          "ssot": {
+            "key": "error",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "error",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 1024,
+            "default": null
+          }
+        },
+        {
+          "key": "webhookSecret",
+          "ssot": {
+            "key": "webhookSecret",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "webhookSecret",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 256,
+            "default": null
+          }
+        },
+        {
+          "key": "imageUrl",
+          "ssot": {
+            "key": "imageUrl",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "imageUrl",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 1024,
+            "default": null
+          }
+        },
+        {
+          "key": "baseModelUrl",
+          "ssot": {
+            "key": "baseModelUrl",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "baseModelUrl",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 1024,
+            "default": null
+          }
+        },
+        {
+          "key": "status",
+          "ssot": {
+            "key": "status",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "status",
             "type": "string",
             "required": false,
             "array": false,
             "size": 16,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "model_versions": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "versionId",
+          "ssot": {
+            "key": "versionId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "versionId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "modelPath",
+          "ssot": {
+            "key": "modelPath",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "modelPath",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 1000,
+            "default": null
+          }
+        },
+        {
+          "key": "version",
+          "ssot": {
+            "key": "version",
+            "type": "integer",
+            "required": true
+          },
+          "live": {
+            "key": "version",
+            "type": "integer",
+            "required": true,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "changes",
+          "ssot": {
+            "key": "changes",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "changes",
+            "type": "string",
+            "required": false,
+            "array": true,
+            "size": 65536,
+            "default": null
+          }
+        },
+        {
+          "key": "createdBy",
+          "ssot": {
+            "key": "createdBy",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "createdBy",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "description",
+          "ssot": {
+            "key": "description",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "description",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 1000,
+            "default": null
+          }
+        },
+        {
+          "key": "bucketFileId",
+          "ssot": {
+            "key": "bucketFileId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "bucketFileId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "artifactUri",
+          "ssot": {
+            "key": "artifactUri",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "artifactUri",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 512,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "migrations": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "migrationId",
+          "ssot": {
+            "key": "migrationId",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "migrationId",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 255,
+            "default": null
+          }
+        },
+        {
+          "key": "name",
+          "ssot": {
+            "key": "name",
+            "type": "string",
+            "required": true
+          },
+          "live": {
+            "key": "name",
+            "type": "string",
+            "required": true,
+            "array": false,
+            "size": 255,
+            "default": null
+          }
+        }
+      ],
+      "missing_indexes_in_live": [],
+      "missing_indexes_in_ssot": [],
+      "mismatched_indexes": []
+    },
+    "drafts": {
+      "missing_attrs_in_live": [],
+      "missing_attrs_in_ssot": [],
+      "mismatched_attrs": [
+        {
+          "key": "leagueId",
+          "ssot": {
+            "key": "leagueId",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "leagueId",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "draftStatus",
+          "ssot": {
+            "key": "draftStatus",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "draftStatus",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "currentRound",
+          "ssot": {
+            "key": "currentRound",
+            "type": "integer",
+            "required": false
+          },
+          "live": {
+            "key": "currentRound",
+            "type": "integer",
+            "required": false,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "currentPick",
+          "ssot": {
+            "key": "currentPick",
+            "type": "integer",
+            "required": false
+          },
+          "live": {
+            "key": "currentPick",
+            "type": "integer",
+            "required": false,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "maxRounds",
+          "ssot": {
+            "key": "maxRounds",
+            "type": "integer",
+            "required": false
+          },
+          "live": {
+            "key": "maxRounds",
+            "type": "integer",
+            "required": false,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "draftOrder",
+          "ssot": {
+            "key": "draftOrder",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "draftOrder",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 100,
+            "default": null
+          }
+        },
+        {
+          "key": "type",
+          "ssot": {
+            "key": "type",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "type",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 16,
+            "default": null
+          }
+        },
+        {
+          "key": "clockSeconds",
+          "ssot": {
+            "key": "clockSeconds",
+            "type": "integer",
+            "required": false
+          },
+          "live": {
+            "key": "clockSeconds",
+            "type": "integer",
+            "required": false,
+            "array": false,
+            "min": -9223372036854776000,
+            "max": 9223372036854776000,
+            "default": null
+          }
+        },
+        {
+          "key": "orderJson",
+          "ssot": {
+            "key": "orderJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "orderJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 8192,
+            "default": null
+          }
+        },
+        {
+          "key": "leagueName",
+          "ssot": {
+            "key": "leagueName",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "leagueName",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 255,
+            "default": null
+          }
+        },
+        {
+          "key": "gameMode",
+          "ssot": {
+            "key": "gameMode",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "gameMode",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
+        {
+          "key": "selectedConference",
+          "ssot": {
+            "key": "selectedConference",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "selectedConference",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 50,
+            "default": null
+          }
+        },
+        {
+          "key": "maxTeams",
+          "ssot": {
+            "key": "maxTeams",
+            "type": "integer",
+            "required": false
+          },
+          "live": {
+            "key": "maxTeams",
+            "type": "integer",
+            "required": false,
+            "array": false,
+            "min": 4,
+            "max": 24,
+            "default": null
+          }
+        },
+        {
+          "key": "scoringRules",
+          "ssot": {
+            "key": "scoringRules",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "scoringRules",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 65535,
+            "default": null
+          }
+        },
+        {
+          "key": "stateJson",
+          "ssot": {
+            "key": "stateJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "stateJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 1000000,
+            "default": null
+          }
+        },
+        {
+          "key": "eventsJson",
+          "ssot": {
+            "key": "eventsJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "eventsJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 1000000,
+            "default": null
+          }
+        },
+        {
+          "key": "picksJson",
+          "ssot": {
+            "key": "picksJson",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "picksJson",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 1000000,
+            "default": null
+          }
+        },
+        {
+          "key": "onTheClock",
+          "ssot": {
+            "key": "onTheClock",
+            "type": "string",
+            "required": false
+          },
+          "live": {
+            "key": "onTheClock",
+            "type": "string",
+            "required": false,
+            "array": false,
+            "size": 255,
             "default": null
           }
         }

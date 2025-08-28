@@ -9,7 +9,8 @@
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { z } from 'zod';
-import { COLLECTIONS, SCHEMA_REGISTRY } from '../schema/zod-schema.js';
+// Use TS SSOT directly
+import { COLLECTIONS, SCHEMA_REGISTRY } from '../../../schema/zod-schema';
 
 interface FieldInfo {
   name: string;
@@ -24,6 +25,8 @@ interface CollectionInfo {
   key: string;
   fields: FieldInfo[];
   relationships: string[];
+  description?: string;
+  notes?: string[];
 }
 
 function extractZodFieldInfo(schema: z.ZodTypeAny, fieldName: string): FieldInfo {
@@ -98,7 +101,7 @@ function detectRelationships(collectionName: string, fields: FieldInfo[]): strin
     { field: 'leagueId', target: 'leagues' },
     { field: 'playerId', target: 'college_players' },
     { field: 'gameId', target: 'games' },
-    { field: 'rosterId', target: 'user_teams' },
+    { field: 'rosterId', target: 'fantasy_teams' },
     { field: 'auctionId', target: 'auctions' },
     { field: 'commissioner', target: 'users' },
     { field: 'team', target: 'teams' }
@@ -123,6 +126,55 @@ function detectRelationships(collectionName: string, fields: FieldInfo[]): strin
   return [...new Set(relationships)]; // Remove duplicates
 }
 
+// Human-readable collection purposes and special notes
+const PURPOSE_MAP: Record<string, string> = {
+  clients: 'User profiles tied to Appwrite Auth (authUserId). Stores displayName, email, avatar, timestamps.',
+  leagues: 'League configuration and metadata. Draft-specific state now lives in drafts.* collections.',
+  league_memberships: 'Normalized membership records per user per league (role, status, joinedAt).',
+  fantasy_teams: 'Fantasy teams per league. Created for each member; stores teamName, ownerAuthUserId, record, logo.',
+  drafts: 'Authoritative draft room configuration and status (order, rounds, timers, participants).',
+  draft_states: 'Append-only or rolling draft state snapshots for recovery/observability (status, on-clock, deadline).',
+  draft_events: 'Immutable event log (pick/autopick/undo/pause/resume) for audit and UI streams.',
+  auctions: 'Auction draft sessions and current bidding state.',
+  bids: 'Auction bid history linked to auctions.',
+  lineups: 'Weekly starting lineups and bench for a roster/team in a league.',
+  matchups: 'Head-to-head matchups per week with scores and status.',
+  player_stats: 'Per-game or aggregated player statistics used for scoring and projections.',
+  projections: 'Projection outputs, inputs, and computed fantasy points (weekly/yearly).',
+  model_runs: 'Model run metadata for reproducibility (versions, metrics, status).',
+  college_players: 'Player master dataset (name, position, team, conference, eligibility).',
+  games: 'Schedule and results, including kickoff time and status.',
+  rankings: 'Poll rankings (AP/Coaches) for eligibility and display.',
+  invites: 'Invite codes/tokens to join leagues with optional expiration and email.',
+  activity_log: 'Operational audit trail of actions in the system.',
+  meshy_jobs: '3D/asset generation jobs and status tracking.',
+  migrations: 'Applied schema/data migrations.'
+};
+
+const NOTES_MAP: Record<string, string[]> = {
+  league_memberships: [
+    'When a user creates or joins a league, a corresponding fantasy_teams document is created for them.',
+    'commissionerAuthUserId (in leagues) is also represented as role=COMMISSIONER in league_memberships.'
+  ],
+  leagues: [
+    'Draft order in leagues is deprecated; drafts.draftOrder is the source of truth.',
+    'selectedConference and gameMode are immutable after creation.'
+  ],
+  drafts: [
+    'One draft per league. Use drafts for timer, order, and status; do not rely on leagues for draft state.'
+  ],
+  fantasy_teams: [
+    'ownerAuthUserId links back to clients.authUserId.',
+    'teamName is required and shown across draft UIs (recent picks/order).'
+  ],
+  draft_states: [
+    'draftId corresponds to the leagueId (one draft per league).'
+  ],
+  draft_events: [
+    'Used for real-time feeds and audit; do not mutate existing events.'
+  ]
+};
+
 function generateCollectionDocs(): CollectionInfo[] {
   const collections: CollectionInfo[] = [];
 
@@ -132,12 +184,16 @@ function generateCollectionDocs(): CollectionInfo[] {
     if (schema && schema instanceof z.ZodObject) {
       const fields = analyzeSchema(schema);
       const relationships = detectRelationships(collectionName, fields);
+      const description = PURPOSE_MAP[collectionName] || undefined;
+      const notes = NOTES_MAP[collectionName] || undefined;
 
       collections.push({
         name: collectionName,
         key,
         fields,
-        relationships
+        relationships,
+        description,
+        notes
       });
     }
   }
@@ -172,6 +228,12 @@ ${collections.map(col => `- [${col.name}](#${col.name.replace(/_/g, '')})`).join
 
 **Key**: \`${collection.key}\`  
 **Fields**: ${collection.fields.length}
+
+${collection.description ? `**Purpose**: ${collection.description}\n\n` : ''}
+
+${collection.notes && collection.notes.length > 0 ? `**Notes**:\n${collection.notes.map(n => `- ${n}`).join('\n')}\n\n` : ''}
+
+${collection.name === 'league_memberships' ? `**Data Flow**:\n- Create/Join League → create \`league_memberships\` (role, status, joinedAt)\n- Create/Join League → create \`fantasy_teams\` with \`ownerAuthUserId\` and \`teamName\`\n- Commissioner is represented by \`commissionerAuthUserId\` in \`leagues\` and role=COMMISSIONER in \`league_memberships\`\n\n` : ''}
 
 ### Fields
 

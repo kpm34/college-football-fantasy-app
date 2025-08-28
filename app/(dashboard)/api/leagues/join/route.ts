@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     // Create roster for the user (only include attributes that exist in `fantasy_teams`)
     const rosterData: Record<string, any> = {
       // Core fields as per SSOT
-      name: teamName || `${user.name || user.email}'s Team`,
+      teamName: teamName || `${user.name || user.email}'s Team`,
       leagueId: leagueId,
       leagueName: (league as any).leagueName || (league as any).name, // Include league name
       ownerAuthUserId: user.$id, // Correct field name for fantasy_teams
@@ -111,9 +111,9 @@ export async function POST(request: NextRequest) {
     // Abbreviation is optional and may not exist in schema
     try {
       const rostersCollection = await databases.getCollection(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS);
-      const hasAbbreviation = Array.isArray((rostersCollection as any).attributes) && (rostersCollection as any).attributes.some((a: any) => a.key === 'abbreviation');
-      if (hasAbbreviation) {
-        rosterData.abbreviation = (teamName || user.name || 'TEAM').substring(0, 3).toUpperCase();
+      const hasAbbrev = Array.isArray((rostersCollection as any).attributes) && (rostersCollection as any).attributes.some((a: any) => a.key === 'abbrev');
+      if (hasAbbrev) {
+        rosterData.abbrev = (teamName || user.name || 'TEAM').substring(0, 3).toUpperCase();
       }
     } catch {}
     

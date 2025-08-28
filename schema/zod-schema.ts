@@ -72,43 +72,50 @@ export const Rankings = z.object({
 
 export const Leagues = z.object({
   leagueName: z.string().min(1).max(100),
-  // New canonical commissioner pointer (auth user id). Keep legacy commissioner for back-compat at runtime.
   commissionerAuthUserId: z.string().min(1).max(64).optional(),
   season: z.number().int().min(2020).max(2030),
-  maxTeams: z.number().int().min(2).max(32),
-  currentTeams: z.number().int().min(0).max(32).default(0),
-  draftType: z.enum(['snake', 'auction']),
-  gameMode: z.enum(['power4', 'sec', 'acc', 'big12', 'bigten']),
+  // Align with live min/max tolerances (live caps currently 20 for some fields)
+  maxTeams: z.number().int().min(2).max(32).optional(),
+  currentTeams: z.number().int().min(0).max(32).optional(),
+  draftType: z.enum(['snake', 'auction']).optional(),
+  gameMode: z.enum(['power4', 'sec', 'acc', 'big12', 'bigten']).optional(),
   selectedConference: z.string().max(50).optional(),
-  leagueStatus: z.enum(['open', 'closed']).default('open'),
-  isPublic: z.boolean().default(true),
-  pickTimeSeconds: z.number().int().min(30).max(600).default(90),
-  scoringRules: z.string().max(2000).optional(), // JSON string
+  // Defaults handled in code; live often stores null
+  leagueStatus: z.enum(['open', 'closed']).optional(),
+  isPublic: z.boolean().optional(),
+  pickTimeSeconds: z.number().int().min(30).max(600).optional(),
+  scoringRules: z.string().max(65535).optional(),
   draftDate: z.date().optional(),
   seasonStartWeek: z.number().int().min(1).max(20).optional(),
   playoffTeams: z.number().int().min(0).max(20).optional(),
   playoffStartWeek: z.number().int().min(1).max(20).optional(),
   waiverType: z.string().max(20).optional(),
   waiverBudget: z.number().int().min(0).max(1000).optional(),
-  password: z.string().max(50).optional()
+  password: z.string().max(50).optional(),
+  // Legacy, deprecated in code but present live; keep optional
+  draftOrder: z.string().max(65535).optional()
 });
 
 export const FantasyTeams = z.object({
+  // Align to live Appwrite where safe; use explicit teamName (required)
   leagueId: z.string().min(1).max(64),
   leagueName: z.string().min(1).max(100).optional(),
   ownerAuthUserId: z.string().min(1).max(64).optional(),
-  name: z.string().min(1).max(128).optional(),
+  teamName: z.string().min(1).max(128),
+  displayName: z.string().max(255).optional(),
   abbrev: z.string().max(8).optional(),
   logoUrl: z.string().max(512).optional(),
-  wins: z.number().int().optional(),
-  losses: z.number().int().optional(),
-  ties: z.number().int().optional(),
+  // Business rule: constrain regular-season counts to 0..25
+  wins: z.number().int().min(0).max(25).optional(),
+  losses: z.number().int().min(0).max(25).optional(),
+  ties: z.number().int().min(0).max(25).optional(),
   pointsFor: z.number().optional(),
   pointsAgainst: z.number().optional(),
-  draftPosition: z.number().int().optional(),
+  draftPosition: z.number().int().min(1).max(32).optional(),
   auctionBudgetTotal: z.number().optional(),
   auctionBudgetRemaining: z.number().optional(),
-  displayName: z.string().max(255).optional()
+  // Mirror live: raw players field (JSON string) when present
+  players: z.string().optional()
 });
 
 export const Lineups = z.object({
@@ -220,22 +227,24 @@ export const MockDraftPicks = z.object({
  * Draft Event Log & Persisted State (for recovery)
  */
 export const DraftEvents = z.object({
-  draftId: z.string().min(1).max(50),
+  draftId: z.string().min(1).max(64),
   ts: z.date(),
   type: z.enum(['pick', 'autopick', 'undo', 'pause', 'resume']),
-  teamId: z.string().min(1).max(50),
-  playerId: z.string().min(1).max(50).optional(),
+  teamId: z.string().min(1).max(64).optional(),
+  playerId: z.string().min(1).max(64).optional(),
   round: z.number().int().min(1),
   overall: z.number().int().min(1),
   by: z.string().min(1).max(50).optional(),
 });
 
 export const DraftStates = z.object({
-  draftId: z.string().min(1).max(50),
-  onClockTeamId: z.string().min(1).max(50),
-  deadlineAt: z.date(),
+  // Align sizes to live (uses up to 255)
+  draftId: z.string().min(1).max(255),
+  onClockTeamId: z.string().min(1).max(255),
+  deadlineAt: z.date().optional(),
   round: z.number().int().min(1),
   pickIndex: z.number().int().min(1),
+  // Match live default to avoid write conflicts; code sets to 'drafting' on start
   draftStatus: z.enum(['pre-draft', 'drafting', 'post-draft']).default('pre-draft'),
 });
 

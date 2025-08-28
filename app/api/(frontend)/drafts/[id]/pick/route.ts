@@ -93,21 +93,24 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     // Persist event and update state in Appwrite
     const overall = state.overall ?? (state.round - 1) * state.totalTeams + state.pickIndex;
 
-    await databases.createDocument(
-      DATABASE_ID,
-      COLLECTIONS.draftEvents,
-      ID.unique(),
-      {
-        draftId,
-        ts: new Date().toISOString(),
-        type: 'pick',
-        fantasyTeamId,
-        playerId,
-        round: state.round,
-        overall,
-        by: by || undefined,
-      }
-    );
+    // Optional: write draft_events if collection is configured; otherwise skip
+    try {
+      await databases.createDocument(
+        DATABASE_ID,
+        (COLLECTIONS as any).DRAFT_EVENTS || 'draft_events',
+        ID.unique(),
+        {
+          draftId,
+          ts: new Date().toISOString(),
+          type: 'pick',
+          fantasyTeamId,
+          playerId,
+          round: state.round,
+          overall,
+          by: by || undefined,
+        }
+      );
+    } catch {}
 
     // Advance state
     const next = { ...state };
@@ -157,22 +160,91 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     } catch {}
 
     // When a human picks, persist into DRAFT_PICKS for realtime UI and downstream roster save
-    await databases.createDocument(
-      DATABASE_ID,
-      COLLECTIONS.DRAFT_PICKS,
-      ID.unique(),
-      {
-        leagueId: draftId,
-        userId: fantasyTeamId,
-        playerId,
-        playerName: undefined,
-        playerPosition: undefined,
-        playerTeam: undefined,
-        round: state.round,
-        pick: overall,
-        timestamp: new Date().toISOString(),
-      } as any
-    ).catch(() => {});
+    try {
+      // Enrich player details
+      let playerName: string | undefined = undefined;
+      let playerPosition: string | undefined = undefined;
+      let playerTeam: string | undefined = undefined;
+      try {
+        const pl = await databases.getDocument(DATABASE_ID, COLLECTIONS.COLLEGE_PLAYERS, playerId);
+        playerName = (pl as any).name;
+        playerPosition = (pl as any).position;
+        playerTeam = String((pl as any).team || '');
+      } catch {}
+
+      await databases.createDocument(
+        DATABASE_ID,
+        COLLECTIONS.DRAFT_PICKS,
+        ID.unique(),
+        {
+          leagueId: draftId,
+          userId: fantasyTeamId,
+          authUserId: by || undefined,
+          teamId: fantasyTeamId,
+          playerId,
+          playerName,
+          playerPosition,
+          playerTeam,
+          round: state.round,
+          pick: overall,
+          timestamp: new Date().toISOString(),
+        } as any
+      );
+      // Also write to roster_slots (authoritative roster tracking)
+      try {
+        await databases.createDocument(
+          DATABASE_ID,
+          COLLECTIONS.ROSTER_SLOTS,
+          ID.unique(),
+          {
+            fantasyTeamId,
+            playerId,
+            position: playerPosition || 'FLEX',
+            acquiredVia: 'draft',
+            acquiredAt: new Date().toISOString(),
+          } as any
+        );
+      } catch {}
+      // Upsert a baseline lineup entry for seasonStartWeek if needed
+      try {
+        const leagueDoc = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, draftId);
+        const season = Number((leagueDoc as any)?.season || new Date().getFullYear());
+        const week = Number((leagueDoc as any)?.seasonStartWeek || 1);
+        // See if lineup exists
+        const existing = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.LINEUPS,
+          [Query.equal('fantasyTeamId', fantasyTeamId), Query.equal('season', season), Query.equal('week', week), Query.limit(1)]
+        );
+        if (existing.documents.length === 0) {
+          await databases.createDocument(
+            DATABASE_ID,
+            COLLECTIONS.LINEUPS,
+            ID.unique(),
+            {
+              fantasyTeamId,
+              season,
+              week,
+              lineup: JSON.stringify({}),
+              bench: JSON.stringify([playerId]),
+              points: 0,
+              locked: false,
+            } as any
+          );
+        } else {
+          const doc = existing.documents[0];
+          let bench: string[] = [];
+          try { bench = Array.isArray((doc as any).bench) ? (doc as any).bench : JSON.parse((doc as any).bench || '[]'); } catch {}
+          if (!bench.includes(playerId)) bench.push(playerId);
+          await databases.updateDocument(
+            DATABASE_ID,
+            COLLECTIONS.LINEUPS,
+            doc.$id,
+            { bench: JSON.stringify(bench) } as any
+          );
+        }
+      } catch {}
+    } catch {}
 
     // Publish realtime (Appwrite functions/channels can observe draft_events)
     return NextResponse.json({ success: true, state: next });

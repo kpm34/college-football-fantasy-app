@@ -442,7 +442,7 @@ export async function PUT(
             gameMode: result.gameMode || league.gameMode,
             selectedConference: result.selectedConference || league.selectedConference,
             maxTeams: result.maxTeams || league.maxTeams,
-            status: 'scheduled',
+            draftStatus: 'pre-draft',
             type: safePayload.draftType || 'snake',
             currentRound: 0,
             currentPick: 0,
