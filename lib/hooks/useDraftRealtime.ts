@@ -115,7 +115,10 @@ export function useDraftRealtime(leagueId: string) {
         const actualIndex = isSnakeRound 
           ? teamsCount - 1 - pickIndex 
           : pickIndex;
-        const onTheClock = orderArray[actualIndex] || league.draftOrder?.[actualIndex];
+        const computedOnClock = orderArray[actualIndex] || league.draftOrder?.[actualIndex];
+        // Prefer server state when available to avoid client/server mismatch
+        const serverOnClock = (draftState as any)?.onClockTeamId || null;
+        const onTheClock = serverOnClock || computedOnClock;
         const draftStartMs = (league as any)?.draftDate ? new Date((league as any).draftDate).getTime() : 0;
         // Treat server draftStatus as source of truth; also allow time-reached fallback
         const effectiveDraftStatus = String(draftState?.draftStatus || '');
