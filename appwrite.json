@@ -80,6 +80,28 @@
             "specification": "s-1vcpu-512mb",
             "path": "functions/appwrite/on-league-membership-change"
         }
+        ,
+        {
+            "$id": "on-draft-deadline-sweep",
+            "execute": [
+                "any"
+            ],
+            "name": "On Draft Deadline Sweep",
+            "enabled": true,
+            "logging": true,
+            "runtime": "node-18.0",
+            "scopes": [],
+            "events": [
+                "databases.*.collections.draft_states.documents.*.create",
+                "databases.*.collections.draft_states.documents.*.update"
+            ],
+            "schedule": "*/1 * * * *",
+            "timeout": 60,
+            "entrypoint": "index.js",
+            "commands": "npm install",
+            "specification": "s-1vcpu-512mb",
+            "path": "functions/appwrite/on-draft-deadline-sweep"
+        }
     ],
     "sites": [
         {

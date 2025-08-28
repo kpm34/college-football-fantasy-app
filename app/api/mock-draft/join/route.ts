@@ -6,7 +6,7 @@ import { COLLECTIONS } from '@schema/zod-schema';
 
 export async function POST(req: Request) {
   try {
-    const { draftId, clientId, displayName } = await req.json();
+    const { draftId, authUserId, displayName } = await req.json();
     
     if (!draftId) {
       return NextResponse.json(
@@ -32,8 +32,8 @@ export async function POST(req: Request) {
       return doc;
     });
 
-    // Check if user is already in the draft (using displayName)
-    const already = participants.find(p => p.displayName === displayName);
+    // Check if user is already in the draft (by authUserId or displayName)
+    const already = participants.find(p => (p.clientId && p.clientId === authUserId) || p.displayName === displayName);
     if (already) {
       return NextResponse.json({ 
         ok: true, 
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       userType: 'human',
       displayName: displayName || 'Guest Player',
       slot: open.slot,
-      clientId: clientId || null
+      clientId: authUserId || null
     };
     
     const upd = await serverDatabases.updateDocument(

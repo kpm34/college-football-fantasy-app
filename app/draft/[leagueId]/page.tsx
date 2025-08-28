@@ -147,7 +147,10 @@ export default function DraftRoom({ params }: Props) {
     const draftDate = (draft.league as any)?.draftDate;
     const effectiveStatus = String((draft as any)?.draftStatus || (draft.league as any)?.draftStatus || '');
     const hasReachedTime = draftDate ? Date.now() >= new Date(draftDate).getTime() : false;
-    const hasStarted = hasReachedTime || effectiveStatus === 'drafting' || effectiveStatus === 'paused';
+    // Treat presence of a server deadline or on-clock assignment as started as well
+    const hasServerDeadline = Boolean((draft as any)?.deadlineAt);
+    const hasOnClock = Boolean((draft as any)?.onTheClock || (draft as any)?.onClockTeamId);
+    const hasStarted = hasReachedTime || effectiveStatus === 'drafting' || effectiveStatus === 'paused' || hasServerDeadline || hasOnClock;
     setDraftHasStarted(hasStarted);
 
     // If not yet started by server but time has arrived, poll every second until time
@@ -163,34 +166,34 @@ export default function DraftRoom({ params }: Props) {
     }
   }, [draft.league, draft.picks, (draft as any)?.deadlineAt]);
 
-  // Derive and lock a deadline when the turn changes (use server draftState when present)
+  // Derive and lock a deadline when critical inputs change (avoid resetting on unrelated renders)
   useEffect(() => {
-    // Only set timer if draft has started
     if (!draftHasStarted) {
       setDeadlineTs(null);
       setSecondsLeft(null);
       return;
     }
-    
+
     const timeLimitSec = Number((draft.league as any)?.settings?.draftTimeLimit || (draft.league as any)?.pickTimeSeconds || 90);
-    // Require on-the-clock assignment before showing a timer
-    const hasOnClock = Boolean(draft.onTheClock);
-    if (!hasOnClock) {
+    const onClockId = draft.onTheClock;
+    if (!onClockId) {
       setDeadlineTs(null);
       setSecondsLeft(null);
       return;
     }
-    // Prefer server-provided deadline if available (late joiners)
-    const serverDeadline = (draft as any)?.deadlineAt ? new Date((draft as any).deadlineAt).getTime() : null;
-    if (serverDeadline && serverDeadline > Date.now() - 5000) {
-      setDeadlineTs(serverDeadline);
-    } else {
-      // Fallback: use the last pick timestamp if available; otherwise anchor to now when onTheClock changes
-      const lastPick = draft.picks.length > 0 ? draft.picks[draft.picks.length - 1] : null;
-      const lastTs = lastPick?.timestamp ? new Date(lastPick.timestamp).getTime() : Date.now();
-      setDeadlineTs(lastTs + timeLimitSec * 1000);
+
+    const serverDeadlineIso = (draft as any)?.deadlineAt as string | undefined;
+    const serverDeadlineMs = serverDeadlineIso ? new Date(serverDeadlineIso).getTime() : undefined;
+    if (serverDeadlineMs) {
+      setDeadlineTs(serverDeadlineMs);
+      return;
     }
-  }, [draft]);
+
+    // Fallback only when server did not provide a deadline
+    const lastPick = draft.picks.length > 0 ? draft.picks[draft.picks.length - 1] : null;
+    const lastTs = lastPick?.timestamp ? new Date(lastPick.timestamp).getTime() : Date.now();
+    setDeadlineTs(lastTs + timeLimitSec * 1000);
+  }, [draftHasStarted, draft.onTheClock, (draft as any)?.deadlineAt, draft.picks.length, (draft.league as any)?.pickTimeSeconds]);
 
   // Countdown from the locked deadline (paused when draftStatus is paused)
   useEffect(() => {

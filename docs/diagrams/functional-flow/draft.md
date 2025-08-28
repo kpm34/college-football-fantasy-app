@@ -201,6 +201,29 @@ sequenceDiagram
     end
 ```
 
+### Autopick Orchestration (New)
+
+```mermaid
+sequenceDiagram
+    participant UI as Draft Room UI
+    participant API as API Routes
+    participant DB as Appwrite (draft_states, draft_picks)
+    participant Fn as Appwrite Function (on-draft-deadline-sweep)
+
+    Note over UI: When timer hits 0:00
+    UI->>API: POST /api/drafts/:id/autopick
+    API->>DB: Validate state, write pick, advance deadline
+
+    alt No clients connected
+        DB-->>Fn: draft_states create/update (event)
+        Fn->>DB: Scan deadline<=now() (deadline_scan_idx)
+        Fn->>API: POST /api/drafts/:id/autopick (with lock)
+    else Periodic safety net
+        Fn->>Fn: Cron */1 checks due deadlines
+        Fn->>API: POST /api/drafts/:id/autopick (with lock)
+    end
+```
+
 ## 4. Data Interaction Comparison
 
 | Collection | Mock Draft | Real Draft | Notes |

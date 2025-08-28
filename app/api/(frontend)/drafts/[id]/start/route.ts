@@ -37,9 +37,22 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const url = new URL(request.url);
     const force = url.searchParams.get('force') === 'true';
 
-    // Enforce draft start time unless overridden by commissioner or cron with force=true
-    const draftStartMs = (league as any)?.draftDate ? new Date((league as any).draftDate).getTime() : 0;
-    if (draftStartMs && Date.now() < draftStartMs && !(force && (isCron || isCommissioner))) {
+    // Determine canonical start time: prefer drafts.startTime, fallback to league.draftDate
+    let startMs = 0;
+    try {
+      const drafts = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.DRAFTS,
+        [Query.equal('leagueId', leagueId), Query.limit(1)]
+      );
+      const draftDoc = drafts.documents?.[0] as any;
+      if (draftDoc?.startTime) startMs = new Date(draftDoc.startTime).getTime();
+    } catch {}
+    if (!startMs && (league as any)?.draftDate) {
+      startMs = new Date((league as any).draftDate).getTime();
+    }
+    // Enforce start time unless overridden
+    if (startMs && Date.now() < startMs && !(force && (isCron || isCommissioner))) {
       return NextResponse.json({ error: 'Draft has not started yet' }, { status: 400 });
     }
 
@@ -72,7 +85,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
                 await kv.set(`draft:${leagueId}:state`, JSON.stringify(existing));
               } catch {}
               try {
-                await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_STATES, 'unique()', {
+                await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_STATES, ID.unique(), {
                   draftId: leagueId,
                   onClockTeamId: existing.onClockTeamId,
                   deadlineAt: existing.deadlineAt,

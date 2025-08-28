@@ -146,8 +146,9 @@ export default function CreateLeaguePage() {
       setIsCreating(true);
       
       // Validate required fields
-      if (!formData.leagueName?.trim()) {
-        alert('Please enter a league name');
+      const trimmedName = formData.leagueName?.trim() || '';
+      if (trimmedName.length < 3) {
+        alert('Please enter a league name with at least 3 characters');
         return;
       }
       
@@ -168,6 +169,9 @@ export default function CreateLeaguePage() {
       
       const requestData = {
         ...formData,
+        leagueName: trimmedName,
+        maxTeams: Number(formData.maxTeams),
+        draftDate: formData.draftDate || null,
         commissionerId: 'auto', // server resolves user from session
         season: 2025
       };

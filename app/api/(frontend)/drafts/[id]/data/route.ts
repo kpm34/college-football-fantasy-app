@@ -114,7 +114,7 @@ export async function GET(
       picks = picksResponse.documents;
     } catch {}
 
-    // Load latest draft state snapshot if exists
+    // Load latest draft state snapshot if exists; fallback to KV if available
     let draftState: any = null;
     try {
       const statesResponse = await databases.listDocuments(
@@ -126,6 +126,25 @@ export async function GET(
         draftState = statesResponse.documents[0];
       }
     } catch {}
+
+    // KV fallback: if no draftState found, read from KV mirror to surface deadline to UI
+    if (!draftState) {
+      try {
+        const { kv } = await import('@vercel/kv');
+        const raw = await kv.get(`draft:${leagueId}:state`);
+        const parsed = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : null;
+        if (parsed && parsed.deadlineAt) {
+          draftState = {
+            draftId: leagueId,
+            onClockTeamId: parsed.onClockTeamId || null,
+            deadlineAt: parsed.deadlineAt,
+            round: parsed.round || 1,
+            pickIndex: parsed.pickIndex || 1,
+            draftStatus: parsed.draftStatus || 'drafting',
+          } as any;
+        }
+      } catch {}
+    }
 
     return NextResponse.json({
       success: true,

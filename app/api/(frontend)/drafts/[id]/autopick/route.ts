@@ -13,8 +13,14 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
     state = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : null;
   } catch {}
 
-  // Skip if no state, not past deadline, or draft is paused
-  if (!state || state.draftStatus === 'paused' || !state.deadlineAt || Date.now() <= new Date(state.deadlineAt).getTime()) {
+  // Skip if no state or paused
+  if (!state || state.draftStatus === 'paused' || !state.deadlineAt) {
+    return NextResponse.json({ skipped: true });
+  }
+  // Allow small drift so UI 0:00 triggers reliably
+  const deadlineMs = new Date(state.deadlineAt).getTime();
+  const driftAllowanceMs = 2000; // 2s tolerance
+  if (Date.now() + driftAllowanceMs < deadlineMs) {
     return NextResponse.json({ skipped: true });
   }
 

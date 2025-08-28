@@ -5,12 +5,22 @@ import { Query } from 'node-appwrite';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+// Allow CORS/preflight or generic OPTIONS requests to avoid 405 noise in the console
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Methods': 'GET,DELETE,OPTIONS',
+    }
+  });
+}
+
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ leagueId: string }> }
+  { params }: { params: { leagueId: string } }
 ) {
   try {
-    const { leagueId } = await context.params;
+    const { leagueId } = params;
     
     if (!leagueId) {
       return NextResponse.json(
@@ -19,27 +29,16 @@ export async function GET(
       );
     }
 
-    // Fetch all rosters/teams in this league (support both league_id and leagueId)
+    // Fetch all teams in this league from fantasy_teams
     let rosters = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.ROSTERS,
+      COLLECTIONS.FANTASY_TEAMS,
       [
         Query.equal('leagueId', leagueId),
         Query.limit(100)
       ]
     );
-    if (!rosters || rosters.documents.length === 0) {
-      try {
-        rosters = await databases.listDocuments(
-          DATABASE_ID,
-          COLLECTIONS.ROSTERS,
-          [
-            Query.equal('leagueId', leagueId),
-            Query.limit(100)
-          ]
-        );
-      } catch {}
-    }
+    // No secondary fallback
 
     // Fetch memberships to leverage per-league member display names
     let memberships: any = { documents: [] };
@@ -115,7 +114,7 @@ export async function GET(
       }
     } catch {}
 
-    // Map to consistent format with resolved manager name
+    // Map to consistent format with resolved manager name; ensure players field is the canonical attribute
     const teams = rosters.documents.map((doc: any) => {
       const ownerId = doc.ownerAuthUserId || doc.teammanager_id || doc.authUserId || doc.ownerClientId || doc.clientId || doc.owner || '';
       const managerName =
@@ -137,7 +136,8 @@ export async function GET(
         points: doc.points ?? doc.pointsFor ?? 0,
         pointsFor: doc.pointsFor ?? doc.points ?? 0,
         pointsAgainst: doc.pointsAgainst ?? 0,
-        players: doc.players,
+        // players is the canonical field on fantasy_teams storing selected players
+        players: doc.players || '[]',
         isActive: doc.isActive ?? true,
         status: doc.status,
       };
@@ -169,6 +169,29 @@ export async function DELETE(
     const targetAuthUserId = searchParams.get('authUserId');
     if (!leagueId || !targetAuthUserId) {
       return NextResponse.json({ error: 'leagueId and authUserId are required' }, { status: 400 });
+    }
+
+    // Fast path: special recount mode to recompute counts without removing anyone
+    if (targetAuthUserId === '__RECOUNT__') {
+      try {
+        const rosterCountPage = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.FANTASY_TEAMS,
+          [Query.equal('leagueId', leagueId), Query.limit(1)]
+        );
+        const total = (rosterCountPage as any).total ?? (rosterCountPage.documents?.length || 0);
+        const league = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, leagueId);
+        const maxTeams = (league as any).maxTeams ?? 12;
+        const payload: any = { currentTeams: total };
+        // Only set leagueStatus when attribute exists in schema
+        try {
+          payload.leagueStatus = total >= maxTeams ? 'closed' : 'open';
+        } catch {}
+        await databases.updateDocument(DATABASE_ID, COLLECTIONS.LEAGUES, leagueId, payload);
+        return NextResponse.json({ success: true, currentTeams: total });
+      } catch (e: any) {
+        return NextResponse.json({ error: e.message || 'Recount failed' }, { status: 500 });
+      }
     }
 
     // Auth check via session cookie
@@ -247,12 +270,22 @@ export async function DELETE(
       currentTeams = (rosterCountPage as any).total ?? (rosterCountPage.documents?.length || 0);
     } catch {}
     const maxTeams = (league as any).maxTeams ?? 12;
-    await databases.updateDocument(
-      DATABASE_ID,
-      COLLECTIONS.LEAGUES,
-      leagueId,
-      { currentTeams, leagueStatus: currentTeams >= maxTeams ? 'closed' : 'open' } as any
-    );
+    try {
+      await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUES,
+        leagueId,
+        { currentTeams, leagueStatus: currentTeams >= maxTeams ? 'closed' : 'open' } as any
+      );
+    } catch {
+      // If leagueStatus doesn't exist in schema, update only currentTeams
+      await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.LEAGUES,
+        leagueId,
+        { currentTeams } as any
+      );
+    }
 
     // Update draft.orderJson: remove this authUserId if present
     try {
