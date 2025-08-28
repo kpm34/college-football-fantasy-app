@@ -71,6 +71,28 @@ export default function Navbar() {
     };
   }, [user?.$id]);
 
+  // When the drawer opens, force-refresh leagues to reflect live DB (e.g., after purges)
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/leagues/mine', { cache: 'no-store' });
+        if (!cancelled) {
+          if (res.ok) {
+            const data = await res.json();
+            setLeagues(Array.isArray(data.leagues) ? data.leagues : []);
+          } else {
+            setLeagues([]);
+          }
+        }
+      } catch {
+        if (!cancelled) setLeagues([]);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [open, user?.$id]);
+
   function handleNavigateWithLoading(href: string) {
     setIsNavigating(true);
     setOpen(false);
@@ -186,13 +208,13 @@ export default function Navbar() {
                 <span className="font-medium">Dashboard</span>
               </Link>
 
-              {leagues.length > 0 && (
+              {leagues.filter(Boolean).length > 0 && (
                 <>
                   <div className="pt-3 mt-3 border-t border-white/10" />
                   <div className="px-3 pb-1 text-white/60 text-xs uppercase tracking-wider">
                     My Leagues
                   </div>
-                  {leagues.map((lg) => (
+                  {leagues.filter((lg) => lg && lg.id).map((lg) => (
                     <div key={lg.id} className="mb-3">
                       <button
                         onClick={() => handleNavigateWithLoading(`/league/${lg.id}`)}
