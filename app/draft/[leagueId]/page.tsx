@@ -13,18 +13,22 @@ interface Props {
 export default function DraftRoomPage({ params }: Props) {
   const { leagueId } = params
   const [engineVersion, setEngineVersion] = useState<'v1' | 'v2' | null>(null)
+  const [leagueNotFound, setNotFound] = useState(false)
 
   // Fetch league meta once to know engine version
   useEffect(() => {
     const load = async () => {
       const res = await fetch(`/api/leagues/${leagueId}`)
-      if (res.ok) {
-        const { data } = await res.json()
-        setEngineVersion((data.engineVersion as 'v2') ?? 'v1')
-      }
+      if (!res.ok) { setNotFound(true); return }
+      const { data } = await res.json()
+      setEngineVersion((data.engineVersion as 'v2') ?? 'v1')
     }
     load()
   }, [leagueId])
+
+  if (leagueNotFound) {
+    return <div className="p-8 text-center">League not found.</div>
+  }
 
   if (!engineVersion) {
     return <div className="p-4">Loading draft room...</div>
