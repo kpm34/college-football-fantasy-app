@@ -4,9 +4,9 @@
 Complete flow for joining a fantasy league via invite link or browse.
 
 ## Auth Route Handlers Detected
-- `/api/invites/accept` - Accept invite endpoint
-- `/api/leagues/join` - Direct join endpoint
-- `/api/leagues/search` - Browse public leagues
+- `/app/(dashboard)/api/leagues/invite` - Validate invite token or get invite links
+- `/app/(dashboard)/api/leagues/join` - Direct join endpoint
+- `/app/(dashboard)/api/leagues/search` - Browse public leagues
 
 ## 1. Flowchart
 
@@ -38,7 +38,7 @@ flowchart TD
     
     AcceptAPI --> CreateMembership[Create league_membership]
     CreateMembership --> CreateTeam[Create fantasy_team]
-    CreateTeam --> UpdateInvite[Update invite usage]
+    CreateTeam --> UpdateInvite[Log invite usage in activity_log]
     UpdateInvite --> LogActivity[Log join activity]
     LogActivity --> Success[Redirect to League Dashboard]
     
@@ -113,13 +113,12 @@ sequenceDiagram
 
 | Collection | Operation | Attributes Read/Written | Notes |
 |------------|-----------|------------------------|-------|
-| invites | READ | inviteCode/token, leagueId, expiresAt, max_uses, uses_count | Verify invite validity |
-| invites | UPDATE | uses_count++ | Track invite usage |
+| activity_log | READ | type='league_invite', leagueId, inviteToken, status, expiresAt | Validate invite |
+| activity_log | UPDATE/CREATE | status or new log row | Track invite usage |
 | leagues | READ | $id, maxTeams, currentTeams, status | Check capacity |
-| league_memberships | READ | league_id, auth_user_id | Check existing membership |
-| league_memberships | WRITE | league_id, auth_user_id, role='MEMBER', status='ACTIVE', joined_at | Create new membership |
-| fantasy_teams | WRITE | league_id, owner_auth_user_id, name, created_at | Create user's team for visibility |
-| activity_log | WRITE | actor_client_id/auth_user_id, action='league.joined', object_type='league', object_id, payload_json (invite), ts | Audit trail |
+| league_memberships | READ | leagueId, authUserId | Check existing membership |
+| league_memberships | WRITE | leagueId, authUserId, role='MEMBER', status='ACTIVE', joinedAt | Create new membership |
+| fantasy_teams | WRITE | leagueId, ownerAuthUserId, name, createdAt | Create user's team for visibility |
 
 ## 4. Validation Steps
 

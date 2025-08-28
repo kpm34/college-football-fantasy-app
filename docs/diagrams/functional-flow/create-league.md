@@ -4,9 +4,9 @@
 Complete flow for creating a new fantasy football league, including draft scheduling and configuration.
 
 ## Auth Route Handlers Detected
-- `/api/leagues/create` - Main league creation endpoint
-- `/api/auth/session` - Session validation
-- `/api/leagues/validate` - League settings validation
+- `/app/(dashboard)/api/leagues/create` - Main league creation endpoint
+- Appwrite Account endpoint via cookie for session validation
+- Validation handled in-route; no separate `/api/leagues/validate`
 
 ## 1. Flowchart
 

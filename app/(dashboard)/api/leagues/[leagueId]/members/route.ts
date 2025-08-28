@@ -161,10 +161,10 @@ export async function GET(
 // DELETE remove a member (commissioner only): cascade delete memberships, fantasy teams, roster slots, lineups; update league currentTeams and draft order
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<{ leagueId: string }> }
+  { params }: { params: { leagueId: string } }
 ) {
   try {
-    const { leagueId } = await context.params;
+    const { leagueId } = params;
     const { searchParams } = new URL(request.url);
     const targetAuthUserId = searchParams.get('authUserId');
     if (!leagueId || !targetAuthUserId) {
@@ -236,13 +236,22 @@ export async function DELETE(
       try { await databases.deleteDocument(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, t.$id); } catch {}
     }
 
-    // Update league counts and leagueStatus
-    const newCount = Math.max(0, (league as any).currentTeams ? (league as any).currentTeams - 1 : 0);
+    // Update league counts and leagueStatus using authoritative roster count
+    let currentTeams = 0;
+    try {
+      const rosterCountPage = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.FANTASY_TEAMS,
+        [Query.equal('leagueId', leagueId), Query.limit(1)]
+      );
+      currentTeams = (rosterCountPage as any).total ?? (rosterCountPage.documents?.length || 0);
+    } catch {}
+    const maxTeams = (league as any).maxTeams ?? 12;
     await databases.updateDocument(
       DATABASE_ID,
       COLLECTIONS.LEAGUES,
       leagueId,
-      { currentTeams: newCount, leagueStatus: newCount >= (league as any).maxTeams ? 'closed' : 'open' } as any
+      { currentTeams, leagueStatus: currentTeams >= maxTeams ? 'closed' : 'open' } as any
     );
 
     // Update draft.orderJson: remove this authUserId if present

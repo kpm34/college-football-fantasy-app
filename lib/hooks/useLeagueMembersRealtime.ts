@@ -26,7 +26,8 @@ function mapRosterToTeam(doc: any): LeagueTeam {
   return {
     $id: doc.$id,
     leagueId: doc.leagueId || doc.leagueId,
-    userId: doc.ownerClientId || doc.clientId || doc.owner || '',
+    // Canonical owner is ownerAuthUserId; fall back to legacy fields just in case
+    userId: doc.ownerAuthUserId || doc.ownerClientId || doc.clientId || doc.owner || '',
     name: doc.name || doc.teamName || 'Team',
     userName: doc.userName,
     email: doc.email,
@@ -89,7 +90,7 @@ export function useLeagueMembersRealtime(leagueId: string) {
       const unsubscribe = client.subscribe(channel, (event: RealtimeResponseEvent<any>) => {
         setConnected(true)
         const payload = event.payload as any
-        if (!payload || (payload.leagueId || payload.leagueId) !== leagueId) return
+        if (!payload || String(payload.leagueId) !== String(leagueId)) return
 
         // Handle create/update/delete
         if (event.events.some(e => e.endsWith('.create'))) {

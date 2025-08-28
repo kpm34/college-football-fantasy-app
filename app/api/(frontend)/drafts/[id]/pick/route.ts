@@ -77,7 +77,32 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       }
     } catch {}
 
-    if (!state || state.draftStatus === 'paused' || state.onClockTeamId !== fantasyTeamId) {
+    // Validate on-clock ownership with robust mapping (supports teamId or ownerAuthUserId in order)
+    if (!state || state.draftStatus === 'paused') {
+      return NextResponse.json({ error: 'Not your turn' }, { status: 400 });
+    }
+
+    let isOnClockForThisTeam = String(state.onClockTeamId) === String(fantasyTeamId);
+    if (!isOnClockForThisTeam) {
+      try {
+        const teamDocs = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.FANTASY_TEAMS,
+          [Query.equal('leagueId', draftId), Query.limit(200)]
+        );
+        const ownerToTeam = new Map<string, string>();
+        for (const t of teamDocs.documents as any[]) {
+          if (t?.ownerAuthUserId) ownerToTeam.set(String(t.ownerAuthUserId), String(t.$id));
+        }
+        // If onClock is an ownerAuthUserId, translate to teamId and compare
+        const mappedTeamId = ownerToTeam.get(String(state.onClockTeamId));
+        if (mappedTeamId && String(mappedTeamId) === String(fantasyTeamId)) {
+          isOnClockForThisTeam = true;
+        }
+      } catch {}
+    }
+
+    if (!isOnClockForThisTeam) {
       return NextResponse.json({ error: 'Not your turn' }, { status: 400 });
     }
     if (state.deadlineAt) {

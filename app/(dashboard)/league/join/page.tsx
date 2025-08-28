@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@lib/hooks/useAuth';
 import Link from 'next/link';
-// Removed direct Appwrite imports - using API routes instead
+// Realtime to live-update team counts
+import { client, DATABASE_ID, COLLECTIONS } from '@lib/appwrite';
 
 interface League {
   $id: string;
@@ -60,6 +61,64 @@ function JoinLeagueContent() {
   const { user: authUser, loading: authLoading } = useAuth();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const hasInvite = Boolean(inviteToken);
+  const trackedIdsRef = useRef<Set<string>>(new Set());
+
+  // Keep a ref of tracked league IDs so realtime callbacks can filter without re-subscribing
+  useEffect(() => {
+    const ids = new Set<string>(availableLeagues.map(l => String(l.$id)));
+    if (selectedLeague) ids.add(String(selectedLeague.$id));
+    trackedIdsRef.current = ids;
+  }, [availableLeagues, selectedLeague]);
+
+  // Helper: refresh a single league from API and merge into state
+  const refreshLeague = async (id: string) => {
+    try {
+      const res = await fetch(`/api/leagues/${id}`, { cache: 'no-store' });
+      const data = await res.json();
+      if (!res.ok || !data.success) return;
+      const doc = data.league;
+      const updated: League = {
+        $id: doc.$id || doc.id,
+        name: doc.name || doc.leagueName,
+        owner: doc.commissioner || doc.commissionerId || 'Commissioner',
+        teams: doc.currentTeams || (Array.isArray(doc.members) ? doc.members.length : 0),
+        maxTeams: doc.maxTeams || 12,
+        draftType: doc.draftType || 'snake',
+        entryFee: typeof doc.entryFee === 'number' ? doc.entryFee : 0,
+        draftDate: doc.draftDate || '',
+        draftTime: doc.draftTime || '',
+        description: doc.description || '',
+        type: (doc.isPublic === false || !!doc.password) ? 'private' : 'public',
+        password: doc.password,
+        leagueStatus: (doc.leagueStatus || 'open') as any,
+        draftStatus: (doc.draftStatus || 'pre-draft') as any,
+        createdAt: doc.$createdAt
+      };
+      setAvailableLeagues(prev => prev.map(l => (String(l.$id) === String(id) ? { ...l, ...updated } : l)));
+      setSelectedLeague(prev => (prev && String(prev.$id) === String(id) ? { ...prev, ...updated } : prev));
+    } catch {}
+  };
+
+  // Realtime: update counts and button state when leagues or fantasy_teams change
+  useEffect(() => {
+    const unsubLeagues = client.subscribe(`databases.${DATABASE_ID}.collections.${COLLECTIONS.LEAGUES}.documents`, (event) => {
+      const payload: any = event.payload;
+      if (!payload?.$id) return;
+      if (!trackedIdsRef.current.has(String(payload.$id))) return;
+      void refreshLeague(String(payload.$id));
+    });
+    const unsubRosters = client.subscribe(`databases.${DATABASE_ID}.collections.${COLLECTIONS.FANTASY_TEAMS}.documents`, (event) => {
+      const payload: any = event.payload;
+      const leagueId = String(payload?.leagueId || '');
+      if (!leagueId) return;
+      if (!trackedIdsRef.current.has(leagueId)) return;
+      void refreshLeague(leagueId);
+    });
+    return () => {
+      try { unsubLeagues(); } catch {}
+      try { unsubRosters(); } catch {}
+    };
+  }, []);
 
   // Invite code system removed - only token-based invites are supported
 
@@ -363,7 +422,7 @@ function JoinLeagueContent() {
         throw new Error(data.error || 'Failed to join league');
       }
 
-      console.log('Successfully joined league:', league.leagueName || league.name);
+      console.log('Successfully joined league:', league.name);
       
       // Redirect to the league home page
       router.push(`/league/${league.$id}`);
@@ -496,7 +555,7 @@ function JoinLeagueContent() {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-xl font-semibold text-[#5E2B8A]">{league.leagueName || league.name}</h3>
+                    <h3 className="text-xl font-semibold text-[#5E2B8A]">{league.name}</h3>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#FF0080]/20 text-[#FF0080] border border-[#FF0080]/30">
                       {((league as any).members?.length ?? league.teams)}/{league.maxTeams} Teams
                     </span>

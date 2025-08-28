@@ -33,10 +33,10 @@ flowchart TB
   R --> app_draft_
   click app_draft_ "/admin/project-map/app/draft" "Open draft routes"
   
-  app_marketing_["📁 (marketing)/<br/>Public pages<br/>• login<br/>• signup<br/>• invite/[leagueId]"]
-  class app_marketing_ folder
-  R --> app_marketing_
-  click app_marketing_ "/admin/project-map/app/marketing" "Open marketing routes"
+  app_league_["📁 (league)/<br/>Public + auth<br/>• login<br/>• signup<br/>• invite/[leagueId]"]
+  class app_league_ folder
+  R --> app_league_
+  click app_league_ "/admin/project-map/app/league" "Open league routes"
   
   app_admin_["📁 admin/<br/>Admin dashboard<br/>• project-map<br/>• cache-status<br/>• sync-status"]
   class app_admin_ folder
