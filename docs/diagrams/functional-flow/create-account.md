@@ -4,10 +4,10 @@
 Client account creation flow using Appwrite Auth with Google OAuth and email/password options.
 
 ## Related Files
-- `/app/api/auth/callback/route.ts` - OAuth callback handler
-- `/app/(auth)/login/page.tsx` - Login/signup UI
+- `/app/(league)/login/oauth-success/page.tsx` - OAuth success handler
+- `/app/(league)/login/page.tsx` - Login/signup UI
 - `/lib/appwrite-server.ts` - Server-side Appwrite client
-- `/lib/db/clients.ts` - Client DAL
+- Appwrite Users API (session handling)
 
 ## Client Flow
 ```mermaid
@@ -25,8 +25,8 @@ flowchart TB
   EmailAuth[Email/Password]:::auth
   AppwriteAuth[Appwrite Auth Service]:::auth
   
-  Callback[OAuth Callback]:::api
-  CreateSession[Create Session]:::auth
+  Callback[OAuth Success Page]:::api
+  CreateSession[Create Session (Appwrite)]:::auth
   
   CheckClient{Client Exists?}:::db
   CreateClient[Create Client Record]:::db
@@ -72,7 +72,7 @@ sequenceDiagram
     UI->>Auth: Initiate OAuth
     Auth->>C: Redirect to Google
     C->>Auth: Authorize
-    Auth->>API: Callback with code
+    Auth->>UI: Redirect to OAuth Success
   else Email/Password
     C->>UI: Enter credentials
     UI->>Auth: Create account
@@ -99,13 +99,13 @@ sequenceDiagram
 ## Data Interactions
 
 | Collection | Operation | Attributes Set | Notes |
-|------------|-----------|---------------|-------|
-| `clients` | READ | `auth_user_id` | Check if client exists |
-| `clients` | CREATE | `auth_user_id`, `display_name`, `email`, `avatar_url`, `created_at` | New client registration |
-| `clients` | UPDATE | `last_login` | Existing client login |
-| `activity_log` | CREATE | `action`, `client_id`, `metadata`, `created_at` | Track signup/login events |
+|------------|-----------|----------------|-------|
+| `clients` | READ | `authUserId` | Check if client exists |
+| `clients` | CREATE | `authUserId`, `displayName`, `email`, `avatarUrl`, `createdAt` | New client registration |
+| `clients` | UPDATE | `lastLogin` | Existing client login |
+| `activity_log` | CREATE | `action`, `clientId`, `metadata`, `createdAt` | Track signup/login events |
 | `leagues` | READ | - | Load client leagues after login |
-| `league_memberships` | READ | `client_id` | Find client memberships |
+| `league_memberships` | READ | `authUserId` | Find client memberships |
 
 ## Validation & Error States
 

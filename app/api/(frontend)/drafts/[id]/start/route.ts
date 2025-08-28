@@ -136,6 +136,31 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     const rounds = Number((league as any)?.draftRounds || 15);
     const pickTimeSeconds = Number((league as any)?.pickTimeSeconds || 90);
+    
+    // Normalize order entries to fantasyTeam document IDs
+    // Some older flows saved authUserIds in orderJson; we map them to team IDs here
+    let teamIdOrder: string[] = [];
+    try {
+      const teamsRes = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.FANTASY_TEAMS,
+        [Query.equal('leagueId', leagueId), Query.limit(200)]
+      );
+      const ownerToTeam = new Map<string, string>();
+      const teamIdSet = new Set<string>();
+      for (const t of teamsRes.documents as any[]) {
+        if (t?.ownerAuthUserId) ownerToTeam.set(String(t.ownerAuthUserId), String(t.$id));
+        teamIdSet.add(String(t.$id));
+      }
+      teamIdOrder = order.map((id) => {
+        const str = String(id);
+        if (teamIdSet.has(str)) return str; // already a team ID
+        const mapped = ownerToTeam.get(str);
+        return mapped || str; // fallback to original to avoid empty slot
+      }).filter(Boolean);
+    } catch {
+      teamIdOrder = [...order];
+    }
     const now = Date.now();
 
     const state = {
@@ -143,12 +168,12 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       draftStatus: 'drafting',
       round: 1,
       pickIndex: 1,
-      picksPerRound: order.length,
-      totalTeams: order.length,
+      picksPerRound: teamIdOrder.length,
+      totalTeams: teamIdOrder.length,
       totalRounds: rounds,
       overall: 1,
-      draftOrder: order,
-      onClockTeamId: order[0],
+      draftOrder: teamIdOrder,
+      onClockTeamId: teamIdOrder[0],
       deadlineAt: new Date(now + pickTimeSeconds * 1000).toISOString(),
       pickTimeSeconds,
       pickedPlayerIds: [], // Track picked players
@@ -191,7 +216,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
           DATABASE_ID,
           COLLECTIONS.DRAFTS,
           doc.$id,
-          { draftStatus: 'drafting', currentRound: 1, currentPick: 1 } as any
+          { draftStatus: 'drafting', currentRound: 1, currentPick: 1, orderJson: JSON.stringify({ draftOrder: teamIdOrder }) } as any
         );
       }
     } catch {}

@@ -9,11 +9,11 @@ flowchart TB
   end
 
   subgraph API[Next.js API Routes]
-    Mine[/GET /api/leagues/mine/]
-    Members[/GET /api/leagues/:id/members/]
-    LockerAPI[/GET /api/leagues/:id/locker-room/]
-    Join[/POST /api/leagues/join]
-    Create[/POST /api/leagues/create]
+    Mine[/GET /(dashboard)/api/leagues/mine/]
+    Members[/GET /(dashboard)/api/leagues/:id/members/]
+    LockerAPI[/GET /(dashboard)/api/leagues/:id/locker-room/]
+    Join[/POST /(dashboard)/api/leagues/join]
+    Create[/POST /(dashboard)/api/leagues/create]
   end
 
   subgraph Appwrite[Appwrite BaaS]
@@ -45,9 +45,9 @@ flowchart TB
   Auth --- LockerAPI
 
   note over Members,DB: Canonical IDs
-  note right of Teams: owner_auth_user_id
-  note right of Leagues: commissioner_auth_user_id
-  note right of Memberships: auth_user_id
+  note right of Teams: ownerAuthUserId
+  note right of Leagues: commissionerAuthUserId
+  note right of Memberships: authUserId
 
   RT --> UI
   DB --> RT

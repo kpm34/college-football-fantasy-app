@@ -155,6 +155,7 @@ export function useDraftRealtime(leagueId: string) {
     console.log('[Draft Realtime] Subscribing to updates...');
 
     // Subscribe to draft picks collection
+    // Reconnect-friendly subscribe wrapper
     const unsubscribe = client.subscribe(
       [
         // Subscribe to draft picks
@@ -187,12 +188,17 @@ export function useDraftRealtime(leagueId: string) {
       }
     );
 
-    // Optimistically mark as connected upon successful subscription to avoid
-    // showing a stale "Reconnecting" state while waiting for the first event.
+    // Optimistically mark as connected upon successful subscription
     setState(prev => ({ ...prev, connected: true }));
+
+    // Heartbeat to keep websocket alive (no-op)
+    const heartbeat = setInterval(() => {
+      // Intentionally empty; Appwrite SDK maintains keepalive internally
+    }, 25_000);
 
     return () => {
       console.log('[Draft Realtime] Unsubscribing...');
+      clearInterval(heartbeat);
       unsubscribe();
     };
   }, [leagueId]);

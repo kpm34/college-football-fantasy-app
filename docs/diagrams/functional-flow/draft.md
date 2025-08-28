@@ -4,13 +4,14 @@
 Comprehensive draft system supporting both mock drafts (practice) and real drafts (scheduled, season commits) with timing gates and room access control.
 
 
-## API Endpoints
-- `GET /api/drafts/:id/room-state` - Check room access and timing
-- `POST /api/drafts/mock/create` - Create mock draft
-- `POST /api/drafts/create` - Create real draft
-- `POST /api/drafts/:id/pick` - Make a pick
-- `GET /api/drafts/:id/events` - Get draft events stream
-- `WebSocket /api/drafts/:id/live` - Real-time updates
+## API Endpoints (Current)
+- `GET /app/api/(frontend)/drafts/[id]/data` - Draft data for room
+- `POST /app/api/(frontend)/drafts/[id]/pick` - Make a pick
+- `POST /app/api/(frontend)/drafts/[id]/autopick` - Server autopick for on-clock team
+- `POST /app/api/(frontend)/drafts/[id]/start` - Initialize/mark draft live
+- `POST /app/api/(frontend)/drafts/[id]/pause` and `/resume` - Pause/resume
+- `GET /app/api/(frontend)/draft/players` - Available players (filtered)
+- Realtime: Appwrite channels (draft picks, league doc, draft states)
 
 ## A) Mock Draft Flow (No Season Commits)
 
@@ -42,7 +43,7 @@ flowchart TD
     UserPick -->|Yes| MakePick[Make Pick]:::action
     UserPick -->|No| WaitTurn[Wait/Watch]:::ui
     
-    MakePick --> WriteMockEvent[Write draft_events<br/>type=pick]:::db
+    MakePick --> WriteMockEvent[Write draft_picks]:::db
     WriteMockEvent --> UpdateMockState[Update draft_states]:::db
     UpdateMockState --> NextPick[Next Pick]:::action
     
@@ -114,7 +115,7 @@ flowchart TD
     UserSelect --> ValidatePick[Validate Pick]:::api
     AutoPick --> ValidatePick:::api
     
-    ValidatePick --> WriteRealEvent[Write draft_events<br/>type=pick]:::db
+    ValidatePick --> WriteRealEvent[Write draft_picks]:::db
     WriteRealEvent --> UpdateRealState[Update draft_states]:::db
     UpdateRealState --> CommitRoster[Write roster_slots]:::db
     CommitRoster --> RecordTransaction[Write transactions<br/>type=draft]:::db
