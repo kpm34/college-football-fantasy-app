@@ -52,9 +52,7 @@ export class LeagueRepository extends BaseRepository<League> {
       isPublic: Boolean(data.isPublic),
       pickTimeSeconds: Number(data.pickTimeSeconds),
       commissionerAuthUserId: String(data.commissionerAuthUserId),
-      leagueStatus: 'open' as const,
-      draftStatus: 'pre-draft' as const,
-      currentTeams: 0,
+      // Avoid writing attributes not present in some live schemas (leagueStatus/draftStatus/currentTeams)
       season: Number(data.season || new Date().getFullYear()),
       scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules())
     };
@@ -165,8 +163,9 @@ export class LeagueRepository extends BaseRepository<League> {
       throw new ValidationError('League not found');
     }
 
-    // Validate join conditions
-    if (league.leagueStatus !== 'open') {
+    // Validate join conditions (treat missing leagueStatus as 'open' by default for backwards-compat)
+    const effectiveStatus = (league as any).leagueStatus || 'open';
+    if (effectiveStatus !== 'open') {
       throw new ValidationError('League is not open for joining');
     }
 
@@ -197,6 +196,8 @@ export class LeagueRepository extends BaseRepository<League> {
       teamName: String(teamName),
       abbrev: String(abbreviation || teamName.substring(0, 3).toUpperCase()),
       draftPosition: Number(league.currentTeams + 1),
+      // Persist human-readable league name for UI convenience
+      leagueName: String((league as any).leagueName || (league as any).name || ''),
       wins: 0,
       losses: 0,
       ties: 0,
@@ -213,15 +214,21 @@ export class LeagueRepository extends BaseRepository<League> {
     const roster = await rosterRepo.create(rosterValidation.data);
 
     // Update league team count
-    const updatedLeague = await this.update(leagueId, {
-      currentTeams: league.currentTeams + 1,
-      leagueStatus: league.currentTeams + 1 >= league.maxTeams ? 'closed' : 'open'
-    }, {
-      invalidateCache: [
-        'league:public:*',
-        `league:user:${userId}:*`
-      ]
-    });
+    let updatedLeague: League;
+    try {
+      updatedLeague = await this.update(leagueId, {
+        currentTeams: (league as any).currentTeams ? (league as any).currentTeams + 1 : 1,
+        leagueStatus: ((league as any).currentTeams ? (league as any).currentTeams + 1 : 1) >= league.maxTeams ? 'closed' : 'open'
+      }, {
+        invalidateCache: [
+          'league:public:*',
+          `league:user:${userId}:*`
+        ]
+      });
+    } catch {
+      // If schema does not allow these fields, return the original league
+      updatedLeague = league;
+    }
 
     return { league: updatedLeague, fantasyTeamId: roster.$id };
   }
@@ -350,7 +357,8 @@ export class LeagueRepository extends BaseRepository<League> {
    * Validate league creation data
    */
   protected async validateCreate(data: Partial<League>): Promise<void> {
-    if (!data.name || data.name.length < 3) {
+    const effectiveName = (data as any).leagueName || data.name;
+    if (!effectiveName || String(effectiveName).trim().length < 3) {
       throw new ValidationError('League name must be at least 3 characters');
     }
 

@@ -99,6 +99,21 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     requestData.teamAbbreviation
   );
 
+  // Best-effort realtime consistency: write a minimal fantasy_teams doc if missing
+  try {
+    // The repo already created the roster; this ensures locker room visibility paths relying on 'name'
+    await databases.updateDocument(
+      DATABASE_ID,
+      COLLECTIONS.FANTASY_TEAMS,
+      fantasyTeamId,
+      {
+        ownerAuthUserId: user.$id,
+        leagueId: league.$id,
+        teamName: requestData.teamName || `${user.name || user.email}'s Team`
+      } as any
+    );
+  } catch {}
+
   // Create a draft document for this league
   try {
     const draftOrder = [user.$id]; // Start with just the commissioner

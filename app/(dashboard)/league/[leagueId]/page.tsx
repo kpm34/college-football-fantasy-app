@@ -169,9 +169,9 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         mapped = {
           $id: l.id,
           name: l.name,
-          commissioner: l.commissioner || (l as any).commissioner_id || (l as any).authUserId || (l as any).ownerClientId,
+          commissioner: l.commissioner || (l as any).commissioner_id || (l as any).authUserId,
           commissionerAuthUserId: l.commissioner || (l as any).commissionerAuthUserId,
-          commissionerId: l.commissioner || (l as any).commissioner_id || (l as any).commissionerId || (l as any).authUserId || (l as any).ownerClientId,
+          commissionerId: l.commissioner || (l as any).commissioner_id || (l as any).commissionerId || (l as any).authUserId,
           commissionerName,
           season: l.seasonStartWeek ? new Date().getFullYear() : (l.season || new Date().getFullYear()),
           scoringType: 'PPR',
@@ -275,7 +275,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     });
     // Check multiple fields for user match (using owner_client_id from fantasy_teams)
     const mine = teams.find(t => 
-      (t as any).teammanager_id === user.$id ||
+      (t as any).userId === user.$id ||
+      (t as any).ownerAuthUserId === user.$id ||
       (t as any).authUserId === user.$id ||
       (t as any).ownerClientId === user.$id || 
       (t as any).clientId === user.$id || // fallback for compatibility
@@ -328,7 +329,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
               <tr key={team.$id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                 <td className="py-4 px-6">
                   <span className="font-semibold">{team.name}</span>
-                  {team.ownerAuthUserId === league?.commissionerAuthUserId && (
+                  {team.userId === league?.commissionerAuthUserId && (
                     <span className="ml-2 text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">Commissioner</span>
                   )}
                 </td>

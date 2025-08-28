@@ -8,7 +8,6 @@
     "schema:pull": "appwrite pull collections",
     "schema:push": "appwrite push collections --force",
     "schema:types": "appwrite types -l ts ./src/types/appwrite",
-    
     "schema:all": "npm run schema:push && npm run schema:types",
     "schema:list": "ts-node ops/common/scripts/list-appwrite-collections.ts",
     "schema:validate": "npx tsx ops/common/scripts/validate-schema-compliance.ts",
@@ -150,7 +149,6 @@
     "@vercel/kv": "^3.0.0",
     "@vercel/speed-insights": "^1.2.0",
     "ai": "^5.0.15",
-    "appwrite": "^16.0.2",
     "cheerio": "^1.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -200,6 +198,7 @@
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
+    "appwrite": "^19.0.0",
     "autoprefixer": "^10.4.20",
     "csv-parse": "^6.1.0",
     "dotenv": "^17.2.1",

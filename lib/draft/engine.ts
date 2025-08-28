@@ -40,7 +40,7 @@ export async function createDraft(
         ID.unique(),
         {
           leagueId: config.leagueId || 'mock-draft', // Prefer real league when provided
-          status: 'active',
+          draftStatus: 'drafting',
           type: 'mock', // Mark as mock draft type
           currentRound: 1,
           currentPick: 1,
@@ -157,16 +157,7 @@ export async function startDraft(draftId: string): Promise<void> {
     const draft = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId);
     const config = draft.config ? JSON.parse(draft.config) : {};
     
-    // Update status to active
-    await databases.updateDocument(
-      DATABASE_ID,
-      COLLECTIONS.MOCK_DRAFTS,
-      draftId,
-      {
-        status: 'active',
-        startedAt: new Date().toISOString()
-      }
-    );
+    // No-op for DB-backed engine; for in-memory variant handled elsewhere
 
     // Get participants
     const participantsResponse = await databases.listDocuments(
@@ -535,8 +526,8 @@ export async function getTurn(draftId: string): Promise<TurnState> {
         draftId,
         {
           startTime: now.toISOString(),
-          // If still waiting, flip to active so timers/autopick behave
-          status: d.status === 'waiting' ? 'active' : d.status,
+          // If pre-draft, flip to drafting so timers/autopick behave
+          draftStatus: (d as any).draftStatus === 'pre-draft' ? 'drafting' : (d as any).draftStatus,
         }
       );
     } catch {}
@@ -551,7 +542,7 @@ export async function getTurn(draftId: string): Promise<TurnState> {
   ]);
   const count = picks.total; // overall just made
   const nextOverall = count + 1;
-  const numTeams = d.numTeams ?? 8;
+  const numTeams = (d as any).numTeams ?? (cfg as any).numTeams ?? 8;
   const { round, slot } = computeSlotFor(nextOverall, numTeams);
 
   const parts = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, [
@@ -660,18 +651,18 @@ export async function applyPick(draftId: string, participantId: string, playerId
   // Update lastPickAt in order_json for mock drafts
   const nextCfg = { ...cfg, lastPickAt: now.toISOString() };
   await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
-    orderJson: JSON.stringify(nextCfg),
+    orderJson: JSON.stringify({ ...(cfg || {}), ...nextCfg }),
     currentPick: turn.overall + 1,
     currentRound: turn.round
   });
 
   // If final pick, flip status
-  const totalPicks = (d.rounds ?? 15) * (d.numTeams ?? 8);
+  const totalPicks = ((d as any).rounds ?? (cfg as any).rounds ?? 15) * (((d as any).numTeams ?? (cfg as any).numTeams ?? 8));
   if (turn.overall >= totalPicks) {
     await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
-      status: 'complete',
-      completedAt: now.toISOString(),
-      config: JSON.stringify(nextCfg),
+      draftStatus: 'post-draft',
+      endTime: now.toISOString(),
+      orderJson: JSON.stringify({ ...(cfg as any), ...nextCfg }),
     });
   }
 }
@@ -679,7 +670,8 @@ export async function applyPick(draftId: string, participantId: string, playerId
 export async function autopickIfExpired(draftId: string, nowIso?: string) {
   const now = nowIso ? new Date(nowIso) : new Date();
   const { d, cfg } = await getDraftDoc(draftId);
-  if (d.status !== 'active') return null;
+  const isActive = ((d as any).draftStatus === 'drafting') || (d as any).status === 'active';
+  if (!isActive) return null;
 
   const turn = await getTurn(draftId);
   const deadline = new Date(turn.deadlineAt);
@@ -687,7 +679,9 @@ export async function autopickIfExpired(draftId: string, nowIso?: string) {
 
   // Check participant type (using userType from existing schema)
   const part = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, turn.participantId);
-  if ((part as any).userType !== 'human') return null; // Only autopick for human players
+  const partPayload = (part as any).payloadJson ? JSON.parse((part as any).payloadJson) : {};
+  const partType = (part as any).userType || partPayload.userType;
+  if (partType !== 'human') return null; // Only autopick for human players
 
   const playerId = await selectBestAvailablePlayer(draftId, cfg.seed);
   await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, ID.unique(), {
@@ -704,16 +698,16 @@ export async function autopickIfExpired(draftId: string, nowIso?: string) {
   const metrics = { autopicksCount: (cfg?.metrics?.autopicksCount ?? 0) + 1 };
   const nextCfg = { ...cfg, lastPickAt: now.toISOString(), metrics: { ...(cfg.metrics || {}), ...metrics } };
   await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
-    config: JSON.stringify(nextCfg),
+    orderJson: JSON.stringify({ ...(cfg as any), ...nextCfg }),
   });
 
   // If final pick, complete
-  const totalPicks = (d.rounds ?? 15) * (d.numTeams ?? 8);
+  const totalPicks = (((d as any).rounds ?? (cfg as any).rounds ?? 15) * (((d as any).numTeams ?? (cfg as any).numTeams ?? 8)));
   if (turn.overall >= totalPicks) {
     await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
-      status: 'complete',
-      completedAt: now.toISOString(),
-      config: JSON.stringify(nextCfg),
+      draftStatus: 'post-draft',
+      endTime: now.toISOString(),
+      orderJson: JSON.stringify({ ...(cfg as any), ...nextCfg }),
     });
   }
   return { autopicked: true, playerId };
@@ -726,12 +720,15 @@ export async function autopickIfExpired(draftId: string, nowIso?: string) {
 export async function autopickBotIfOnClock(draftId: string, nowIso?: string): Promise<boolean> {
   const now = nowIso ? new Date(nowIso) : new Date();
   const { d, cfg } = await getDraftDoc(draftId);
-  if (d.status !== 'active') return false;
+  const isActive = ((d as any).draftStatus === 'drafting') || (d as any).status === 'active';
+  if (!isActive) return false;
 
   const turn = await getTurn(draftId);
   // Load participant to check userType
   const part = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFT_EVENTS, turn.participantId);
-  if ((part as any).userType !== 'bot') return false;
+  const partPayload = (part as any).payloadJson ? JSON.parse((part as any).payloadJson) : {};
+  const partType = (part as any).userType || partPayload.userType;
+  if (partType !== 'bot') return false;
 
   // Rate-limit bot picks to at most one every 5 seconds
   const lastBotAutoAt = cfg.lastBotAutoAt ? new Date(cfg.lastBotAutoAt).getTime() : 0;
@@ -754,16 +751,16 @@ export async function autopickBotIfOnClock(draftId: string, nowIso?: string): Pr
   const metrics = { autopicksCount: (cfg?.metrics?.autopicksCount ?? 0) + 1 };
   const nextCfg = { ...cfg, lastPickAt: now.toISOString(), lastBotAutoAt: now.toISOString(), metrics: { ...(cfg.metrics || {}), ...metrics } };
   await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
-    config: JSON.stringify(nextCfg),
+    orderJson: JSON.stringify({ ...(cfg as any), ...nextCfg }),
   });
 
   // Complete if this was the last pick
-  const totalPicks = (d.rounds ?? 15) * (d.numTeams ?? 8);
+  const totalPicks = (((d as any).rounds ?? (cfg as any).rounds ?? 15) * (((d as any).numTeams ?? (cfg as any).numTeams ?? 8)));
   if (turn.overall >= totalPicks) {
     await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftId, {
-      status: 'complete',
-      completedAt: now.toISOString(),
-      config: JSON.stringify(nextCfg),
+      draftStatus: 'post-draft',
+      endTime: now.toISOString(),
+      orderJson: JSON.stringify({ ...(cfg as any), ...nextCfg }),
     });
   }
   return true;

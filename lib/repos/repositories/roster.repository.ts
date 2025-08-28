@@ -61,7 +61,8 @@ export class RosterRepository extends BaseRepository<Roster> {
     const result = await this.find({
       filters: {
         leagueId,
-        authUserId: userId  // use canonical field
+        // Use canonical field from Appwrite schema for fantasy_teams
+        ownerAuthUserId: userId
       },
       limit: 1,
       cache: {
@@ -134,7 +135,7 @@ export class RosterRepository extends BaseRepository<Roster> {
       updatedAt: new Date().toISOString()
     });
 
-    return this.update(fantasy_team_id, updateData, {
+    return this.update(fantasyTeamId, updateData, {
       invalidateCache: [
         `roster:league:${roster.leagueId}:*`,
         `player:roster:${playerData.playerId}`
@@ -145,7 +146,7 @@ export class RosterRepository extends BaseRepository<Roster> {
   /**
    * Remove player from roster
    */
-  async removePlayer(fantasy_team_id: string, playerId: string): Promise<Roster> {
+  async removePlayer(fantasyTeamId: string, playerId: string): Promise<Roster> {
     const roster = await this.findById(fantasyTeamId);
     if (!roster) {
       throw new ValidationError('Roster not found');
@@ -167,7 +168,7 @@ export class RosterRepository extends BaseRepository<Roster> {
     // Remove from bench if present
     const updatedBench = roster.bench.filter(id => id !== playerId);
 
-    return this.update(fantasy_team_id, {
+    return this.update(fantasyTeamId, {
       players: updatedPlayers,
       lineup: updatedLineup,
       bench: updatedBench,
@@ -211,7 +212,7 @@ export class RosterRepository extends BaseRepository<Roster> {
       .filter(p => !lineupPlayerIds.has(p.playerId))
       .map(p => p.playerId);
 
-    return this.update(fantasy_team_id, {
+    return this.update(fantasyTeamId, {
       lineup,
       bench: benchPlayers,
       updatedAt: new Date().toISOString()
