@@ -58,6 +58,8 @@ function JoinLeagueContent() {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [availableLeagues, setAvailableLeagues] = useState<League[]>([]);
+  // Track which specific league is currently joining to avoid global loading affecting all cards
+  const [joiningLeagueId, setJoiningLeagueId] = useState<string | null>(null);
   const { user: authUser, loading: authLoading } = useAuth();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const hasInvite = Boolean(inviteToken);
@@ -397,6 +399,7 @@ function JoinLeagueContent() {
   const joinLeague = async (league: League, password?: string) => {
     if (!currentUser) return;
 
+    setJoiningLeagueId(String(league.$id));
     setLoading(true);
     try {
       // Use the API endpoint for joining
@@ -431,6 +434,7 @@ function JoinLeagueContent() {
       alert(error.message || 'Failed to join league. Please try again.');
     } finally {
       setLoading(false);
+      setJoiningLeagueId(null);
       if (!password || !passwordError) {
         setShowPasswordModal(false);
         setSelectedLeague(null);
@@ -587,10 +591,7 @@ function JoinLeagueContent() {
                 <div className="ml-6">
                   <button
                     onClick={() => handleJoinLeague(league)}
-                    disabled={
-                      loading ||
-                      (league.teams >= league.maxTeams)
-                    }
+                    disabled={(league.teams >= league.maxTeams) || joiningLeagueId === String(league.$id)}
                     className={`px-6 py-2 rounded-lg font-medium transition-colors ${
                       (league.teams >= league.maxTeams)
                         ? 'bg-[#8A6B4D]/30 text-[#8A6B4D] cursor-not-allowed'
@@ -599,9 +600,7 @@ function JoinLeagueContent() {
                   >
                     {league.teams >= league.maxTeams
                       ? 'Full'
-                      : loading
-                      ? 'Joining...'
-                      : 'Join League'}
+                      : (joiningLeagueId === String(league.$id) ? 'Joining...' : 'Join League')}
                   </button>
                 </div>
               </div>
