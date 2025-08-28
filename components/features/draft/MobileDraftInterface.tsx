@@ -8,12 +8,17 @@ interface MobileDraftInterfaceProps {
   players: DraftPlayer[];
   myPicks: DraftPlayer[];
   draftOrder: any[];
+  // current pick metadata for header: { teamId, teamName, pickNumber }
   currentPick: any;
   timeRemaining: number | null;
   onPickPlayer: (player: DraftPlayer) => void;
   isMyTurn: boolean;
   draftStarted: boolean;
   leagueColors: any;
+  // Enriched teams with picks for roster previews (no dependence on users collection)
+  teams?: Array<{ $id: string; teamName: string; picks: any[] }>;
+  // Recent picks for ticker
+  recentPicks?: any[];
 }
 
 export default function MobileDraftInterface({
@@ -25,21 +30,33 @@ export default function MobileDraftInterface({
   onPickPlayer,
   isMyTurn,
   draftStarted,
-  leagueColors
+  leagueColors,
+  teams = [],
+  recentPicks = []
 }: MobileDraftInterfaceProps) {
   const [activeView, setActiveView] = useState<'players' | 'myteam' | 'order'>('players');
   const [showFilters, setShowFilters] = useState(false);
   const [positionFilter, setPositionFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
 
   // Filter players - with safety checks
-  const availablePlayers = (players || []).filter(p => p && !p.isDrafted);
+  // Normalize player records and filter drafted
+  const normalizedPlayers: DraftPlayer[] = (players || []).map((p: any) => ({
+    ...p,
+    playerName: p.playerName || p.name || p.displayName || p.fullName || 'Unknown Player',
+    position: p.position || p.pos || (p.meta && p.meta.position) || '—',
+    team: p.team || p.school || p.college || '',
+    projections: p.projections || { fantasyPoints: p.projectedPoints ?? p.fantasyPoints ?? 0 },
+  })) as any;
+
+  const availablePlayers = (normalizedPlayers || []).filter(p => p && !(p as any).isDrafted);
   const filteredPlayers = availablePlayers.filter(player => {
     if (!player) return false;
     const matchesPosition = positionFilter === 'ALL' || player.position === positionFilter;
     const matchesSearch = !searchQuery || 
-      (player.playerName && player.playerName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (player.team && player.team.toLowerCase().includes(searchQuery.toLowerCase()));
+      ((player as any).playerName && (player as any).playerName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      ((player as any).team && (player as any).team.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesPosition && matchesSearch;
   });
 
@@ -75,12 +92,28 @@ export default function MobileDraftInterface({
                     YOUR TURN
                   </span>
                 ) : currentPick ? (
-                  <span>On the clock: {currentPick.teamName}</span>
+                  <span>On the clock: {currentPick.teamName || 'Team'}</span>
                 ) : (
                   <span>Waiting to start...</span>
                 )}
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Recent Picks Ticker */}
+        {Array.isArray(recentPicks) && recentPicks.length > 0 && (
+          <div className="bg-white border-t border-b px-3 py-2 text-xs text-gray-700 overflow-x-auto whitespace-nowrap">
+            {recentPicks.slice(-10).map((p: any, i: number) => {
+              const pos = String(p.playerPosition || p.position || '').toUpperCase();
+              return (
+                <span key={`${p.$id || p.playerId || i}`} className="inline-flex items-center gap-2 mr-3">
+                  <span className="text-gray-400">#{p.pickNumber || p.overall || ''}</span>
+                  {pos && (<span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">{pos}</span>)}
+                  <span className="font-medium">{p.playerName || p.name || 'Player'}</span>
+                </span>
+              );
+            })}
           </div>
         )}
 
@@ -185,12 +218,12 @@ export default function MobileDraftInterface({
                     className="flex items-center justify-between p-3 hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex-1">
-                      <div className="font-semibold text-sm">{player.playerName || 'Unknown Player'}</div>
+                      <div className="font-semibold text-sm">{(player as any).playerName || 'Unknown Player'}</div>
                       <div className="text-xs text-gray-600">
                         {player.position || 'POS'} • {player.team || 'Team'}
                       </div>
                       <div className="text-xs text-gray-500 mt-1">
-                        Proj: {player.projections?.fantasyPoints?.toFixed(1) || '0.0'} pts
+                        Proj: {(player as any).projections?.fantasyPoints?.toFixed ? (player as any).projections.fantasyPoints.toFixed(1) : (((player as any).projections?.fantasyPoints ?? 0).toString())} pts
                       </div>
                     </div>
                     {isMyTurn && (
@@ -244,27 +277,36 @@ export default function MobileDraftInterface({
           <div className="p-4">
             <h3 className="font-bold text-lg mb-3">Draft Order</h3>
             <div className="grid grid-cols-2 gap-2">
-              {draftOrder.map((team, index) => (
-                <div
-                  key={team.$id || index}
-                  className={`p-3 rounded-lg border ${
-                    currentPick?.teamId === team.$id
-                      ? 'bg-blue-50 border-blue-400'
-                      : 'bg-white'
-                  }`}
-                >
+              {(teams.length > 0 ? teams : draftOrder).map((team: any, index: number) => (
+                <div key={team.$id || index} className={`p-3 rounded-lg border ${currentPick?.teamId === team.$id ? 'bg-blue-50 border-blue-400' : 'bg-white'}`}>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500">#{index + 1}</span>
-                    {currentPick?.teamId === team.$id && (
-                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    )}
+                    <button
+                      className="text-xs text-blue-600"
+                      onClick={() => setExpandedTeamId(expandedTeamId === (team.$id || '') ? null : (team.$id || ''))}
+                    >
+                      {expandedTeamId === (team.$id || '') ? 'Hide' : 'Roster'}
+                    </button>
                   </div>
                   <div className="font-medium text-sm mt-1">
                     {team.teamName || team.name || `Team ${index + 1}`}
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
-                    Picks: {team.picks || 0}
+                    Picks: {Array.isArray(team.picks) ? team.picks.length : (team.picks || 0)}
                   </div>
+                  {expandedTeamId === (team.$id || '') && Array.isArray(team.picks) && team.picks.length > 0 && (
+                    <div className="mt-2 border-t pt-2 space-y-1">
+                      {team.picks.slice(0, 8).map((p: any, i: number) => (
+                        <div key={`${p.$id || p.playerId || i}`} className="flex items-center justify-between text-xs">
+                          <span className="truncate">{p.playerName || p.name || 'Player'}</span>
+                          <span className="text-gray-500">{String(p.playerPosition || p.position || '').toUpperCase()}</span>
+                        </div>
+                      ))}
+                      {team.picks.length > 8 && (
+                        <div className="text-[11px] text-gray-500">and {team.picks.length - 8} more…</div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
