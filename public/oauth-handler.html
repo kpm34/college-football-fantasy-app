@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Completing Login...</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #5B2B8C;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <h2>Completing login...</h2>
+        <p id="status">Please wait while we complete your authentication.</p>
+    </div>
+
+    <script type="module">
+        // This runs on the client side after OAuth redirect
+        async function handleOAuthCallback() {
+            const params = new URLSearchParams(window.location.search);
+            const hashParams = new URLSearchParams(window.location.hash.slice(1));
+            
+            // Check for parameters in both query and hash
+            const userId = params.get('userId') || hashParams.get('userId');
+            const secret = params.get('secret') || hashParams.get('secret');
+            const error = params.get('error') || hashParams.get('error');
+            
+            console.log('OAuth callback params:', { userId: !!userId, secret: !!secret, error });
+            
+            if (error) {
+                document.getElementById('status').textContent = 'Authentication failed. Redirecting...';
+                setTimeout(() => {
+                    window.location.href = '/login?error=' + error;
+                }, 1000);
+                return;
+            }
+            
+            if (userId && secret) {
+                try {
+                    // Import Appwrite SDK
+                    const { Client, Account } = await import('https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/appwrite.js');
+                    
+                    const client = new Client()
+                        .setEndpoint('https://nyc.cloud.appwrite.io/v1')
+                        .setProject('college-football-fantasy-app');
+                    
+                    const account = new Account(client);
+                    
+                    // Create session with the OAuth credentials
+                    const session = await account.createSession(userId, secret);
+                    console.log('Session created:', session.$id);
+                    
+                    // Session is now stored in cookies by Appwrite SDK
+                    document.getElementById('status').textContent = 'Login successful! Redirecting to dashboard...';
+                    
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 500);
+                    
+                } catch (err) {
+                    console.error('Session creation failed:', err);
+                    document.getElementById('status').textContent = 'Authentication error. Redirecting...';
+                    setTimeout(() => {
+                        window.location.href = '/login?error=session_failed';
+                    }, 1000);
+                }
+            } else {
+                // No credentials found
+                document.getElementById('status').textContent = 'No authentication data found. Redirecting...';
+                setTimeout(() => {
+                    window.location.href = '/login?error=no_credentials';
+                }, 1000);
+            }
+        }
+        
+        // Run the handler
+        handleOAuthCallback();
+    </script>
+</body>
+</html>
