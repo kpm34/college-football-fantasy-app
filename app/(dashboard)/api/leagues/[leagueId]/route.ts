@@ -33,7 +33,12 @@ export async function GET(
             Query.limit(1)
           ]
         );
-        if (rosters.total === 0 && league.commissioner !== client_id) {
+
+        // Commissioner can always access even if their roster hasn't materialized yet
+        const commissionerId = (league as any).commissionerAuthUserId || (league as any).commissioner;
+        const isCommissioner = commissionerId && String(commissionerId) === String(client_id);
+
+        if (rosters.total === 0 && !isCommissioner) {
           return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
       } catch {}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 // import { databases, DATABASE_ID, COLLECTIONS } from "@/lib/appwrite";
 import Link from "next/link";
@@ -15,6 +15,7 @@ import { DraftButton } from '@components/features/leagues/DraftButton';
 
 interface League {
   $id: string;
+  id?: string;
   name: string;
   leagueName?: string;
   commissioner: string; // User ID of commissioner
@@ -74,10 +75,14 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
   const [teams, setTeams] = useState<Team[]>([]);
   const [userTeam, setUserTeam] = useState<Team | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'standings' | 'schedule' | 'settings' | 'draft'>('overview');
   const [isCommissioner, setIsCommissioner] = useState(false);
   const [savingSettings, setSavingSettings] = useState(false);
+  const retryRef = useRef(0);
+
+  // No-op: fallback handled inline in loader
 
   // State for commissioner settings
   const [scoringSettings, setScoringSettings] = useState({
@@ -148,27 +153,54 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     setIsCommissioner(result);
   }, [league, user?.$id, (user as any)?.email, (user as any)?.name]);
 
-  const loadLeagueData = async () => {
+  const loadLeagueData = async (withHeader: boolean = true) => {
     try {
       setLoading(true);
       // Load league via server API (handles documentSecurity and membership)
       let mapped: League | null = null;
-      const res = await fetch(`/api/leagues/${leagueId}`, {
+      const res = await fetch(`/api/leagues/${leagueId}?ts=${Date.now()}`,
+      {
         cache: 'no-store',
-        headers: user?.$id ? { 'x-user-id': user.$id } as any : undefined
+        headers: withHeader && user?.$id ? { 'x-user-id': user.$id } as any : undefined
       });
-      if (!res.ok) {
+      if (res.status === 404 || res.status === 401) {
+        // Always attempt a headerless retry to avoid timing/membership races
+        if (withHeader) {
+          await loadLeagueData(false);
+          return;
+        }
         setLeague(null);
-      } else {
-        const data = await res.json();
-        const l = data.league;
-        
+        setNotFound(true);
+      } else if (res.status === 304) {
+        // Gracefully retry once or twice to avoid flashing Not Found on ETag hits
+        if (retryRef.current < 2) {
+          retryRef.current += 1;
+          setTimeout(() => { void loadLeagueData(); }, 350);
+          return;
+        }
+      } else if (res.ok) {
+        // Defensive parsing to tolerate 304/empty or variant shapes
+        let data: any = null;
+        try { data = await res.json(); } catch {}
+        const l = data?.league || data?.data?.league || data;
+        if (!l || (!l.id && !l.$id)) {
+          // Retry briefly if body empty
+          if (retryRef.current < 2) {
+            retryRef.current += 1;
+            setTimeout(() => { void loadLeagueData(); }, 350);
+            return;
+          }
+          setLeague(null);
+          return;
+        }
+
         // Commissioner name provided by API (server resolves via users/clients)
-        const commissionerName = data.league?.commissionerName || 'Unknown Commissioner';
-        
+        const commissionerName = data?.league?.commissionerName || 'Unknown Commissioner';
+
         mapped = {
-          $id: l.id,
-          name: l.name,
+          $id: l.id || l.$id,
+          id: l.id || l.$id,
+          name: l.name || l.leagueName,
           commissioner: l.commissioner || (l as any).commissioner_id || (l as any).authUserId,
           commissionerAuthUserId: l.commissioner || (l as any).commissionerAuthUserId,
           commissionerId: l.commissioner || (l as any).commissioner_id || (l as any).commissionerId || (l as any).authUserId,
@@ -176,18 +208,19 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
           season: l.seasonStartWeek ? new Date().getFullYear() : (l.season || new Date().getFullYear()),
           scoringType: 'PPR',
           maxTeams: l.maxTeams || 12,
-          teams: l.members?.length || 0,
+          teams: (l.members && Array.isArray(l.members)) ? l.members.length : 0,
           draftDate: l.draftDate || '',
           draftStartedAt: (l as any).draftStartedAt || undefined,
           status: l.status || 'open',
           draftStatus: (l as any).draftStatus || 'pre-draft',
-          gameMode: l.mode,
-          selectedConference: l.conf || undefined,
+          gameMode: l.gameMode || l.mode,
+          selectedConference: l.selectedConference || l.conf || undefined,
           draftType: (l as any).draftType,
           pickTimeSeconds: (l as any).pickTimeSeconds,
           orderMode: (l as any).orderMode,
           members: l.members || []
         };
+        retryRef.current = 0;
         setLeague(mapped);
       }
       
@@ -512,7 +545,7 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
     );
   }
 
-  if (!league) {
+  if (!league && notFound && teams.length === 0) {
     return (
       <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main }}>
         <div className="flex items-center justify-center min-h-screen">
@@ -521,6 +554,20 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
             <Link href="/dashboard" className="hover:underline" style={{ color: leagueColors.primary.highlight }}>
               Back to Dashboard
             </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Grace: if we still don't have league but also not truly notFound, keep loading
+  if (!league) {
+    return (
+      <div className="min-h-screen" style={{ backgroundColor: leagueColors.background.main }}>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderBottomColor: leagueColors.primary.highlight }}></div>
+            <p className="text-lg" style={{ color: leagueColors.text.primary }}>Loading league…</p>
           </div>
         </div>
       </div>

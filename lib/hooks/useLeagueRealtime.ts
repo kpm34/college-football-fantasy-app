@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { client, DATABASE_ID, COLLECTIONS } from '@lib/appwrite'
+import { normalizeLeague } from '@lib/utils/league-normalize'
 import { type RealtimeResponseEvent } from 'appwrite'
 
 export interface LeagueRealtimeState {
@@ -32,19 +33,19 @@ export function useLeagueRealtime(leagueId: string, initialLeague?: any) {
       const unsubscribe = client.subscribe(channel, (event: RealtimeResponseEvent<any>) => {
         setState(prev => ({ ...prev, connected: true, error: null }))
         
-        const payload = event.payload as any
+        const payload = normalizeLeague(event.payload as any)
         
         // Only process events for our specific league
-        if (!payload || payload.$id !== leagueId) return
+        if (!payload || (payload as any).$id !== leagueId) return
 
         console.log('League realtime event:', event.events, payload)
 
         // Handle league updates
         if (event.events.some(e => e.endsWith('.update'))) {
           console.log('League updated:', payload)
-          setState(prev => ({ 
-            ...prev, 
-            league: payload,
+          setState(prev => ({
+            ...prev,
+            league: payload as any,
             deleted: false 
           }))
         }

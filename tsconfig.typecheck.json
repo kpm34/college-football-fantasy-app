@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "include": [
+    "next-env.d.ts",
     "app/(dashboard)/**/*",
     "app/draft/**/*",
     "app/(league)/**/*",

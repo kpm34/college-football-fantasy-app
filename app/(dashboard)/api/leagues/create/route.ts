@@ -41,6 +41,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     : parseInt(requestData.maxTeams);
   const draftType: string = requestData.draftType || 'snake';
   const isPrivate: boolean = Boolean(requestData.isPrivate);
+  const password: string | undefined = requestData.password;
   const pickTimeSeconds: number = typeof requestData.pickTimeSeconds === 'number'
     ? requestData.pickTimeSeconds
     : parseInt(requestData.pickTimeSeconds) || 90;
@@ -82,6 +83,8 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     draftType: draftType as any,
     gameMode,
     isPublic: !isPrivate,
+    // If private and password provided, persist it
+    password: isPrivate && password ? String(password) : undefined,
     pickTimeSeconds,
     commissionerAuthUserId: user.$id,
     scoringRules: requestData.scoringRules,

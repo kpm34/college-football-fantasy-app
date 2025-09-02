@@ -2,7 +2,7 @@
   "database": "college-football-fantasy",
   "endpoint": "https://nyc.cloud.appwrite.io/v1",
   "project": "college-football-fantasy-app",
-  "timestamp": "2025-08-28T18:04:24.067Z",
+  "timestamp": "2025-09-01T21:59:30.309Z",
   "collections": {
     "rankings": {
       "name": "AP Rankings",
@@ -274,6 +274,26 @@
           "required": false,
           "array": false,
           "size": 16,
+          "default": null
+        },
+        {
+          "key": "homeRosterId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "array": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "awayRosterId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "array": false,
+          "size": 64,
           "default": null
         }
       ],
@@ -1688,6 +1708,47 @@
           "array": false,
           "size": 64,
           "default": null
+        },
+        {
+          "key": "leagueId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "array": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "sessionId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "array": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "userId",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "array": false,
+          "size": 64,
+          "default": null
+        },
+        {
+          "key": "bidAmount",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "array": false,
+          "default": null,
+          "min": 1,
+          "max": 9223372036854776000
         }
       ],
       "indexes": [
@@ -1862,6 +1923,36 @@
           "array": false,
           "default": null,
           "format": ""
+        },
+        {
+          "key": "version",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "array": false,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "applied",
+          "type": "datetime",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "array": false,
+          "default": null,
+          "format": ""
+        },
+        {
+          "key": "checksum",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "array": false,
+          "size": 200,
+          "default": null
         }
       ],
       "indexes": [
@@ -2192,6 +2283,26 @@
           "array": false,
           "size": 65535,
           "default": null
+        },
+        {
+          "key": "phase",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "array": false,
+          "size": 16,
+          "default": "scheduled"
+        },
+        {
+          "key": "engineVersion",
+          "type": "string",
+          "status": "available",
+          "error": "",
+          "required": false,
+          "array": false,
+          "size": 3,
+          "default": "v2"
         }
       ],
       "indexes": [
@@ -3694,6 +3805,17 @@
           "array": false,
           "size": 65535,
           "default": null
+        },
+        {
+          "key": "version",
+          "type": "integer",
+          "status": "available",
+          "error": "",
+          "required": true,
+          "array": false,
+          "default": null,
+          "min": 1,
+          "max": 9223372036854776000
         }
       ],
       "indexes": [

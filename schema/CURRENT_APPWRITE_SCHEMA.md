@@ -1,7 +1,7 @@
 # Current Appwrite Schema
 
 **Database:** college-football-fantasy
-**Updated:** 2025-08-28T18:04:26.754Z
+**Updated:** 2025-09-01T21:59:34.255Z
 
 ## AP Rankings (rankings)
 
@@ -47,6 +47,8 @@
 | homePoints | double | ❌ | `null` | - | ✅ |
 | awayPoints | double | ❌ | `null` | - | ✅ |
 | status | string | ❌ | `null` | 16 | ✅ |
+| homeRosterId | string | ✅ | `null` | 64 | ✅ |
+| awayRosterId | string | ✅ | `null` | 64 | ✅ |
 
 ### Indexes
 
@@ -298,6 +300,10 @@
 | timestamp | datetime | ✅ | `null` | - | ✅ |
 | isWinning | boolean | ❌ | `false` | - | ✅ |
 | fantasyTeamId | string | ✅ | `null` | 64 | ✅ |
+| leagueId | string | ✅ | `null` | 64 | ✅ |
+| sessionId | string | ✅ | `null` | 64 | ✅ |
+| userId | string | ✅ | `null` | 64 | ✅ |
+| bidAmount | integer | ✅ | `null` | - | ✅ |
 
 ### Indexes
 
@@ -341,6 +347,9 @@
 | migrationId | string | ✅ | `null` | 255 | ✅ |
 | name | string | ✅ | `null` | 255 | ✅ |
 | appliedAt | datetime | ✅ | `null` | - | ✅ |
+| version | string | ✅ | `null` | 100 | ✅ |
+| applied | datetime | ✅ | `null` | - | ✅ |
+| checksum | string | ✅ | `null` | 200 | ✅ |
 
 ### Indexes
 
@@ -398,6 +407,8 @@
 | commissionerAuthUserId | string | ❌ | `null` | 64 | ✅ |
 | scoringRules | string | ❌ | `null` | 65535 | ✅ |
 | draftOrder | string | ❌ | `null` | 65535 | ✅ |
+| phase | string | ❌ | `scheduled` | 16 | ✅ |
+| engineVersion | string | ❌ | `v2` | 3 | ✅ |
 
 ### Indexes
 
@@ -661,6 +672,7 @@
 | inputsJson | string | ❌ | `null` | 65535 | ✅ |
 | metricsJson | string | ❌ | `null` | 65535 | ✅ |
 | weightsJson | string | ❌ | `null` | 65535 | ✅ |
+| version | integer | ✅ | `null` | - | ✅ |
 
 ### Indexes
 

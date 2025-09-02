@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { client, DATABASE_ID, COLLECTIONS } from '@lib/appwrite'
 import { type RealtimeResponseEvent } from 'appwrite'
 import { useAuth } from '@lib/hooks/useAuth'
+import { normalizeLeague } from '@lib/utils/league-normalize'
 
 export interface UserLeague {
   $id: string
@@ -47,7 +48,7 @@ export function useUserLeaguesRealtime() {
         
         const data = await response.json()
         const mapped = (data.leagues || [])
-          .map((l: any) => ({
+          .map((l: any) => normalizeLeague({
             $id: l.$id ?? l.id,
             name: l.name || l.leagueName,
             leagueName: l.leagueName,
@@ -93,8 +94,8 @@ export function useUserLeaguesRealtime() {
       const unsubscribeLeagues = client.subscribe(leaguesChannel, (event: RealtimeResponseEvent<any>) => {
         setState(prev => ({ ...prev, connected: true }))
         
-        const payload = event.payload as any
-        if (!payload || !payload.$id) return
+        const payload = normalizeLeague(event.payload as any)
+        if (!payload || !(payload as any).$id) return
 
         console.log('League realtime event:', event.events, payload.$id)
 
@@ -102,18 +103,18 @@ export function useUserLeaguesRealtime() {
         if (event.events.some(e => e.endsWith('.update'))) {
           setState(prev => ({
             ...prev,
-            leagues: prev.leagues.map(league => 
-              league.$id === payload.$id ? { ...league, ...payload } : league
+            leagues: prev.leagues.map(league =>
+              league.$id === (payload as any).$id ? { ...league, ...(payload as any) } : league
             )
           }))
         }
 
         // Handle league deletion
         if (event.events.some(e => e.endsWith('.delete'))) {
-          console.log('League deleted from user view:', payload.$id)
+          console.log('League deleted from user view:', (payload as any).$id)
           setState(prev => ({
             ...prev,
-            leagues: prev.leagues.filter(league => league.$id !== payload.$id)
+            leagues: prev.leagues.filter(league => league.$id !== (payload as any).$id)
           }))
         }
       })
