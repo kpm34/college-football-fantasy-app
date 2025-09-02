@@ -141,7 +141,9 @@ export function DraftButton({ league, isCommissioner, isMember }: DraftButtonPro
   }, [currentLeague.draftDate, currentLeague.status]);
 
   const handleDraftClick = () => {
-    router.push(`/draft/${league.$id}`);
+    const id = (league as any).$id || (league as any).id;
+    if (!id) return;
+    router.push(`/draft/${id}`);
   };
 
   // Don't show button if user is not a member

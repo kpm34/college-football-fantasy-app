@@ -113,7 +113,9 @@
     "ops:cursor:open": "tsx ops/common/scripts/open-latest-context.ts",
     "generate:project-map": "tsx ops/common/scripts/generate-project-map-diagrams.ts",
     "indexes:ensure": "tsx scripts/guards/ensure-indexes.ts",
-    "validate:relationships": "tsx scripts/guards/validate-relationships.ts"
+    "validate:relationships": "tsx scripts/guards/validate-relationships.ts",
+    "diagrams:plan": "node scripts/organize-diagrams.js --plan",
+    "diagrams:apply": "node scripts/organize-diagrams.js --apply"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",
