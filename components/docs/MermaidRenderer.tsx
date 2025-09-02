@@ -157,12 +157,12 @@ export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
           theme: 'dark',
           flowchart: { htmlLabels: true },
           themeVariables: {
-            background: '#111827',
-            primaryTextColor: '#f3f4f6',
-            secondaryTextColor: '#e5e7eb',
-            lineColor: '#9ca3af',
-            nodeBorder: '#e5e7eb',
-            fontSize: '16px'
+            background: '#0b1220',
+            primaryTextColor: '#ffffff',
+            secondaryTextColor: '#f5f7fb',
+            lineColor: '#cbd5e1',
+            nodeBorder: '#e2e8f0',
+            fontSize: '17px'
           }
         })
         if (!isMounted || !containerRef.current) return

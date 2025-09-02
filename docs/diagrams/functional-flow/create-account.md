@@ -26,7 +26,7 @@ flowchart TB
   AppwriteAuth[Appwrite Auth Service]:::auth
   
   Callback[OAuth Success Page]:::api
-  CreateSession[Create Session (Appwrite)]:::auth
+  CreateSession[Create Session - Appwrite]:::auth
   
   CheckClient{Client Exists?}:::db
   CreateClient[Create Client Record]:::db
