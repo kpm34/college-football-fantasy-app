@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft API Endpoints & Real-time</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            min-height: 100vh;
+            color: #1a202c;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .api-endpoint {
+            background: #f0f9ff;
+            border: 1px solid #0284c7;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.2s ease;
+        }
+        
+        .api-endpoint:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .api-method {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .method-get {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .method-post {
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+        
+        .method-delete {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .method-put {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #0ea5e9;
+        }
+        
+        .section-header h3 {
+            color: #0c4a6e;
+            margin: 0;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #0ea5e9;
+        }
+        
+        .info-card h3 {
+            color: #0284c7;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-card li {
+            padding: 0.25rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .info-card li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #0ea5e9;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .code-block .comment {
+            color: #94a3b8;
+        }
+        
+        .code-block .keyword {
+            color: #c084fc;
+        }
+        
+        .code-block .string {
+            color: #86efac;
+        }
+        
+        .code-block .function {
+            color: #60a5fa;
+        }
+        
+        .endpoint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 Draft API Endpoints & Real-time</h1>
+            <p>Complete API reference and WebSocket implementation</p>
+        </div>
+        
+        <div class="content-card">
+            <h2>API Endpoints</h2>
+            
+            <div class="section-header">
+                <h3>Draft Room Operations</h3>
+            </div>
+            
+            <div class="endpoint-grid">
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span>/api/drafts/[id]/data</span>
+                    </div>
+                    <span>Draft data for room</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span>/api/drafts/[id]/room-state</span>
+                    </div>
+                    <span>Room timing state</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span>/api/drafts/[id]/pick</span>
+                    </div>
+                    <span>Make a pick</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span>/api/drafts/[id]/autopick</span>
+                    </div>
+                    <span>Server autopick</span>
+                </div>
+            </div>
+            
+            <div class="section-header">
+                <h3>Draft Control (Commissioner)</h3>
+            </div>
+            
+            <div class="endpoint-grid">
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span>/api/drafts/[id]/start</span>
+                    </div>
+                    <span>Start draft</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span>/api/drafts/[id]/pause</span>
+                    </div>
+                    <span>Pause draft</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span>/api/drafts/[id]/resume</span>
+                    </div>
+                    <span>Resume draft</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-delete">DELETE</span>
+                        <span>/api/drafts/[id]/reset</span>
+                    </div>
+                    <span>Reset mock draft</span>
+                </div>
+            </div>
+            
+            <div class="section-header">
+                <h3>Player Data & Rankings</h3>
+            </div>
+            
+            <div class="endpoint-grid">
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span>/api/draft/players</span>
+                    </div>
+                    <span>Available players</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span>/api/draft/players/rankings</span>
+                    </div>
+                    <span>Player rankings</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span>/api/draft/players/[id]/stats</span>
+                    </div>
+                    <span>Player statistics</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-put">PUT</span>
+                        <span>/api/draft/players/[id]/rank</span>
+                    </div>
+                    <span>Update custom rank</span>
+                </div>
+            </div>
+            
+            <div class="section-header">
+                <h3>Draft Management</h3>
+            </div>
+            
+            <div class="endpoint-grid">
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span>/api/drafts/create</span>
+                    </div>
+                    <span>Create new draft</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span>/api/drafts/[id]/board</span>
+                    </div>
+                    <span>Get draft board</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span>/api/drafts/[id]/export</span>
+                    </div>
+                    <span>Export results</span>
+                </div>
+                <div class="api-endpoint">
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span>/api/drafts/[id]/chat</span>
+                    </div>
+                    <span>Draft chat history</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <h2>WebSocket Real-time Implementation</h2>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>📡 WebSocket Channels</h3>
+                    <ul>
+                        <li>databases.[db].collections.draft_picks.documents</li>
+                        <li>databases.[db].collections.draft_states.documents</li>
+                        <li>databases.[db].collections.leagues.documents.[id]</li>
+                        <li>Custom: draft.[id].picks</li>
+                        <li>Custom: draft.[id].chat</li>
+                        <li>Custom: draft.[id].timer</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>🔄 Event Types</h3>
+                    <ul>
+                        <li>PICK_MADE - New pick event</li>
+                        <li>TIMER_UPDATE - Clock tick</li>
+                        <li>DRAFT_PAUSED - Pause event</li>
+                        <li>DRAFT_RESUMED - Resume event</li>
+                        <li>USER_JOINED - User entered</li>
+                        <li>USER_LEFT - User exited</li>
+                        <li>CHAT_MESSAGE - Chat event</li>
+                        <li>TRADE_PROPOSAL - Trade offer</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<span class="comment">// WebSocket Client Setup</span>
+<span class="keyword">import</span> { Client } <span class="keyword">from</span> <span class="string">'appwrite'</span>
+
+<span class="keyword">const</span> client = <span class="keyword">new</span> Client()
+  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID)
+
+<span class="comment">// Subscribe to draft events</span>
+<span class="keyword">const</span> unsubscribe = client.subscribe([
+  <span class="string">`databases.${DB_ID}.collections.draft_picks.documents`</span>,
+  <span class="string">`databases.${DB_ID}.collections.draft_states.documents`</span>
+], (response) => {
+  <span class="keyword">if</span> (response.events.includes(<span class="string">'databases.*.collections.*.documents.*.create'</span>)) {
+    <span class="comment">// New pick made</span>
+    handleNewPick(response.payload)
+  }
+  
+  <span class="keyword">if</span> (response.events.includes(<span class="string">'databases.*.collections.*.documents.*.update'</span>)) {
+    <span class="comment">// Draft state updated</span>
+    handleStateUpdate(response.payload)
+  }
+})
+
+<span class="comment">// Broadcast pick to all clients</span>
+<span class="keyword">async function</span> <span class="function">broadcastPick</span>(pick: DraftPick) {
+  <span class="keyword">const</span> message = {
+    type: <span class="string">'PICK_MADE'</span>,
+    data: {
+      teamId: pick.teamId,
+      playerId: pick.playerId,
+      playerName: pick.playerName,
+      position: pick.position,
+      overall: pick.overall,
+      round: pick.round,
+      pickInRound: pick.pickInRound,
+      timestamp: <span class="keyword">new</span> Date().toISOString()
+    }
+  }
+  
+  <span class="comment">// Send to all connected clients</span>
+  <span class="keyword">await</span> broadcast(pick.draftId, message)
+}
+
+<span class="comment">// Handle incoming events</span>
+<span class="keyword">function</span> <span class="function">handleDraftEvent</span>(event: DraftEvent) {
+  <span class="keyword">switch</span> (event.type) {
+    <span class="keyword">case</span> <span class="string">'PICK_MADE'</span>:
+      updateDraftBoard(event.data)
+      playSound(<span class="string">'pick'</span>)
+      showNotification(<span class="string">`${event.data.playerName} selected`</span>)
+      <span class="keyword">break</span>
+      
+    <span class="keyword">case</span> <span class="string">'TIMER_UPDATE'</span>:
+      updateTimer(event.data.timeRemaining)
+      <span class="keyword">if</span> (event.data.timeRemaining <= 10) {
+        playSound(<span class="string">'warning'</span>)
+      }
+      <span class="keyword">break</span>
+      
+    <span class="keyword">case</span> <span class="string">'USER_JOINED'</span>:
+      updateUserList(event.data.users)
+      showNotification(<span class="string">`${event.data.userName} joined`</span>)
+      <span class="keyword">break</span>
+      
+    <span class="keyword">default</span>:
+      console.log(<span class="string">'Unknown event:'</span>, event)
+  }
+}
+
+<span class="comment">// Cleanup on unmount</span>
+<span class="keyword">function</span> <span class="function">cleanup</span>() {
+  unsubscribe()
+}
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <h2>API Response Examples</h2>
+            
+            <div class="section-header">
+                <h3>Room State Response</h3>
+            </div>
+            
+            <div class="code-block">
+<span class="comment">// GET /api/drafts/[id]/room-state</span>
+{
+  <span class="string">"now"</span>: <span class="string">"2025-09-02T14:30:00Z"</span>,
+  <span class="string">"draft_start_at"</span>: <span class="string">"2025-09-02T15:00:00Z"</span>,
+  <span class="string">"draft_room_open_at"</span>: <span class="string">"2025-09-02T14:00:00Z"</span>,
+  <span class="string">"isOpen"</span>: <span class="keyword">true</span>,
+  <span class="string">"isLive"</span>: <span class="keyword">false</span>,
+  <span class="string">"isComplete"</span>: <span class="keyword">false</span>,
+  <span class="string">"server_tz"</span>: <span class="string">"America/New_York"</span>,
+  <span class="string">"timeToStart"</span>: 1800000,
+  <span class="string">"currentPick"</span>: {
+    <span class="string">"overall"</span>: 1,
+    <span class="string">"round"</span>: 1,
+    <span class="string">"pickInRound"</span>: 1,
+    <span class="string">"teamId"</span>: <span class="string">"team_123"</span>,
+    <span class="string">"timeRemaining"</span>: 90
+  }
+}
+            </div>
+            
+            <div class="section-header">
+                <h3>Pick Request/Response</h3>
+            </div>
+            
+            <div class="code-block">
+<span class="comment">// POST /api/drafts/[id]/pick</span>
+<span class="comment">// Request Body:</span>
+{
+  <span class="string">"playerId"</span>: <span class="string">"player_456"</span>,
+  <span class="string">"teamId"</span>: <span class="string">"team_123"</span>
+}
+
+<span class="comment">// Response:</span>
+{
+  <span class="string">"success"</span>: <span class="keyword">true</span>,
+  <span class="string">"pick"</span>: {
+    <span class="string">"id"</span>: <span class="string">"pick_789"</span>,
+    <span class="string">"draftId"</span>: <span class="string">"draft_001"</span>,
+    <span class="string">"teamId"</span>: <span class="string">"team_123"</span>,
+    <span class="string">"playerId"</span>: <span class="string">"player_456"</span>,
+    <span class="string">"playerName"</span>: <span class="string">"John Smith"</span>,
+    <span class="string">"position"</span>: <span class="string">"QB"</span>,
+    <span class="string">"overall"</span>: 1,
+    <span class="string">"round"</span>: 1,
+    <span class="string">"pickInRound"</span>: 1,
+    <span class="string">"timestamp"</span>: <span class="string">"2025-09-02T15:01:30Z"</span>
+  },
+  <span class="string">"nextPick"</span>: {
+    <span class="string">"overall"</span>: 2,
+    <span class="string">"teamId"</span>: <span class="string">"team_124"</span>
+  }
+}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

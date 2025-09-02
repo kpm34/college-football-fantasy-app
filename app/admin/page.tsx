@@ -17,6 +17,12 @@ export default function AdminDashboard() {
     claude: { status: 'Pro', features: 'Deep reasoning, 5x usage, priority access' },
     gpt: { status: 'Max', features: 'Long context, vision capabilities, fastest response' },
   });
+  // Admin tools state
+  const [season, setSeason] = useState<number>(new Date().getFullYear())
+  const [applyChanges, setApplyChanges] = useState<boolean>(false)
+  const [leagueIdInput, setLeagueIdInput] = useState<string>('')
+  const [running, setRunning] = useState<boolean>(false)
+  const [actionResult, setActionResult] = useState<any>(null)
 
   if (loading) {
     return (
@@ -52,6 +58,40 @@ export default function AdminDashboard() {
       setDebugInfo({ endpoint: slug, error: message })
       setCharts([])
     }
+  }
+
+  // Helpers for Admin Tools actions (server-verified on API routes)
+  const postJSON = async (url: string, body?: any) => {
+    try {
+      setRunning(true)
+      setActionResult(null)
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined,
+      })
+      const data = await res.json().catch(() => ({}))
+      setActionResult({ url, status: res.status, data })
+      if (!res.ok) throw new Error(data?.error || 'Request failed')
+      return data
+    } catch (e: any) {
+      setActionResult((prev: any) => ({ ...(prev || {}), error: e?.message || 'Failed' }))
+      return null
+    } finally {
+      setRunning(false)
+    }
+  }
+
+  const refreshPlayers = () => postJSON('/api/admin/players/refresh', { season })
+  const reconcileDepth = () => postJSON('/api/admin/players/reconcile-depth', { season, apply: applyChanges })
+  const cronCleanup = () => postJSON('/api/admin/players/cron-cleanup', { season, apply: applyChanges })
+  const dedupePlayers = () => postJSON('/api/admin/dedupe/players', { dryRun: !applyChanges, limit: 1000, offset: 0 })
+  const syncLeagueMembers = () => {
+    if (!leagueIdInput.trim()) {
+      setActionResult({ error: 'League ID required' })
+      return
+    }
+    return postJSON('/api/admin/leagues/sync-members', { leagueId: leagueIdInput.trim() })
   }
 
   return (
@@ -177,32 +217,14 @@ export default function AdminDashboard() {
               <div className="text-sm text-orange-100">Join via invite or browse</div>
             </button>
 
-            <button
-              onClick={() => loadDiagram('functional-flow:draft', '📋 Draft System')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
+            <Link
+              href="/admin/draft-diagrams"
+              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
               style={{ background:'#B45309', color:'#fff' }}
             >
               <div className="font-semibold">📋 Draft System</div>
-              <div className="text-sm text-amber-100">Mock & real drafts with timing</div>
-            </button>
-
-            {/* Draft: separate buttons */}
-            <button
-              onClick={() => loadDiagram('functional-flow:draft:mock', '🧪 Mock Draft')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#0E7490', color:'#fff' }}
-            >
-              <div className="font-semibold">🧪 Mock Draft</div>
-              <div className="text-sm text-sky-100">Practice room flow</div>
-            </button>
-            <button
-              onClick={() => loadDiagram('functional-flow:draft:real', '🏁 Real Draft')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#047857', color:'#fff' }}
-            >
-              <div className="font-semibold">🏁 Real Draft</div>
-              <div className="text-sm text-emerald-100">Timer + realtime + persistence</div>
-            </button>
+              <div className="text-sm text-amber-100">Open draft diagrams</div>
+            </Link>
           </div>
         </div>
 
@@ -299,6 +321,67 @@ export default function AdminDashboard() {
                 <li>• Custom league features</li>
                 <li>• White-label solutions</li>
               </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Admin Tools */}
+        <div className="mb-10 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
+          <h3 className="text-xl font-bold text-amber-900 mb-4">🛠️ Admin Tools</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Controls */}
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-lg border border-amber-300">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <label className="text-sm text-amber-900 w-24">Season</label>
+                  <input
+                    type="number"
+                    value={season}
+                    onChange={(e) => setSeason(Number(e.target.value || season))}
+                    className="w-28 rounded border border-amber-300 px-2 py-1 bg-white/70 text-amber-900"
+                  />
+                </div>
+                <label className="inline-flex items-center gap-2 text-sm text-amber-900">
+                  <input type="checkbox" checked={applyChanges} onChange={(e) => setApplyChanges(e.target.checked)} />
+                  Apply changes (otherwise dry run)
+                </label>
+                <div className="flex items-center gap-3">
+                  <label className="text-sm text-amber-900 w-24">League ID</label>
+                  <input
+                    type="text"
+                    value={leagueIdInput}
+                    onChange={(e) => setLeagueIdInput(e.target.value)}
+                    placeholder="leagues/$id"
+                    className="flex-1 rounded border border-amber-300 px-2 py-1 bg-white/70 text-amber-900"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="bg-gradient-to-br from-sky-50 to-sky-100 p-4 rounded-lg border border-sky-300">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button onClick={refreshPlayers} disabled={running} className="px-3 py-2 rounded bg-sky-700 text-white hover:bg-sky-800 disabled:opacity-50">Refresh Players (CFBD)</button>
+                <button onClick={reconcileDepth} disabled={running} className="px-3 py-2 rounded bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-50">Reconcile Depth</button>
+                <button onClick={cronCleanup} disabled={running} className="px-3 py-2 rounded bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50">Cron Cleanup</button>
+                <button onClick={dedupePlayers} disabled={running} className="px-3 py-2 rounded bg-slate-700 text-white hover:bg-slate-800 disabled:opacity-50">Dedupe Players</button>
+                <button onClick={syncLeagueMembers} disabled={running} className="px-3 py-2 rounded bg-emerald-700 text-white hover:bg-emerald-800 disabled:opacity-50">Sync League Members</button>
+                <a href={`/api/admin/players/export?season=${season}&format=csv`} target="_blank" className="px-3 py-2 rounded bg-indigo-700 text-white text-center hover:bg-indigo-800">Export Players CSV</a>
+                <a href={`/api/admin/players/export?season=${season}&format=json`} target="_blank" className="px-3 py-2 rounded bg-indigo-500 text-white text-center hover:bg-indigo-600">Export Players JSON</a>
+                <a href="/admin/cache-status" className="px-3 py-2 rounded bg-blue-600 text-white text-center hover:bg-blue-700">Cache Status</a>
+                <a href="/admin/sync-status" className="px-3 py-2 rounded bg-blue-500 text-white text-center hover:bg-blue-600">Sync Status</a>
+                <a href="/admin/sec-survey" className="px-3 py-2 rounded bg-red-600 text-white text-center hover:bg-red-700">SEC → NFL Survey</a>
+              </div>
+            </div>
+
+            {/* Result */}
+            <div className="bg-white p-4 rounded-lg border border-amber-300">
+              <h4 className="font-semibold text-amber-900 mb-2">Result</h4>
+              {!actionResult ? (
+                <p className="text-sm text-amber-700">No action run yet.</p>
+              ) : (
+                <pre className="text-xs bg-amber-50 text-amber-900 p-3 rounded overflow-auto max-h-64">{JSON.stringify(actionResult, null, 2)}</pre>
+              )}
             </div>
           </div>
         </div>

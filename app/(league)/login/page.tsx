@@ -173,15 +173,13 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
       
       console.log('OAuth URLs:', { successUrl, failureUrl, provider: providerName });
       
-      // Appwrite SDK v11: 4th param scopes (array) + 6th param token flag (boolean)
-      await (account as any).createOAuth2Session(
-        providerName,
-        successUrl,
-        failureUrl,
-        [],          // scopes
-        undefined,   // projectId
-        true         // token=true so Appwrite appends client_id & secret
-      );
+      // For token flow, use createOAuth2Token instead of createOAuth2Session
+      if (typeof window !== 'undefined') {
+        // Use createOAuth2Token for the token flow (returns userId and secret in callback)
+        const authUrl = await account.createOAuth2Token(providerName, successUrl, failureUrl);
+        // Redirect to the OAuth provider
+        window.location.href = authUrl;
+      }
       
     } catch (error) {
       console.error('OAuth error:', error);
