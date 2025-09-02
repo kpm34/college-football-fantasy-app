@@ -182,7 +182,8 @@ export default function LeagueHomePage({ params }: LeagueHomePageProps) {
         // Defensive parsing to tolerate 304/empty or variant shapes
         let data: any = null;
         try { data = await res.json(); } catch {}
-        const l = data?.league || data?.data?.league || data;
+        // Handle both authoritative shape { success, league } and old duplicate { data }
+        const l = data?.league || data?.data || data?.data?.league || data;
         if (!l || (!l.id && !l.$id)) {
           // Retry briefly if body empty
           if (retryRef.current < 2) {

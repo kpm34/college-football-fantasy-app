@@ -80,16 +80,16 @@ export async function GET(
     'project-map:public': 'diagrams/project-map/public.md',
     
     // Functional Flow (user journeys and features)
-    'functional-flow:create-account': 'diagrams/functional-flow/create-account.md',
-    'functional-flow:create-league': 'diagrams/functional-flow/create-league.md',
-    'functional-flow:join-league': 'diagrams/functional-flow/join-league.md',
-    'functional-flow:draft': 'diagrams/functional-flow/draft.md',
+    'functional-flow:create-account': 'diagrams/functional-flow/create-account-flow.md',
+    'functional-flow:create-league': 'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
+    'functional-flow:join-league': 'diagrams/functional-flow/join-league-flow-invite.md',
+    'functional-flow:draft': 'diagrams/functional-flow/draft-system-flow-mock-vs-real-scheduled.md',
     
     // System Architecture (technical systems)
-    'system-architecture:projections-overview': 'diagrams/system-architecture/projections-overview.md',
-    'system-architecture:yearly-projections': 'diagrams/system-architecture/yearly-projections.md',
-    'system-architecture:weekly-projections': 'diagrams/system-architecture/weekly-projections.md',
-    'system-architecture:weight-tuning': 'diagrams/system-architecture/weight-tuning.md',
+    'system-architecture:projections-overview': 'diagrams/system-architecture/projections-system-overview.md',
+    'system-architecture:yearly-projections': 'diagrams/system-architecture/yearly-projections-flow-draft.md',
+    'system-architecture:weekly-projections': 'diagrams/system-architecture/weekly-projections-flow-in-season.md',
+    'system-architecture:weight-tuning': 'diagrams/system-architecture/weight-tuning-loop.md',
     
     // API Documentation (generated)
     'api:routes': 'diagrams/api/routes.md',
@@ -126,7 +126,67 @@ export async function GET(
     }
   }
 
-  const filePath = fileMap[slug]
+  // Helper: attempt to resolve a diagram path using new flattened filenames
+  const docsRoot = path.join(process.cwd(), 'docs')
+  function existsRel(rel: string): boolean {
+    return fs.existsSync(path.join(docsRoot, rel))
+  }
+
+  function resolveFallback(s: string): string | null {
+    // project-map:* fallbacks
+    if (s.startsWith('project-map:')) {
+      const parts = s.split(':').slice(1)
+      if (parts.length >= 1) {
+        // Try old dotted path first
+        const dotted = `diagrams/project-map/${parts.join('.')}.md`
+        if (existsRel(dotted)) return dotted
+        // Try flattened: project-map-<parts-joined-by-hyphen>.md
+        const flat = `diagrams/project-map/project-map-${parts.join('-')}.md`
+        if (existsRel(flat)) return flat
+        // For top-level roots also try <root>.md
+        if (parts.length === 1) {
+          const simple = `diagrams/project-map/${parts[0]}.md`
+          if (existsRel(simple)) return simple
+        }
+      }
+    }
+    // functional-flow:* fallbacks
+    if (s.startsWith('functional-flow:')) {
+      const name = s.split(':')[1]
+      const dir = path.join(docsRoot, 'diagrams', 'functional-flow')
+      try {
+        const files = fs.readdirSync(dir)
+        const exact = `${name}.md`
+        if (files.includes(exact)) return path.join('diagrams', 'functional-flow', exact)
+        const starts = files.find(f => f.toLowerCase().startsWith(`${name}-`) && f.endsWith('.md'))
+        if (starts) return path.join('diagrams', 'functional-flow', starts)
+        const contains = files.find(f => f.toLowerCase().includes(name) && f.endsWith('.md'))
+        if (contains) return path.join('diagrams', 'functional-flow', contains)
+      } catch {}
+    }
+    // system-architecture:* fallbacks
+    if (s.startsWith('system-architecture:')) {
+      const name = s.split(':')[1]
+      const dir = path.join(docsRoot, 'diagrams', 'system-architecture')
+      try {
+        const files = fs.readdirSync(dir)
+        const exact = `${name}.md`
+        if (files.includes(exact)) return path.join('diagrams', 'system-architecture', exact)
+        const starts = files.find(f => f.toLowerCase().startsWith(name) && f.endsWith('.md'))
+        if (starts) return path.join('diagrams', 'system-architecture', starts)
+        const contains = files.find(f => f.toLowerCase().includes(name) && f.endsWith('.md'))
+        if (contains) return path.join('diagrams', 'system-architecture', contains)
+      } catch {}
+    }
+    return null
+  }
+
+  let filePath = fileMap[slug]
+  // If not mapped, or mapped path no longer exists after reorganization, try fallback resolvers
+  if (!filePath || !existsRel(filePath)) {
+    const fb = resolveFallback(slug)
+    if (fb) filePath = fb
+  }
   
   if (!filePath) {
     console.error(`Diagram not found for slug: ${slug}`)
