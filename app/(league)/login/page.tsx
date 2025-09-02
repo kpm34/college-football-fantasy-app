@@ -166,10 +166,10 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
       // Initiate OAuth2 session
       const providerName = provider === 'google' ? OAuthProvider.Google : OAuthProvider.Apple;
       
-      // Use the full URL for success and failure callbacks
+      // Use the server-side OAuth callback to bypass Vercel protection
       const origin = window.location.origin;
-      const successUrl = `${origin}/login/oauth-success?token=true`;
-      const failureUrl = `${origin}/login?error=oauth_failed`;
+      const successUrl = `${origin}/api/auth/oauth/callback`;
+      const failureUrl = `${origin}/api/auth/oauth/callback?error=oauth_failed`;
       
       console.log('OAuth URLs:', { successUrl, failureUrl, provider: providerName });
       
