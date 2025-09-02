@@ -180,11 +180,12 @@ export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
               host.style.display = 'block'
               host.style.overflow = 'hidden'
               host.style.background = 'transparent'
-              host.style.borderRadius = '0.5rem'
-              host.style.padding = '0.5rem'
+              host.style.borderRadius = '0.25rem'
+              host.style.padding = '0'
               host.style.width = '100%'
-              host.style.height = '85vh'
-              host.style.minHeight = '70vh'
+              // Give the diagram as much vertical space as possible in the modal
+              host.style.height = '90vh'
+              host.style.minHeight = '80vh'
 
               // Fit-to-width once the SVG is in the DOM and keep responsive
               const svgEl = host.querySelector('svg') as SVGSVGElement | null

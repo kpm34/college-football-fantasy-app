@@ -84,6 +84,8 @@ export async function GET(
     'functional-flow:create-league': 'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
     'functional-flow:join-league': 'diagrams/functional-flow/join-league-flow-invite.md',
     'functional-flow:draft': 'diagrams/functional-flow/draft-system-flow-mock-vs-real-scheduled.md',
+    'functional-flow:draft:mock': 'diagrams/functional-flow/draft-mock.md',
+    'functional-flow:draft:real': 'diagrams/functional-flow/draft-real.md',
     
     // System Architecture (technical systems)
     'system-architecture:projections-overview': 'diagrams/system-architecture/projections-system-overview.md',
