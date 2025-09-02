@@ -5,9 +5,13 @@ import { useEffect, useRef } from 'react'
 interface MermaidRendererProps {
   charts?: string[]
   chart?: string
+  // Rendering context: 'modal' (full-viewport) or 'page' (inline, fits width)
+  mode?: 'modal' | 'page'
+  // Whether to hijack wheel for zooming; disable on long pages to allow scrolling
+  wheelZoom?: boolean
 }
 
-export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
+export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mode === 'modal' }: MermaidRendererProps) {
   const chartsToRender = charts || (chart ? [chart] : [])
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -79,6 +83,7 @@ export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
         svg.style.cursor = 'grab'
       }
       const onWheel = (e: WheelEvent) => {
+        if (!wheelZoom) return // allow page scroll
         e.preventDefault()
         const delta = -e.deltaY
         const factor = delta > 0 ? 1.1 : 0.9
@@ -103,7 +108,7 @@ export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
       }
 
       svg.style.cursor = 'grab'
-      ;(host.style as any).touchAction = 'none'
+      ;(host.style as any).touchAction = wheelZoom ? 'none' : 'pan-y'
       host.addEventListener('pointerdown', onPointerDown)
       host.addEventListener('pointermove', onPointerMove)
       host.addEventListener('pointerup', onPointerUp)
@@ -183,9 +188,14 @@ export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
               host.style.borderRadius = '0.25rem'
               host.style.padding = '0'
               host.style.width = '100%'
-              // Give the diagram as much vertical space as possible in the modal
-              host.style.height = '90vh'
-              host.style.minHeight = '80vh'
+              if (mode === 'modal') {
+                // Give the diagram as much vertical space as possible in the modal
+                host.style.height = '90vh'
+                host.style.minHeight = '80vh'
+              } else {
+                host.style.height = 'auto'
+                host.style.minHeight = '320px'
+              }
 
               // Fit-to-width once the SVG is in the DOM and keep responsive
               const svgEl = host.querySelector('svg') as SVGSVGElement | null
@@ -194,14 +204,20 @@ export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
                   const vb = svgEl.viewBox.baseVal
                   if (!vb || vb.width === 0) return
                   const cw = host.clientWidth
-                  const chAvail = Math.max(400, host.clientHeight || Math.floor((window.innerHeight || 800) * 0.85))
                   const sw = cw / vb.width
-                  const sh = chAvail / vb.height
-                  const base = Math.min(sw, sh)
-                  // Fill full width/height; remove extra margin
-                  const scale = Math.max(0.5, base)
-                  svgEl.style.transformOrigin = '0 0'
-                  svgEl.style.transform = `translate(0px, 0px) scale(${scale})`
+                  if (mode === 'modal') {
+                    const chAvail = Math.max(400, host.clientHeight || Math.floor((window.innerHeight || 800) * 0.85))
+                    const sh = chAvail / vb.height
+                    const base = Math.min(sw, sh)
+                    const scale = Math.max(0.5, base)
+                    svgEl.style.transformOrigin = '0 0'
+                    svgEl.style.transform = `translate(0px, 0px) scale(${scale})`
+                  } else {
+                    // Page mode: fit to width, let page scroll vertically
+                    const scale = Math.max(0.5, sw)
+                    svgEl.style.transformOrigin = '0 0'
+                    svgEl.style.transform = `translate(0px, 0px) scale(${scale})`
+                  }
                 }
                 fit()
                 const ro = new ResizeObserver(() => fit())

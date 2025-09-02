@@ -325,7 +325,7 @@ export default function AdminDashboard() {
                   <div className="space-y-4 md:space-y-6">
                     {charts.map((chart: string, idx: number) => (
                       <div key={idx} className="p-0 bg-transparent">
-                        <MermaidRenderer chart={chart} />
+                        <MermaidRenderer chart={chart} mode="modal" wheelZoom={true} />
                       </div>
                     ))}
                     {lastUpdated && (
