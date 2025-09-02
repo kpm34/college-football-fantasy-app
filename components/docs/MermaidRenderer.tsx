@@ -160,7 +160,20 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
           startOnLoad: false,
           securityLevel: 'loose',
           theme: 'dark',
-          flowchart: { htmlLabels: true },
+          flowchart: { htmlLabels: true, useMaxWidth: true, nodeSpacing: 70, rankSpacing: 60, padding: 12 },
+          sequence: {
+            diagramMarginX: 30,
+            diagramMarginY: 30,
+            actorMargin: 80,
+            messageMargin: 45,
+            noteMargin: 35,
+            boxMargin: 20,
+            mirrorActors: true,
+            rightAngles: false,
+            showSequenceNumbers: false,
+            useMaxWidth: true,
+            wrap: true
+          },
           themeVariables: {
             background: '#0b1220',
             primaryTextColor: '#ffffff',
@@ -183,7 +196,7 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
             const host = el.querySelector('.pz-host') as HTMLElement | null
             if (host) {
               host.style.display = 'block'
-              host.style.overflow = 'hidden'
+              host.style.overflow = mode === 'modal' ? 'hidden' : 'visible'
               host.style.background = 'transparent'
               host.style.borderRadius = '0.25rem'
               host.style.padding = '0'
