@@ -113,13 +113,13 @@ export async function GET(
       const filePath = `diagrams/project-map/${pathParts.join('.')}.md`
       
       // Also check for index.md in folder structure
-      const folderIndexPath = `diagrams/project-map/${pathParts.join('.')}/index.md`
+      const folderIndexPath = `diagrams/project-map/${pathParts.join('/')}/index.md`
       
       const docsPath = path.join(process.cwd(), 'docs')
       const fullFilePath = path.join(docsPath, filePath)
       const fullIndexPath = path.join(docsPath, folderIndexPath)
       
-      // Prioritize index.md if it exists, otherwise use direct file
+      // Prioritize index.md in nested folder, otherwise use dotted file
       if (fs.existsSync(fullIndexPath)) {
         fileMap[slug] = folderIndexPath
       } else if (fs.existsSync(fullFilePath)) {
