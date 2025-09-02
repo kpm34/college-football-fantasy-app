@@ -38,7 +38,7 @@ export function ProjectMapClient({ root }: Props) {
     <div>
       <div className="text-xs text-gray-400 mb-2">{error ? `Error: ${error}` : `Charts: ${charts.length}`}</div>
       {charts.length > 0 ? (
-        <MermaidRenderer charts={charts} />
+        <MermaidRenderer charts={charts} mode="page" wheelZoom={false} />
       ) : (
         <div className="text-gray-400 text-sm">{error || 'Loading diagram…'}</div>
       )}
