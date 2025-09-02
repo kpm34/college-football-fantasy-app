@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Draft & Real Draft Flows - Interactive Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+            min-height: 100vh;
+            color: #1a202c;
+        }
+        
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            animation: slideDown 0.6s ease-out;
+        }
+        
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: none;
+            border-radius: 0.5rem 0.5rem 0 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        .content-area {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .diagram-container {
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .comparison-card {
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 2px solid #e5e7eb;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .mock-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #f59e0b;
+        }
+        
+        .real-card {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-color: #3b82f6;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .mock-card .card-header {
+            color: #92400e;
+        }
+        
+        .real-card .card-header {
+            color: #1e3a8a;
+        }
+        
+        .card-icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #f97316;
+            transition: transform 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .info-card h3 {
+            color: #c2410c;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-card li {
+            padding: 0.25rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .info-card li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #f97316;
+        }
+        
+        .feature-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        
+        .feature-table th {
+            background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .feature-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .feature-table tr:hover {
+            background: #f7fafc;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .status-error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .status-info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        
+        .status-warning {
+            background: #fef3c7;
+            color: #78350f;
+        }
+        
+        .draft-flow-timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .timeline-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            left: 2rem;
+            top: 3.5rem;
+            width: 2px;
+            height: 2rem;
+            background: linear-gradient(to bottom, #f97316, transparent);
+        }
+        
+        .timeline-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-desc {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .code-block .comment {
+            color: #94a3b8;
+        }
+        
+        .code-block .keyword {
+            color: #c084fc;
+        }
+        
+        .code-block .string {
+            color: #86efac;
+        }
+        
+        .code-block .function {
+            color: #60a5fa;
+        }
+        
+        .feature-comparison {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: #f9fafb;
+            border-radius: 0.375rem;
+        }
+        
+        .feature-name {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .feature-values {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .feature-mock {
+            color: #92400e;
+            font-weight: 600;
+        }
+        
+        .feature-real {
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏈 Mock Draft & Real Draft Flows</h1>
+            <p>Complete draft system supporting practice (mock) and scheduled (real) drafts</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('mock')">Mock Draft Flow</button>
+            <button class="tab-button" onclick="showTab('real')">Real Draft Flow</button>
+            <button class="tab-button" onclick="showTab('comparison')">Mock vs Real</button>
+            <button class="tab-button" onclick="showTab('timing')">Timing & Clock</button>
+            <button class="tab-button" onclick="showTab('features')">Features Comparison</button>
+            <button class="tab-button" onclick="showTab('data')">Data Persistence</button>
+        </div>
+        
+        <div class="content-area">
+            <!-- Mock Draft Flow Tab -->
+            <div id="mock" class="tab-content active">
+                <h2 style="margin-bottom: 1.5rem;">Mock Draft Flow (Practice Mode)</h2>
+                <div class="diagram-container">
+                    <div class="mermaid">
+graph LR
+  Lobby["Mock Draft Lobby"]
+  Create["Create Mock Draft"]
+  Num["Select Teams / Rounds"]
+  Start["Start Mock"]
+  Auto["Auto-pick Engine"]
+  Timer["Per-pick Timer<br/>(configurable)"]
+  Turn["Compute Turn<br/>(snake)"]
+  Pick["Make Pick"]
+  Validate["Validate<br/>(dupe/roster)"]
+  Apply["Apply Pick → Board"]
+  Next["Next Turn"]
+  Finish["Finish & Export Results"]
+
+  Lobby --> Create --> Num --> Start --> Turn --> Timer --> Pick --> Validate
+  Validate --> Apply --> Next --> Turn
+  Apply --> Auto
+  Auto --> Next
+  Next --> Finish
+
+  style Lobby fill:#fef3c7
+  style Create fill:#fde68a
+  style Start fill:#fbbf24
+  style Pick fill:#f59e0b
+  style Finish fill:#d97706
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🎮 Mock Draft Features</h3>
+                        <ul>
+                            <li>Instant start - no scheduling</li>
+                            <li>Practice with AI autopickers</li>
+                            <li>Configurable team count (4-20)</li>
+                            <li>Adjustable pick timer</li>
+                            <li>Reset and restart anytime</li>
+                            <li>Export results as CSV/PDF</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>📊 No Season Impact</h3>
+                        <ul>
+                            <li>❌ NO roster_slots created</li>
+                            <li>❌ NO transactions recorded</li>
+                            <li>❌ NO budget updates</li>
+                            <li>✅ Only draft_picks saved</li>
+                            <li>✅ Board saved as markdown</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="draft-flow-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🚀</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Instant Start</div>
+                            <div class="timeline-desc">Create and begin immediately, no waiting</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🤖</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">AI Fills Empty Spots</div>
+                            <div class="timeline-desc">Autopick engine manages unmanned teams</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">⏱️</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Flexible Timer</div>
+                            <div class="timeline-desc">Adjust pick clock speed on the fly</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🔄</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Reset Option</div>
+                            <div class="timeline-desc">Start over anytime for more practice</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+<span class="comment">// Mock Draft Initialization</span>
+<span class="keyword">async function</span> <span class="function">createMockDraft</span>(options: {
+  teamCount: number
+  rounds: number
+  pickTimeSeconds: number
+}) {
+  <span class="keyword">const</span> draft = <span class="keyword">await</span> createDraft({
+    is_mock: <span class="keyword">true</span>,  <span class="comment">// Critical flag</span>
+    status: <span class="string">'active'</span>,
+    draft_type: <span class="string">'snake'</span>,
+    max_teams: options.teamCount,
+    pick_time_seconds: options.pickTimeSeconds,
+    draft_start_at: <span class="keyword">new</span> Date().toISOString() <span class="comment">// Immediate</span>
+  })
+  
+  <span class="comment">// Generate random draft order</span>
+  <span class="keyword">const</span> draftOrder = shuffleArray(
+    Array.from({length: options.teamCount}, (_, i) => i + 1)
+  )
+  
+  <span class="comment">// No roster commits for mock drafts</span>
+  <span class="keyword">return</span> {
+    ...draft,
+    draftOrder,
+    mockBanner: <span class="string">'MOCK DRAFT - Practice Mode'</span>
+  }
+}
+                </div>
+            </div>
+            
+            <!-- Real Draft Flow Tab -->
+            <div id="real" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Real Draft Flow (Scheduled League Draft)</h2>
+                <div class="diagram-container">
+                    <div class="mermaid">
+graph LR
+  Lobby["League Draft Lobby"]
+  Schedule["Draft Date & Clock"]
+  Ready["Teams Ready"]
+  Start["Commissioner Starts"]
+  Realtime["Realtime Channel<br/>(Appwrite)"]
+  Turn["Compute Turn<br/>(snake)"]
+  Clock["Pick Clock"]
+  Pick["Team Makes Pick"]
+  Validate["Validate<br/>(eligibility, roster)"]
+  Apply["Apply Pick →<br/>State + Persist"]
+  Broadcast["Broadcast Update"]
+  Auto["Autopick On Timeout"]
+  Next["Next Turn"]
+  Complete["Draft Complete"]
+
+  Lobby --> Schedule --> Ready --> Start --> Realtime --> Turn --> Clock --> Pick --> Validate
+  Validate --> Apply --> Broadcast --> Next --> Turn
+  Clock --> Auto --> Apply
+  Next --> Complete
+
+  style Lobby fill:#dbeafe
+  style Schedule fill:#bfdbfe
+  style Start fill:#93c5fd
+  style Pick fill:#3b82f6
+  style Complete fill:#1e40af
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>📅 Scheduled Draft Features</h3>
+                        <ul>
+                            <li>Pre-scheduled date & time</li>
+                            <li>60-minute preview window</li>
+                            <li>Commissioner controls</li>
+                            <li>Real-time WebSocket updates</li>
+                            <li>Pause/resume capability</li>
+                            <li>Auto-pick on timer expiry</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>💾 Full Season Commits</h3>
+                        <ul>
+                            <li>✅ Creates roster_slots</li>
+                            <li>✅ Records transactions</li>
+                            <li>✅ Updates team budgets</li>
+                            <li>✅ Persists to draft_picks</li>
+                            <li>✅ Generates final board</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="draft-flow-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon">📅</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">T-60 Minutes</div>
+                            <div class="timeline-desc">Draft room opens for preview</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">⏰</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">T-0 Draft Time</div>
+                            <div class="timeline-desc">Draft automatically goes live</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🔔</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Real-time Updates</div>
+                            <div class="timeline-desc">WebSocket broadcasts every pick</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">✅</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Season Commit</div>
+                            <div class="timeline-desc">Rosters finalized, transactions recorded</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+<span class="comment">// Real Draft with Timing Gates</span>
+<span class="keyword">async function</span> <span class="function">initializeRealDraft</span>(leagueId: string) {
+  <span class="keyword">const</span> draft = <span class="keyword">await</span> getDraft(leagueId)
+  <span class="keyword">const</span> now = <span class="keyword">new</span> Date()
+  
+  <span class="comment">// Calculate room state based on time</span>
+  <span class="keyword">const</span> roomOpenTime = <span class="keyword">new</span> Date(draft.draft_room_open_at)
+  <span class="keyword">const</span> draftStartTime = <span class="keyword">new</span> Date(draft.draft_start_at)
+  
+  <span class="keyword">if</span> (now < roomOpenTime) {
+    <span class="keyword">return</span> {
+      status: <span class="string">'closed'</span>,
+      message: <span class="string">'Room opens at'</span> + roomOpenTime
+    }
+  }
+  
+  <span class="keyword">if</span> (now < draftStartTime) {
+    <span class="keyword">return</span> {
+      status: <span class="string">'preview'</span>,
+      readOnly: <span class="keyword">true</span>,
+      countdown: draftStartTime - now
+    }
+  }
+  
+  <span class="comment">// Draft is live - enable all features</span>
+  <span class="keyword">await</span> enableDraftControls(draft.id)
+  <span class="keyword">await</span> startPickClock(draft.pick_time_seconds)
+  
+  <span class="keyword">return</span> {
+    status: <span class="string">'live'</span>,
+    canPick: <span class="keyword">true</span>,
+    currentPick: <span class="keyword">await</span> getCurrentPick(draft.id)
+  }
+}
+
+<span class="comment">// Commit pick to season</span>
+<span class="keyword">async function</span> <span class="function">commitRealPick</span>(pick: DraftPick) {
+  <span class="comment">// Write to multiple collections</span>
+  <span class="keyword">await</span> Promise.all([
+    writeDraftPick(pick),
+    createRosterSlot(pick),
+    recordTransaction(pick),
+    updateTeamBudget(pick),
+    broadcastUpdate(pick)
+  ])
+}
+                </div>
+            </div>
+            
+            <!-- Comparison Tab -->
+            <div id="comparison" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Mock vs Real Draft Comparison</h2>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card mock-card">
+                        <div class="card-header">
+                            <span class="card-icon">🎮</span>
+                            Mock Draft (Practice)
+                        </div>
+                        <ul>
+                            <li>✅ Instant start</li>
+                            <li>✅ No scheduling required</li>
+                            <li>✅ AI fills empty slots</li>
+                            <li>✅ Reset anytime</li>
+                            <li>✅ Practice unlimited times</li>
+                            <li>❌ No roster commits</li>
+                            <li>❌ No transactions</li>
+                            <li>❌ No budget impact</li>
+                            <li>🎯 Purpose: Practice & preparation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="comparison-card real-card">
+                        <div class="card-header">
+                            <span class="card-icon">🏆</span>
+                            Real Draft (League)
+                        </div>
+                        <ul>
+                            <li>📅 Scheduled date/time</li>
+                            <li>⏰ 60-min preview window</li>
+                            <li>👥 All managers required</li>
+                            <li>🔒 One-time event</li>
+                            <li>📊 Commissioner controls</li>
+                            <li>✅ Creates rosters</li>
+                            <li>✅ Records transactions</li>
+                            <li>✅ Updates budgets</li>
+                            <li>🎯 Purpose: Season team selection</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 2rem;">Feature Comparison</h3>
+                <div class="feature-comparison">
+                    <span class="feature-name">Start Method</span>
+                    <div class="feature-values">
+                        <span class="feature-mock">Instant</span>
+                        <span class="feature-real">Scheduled</span>
+                    </div>
+                </div>
+                <div class="feature-comparison">
+                    <span class="feature-name">Room Access</span>
+                    <div class="feature-values">
+                        <span class="feature-mock">Always Open</span>
+                        <span class="feature-real">Timed Gates</span>
+                    </div>
+                </div>
+                <div class="feature-comparison">
+                    <span class="feature-name">Team Requirements</span>
+                    <div class="feature-values">
+                        <span class="feature-mock">1+ Human</span>
+                        <span class="feature-real">All Humans</span>
+                    </div>
+                </div>
+                <div class="feature-comparison">
+                    <span class="feature-name">Persistence</span>
+                    <div class="feature-values">
+                        <span class="feature-mock">Draft Board Only</span>
+                        <span class="feature-real">Full Season Data</span>
+                    </div>
+                </div>
+                <div class="feature-comparison">
+                    <span class="feature-name">Reset Option</span>
+                    <div class="feature-values">
+                        <span class="feature-mock">Yes</span>
+                        <span class="feature-real">No</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Timing & Clock Tab -->
+            <div id="timing" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Draft Timing & Clock Management</h2>
+                
+                <div class="diagram-container">
+                    <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant UI as Draft Room UI
+    participant API as API Routes
+    participant WS as WebSocket
+    participant DB as Appwrite
+    participant Clock as Server Clock
+    
+    U->>UI: Enter Draft Room
+    UI->>API: GET /api/drafts/:id/room-state
+    
+    API->>Clock: Get current time
+    API->>DB: Get draft settings
+    DB-->>API: draft_start_at, room_open_at
+    
+    API->>API: Calculate state
+    Note over API: isOpen = now >= room_open_at<br/>isLive = now >= draft_start_at
+    
+    API-->>UI: {isOpen, isLive, timeToStart}
+    
+    alt Room Not Open
+        UI-->>U: Show "Room opens in X"
+    else Room Open, Not Live
+        UI-->>U: Show preview + countdown
+        UI->>WS: Connect WebSocket
+        
+        loop Every Second
+            Clock->>WS: Time update
+            WS-->>UI: Countdown tick
+            UI-->>U: Update timer
+        end
+        
+        Clock->>WS: Draft start signal
+        WS-->>UI: Enable controls
+    else Draft Live
+        UI-->>U: Full interface
+        
+        loop On Each Pick
+            WS-->>UI: Pick event
+            UI-->>U: Update board
+            
+            alt Timer Expires
+                UI->>API: POST /api/drafts/:id/autopick
+                API->>DB: Auto-select BPA
+            end
+        end
+    end
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>⏱️ Pick Timer Rules</h3>
+                        <ul>
+                            <li>Configurable: 30-180 seconds</li>
+                            <li>Starts when team is on clock</li>
+                            <li>Visual + audio warnings at 10s</li>
+                            <li>Auto-pick BPA on expiry</li>
+                            <li>Commissioner can pause/resume</li>
+                            <li>Reduced time in later rounds (optional)</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>🤖 Auto-pick Logic</h3>
+                        <ul>
+                            <li>Best Player Available (BPA)</li>
+                            <li>Respects position needs</li>
+                            <li>Follows pre-set rankings</li>
+                            <li>Avoids bye week conflicts</li>
+                            <li>Considers roster limits</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+<span class="comment">// Autopick Orchestration</span>
+<span class="keyword">interface</span> AutopickStrategy {
+  mode: <span class="string">'bpa'</span> | <span class="string">'balanced'</span> | <span class="string">'need-based'</span>
+  excludePositions?: string[]
+  preferredPositions?: string[]
+}
+
+<span class="keyword">async function</span> <span class="function">executeAutopick</span>(
+  draftId: string,
+  teamId: string,
+  strategy: AutopickStrategy
+) {
+  <span class="comment">// Get available players</span>
+  <span class="keyword">const</span> available = <span class="keyword">await</span> getAvailablePlayers(draftId)
+  
+  <span class="comment">// Get team's current roster</span>
+  <span class="keyword">const</span> roster = <span class="keyword">await</span> getTeamRoster(teamId)
+  
+  <span class="comment">// Apply strategy</span>
+  <span class="keyword">let</span> selected
+  <span class="keyword">switch</span>(strategy.mode) {
+    <span class="keyword">case</span> <span class="string">'bpa'</span>:
+      selected = available[0] <span class="comment">// Top ranked</span>
+      <span class="keyword">break</span>
+    <span class="keyword">case</span> <span class="string">'balanced'</span>:
+      selected = selectBalanced(available, roster)
+      <span class="keyword">break</span>
+    <span class="keyword">case</span> <span class="string">'need-based'</span>:
+      selected = selectByNeed(available, roster)
+      <span class="keyword">break</span>
+  }
+  
+  <span class="comment">// Make the pick</span>
+  <span class="keyword">await</span> makePick(draftId, teamId, selected.id)
+  
+  <span class="comment">// Log autopick event</span>
+  <span class="keyword">await</span> logActivity({
+    type: <span class="string">'autopick'</span>,
+    draftId,
+    teamId,
+    playerId: selected.id,
+    reason: <span class="string">'timer_expired'</span>
+  })
+}
+                </div>
+            </div>
+            
+            <!-- Features Comparison Tab -->
+            <div id="features" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Feature Comparison Table</h2>
+                
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Mock Draft</th>
+                            <th>Real Draft</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Start Method</strong></td>
+                            <td><span class="status-badge status-warning">Instant</span></td>
+                            <td><span class="status-badge status-info">Scheduled</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Preview Window</strong></td>
+                            <td>None needed</td>
+                            <td>60 minutes before</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Team Fill</strong></td>
+                            <td>AI bots available</td>
+                            <td>Human managers only</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pick Timer</strong></td>
+                            <td>Adjustable on-fly</td>
+                            <td>Fixed per league</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pause/Resume</strong></td>
+                            <td>Any user</td>
+                            <td>Commissioner only</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reset Draft</strong></td>
+                            <td><span class="status-badge status-success">Yes</span></td>
+                            <td><span class="status-badge status-error">No</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Creates Rosters</strong></td>
+                            <td><span class="status-badge status-error">No</span></td>
+                            <td><span class="status-badge status-success">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Records Transactions</strong></td>
+                            <td><span class="status-badge status-error">No</span></td>
+                            <td><span class="status-badge status-success">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Updates Budget</strong></td>
+                            <td><span class="status-badge status-error">No</span></td>
+                            <td><span class="status-badge status-success">Yes (Auction)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Export Results</strong></td>
+                            <td>CSV, PDF, Markdown</td>
+                            <td>Full board + transactions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>WebSocket Updates</strong></td>
+                            <td>Optional</td>
+                            <td>Required</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Draft Order</strong></td>
+                            <td>Random generated</td>
+                            <td>Pre-determined</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="info-card" style="margin-top: 2rem;">
+                    <h3>🎯 When to Use Each</h3>
+                    <ul>
+                        <li><strong>Mock Draft:</strong> Pre-season preparation, strategy testing, learning the interface</li>
+                        <li><strong>Real Draft:</strong> Official league draft for the season, binding team selection</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Data Persistence Tab -->
+            <div id="data" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Data Persistence Comparison</h2>
+                
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>Collection</th>
+                            <th>Mock Draft</th>
+                            <th>Real Draft</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="status-badge status-info">drafts</span></td>
+                            <td>READ/WRITE</td>
+                            <td>READ/WRITE</td>
+                            <td>is_mock flag differentiates</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-info">draft_states</span></td>
+                            <td>WRITE</td>
+                            <td>WRITE</td>
+                            <td>Current pick state</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-info">draft_events</span></td>
+                            <td>WRITE</td>
+                            <td>WRITE</td>
+                            <td>All pick events</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-success">roster_slots</span></td>
+                            <td>❌ NO</td>
+                            <td>✅ WRITE</td>
+                            <td>Only real drafts commit</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-success">transactions</span></td>
+                            <td>❌ NO</td>
+                            <td>✅ WRITE</td>
+                            <td>Only real drafts record</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-warning">fantasy_teams</span></td>
+                            <td>❌ NO</td>
+                            <td>✅ UPDATE</td>
+                            <td>Budget only for auction</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-info">activity_log</span></td>
+                            <td>WRITE</td>
+                            <td>WRITE</td>
+                            <td>Both log activity</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="code-block">
+<span class="comment">// Data persistence logic</span>
+<span class="keyword">async function</span> <span class="function">persistDraftPick</span>(pick: DraftPick, draft: Draft) {
+  <span class="comment">// Always save to draft events</span>
+  <span class="keyword">await</span> saveDraftEvent({
+    draft_id: draft.id,
+    type: <span class="string">'pick'</span>,
+    team_id: pick.team_id,
+    player_id: pick.player_id,
+    overall: pick.overall,
+    round: pick.round,
+    pick_in_round: pick.pick_in_round
+  })
+  
+  <span class="comment">// Only persist to season for real drafts</span>
+  <span class="keyword">if</span> (!draft.is_mock) {
+    <span class="comment">// Create roster slot</span>
+    <span class="keyword">await</span> createRosterSlot({
+      team_id: pick.team_id,
+      player_id: pick.player_id,
+      position: pick.position,
+      acquired_via: <span class="string">'draft'</span>,
+      acquisition_date: <span class="keyword">new</span> Date()
+    })
+    
+    <span class="comment">// Record transaction</span>
+    <span class="keyword">await</span> recordTransaction({
+      type: <span class="string">'draft'</span>,
+      team_id: pick.team_id,
+      player_id: pick.player_id,
+      draft_round: pick.round,
+      draft_pick: pick.pick_in_round,
+      cost: pick.auction_amount || 0
+    })
+    
+    <span class="comment">// Update budget for auction</span>
+    <span class="keyword">if</span> (draft.draft_type === <span class="string">'auction'</span>) {
+      <span class="keyword">await</span> updateTeamBudget(
+        pick.team_id,
+        -pick.auction_amount
+      )
+    }
+  }
+}
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>📁 Mock Draft Storage</h3>
+                        <ul>
+                            <li>Temporary draft state</li>
+                            <li>Pick history for review</li>
+                            <li>Board export as markdown</li>
+                            <li>No permanent team changes</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>💾 Real Draft Storage</h3>
+                        <ul>
+                            <li>Permanent roster creation</li>
+                            <li>Transaction history</li>
+                            <li>Budget tracking (auction)</li>
+                            <li>Season-long persistence</li>
+                            <li>Cannot be undone</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

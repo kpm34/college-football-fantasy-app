@@ -1,0 +1,3607 @@
+{
+  "generatedAt": "2025-09-02T10:32:43.585Z",
+  "root": "docs/diagrams",
+  "total": 447,
+  "duplicates": 213,
+  "moves": [
+    {
+      "from": "README.md",
+      "to": "functional-flow/diagrams-guide.md"
+    },
+    {
+      "from": "system-architecture/yearly-projections.md",
+      "to": "system-architecture/yearly-projections-flow-draft.md"
+    },
+    {
+      "from": "system-architecture/weight-tuning.md",
+      "to": "system-architecture/weight-tuning-loop.md"
+    },
+    {
+      "from": "system-architecture/weekly-projections.md",
+      "to": "system-architecture/weekly-projections-flow-in-season.md"
+    },
+    {
+      "from": "system-architecture/projections-overview.md",
+      "to": "system-architecture/projections-system-overview.md"
+    },
+    {
+      "from": "system-architecture/complete-data-flow.md",
+      "to": "system-architecture/system-architecture-complete-data-flow-auth-ids-canonicalized.md"
+    },
+    {
+      "from": "functional-flow/join-league.md",
+      "to": "functional-flow/join-league-flow-invite.md"
+    },
+    {
+      "from": "functional-flow/draft.md",
+      "to": "functional-flow/draft-system-flow-mock-vs-real-scheduled.md"
+    },
+    {
+      "from": "functional-flow/create-league.md",
+      "to": "functional-flow/create-league-flow-with-draft-scheduling.md"
+    },
+    {
+      "from": "functional-flow/create-account.md",
+      "to": "functional-flow/create-account-flow.md"
+    },
+    {
+      "from": "project-map/schema.zod.md",
+      "to": "project-map/project-map-schema-zod.md"
+    },
+    {
+      "from": "project-map/schema.snapshots.md",
+      "to": "project-map/project-map-schema-snapshots.md"
+    },
+    {
+      "from": "project-map/schema.sites.md",
+      "to": "project-map/project-map-schema-sites.md"
+    },
+    {
+      "from": "project-map/schema.sites.college-football-fantasy-app.md",
+      "to": "project-map/project-map-schema-sites-college-football-fantasy-app.md"
+    },
+    {
+      "from": "project-map/schema.md",
+      "to": "project-map/project-map-schema.md"
+    },
+    {
+      "from": "project-map/schema.generators.md",
+      "to": "project-map/project-map-schema-generators.md"
+    },
+    {
+      "from": "project-map/public.md",
+      "to": "project-map/project-map-public.md"
+    },
+    {
+      "from": "project-map/future.waiver.md",
+      "to": "project-map/project-map-future-waiver.md"
+    },
+    {
+      "from": "project-map/future.trading.trade-processor.md",
+      "to": "project-map/project-map-future-trading-trade-processor.md"
+    },
+    {
+      "from": "project-map/future.trading.md",
+      "to": "project-map/project-map-future-trading.md"
+    },
+    {
+      "from": "project-map/future.scoring.weekly-scoring.md",
+      "to": "project-map/project-map-future-scoring-weekly-scoring.md"
+    },
+    {
+      "from": "project-map/future.scoring.md",
+      "to": "project-map/project-map-future-scoring.md"
+    },
+    {
+      "from": "project-map/future.scoring.live-scoring-mechanics.md",
+      "to": "project-map/project-map-future-scoring-live-scoring-mechanics.md"
+    },
+    {
+      "from": "project-map/future.scoring.api-cron.md",
+      "to": "project-map/project-map-future-scoring-api-cron.md"
+    },
+    {
+      "from": "project-map/future.md",
+      "to": "project-map/project-map-future.md"
+    },
+    {
+      "from": "project-map/future.marketing.md",
+      "to": "project-map/project-map-future-marketing.md"
+    },
+    {
+      "from": "project-map/future.ideas.md",
+      "to": "project-map/project-map-future-ideas.md"
+    },
+    {
+      "from": "project-map/future.compliance.md",
+      "to": "project-map/project-map-future-compliance.md"
+    },
+    {
+      "from": "project-map/future.auction-drafts.md",
+      "to": "project-map/project-map-future-auction-drafts.md"
+    },
+    {
+      "from": "project-map/components.ui.md",
+      "to": "project-map/project-map-components-ui.md"
+    },
+    {
+      "from": "project-map/components.tables.md",
+      "to": "project-map/project-map-components-tables.md"
+    },
+    {
+      "from": "project-map/components.md",
+      "to": "project-map/project-map-components.md"
+    },
+    {
+      "from": "project-map/components.layout.md",
+      "to": "project-map/project-map-components-layout.md"
+    },
+    {
+      "from": "project-map/components.hooks.md",
+      "to": "project-map/project-map-components-hooks.md"
+    },
+    {
+      "from": "project-map/components.forms.md",
+      "to": "project-map/project-map-components-forms.md"
+    },
+    {
+      "from": "project-map/components.features.players.md",
+      "to": "project-map/project-map-components-features-players.md"
+    },
+    {
+      "from": "project-map/components.features.md",
+      "to": "project-map/project-map-components-features.md"
+    },
+    {
+      "from": "project-map/components.features.leagues.md",
+      "to": "project-map/project-map-components-features-leagues.md"
+    },
+    {
+      "from": "project-map/components.features.games.md",
+      "to": "project-map/project-map-components-features-games.md"
+    },
+    {
+      "from": "project-map/components.features.draft.md",
+      "to": "project-map/project-map-components-features-draft.md"
+    },
+    {
+      "from": "project-map/components.features.conferences.md",
+      "to": "project-map/project-map-components-features-conferences.md"
+    },
+    {
+      "from": "project-map/components.draft.md",
+      "to": "project-map/project-map-components-draft.md"
+    },
+    {
+      "from": "project-map/components.docs.md",
+      "to": "project-map/project-map-components-docs.md"
+    },
+    {
+      "from": "project-map/components.dev.md",
+      "to": "project-map/project-map-components-dev.md"
+    },
+    {
+      "from": "project-map/components.charts.md",
+      "to": "project-map/project-map-components-charts.md"
+    },
+    {
+      "from": "project-map/appwrite-schema.md",
+      "to": "project-map/appwrite-live-schema.md"
+    },
+    {
+      "from": "project-map/schema/index.md",
+      "to": "project-map/project-map-schema.md"
+    },
+    {
+      "from": "project-map/ops/index.md",
+      "to": "project-map/project-map-ops.md"
+    },
+    {
+      "from": "project-map/docs/index.md",
+      "to": "project-map/project-map-docs.md"
+    },
+    {
+      "from": "project-map/app/index.md",
+      "to": "project-map/project-map-app.md"
+    },
+    {
+      "from": "project-map/app/api/index.md",
+      "to": "project-map/project-map-app-api.md"
+    }
+  ],
+  "files": [
+    {
+      "rel": "README.md",
+      "title": "Diagrams Guide",
+      "hash": "294a7a7891968b86a59ab48ae20225908641d145",
+      "category": "functional-flow",
+      "size": 1236,
+      "proposed": "functional-flow/diagrams-guide.md"
+    },
+    {
+      "rel": "system-architecture/yearly-projections.md",
+      "title": "Yearly Projections Flow (Draft)",
+      "hash": "a24b5d1de862cc5516da1d9281badabd202cd007",
+      "category": "system-architecture",
+      "size": 4960,
+      "proposed": "system-architecture/yearly-projections-flow-draft.md"
+    },
+    {
+      "rel": "system-architecture/weight-tuning.md",
+      "title": "Weight Tuning Loop",
+      "hash": "917e303bff3f3cbea99da8845ba884bf16f3f437",
+      "category": "system-architecture",
+      "size": 8234,
+      "proposed": "system-architecture/weight-tuning-loop.md"
+    },
+    {
+      "rel": "system-architecture/weekly-projections.md",
+      "title": "Weekly Projections Flow (In-Season)",
+      "hash": "b7e012d2ce609ff4da2524222c3aa1c6c84a333c",
+      "category": "system-architecture",
+      "size": 6930,
+      "proposed": "system-architecture/weekly-projections-flow-in-season.md"
+    },
+    {
+      "rel": "system-architecture/projections-overview.md",
+      "title": "Projections System Overview",
+      "hash": "7511174355fff652e9cf4eb72befc6333a76701f",
+      "category": "system-architecture",
+      "size": 3731,
+      "proposed": "system-architecture/projections-system-overview.md"
+    },
+    {
+      "rel": "system-architecture/complete-data-flow.md",
+      "title": "System Architecture — Complete Data Flow (Auth IDs canonicalized)",
+      "hash": "940187bb899a5667d4b827a631bc39ac2440ed94",
+      "category": "system-architecture",
+      "size": 1280,
+      "proposed": "system-architecture/system-architecture-complete-data-flow-auth-ids-canonicalized.md"
+    },
+    {
+      "rel": "functional-flow/join-league.md",
+      "title": "Join League Flow (Invite)",
+      "hash": "75cba761ef2d75fc3ba5d806a37dd4bfe527fd53",
+      "category": "functional-flow",
+      "size": 5973,
+      "proposed": "functional-flow/join-league-flow-invite.md"
+    },
+    {
+      "rel": "functional-flow/draft.md",
+      "title": "Draft System Flow (Mock vs Real, Scheduled)",
+      "hash": "2b8049d7901616daaf47075caa0e6e40ada90b52",
+      "category": "functional-flow",
+      "size": 12544,
+      "proposed": "functional-flow/draft-system-flow-mock-vs-real-scheduled.md"
+    },
+    {
+      "rel": "functional-flow/create-league.md",
+      "title": "Create League Flow (with Draft Scheduling)",
+      "hash": "8dc89616880d852ec9553e2ca9016daf68eccbe6",
+      "category": "functional-flow",
+      "size": 5712,
+      "proposed": "functional-flow/create-league-flow-with-draft-scheduling.md"
+    },
+    {
+      "rel": "functional-flow/create-account.md",
+      "title": "Create Account Flow",
+      "hash": "bd5d5b095a4bda389cfcf2f75299a0fbc5ba440e",
+      "category": "functional-flow",
+      "size": 3535,
+      "proposed": "functional-flow/create-account-flow.md"
+    },
+    {
+      "rel": "project-map/schema.zod.md",
+      "title": "Project Map — schema/zod",
+      "hash": "0a8632a1b153b8fda72ad493baf2f55b6093521b",
+      "category": "project-map",
+      "size": 2711,
+      "proposed": "project-map/project-map-schema-zod.md"
+    },
+    {
+      "rel": "project-map/schema.snapshots.md",
+      "title": "Project Map — schema/snapshots",
+      "hash": "0a99edf7a49bd2b0488153784b38ff4fb1eab464",
+      "category": "project-map",
+      "size": 483,
+      "proposed": "project-map/project-map-schema-snapshots.md"
+    },
+    {
+      "rel": "project-map/schema.sites.md",
+      "title": "Project Map — schema/sites",
+      "hash": "5a8a5a5fe35d0442d6f3420503da0ee4ac01bada",
+      "category": "project-map",
+      "size": 635,
+      "proposed": "project-map/project-map-schema-sites.md"
+    },
+    {
+      "rel": "project-map/schema.sites.college-football-fantasy-app.md",
+      "title": "Project Map — schema/sites/college-football-fantasy-app",
+      "hash": "2465ad043e18780a22e2b14f56432abe877835db",
+      "category": "project-map",
+      "size": 407,
+      "proposed": "project-map/project-map-schema-sites-college-football-fantasy-app.md"
+    },
+    {
+      "rel": "project-map/schema.md",
+      "title": "Project Map — schema",
+      "hash": "35415af5467da52fdc765342850043e1075fb0a2",
+      "category": "project-map",
+      "size": 1519,
+      "proposed": "project-map/project-map-schema.md"
+    },
+    {
+      "rel": "project-map/schema.generators.md",
+      "title": "Project Map — schema/generators",
+      "hash": "08877fbbeb4a36c6c2da94001b506def44ec6287",
+      "category": "project-map",
+      "size": 1215,
+      "proposed": "project-map/project-map-schema-generators.md"
+    },
+    {
+      "rel": "project-map/public.md",
+      "title": "Project Map — public",
+      "hash": "9fcbe69661d9a22feeb90136e8393abf58028186",
+      "category": "project-map",
+      "size": 256,
+      "proposed": "project-map/project-map-public.md"
+    },
+    {
+      "rel": "project-map/ops.out.snapshots.md",
+      "title": "Project Map — ops/out/snapshots",
+      "hash": "96df8cf6710f346bcaf3d0af9e6f7d4412313cc4",
+      "category": "project-map",
+      "size": 4283
+    },
+    {
+      "rel": "project-map/ops.out.md",
+      "title": "Project Map — ops/out",
+      "hash": "404eb494c4855a7f90856d537b5180fa44f82eee",
+      "category": "project-map",
+      "size": 1840
+    },
+    {
+      "rel": "project-map/ops.md",
+      "title": "Project Map — ops",
+      "hash": "84cb24bb3a6e06d33ac794feb783a06966dae8bb",
+      "category": "project-map",
+      "size": 2235
+    },
+    {
+      "rel": "project-map/ops.diagrams.md",
+      "title": "Project Map — ops/diagrams",
+      "hash": "68d2dc1427c48cd7835829f0c48c624bf8ddd161",
+      "category": "project-map",
+      "size": 509
+    },
+    {
+      "rel": "project-map/ops.diagrams.functional.md",
+      "title": "Project Map — ops/diagrams/functional",
+      "hash": "f60701b64ce45a58fb51cea095ece67cd462498d",
+      "category": "project-map",
+      "size": 883
+    },
+    {
+      "rel": "project-map/ops.db.md",
+      "title": "Project Map — ops/db",
+      "hash": "2af87d43984ee41c57e17b336deb18c0f17e3ee2",
+      "category": "project-map",
+      "size": 623
+    },
+    {
+      "rel": "project-map/ops.cursor.screenshot.md",
+      "title": "Project Map — ops/cursor/screenshot",
+      "hash": "5355fc2ee8093d0147138114eecf2c58a2c93e10",
+      "category": "project-map",
+      "size": 327
+    },
+    {
+      "rel": "project-map/ops.cursor.md",
+      "title": "Project Map — ops/cursor",
+      "hash": "8d7927b06c8f341a90ad2496092d1d73cac6dbfd",
+      "category": "project-map",
+      "size": 820
+    },
+    {
+      "rel": "project-map/ops.cursor.context-packs.md",
+      "title": "Project Map — ops/cursor/context-packs",
+      "hash": "489150b19ed97eac7658f03f3fa87bc83a567c43",
+      "category": "project-map",
+      "size": 503
+    },
+    {
+      "rel": "project-map/ops.cursor-ops.test.md",
+      "title": "Project Map — ops/cursor-ops/test",
+      "hash": "501d286d4fa3cf15c195043266c2d0ec04ba154f",
+      "category": "project-map",
+      "size": 319
+    },
+    {
+      "rel": "project-map/ops.cursor-ops.sync.md",
+      "title": "Project Map — ops/cursor-ops/sync",
+      "hash": "1b260383833b87977569aeb9124aff33713cddb3",
+      "category": "project-map",
+      "size": 319
+    },
+    {
+      "rel": "project-map/ops.cursor-ops.review.md",
+      "title": "Project Map — ops/cursor-ops/review",
+      "hash": "7157269b5492445f7b6909c8172b373c0d98ea32",
+      "category": "project-map",
+      "size": 327
+    },
+    {
+      "rel": "project-map/ops.cursor-ops.md",
+      "title": "Project Map — ops/cursor-ops",
+      "hash": "12d733abf03ecd531c4cdff247f698c786f835d5",
+      "category": "project-map",
+      "size": 1618
+    },
+    {
+      "rel": "project-map/ops.cursor-ops.appwrite-update.md",
+      "title": "Project Map — ops/cursor-ops/appwrite-update",
+      "hash": "d222a307de80a11f442cda905b2d1589ef94f2fa",
+      "category": "project-map",
+      "size": 363
+    },
+    {
+      "rel": "project-map/ops.config.md",
+      "title": "Project Map — ops/config",
+      "hash": "d874cd34bac83d00eafdb3b5794c6663a66988d1",
+      "category": "project-map",
+      "size": 547
+    },
+    {
+      "rel": "project-map/ops.common.test.md",
+      "title": "Project Map — ops/common/test",
+      "hash": "3b355367bf27039ee9907cb0ca5e3bfa3d077488",
+      "category": "project-map",
+      "size": 303
+    },
+    {
+      "rel": "project-map/ops.common.scripts.md",
+      "title": "Project Map — ops/common/scripts",
+      "hash": "04c01f88687e82ad85f49d53b77154a270ec1db3",
+      "category": "project-map",
+      "size": 17194
+    },
+    {
+      "rel": "project-map/ops.common.python.md",
+      "title": "Project Map — ops/common/python",
+      "hash": "723de728233669123dfb27fee2293c6092790ea1",
+      "category": "project-map",
+      "size": 475
+    },
+    {
+      "rel": "project-map/ops.common.public.md",
+      "title": "Project Map — ops/common/public",
+      "hash": "b1810334b61aa106f3c4078e7ae15efa5f5182f8",
+      "category": "project-map",
+      "size": 434
+    },
+    {
+      "rel": "project-map/ops.common.prompts.md",
+      "title": "Project Map — ops/common/prompts",
+      "hash": "5d8bdc6720c82489a0813cd375a4f97de2fa5914",
+      "category": "project-map",
+      "size": 450
+    },
+    {
+      "rel": "project-map/ops.common.md",
+      "title": "Project Map — ops/common",
+      "hash": "2c7a0e1b3ea8e34285538f6b0b11f3442b72fb06",
+      "category": "project-map",
+      "size": 2091
+    },
+    {
+      "rel": "project-map/ops.common.guards.md",
+      "title": "Project Map — ops/common/guards",
+      "hash": "6145e72eabd9951709c96e4e094360ea3a586126",
+      "category": "project-map",
+      "size": 1731
+    },
+    {
+      "rel": "project-map/ops.common.functions.md",
+      "title": "Project Map — ops/common/functions",
+      "hash": "900e15fe8bcc7257ec2e181801a09724d08fcb60",
+      "category": "project-map",
+      "size": 641
+    },
+    {
+      "rel": "project-map/ops.common.codemods.md",
+      "title": "Project Map — ops/common/codemods",
+      "hash": "9bf8335af7cfe3c3068f5734995045b1d0eeeb8b",
+      "category": "project-map",
+      "size": 691
+    },
+    {
+      "rel": "project-map/ops.common.appwrite-update.md",
+      "title": "Project Map — ops/common/appwrite-update",
+      "hash": "acc6f5a2f1df8ba06d5a1d670393eadeaf01c939",
+      "category": "project-map",
+      "size": 347
+    },
+    {
+      "rel": "project-map/ops.claude.md",
+      "title": "Project Map — ops/claude",
+      "hash": "91cc50ba78a2c0e8de13662accb29f6f2a4664ad",
+      "category": "project-map",
+      "size": 283
+    },
+    {
+      "rel": "project-map/ops.claude-ops.test.md",
+      "title": "Project Map — ops/claude-ops/test",
+      "hash": "2929409403800bee7df8ebd65c0c7edf2abb315b",
+      "category": "project-map",
+      "size": 319
+    },
+    {
+      "rel": "project-map/ops.claude-ops.sync.md",
+      "title": "Project Map — ops/claude-ops/sync",
+      "hash": "74b77afbd79936437e4191febd6c8b5b1a559ad9",
+      "category": "project-map",
+      "size": 319
+    },
+    {
+      "rel": "project-map/ops.claude-ops.review.md",
+      "title": "Project Map — ops/claude-ops/review",
+      "hash": "c9dd9b01bfe35c089963d2a7429a4a63a51cfd0b",
+      "category": "project-map",
+      "size": 327
+    },
+    {
+      "rel": "project-map/ops.claude-ops.md",
+      "title": "Project Map — ops/claude-ops",
+      "hash": "b752c6503ca5f30fe33563ebb05ae7e3217a8d2b",
+      "category": "project-map",
+      "size": 1626
+    },
+    {
+      "rel": "project-map/ops.claude-ops.edit.md",
+      "title": "Project Map — ops/claude-ops/edit",
+      "hash": "4fe9e47339297e1619f479a64c5e030bfe725191",
+      "category": "project-map",
+      "size": 319
+    },
+    {
+      "rel": "project-map/ops.claude-ops.appwrite-update.md",
+      "title": "Project Map — ops/claude-ops/appwrite-update",
+      "hash": "a0fa330bb163a24eee25bacd4a49ed7984041c19",
+      "category": "project-map",
+      "size": 363
+    },
+    {
+      "rel": "project-map/ops.chatgpt.md",
+      "title": "Project Map — ops/chatgpt",
+      "hash": "6d9c565a4693095eb1638b919180f2213b4c2ffb",
+      "category": "project-map",
+      "size": 287
+    },
+    {
+      "rel": "project-map/ops.chatgpt-ops.test.md",
+      "title": "Project Map — ops/chatgpt-ops/test",
+      "hash": "d2f1cac76d928e6f7dcc3abbd8d316f5cd3dc63e",
+      "category": "project-map",
+      "size": 323
+    },
+    {
+      "rel": "project-map/ops.chatgpt-ops.sync.md",
+      "title": "Project Map — ops/chatgpt-ops/sync",
+      "hash": "79c7de75ee13337322a89581263266cedd3d8724",
+      "category": "project-map",
+      "size": 323
+    },
+    {
+      "rel": "project-map/ops.chatgpt-ops.review.md",
+      "title": "Project Map — ops/chatgpt-ops/review",
+      "hash": "aa1c70a0e7563a2de334100685229da2afe4b3ea",
+      "category": "project-map",
+      "size": 331
+    },
+    {
+      "rel": "project-map/ops.chatgpt-ops.md",
+      "title": "Project Map — ops/chatgpt-ops",
+      "hash": "71f49b85881e3fc558ff60b1263d8bbe36a1f957",
+      "category": "project-map",
+      "size": 1364
+    },
+    {
+      "rel": "project-map/ops.chatgpt-ops.edit.md",
+      "title": "Project Map — ops/chatgpt-ops/edit",
+      "hash": "81c71abc32183d69f06c07354988860a7b4213fd",
+      "category": "project-map",
+      "size": 323
+    },
+    {
+      "rel": "project-map/ops.chatgpt-ops.appwrite-update.md",
+      "title": "Project Map — ops/chatgpt-ops/appwrite-update",
+      "hash": "736df75c6409e9d609e3496c072de9ae9040edd5",
+      "category": "project-map",
+      "size": 367
+    },
+    {
+      "rel": "project-map/ops.attic.types.md",
+      "title": "Project Map — ops/attic/types",
+      "hash": "093c3d8a60234e7ba17df667320b35a4ba21c53d",
+      "category": "project-map",
+      "size": 303
+    },
+    {
+      "rel": "project-map/ops.attic.toolbox.md",
+      "title": "Project Map — ops/attic/toolbox",
+      "hash": "17b258078457b3d41e58ae74366ec44f47b03422",
+      "category": "project-map",
+      "size": 430
+    },
+    {
+      "rel": "project-map/ops.attic.tests.md",
+      "title": "Project Map — ops/attic/tests",
+      "hash": "6eaa9dd73b71d19d0143fe6ff36099e7f7a69432",
+      "category": "project-map",
+      "size": 1352
+    },
+    {
+      "rel": "project-map/ops.attic.testing-and-release.md",
+      "title": "Project Map — ops/attic/testing-and-release",
+      "hash": "e17cf839cf72109d6cdc4275ae843b1f35907298",
+      "category": "project-map",
+      "size": 742
+    },
+    {
+      "rel": "project-map/ops.attic.old-schemas.md",
+      "title": "Project Map — ops/attic/old-schemas",
+      "hash": "69c06d3e383755fb18b18fb42e2a21aedae27f79",
+      "category": "project-map",
+      "size": 1151
+    },
+    {
+      "rel": "project-map/ops.attic.migration-scripts.md",
+      "title": "Project Map — ops/attic/migration-scripts",
+      "hash": "8996ce0482e72c8d910b42b66b5ca85d8590b002",
+      "category": "project-map",
+      "size": 8171
+    },
+    {
+      "rel": "project-map/ops.attic.md",
+      "title": "Project Map — ops/attic",
+      "hash": "e122af32eae9193ce6330ee49b9b592cfd28f749",
+      "category": "project-map",
+      "size": 2556
+    },
+    {
+      "rel": "project-map/ops.attic.exports.md",
+      "title": "Project Map — ops/attic/exports",
+      "hash": "473c564386fcb1b3606d3eb40bc35af39a635971",
+      "category": "project-map",
+      "size": 7458
+    },
+    {
+      "rel": "project-map/ops.attic.evaluation.md",
+      "title": "Project Map — ops/attic/evaluation",
+      "hash": "44da3b5a096a4aa5893280a6605795311fa914b7",
+      "category": "project-map",
+      "size": 1459
+    },
+    {
+      "rel": "project-map/ops.attic.docs-archive.md",
+      "title": "Project Map — ops/attic/docs-archive",
+      "hash": "ee5014c390568c38e142c8585504b57b76578bc8",
+      "category": "project-map",
+      "size": 494
+    },
+    {
+      "rel": "project-map/ops.attic.core-remaining.md",
+      "title": "Project Map — ops/attic/core-remaining",
+      "hash": "3b03ede6276f8577883b449545d1a66d26fced9a",
+      "category": "project-map",
+      "size": 1326
+    },
+    {
+      "rel": "project-map/ops._archive.md",
+      "title": "Project Map — ops/_archive",
+      "hash": "55e9fd38d773c1ac916dea9a028fcf44ed8aece8",
+      "category": "project-map",
+      "size": 783
+    },
+    {
+      "rel": "project-map/lib.utils.utils.md",
+      "title": "Project Map — lib/utils/utils",
+      "hash": "102cfe5edc94c84a1d0da3f1809fa530763626bd",
+      "category": "project-map",
+      "size": 303
+    },
+    {
+      "rel": "project-map/lib.utils.md",
+      "title": "Project Map — lib/utils",
+      "hash": "c17bf7e03df84c741e6485e506df9482d764a4a0",
+      "category": "project-map",
+      "size": 1048
+    },
+    {
+      "rel": "project-map/lib.types.md",
+      "title": "Project Map — lib/types",
+      "hash": "4211cfb748be54dc55dab41ae84907add77d0ccb",
+      "category": "project-map",
+      "size": 1679
+    },
+    {
+      "rel": "project-map/lib.theme.md",
+      "title": "Project Map — lib/theme",
+      "hash": "96bd69af17ecd17e0732c55eee70a25a99da76e5",
+      "category": "project-map",
+      "size": 383
+    },
+    {
+      "rel": "project-map/lib.services.md",
+      "title": "Project Map — lib/services",
+      "hash": "35ef19cd6fd00dfe8b449a12ea207c029abcb121",
+      "category": "project-map",
+      "size": 451
+    },
+    {
+      "rel": "project-map/lib.rotowire.md",
+      "title": "Project Map — lib/rotowire",
+      "hash": "3676bf8ad89b658a242c95fdf7ca2fc75c946d1a",
+      "category": "project-map",
+      "size": 519
+    },
+    {
+      "rel": "project-map/lib.repos.repositories.md",
+      "title": "Project Map — lib/repos/repositories",
+      "hash": "fb4ad0419da619aa1b03fd71a474ede357e42ef0",
+      "category": "project-map",
+      "size": 1275
+    },
+    {
+      "rel": "project-map/lib.repos.md",
+      "title": "Project Map — lib/repos",
+      "hash": "9b6d986ea6a8cd91f7fff79e7692af2bc91ef9bd",
+      "category": "project-map",
+      "size": 2105
+    },
+    {
+      "rel": "project-map/lib.realtime.md",
+      "title": "Project Map — lib/realtime",
+      "hash": "321ee3364368e0a0ca4caab899ffba6635506f63",
+      "category": "project-map",
+      "size": 403
+    },
+    {
+      "rel": "project-map/lib.middleware.md",
+      "title": "Project Map — lib/middleware",
+      "hash": "58f7c11704526385d7963794d315cc58a2f5fe46",
+      "category": "project-map",
+      "size": 467
+    },
+    {
+      "rel": "project-map/lib.md",
+      "title": "Project Map — lib",
+      "hash": "56cc77397121c85cefbe32673fb8a2fcce2e97f2",
+      "category": "project-map",
+      "size": 2624
+    },
+    {
+      "rel": "project-map/lib.hooks.md",
+      "title": "Project Map — lib/hooks",
+      "hash": "88132e808017037cdf7c52a96be4a73b3b53a6d2",
+      "category": "project-map",
+      "size": 1979
+    },
+    {
+      "rel": "project-map/lib.generated.md",
+      "title": "Project Map — lib/generated",
+      "hash": "c785c916dcd1d5b099ddb1409d96b710b8271480",
+      "category": "project-map",
+      "size": 607
+    },
+    {
+      "rel": "project-map/lib.draft.md",
+      "title": "Project Map — lib/draft",
+      "hash": "176ef64a10bce4e472dfaa4f502962177a32f0ab",
+      "category": "project-map",
+      "size": 927
+    },
+    {
+      "rel": "project-map/lib.domain.validation.md",
+      "title": "Project Map — lib/domain/validation",
+      "hash": "687b7f9c707d6fb616043f81315e2b250aaba4b7",
+      "category": "project-map",
+      "size": 515
+    },
+    {
+      "rel": "project-map/lib.domain.services.md",
+      "title": "Project Map — lib/domain/services",
+      "hash": "b64d91835395c87a81438fc27bbcf29618303984",
+      "category": "project-map",
+      "size": 487
+    },
+    {
+      "rel": "project-map/lib.domain.repositories.md",
+      "title": "Project Map — lib/domain/repositories",
+      "hash": "f7813b3703decde76db13b922f8fa207aefc1f82",
+      "category": "project-map",
+      "size": 491
+    },
+    {
+      "rel": "project-map/lib.domain.md",
+      "title": "Project Map — lib/domain",
+      "hash": "17235f3fe03a8acbc3e94ea67d9479595e7f9b53",
+      "category": "project-map",
+      "size": 1079
+    },
+    {
+      "rel": "project-map/lib.domain.errors.md",
+      "title": "Project Map — lib/domain/errors",
+      "hash": "3e3d9b48a938d6876fbaf68b5ea4defbc0a2ce2d",
+      "category": "project-map",
+      "size": 459
+    },
+    {
+      "rel": "project-map/lib.db.md",
+      "title": "Project Map — lib/db",
+      "hash": "44dc454749fc52f56713e446b9cca49b25bdd07a",
+      "category": "project-map",
+      "size": 2151
+    },
+    {
+      "rel": "project-map/lib.data-sync.md",
+      "title": "Project Map — lib/data-sync",
+      "hash": "c144e4b1c0fd67d6a51e7183f927418c08520d41",
+      "category": "project-map",
+      "size": 691
+    },
+    {
+      "rel": "project-map/lib.config.md",
+      "title": "Project Map — lib/config",
+      "hash": "64a7aec798d2c1bac088ec931b07b5c1fff36e8b",
+      "category": "project-map",
+      "size": 877
+    },
+    {
+      "rel": "project-map/lib.config.config.md",
+      "title": "Project Map — lib/config/config",
+      "hash": "5338712c89e08f36a1a4d8fb71f884e04b333e80",
+      "category": "project-map",
+      "size": 311
+    },
+    {
+      "rel": "project-map/lib.clients.md",
+      "title": "Project Map — lib/clients",
+      "hash": "4121fc6eb0538fb7bb1618cda6e918da7ace920f",
+      "category": "project-map",
+      "size": 407
+    },
+    {
+      "rel": "project-map/lib.api.md",
+      "title": "Project Map — lib/api",
+      "hash": "0b841005417312be0936927d954fef9a0a7052be",
+      "category": "project-map",
+      "size": 655
+    },
+    {
+      "rel": "project-map/future.waiver.md",
+      "title": "Project Map — future/waiver",
+      "hash": "5433ef37f830b51370c2aedb929bc3a592e7e4fd",
+      "category": "project-map",
+      "size": 295,
+      "proposed": "project-map/project-map-future-waiver.md"
+    },
+    {
+      "rel": "project-map/future.trading.trade-processor.md",
+      "title": "Project Map — future/trading/trade-processor",
+      "hash": "e78dec3c54130b4ce8e3c13cea5103e13a223b3a",
+      "category": "project-map",
+      "size": 951,
+      "proposed": "project-map/project-map-future-trading-trade-processor.md"
+    },
+    {
+      "rel": "project-map/future.trading.md",
+      "title": "Project Map — future/trading",
+      "hash": "ca4a7e9bf57ff2edf9977ed333db11ff337e12d5",
+      "category": "project-map",
+      "size": 564,
+      "proposed": "project-map/project-map-future-trading.md"
+    },
+    {
+      "rel": "project-map/future.scoring.weekly-scoring.md",
+      "title": "Project Map — future/scoring/weekly-scoring",
+      "hash": "a1be44cb68931837fb087de5330d0b710f5eb66c",
+      "category": "project-map",
+      "size": 918,
+      "proposed": "project-map/project-map-future-scoring-weekly-scoring.md"
+    },
+    {
+      "rel": "project-map/future.scoring.md",
+      "title": "Project Map — future/scoring",
+      "hash": "b6551f5789382243687585ef799e71994fa0bee3",
+      "category": "project-map",
+      "size": 1519,
+      "proposed": "project-map/project-map-future-scoring.md"
+    },
+    {
+      "rel": "project-map/future.scoring.live-scoring-mechanics.md",
+      "title": "Project Map — future/scoring/live-scoring-mechanics",
+      "hash": "01858cc45643a6609879c32379e293dfec293a5e",
+      "category": "project-map",
+      "size": 846,
+      "proposed": "project-map/project-map-future-scoring-live-scoring-mechanics.md"
+    },
+    {
+      "rel": "project-map/future.scoring.api-cron.md",
+      "title": "Project Map — future/scoring/api-cron",
+      "hash": "6279cd5b630df596af2c14f5e4551598e267c4f1",
+      "category": "project-map",
+      "size": 491,
+      "proposed": "project-map/project-map-future-scoring-api-cron.md"
+    },
+    {
+      "rel": "project-map/future.md",
+      "title": "Project Map — future",
+      "hash": "6d6ea42935340a97369c0b0c5eebf347c843d278",
+      "category": "project-map",
+      "size": 1439,
+      "proposed": "project-map/project-map-future.md"
+    },
+    {
+      "rel": "project-map/future.marketing.md",
+      "title": "Project Map — future/marketing",
+      "hash": "3505e289e8c0ab43f04dc4b08aaced2246237f0e",
+      "category": "project-map",
+      "size": 719,
+      "proposed": "project-map/project-map-future-marketing.md"
+    },
+    {
+      "rel": "project-map/future.ideas.md",
+      "title": "Project Map — future/ideas",
+      "hash": "3778bb1a9a2560cbdd816c10632f4d80737d4f5c",
+      "category": "project-map",
+      "size": 879,
+      "proposed": "project-map/project-map-future-ideas.md"
+    },
+    {
+      "rel": "project-map/future.compliance.md",
+      "title": "Project Map — future/compliance",
+      "hash": "3221821159e85ecaa2a961ef0402c6d04e96ca68",
+      "category": "project-map",
+      "size": 951,
+      "proposed": "project-map/project-map-future-compliance.md"
+    },
+    {
+      "rel": "project-map/future.auction-drafts.md",
+      "title": "Project Map — future/auction-drafts",
+      "hash": "0fd7ef522dce61f580b5fba8e0e82290856e77bb",
+      "category": "project-map",
+      "size": 499,
+      "proposed": "project-map/project-map-future-auction-drafts.md"
+    },
+    {
+      "rel": "project-map/functions.workers.md",
+      "title": "Project Map — functions/workers",
+      "hash": "67dc1876352c0e377577db6d0ee5d6a64b3b59fb",
+      "category": "project-map",
+      "size": 1135
+    },
+    {
+      "rel": "project-map/functions.md",
+      "title": "Project Map — functions",
+      "hash": "132468cd578512e01af7f9c0f5d22df7b7681dbb",
+      "category": "project-map",
+      "size": 773
+    },
+    {
+      "rel": "project-map/functions.cron.md",
+      "title": "Project Map — functions/cron",
+      "hash": "76d8b31a9e2d6765d0ed88a3a2db9b4430c6cc7c",
+      "category": "project-map",
+      "size": 623
+    },
+    {
+      "rel": "project-map/functions.appwrite.on-auction-close.md",
+      "title": "Project Map — functions/appwrite/on-auction-close",
+      "hash": "9003369199b34e867a1b8751f861a14479a2897b",
+      "category": "project-map",
+      "size": 1035
+    },
+    {
+      "rel": "project-map/functions.appwrite.md",
+      "title": "Project Map — functions/appwrite",
+      "hash": "2c10e3509234c215ea1fc7b7c893a534259c6bbd",
+      "category": "project-map",
+      "size": 893
+    },
+    {
+      "rel": "project-map/functions.appwrite.import-players.md",
+      "title": "Project Map — functions/appwrite/import-players",
+      "hash": "ad9835b9817686ff28f115bb505015d60290e8bb",
+      "category": "project-map",
+      "size": 1203
+    },
+    {
+      "rel": "project-map/docs.runbooks.md",
+      "title": "Project Map — docs/runbooks",
+      "hash": "2b2e161edaaa251ad0c844901f8893d9fac26450",
+      "category": "project-map",
+      "size": 1555
+    },
+    {
+      "rel": "project-map/docs.reference.md",
+      "title": "Project Map — docs/reference",
+      "hash": "d61f1eb651dbc344142860b0933a0256929f703b",
+      "category": "project-map",
+      "size": 1835
+    },
+    {
+      "rel": "project-map/docs.md",
+      "title": "Project Map — docs",
+      "hash": "a1935ef24d835059779b16ef09ff829517c5634b",
+      "category": "project-map",
+      "size": 2340
+    },
+    {
+      "rel": "project-map/docs.guides.md",
+      "title": "Project Map — docs/guides",
+      "hash": "99ae136bc561fbefa066922c114e594a19fc482f",
+      "category": "project-map",
+      "size": 2051
+    },
+    {
+      "rel": "project-map/docs.guardrails.md",
+      "title": "Project Map — docs/guardrails",
+      "hash": "1dfd04e90e3752a1128f800080d11cb5d957f7bc",
+      "category": "project-map",
+      "size": 667
+    },
+    {
+      "rel": "project-map/docs.guardrails.data-feeds.md",
+      "title": "Project Map — docs/guardrails/data-feeds",
+      "hash": "573524e6636289529fe51a9ee0fc7ef77d77b109",
+      "category": "project-map",
+      "size": 539
+    },
+    {
+      "rel": "project-map/docs.draft.md",
+      "title": "Project Map — docs/draft",
+      "hash": "f030b5d7d25279fc6c3b0d2b9ead739f9bf13705",
+      "category": "project-map",
+      "size": 447
+    },
+    {
+      "rel": "project-map/docs.diagrams.system-architecture.md",
+      "title": "Project Map — docs/diagrams/system-architecture",
+      "hash": "3f35f75e8597bb5d19e1373c92cdf3b50b959dd0",
+      "category": "project-map",
+      "size": 1338
+    },
+    {
+      "rel": "project-map/docs.diagrams.project-map.md",
+      "title": "Project Map — docs/diagrams/project-map",
+      "hash": "74a069f9f442c0900973f0134cbd4379908ceeee",
+      "category": "project-map",
+      "size": 34199
+    },
+    {
+      "rel": "project-map/docs.diagrams.md",
+      "title": "Project Map — docs/diagrams",
+      "hash": "41ffa45f7741cc562161b47f2995ade88aeed95b",
+      "category": "project-map",
+      "size": 1780
+    },
+    {
+      "rel": "project-map/docs.diagrams.functional.md",
+      "title": "Project Map — docs/diagrams/functional",
+      "hash": "256fabd25151ab065b284ef08d142fba8b88ced0",
+      "category": "project-map",
+      "size": 727
+    },
+    {
+      "rel": "project-map/docs.diagrams.functional-architecture.md",
+      "title": "Project Map — docs/diagrams/functional-architecture",
+      "hash": "6e906d81ba68cd0357d502379676704a19190e5c",
+      "category": "project-map",
+      "size": 391
+    },
+    {
+      "rel": "project-map/docs.diagrams-archive.projections.md",
+      "title": "Project Map — docs/diagrams-archive/projections",
+      "hash": "fe259790f8b52d24600eb51d01dd07e483cbf52a",
+      "category": "project-map",
+      "size": 1803
+    },
+    {
+      "rel": "project-map/docs.diagrams-archive.md",
+      "title": "Project Map — docs/diagrams-archive",
+      "hash": "4dbed06e9a9cf7aca56c34bb8b2e08eefc2db90c",
+      "category": "project-map",
+      "size": 42807
+    },
+    {
+      "rel": "project-map/docs.diagrams-archive.league-draft.md",
+      "title": "Project Map — docs/diagrams-archive/league-draft",
+      "hash": "52cfb6a2e5dfcfda7262a1a9751428c10cc8b856",
+      "category": "project-map",
+      "size": 1115
+    },
+    {
+      "rel": "project-map/docs.diagrams-archive.admin-tools.md",
+      "title": "Project Map — docs/diagrams-archive/admin-tools",
+      "hash": "444a7312115f8132109f8df74764e6ac8b9181e0",
+      "category": "project-map",
+      "size": 875
+    },
+    {
+      "rel": "project-map/docs.adr.md",
+      "title": "Project Map — docs/adr",
+      "hash": "b972e002b4aa4f3f7dbfdc040b37e8191b0486b0",
+      "category": "project-map",
+      "size": 503
+    },
+    {
+      "rel": "project-map/data.user.md",
+      "title": "Project Map — data/user",
+      "hash": "126606fb04bd6be72388de214a8e79b01dd212ee",
+      "category": "project-map",
+      "size": 279
+    },
+    {
+      "rel": "project-map/data.scripts.testing.md",
+      "title": "Project Map — data/scripts/testing",
+      "hash": "f71f168b82a03d573b77ed3b3805dc9369d61635",
+      "category": "project-map",
+      "size": 487
+    },
+    {
+      "rel": "project-map/data.scripts.md",
+      "title": "Project Map — data/scripts",
+      "hash": "9b7acf006838854d07b4cf4d8dcc3f2423358f2b",
+      "category": "project-map",
+      "size": 1396
+    },
+    {
+      "rel": "project-map/data.scripts.ingestion.md",
+      "title": "Project Map — data/scripts/ingestion",
+      "hash": "deea0cbc8b3421588113b9d47651d2ca9866ca52",
+      "category": "project-map",
+      "size": 1484
+    },
+    {
+      "rel": "project-map/data.scripts.imports.md",
+      "title": "Project Map — data/scripts/imports",
+      "hash": "32cfbe10b1616988a2977395d1785077daafbefe",
+      "category": "project-map",
+      "size": 1459
+    },
+    {
+      "rel": "project-map/data.player.raw.md",
+      "title": "Project Map — data/player/raw",
+      "hash": "0d8a5037b07c89b59080c9c69537c13a938b8372",
+      "category": "project-map",
+      "size": 418
+    },
+    {
+      "rel": "project-map/data.player.processed.md",
+      "title": "Project Map — data/player/processed",
+      "hash": "71a00e73c5e1ef1879737c7a98a089a60d138697",
+      "category": "project-map",
+      "size": 625
+    },
+    {
+      "rel": "project-map/data.player.md",
+      "title": "Project Map — data/player",
+      "hash": "6b0a75831363307c052522094d05272f86ae9fa4",
+      "category": "project-map",
+      "size": 988
+    },
+    {
+      "rel": "project-map/data.player.ea.md",
+      "title": "Project Map — data/player/ea",
+      "hash": "6b757285aae4f87e7ecaaa256407bd7d5292e323",
+      "category": "project-map",
+      "size": 451
+    },
+    {
+      "rel": "project-map/data.player.depth.md",
+      "title": "Project Map — data/player/depth",
+      "hash": "a9827d05e350e682ab144875eae7c331b4b75e72",
+      "category": "project-map",
+      "size": 667
+    },
+    {
+      "rel": "project-map/data.md",
+      "title": "Project Map — data",
+      "hash": "6af1a79396270a972344049bfe70eec9aebe665a",
+      "category": "project-map",
+      "size": 1044
+    },
+    {
+      "rel": "project-map/data.market.mockdraft.md",
+      "title": "Project Map — data/market/mockdraft",
+      "hash": "cde76bfe2ee7d68a8aa647dc4b20aeee2fe3f854",
+      "category": "project-map",
+      "size": 475
+    },
+    {
+      "rel": "project-map/data.market.md",
+      "title": "Project Map — data/market",
+      "hash": "784e8c73ce95ce6797178251e509d51e80bb72e3",
+      "category": "project-map",
+      "size": 704
+    },
+    {
+      "rel": "project-map/data.market.efficiency.md",
+      "title": "Project Map — data/market/efficiency",
+      "hash": "122e6c1136ad9bd6c8113adb4d7e5b1014301443",
+      "category": "project-map",
+      "size": 855
+    },
+    {
+      "rel": "project-map/data.conference rosters.md",
+      "title": "Project Map — data/conference rosters",
+      "hash": "2bdcd6919474bef7adb73fde5c9e19bf037e9935",
+      "category": "project-map",
+      "size": 1534
+    },
+    {
+      "rel": "project-map/data.conference rosters.big ten rosters.md",
+      "title": "Project Map — data/conference rosters/big ten rosters",
+      "hash": "ffa8987e525125239b8d45e0dd18347918ebe5e6",
+      "category": "project-map",
+      "size": 6335
+    },
+    {
+      "rel": "project-map/data.conference rosters.SEC_College_Football.md",
+      "title": "Project Map — data/conference rosters/SEC_College_Football",
+      "hash": "5e07449520299e0032c026bb371adf6cd92b64c9",
+      "category": "project-map",
+      "size": 4799
+    },
+    {
+      "rel": "project-map/data.conference rosters.Big_12_2025.md",
+      "title": "Project Map — data/conference rosters/Big_12_2025",
+      "hash": "8b20e5875062d1bf594a29bd6803a6e12443d15d",
+      "category": "project-map",
+      "size": 5327
+    },
+    {
+      "rel": "project-map/data.conference rosters.ACC.md",
+      "title": "Project Map — data/conference rosters/ACC",
+      "hash": "0209df663927226e7530f5095cbb3608f6033639",
+      "category": "project-map",
+      "size": 3879
+    },
+    {
+      "rel": "project-map/components.ui.md",
+      "title": "Project Map — components/ui",
+      "hash": "35d07481726a82140721ee1a19a115015f0a2098",
+      "category": "project-map",
+      "size": 1459,
+      "proposed": "project-map/project-map-components-ui.md"
+    },
+    {
+      "rel": "project-map/components.tables.md",
+      "title": "Project Map — components/tables",
+      "hash": "0a36cef3a958dad9bf61e9504f85e249b943c100",
+      "category": "project-map",
+      "size": 607,
+      "proposed": "project-map/project-map-components-tables.md"
+    },
+    {
+      "rel": "project-map/components.md",
+      "title": "Project Map — components",
+      "hash": "4bda9f36728da7108e3bb5ff741774ba1c589675",
+      "category": "project-map",
+      "size": 1924,
+      "proposed": "project-map/project-map-components.md"
+    },
+    {
+      "rel": "project-map/components.layout.md",
+      "title": "Project Map — components/layout",
+      "hash": "ea558c47ba1d5345a7a78d6ae22ae385e07752a6",
+      "category": "project-map",
+      "size": 947,
+      "proposed": "project-map/project-map-components-layout.md"
+    },
+    {
+      "rel": "project-map/components.hooks.md",
+      "title": "Project Map — components/hooks",
+      "hash": "5623ad3cde4c1251978c000d7b7ec41cd4374f34",
+      "category": "project-map",
+      "size": 611,
+      "proposed": "project-map/project-map-components-hooks.md"
+    },
+    {
+      "rel": "project-map/components.forms.md",
+      "title": "Project Map — components/forms",
+      "hash": "bbe8cf2db99f77a046b179974d742a4c03504365",
+      "category": "project-map",
+      "size": 695,
+      "proposed": "project-map/project-map-components-forms.md"
+    },
+    {
+      "rel": "project-map/components.features.players.md",
+      "title": "Project Map — components/features/players",
+      "hash": "6294063c526ba81bfefc5384442e874a13146640",
+      "category": "project-map",
+      "size": 351,
+      "proposed": "project-map/project-map-components-features-players.md"
+    },
+    {
+      "rel": "project-map/components.features.md",
+      "title": "Project Map — components/features",
+      "hash": "e8174f4275df5b730a2007b4eccc7ac8373874b0",
+      "category": "project-map",
+      "size": 1514,
+      "proposed": "project-map/project-map-components-features.md"
+    },
+    {
+      "rel": "project-map/components.features.leagues.md",
+      "title": "Project Map — components/features/leagues",
+      "hash": "42f63b15aab53079972229ede89e1de85e8db4ea",
+      "category": "project-map",
+      "size": 1827,
+      "proposed": "project-map/project-map-components-features-leagues.md"
+    },
+    {
+      "rel": "project-map/components.features.games.md",
+      "title": "Project Map — components/features/games",
+      "hash": "9eef8642bc97dbbf5ab3387fd973d891fa6acc3b",
+      "category": "project-map",
+      "size": 707,
+      "proposed": "project-map/project-map-components-features-games.md"
+    },
+    {
+      "rel": "project-map/components.features.draft.md",
+      "title": "Project Map — components/features/draft",
+      "hash": "9a44726b6683c31b592a7317afa0351c5b707450",
+      "category": "project-map",
+      "size": 1499,
+      "proposed": "project-map/project-map-components-features-draft.md"
+    },
+    {
+      "rel": "project-map/components.features.conferences.md",
+      "title": "Project Map — components/features/conferences",
+      "hash": "70588006f30a6724b5f7816a84706b0c4b6545b8",
+      "category": "project-map",
+      "size": 595,
+      "proposed": "project-map/project-map-components-features-conferences.md"
+    },
+    {
+      "rel": "project-map/components.draft.md",
+      "title": "Project Map — components/draft",
+      "hash": "5e886d3441fd2d963716c66cc2bff3ed3ecd9c18",
+      "category": "project-map",
+      "size": 307,
+      "proposed": "project-map/project-map-components-draft.md"
+    },
+    {
+      "rel": "project-map/components.docs.md",
+      "title": "Project Map — components/docs",
+      "hash": "f98188ba7e905f4bc0ca00db3fc5dae634204cd1",
+      "category": "project-map",
+      "size": 643,
+      "proposed": "project-map/project-map-components-docs.md"
+    },
+    {
+      "rel": "project-map/components.dev.md",
+      "title": "Project Map — components/dev",
+      "hash": "99d39ff1687467a99e784b41ba2a3e1b4e2431b7",
+      "category": "project-map",
+      "size": 467,
+      "proposed": "project-map/project-map-components-dev.md"
+    },
+    {
+      "rel": "project-map/components.charts.md",
+      "title": "Project Map — components/charts",
+      "hash": "dcb9c65a56fab5ddea863b76a01bc138ff886349",
+      "category": "project-map",
+      "size": 595,
+      "proposed": "project-map/project-map-components-charts.md"
+    },
+    {
+      "rel": "project-map/appwrite-schema.md",
+      "title": "Appwrite Live Schema",
+      "hash": "684449deb61888f2e0b2baf6cc9447c42dcb2f7a",
+      "category": "project-map",
+      "size": 17293,
+      "proposed": "project-map/appwrite-live-schema.md"
+    },
+    {
+      "rel": "project-map/app.md",
+      "title": "Project Map — app",
+      "hash": "ff836b40ac5acbe8a3f68b399131089f84fe873c",
+      "category": "project-map",
+      "size": 3127
+    },
+    {
+      "rel": "project-map/app.marketing.videos.md",
+      "title": "Project Map — app/marketing/videos",
+      "hash": "04ec358496ca75364eb016126386dbd7ec226444",
+      "category": "project-map",
+      "size": 753
+    },
+    {
+      "rel": "project-map/app.marketing.signup.md",
+      "title": "Project Map — app/marketing/signup",
+      "hash": "0a7dc5653659fbdcc05bf8864399cf9c438a7b23",
+      "category": "project-map",
+      "size": 467
+    },
+    {
+      "rel": "project-map/app.marketing.projection-showcase.md",
+      "title": "Project Map — app/marketing/projection-showcase",
+      "hash": "c2a7f028fa582a2e9a87081dc5ce9a6691640515",
+      "category": "project-map",
+      "size": 571
+    },
+    {
+      "rel": "project-map/app.marketing.offline.md",
+      "title": "Project Map — app/marketing/offline",
+      "hash": "92fd6a73fd61b855f7415625de25e2fa15f6296c",
+      "category": "project-map",
+      "size": 475
+    },
+    {
+      "rel": "project-map/app.marketing.md",
+      "title": "Project Map — app/marketing",
+      "hash": "de70e214945b34f50009a66d8ae2fd6837111977",
+      "category": "project-map",
+      "size": 2161
+    },
+    {
+      "rel": "project-map/app.marketing.login.md",
+      "title": "Project Map — app/marketing/login",
+      "hash": "91f72aa9eefcc2d0f5621b98f12fe01eda153a51",
+      "category": "project-map",
+      "size": 622
+    },
+    {
+      "rel": "project-map/app.marketing.launch.md",
+      "title": "Project Map — app/marketing/launch",
+      "hash": "73be5a07775ed94f154287a8fea2ab34236bf875",
+      "category": "project-map",
+      "size": 467
+    },
+    {
+      "rel": "project-map/app.marketing.invite.md",
+      "title": "Project Map — app/marketing/invite",
+      "hash": "ad8537602afedb37fc20f728c4c26a5832a4adeb",
+      "category": "project-map",
+      "size": 478
+    },
+    {
+      "rel": "project-map/app.marketing.conference-showcase.md",
+      "title": "Project Map — app/marketing/conference-showcase",
+      "hash": "3397733f33268c29acbe95e93cc3357f2aed868a",
+      "category": "project-map",
+      "size": 571
+    },
+    {
+      "rel": "project-map/app.draft.mock-draft.md",
+      "title": "Project Map — app/draft/mock-draft",
+      "hash": "134b4cfe38155b24b50083f1edaaa2edbc3aed96",
+      "category": "project-map",
+      "size": 474
+    },
+    {
+      "rel": "project-map/app.draft.md",
+      "title": "Project Map — app/draft",
+      "hash": "8bc6cadbf39479f15dc3566aae78a074e3632629",
+      "category": "project-map",
+      "size": 644
+    },
+    {
+      "rel": "project-map/app.draft.draft.md",
+      "title": "Project Map — app/draft/draft",
+      "hash": "d8c47eae2ce4a53fcd8f39824485a60d07c1abf9",
+      "category": "project-map",
+      "size": 549
+    },
+    {
+      "rel": "project-map/app.dashboard.standings.md",
+      "title": "Project Map — app/dashboard/standings",
+      "hash": "f0ee8166150cd5c67feaff8f507c095bb2c5f2a8",
+      "category": "project-map",
+      "size": 491
+    },
+    {
+      "rel": "project-map/app.dashboard.scoreboard.md",
+      "title": "Project Map — app/dashboard/scoreboard",
+      "hash": "0d230a6db7f6d88fbc7a092f94771a462960168c",
+      "category": "project-map",
+      "size": 499
+    },
+    {
+      "rel": "project-map/app.dashboard.md",
+      "title": "Project Map — app/dashboard",
+      "hash": "ed1dc9a3917318f940098f894bdf2aaf64805e58",
+      "category": "project-map",
+      "size": 1541
+    },
+    {
+      "rel": "project-map/app.dashboard.league.md",
+      "title": "Project Map — app/dashboard/league",
+      "hash": "7d1c559e6bf8ec6bd0a9564fed8b2c59c708f6aa",
+      "category": "project-map",
+      "size": 748
+    },
+    {
+      "rel": "project-map/app.dashboard.dashboard.md",
+      "title": "Project Map — app/dashboard/dashboard",
+      "hash": "bfb2b982a4a17a1e6c1d445fd82d3bacfeafb16e",
+      "category": "project-map",
+      "size": 491
+    },
+    {
+      "rel": "project-map/app.dashboard.admin.md",
+      "title": "Project Map — app/dashboard/admin",
+      "hash": "42ee9aef6f3e7423bda3ccb93827dc0d3eddab16",
+      "category": "project-map",
+      "size": 319
+    },
+    {
+      "rel": "project-map/app.dashboard.account.md",
+      "title": "Project Map — app/dashboard/account",
+      "hash": "1ae561024e074692a2decffb6c1470c94ab9c42c",
+      "category": "project-map",
+      "size": 478
+    },
+    {
+      "rel": "project-map/app.api.webhooks.md",
+      "title": "Project Map — app/api/webhooks",
+      "hash": "114df0ef8eeedd2bff4722c1b0d2462887b37496",
+      "category": "project-map",
+      "size": 597
+    },
+    {
+      "rel": "project-map/app.api.users.md",
+      "title": "Project Map — app/api/users",
+      "hash": "ad59918bb5d29fbc9aa259c81f42c37a6e45f6a8",
+      "category": "project-map",
+      "size": 414
+    },
+    {
+      "rel": "project-map/app.api.sync.md",
+      "title": "Project Map — app/api/sync",
+      "hash": "0be81af55dcb9eab37fd10b81994c744b946f8a2",
+      "category": "project-map",
+      "size": 403
+    },
+    {
+      "rel": "project-map/app.api.static.md",
+      "title": "Project Map — app/api/static",
+      "hash": "095ca27f085e45e65eaf901ce8fc5c8eae00468d",
+      "category": "project-map",
+      "size": 426
+    },
+    {
+      "rel": "project-map/app.api.security.md",
+      "title": "Project Map — app/api/security",
+      "hash": "78369bf22c3cc2abbc42f432e3df2c2008c6a0af",
+      "category": "project-map",
+      "size": 446
+    },
+    {
+      "rel": "project-map/app.api.search.md",
+      "title": "Project Map — app/api/search",
+      "hash": "c4c4dc912bcba36d773e19ce1f6d4d7f3e81a59d",
+      "category": "project-map",
+      "size": 419
+    },
+    {
+      "rel": "project-map/app.api.scraper.md",
+      "title": "Project Map — app/api/scraper",
+      "hash": "e9c5e2fd6e2997048efc3b33625b97f4ae2d2706",
+      "category": "project-map",
+      "size": 427
+    },
+    {
+      "rel": "project-map/app.api.schedule.md",
+      "title": "Project Map — app/api/schedule",
+      "hash": "2ac696452587c2ea1b2fac61573bb3de37963d4c",
+      "category": "project-map",
+      "size": 435
+    },
+    {
+      "rel": "project-map/app.api.runway.md",
+      "title": "Project Map — app/api/runway",
+      "hash": "8af287ce8abd1f46d8d01cecf0b0768d3364f0ef",
+      "category": "project-map",
+      "size": 414
+    },
+    {
+      "rel": "project-map/app.api.rotowire.md",
+      "title": "Project Map — app/api/rotowire",
+      "hash": "3f299d6a187b65163df4d2ddc2d8ca9b2530a3d3",
+      "category": "project-map",
+      "size": 550
+    },
+    {
+      "rel": "project-map/app.api.rosters.md",
+      "title": "Project Map — app/api/rosters",
+      "hash": "e38ec9e8f5e2c8a285ef45b8ae99d261e6148013",
+      "category": "project-map",
+      "size": 427
+    },
+    {
+      "rel": "project-map/app.api.rankings.md",
+      "title": "Project Map — app/api/rankings",
+      "hash": "08dad60c133990a34df87e2f5cd0ac0757015ab1",
+      "category": "project-map",
+      "size": 558
+    },
+    {
+      "rel": "project-map/app.api.projections.md",
+      "title": "Project Map — app/api/projections",
+      "hash": "0dff68041d21f559b9a1bcd013f06320d510fc28",
+      "category": "project-map",
+      "size": 442
+    },
+    {
+      "rel": "project-map/app.api.players.md",
+      "title": "Project Map — app/api/players",
+      "hash": "352077d37951bd202fbcd81cfa66c3c19f360259",
+      "category": "project-map",
+      "size": 788
+    },
+    {
+      "rel": "project-map/app.api.og.md",
+      "title": "Project Map — app/api/og",
+      "hash": "7a015bdc8a6ff5551cba7c77a2d03ebd54653dc5",
+      "category": "project-map",
+      "size": 501
+    },
+    {
+      "rel": "project-map/app.api.monitoring.md",
+      "title": "Project Map — app/api/monitoring",
+      "hash": "077107384d548b6c2082ca573280c7914126b150",
+      "category": "project-map",
+      "size": 458
+    },
+    {
+      "rel": "project-map/app.api.mock-draft.md",
+      "title": "Project Map — app/api/mock-draft",
+      "hash": "8f7ee31f8ad43890bfd2e608d7f2153cd60e0e14",
+      "category": "project-map",
+      "size": 1077
+    },
+    {
+      "rel": "project-map/app.api.migrations.md",
+      "title": "Project Map — app/api/migrations",
+      "hash": "f6f561c3e01329ca7da3ad26a6acbe8f8443ff97",
+      "category": "project-map",
+      "size": 1210
+    },
+    {
+      "rel": "project-map/app.api.meshy.md",
+      "title": "Project Map — app/api/meshy",
+      "hash": "b6190fac746d7f25b79795c09a3484b1a9955f9b",
+      "category": "project-map",
+      "size": 513
+    },
+    {
+      "rel": "project-map/app.api.md",
+      "title": "Project Map — app/api",
+      "hash": "b106b98168207946c9e6ee45c43f85ae2420036a",
+      "category": "project-map",
+      "size": 7137
+    },
+    {
+      "rel": "project-map/app.api.mcp.md",
+      "title": "Project Map — app/api/mcp",
+      "hash": "c495c0e4a7b3f2b38883a4f55d8d47c064fbd8cb",
+      "category": "project-map",
+      "size": 539
+    },
+    {
+      "rel": "project-map/app.api.mascot.md",
+      "title": "Project Map — app/api/mascot",
+      "hash": "04726ebb93b07010d598943e5eee3051d4b55da6",
+      "category": "project-map",
+      "size": 426
+    },
+    {
+      "rel": "project-map/app.api.leagues.md",
+      "title": "Project Map — app/api/leagues",
+      "hash": "e5774927fc962b9d50941b590588cfce7227fbc8",
+      "category": "project-map",
+      "size": 1558
+    },
+    {
+      "rel": "project-map/app.api.launch.md",
+      "title": "Project Map — app/api/launch",
+      "hash": "f75f1c6dc425296044a821c4eb8084ba2a9dd0ae",
+      "category": "project-map",
+      "size": 414
+    },
+    {
+      "rel": "project-map/app.api.health.md",
+      "title": "Project Map — app/api/health",
+      "hash": "7188418cb0d17ab0e62d0c1397485d64de91bbe4",
+      "category": "project-map",
+      "size": 419
+    },
+    {
+      "rel": "project-map/app.api.games.md",
+      "title": "Project Map — app/api/games",
+      "hash": "52be8ecf034d52ad09e0e843a02e4c5bc377974b",
+      "category": "project-map",
+      "size": 406
+    },
+    {
+      "rel": "project-map/app.api.drafts.md",
+      "title": "Project Map — app/api/drafts",
+      "hash": "13f439a555428a39123ca9cff4e1e67c96644e6d",
+      "category": "project-map",
+      "size": 526
+    },
+    {
+      "rel": "project-map/app.api.draft.md",
+      "title": "Project Map — app/api/draft",
+      "hash": "cdb7662acfc2dffaa2b0b9b19cbf6394d49e3bc4",
+      "category": "project-map",
+      "size": 656
+    },
+    {
+      "rel": "project-map/app.api.docs.md",
+      "title": "Project Map — app/api/docs",
+      "hash": "56665b89bccc174d70055b03ea49cca11cf9a065",
+      "category": "project-map",
+      "size": 402
+    },
+    {
+      "rel": "project-map/app.api.cursor-report.md",
+      "title": "Project Map — app/api/cursor-report",
+      "hash": "4623756d3245fcfef5e2f2a708d51270e63680fc",
+      "category": "project-map",
+      "size": 475
+    },
+    {
+      "rel": "project-map/app.api.cron.md",
+      "title": "Project Map — app/api/cron",
+      "hash": "b6ad3f37b0927fc6fd572193de70e96fe7952755",
+      "category": "project-map",
+      "size": 962
+    },
+    {
+      "rel": "project-map/app.api.conferences.md",
+      "title": "Project Map — app/api/conferences",
+      "hash": "a48220826cf795f1a6d4904509ea32a50a8d2e06",
+      "category": "project-map",
+      "size": 478
+    },
+    {
+      "rel": "project-map/app.api.claude.md",
+      "title": "Project Map — app/api/claude",
+      "hash": "36231d734f6a44e257dac9261d6bd6a06596ea63",
+      "category": "project-map",
+      "size": 419
+    },
+    {
+      "rel": "project-map/app.api.cfbd.md",
+      "title": "Project Map — app/api/cfbd",
+      "hash": "94c317ae8c9045e30665b0474c871ea349a9d8b6",
+      "category": "project-map",
+      "size": 402
+    },
+    {
+      "rel": "project-map/app.api.cache.md",
+      "title": "Project Map — app/api/cache",
+      "hash": "22f46c5574a5d1ac235684cfe274ddcb6d98c3f1",
+      "category": "project-map",
+      "size": 529
+    },
+    {
+      "rel": "project-map/app.api.blender.md",
+      "title": "Project Map — app/api/blender",
+      "hash": "3dc4c549aa2ae450cc93d436706d82ca6d7ec59f",
+      "category": "project-map",
+      "size": 895
+    },
+    {
+      "rel": "project-map/app.api.bids.md",
+      "title": "Project Map — app/api/bids",
+      "hash": "f9204348ed736be4343f6d3ab6b3677ec36aa5f7",
+      "category": "project-map",
+      "size": 403
+    },
+    {
+      "rel": "project-map/app.api.auth.md",
+      "title": "Project Map — app/api/auth",
+      "hash": "f44d5946cf0474c0ec863529b2691f084730ca13",
+      "category": "project-map",
+      "size": 1072
+    },
+    {
+      "rel": "project-map/app.api.auctions.md",
+      "title": "Project Map — app/api/auctions",
+      "hash": "65401e67ebcc5dad031c8206f3f1fb571177e611",
+      "category": "project-map",
+      "size": 435
+    },
+    {
+      "rel": "project-map/app.api.admin.md",
+      "title": "Project Map — app/api/admin",
+      "hash": "90d56b3847afaaaf2049ca16fbbf188598df3e39",
+      "category": "project-map",
+      "size": 1141
+    },
+    {
+      "rel": "project-map/app.admin.sync-status.md",
+      "title": "Project Map — app/admin/sync-status",
+      "hash": "4e34899050ab61b18b02fb51abc9366ff2e1c3e6",
+      "category": "project-map",
+      "size": 475
+    },
+    {
+      "rel": "project-map/app.admin.sec-survey.md",
+      "title": "Project Map — app/admin/sec-survey",
+      "hash": "c16f7466117312a5149d0d8e56ab07d66adc786c",
+      "category": "project-map",
+      "size": 467
+    },
+    {
+      "rel": "project-map/app.admin.project-map.md",
+      "title": "Project Map — app/admin/project-map",
+      "hash": "c5d7200cd386bab7bc594e2ed5e31d7b96392111",
+      "category": "project-map",
+      "size": 749
+    },
+    {
+      "rel": "project-map/app.admin.md",
+      "title": "Project Map — app/admin",
+      "hash": "57a3bd1fc80ec2fde5be02f77f30aab04dd8deef",
+      "category": "project-map",
+      "size": 1207
+    },
+    {
+      "rel": "project-map/app.admin.cache-status.md",
+      "title": "Project Map — app/admin/cache-status",
+      "hash": "2c11ec0ba9dc24db5197ddc04ae19d14b6d9b060",
+      "category": "project-map",
+      "size": 483
+    },
+    {
+      "rel": "project-map/public/index.md",
+      "title": "Project Map — public",
+      "hash": "9fcbe69661d9a22feeb90136e8393abf58028186",
+      "category": "project-map",
+      "size": 256,
+      "duplicateOf": "project-map/public.md"
+    },
+    {
+      "rel": "project-map/schema/index.md",
+      "title": "Project Map — schema",
+      "hash": "64e274b78c867a19a020354cf6d1667d04c974fe",
+      "category": "project-map",
+      "size": 889,
+      "proposed": "project-map/project-map-schema.md"
+    },
+    {
+      "rel": "project-map/ops/index.md",
+      "title": "Project Map — ops",
+      "hash": "46b9537f3a58730bbd1b69c9cda9ae1c6746a33c",
+      "category": "project-map",
+      "size": 2114,
+      "proposed": "project-map/project-map-ops.md"
+    },
+    {
+      "rel": "project-map/lib/index.md",
+      "title": "Project Map — lib",
+      "hash": "56cc77397121c85cefbe32673fb8a2fcce2e97f2",
+      "category": "project-map",
+      "size": 2624,
+      "duplicateOf": "project-map/lib.md"
+    },
+    {
+      "rel": "project-map/future/index.md",
+      "title": "Project Map — future",
+      "hash": "6d6ea42935340a97369c0b0c5eebf347c843d278",
+      "category": "project-map",
+      "size": 1439,
+      "duplicateOf": "project-map/future.md"
+    },
+    {
+      "rel": "project-map/functions/index.md",
+      "title": "Project Map — functions",
+      "hash": "132468cd578512e01af7f9c0f5d22df7b7681dbb",
+      "category": "project-map",
+      "size": 773,
+      "duplicateOf": "project-map/functions.md"
+    },
+    {
+      "rel": "project-map/docs/index.md",
+      "title": "Project Map — docs",
+      "hash": "b1db7b74d8b15320778f189f90f62d5f9704d04f",
+      "category": "project-map",
+      "size": 1515,
+      "proposed": "project-map/project-map-docs.md"
+    },
+    {
+      "rel": "project-map/schema/zod/index.md",
+      "title": "Project Map — schema/zod",
+      "hash": "0a8632a1b153b8fda72ad493baf2f55b6093521b",
+      "category": "project-map",
+      "size": 2711,
+      "duplicateOf": "project-map/schema.zod.md"
+    },
+    {
+      "rel": "project-map/schema/snapshots/index.md",
+      "title": "Project Map — schema/snapshots",
+      "hash": "0a99edf7a49bd2b0488153784b38ff4fb1eab464",
+      "category": "project-map",
+      "size": 483,
+      "duplicateOf": "project-map/schema.snapshots.md"
+    },
+    {
+      "rel": "project-map/data/index.md",
+      "title": "Project Map — data",
+      "hash": "6af1a79396270a972344049bfe70eec9aebe665a",
+      "category": "project-map",
+      "size": 1044,
+      "duplicateOf": "project-map/data.md"
+    },
+    {
+      "rel": "project-map/schema/sites/index.md",
+      "title": "Project Map — schema/sites",
+      "hash": "5a8a5a5fe35d0442d6f3420503da0ee4ac01bada",
+      "category": "project-map",
+      "size": 635,
+      "duplicateOf": "project-map/schema.sites.md"
+    },
+    {
+      "rel": "project-map/schema/generators/index.md",
+      "title": "Project Map — schema/generators",
+      "hash": "08877fbbeb4a36c6c2da94001b506def44ec6287",
+      "category": "project-map",
+      "size": 1215,
+      "duplicateOf": "project-map/schema.generators.md"
+    },
+    {
+      "rel": "project-map/components/index.md",
+      "title": "Project Map — components",
+      "hash": "4bda9f36728da7108e3bb5ff741774ba1c589675",
+      "category": "project-map",
+      "size": 1924,
+      "duplicateOf": "project-map/components.md"
+    },
+    {
+      "rel": "project-map/app/index.md",
+      "title": "Project Map — app",
+      "hash": "22b00e4b5bb2c6631e89763c832646b03b8cc7b7",
+      "category": "project-map",
+      "size": 1185,
+      "proposed": "project-map/project-map-app.md"
+    },
+    {
+      "rel": "project-map/ops/diagrams/index.md",
+      "title": "Project Map — ops/diagrams",
+      "hash": "68d2dc1427c48cd7835829f0c48c624bf8ddd161",
+      "category": "project-map",
+      "size": 509,
+      "duplicateOf": "project-map/ops.diagrams.md"
+    },
+    {
+      "rel": "project-map/ops/db/index.md",
+      "title": "Project Map — ops/db",
+      "hash": "2af87d43984ee41c57e17b336deb18c0f17e3ee2",
+      "category": "project-map",
+      "size": 623,
+      "duplicateOf": "project-map/ops.db.md"
+    },
+    {
+      "rel": "project-map/ops/out/index.md",
+      "title": "Project Map — ops/out",
+      "hash": "404eb494c4855a7f90856d537b5180fa44f82eee",
+      "category": "project-map",
+      "size": 1840,
+      "duplicateOf": "project-map/ops.out.md"
+    },
+    {
+      "rel": "project-map/ops/cursor/index.md",
+      "title": "Project Map — ops/cursor",
+      "hash": "8d7927b06c8f341a90ad2496092d1d73cac6dbfd",
+      "category": "project-map",
+      "size": 820,
+      "duplicateOf": "project-map/ops.cursor.md"
+    },
+    {
+      "rel": "project-map/ops/cursor-ops/index.md",
+      "title": "Project Map — ops/cursor-ops",
+      "hash": "12d733abf03ecd531c4cdff247f698c786f835d5",
+      "category": "project-map",
+      "size": 1618,
+      "duplicateOf": "project-map/ops.cursor-ops.md"
+    },
+    {
+      "rel": "project-map/ops/config/index.md",
+      "title": "Project Map — ops/config",
+      "hash": "d874cd34bac83d00eafdb3b5794c6663a66988d1",
+      "category": "project-map",
+      "size": 547,
+      "duplicateOf": "project-map/ops.config.md"
+    },
+    {
+      "rel": "project-map/ops/claude/index.md",
+      "title": "Project Map — ops/claude",
+      "hash": "91cc50ba78a2c0e8de13662accb29f6f2a4664ad",
+      "category": "project-map",
+      "size": 283,
+      "duplicateOf": "project-map/ops.claude.md"
+    },
+    {
+      "rel": "project-map/ops/common/index.md",
+      "title": "Project Map — ops/common",
+      "hash": "2c7a0e1b3ea8e34285538f6b0b11f3442b72fb06",
+      "category": "project-map",
+      "size": 2091,
+      "duplicateOf": "project-map/ops.common.md"
+    },
+    {
+      "rel": "project-map/ops/attic/index.md",
+      "title": "Project Map — ops/attic",
+      "hash": "e122af32eae9193ce6330ee49b9b592cfd28f749",
+      "category": "project-map",
+      "size": 2556,
+      "duplicateOf": "project-map/ops.attic.md"
+    },
+    {
+      "rel": "project-map/ops/chatgpt/index.md",
+      "title": "Project Map — ops/chatgpt",
+      "hash": "6d9c565a4693095eb1638b919180f2213b4c2ffb",
+      "category": "project-map",
+      "size": 287,
+      "duplicateOf": "project-map/ops.chatgpt.md"
+    },
+    {
+      "rel": "project-map/ops/claude-ops/index.md",
+      "title": "Project Map — ops/claude-ops",
+      "hash": "b752c6503ca5f30fe33563ebb05ae7e3217a8d2b",
+      "category": "project-map",
+      "size": 1626,
+      "duplicateOf": "project-map/ops.claude-ops.md"
+    },
+    {
+      "rel": "project-map/ops/_archive/index.md",
+      "title": "Project Map — ops/_archive",
+      "hash": "55e9fd38d773c1ac916dea9a028fcf44ed8aece8",
+      "category": "project-map",
+      "size": 783,
+      "duplicateOf": "project-map/ops._archive.md"
+    },
+    {
+      "rel": "project-map/ops/chatgpt-ops/index.md",
+      "title": "Project Map — ops/chatgpt-ops",
+      "hash": "71f49b85881e3fc558ff60b1263d8bbe36a1f957",
+      "category": "project-map",
+      "size": 1364,
+      "duplicateOf": "project-map/ops.chatgpt-ops.md"
+    },
+    {
+      "rel": "project-map/lib/services/index.md",
+      "title": "Project Map — lib/services",
+      "hash": "35ef19cd6fd00dfe8b449a12ea207c029abcb121",
+      "category": "project-map",
+      "size": 451,
+      "duplicateOf": "project-map/lib.services.md"
+    },
+    {
+      "rel": "project-map/lib/types/index.md",
+      "title": "Project Map — lib/types",
+      "hash": "4211cfb748be54dc55dab41ae84907add77d0ccb",
+      "category": "project-map",
+      "size": 1679,
+      "duplicateOf": "project-map/lib.types.md"
+    },
+    {
+      "rel": "project-map/lib/theme/index.md",
+      "title": "Project Map — lib/theme",
+      "hash": "96bd69af17ecd17e0732c55eee70a25a99da76e5",
+      "category": "project-map",
+      "size": 383,
+      "duplicateOf": "project-map/lib.theme.md"
+    },
+    {
+      "rel": "project-map/lib/utils/index.md",
+      "title": "Project Map — lib/utils",
+      "hash": "c17bf7e03df84c741e6485e506df9482d764a4a0",
+      "category": "project-map",
+      "size": 1048,
+      "duplicateOf": "project-map/lib.utils.md"
+    },
+    {
+      "rel": "project-map/lib/rotowire/index.md",
+      "title": "Project Map — lib/rotowire",
+      "hash": "3676bf8ad89b658a242c95fdf7ca2fc75c946d1a",
+      "category": "project-map",
+      "size": 519,
+      "duplicateOf": "project-map/lib.rotowire.md"
+    },
+    {
+      "rel": "project-map/lib/repos/index.md",
+      "title": "Project Map — lib/repos",
+      "hash": "9b6d986ea6a8cd91f7fff79e7692af2bc91ef9bd",
+      "category": "project-map",
+      "size": 2105,
+      "duplicateOf": "project-map/lib.repos.md"
+    },
+    {
+      "rel": "project-map/lib/realtime/index.md",
+      "title": "Project Map — lib/realtime",
+      "hash": "321ee3364368e0a0ca4caab899ffba6635506f63",
+      "category": "project-map",
+      "size": 403,
+      "duplicateOf": "project-map/lib.realtime.md"
+    },
+    {
+      "rel": "project-map/lib/middleware/index.md",
+      "title": "Project Map — lib/middleware",
+      "hash": "58f7c11704526385d7963794d315cc58a2f5fe46",
+      "category": "project-map",
+      "size": 467,
+      "duplicateOf": "project-map/lib.middleware.md"
+    },
+    {
+      "rel": "project-map/lib/draft/index.md",
+      "title": "Project Map — lib/draft",
+      "hash": "176ef64a10bce4e472dfaa4f502962177a32f0ab",
+      "category": "project-map",
+      "size": 927,
+      "duplicateOf": "project-map/lib.draft.md"
+    },
+    {
+      "rel": "project-map/lib/hooks/index.md",
+      "title": "Project Map — lib/hooks",
+      "hash": "88132e808017037cdf7c52a96be4a73b3b53a6d2",
+      "category": "project-map",
+      "size": 1979,
+      "duplicateOf": "project-map/lib.hooks.md"
+    },
+    {
+      "rel": "project-map/lib/domain/index.md",
+      "title": "Project Map — lib/domain",
+      "hash": "17235f3fe03a8acbc3e94ea67d9479595e7f9b53",
+      "category": "project-map",
+      "size": 1079,
+      "duplicateOf": "project-map/lib.domain.md"
+    },
+    {
+      "rel": "project-map/lib/generated/index.md",
+      "title": "Project Map — lib/generated",
+      "hash": "c785c916dcd1d5b099ddb1409d96b710b8271480",
+      "category": "project-map",
+      "size": 607,
+      "duplicateOf": "project-map/lib.generated.md"
+    },
+    {
+      "rel": "project-map/lib/data-sync/index.md",
+      "title": "Project Map — lib/data-sync",
+      "hash": "c144e4b1c0fd67d6a51e7183f927418c08520d41",
+      "category": "project-map",
+      "size": 691,
+      "duplicateOf": "project-map/lib.data-sync.md"
+    },
+    {
+      "rel": "project-map/lib/clients/index.md",
+      "title": "Project Map — lib/clients",
+      "hash": "4121fc6eb0538fb7bb1618cda6e918da7ace920f",
+      "category": "project-map",
+      "size": 407,
+      "duplicateOf": "project-map/lib.clients.md"
+    },
+    {
+      "rel": "project-map/lib/db/index.md",
+      "title": "Project Map — lib/db",
+      "hash": "44dc454749fc52f56713e446b9cca49b25bdd07a",
+      "category": "project-map",
+      "size": 2151,
+      "duplicateOf": "project-map/lib.db.md"
+    },
+    {
+      "rel": "project-map/lib/api/index.md",
+      "title": "Project Map — lib/api",
+      "hash": "0b841005417312be0936927d954fef9a0a7052be",
+      "category": "project-map",
+      "size": 655,
+      "duplicateOf": "project-map/lib.api.md"
+    },
+    {
+      "rel": "project-map/lib/config/index.md",
+      "title": "Project Map — lib/config",
+      "hash": "64a7aec798d2c1bac088ec931b07b5c1fff36e8b",
+      "category": "project-map",
+      "size": 877,
+      "duplicateOf": "project-map/lib.config.md"
+    },
+    {
+      "rel": "project-map/future/scoring/index.md",
+      "title": "Project Map — future/scoring",
+      "hash": "b6551f5789382243687585ef799e71994fa0bee3",
+      "category": "project-map",
+      "size": 1519,
+      "duplicateOf": "project-map/future.scoring.md"
+    },
+    {
+      "rel": "project-map/future/marketing/index.md",
+      "title": "Project Map — future/marketing",
+      "hash": "3505e289e8c0ab43f04dc4b08aaced2246237f0e",
+      "category": "project-map",
+      "size": 719,
+      "duplicateOf": "project-map/future.marketing.md"
+    },
+    {
+      "rel": "project-map/future/ideas/index.md",
+      "title": "Project Map — future/ideas",
+      "hash": "3778bb1a9a2560cbdd816c10632f4d80737d4f5c",
+      "category": "project-map",
+      "size": 879,
+      "duplicateOf": "project-map/future.ideas.md"
+    },
+    {
+      "rel": "project-map/future/compliance/index.md",
+      "title": "Project Map — future/compliance",
+      "hash": "3221821159e85ecaa2a961ef0402c6d04e96ca68",
+      "category": "project-map",
+      "size": 951,
+      "duplicateOf": "project-map/future.compliance.md"
+    },
+    {
+      "rel": "project-map/future/auction-drafts/index.md",
+      "title": "Project Map — future/auction-drafts",
+      "hash": "0fd7ef522dce61f580b5fba8e0e82290856e77bb",
+      "category": "project-map",
+      "size": 499,
+      "duplicateOf": "project-map/future.auction-drafts.md"
+    },
+    {
+      "rel": "project-map/functions/workers/index.md",
+      "title": "Project Map — functions/workers",
+      "hash": "67dc1876352c0e377577db6d0ee5d6a64b3b59fb",
+      "category": "project-map",
+      "size": 1135,
+      "duplicateOf": "project-map/functions.workers.md"
+    },
+    {
+      "rel": "project-map/functions/cron/index.md",
+      "title": "Project Map — functions/cron",
+      "hash": "76d8b31a9e2d6765d0ed88a3a2db9b4430c6cc7c",
+      "category": "project-map",
+      "size": 623,
+      "duplicateOf": "project-map/functions.cron.md"
+    },
+    {
+      "rel": "project-map/functions/appwrite/index.md",
+      "title": "Project Map — functions/appwrite",
+      "hash": "2c10e3509234c215ea1fc7b7c893a534259c6bbd",
+      "category": "project-map",
+      "size": 893,
+      "duplicateOf": "project-map/functions.appwrite.md"
+    },
+    {
+      "rel": "project-map/future/waiver/index.md",
+      "title": "Project Map — future/waiver",
+      "hash": "5433ef37f830b51370c2aedb929bc3a592e7e4fd",
+      "category": "project-map",
+      "size": 295,
+      "duplicateOf": "project-map/future.waiver.md"
+    },
+    {
+      "rel": "project-map/future/trading/index.md",
+      "title": "Project Map — future/trading",
+      "hash": "ca4a7e9bf57ff2edf9977ed333db11ff337e12d5",
+      "category": "project-map",
+      "size": 564,
+      "duplicateOf": "project-map/future.trading.md"
+    },
+    {
+      "rel": "project-map/docs/runbooks/index.md",
+      "title": "Project Map — docs/runbooks",
+      "hash": "2b2e161edaaa251ad0c844901f8893d9fac26450",
+      "category": "project-map",
+      "size": 1555,
+      "duplicateOf": "project-map/docs.runbooks.md"
+    },
+    {
+      "rel": "project-map/docs/reference/index.md",
+      "title": "Project Map — docs/reference",
+      "hash": "d61f1eb651dbc344142860b0933a0256929f703b",
+      "category": "project-map",
+      "size": 1835,
+      "duplicateOf": "project-map/docs.reference.md"
+    },
+    {
+      "rel": "project-map/docs/guides/index.md",
+      "title": "Project Map — docs/guides",
+      "hash": "99ae136bc561fbefa066922c114e594a19fc482f",
+      "category": "project-map",
+      "size": 2051,
+      "duplicateOf": "project-map/docs.guides.md"
+    },
+    {
+      "rel": "project-map/docs/diagrams-archive/index.md",
+      "title": "Project Map — docs/diagrams-archive",
+      "hash": "4dbed06e9a9cf7aca56c34bb8b2e08eefc2db90c",
+      "category": "project-map",
+      "size": 42807,
+      "duplicateOf": "project-map/docs.diagrams-archive.md"
+    },
+    {
+      "rel": "project-map/docs/adr/index.md",
+      "title": "Project Map — docs/adr",
+      "hash": "b972e002b4aa4f3f7dbfdc040b37e8191b0486b0",
+      "category": "project-map",
+      "size": 503,
+      "duplicateOf": "project-map/docs.adr.md"
+    },
+    {
+      "rel": "project-map/docs/guardrails/index.md",
+      "title": "Project Map — docs/guardrails",
+      "hash": "1dfd04e90e3752a1128f800080d11cb5d957f7bc",
+      "category": "project-map",
+      "size": 667,
+      "duplicateOf": "project-map/docs.guardrails.md"
+    },
+    {
+      "rel": "project-map/docs/draft/index.md",
+      "title": "Project Map — docs/draft",
+      "hash": "f030b5d7d25279fc6c3b0d2b9ead739f9bf13705",
+      "category": "project-map",
+      "size": 447,
+      "duplicateOf": "project-map/docs.draft.md"
+    },
+    {
+      "rel": "project-map/docs/diagrams/index.md",
+      "title": "Project Map — docs/diagrams",
+      "hash": "41ffa45f7741cc562161b47f2995ade88aeed95b",
+      "category": "project-map",
+      "size": 1780,
+      "duplicateOf": "project-map/docs.diagrams.md"
+    },
+    {
+      "rel": "project-map/data/market/index.md",
+      "title": "Project Map — data/market",
+      "hash": "784e8c73ce95ce6797178251e509d51e80bb72e3",
+      "category": "project-map",
+      "size": 704,
+      "duplicateOf": "project-map/data.market.md"
+    },
+    {
+      "rel": "project-map/data/user/index.md",
+      "title": "Project Map — data/user",
+      "hash": "126606fb04bd6be72388de214a8e79b01dd212ee",
+      "category": "project-map",
+      "size": 279,
+      "duplicateOf": "project-map/data.user.md"
+    },
+    {
+      "rel": "project-map/data/scripts/index.md",
+      "title": "Project Map — data/scripts",
+      "hash": "9b7acf006838854d07b4cf4d8dcc3f2423358f2b",
+      "category": "project-map",
+      "size": 1396,
+      "duplicateOf": "project-map/data.scripts.md"
+    },
+    {
+      "rel": "project-map/data/conference rosters/index.md",
+      "title": "Project Map — data/conference rosters",
+      "hash": "2bdcd6919474bef7adb73fde5c9e19bf037e9935",
+      "category": "project-map",
+      "size": 1534,
+      "duplicateOf": "project-map/data.conference rosters.md"
+    },
+    {
+      "rel": "project-map/data/player/index.md",
+      "title": "Project Map — data/player",
+      "hash": "6b0a75831363307c052522094d05272f86ae9fa4",
+      "category": "project-map",
+      "size": 988,
+      "duplicateOf": "project-map/data.player.md"
+    },
+    {
+      "rel": "project-map/schema/sites/college-football-fantasy-app/index.md",
+      "title": "Project Map — schema/sites/college-football-fantasy-app",
+      "hash": "2465ad043e18780a22e2b14f56432abe877835db",
+      "category": "project-map",
+      "size": 407,
+      "duplicateOf": "project-map/schema.sites.college-football-fantasy-app.md"
+    },
+    {
+      "rel": "project-map/components/layout/index.md",
+      "title": "Project Map — components/layout",
+      "hash": "ea558c47ba1d5345a7a78d6ae22ae385e07752a6",
+      "category": "project-map",
+      "size": 947,
+      "duplicateOf": "project-map/components.layout.md"
+    },
+    {
+      "rel": "project-map/components/hooks/index.md",
+      "title": "Project Map — components/hooks",
+      "hash": "5623ad3cde4c1251978c000d7b7ec41cd4374f34",
+      "category": "project-map",
+      "size": 611,
+      "duplicateOf": "project-map/components.hooks.md"
+    },
+    {
+      "rel": "project-map/components/tables/index.md",
+      "title": "Project Map — components/tables",
+      "hash": "0a36cef3a958dad9bf61e9504f85e249b943c100",
+      "category": "project-map",
+      "size": 607,
+      "duplicateOf": "project-map/components.tables.md"
+    },
+    {
+      "rel": "project-map/components/ui/index.md",
+      "title": "Project Map — components/ui",
+      "hash": "35d07481726a82140721ee1a19a115015f0a2098",
+      "category": "project-map",
+      "size": 1459,
+      "duplicateOf": "project-map/components.ui.md"
+    },
+    {
+      "rel": "project-map/components/forms/index.md",
+      "title": "Project Map — components/forms",
+      "hash": "bbe8cf2db99f77a046b179974d742a4c03504365",
+      "category": "project-map",
+      "size": 695,
+      "duplicateOf": "project-map/components.forms.md"
+    },
+    {
+      "rel": "project-map/components/features/index.md",
+      "title": "Project Map — components/features",
+      "hash": "e8174f4275df5b730a2007b4eccc7ac8373874b0",
+      "category": "project-map",
+      "size": 1514,
+      "duplicateOf": "project-map/components.features.md"
+    },
+    {
+      "rel": "project-map/components/draft/index.md",
+      "title": "Project Map — components/draft",
+      "hash": "5e886d3441fd2d963716c66cc2bff3ed3ecd9c18",
+      "category": "project-map",
+      "size": 307,
+      "duplicateOf": "project-map/components.draft.md"
+    },
+    {
+      "rel": "project-map/components/docs/index.md",
+      "title": "Project Map — components/docs",
+      "hash": "f98188ba7e905f4bc0ca00db3fc5dae634204cd1",
+      "category": "project-map",
+      "size": 643,
+      "duplicateOf": "project-map/components.docs.md"
+    },
+    {
+      "rel": "project-map/components/dev/index.md",
+      "title": "Project Map — components/dev",
+      "hash": "99d39ff1687467a99e784b41ba2a3e1b4e2431b7",
+      "category": "project-map",
+      "size": 467,
+      "duplicateOf": "project-map/components.dev.md"
+    },
+    {
+      "rel": "project-map/components/charts/index.md",
+      "title": "Project Map — components/charts",
+      "hash": "dcb9c65a56fab5ddea863b76a01bc138ff886349",
+      "category": "project-map",
+      "size": 595,
+      "duplicateOf": "project-map/components.charts.md"
+    },
+    {
+      "rel": "project-map/app/draft/index.md",
+      "title": "Project Map — app/draft",
+      "hash": "8bc6cadbf39479f15dc3566aae78a074e3632629",
+      "category": "project-map",
+      "size": 644,
+      "duplicateOf": "project-map/app.draft.md"
+    },
+    {
+      "rel": "project-map/app/dashboard/index.md",
+      "title": "Project Map — app/dashboard",
+      "hash": "ed1dc9a3917318f940098f894bdf2aaf64805e58",
+      "category": "project-map",
+      "size": 1541,
+      "duplicateOf": "project-map/app.dashboard.md"
+    },
+    {
+      "rel": "project-map/app/marketing/index.md",
+      "title": "Project Map — app/marketing",
+      "hash": "de70e214945b34f50009a66d8ae2fd6837111977",
+      "category": "project-map",
+      "size": 2161,
+      "duplicateOf": "project-map/app.marketing.md"
+    },
+    {
+      "rel": "project-map/ops/diagrams/functional/index.md",
+      "title": "Project Map — ops/diagrams/functional",
+      "hash": "f60701b64ce45a58fb51cea095ece67cd462498d",
+      "category": "project-map",
+      "size": 883,
+      "duplicateOf": "project-map/ops.diagrams.functional.md"
+    },
+    {
+      "rel": "project-map/app/admin/index.md",
+      "title": "Project Map — app/admin",
+      "hash": "57a3bd1fc80ec2fde5be02f77f30aab04dd8deef",
+      "category": "project-map",
+      "size": 1207,
+      "duplicateOf": "project-map/app.admin.md"
+    },
+    {
+      "rel": "project-map/ops/out/snapshots/index.md",
+      "title": "Project Map — ops/out/snapshots",
+      "hash": "96df8cf6710f346bcaf3d0af9e6f7d4412313cc4",
+      "category": "project-map",
+      "size": 4283,
+      "duplicateOf": "project-map/ops.out.snapshots.md"
+    },
+    {
+      "rel": "project-map/ops/cursor/screenshot/index.md",
+      "title": "Project Map — ops/cursor/screenshot",
+      "hash": "5355fc2ee8093d0147138114eecf2c58a2c93e10",
+      "category": "project-map",
+      "size": 327,
+      "duplicateOf": "project-map/ops.cursor.screenshot.md"
+    },
+    {
+      "rel": "project-map/ops/cursor/context-packs/index.md",
+      "title": "Project Map — ops/cursor/context-packs",
+      "hash": "489150b19ed97eac7658f03f3fa87bc83a567c43",
+      "category": "project-map",
+      "size": 503,
+      "duplicateOf": "project-map/ops.cursor.context-packs.md"
+    },
+    {
+      "rel": "project-map/ops/cursor-ops/test/index.md",
+      "title": "Project Map — ops/cursor-ops/test",
+      "hash": "501d286d4fa3cf15c195043266c2d0ec04ba154f",
+      "category": "project-map",
+      "size": 319,
+      "duplicateOf": "project-map/ops.cursor-ops.test.md"
+    },
+    {
+      "rel": "project-map/ops/cursor-ops/sync/index.md",
+      "title": "Project Map — ops/cursor-ops/sync",
+      "hash": "1b260383833b87977569aeb9124aff33713cddb3",
+      "category": "project-map",
+      "size": 319,
+      "duplicateOf": "project-map/ops.cursor-ops.sync.md"
+    },
+    {
+      "rel": "project-map/ops/cursor-ops/review/index.md",
+      "title": "Project Map — ops/cursor-ops/review",
+      "hash": "7157269b5492445f7b6909c8172b373c0d98ea32",
+      "category": "project-map",
+      "size": 327,
+      "duplicateOf": "project-map/ops.cursor-ops.review.md"
+    },
+    {
+      "rel": "project-map/ops/cursor-ops/appwrite-update/index.md",
+      "title": "Project Map — ops/cursor-ops/appwrite-update",
+      "hash": "d222a307de80a11f442cda905b2d1589ef94f2fa",
+      "category": "project-map",
+      "size": 363,
+      "duplicateOf": "project-map/ops.cursor-ops.appwrite-update.md"
+    },
+    {
+      "rel": "project-map/ops/common/test/index.md",
+      "title": "Project Map — ops/common/test",
+      "hash": "3b355367bf27039ee9907cb0ca5e3bfa3d077488",
+      "category": "project-map",
+      "size": 303,
+      "duplicateOf": "project-map/ops.common.test.md"
+    },
+    {
+      "rel": "project-map/ops/common/scripts/index.md",
+      "title": "Project Map — ops/common/scripts",
+      "hash": "04c01f88687e82ad85f49d53b77154a270ec1db3",
+      "category": "project-map",
+      "size": 17194,
+      "duplicateOf": "project-map/ops.common.scripts.md"
+    },
+    {
+      "rel": "project-map/ops/common/python/index.md",
+      "title": "Project Map — ops/common/python",
+      "hash": "723de728233669123dfb27fee2293c6092790ea1",
+      "category": "project-map",
+      "size": 475,
+      "duplicateOf": "project-map/ops.common.python.md"
+    },
+    {
+      "rel": "project-map/ops/common/public/index.md",
+      "title": "Project Map — ops/common/public",
+      "hash": "b1810334b61aa106f3c4078e7ae15efa5f5182f8",
+      "category": "project-map",
+      "size": 434,
+      "duplicateOf": "project-map/ops.common.public.md"
+    },
+    {
+      "rel": "project-map/ops/common/prompts/index.md",
+      "title": "Project Map — ops/common/prompts",
+      "hash": "5d8bdc6720c82489a0813cd375a4f97de2fa5914",
+      "category": "project-map",
+      "size": 450,
+      "duplicateOf": "project-map/ops.common.prompts.md"
+    },
+    {
+      "rel": "project-map/ops/common/guards/index.md",
+      "title": "Project Map — ops/common/guards",
+      "hash": "6145e72eabd9951709c96e4e094360ea3a586126",
+      "category": "project-map",
+      "size": 1731,
+      "duplicateOf": "project-map/ops.common.guards.md"
+    },
+    {
+      "rel": "project-map/ops/common/functions/index.md",
+      "title": "Project Map — ops/common/functions",
+      "hash": "900e15fe8bcc7257ec2e181801a09724d08fcb60",
+      "category": "project-map",
+      "size": 641,
+      "duplicateOf": "project-map/ops.common.functions.md"
+    },
+    {
+      "rel": "project-map/ops/common/codemods/index.md",
+      "title": "Project Map — ops/common/codemods",
+      "hash": "9bf8335af7cfe3c3068f5734995045b1d0eeeb8b",
+      "category": "project-map",
+      "size": 691,
+      "duplicateOf": "project-map/ops.common.codemods.md"
+    },
+    {
+      "rel": "project-map/ops/common/appwrite-update/index.md",
+      "title": "Project Map — ops/common/appwrite-update",
+      "hash": "acc6f5a2f1df8ba06d5a1d670393eadeaf01c939",
+      "category": "project-map",
+      "size": 347,
+      "duplicateOf": "project-map/ops.common.appwrite-update.md"
+    },
+    {
+      "rel": "project-map/ops/attic/toolbox/index.md",
+      "title": "Project Map — ops/attic/toolbox",
+      "hash": "17b258078457b3d41e58ae74366ec44f47b03422",
+      "category": "project-map",
+      "size": 430,
+      "duplicateOf": "project-map/ops.attic.toolbox.md"
+    },
+    {
+      "rel": "project-map/ops/attic/tests/index.md",
+      "title": "Project Map — ops/attic/tests",
+      "hash": "6eaa9dd73b71d19d0143fe6ff36099e7f7a69432",
+      "category": "project-map",
+      "size": 1352,
+      "duplicateOf": "project-map/ops.attic.tests.md"
+    },
+    {
+      "rel": "project-map/app/api/index.md",
+      "title": "Project Map — app/api",
+      "hash": "bbb9aaddc8f26fcfc4d020b08b30b00c1aa9eac6",
+      "category": "project-map",
+      "size": 6658,
+      "proposed": "project-map/project-map-app-api.md"
+    },
+    {
+      "rel": "project-map/ops/attic/testing-and-release/index.md",
+      "title": "Project Map — ops/attic/testing-and-release",
+      "hash": "e17cf839cf72109d6cdc4275ae843b1f35907298",
+      "category": "project-map",
+      "size": 742,
+      "duplicateOf": "project-map/ops.attic.testing-and-release.md"
+    },
+    {
+      "rel": "project-map/ops/attic/old-schemas/index.md",
+      "title": "Project Map — ops/attic/old-schemas",
+      "hash": "69c06d3e383755fb18b18fb42e2a21aedae27f79",
+      "category": "project-map",
+      "size": 1151,
+      "duplicateOf": "project-map/ops.attic.old-schemas.md"
+    },
+    {
+      "rel": "project-map/ops/attic/types/index.md",
+      "title": "Project Map — ops/attic/types",
+      "hash": "093c3d8a60234e7ba17df667320b35a4ba21c53d",
+      "category": "project-map",
+      "size": 303,
+      "duplicateOf": "project-map/ops.attic.types.md"
+    },
+    {
+      "rel": "project-map/ops/attic/evaluation/index.md",
+      "title": "Project Map — ops/attic/evaluation",
+      "hash": "44da3b5a096a4aa5893280a6605795311fa914b7",
+      "category": "project-map",
+      "size": 1459,
+      "duplicateOf": "project-map/ops.attic.evaluation.md"
+    },
+    {
+      "rel": "project-map/ops/attic/exports/index.md",
+      "title": "Project Map — ops/attic/exports",
+      "hash": "473c564386fcb1b3606d3eb40bc35af39a635971",
+      "category": "project-map",
+      "size": 7458,
+      "duplicateOf": "project-map/ops.attic.exports.md"
+    },
+    {
+      "rel": "project-map/ops/attic/core-remaining/index.md",
+      "title": "Project Map — ops/attic/core-remaining",
+      "hash": "3b03ede6276f8577883b449545d1a66d26fced9a",
+      "category": "project-map",
+      "size": 1326,
+      "duplicateOf": "project-map/ops.attic.core-remaining.md"
+    },
+    {
+      "rel": "project-map/ops/claude-ops/test/index.md",
+      "title": "Project Map — ops/claude-ops/test",
+      "hash": "2929409403800bee7df8ebd65c0c7edf2abb315b",
+      "category": "project-map",
+      "size": 319,
+      "duplicateOf": "project-map/ops.claude-ops.test.md"
+    },
+    {
+      "rel": "project-map/ops/claude-ops/review/index.md",
+      "title": "Project Map — ops/claude-ops/review",
+      "hash": "c9dd9b01bfe35c089963d2a7429a4a63a51cfd0b",
+      "category": "project-map",
+      "size": 327,
+      "duplicateOf": "project-map/ops.claude-ops.review.md"
+    },
+    {
+      "rel": "project-map/ops/claude-ops/sync/index.md",
+      "title": "Project Map — ops/claude-ops/sync",
+      "hash": "74b77afbd79936437e4191febd6c8b5b1a559ad9",
+      "category": "project-map",
+      "size": 319,
+      "duplicateOf": "project-map/ops.claude-ops.sync.md"
+    },
+    {
+      "rel": "project-map/ops/claude-ops/edit/index.md",
+      "title": "Project Map — ops/claude-ops/edit",
+      "hash": "4fe9e47339297e1619f479a64c5e030bfe725191",
+      "category": "project-map",
+      "size": 319,
+      "duplicateOf": "project-map/ops.claude-ops.edit.md"
+    },
+    {
+      "rel": "project-map/ops/attic/migration-scripts/index.md",
+      "title": "Project Map — ops/attic/migration-scripts",
+      "hash": "8996ce0482e72c8d910b42b66b5ca85d8590b002",
+      "category": "project-map",
+      "size": 8171,
+      "duplicateOf": "project-map/ops.attic.migration-scripts.md"
+    },
+    {
+      "rel": "project-map/ops/claude-ops/appwrite-update/index.md",
+      "title": "Project Map — ops/claude-ops/appwrite-update",
+      "hash": "a0fa330bb163a24eee25bacd4a49ed7984041c19",
+      "category": "project-map",
+      "size": 363,
+      "duplicateOf": "project-map/ops.claude-ops.appwrite-update.md"
+    },
+    {
+      "rel": "project-map/ops/chatgpt-ops/test/index.md",
+      "title": "Project Map — ops/chatgpt-ops/test",
+      "hash": "d2f1cac76d928e6f7dcc3abbd8d316f5cd3dc63e",
+      "category": "project-map",
+      "size": 323,
+      "duplicateOf": "project-map/ops.chatgpt-ops.test.md"
+    },
+    {
+      "rel": "project-map/ops/chatgpt-ops/review/index.md",
+      "title": "Project Map — ops/chatgpt-ops/review",
+      "hash": "aa1c70a0e7563a2de334100685229da2afe4b3ea",
+      "category": "project-map",
+      "size": 331,
+      "duplicateOf": "project-map/ops.chatgpt-ops.review.md"
+    },
+    {
+      "rel": "project-map/ops/chatgpt-ops/edit/index.md",
+      "title": "Project Map — ops/chatgpt-ops/edit",
+      "hash": "81c71abc32183d69f06c07354988860a7b4213fd",
+      "category": "project-map",
+      "size": 323,
+      "duplicateOf": "project-map/ops.chatgpt-ops.edit.md"
+    },
+    {
+      "rel": "project-map/ops/chatgpt-ops/appwrite-update/index.md",
+      "title": "Project Map — ops/chatgpt-ops/appwrite-update",
+      "hash": "736df75c6409e9d609e3496c072de9ae9040edd5",
+      "category": "project-map",
+      "size": 367,
+      "duplicateOf": "project-map/ops.chatgpt-ops.appwrite-update.md"
+    },
+    {
+      "rel": "project-map/ops/chatgpt-ops/sync/index.md",
+      "title": "Project Map — ops/chatgpt-ops/sync",
+      "hash": "79c7de75ee13337322a89581263266cedd3d8724",
+      "category": "project-map",
+      "size": 323,
+      "duplicateOf": "project-map/ops.chatgpt-ops.sync.md"
+    },
+    {
+      "rel": "project-map/lib/repos/repositories/index.md",
+      "title": "Project Map — lib/repos/repositories",
+      "hash": "fb4ad0419da619aa1b03fd71a474ede357e42ef0",
+      "category": "project-map",
+      "size": 1275,
+      "duplicateOf": "project-map/lib.repos.repositories.md"
+    },
+    {
+      "rel": "project-map/ops/attic/docs-archive/index.md",
+      "title": "Project Map — ops/attic/docs-archive",
+      "hash": "ee5014c390568c38e142c8585504b57b76578bc8",
+      "category": "project-map",
+      "size": 494,
+      "duplicateOf": "project-map/ops.attic.docs-archive.md"
+    },
+    {
+      "rel": "project-map/lib/domain/services/index.md",
+      "title": "Project Map — lib/domain/services",
+      "hash": "b64d91835395c87a81438fc27bbcf29618303984",
+      "category": "project-map",
+      "size": 487,
+      "duplicateOf": "project-map/lib.domain.services.md"
+    },
+    {
+      "rel": "project-map/lib/domain/repositories/index.md",
+      "title": "Project Map — lib/domain/repositories",
+      "hash": "f7813b3703decde76db13b922f8fa207aefc1f82",
+      "category": "project-map",
+      "size": 491,
+      "duplicateOf": "project-map/lib.domain.repositories.md"
+    },
+    {
+      "rel": "project-map/lib/config/config/index.md",
+      "title": "Project Map — lib/config/config",
+      "hash": "5338712c89e08f36a1a4d8fb71f884e04b333e80",
+      "category": "project-map",
+      "size": 311,
+      "duplicateOf": "project-map/lib.config.config.md"
+    },
+    {
+      "rel": "project-map/lib/domain/errors/index.md",
+      "title": "Project Map — lib/domain/errors",
+      "hash": "3e3d9b48a938d6876fbaf68b5ea4defbc0a2ce2d",
+      "category": "project-map",
+      "size": 459,
+      "duplicateOf": "project-map/lib.domain.errors.md"
+    },
+    {
+      "rel": "project-map/lib/domain/validation/index.md",
+      "title": "Project Map — lib/domain/validation",
+      "hash": "687b7f9c707d6fb616043f81315e2b250aaba4b7",
+      "category": "project-map",
+      "size": 515,
+      "duplicateOf": "project-map/lib.domain.validation.md"
+    },
+    {
+      "rel": "project-map/lib/utils/utils/index.md",
+      "title": "Project Map — lib/utils/utils",
+      "hash": "102cfe5edc94c84a1d0da3f1809fa530763626bd",
+      "category": "project-map",
+      "size": 303,
+      "duplicateOf": "project-map/lib.utils.utils.md"
+    },
+    {
+      "rel": "project-map/future/scoring/weekly-scoring/index.md",
+      "title": "Project Map — future/scoring/weekly-scoring",
+      "hash": "a1be44cb68931837fb087de5330d0b710f5eb66c",
+      "category": "project-map",
+      "size": 918,
+      "duplicateOf": "project-map/future.scoring.weekly-scoring.md"
+    },
+    {
+      "rel": "project-map/future/scoring/live-scoring-mechanics/index.md",
+      "title": "Project Map — future/scoring/live-scoring-mechanics",
+      "hash": "01858cc45643a6609879c32379e293dfec293a5e",
+      "category": "project-map",
+      "size": 846,
+      "duplicateOf": "project-map/future.scoring.live-scoring-mechanics.md"
+    },
+    {
+      "rel": "project-map/future/scoring/api-cron/index.md",
+      "title": "Project Map — future/scoring/api-cron",
+      "hash": "6279cd5b630df596af2c14f5e4551598e267c4f1",
+      "category": "project-map",
+      "size": 491,
+      "duplicateOf": "project-map/future.scoring.api-cron.md"
+    },
+    {
+      "rel": "project-map/future/trading/trade-processor/index.md",
+      "title": "Project Map — future/trading/trade-processor",
+      "hash": "e78dec3c54130b4ce8e3c13cea5103e13a223b3a",
+      "category": "project-map",
+      "size": 951,
+      "duplicateOf": "project-map/future.trading.trade-processor.md"
+    },
+    {
+      "rel": "project-map/functions/appwrite/import-players/index.md",
+      "title": "Project Map — functions/appwrite/import-players",
+      "hash": "ad9835b9817686ff28f115bb505015d60290e8bb",
+      "category": "project-map",
+      "size": 1203,
+      "duplicateOf": "project-map/functions.appwrite.import-players.md"
+    },
+    {
+      "rel": "project-map/functions/appwrite/on-auction-close/index.md",
+      "title": "Project Map — functions/appwrite/on-auction-close",
+      "hash": "9003369199b34e867a1b8751f861a14479a2897b",
+      "category": "project-map",
+      "size": 1035,
+      "duplicateOf": "project-map/functions.appwrite.on-auction-close.md"
+    },
+    {
+      "rel": "project-map/docs/diagrams-archive/projections/index.md",
+      "title": "Project Map — docs/diagrams-archive/projections",
+      "hash": "fe259790f8b52d24600eb51d01dd07e483cbf52a",
+      "category": "project-map",
+      "size": 1803,
+      "duplicateOf": "project-map/docs.diagrams-archive.projections.md"
+    },
+    {
+      "rel": "project-map/docs/guardrails/data-feeds/index.md",
+      "title": "Project Map — docs/guardrails/data-feeds",
+      "hash": "573524e6636289529fe51a9ee0fc7ef77d77b109",
+      "category": "project-map",
+      "size": 539,
+      "duplicateOf": "project-map/docs.guardrails.data-feeds.md"
+    },
+    {
+      "rel": "project-map/docs/diagrams-archive/admin-tools/index.md",
+      "title": "Project Map — docs/diagrams-archive/admin-tools",
+      "hash": "444a7312115f8132109f8df74764e6ac8b9181e0",
+      "category": "project-map",
+      "size": 875,
+      "duplicateOf": "project-map/docs.diagrams-archive.admin-tools.md"
+    },
+    {
+      "rel": "project-map/docs/diagrams-archive/league-draft/index.md",
+      "title": "Project Map — docs/diagrams-archive/league-draft",
+      "hash": "52cfb6a2e5dfcfda7262a1a9751428c10cc8b856",
+      "category": "project-map",
+      "size": 1115,
+      "duplicateOf": "project-map/docs.diagrams-archive.league-draft.md"
+    },
+    {
+      "rel": "project-map/docs/diagrams/project-map/index.md",
+      "title": "Project Map — docs/diagrams/project-map",
+      "hash": "74a069f9f442c0900973f0134cbd4379908ceeee",
+      "category": "project-map",
+      "size": 34199,
+      "duplicateOf": "project-map/docs.diagrams.project-map.md"
+    },
+    {
+      "rel": "project-map/docs/diagrams/functional-architecture/index.md",
+      "title": "Project Map — docs/diagrams/functional-architecture",
+      "hash": "6e906d81ba68cd0357d502379676704a19190e5c",
+      "category": "project-map",
+      "size": 391,
+      "duplicateOf": "project-map/docs.diagrams.functional-architecture.md"
+    },
+    {
+      "rel": "project-map/docs/diagrams/functional/index.md",
+      "title": "Project Map — docs/diagrams/functional",
+      "hash": "256fabd25151ab065b284ef08d142fba8b88ced0",
+      "category": "project-map",
+      "size": 727,
+      "duplicateOf": "project-map/docs.diagrams.functional.md"
+    },
+    {
+      "rel": "project-map/data/market/mockdraft/index.md",
+      "title": "Project Map — data/market/mockdraft",
+      "hash": "cde76bfe2ee7d68a8aa647dc4b20aeee2fe3f854",
+      "category": "project-map",
+      "size": 475,
+      "duplicateOf": "project-map/data.market.mockdraft.md"
+    },
+    {
+      "rel": "project-map/docs/diagrams/system-architecture/index.md",
+      "title": "Project Map — docs/diagrams/system-architecture",
+      "hash": "3f35f75e8597bb5d19e1373c92cdf3b50b959dd0",
+      "category": "system-architecture",
+      "size": 1338,
+      "duplicateOf": "project-map/docs.diagrams.system-architecture.md"
+    },
+    {
+      "rel": "project-map/data/scripts/testing/index.md",
+      "title": "Project Map — data/scripts/testing",
+      "hash": "f71f168b82a03d573b77ed3b3805dc9369d61635",
+      "category": "project-map",
+      "size": 487,
+      "duplicateOf": "project-map/data.scripts.testing.md"
+    },
+    {
+      "rel": "project-map/data/scripts/ingestion/index.md",
+      "title": "Project Map — data/scripts/ingestion",
+      "hash": "deea0cbc8b3421588113b9d47651d2ca9866ca52",
+      "category": "project-map",
+      "size": 1484,
+      "duplicateOf": "project-map/data.scripts.ingestion.md"
+    },
+    {
+      "rel": "project-map/data/market/efficiency/index.md",
+      "title": "Project Map — data/market/efficiency",
+      "hash": "122e6c1136ad9bd6c8113adb4d7e5b1014301443",
+      "category": "project-map",
+      "size": 855,
+      "duplicateOf": "project-map/data.market.efficiency.md"
+    },
+    {
+      "rel": "project-map/data/conference rosters/SEC_College_Football/index.md",
+      "title": "Project Map — data/conference rosters/SEC_College_Football",
+      "hash": "5e07449520299e0032c026bb371adf6cd92b64c9",
+      "category": "project-map",
+      "size": 4799,
+      "duplicateOf": "project-map/data.conference rosters.SEC_College_Football.md"
+    },
+    {
+      "rel": "project-map/data/conference rosters/big ten rosters/index.md",
+      "title": "Project Map — data/conference rosters/big ten rosters",
+      "hash": "ffa8987e525125239b8d45e0dd18347918ebe5e6",
+      "category": "project-map",
+      "size": 6335,
+      "duplicateOf": "project-map/data.conference rosters.big ten rosters.md"
+    },
+    {
+      "rel": "project-map/data/scripts/imports/index.md",
+      "title": "Project Map — data/scripts/imports",
+      "hash": "32cfbe10b1616988a2977395d1785077daafbefe",
+      "category": "project-map",
+      "size": 1459,
+      "duplicateOf": "project-map/data.scripts.imports.md"
+    },
+    {
+      "rel": "project-map/data/conference rosters/Big_12_2025/index.md",
+      "title": "Project Map — data/conference rosters/Big_12_2025",
+      "hash": "8b20e5875062d1bf594a29bd6803a6e12443d15d",
+      "category": "project-map",
+      "size": 5327,
+      "duplicateOf": "project-map/data.conference rosters.Big_12_2025.md"
+    },
+    {
+      "rel": "project-map/data/conference rosters/ACC/index.md",
+      "title": "Project Map — data/conference rosters/ACC",
+      "hash": "0209df663927226e7530f5095cbb3608f6033639",
+      "category": "project-map",
+      "size": 3879,
+      "duplicateOf": "project-map/data.conference rosters.ACC.md"
+    },
+    {
+      "rel": "project-map/data/player/raw/index.md",
+      "title": "Project Map — data/player/raw",
+      "hash": "0d8a5037b07c89b59080c9c69537c13a938b8372",
+      "category": "project-map",
+      "size": 418,
+      "duplicateOf": "project-map/data.player.raw.md"
+    },
+    {
+      "rel": "project-map/data/player/processed/index.md",
+      "title": "Project Map — data/player/processed",
+      "hash": "71a00e73c5e1ef1879737c7a98a089a60d138697",
+      "category": "project-map",
+      "size": 625,
+      "duplicateOf": "project-map/data.player.processed.md"
+    },
+    {
+      "rel": "project-map/data/player/depth/index.md",
+      "title": "Project Map — data/player/depth",
+      "hash": "a9827d05e350e682ab144875eae7c331b4b75e72",
+      "category": "project-map",
+      "size": 667,
+      "duplicateOf": "project-map/data.player.depth.md"
+    },
+    {
+      "rel": "project-map/components/features/players/index.md",
+      "title": "Project Map — components/features/players",
+      "hash": "6294063c526ba81bfefc5384442e874a13146640",
+      "category": "project-map",
+      "size": 351,
+      "duplicateOf": "project-map/components.features.players.md"
+    },
+    {
+      "rel": "project-map/data/player/ea/index.md",
+      "title": "Project Map — data/player/ea",
+      "hash": "6b757285aae4f87e7ecaaa256407bd7d5292e323",
+      "category": "project-map",
+      "size": 451,
+      "duplicateOf": "project-map/data.player.ea.md"
+    },
+    {
+      "rel": "project-map/components/features/games/index.md",
+      "title": "Project Map — components/features/games",
+      "hash": "9eef8642bc97dbbf5ab3387fd973d891fa6acc3b",
+      "category": "project-map",
+      "size": 707,
+      "duplicateOf": "project-map/components.features.games.md"
+    },
+    {
+      "rel": "project-map/components/features/leagues/index.md",
+      "title": "Project Map — components/features/leagues",
+      "hash": "42f63b15aab53079972229ede89e1de85e8db4ea",
+      "category": "project-map",
+      "size": 1827,
+      "duplicateOf": "project-map/components.features.leagues.md"
+    },
+    {
+      "rel": "project-map/components/features/draft/index.md",
+      "title": "Project Map — components/features/draft",
+      "hash": "9a44726b6683c31b592a7317afa0351c5b707450",
+      "category": "project-map",
+      "size": 1499,
+      "duplicateOf": "project-map/components.features.draft.md"
+    },
+    {
+      "rel": "project-map/components/features/conferences/index.md",
+      "title": "Project Map — components/features/conferences",
+      "hash": "70588006f30a6724b5f7816a84706b0c4b6545b8",
+      "category": "project-map",
+      "size": 595,
+      "duplicateOf": "project-map/components.features.conferences.md"
+    },
+    {
+      "rel": "project-map/app/draft/mock-draft/index.md",
+      "title": "Project Map — app/draft/mock-draft",
+      "hash": "134b4cfe38155b24b50083f1edaaa2edbc3aed96",
+      "category": "project-map",
+      "size": 474,
+      "duplicateOf": "project-map/app.draft.mock-draft.md"
+    },
+    {
+      "rel": "project-map/app/draft/draft/index.md",
+      "title": "Project Map — app/draft/draft",
+      "hash": "d8c47eae2ce4a53fcd8f39824485a60d07c1abf9",
+      "category": "project-map",
+      "size": 549,
+      "duplicateOf": "project-map/app.draft.draft.md"
+    },
+    {
+      "rel": "project-map/app/dashboard/standings/index.md",
+      "title": "Project Map — app/dashboard/standings",
+      "hash": "f0ee8166150cd5c67feaff8f507c095bb2c5f2a8",
+      "category": "project-map",
+      "size": 491,
+      "duplicateOf": "project-map/app.dashboard.standings.md"
+    },
+    {
+      "rel": "project-map/app/dashboard/scoreboard/index.md",
+      "title": "Project Map — app/dashboard/scoreboard",
+      "hash": "0d230a6db7f6d88fbc7a092f94771a462960168c",
+      "category": "project-map",
+      "size": 499,
+      "duplicateOf": "project-map/app.dashboard.scoreboard.md"
+    },
+    {
+      "rel": "project-map/app/dashboard/league/index.md",
+      "title": "Project Map — app/dashboard/league",
+      "hash": "7d1c559e6bf8ec6bd0a9564fed8b2c59c708f6aa",
+      "category": "project-map",
+      "size": 748,
+      "duplicateOf": "project-map/app.dashboard.league.md"
+    },
+    {
+      "rel": "project-map/app/dashboard/admin/index.md",
+      "title": "Project Map — app/dashboard/admin",
+      "hash": "42ee9aef6f3e7423bda3ccb93827dc0d3eddab16",
+      "category": "project-map",
+      "size": 319,
+      "duplicateOf": "project-map/app.dashboard.admin.md"
+    },
+    {
+      "rel": "project-map/app/dashboard/dashboard/index.md",
+      "title": "Project Map — app/dashboard/dashboard",
+      "hash": "bfb2b982a4a17a1e6c1d445fd82d3bacfeafb16e",
+      "category": "project-map",
+      "size": 491,
+      "duplicateOf": "project-map/app.dashboard.dashboard.md"
+    },
+    {
+      "rel": "project-map/app/dashboard/account/index.md",
+      "title": "Project Map — app/dashboard/account",
+      "hash": "1ae561024e074692a2decffb6c1470c94ab9c42c",
+      "category": "project-map",
+      "size": 478,
+      "duplicateOf": "project-map/app.dashboard.account.md"
+    },
+    {
+      "rel": "project-map/app/marketing/videos/index.md",
+      "title": "Project Map — app/marketing/videos",
+      "hash": "04ec358496ca75364eb016126386dbd7ec226444",
+      "category": "project-map",
+      "size": 753,
+      "duplicateOf": "project-map/app.marketing.videos.md"
+    },
+    {
+      "rel": "project-map/app/marketing/signup/index.md",
+      "title": "Project Map — app/marketing/signup",
+      "hash": "0a7dc5653659fbdcc05bf8864399cf9c438a7b23",
+      "category": "project-map",
+      "size": 467,
+      "duplicateOf": "project-map/app.marketing.signup.md"
+    },
+    {
+      "rel": "project-map/app/marketing/projection-showcase/index.md",
+      "title": "Project Map — app/marketing/projection-showcase",
+      "hash": "c2a7f028fa582a2e9a87081dc5ce9a6691640515",
+      "category": "project-map",
+      "size": 571,
+      "duplicateOf": "project-map/app.marketing.projection-showcase.md"
+    },
+    {
+      "rel": "project-map/app/marketing/offline/index.md",
+      "title": "Project Map — app/marketing/offline",
+      "hash": "92fd6a73fd61b855f7415625de25e2fa15f6296c",
+      "category": "project-map",
+      "size": 475,
+      "duplicateOf": "project-map/app.marketing.offline.md"
+    },
+    {
+      "rel": "project-map/app/marketing/login/index.md",
+      "title": "Project Map — app/marketing/login",
+      "hash": "91f72aa9eefcc2d0f5621b98f12fe01eda153a51",
+      "category": "project-map",
+      "size": 622,
+      "duplicateOf": "project-map/app.marketing.login.md"
+    },
+    {
+      "rel": "project-map/app/marketing/launch/index.md",
+      "title": "Project Map — app/marketing/launch",
+      "hash": "73be5a07775ed94f154287a8fea2ab34236bf875",
+      "category": "project-map",
+      "size": 467,
+      "duplicateOf": "project-map/app.marketing.launch.md"
+    },
+    {
+      "rel": "project-map/app/marketing/conference-showcase/index.md",
+      "title": "Project Map — app/marketing/conference-showcase",
+      "hash": "3397733f33268c29acbe95e93cc3357f2aed868a",
+      "category": "project-map",
+      "size": 571,
+      "duplicateOf": "project-map/app.marketing.conference-showcase.md"
+    },
+    {
+      "rel": "project-map/app/marketing/invite/index.md",
+      "title": "Project Map — app/marketing/invite",
+      "hash": "ad8537602afedb37fc20f728c4c26a5832a4adeb",
+      "category": "project-map",
+      "size": 478,
+      "duplicateOf": "project-map/app.marketing.invite.md"
+    },
+    {
+      "rel": "project-map/app/admin/sync-status/index.md",
+      "title": "Project Map — app/admin/sync-status",
+      "hash": "4e34899050ab61b18b02fb51abc9366ff2e1c3e6",
+      "category": "project-map",
+      "size": 475,
+      "duplicateOf": "project-map/app.admin.sync-status.md"
+    },
+    {
+      "rel": "project-map/app/admin/sec-survey/index.md",
+      "title": "Project Map — app/admin/sec-survey",
+      "hash": "c16f7466117312a5149d0d8e56ab07d66adc786c",
+      "category": "project-map",
+      "size": 467,
+      "duplicateOf": "project-map/app.admin.sec-survey.md"
+    },
+    {
+      "rel": "project-map/app/admin/project-map/index.md",
+      "title": "Project Map — app/admin/project-map",
+      "hash": "c5d7200cd386bab7bc594e2ed5e31d7b96392111",
+      "category": "project-map",
+      "size": 749,
+      "duplicateOf": "project-map/app.admin.project-map.md"
+    },
+    {
+      "rel": "project-map/app/admin/cache-status/index.md",
+      "title": "Project Map — app/admin/cache-status",
+      "hash": "2c11ec0ba9dc24db5197ddc04ae19d14b6d9b060",
+      "category": "project-map",
+      "size": 483,
+      "duplicateOf": "project-map/app.admin.cache-status.md"
+    },
+    {
+      "rel": "project-map/app/api/webhooks/index.md",
+      "title": "Project Map — app/api/webhooks",
+      "hash": "114df0ef8eeedd2bff4722c1b0d2462887b37496",
+      "category": "project-map",
+      "size": 597,
+      "duplicateOf": "project-map/app.api.webhooks.md"
+    },
+    {
+      "rel": "project-map/app/api/users/index.md",
+      "title": "Project Map — app/api/users",
+      "hash": "ad59918bb5d29fbc9aa259c81f42c37a6e45f6a8",
+      "category": "project-map",
+      "size": 414,
+      "duplicateOf": "project-map/app.api.users.md"
+    },
+    {
+      "rel": "project-map/app/api/sync/index.md",
+      "title": "Project Map — app/api/sync",
+      "hash": "0be81af55dcb9eab37fd10b81994c744b946f8a2",
+      "category": "project-map",
+      "size": 403,
+      "duplicateOf": "project-map/app.api.sync.md"
+    },
+    {
+      "rel": "project-map/app/api/static/index.md",
+      "title": "Project Map — app/api/static",
+      "hash": "095ca27f085e45e65eaf901ce8fc5c8eae00468d",
+      "category": "project-map",
+      "size": 426,
+      "duplicateOf": "project-map/app.api.static.md"
+    },
+    {
+      "rel": "project-map/app/api/security/index.md",
+      "title": "Project Map — app/api/security",
+      "hash": "78369bf22c3cc2abbc42f432e3df2c2008c6a0af",
+      "category": "project-map",
+      "size": 446,
+      "duplicateOf": "project-map/app.api.security.md"
+    },
+    {
+      "rel": "project-map/app/api/search/index.md",
+      "title": "Project Map — app/api/search",
+      "hash": "c4c4dc912bcba36d773e19ce1f6d4d7f3e81a59d",
+      "category": "project-map",
+      "size": 419,
+      "duplicateOf": "project-map/app.api.search.md"
+    },
+    {
+      "rel": "project-map/app/api/rotowire/index.md",
+      "title": "Project Map — app/api/rotowire",
+      "hash": "3f299d6a187b65163df4d2ddc2d8ca9b2530a3d3",
+      "category": "project-map",
+      "size": 550,
+      "duplicateOf": "project-map/app.api.rotowire.md"
+    },
+    {
+      "rel": "project-map/app/api/runway/index.md",
+      "title": "Project Map — app/api/runway",
+      "hash": "8af287ce8abd1f46d8d01cecf0b0768d3364f0ef",
+      "category": "project-map",
+      "size": 414,
+      "duplicateOf": "project-map/app.api.runway.md"
+    },
+    {
+      "rel": "project-map/app/api/schedule/index.md",
+      "title": "Project Map — app/api/schedule",
+      "hash": "2ac696452587c2ea1b2fac61573bb3de37963d4c",
+      "category": "project-map",
+      "size": 435,
+      "duplicateOf": "project-map/app.api.schedule.md"
+    },
+    {
+      "rel": "project-map/app/api/scraper/index.md",
+      "title": "Project Map — app/api/scraper",
+      "hash": "e9c5e2fd6e2997048efc3b33625b97f4ae2d2706",
+      "category": "project-map",
+      "size": 427,
+      "duplicateOf": "project-map/app.api.scraper.md"
+    },
+    {
+      "rel": "project-map/app/api/rosters/index.md",
+      "title": "Project Map — app/api/rosters",
+      "hash": "e38ec9e8f5e2c8a285ef45b8ae99d261e6148013",
+      "category": "project-map",
+      "size": 427,
+      "duplicateOf": "project-map/app.api.rosters.md"
+    },
+    {
+      "rel": "project-map/app/api/rankings/index.md",
+      "title": "Project Map — app/api/rankings",
+      "hash": "08dad60c133990a34df87e2f5cd0ac0757015ab1",
+      "category": "project-map",
+      "size": 558,
+      "duplicateOf": "project-map/app.api.rankings.md"
+    },
+    {
+      "rel": "project-map/app/api/projections/index.md",
+      "title": "Project Map — app/api/projections",
+      "hash": "0dff68041d21f559b9a1bcd013f06320d510fc28",
+      "category": "project-map",
+      "size": 442,
+      "duplicateOf": "project-map/app.api.projections.md"
+    },
+    {
+      "rel": "project-map/app/api/players/index.md",
+      "title": "Project Map — app/api/players",
+      "hash": "352077d37951bd202fbcd81cfa66c3c19f360259",
+      "category": "project-map",
+      "size": 788,
+      "duplicateOf": "project-map/app.api.players.md"
+    },
+    {
+      "rel": "project-map/app/api/og/index.md",
+      "title": "Project Map — app/api/og",
+      "hash": "7a015bdc8a6ff5551cba7c77a2d03ebd54653dc5",
+      "category": "project-map",
+      "size": 501,
+      "duplicateOf": "project-map/app.api.og.md"
+    },
+    {
+      "rel": "project-map/app/api/meshy/index.md",
+      "title": "Project Map — app/api/meshy",
+      "hash": "b6190fac746d7f25b79795c09a3484b1a9955f9b",
+      "category": "project-map",
+      "size": 513,
+      "duplicateOf": "project-map/app.api.meshy.md"
+    },
+    {
+      "rel": "project-map/app/api/monitoring/index.md",
+      "title": "Project Map — app/api/monitoring",
+      "hash": "077107384d548b6c2082ca573280c7914126b150",
+      "category": "project-map",
+      "size": 458,
+      "duplicateOf": "project-map/app.api.monitoring.md"
+    },
+    {
+      "rel": "project-map/app/api/migrations/index.md",
+      "title": "Project Map — app/api/migrations",
+      "hash": "f6f561c3e01329ca7da3ad26a6acbe8f8443ff97",
+      "category": "project-map",
+      "size": 1210,
+      "duplicateOf": "project-map/app.api.migrations.md"
+    },
+    {
+      "rel": "project-map/app/api/mock-draft/index.md",
+      "title": "Project Map — app/api/mock-draft",
+      "hash": "8f7ee31f8ad43890bfd2e608d7f2153cd60e0e14",
+      "category": "project-map",
+      "size": 1077,
+      "duplicateOf": "project-map/app.api.mock-draft.md"
+    },
+    {
+      "rel": "project-map/app/api/mcp/index.md",
+      "title": "Project Map — app/api/mcp",
+      "hash": "c495c0e4a7b3f2b38883a4f55d8d47c064fbd8cb",
+      "category": "project-map",
+      "size": 539,
+      "duplicateOf": "project-map/app.api.mcp.md"
+    },
+    {
+      "rel": "project-map/app/api/mascot/index.md",
+      "title": "Project Map — app/api/mascot",
+      "hash": "04726ebb93b07010d598943e5eee3051d4b55da6",
+      "category": "project-map",
+      "size": 426,
+      "duplicateOf": "project-map/app.api.mascot.md"
+    },
+    {
+      "rel": "project-map/app/api/leagues/index.md",
+      "title": "Project Map — app/api/leagues",
+      "hash": "e5774927fc962b9d50941b590588cfce7227fbc8",
+      "category": "project-map",
+      "size": 1558,
+      "duplicateOf": "project-map/app.api.leagues.md"
+    },
+    {
+      "rel": "project-map/app/api/launch/index.md",
+      "title": "Project Map — app/api/launch",
+      "hash": "f75f1c6dc425296044a821c4eb8084ba2a9dd0ae",
+      "category": "project-map",
+      "size": 414,
+      "duplicateOf": "project-map/app.api.launch.md"
+    },
+    {
+      "rel": "project-map/app/api/health/index.md",
+      "title": "Project Map — app/api/health",
+      "hash": "7188418cb0d17ab0e62d0c1397485d64de91bbe4",
+      "category": "project-map",
+      "size": 419,
+      "duplicateOf": "project-map/app.api.health.md"
+    },
+    {
+      "rel": "project-map/app/api/drafts/index.md",
+      "title": "Project Map — app/api/drafts",
+      "hash": "13f439a555428a39123ca9cff4e1e67c96644e6d",
+      "category": "project-map",
+      "size": 526,
+      "duplicateOf": "project-map/app.api.drafts.md"
+    },
+    {
+      "rel": "project-map/app/api/draft/index.md",
+      "title": "Project Map — app/api/draft",
+      "hash": "cdb7662acfc2dffaa2b0b9b19cbf6394d49e3bc4",
+      "category": "project-map",
+      "size": 656,
+      "duplicateOf": "project-map/app.api.draft.md"
+    },
+    {
+      "rel": "project-map/app/api/games/index.md",
+      "title": "Project Map — app/api/games",
+      "hash": "52be8ecf034d52ad09e0e843a02e4c5bc377974b",
+      "category": "project-map",
+      "size": 406,
+      "duplicateOf": "project-map/app.api.games.md"
+    },
+    {
+      "rel": "project-map/app/api/docs/index.md",
+      "title": "Project Map — app/api/docs",
+      "hash": "56665b89bccc174d70055b03ea49cca11cf9a065",
+      "category": "project-map",
+      "size": 402,
+      "duplicateOf": "project-map/app.api.docs.md"
+    },
+    {
+      "rel": "project-map/app/api/cursor-report/index.md",
+      "title": "Project Map — app/api/cursor-report",
+      "hash": "4623756d3245fcfef5e2f2a708d51270e63680fc",
+      "category": "project-map",
+      "size": 475,
+      "duplicateOf": "project-map/app.api.cursor-report.md"
+    },
+    {
+      "rel": "project-map/app/api/cron/index.md",
+      "title": "Project Map — app/api/cron",
+      "hash": "b6ad3f37b0927fc6fd572193de70e96fe7952755",
+      "category": "project-map",
+      "size": 962,
+      "duplicateOf": "project-map/app.api.cron.md"
+    },
+    {
+      "rel": "project-map/app/api/conferences/index.md",
+      "title": "Project Map — app/api/conferences",
+      "hash": "a48220826cf795f1a6d4904509ea32a50a8d2e06",
+      "category": "project-map",
+      "size": 478,
+      "duplicateOf": "project-map/app.api.conferences.md"
+    },
+    {
+      "rel": "project-map/app/api/claude/index.md",
+      "title": "Project Map — app/api/claude",
+      "hash": "36231d734f6a44e257dac9261d6bd6a06596ea63",
+      "category": "project-map",
+      "size": 419,
+      "duplicateOf": "project-map/app.api.claude.md"
+    },
+    {
+      "rel": "project-map/app/api/cfbd/index.md",
+      "title": "Project Map — app/api/cfbd",
+      "hash": "94c317ae8c9045e30665b0474c871ea349a9d8b6",
+      "category": "project-map",
+      "size": 402,
+      "duplicateOf": "project-map/app.api.cfbd.md"
+    },
+    {
+      "rel": "project-map/app/api/cache/index.md",
+      "title": "Project Map — app/api/cache",
+      "hash": "22f46c5574a5d1ac235684cfe274ddcb6d98c3f1",
+      "category": "project-map",
+      "size": 529,
+      "duplicateOf": "project-map/app.api.cache.md"
+    },
+    {
+      "rel": "project-map/app/api/bids/index.md",
+      "title": "Project Map — app/api/bids",
+      "hash": "f9204348ed736be4343f6d3ab6b3677ec36aa5f7",
+      "category": "project-map",
+      "size": 403,
+      "duplicateOf": "project-map/app.api.bids.md"
+    },
+    {
+      "rel": "project-map/app/api/auth/index.md",
+      "title": "Project Map — app/api/auth",
+      "hash": "f44d5946cf0474c0ec863529b2691f084730ca13",
+      "category": "project-map",
+      "size": 1072,
+      "duplicateOf": "project-map/app.api.auth.md"
+    },
+    {
+      "rel": "project-map/app/api/auctions/index.md",
+      "title": "Project Map — app/api/auctions",
+      "hash": "65401e67ebcc5dad031c8206f3f1fb571177e611",
+      "category": "project-map",
+      "size": 435,
+      "duplicateOf": "project-map/app.api.auctions.md"
+    },
+    {
+      "rel": "project-map/app/api/admin/index.md",
+      "title": "Project Map — app/api/admin",
+      "hash": "90d56b3847afaaaf2049ca16fbbf188598df3e39",
+      "category": "project-map",
+      "size": 1141,
+      "duplicateOf": "project-map/app.api.admin.md"
+    },
+    {
+      "rel": "project-map/app/api/blender/index.md",
+      "title": "Project Map — app/api/blender",
+      "hash": "3dc4c549aa2ae450cc93d436706d82ca6d7ec59f",
+      "category": "project-map",
+      "size": 895,
+      "duplicateOf": "project-map/app.api.blender.md"
+    }
+  ]
+}
