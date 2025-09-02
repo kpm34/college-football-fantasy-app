@@ -186,23 +186,23 @@ export default function AdminDashboard() {
               <div className="text-sm text-amber-100">Mock & real drafts with timing</div>
             </button>
 
-            {/* New: Draw.io buttons */}
-            <a
-              href="/admin/diagrams?file=draft-mock.drawio"
+            {/* Draft: separate buttons */}
+            <button
+              onClick={() => loadDiagram('functional-flow:draft:mock', '🧪 Mock Draft')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
               style={{ background:'#0E7490', color:'#fff' }}
             >
-              <div className="font-semibold">🧪 Mock Draft (draw.io)</div>
-              <div className="text-sm text-sky-100">Open interactive diagram</div>
-            </a>
-            <a
-              href="/admin/diagrams?file=draft-real.drawio"
+              <div className="font-semibold">🧪 Mock Draft</div>
+              <div className="text-sm text-sky-100">Practice room flow</div>
+            </button>
+            <button
+              onClick={() => loadDiagram('functional-flow:draft:real', '🏁 Real Draft')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
               style={{ background:'#047857', color:'#fff' }}
             >
-              <div className="font-semibold">🏁 Real Draft (draw.io)</div>
-              <div className="text-sm text-emerald-100">Timers, realtime, persistence</div>
-            </a>
+              <div className="font-semibold">🏁 Real Draft</div>
+              <div className="text-sm text-emerald-100">Timer + realtime + persistence</div>
+            </button>
           </div>
         </div>
 
