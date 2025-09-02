@@ -185,6 +185,24 @@ export default function AdminDashboard() {
               <div className="font-semibold">📋 Draft System</div>
               <div className="text-sm text-amber-100">Mock & real drafts with timing</div>
             </button>
+
+            {/* New: Draw.io buttons */}
+            <a
+              href="/admin/diagrams?file=draft-mock.drawio"
+              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
+              style={{ background:'#0E7490', color:'#fff' }}
+            >
+              <div className="font-semibold">🧪 Mock Draft (draw.io)</div>
+              <div className="text-sm text-sky-100">Open interactive diagram</div>
+            </a>
+            <a
+              href="/admin/diagrams?file=draft-real.drawio"
+              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
+              style={{ background:'#047857', color:'#fff' }}
+            >
+              <div className="font-semibold">🏁 Real Draft (draw.io)</div>
+              <div className="text-sm text-emerald-100">Timers, realtime, persistence</div>
+            </a>
           </div>
         </div>
 
@@ -199,6 +217,15 @@ export default function AdminDashboard() {
               <div className="font-semibold">📊 Projections Overview</div>
               <div className="text-sm text-sky-100">Complete pipeline architecture</div>
             </button>
+
+            <a
+              href="/admin/diagrams?file=projections.drawio"
+              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
+              style={{ background:'#1D4ED8', color:'#fff' }}
+            >
+              <div className="font-semibold">📈 Projections (draw.io)</div>
+              <div className="text-sm text-indigo-100">Feature → weights → outputs</div>
+            </a>
             
             <button
               onClick={() => loadDiagram('system-architecture:yearly-projections', '📈 Yearly Projections')}
