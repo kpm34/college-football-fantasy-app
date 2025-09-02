@@ -8585,10 +8585,10 @@ next@15.0.3:
     "@next/swc-win32-x64-msvc" "15.0.3"
     sharp "^0.33.5"
 
-node-appwrite@^14.1.0:
-  version "14.2.0"
-  resolved "https://registry.npmjs.org/node-appwrite/-/node-appwrite-14.2.0.tgz"
-  integrity sha512-sPPA+JzdBJRS+lM6azX85y3/6iyKQYlHcXCbjMuWLROh6IiU9EfXRW3XSUTa5HDoBrlo8ve+AnVA6BIjQfUs1g==
+node-appwrite@^18.0.0:
+  version "18.0.0"
+  resolved "https://registry.npmjs.org/node-appwrite/-/node-appwrite-18.0.0.tgz"
+  integrity sha512-2S0T17H2Gm5ZcdInCmHk8Pc8P6mKW8cDCoSBNF3PYGxbKjT51V/HY/2n6IPRqk2HrHPySmx3JIMN+V6QBprqAw==
   dependencies:
     node-fetch-native-with-agent "1.7.2"
 
