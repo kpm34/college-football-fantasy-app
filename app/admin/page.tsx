@@ -278,9 +278,9 @@ export default function AdminDashboard() {
 
         {/* Diagram Display Modal */}
         {showDiagram && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl shadow-2xl max-w-[95vw] w-full max-h-[92vh] overflow-auto border-2 border-amber-300">
-              <div className="sticky top-0 bg-gradient-to-r from-amber-100 to-orange-100 px-6 py-4 border-b border-amber-300 flex justify-between items-center">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-0 z-50">
+            <div className="bg-white rounded-none shadow-2xl w-screen h-screen overflow-hidden border-2 border-amber-300">
+              <div className="sticky top-0 bg-gradient-to-r from-amber-100 to-orange-100 px-4 md:px-6 py-4 border-b border-amber-300 flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-amber-900">{showDiagram.title}</h2>
                 <button
                   onClick={() => {
@@ -293,11 +293,11 @@ export default function AdminDashboard() {
                   ×
                 </button>
               </div>
-              <div className="p-8">
+              <div className="px-2 md:px-4 py-2 md:py-4 h-[calc(100vh-72px)] overflow-auto">
                 {charts.length > 0 ? (
-                  <div className="space-y-8">
+                  <div className="space-y-4 md:space-y-6">
                     {charts.map((chart: string, idx: number) => (
-                      <div key={idx} className="border border-amber-200 rounded-lg p-6 bg-amber-50/30">
+                      <div key={idx} className="p-0 bg-transparent">
                         <MermaidRenderer chart={chart} />
                       </div>
                     ))}

@@ -198,8 +198,8 @@ export function MermaidRenderer({ charts, chart }: MermaidRendererProps) {
                   const sw = cw / vb.width
                   const sh = chAvail / vb.height
                   const base = Math.min(sw, sh)
-                  // Fit to container more aggressively for readability
-                  const scale = Math.max(0.5, base * 0.98)
+                  // Fill full width/height; remove extra margin
+                  const scale = Math.max(0.5, base)
                   svgEl.style.transformOrigin = '0 0'
                   svgEl.style.transform = `translate(0px, 0px) scale(${scale})`
                 }
