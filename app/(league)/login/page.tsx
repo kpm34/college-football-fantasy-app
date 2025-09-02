@@ -166,18 +166,16 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
       // Initiate OAuth2 session
       const providerName = provider === 'google' ? OAuthProvider.Google : OAuthProvider.Apple;
       
-      // Use the server-side OAuth callback to bypass Vercel protection
+      // Use static HTML handler to bypass Vercel protection
       const origin = window.location.origin;
-      const successUrl = `${origin}/api/auth/oauth/callback`;
-      const failureUrl = `${origin}/api/auth/oauth/callback?error=oauth_failed`;
+      const successUrl = `${origin}/oauth-handler.html`;
+      const failureUrl = `${origin}/oauth-handler.html?error=oauth_failed`;
       
       console.log('OAuth URLs:', { successUrl, failureUrl, provider: providerName });
       
-      // For token flow, use createOAuth2Token instead of createOAuth2Session
+      // Use createOAuth2Token for the token flow (returns userId/secret)
       if (typeof window !== 'undefined') {
-        // Use createOAuth2Token for the token flow (returns userId and secret in callback)
         const authUrl = await account.createOAuth2Token(providerName, successUrl, failureUrl);
-        // Redirect to the OAuth provider
         window.location.href = authUrl;
       }
       
