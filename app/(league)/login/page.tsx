@@ -42,12 +42,23 @@ function LoginPageContent() {
       setError(`OAuth Error: ${urlError}${urlDetails ? ` - ${urlDetails}` : ''}`)
     }
     
-    // Poll auth status every 2 seconds if we're expecting OAuth callback
-    const interval = setInterval(() => {
-      checkAuthStatus()
-    }, 2000)
+    // Only poll if we just came back from OAuth (has error or success params)
+    // or if we detect an OAuth cookie
+    let interval: NodeJS.Timeout | null = null
+    if (urlError || searchParams?.get('success') || document.cookie.includes('oauth_')) {
+      interval = setInterval(() => {
+        checkAuthStatus()
+      }, 3000) // Check every 3 seconds only when needed
+      
+      // Stop polling after 30 seconds
+      setTimeout(() => {
+        if (interval) clearInterval(interval)
+      }, 30000)
+    }
     
-    return () => clearInterval(interval)
+    return () => {
+      if (interval) clearInterval(interval)
+    }
   }, [searchParams])
   
   async function checkAuthStatus() {
@@ -117,12 +128,17 @@ function LoginPageContent() {
         }
       })
       
-      // If authenticated, redirect to dashboard
+      // If authenticated, show in debug panel but don't auto-redirect
+      // (let user manually navigate or click a button)
       if (user && user.$id) {
-        console.log('🎉 User authenticated, redirecting to dashboard...')
-        setTimeout(() => {
-          window.location.href = '/dashboard'
-        }, 1000)
+        console.log('🎉 User authenticated! User can now go to dashboard')
+        // Only redirect if we're coming from OAuth callback
+        if (searchParams?.get('oauth_callback') === 'true' || window.location.hash.includes('userId')) {
+          console.log('OAuth callback detected, redirecting to dashboard...')
+          setTimeout(() => {
+            window.location.href = '/dashboard'
+          }, 1500)
+        }
       }
     } catch (err) {
       console.error('Auth check error:', err)
@@ -405,24 +421,36 @@ function LoginPageContent() {
             )}
             
             {/* Action Buttons */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => checkAuthStatus()}
-                className="flex-1 px-3 py-2 text-xs rounded bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                🔄 Refresh Status
-              </button>
-              <button
-                onClick={() => {
-                  document.cookie.split(";").forEach(c => {
-                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
-                  });
-                  checkAuthStatus();
-                }}
-                className="flex-1 px-3 py-2 text-xs rounded bg-red-600 hover:bg-red-700 text-white"
-              >
-                🗑️ Clear Cookies
-              </button>
+            <div className="space-y-2">
+              {/* Show Dashboard button if authenticated */}
+              {debugInfo.appwrite?.hasSession && (
+                <button
+                  onClick={() => window.location.href = '/dashboard'}
+                  className="w-full px-3 py-2 text-xs rounded bg-green-600 hover:bg-green-700 text-white font-semibold"
+                >
+                  ✅ Authenticated - Go to Dashboard
+                </button>
+              )}
+              
+              <div className="flex gap-2">
+                <button
+                  onClick={() => checkAuthStatus()}
+                  className="flex-1 px-3 py-2 text-xs rounded bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  🔄 Refresh Status
+                </button>
+                <button
+                  onClick={() => {
+                    document.cookie.split(";").forEach(c => {
+                      document.cookie = c.replace(/^ +/, "").replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+                    });
+                    checkAuthStatus();
+                  }}
+                  className="flex-1 px-3 py-2 text-xs rounded bg-red-600 hover:bg-red-700 text-white"
+                >
+                  🗑️ Clear Cookies
+                </button>
+              </div>
             </div>
           </div>
         </div>
