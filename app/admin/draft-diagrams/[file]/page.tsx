@@ -18,7 +18,7 @@ export default function DraftDiagramPage({ params }: { params: Promise<{ file: s
 
       // Fetch the diagram content for embedded viewer
       if (p.file && p.file.endsWith('.drawio')) {
-        fetch(`/docs/diagrams/draft-diagrams/${p.file}`)
+        fetch(`/api/diagrams/${p.file}`)
           .then(res => res.text())
           .then(content => {
             console.log('Fetched diagram content, length:', content.length)
@@ -31,11 +31,11 @@ export default function DraftDiagramPage({ params }: { params: Promise<{ file: s
 
   const url = useMemo(() => {
     if (!file) return ''
-    // Serve directly from public folder - diagrams.net needs a publicly accessible URL
+    // Use API route to serve with proper content-type headers
     const origin = typeof window !== 'undefined' ? window.location.origin : ''
     return origin
-      ? `${origin}/docs/diagrams/draft-diagrams/${file}`
-      : `/docs/diagrams/draft-diagrams/${file}`
+      ? `${origin}/api/diagrams/${file}`
+      : `/api/diagrams/${file}`
   }, [file])
 
   const isMarkdown = useMemo(() => file.toLowerCase().endsWith('.md'), [file])
