@@ -283,13 +283,51 @@ function LoginPageContent() {
         {debugInfo?.appwrite?.hasSession && (
           <div className="mt-4 p-3 rounded-lg" style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
             <p className="text-sm text-green-700 mb-2">✅ You're already logged in!</p>
-            <Link
-              href="/dashboard"
-              className="block w-full text-center px-4 py-2 rounded-lg font-semibold transition-colors"
-              style={{ backgroundColor: '#22C55E', color: '#FFFFFF' }}
-            >
-              Go to Dashboard →
-            </Link>
+            <div className="space-y-2">
+              <Link
+                href="/dashboard"
+                className="block w-full text-center px-4 py-2 rounded-lg font-semibold transition-colors"
+                style={{ backgroundColor: '#22C55E', color: '#FFFFFF' }}
+              >
+                Go to Dashboard →
+              </Link>
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    // Clear the session via API
+                    await fetch('/api/auth/clear-session', { method: 'POST' });
+                    
+                    // Clear client-side Appwrite session
+                    const { Account } = await import('appwrite')
+                    const account = new Account(client)
+                    try {
+                      await account.deleteSessions()
+                    } catch (e) {
+                      console.log('Could not delete client sessions:', e)
+                    }
+                    
+                    // Clear all cookies client-side
+                    document.cookie.split(";").forEach(c => {
+                      document.cookie = c.replace(/^ +/, "").replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+                    });
+                    
+                    // Refresh the page
+                    window.location.reload();
+                  } catch (error) {
+                    console.error('Failed to clear session:', error);
+                    alert('Failed to clear session. Try clearing browser cookies manually.');
+                  }
+                }}
+                className="block w-full text-center px-4 py-2 rounded-lg font-semibold transition-colors"
+                style={{ backgroundColor: '#DC2626', color: '#FFFFFF' }}
+              >
+                🗑️ Clear Stale Session & Restart
+              </button>
+            </div>
+            <p className="text-xs text-gray-600 mt-2">
+              If dashboard keeps redirecting, click "Clear Stale Session" to reset
+            </p>
           </div>
         )}
 

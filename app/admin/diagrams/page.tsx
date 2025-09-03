@@ -1,6 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
+import Script from 'next/script'
 import { Suspense, useEffect, useState } from 'react'
 
 function DiagramsContent() {
@@ -40,14 +41,23 @@ function DiagramsContent() {
   // Fallback viewer host if the default viewer doesn't render
   const [viewerHost, setViewerHost] = useState<string>('https://viewer.diagrams.net')
   const [frameLoaded, setFrameLoaded] = useState<boolean>(false)
+  const [useMx, setUseMx] = useState<boolean>(false)
   useEffect(() => {
     setFrameLoaded(false)
+    setUseMx(false)
     setViewerHost('https://viewer.diagrams.net')
     // If not loaded within 3s, try app.diagrams.net (sometimes works better behind strict CSPs)
     const t = setTimeout(() => {
       if (!frameLoaded) setViewerHost('https://app.diagrams.net')
     }, 3000)
-    return () => clearTimeout(t)
+    // If not loaded within 6s, switch to static mxgraph viewer
+    const t2 = setTimeout(() => {
+      if (!frameLoaded) setUseMx(true)
+    }, 6000)
+    return () => {
+      clearTimeout(t)
+      clearTimeout(t2)
+    }
   }, [signed])
 
   useEffect(() => {
@@ -89,12 +99,34 @@ function DiagramsContent() {
           </div>
         </div>
       )}
-      <iframe
-        key={viewerHost}
-        src={`${viewerHost}/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(signed)}`}
-        className="w-full h-full border-0"
-        onLoad={() => setFrameLoaded(true)}
-      />
+      {useMx ? (
+        <div className="w-full h-full">
+          <Script
+            src="https://viewer.diagrams.net/js/viewer-static.min.js"
+            strategy="afterInteractive"
+          />
+          <div
+            className="mxgraph"
+            data-mxgraph={JSON.stringify({
+              url: signed,
+              highlight: '#0000ff',
+              nav: 1,
+              resize: 1,
+              fit: 1,
+              zoom: 1,
+              toolbar: 'zoom lightbox',
+            })}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
+      ) : (
+        <iframe
+          key={viewerHost}
+          src={`${viewerHost}/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(signed)}`}
+          className="w-full h-full border-0"
+          onLoad={() => setFrameLoaded(true)}
+        />
+      )}
     </>
   )
 }

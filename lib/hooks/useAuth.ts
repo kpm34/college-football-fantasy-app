@@ -29,12 +29,37 @@ export function useAuth() {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch('/api/auth/user', { 
+      // Try the new check endpoint first
+      const checkResponse = await fetch('/api/auth/check', { 
         cache: 'no-store',
+        credentials: 'include',
         headers: {
           'Cache-Control': 'no-cache'
         }
       });
+      
+      if (checkResponse.ok) {
+        const checkData = await checkResponse.json();
+        if (checkData.authenticated && checkData.user) {
+          setUser({
+            $id: checkData.user.id,
+            email: checkData.user.email,
+            name: checkData.user.name
+          } as any);
+          setLoading(false);
+          return;
+        }
+      }
+      
+      // Fallback to original endpoint
+      const response = await fetch('/api/auth/user', { 
+        cache: 'no-store',
+        credentials: 'include',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
       if (response.ok) {
         const payload = await response.json();
         // Handle both shapes: { success: true, data: {...} } and direct user object
