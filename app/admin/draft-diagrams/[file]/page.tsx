@@ -7,22 +7,32 @@ import { useEffect, useMemo, useState } from 'react'
 export default function DraftDiagramPage({ params }: { params: Promise<{ file: string }> }) {
   const [file, setFile] = useState('')
   const [loading, setLoading] = useState(true)
-  
+  const [diagramContent, setDiagramContent] = useState<string | null>(null)
+  const [useEmbedded, setUseEmbedded] = useState(true)
+
   useEffect(() => {
     params.then(p => {
       console.log('Loading diagram:', p.file)
       setFile(p.file)
       setLoading(false)
+
+      // Also fetch the diagram content as backup
+      if (p.file && p.file.endsWith('.drawio')) {
+        fetch(`/docs/diagrams/draft-diagrams/${p.file}`)
+          .then(res => res.text())
+          .then(content => setDiagramContent(content))
+          .catch(err => console.error('Failed to load diagram content:', err))
+      }
     })
   }, [params])
 
   const url = useMemo(() => {
     if (!file) return ''
-    // Use the API route to serve the file content
+    // Serve directly from public folder - diagrams.net needs a publicly accessible URL
     const origin = typeof window !== 'undefined' ? window.location.origin : ''
     return origin
-      ? `${origin}/api/docs/diagrams/draft-diagrams/${file}`
-      : `/api/docs/diagrams/draft-diagrams/${file}`
+      ? `${origin}/docs/diagrams/draft-diagrams/${file}`
+      : `/docs/diagrams/draft-diagrams/${file}`
   }, [file])
 
   const isMarkdown = useMemo(() => file.toLowerCase().endsWith('.md'), [file])
@@ -54,9 +64,7 @@ export default function DraftDiagramPage({ params }: { params: Promise<{ file: s
             <h1 className="text-3xl font-extrabold" style={{ color: '#5B2E0F' }}>
               {file ? file.replace(/\.(drawio|md)$/i, '').replace(/[-_]/g, ' ') : 'Diagram'}
             </h1>
-            {file && (
-              <p className="text-sm text-amber-700 mt-1">File: {file}</p>
-            )}
+            {file && <p className="text-sm text-amber-700 mt-1">File: {file}</p>}
           </div>
           <Link
             href="/admin/draft-diagrams"
@@ -65,26 +73,63 @@ export default function DraftDiagramPage({ params }: { params: Promise<{ file: s
             Back
           </Link>
         </div>
-        
+
         {loading && (
           <div className="bg-white/90 rounded-xl p-8 shadow border border-amber-200 text-center">
             <div className="text-amber-800">Loading diagram...</div>
           </div>
         )}
-        
+
         {/* Render .drawio in viewer, .md via MermaidRenderer */}
         {!loading && !isMarkdown && url && (
           <div>
-            <div className="mb-2 text-sm text-amber-700">
-              Loading from: {url}
+            <div className="mb-2 flex items-center justify-between">
+              <div className="text-sm text-amber-700">Loading from: {url}</div>
+              {diagramContent && (
+                <button
+                  onClick={() => setUseEmbedded(!useEmbedded)}
+                  className="px-3 py-1 text-sm rounded bg-amber-600 text-white hover:bg-amber-700"
+                >
+                  {useEmbedded ? 'Use Viewer' : 'Use Embedded'}
+                </button>
+              )}
             </div>
-            <iframe
-              key={file}
-              src={`https://viewer.diagrams.net/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(url)}`}
-              className="w-full h-[80vh] border rounded bg-white"
-              onLoad={() => console.log('Iframe loaded for:', file)}
-              onError={(e) => console.error('Iframe error for:', file, e)}
-            />
+
+            {useEmbedded && diagramContent ? (
+              // Embedded viewer with content
+              <iframe
+                key={`embedded-${file}`}
+                srcDoc={`
+                  <!DOCTYPE html>
+                  <html>
+                  <head>
+                    <style>body { margin: 0; overflow: hidden; }</style>
+                  </head>
+                  <body>
+                    <div id="diagram" style="width:100%;height:100vh;"></div>
+                    <script src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
+                    <script>
+                      const data = ${JSON.stringify(diagramContent)};
+                      const viewer = new GraphViewer(document.getElementById('diagram'), data);
+                      viewer.setEnabled(true);
+                      viewer.showLightbox = true;
+                    </script>
+                  </body>
+                  </html>
+                `}
+                className="w-full h-[80vh] border rounded bg-white"
+                onLoad={() => console.log('Embedded viewer loaded for:', file)}
+              />
+            ) : (
+              // External viewer with URL
+              <iframe
+                key={`viewer-${file}`}
+                src={`https://viewer.diagrams.net/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(url)}`}
+                className="w-full h-[80vh] border rounded bg-white"
+                onLoad={() => console.log('External viewer loaded for:', file)}
+                onError={e => console.error('Viewer error for:', file, e)}
+              />
+            )}
           </div>
         )}
         {isMarkdown && (
