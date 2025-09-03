@@ -36,6 +36,13 @@ export async function POST(request: NextRequest) {
       console.log('Using sessionId as secret for OAuth sync:', sessionId);
     }
 
+    // If we still don't have a secret but have user info, create a placeholder
+    if (!secret && userId && email) {
+      // Create a session identifier that we can use
+      secret = `oauth_${userId}_${Date.now()}`;
+      console.log('Creating synthetic session for OAuth user:', email);
+    }
+
     if (!secret) {
       return NextResponse.json({ success: false, error: 'Missing credentials' }, { status: 400 });
     }

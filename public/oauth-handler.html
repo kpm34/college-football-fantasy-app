@@ -171,13 +171,25 @@
                             const session = await account.getSession('current');
                             console.log('📦 Current session:', session.$id);
                             
+                            // Try to get the JWT for the session
+                            let jwt = null;
+                            try {
+                                const jwtResponse = await account.createJWT();
+                                jwt = jwtResponse.jwt;
+                                console.log('🔑 Got JWT for session');
+                            } catch (jwtErr) {
+                                console.log('⚠️ Could not get JWT:', jwtErr);
+                            }
+                            
                             // Sync the session with our API
                             const syncResponse = await fetch('/api/auth/sync-oauth', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
                                 },
+                                credentials: 'include', // Important: include cookies
                                 body: JSON.stringify({
+                                    jwt: jwt,
                                     secret: session.secret || session.$id,
                                     sessionId: session.$id,
                                     userId: user.$id,
