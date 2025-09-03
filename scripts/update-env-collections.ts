@@ -10,7 +10,7 @@ const CORRECT_COLLECTION_MAPPINGS = {
   NEXT_PUBLIC_APPWRITE_COLLECTION_AUCTIONS: 'Auctions',
   NEXT_PUBLIC_APPWRITE_COLLECTION_BIDS: 'Bids',
   NEXT_PUBLIC_APPWRITE_COLLECTION_COLLEGE_PLAYERS: 'College Players',
-  NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS: 'Draft Picks',  // This is the actual collection
+  NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_PICKS: 'Draft Picks', // This is the actual collection
   NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_EVENTS: 'draft_events',
   NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFT_STATES: 'Draft States',
   NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFTS: 'drafts',
@@ -29,17 +29,17 @@ const CORRECT_COLLECTION_MAPPINGS = {
   NEXT_PUBLIC_APPWRITE_COLLECTION_CLIENTS: 'clients',
   NEXT_PUBLIC_APPWRITE_COLLECTION_INVITES: 'invites',
   NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUE_MEMBERSHIPS: 'league_memberships',
-  
+
   // Mascot/Job collections
   NEXT_PUBLIC_APPWRITE_COLLECTION_MASCOT_JOBS: 'Mascot Jobs',
   NEXT_PUBLIC_APPWRITE_COLLECTION_MASCOT_PRESETS: 'Mascot Presets',
   NEXT_PUBLIC_APPWRITE_COLLECTION_MASCOT_DOWNLOAD_TASKS: 'Mascot Download Tasks',
   NEXT_PUBLIC_APPWRITE_COLLECTION_MESHY_JOBS: 'meshy_jobs',
-  
+
   // Model collections
   NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_VERSIONS: 'Model Versions',
   NEXT_PUBLIC_APPWRITE_COLLECTION_DATABASE_MIGRATIONS: 'Database Migrations',
-  
+
   // Deprecated/Aliased (keep for backwards compatibility)
   NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYERS: 'College Players', // Alias
   NEXT_PUBLIC_APPWRITE_COLLECTION_ROSTERS: 'roster_slots', // Alias
@@ -61,7 +61,7 @@ function updateEnvFile(filePath: string) {
   for (const [key, value] of Object.entries(CORRECT_COLLECTION_MAPPINGS)) {
     const regex = new RegExp(`^${key}=.*$`, 'gm')
     const newLine = `${key}="${value}"`
-    
+
     if (regex.test(content)) {
       const oldLine = content.match(regex)?.[0]
       if (oldLine && oldLine !== newLine) {
@@ -83,7 +83,7 @@ function updateEnvFile(filePath: string) {
     'NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_PROJECTIONS',
     'NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_WEEKLY',
     'NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_YEARLY',
-    'NEXT_PUBLIC_APPWRITE_COLLECTION_USER_CUSTOM_PROJECTIONS'
+    'NEXT_PUBLIC_APPWRITE_COLLECTION_USER_CUSTOM_PROJECTIONS',
   ]
 
   for (const key of deprecatedKeys) {
@@ -104,12 +104,7 @@ function updateEnvFile(filePath: string) {
 }
 
 // Update all .env files
-const envFiles = [
-  '.env.local',
-  '.env.example',
-  '.env.template.generated',
-  '.env.production.backup'
-]
+const envFiles = ['.env.local', '.env.example', '.env.template.generated', '.env.production.backup']
 
 console.log('Updating .env files with correct collection names from live schema...\n')
 
