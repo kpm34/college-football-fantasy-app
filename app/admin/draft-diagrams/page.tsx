@@ -22,17 +22,17 @@ const DIAGRAMS: Diagram[] = [
 type DrawioDiagram = { file: string; title: string; group: 'Flows' | 'Operations' | 'Endpoints' | 'Timing' }
 
 const DRAWIO_DIAGRAMS: DrawioDiagram[] = [
-  // Flows
-  { file: 'mock-real-draft-flows.drawio', title: 'System Overview (Mock vs Real)', group: 'Flows' },
-  { file: 'mock-draft-flow.drawio', title: 'Mock Draft Flow', group: 'Flows' },
-  { file: 'real-draft-flow.drawio', title: 'Real Draft Flow', group: 'Flows' },
+  // Flows (served from docs/diagrams/draft)
+  { file: 'diagrams/draft/mock-real-draft-flows.drawio', title: 'System Overview (Mock vs Real)', group: 'Flows' },
+  { file: 'diagrams/draft/mock-draft-flow.drawio', title: 'Mock Draft Flow', group: 'Flows' },
+  { file: 'diagrams/draft/real-draft-flow.drawio', title: 'Real Draft Flow', group: 'Flows' },
   // Operations
-  { file: 'draft-autopick-system.drawio', title: 'Autopick System', group: 'Operations' },
-  { file: 'draft-database-board.drawio', title: 'Draft Database + Board', group: 'Operations' },
+  { file: 'diagrams/draft/draft-autopick-system.drawio', title: 'Autopick System', group: 'Operations' },
+  { file: 'diagrams/draft/draft-database-board.drawio', title: 'Draft Database + Board', group: 'Operations' },
   // Endpoints
-  { file: 'draft-api-endpoints.drawio', title: 'Draft API Endpoints', group: 'Endpoints' },
+  { file: 'diagrams/draft/draft-api-endpoints.drawio', title: 'Draft API Endpoints', group: 'Endpoints' },
   // Timing
-  { file: 'draft-comparison-timing.drawio', title: 'Timing Comparison', group: 'Timing' },
+  { file: 'diagrams/draft/draft-comparison-timing.drawio', title: 'Timing Comparison', group: 'Timing' },
 ]
 
 export default function DraftDiagramsPage() {
@@ -136,12 +136,12 @@ export default function DraftDiagramsPage() {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xl font-bold" style={{ color: '#5B2E0F' }}>{currentDrawio.title}</h2>
               <div className="flex items-center gap-2">
-                <a href={`/admin/diagrams?file=${currentDrawio.file}`} target="_blank" className="px-3 py-1 rounded bg-emerald-700 text-white hover:bg-emerald-800">Open in New Tab</a>
+                <a href={`/admin/diagrams?file=${encodeURIComponent(currentDrawio.file)}`} target="_blank" className="px-3 py-1 rounded bg-emerald-700 text-white hover:bg-emerald-800">Open in New Tab</a>
                 <button onClick={() => setCurrentDrawio(null)} className="px-3 py-1 rounded bg-stone-700 text-white hover:bg-stone-800">Close</button>
               </div>
             </div>
             <iframe 
-              src={`https://viewer.diagrams.net/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(window.location.origin + '/docs/draft/' + currentDrawio.file)}`}
+              src={`https://viewer.diagrams.net/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(((typeof window !== 'undefined' ? window.location.origin : '') + '/docs/' + currentDrawio.file))}`}
               className="w-full h-[70vh] border rounded" 
             />
           </div>

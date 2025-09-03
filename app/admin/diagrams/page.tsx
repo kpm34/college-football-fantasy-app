@@ -9,8 +9,8 @@ function DiagramsContent() {
   const url = useMemo(() => {
     if (!file) return ''
     const origin = typeof window !== 'undefined' ? window.location.origin : ''
-    // Ensure absolute URL so viewer.diagrams.net can fetch via CORS
-    return origin ? `${origin}/diagrams/${file}` : `/diagrams/${file}`
+    // Serve statically from /docs (symlinked to docs/)
+    return origin ? `${origin}/docs/${file}` : `/docs/${file}`
   }, [file])
 
   useEffect(() => {

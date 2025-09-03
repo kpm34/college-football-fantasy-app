@@ -1,45 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs'
+import path from 'node:path'
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
+  _request: any,
+  ctx: { params: Promise<{ path: string[] }> } | { params: { path: string[] } }
 ) {
   try {
-    const resolvedParams = await params;
-    const filePath = path.join(process.cwd(), 'public', ...resolvedParams.path);
-    
-    // Check if file exists
+    const resolved = 'then' in ctx.params ? await (ctx.params as Promise<{ path: string[] }>) : (ctx.params as { path: string[] })
+    const filePath = path.join(process.cwd(), 'public', ...resolved.path)
+
     if (!fs.existsSync(filePath)) {
-      return NextResponse.json({ error: 'File not found' }, { status: 404 });
+      return new Response(JSON.stringify({ error: 'File not found' }), { status: 404, headers: { 'Content-Type': 'application/json' } })
     }
 
-    // Read the file
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    
-    // Determine content type
-    const ext = path.extname(filePath);
-    let contentType = 'text/plain';
-    
-    if (ext === '.html') {
-      contentType = 'text/html';
-    } else if (ext === '.css') {
-      contentType = 'text/css';
-    } else if (ext === '.js') {
-      contentType = 'application/javascript';
-    } else if (ext === '.json') {
-      contentType = 'application/json';
-    }
+    const ext = path.extname(filePath).toLowerCase()
+    let contentType = 'application/octet-stream'
+    if (ext === '.html') contentType = 'text/html; charset=utf-8'
+    else if (ext === '.css') contentType = 'text/css; charset=utf-8'
+    else if (ext === '.js') contentType = 'application/javascript; charset=utf-8'
+    else if (ext === '.json') contentType = 'application/json; charset=utf-8'
+    else if (ext === '.svg') contentType = 'image/svg+xml'
+    else if (ext === '.png') contentType = 'image/png'
+    else if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg'
+    else if (ext === '.drawio') contentType = 'application/xml; charset=utf-8'
 
-    return new NextResponse(fileContent, {
-      headers: {
-        'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=3600',
-      },
-    });
-  } catch (error) {
-    console.error('Error serving static file:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const data = fs.readFileSync(filePath)
+    return new Response(data, { headers: { 'Content-Type': contentType, 'Cache-Control': 'public, max-age=3600' } })
+  } catch (error: any) {
+    return new Response(JSON.stringify({ error: error?.message || 'Internal server error' }), { status: 500, headers: { 'Content-Type': 'application/json' } })
   }
-} 
+}
