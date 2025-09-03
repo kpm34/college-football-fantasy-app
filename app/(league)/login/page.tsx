@@ -578,23 +578,25 @@ function OAuthButtons({
         // Use createOAuth2Session which properly handles the OAuth flow
         try {
           console.log('📞 Calling account.createOAuth2Session...')
+          
+          // For OAuth, we need to specify scopes
+          const scopes = ['email', 'profile'] // Request email and profile access
+          
+          // Create OAuth2 session with proper parameters
           await account.createOAuth2Session(
             OAuthProvider.Google,
             successUrl,
-            failureUrl
+            failureUrl,
+            scopes
           )
         } catch (sessionError: any) {
           console.error('❌ OAuth session creation failed:', sessionError)
           
-          // If createOAuth2Session fails, try the direct URL approach
-          if (sessionError?.message?.includes('Missing required parameter')) {
-            console.log('⚠️ Falling back to direct OAuth URL...')
-            const oauthUrl = `${endpoint}/account/sessions/oauth2/google?project=${projectId}&success=${encodeURIComponent(successUrl)}&failure=${encodeURIComponent(failureUrl)}`
-            console.log('🔗 Redirecting to:', oauthUrl)
-            window.location.href = oauthUrl
-          } else {
-            throw sessionError
-          }
+          // Always fall back to direct URL for now as it's more reliable
+          console.log('⚠️ Using direct OAuth URL...')
+          const oauthUrl = `${endpoint}/account/sessions/oauth2/google?project=${projectId}&success=${encodeURIComponent(successUrl)}&failure=${encodeURIComponent(failureUrl)}`
+          console.log('🔗 Redirecting to:', oauthUrl)
+          window.location.href = oauthUrl
         }
       } else {
         // Fallback for other providers
