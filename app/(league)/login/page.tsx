@@ -167,16 +167,27 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
       const providerName = provider === 'google' ? OAuthProvider.Google : OAuthProvider.Apple;
       
       // Use static HTML handler to bypass Vercel protection
-      const origin = window.location.origin;
-      const successUrl = `${origin}/oauth-handler.html`;
-      const failureUrl = `${origin}/oauth-handler.html?error=oauth_failed`;
-      
-      console.log('OAuth URLs:', { successUrl, failureUrl, provider: providerName });
-      
-      // Use createOAuth2Token for the token flow (returns userId/secret)
-      if (typeof window !== 'undefined') {
-        const authUrl = await account.createOAuth2Token(providerName, successUrl, failureUrl);
-        window.location.href = authUrl;
+      if (providerName === 'google') {
+        // Direct OAuth URL that we know works
+        const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
+        const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
+        const origin = window.location.origin;
+        
+        const oauthUrl = `${endpoint}/account/sessions/oauth2/google?project=${projectId}&success=${encodeURIComponent(`${origin}/dashboard`)}&failure=${encodeURIComponent(`${origin}/login`)}`;
+        window.location.href = oauthUrl;
+      } else {
+        // Fallback for other providers
+        const origin = window.location.origin;
+        const successUrl = `${origin}/oauth-handler.html`;
+        const failureUrl = `${origin}/oauth-handler.html?error=oauth_failed`;
+        
+        console.log('OAuth URLs:', { successUrl, failureUrl, provider: providerName });
+        
+        // Use createOAuth2Token for the token flow (returns userId/secret)
+        if (typeof window !== 'undefined') {
+          const authUrl = await account.createOAuth2Token(providerName, successUrl, failureUrl);
+          window.location.href = authUrl;
+        }
       }
       
     } catch (error) {
