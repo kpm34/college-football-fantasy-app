@@ -73,18 +73,21 @@ function DiagramsContent() {
   // Fallback viewer host if the default viewer doesn't render
   const [viewerHost, setViewerHost] = useState<string>('https://viewer.diagrams.net')
   const [frameLoaded, setFrameLoaded] = useState<boolean>(false)
-  const [useMx, setUseMx] = useState<boolean>(false)
+  const [useMx, setUseMx] = useState<boolean>(true) // Default to mxGraph for better reliability
   useEffect(() => {
     setFrameLoaded(false)
-    setUseMx(false)
+    setUseMx(true) // Default to mxGraph
     setViewerHost('https://viewer.diagrams.net')
-    // If not loaded within 3s, try app.diagrams.net (sometimes works better behind strict CSPs)
+    // If mxGraph fails, try iframe approach
     const t = setTimeout(() => {
-      if (!frameLoaded) setViewerHost('https://app.diagrams.net')
+      if (!frameLoaded) {
+        setUseMx(false)
+        setViewerHost('https://viewer.diagrams.net')
+      }
     }, 3000)
-    // If not loaded within 6s, switch to static mxgraph viewer
+    // If iframe fails, try app.diagrams.net
     const t2 = setTimeout(() => {
-      if (!frameLoaded) setUseMx(true)
+      if (!frameLoaded) setViewerHost('https://app.diagrams.net')
     }, 6000)
     return () => {
       clearTimeout(t)
