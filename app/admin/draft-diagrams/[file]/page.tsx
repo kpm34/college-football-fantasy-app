@@ -8,7 +8,7 @@ export default function DraftDiagramPage({ params }: { params: Promise<{ file: s
   const [file, setFile] = useState('')
   const [loading, setLoading] = useState(true)
   const [diagramContent, setDiagramContent] = useState<string | null>(null)
-  const [useEmbedded, setUseEmbedded] = useState(true)
+  const [useEmbedded, setUseEmbedded] = useState(false)
 
   useEffect(() => {
     params.then(p => {
@@ -16,11 +16,14 @@ export default function DraftDiagramPage({ params }: { params: Promise<{ file: s
       setFile(p.file)
       setLoading(false)
 
-      // Also fetch the diagram content as backup
+      // Fetch the diagram content for embedded viewer
       if (p.file && p.file.endsWith('.drawio')) {
         fetch(`/docs/diagrams/draft-diagrams/${p.file}`)
           .then(res => res.text())
-          .then(content => setDiagramContent(content))
+          .then(content => {
+            console.log('Fetched diagram content, length:', content.length)
+            setDiagramContent(content)
+          })
           .catch(err => console.error('Failed to load diagram content:', err))
       }
     })
@@ -96,29 +99,28 @@ export default function DraftDiagramPage({ params }: { params: Promise<{ file: s
             </div>
 
             {useEmbedded && diagramContent ? (
-              // Embedded viewer with content
+              // Embedded viewer with content using draw.io embed mode
               <iframe
                 key={`embedded-${file}`}
-                srcDoc={`
-                  <!DOCTYPE html>
-                  <html>
-                  <head>
-                    <style>body { margin: 0; overflow: hidden; }</style>
-                  </head>
-                  <body>
-                    <div id="diagram" style="width:100%;height:100vh;"></div>
-                    <script src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
-                    <script>
-                      const data = ${JSON.stringify(diagramContent)};
-                      const viewer = new GraphViewer(document.getElementById('diagram'), data);
-                      viewer.setEnabled(true);
-                      viewer.showLightbox = true;
-                    </script>
-                  </body>
-                  </html>
-                `}
+                src={`https://embed.diagrams.net/?embed=1&ui=min&spin=1&modified=unsavedChanges&proto=json`}
                 className="w-full h-[80vh] border rounded bg-white"
-                onLoad={() => console.log('Embedded viewer loaded for:', file)}
+                onLoad={(e) => {
+                  console.log('Embedded viewer loaded for:', file)
+                  // Send the diagram content to the embedded viewer
+                  const iframe = e.target as HTMLIFrameElement
+                  if (iframe.contentWindow) {
+                    setTimeout(() => {
+                      iframe.contentWindow?.postMessage(
+                        JSON.stringify({
+                          action: 'load',
+                          xml: diagramContent,
+                          autosave: 0
+                        }),
+                        '*'
+                      )
+                    }, 1000)
+                  }
+                }}
               />
             ) : (
               // External viewer with URL
