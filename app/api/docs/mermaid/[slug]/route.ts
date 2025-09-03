@@ -137,7 +137,12 @@ export async function GET(
   // Helper: attempt to resolve a diagram path using new flattened filenames
   const docsRoot = path.join(process.cwd(), 'docs')
   function existsRel(rel: string): boolean {
-    return fs.existsSync(path.join(docsRoot, rel))
+    try {
+      return fs.existsSync(path.join(docsRoot, rel))
+    } catch (error) {
+      console.warn('Error checking file existence:', error)
+      return false
+    }
   }
 
   function resolveFallback(s: string): string | null {
@@ -231,30 +236,41 @@ export async function GET(
 }
 
 async function buildChartsFromFile(filePath: string) {
-  const docsPath = path.join(process.cwd(), 'docs')
-  const fullPath = path.join(docsPath, filePath)
+  try {
+    const docsPath = path.join(process.cwd(), 'docs')
+    const fullPath = path.join(docsPath, filePath)
 
-  if (!fs.existsSync(fullPath)) {
+    if (!fs.existsSync(fullPath)) {
+      return {
+        error: 'File not found',
+        path: filePath,
+        fullPath: fullPath.replace(process.cwd(), '...'),
+        exists: false,
+        charts: [],
+        updatedAt: new Date().toISOString(),
+      }
+    }
+
+    const content = fs.readFileSync(fullPath, 'utf-8')
+    const charts = extractMermaidBlocks(content)
+    const stats = fs.statSync(fullPath)
+
     return {
-      error: 'File not found',
+      charts,
+      updatedAt: stats.mtime.toISOString(),
       path: filePath,
-      fullPath: fullPath.replace(process.cwd(), '...'),
-      exists: false,
+      slug: filePath,
+      chartsCount: charts.length,
+    }
+  } catch (error: any) {
+    console.error('Error in buildChartsFromFile:', error)
+    return {
+      error: 'Failed to read file',
+      details: error?.message || 'Unknown error',
+      path: filePath,
       charts: [],
       updatedAt: new Date().toISOString(),
     }
-  }
-
-  const content = fs.readFileSync(fullPath, 'utf-8')
-  const charts = extractMermaidBlocks(content)
-  const stats = fs.statSync(fullPath)
-
-  return {
-    charts,
-    updatedAt: stats.mtime.toISOString(),
-    path: filePath,
-    slug: filePath,
-    chartsCount: charts.length,
   }
 }
 

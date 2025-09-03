@@ -4,594 +4,486 @@
  * 
  * All database schemas, TypeScript types, and validation rules 
  * are defined here using Zod. Everything else is inferred.
+ * 
+ * Generated from live Appwrite schema on 2025-09-03T09:36:22.858Z
  */
 
 import { z } from "zod";
 
 /**
- * CORE COLLECTIONS - Zod Schemas
+ * LIVE APPWRITE COLLECTIONS - Zod Schemas
+ * Total Collections: 25
  */
 
+// Collection: activity_log (ID: activity_log)
+export const ActivityLog = z.object({
+  userId: z.string().max(100).optional(),
+  action: z.string().max(100),
+  details: z.string().max(100).optional(),
+  timestamp: z.date(),
+  type: z.string().max(50),
+  teamId: z.string().max(255).optional(),
+  description: z.string().max(1000),
+  data: z.string().max(5000).optional(),
+  createdAt: z.date(),
+  inviteToken: z.string().max(255).optional(),
+  status: z.string().max(50).default('pending').optional(),
+  expiresAt: z.date().optional(),
+  ipAddress: z.string().max(45).optional(),
+  userAgent: z.string().max(500).optional(),
+  actorClientId: z.string().max(64).optional(),
+  objectType: z.string().max(24).optional(),
+  objectId: z.string().max(64).optional(),
+  leagueId: z.string().max(64).optional(),
+  ts: z.date(),
+  payloadJson: z.string().max(16384).optional(),
+});
+
+// Collection: AP Rankings (ID: rankings)
+export const Rankings = z.object({
+  week: z.number().int(),
+  season: z.number().int(),
+  pollType: z.string().max(20),
+  team: z.string().max(50),
+  rank: z.number().int(),
+  points: z.number().int().optional(),
+  firstPlaceVotes: z.number().int().optional(),
+  source: z.string().max(24),
+  schoolId: z.string().max(64),
+});
+
+// Collection: Auctions (ID: auctions)
+export const Auctions = z.object({
+  leagueId: z.string().max(50),
+  draftId: z.string().max(64),
+  playerId: z.string().max(64),
+  status: z.string().max(16),
+  winnerTeamId: z.string().max(64).optional(),
+  winningBid: z.number().optional(),
+});
+
+// Collection: Bids (ID: bids)
+export const Bids = z.object({
+  auctionId: z.string().max(50),
+  playerId: z.string().max(50),
+  teamId: z.string().max(50),
+  amount: z.number(),
+  timestamp: z.date(),
+  isWinning: z.boolean().default(false).optional(),
+  fantasyTeamId: z.string().max(64),
+  leagueId: z.string().max(64),
+  sessionId: z.string().max(64),
+  userId: z.string().max(64),
+  bidAmount: z.number().int().min(1),
+});
+
+// Collection: clients (ID: clients)
+export const Clients = z.object({
+  authUserId: z.string().max(64),
+  displayName: z.string().max(128).optional(),
+  email: z.string().max(256).optional(),
+  avatarUrl: z.string().max(512).optional(),
+  createdAt: z.date(),
+  lastLogin: z.date().optional(),
+});
+
+// Collection: College Players (ID: college_players)
 export const CollegePlayers = z.object({
-  name: z.string().min(2).max(100),
-  position: z.enum(['QB', 'RB', 'WR', 'TE', 'K', 'DEF']),
-  team: z.string().min(2).max(50),
-  conference: z.enum(['SEC', 'ACC', 'Big 12', 'Big Ten']),
+  name: z.string().max(100),
+  position: z.string().max(10),
+  team: z.string().max(50),
+  conference: z.string().max(20),
+  year: z.string().max(10).optional(),
   jerseyNumber: z.number().int().min(0).max(99).optional(),
   height: z.string().max(10).optional(),
   weight: z.number().int().min(150).max(400).optional(),
-  year: z.enum(['FR', 'SO', 'JR', 'SR']).optional(),
-  eligible: z.boolean().default(true),
-  fantasyPoints: z.number().default(0),
-  seasonFantasyPoints: z.number().default(0),
+  eligible: z.boolean().optional(),
+  fantasyPoints: z.number().optional(),
+  seasonFantasyPoints: z.number().optional(),
   depthChartOrder: z.number().int().optional(),
-  lastProjectionUpdate: z.date().optional(),
-  externalId: z.string().max(50).optional(),
-  imageUrl: z.string().url().optional(),
-  stats: z.string().max(5000).optional() // JSON string
+  schoolId: z.string().max(64),
+  classYear: z.string().max(16).optional(),
+  cfbdId: z.string().max(32).optional(),
+  espnId: z.string().max(32).optional(),
 });
 
-export const Teams = z.object({
-  name: z.string().min(1).max(100),
-  abbreviation: z.string().min(2).max(10),
-  conference: z.enum(['SEC', 'ACC', 'Big 12', 'Big Ten']),
-  mascot: z.string().max(50).optional(),
-  logoUrl: z.string().url().optional(),
-  primaryColor: z.string().max(7).optional(), // hex color
-  secondaryColor: z.string().max(7).optional(),
-  venue: z.string().max(100).optional(),
-  founded: z.number().int().min(1800).max(2100).optional(),
-  externalId: z.string().max(50).optional()
+// Collection: Database Migrations (ID: migrations)
+export const Migrations = z.object({
+  migrationId: z.string().max(255),
+  name: z.string().max(255),
+  appliedAt: z.date(),
+  version: z.string().max(100),
+  applied: z.date(),
+  checksum: z.string().max(200),
 });
 
-export const Games = z.object({
-  season: z.number().int().min(2020).max(2035),
-  week: z.number().int().min(1).max(20),
-  seasonType: z.enum(['regular', 'postseason']),
-  homeTeam: z.string().min(2).max(50),
-  awayTeam: z.string().min(2).max(50),
-  homeSchoolId: z.string().optional(),
-  awaySchoolId: z.string().optional(),
-  homeScore: z.number().int().min(0).optional(),
-  awayScore: z.number().int().min(0).optional(),
-  kickoffAt: z.date(),
-  completed: z.boolean().default(false),
-  eligibleGame: z.boolean().optional(),
-  status: z.string().optional(),
+// Collection: Draft States (ID: draft_states)
+export const DraftStates = z.object({
+  draftId: z.string().max(255),
+  onClockTeamId: z.string().max(255),
+  deadlineAt: z.date().optional(),
+  round: z.number().int(),
+  pickIndex: z.number().int(),
+  draftStatus: z.string().default('pre-draft').optional(),
 });
 
-export const Rankings = z.object({
-  week: z.number().int().min(1).max(20),
-  season: z.number().int().min(2020).max(2030),
-  pollType: z.enum(['AP Top 25', 'Coaches Poll']),
-  team: z.string().min(2).max(50),
-  rank: z.number().int().min(1).max(25),
-  points: z.number().int().min(0).optional(),
-  firstPlaceVotes: z.number().int().min(0).optional()
+// Collection: draft_events (ID: draft_events)
+export const DraftEvents = z.object({
+  draftId: z.string().max(64),
+  type: z.string().max(24),
+  round: z.number().int().optional(),
+  overall: z.number().int().optional(),
+  fantasyTeamId: z.string().max(64).optional(),
+  playerId: z.string().max(64).optional(),
+  ts: z.date().optional(),
+  payloadJson: z.string().max(8192).optional(),
 });
 
-export const Leagues = z.object({
-  leagueName: z.string().min(1).max(100),
-  commissionerAuthUserId: z.string().min(1).max(64).optional(),
-  season: z.number().int().min(2020).max(2030),
-  // Align with live min/max tolerances (live caps currently 20 for some fields)
-  maxTeams: z.number().int().min(2).max(32).optional(),
-  currentTeams: z.number().int().min(0).max(32).optional(),
-  draftType: z.enum(['snake', 'auction']).optional(),
-  gameMode: z.enum(['power4', 'sec', 'acc', 'big12', 'bigten']).optional(),
+// Collection: drafts (ID: drafts)
+export const Drafts = z.object({
+  leagueId: z.string().max(100).optional(),
+  draftStatus: z.string().max(100).optional(),
+  currentRound: z.number().int().optional(),
+  currentPick: z.number().int().optional(),
+  maxRounds: z.number().int().optional(),
+  draftOrder: z.string().max(100).optional(),
+  startTime: z.date().optional(),
+  endTime: z.date().optional(),
+  type: z.string().max(16).optional(),
+  clockSeconds: z.number().int().optional(),
+  orderJson: z.string().max(8192).optional(),
+  isMock: z.boolean().optional(),
+  leagueName: z.string().max(255).optional(),
+  gameMode: z.string().max(50).optional(),
   selectedConference: z.string().max(50).optional(),
-  // Defaults handled in code; live often stores null
-  leagueStatus: z.enum(['open', 'closed']).optional(),
-  isPublic: z.boolean().optional(),
-  pickTimeSeconds: z.number().int().min(30).max(600).optional(),
+  maxTeams: z.number().int().min(4).max(24).optional(),
   scoringRules: z.string().max(65535).optional(),
+  stateJson: z.string().max(1000000).optional(),
+  eventsJson: z.string().max(1000000).optional(),
+  picksJson: z.string().max(1000000).optional(),
+  onTheClock: z.string().max(255).optional(),
+  lastPickTime: z.date().optional(),
+});
+
+// Collection: fantasy_teams (ID: fantasy_teams)
+export const FantasyTeams = z.object({
+  leagueId: z.string().max(64),
+  teamName: z.string().max(128),
+  abbrev: z.string().max(8).optional(),
+  logoUrl: z.string().max(512).optional(),
+  wins: z.number().int().min(0).max(25).optional(),
+  losses: z.number().int().min(0).max(25).optional(),
+  ties: z.number().int().optional(),
+  pointsFor: z.number().optional(),
+  pointsAgainst: z.number().optional(),
+  draftPosition: z.number().int().optional(),
+  auctionBudgetTotal: z.number().optional(),
+  auctionBudgetRemaining: z.number().optional(),
+  displayName: z.string().max(255).optional(),
+  ownerAuthUserId: z.string().max(64).optional(),
+  leagueName: z.string().max(100).optional(),
+  players: z.string().max(64).optional(),
+});
+
+// Collection: Games (ID: games)
+export const Games = z.object({
+  week: z.number().int().min(1).max(20),
+  season: z.number().int().min(2020).max(2030),
+  seasonType: z.string().max(20),
+  date: z.date(),
+  homeTeam: z.string().max(50),
+  awayTeam: z.string().max(50),
+  homeScore: z.number().int().min(0).max(200).optional(),
+  awayScore: z.number().int().min(0).max(200).optional(),
+  status: z.string().max(20).optional(),
+  eligible: z.boolean().optional(),
+  startDate: z.date(),
+  completed: z.boolean(),
+  eligibleGame: z.boolean(),
+  homeSchoolId: z.string().max(64),
+  awaySchoolId: z.string().max(64),
+  kickoffAt: z.date(),
+});
+
+// Collection: invites (ID: invites)
+export const Invites = z.object({
+  leagueId: z.string().max(100),
+  email: z.string().max(100).optional(),
+  inviteCode: z.string().max(100),
+  token: z.string().max(100).optional(),
+  status: z.string().max(100).optional(),
+  expiresAt: z.date().optional(),
+  createdAt: z.date(),
+  acceptedAt: z.date().optional(),
+  invitedByAuthUserId: z.string().max(255).optional(),
+});
+
+// Collection: league_memberships (ID: league_memberships)
+export const LeagueMemberships = z.object({
+  leagueId: z.string().max(64),
+  authUserId: z.string().max(64),
+  role: z.string().max(16),
+  status: z.string().max(16),
+  joinedAt: z.date().optional(),
+  displayName: z.string().max(255).optional(),
+  leagueName: z.string().max(100).optional(),
+});
+
+// Collection: Leagues (ID: leagues)
+export const Leagues = z.object({
+  leagueName: z.string().max(100),
+  season: z.number().int().min(2020).max(2030),
+  maxTeams: z.number().int().min(2).max(32).optional(),
+  leagueStatus: z.string().max(20).optional(),
+  gameMode: z.string().max(20).optional(),
+  draftType: z.string().max(20).optional(),
+  isPublic: z.boolean().optional(),
+  currentTeams: z.number().int().min(0).max(20).optional(),
+  pickTimeSeconds: z.number().int().min(30).max(600).optional(),
   draftDate: z.date().optional(),
+  selectedConference: z.string().max(50).optional(),
   seasonStartWeek: z.number().int().min(1).max(20).optional(),
   playoffTeams: z.number().int().min(0).max(20).optional(),
   playoffStartWeek: z.number().int().min(1).max(20).optional(),
   waiverType: z.string().max(20).optional(),
   waiverBudget: z.number().int().min(0).max(1000).optional(),
   password: z.string().max(50).optional(),
-  // Legacy, deprecated in code but present live; keep optional
-  draftOrder: z.string().max(65535).optional()
+  commissionerAuthUserId: z.string().max(64).optional(),
+  scoringRules: z.string().max(65535).optional(),
+  draftOrder: z.string().max(65535).optional(),
+  phase: z.string().max(16).default('scheduled').optional(),
+  engineVersion: z.string().max(3).default('v2').optional(),
 });
 
-export const FantasyTeams = z.object({
-  // Align to live Appwrite where safe; use explicit teamName (required)
-  leagueId: z.string().min(1).max(64),
-  leagueName: z.string().min(1).max(100).optional(),
-  ownerAuthUserId: z.string().min(1).max(64).optional(),
-  teamName: z.string().min(1).max(128),
-  displayName: z.string().max(255).optional(),
-  abbrev: z.string().max(8).optional(),
-  logoUrl: z.string().max(512).optional(),
-  // Business rule: constrain regular-season counts to 0..25
-  wins: z.number().int().min(0).max(25).optional(),
-  losses: z.number().int().min(0).max(25).optional(),
-  ties: z.number().int().min(0).max(25).optional(),
-  pointsFor: z.number().optional(),
-  pointsAgainst: z.number().optional(),
-  draftPosition: z.number().int().min(1).max(32).optional(),
-  auctionBudgetTotal: z.number().optional(),
-  auctionBudgetRemaining: z.number().optional(),
-  // Mirror live: raw players field (JSON string) when present
-  players: z.string().optional()
-});
-
+// Collection: Lineups (ID: lineups)
 export const Lineups = z.object({
-  rosterId: z.string().min(1).max(50),
-  season: z.number().int().min(2020).max(2030),
-  week: z.number().int().min(1).max(20),
+  rosterId: z.string().max(50),
+  week: z.number().int(),
+  season: z.number().int(),
   lineup: z.string().max(5000).optional(),
   bench: z.string().max(5000).optional(),
-  points: z.number().min(0).default(0),
-  locked: z.boolean().default(false)
+  points: z.number().default(0).optional(),
+  locked: z.boolean().default(false).optional(),
+  fantasyTeamId: z.string().max(64),
 });
 
-export const Auctions = z.object({
-  leagueId: z.string().min(1).max(50),
-  status: z.string().min(1).max(20),
-  currentPlayerId: z.string().min(1).max(50).optional(),
-  currentBid: z.number().min(0).optional(),
-  currentBidder: z.string().min(1).max(50).optional(),
-  startTime: z.date().optional(),
-  endTime: z.date().optional()
-});
-
-export const Bids = z.object({
-  leagueId: z.string().min(1).max(50),
-  sessionId: z.string().min(1).max(50),
-  userId: z.string().min(1).max(50),
-  playerId: z.string().min(1).max(50),
-  bidAmount: z.number().min(1),
-  timestamp: z.date(),
-  auctionId: z.string().min(1).max(50).optional(),
-  teamId: z.string().min(1).max(50).optional()
-});
-
-export const PlayerStats = z.object({
-  playerId: z.string().min(1).max(50),
-  gameId: z.string().min(1).max(50),
-  week: z.number().int().min(1).max(20),
-  season: z.number().int().min(2020).max(2030),
-  stats: z.string().max(2000), // JSON stats object
-  fantasyPoints: z.number().default(0),
-  updated: z.date().default(() => new Date())
-});
-
-// Users collection deprecated - use Appwrite Auth Users instead
-
-export const ActivityLog = z.object({
-  userId: z.string().max(50).optional(),
-  action: z.string().min(1).max(100),
-  details: z.string().max(1000).optional(),
-  timestamp: z.date().default(() => new Date()),
-  ipAddress: z.string().max(45).optional(),
-  userAgent: z.string().max(500).optional()
-});
-
-/**
- * Meshy Jobs (placeholder schema for build/runtime)
- * Aligns with live DB: meshy_jobs
- */
-export const MeshyJobs = z.object({
-  userId: z.string().optional(),
-  prompt: z.string().optional(),
-  mode: z.string().optional(),
-  imageUrl: z.string().optional(),
-  resultUrl: z.string().optional(),
-  status: z.string().optional(),
-  createdAt: z.string().optional(),
-  updatedAt: z.string().optional(),
-  webhookSecret: z.string().optional(),
-});
-
-/**
- * Draft & Mock Draft Collections (in use but missing from SSOT)
- */
-export const DraftPicks = z.object({
-  leagueId: z.string().min(1).max(50),
-  teamId: z.string().min(1).max(50),
-  rosterId: z.string().min(1).max(50).optional(),
-  playerId: z.string().min(1).max(50),
-  playerName: z.string().min(1).max(120),
-  position: z.enum(['QB', 'RB', 'WR', 'TE', 'K']),
-  round: z.number().int().min(1),
-  pick: z.number().int().min(1),
-  overallPick: z.number().int().min(1),
-  timestamp: z.string().optional()
-});
-
-export const MockDrafts = z.object({
-  title: z.string().min(1).max(100).optional(),
-  numTeams: z.number().int().min(2).max(24),
-  status: z.enum(['waiting', 'active', 'complete']).default('waiting'),
-  settings: z.string().max(5000).optional() // JSON settings
-});
-
-export const MockDraftParticipants = z.object({
-  draftId: z.string().min(1).max(50),
-  name: z.string().min(1).max(100),
-  slot: z.number().int().min(1).max(24)
-});
-
-export const MockDraftPicks = z.object({
-  draftId: z.string().min(1).max(50),
-  participantId: z.string().min(1).max(50),
-  playerId: z.string().min(1).max(50),
-  round: z.number().int().min(1),
-  pick: z.number().int().min(1)
-});
-
-/**
- * Draft Event Log & Persisted State (for recovery)
- */
-export const DraftEvents = z.object({
-  draftId: z.string().min(1).max(64),
-  ts: z.date(),
-  type: z.enum(['pick', 'autopick', 'undo', 'pause', 'resume']),
-  teamId: z.string().min(1).max(64).optional(),
-  playerId: z.string().min(1).max(64).optional(),
-  round: z.number().int().min(1),
-  overall: z.number().int().min(1),
-  by: z.string().min(1).max(50).optional(),
-});
-
-export const DraftStates = z.object({
-  // Align sizes to live (uses up to 255)
-  draftId: z.string().min(1).max(255),
-  onClockTeamId: z.string().min(1).max(255),
-  deadlineAt: z.date().optional(),
-  round: z.number().int().min(1),
-  pickIndex: z.number().int().min(1),
-  // Match live default to avoid write conflicts; code sets to 'drafting' on start
-  draftStatus: z.enum(['pre-draft', 'drafting', 'post-draft']).default('pre-draft'),
-});
-
-/**
- * Projections & Inputs (present in env and services)
- */
-export const PlayerProjections = z.object({
-  playerId: z.string().min(1).max(50),
-  season: z.number().int().min(2020).max(2035),
-  week: z.number().int().min(1).max(20).optional(),
-  version: z.number().int().min(1).default(1),
-  points: z.number().optional(),
-  components: z.string().max(10000).optional(), // JSON payload with base, multipliers, etc.
-  fantasyPoints: z.number().optional(),
-  data: z.string().max(10000).optional() // legacy JSON payload
-});
-
-export const ProjectionsYearly = z.object({
-  // Live DB: projections_yearly
-  playerId: z.string().min(1).max(64),
-  season: z.number().int().min(2020).max(2035),
-  teamId: z.string().max(64).optional(),
-  position: z.enum(['QB', 'RB', 'WR', 'TE']),
-  modelVersion: z.string().min(1).max(50),
-  gamesPlayedEst: z.number().optional(),
-  usageRate: z.number().optional(),
-  paceAdj: z.number().optional(),
-  fantasyPointsSimple: z.number().optional(),
-  rangeFloor: z.number().optional(),
-  rangeMedian: z.number().optional(),
-  rangeCeiling: z.number().optional(),
-  injuryRisk: z.number().optional(),
-  volatilityScore: z.number().optional(),
-  replacementValue: z.number().optional(),
-  adpEst: z.number().optional(),
-  ecrRank: z.number().int().optional(),
-  statlineSimpleJson: z.string().optional()
-});
-
-export const ProjectionsWeekly = z.object({
-  // Live DB: projections_weekly
-  playerId: z.string().min(1).max(64),
-  season: z.number().int().min(2020).max(2035),
-  week: z.number().int().min(1).max(20),
-  opponentTeamId: z.string().max(64).optional(),
-  homeAway: z.enum(['H', 'A', 'N']).optional(),
-  teamTotalEst: z.number().optional(),
-  paceMatchupAdj: z.number().optional(),
-  fantasyPointsSimple: z.number().optional(),
-  boomProb: z.number().optional(),
-  bustProb: z.number().optional(),
-  defenseVsPosGrade: z.number().optional(),
-  injuryStatus: z.enum(['Healthy', 'Questionable', 'Doubtful', 'Out']).optional(),
-  utilizationTrend: z.enum(['+', '=', '-']).optional(),
-  rankPro: z.number().int().optional(),
-  startSitColor: z.enum(['Green', 'Yellow', 'Red']).optional()
-});
-
-export const ModelInputs = z.object({
-  // Live DB: model_inputs
-  season: z.number().int().min(2020).max(2035),
-  week: z.number().int().min(1).max(20).optional(),
-  depthChart: z.string().optional(),
-  teamPace: z.string().optional(),
-  passRate: z.string().optional(),
-  rushRate: z.string().optional(),
-  depthChartJson: z.string().optional(),
-  usagePriorsJson: z.string().optional(),
-  teamEfficiencyJson: z.string().optional(),
-  paceEstimatesJson: z.string().optional(),
-  opponentGradesByPosJson: z.string().optional(),
-  manualOverridesJson: z.string().optional(),
-  eaRatingsJson: z.string().optional(),
-  nflDraftCapitalJson: z.string().optional()
-});
-
-export const UserCustomProjections = z.object({
-  userId: z.string().min(1).max(50),
-  playerId: z.string().min(1).max(50),
-  season: z.number().int().min(2020).max(2035),
-  week: z.number().int().min(1).max(20).optional(),
-  fantasyPoints: z.number().optional(),
-  notes: z.string().max(2000).optional()
-});
-
-/**
- * League Memberships (normalized user membership with role)
- */
-export const LeagueMemberships = z.object({
-  leagueId: z.string().min(1).max(50),
-  leagueName: z.string().min(1).max(100).optional(), // Add league name for display
-  authUserId: z.string().min(1).max(64),
-  role: z.enum(['COMMISSIONER', 'MEMBER']).default('MEMBER'),
-  status: z.enum(['ACTIVE','INVITED','LEFT','KICKED']).default('ACTIVE'),
-  joinedAt: z.string().optional(),
-  displayName: z.string().optional()
-});
-
-/**
- * Clients collection (user profiles)
- * Maps authUserId from Appwrite Auth to user profile data
- */
-export const Clients = z.object({
-  authUserId: z.string().min(1).max(64), // Primary key linking to Appwrite Auth
-  email: z.string().email().optional(),
-  displayName: z.string().max(255).optional(),
-  avatarUrl: z.string().max(512).optional(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional()
-});
-
-/**
- * Projection Run Records (versioning/reproducibility)
- */
-export const ProjectionRuns = z.object({
-  runId: z.string().min(1).max(64),
-  version: z.number().int().min(1),
-  scope: z.enum(['season', 'week']),
-  season: z.number().int().min(2020).max(2035),
-  week: z.number().int().min(1).max(20).optional(),
-  sources: z.string().max(20000).optional(), // JSON: checksums/urls/timestamps
-  weights: z.string().max(10000).optional(),
-  metrics: z.string().max(10000).optional(), // JSON: MAE/MAPE
-  status: z.enum(['running', 'success', 'failed']).default('running'),
-  startedAt: z.date(),
-  finishedAt: z.date().optional(),
-});
-
-/**
- * Projection Run Metrics (separate to avoid attribute limits)
- */
-export const ProjectionRunMetrics = z.object({
-  runId: z.string().min(1).max(64),
-  metrics: z.string().max(10000), // JSON string of metrics (e.g., MAE/MAPE)
-});
-
-/**
- * Matchups (weekly head-to-head)
- */
-export const Drafts = z.object({
-  // League association is optional to support mock drafts and practice rooms
-  leagueId: z.string().min(1).max(50).optional(),
-  draftStatus: z.enum(['pre-draft', 'drafting', 'post-draft']).default('pre-draft'),
-  currentRound: z.number().int().min(1).optional(),
-  currentPick: z.number().int().min(1).optional(),
-  maxRounds: z.number().int().min(1).optional(),
-  draftOrder: z.string().max(5000).optional(), // JSON array of team IDs
-  startTime: z.date().optional(),
-  endTime: z.date().optional(),
-  type: z.enum(['snake','auction','mock']).optional(),
-  settings: z.string().max(10000).optional(),
-  participants: z.string().max(10000).optional(),
-  pickTimeSeconds: z.number().int().optional(),
-  autoPickEnabled: z.boolean().optional(),
-  commissioner: z.string().optional(),
-  season: z.number().int().optional(),
-  maxTeams: z.number().int().optional(),
-  currentTeams: z.number().int().optional(),
-  created: z.date().optional(),
-  updated: z.date().optional()
-});
-
+// Collection: Matchups (ID: matchups)
 export const Matchups = z.object({
-  leagueId: z.string().min(1).max(50),
-  week: z.number().int().min(1).max(20),
-  season: z.number().int().min(2020).max(2035),
-  homeRosterId: z.string().min(1).max(50),
-  awayRosterId: z.string().min(1).max(50),
+  leagueId: z.string().max(64),
+  season: z.number().int(),
+  week: z.number().int(),
+  homeTeamId: z.string().max(64),
+  awayTeamId: z.string().max(64),
   homePoints: z.number().optional(),
   awayPoints: z.number().optional(),
-  status: z.enum(['scheduled', 'active', 'final']).default('scheduled')
+  status: z.string().max(16).optional(),
+  homeRosterId: z.string().max(64),
+  awayRosterId: z.string().max(64),
 });
 
-/**
- * Scores (weekly scoring results)
- */
-export const Scores = z.object({
-  leagueId: z.string().min(1).max(50),
+// Collection: meshy_jobs (ID: meshy_jobs)
+export const MeshyJobs = z.object({
+  resultUrl: z.string().max(1024).optional(),
+  mode: z.string().max(32).optional(),
+  prompt: z.string().max(2048).optional(),
+  userId: z.string().max(128).optional(),
+  error: z.string().max(1024).optional(),
+  webhookSecret: z.string().max(256).optional(),
+  createdAt: z.date(),
+  imageUrl: z.string().max(1024).optional(),
+  baseModelUrl: z.string().max(1024).optional(),
+  status: z.string().max(16).optional(),
+  updatedAt: z.date().optional(),
+});
+
+// Collection: Model Versions (ID: model_versions)
+export const ModelVersions = z.object({
+  versionId: z.string().max(100),
+  modelPath: z.string().max(1000),
+  version: z.number().int(),
+  changes: z.string().max(65536).array().optional(),
+  createdAt: z.date(),
+  createdBy: z.string().max(100),
+  description: z.string().max(1000),
+  glbUrl: z.string().optional(),
+  thumbnailUrl: z.string().optional(),
+  bucketFileId: z.string().max(100).optional(),
+  artifactUri: z.string().max(512).optional(),
+});
+
+// Collection: model_runs (ID: model_runs)
+export const ModelRuns = z.object({
+  season: z.number().int(),
+  week: z.number().int().optional(),
+  scope: z.string().max(32),
+  sources: z.string().max(512).optional(),
+  status: z.string().max(16),
+  runId: z.string().max(255).optional(),
+  modelVersionId: z.string().max(255).optional(),
+  startedAt: z.date().optional(),
+  finishedAt: z.date().optional(),
+  inputsJson: z.string().max(65535).optional(),
+  metricsJson: z.string().max(65535).optional(),
+  weightsJson: z.string().max(65535).optional(),
+  version: z.number().int().min(1),
+});
+
+// Collection: Player Stats (ID: player_stats)
+export const PlayerStats = z.object({
+  playerId: z.string().max(50),
+  gameId: z.string().max(50),
   week: z.number().int().min(1).max(20),
-  rosterId: z.string().min(1).max(50),
-  points: z.number().min(0),
-  opponentId: z.string().min(1).max(50).optional(),
-  result: z.string().max(20).optional() // 'win', 'loss', 'tie'
+  season: z.number().int().min(2020).max(2030),
+  stats: z.string().max(2000),
+  opponent: z.string().max(50).optional(),
+  eligible: z.boolean().default(true).optional(),
+  fantasyPoints: z.number().optional(),
+  statlineJson: z.string().max(65535).optional(),
+});
+
+// Collection: projections (ID: projections)
+export const Projections = z.object({
+  playerId: z.string().max(64),
+  season: z.number().int(),
+  week: z.number().int().optional(),
+  period: z.string().max(16),
+  version: z.number().int(),
+  model: z.string().max(32).optional(),
+  source: z.string().max(16).optional(),
+  clientId: z.string().max(64).optional(),
+  fantasyPoints: z.number().optional(),
+  componentsJson: z.string().max(16384).optional(),
+  boomProb: z.number().optional(),
+  bustProb: z.number().optional(),
+  homeAway: z.string().max(8).optional(),
+  injuryStatus: z.string().max(16).optional(),
+  opponentSchoolId: z.string().max(64).optional(),
+  rankPro: z.number().int().optional(),
+  startSit_color: z.string().max(8).optional(),
+  utilizationTrend: z.string().max(16).optional(),
+  defenseVsPosGrade: z.number().optional(),
+  startSitColor: z.string().max(20).optional(),
+  teamTotalEst: z.number().optional(),
+});
+
+// Collection: roster_slots (ID: roster_slots)
+export const RosterSlots = z.object({
+  fantasyTeamId: z.string().max(64),
+  playerId: z.string().max(64),
+  position: z.string().max(8),
+  acquiredVia: z.string().max(16).optional(),
+  acquiredAt: z.date().optional(),
+});
+
+// Collection: schools (ID: schools)
+export const Schools = z.object({
+  name: z.string().max(128),
+  conference: z.string().max(16),
+  slug: z.string().max(64).optional(),
+  abbreviation: z.string().max(16).optional(),
+  logoUrl: z.string().max(512).optional(),
+  primaryColor: z.string().max(16).optional(),
+  secondaryColor: z.string().max(16).optional(),
+  mascot: z.string().max(64).optional(),
+});
+
+// Collection: Transactions (ID: transactions)
+export const Transactions = z.object({
+  leagueId: z.string().max(64),
+  fantasyTeamId: z.string().max(64),
+  type: z.string().max(24),
+  payloadJson: z.string().max(8192).optional(),
+  season: z.number().int().optional(),
+  week: z.number().int().optional(),
+  ts: z.date().optional(),
 });
 
 /**
- * Team Budgets (auction draft budgets)
+ * TYPESCRIPT TYPE EXPORTS
  */
-export const TeamBudgets = z.object({
-  leagueId: z.string().min(1).max(50),
-  userId: z.string().min(1).max(50),
-  budget: z.number().min(0),
-  spent: z.number().min(0).optional(),
-  remaining: z.number().min(0).optional()
-});
 
-/** Invites (aligns with live DB: invites) */
-export const Invites = z.object({
-  leagueId: z.string().min(1).max(64),
-  inviteCode: z.string().min(1).max(128),
-  createdAt: z.string().optional(),
-  email: z.string().email().optional(),
-  expiresAt: z.string().optional(),
-  invitedByAuthUserId: z.string().optional(),
-  status: z.string().optional(),
-  token: z.string().optional(),
-  acceptedAt: z.string().optional(),
-});
-
-/** System collections present in live DB */
-export const Migrations = z.object({
-  version: z.string().min(1).max(100),
-  applied: z.date(),
-  checksum: z.string().max(200)
-});
+export type ActivityLogType = z.infer<typeof ActivityLog>;
+export type RankingsType = z.infer<typeof Rankings>;
+export type AuctionsType = z.infer<typeof Auctions>;
+export type BidsType = z.infer<typeof Bids>;
+export type ClientsType = z.infer<typeof Clients>;
+export type CollegePlayersType = z.infer<typeof CollegePlayers>;
+export type MigrationsType = z.infer<typeof Migrations>;
+export type DraftStatesType = z.infer<typeof DraftStates>;
+export type DraftEventsType = z.infer<typeof DraftEvents>;
+export type DraftsType = z.infer<typeof Drafts>;
+export type FantasyTeamsType = z.infer<typeof FantasyTeams>;
+export type GamesType = z.infer<typeof Games>;
+export type InvitesType = z.infer<typeof Invites>;
+export type LeagueMembershipsType = z.infer<typeof LeagueMemberships>;
+export type LeaguesType = z.infer<typeof Leagues>;
+export type LineupsType = z.infer<typeof Lineups>;
+export type MatchupsType = z.infer<typeof Matchups>;
+export type MeshyJobsType = z.infer<typeof MeshyJobs>;
+export type ModelVersionsType = z.infer<typeof ModelVersions>;
+export type ModelRunsType = z.infer<typeof ModelRuns>;
+export type PlayerStatsType = z.infer<typeof PlayerStats>;
+export type ProjectionsType = z.infer<typeof Projections>;
+export type RosterSlotsType = z.infer<typeof RosterSlots>;
+export type SchoolsType = z.infer<typeof Schools>;
+export type TransactionsType = z.infer<typeof Transactions>;
 
 /**
- * INFERRED TYPESCRIPT TYPES
+ * COLLECTION ID MAPPINGS
  */
-export type CollegePlayer = z.infer<typeof CollegePlayers>;
-export type Team = z.infer<typeof Teams>;
-export type Game = z.infer<typeof Games>;
-export type Ranking = z.infer<typeof Rankings>;
-export type League = z.infer<typeof Leagues>;
-export type FantasyTeam = z.infer<typeof FantasyTeams>;
-export type Lineup = z.infer<typeof Lineups>;
-export type Auction = z.infer<typeof Auctions>;
-export type Bid = z.infer<typeof Bids>;
-export type PlayerStat = z.infer<typeof PlayerStats>;
-export type Client = z.infer<typeof Clients>;
-// User type deprecated - use Appwrite User type instead
-export type ActivityLogEntry = z.infer<typeof ActivityLog>;
-export type Draft = z.infer<typeof Drafts>;
-export type Score = z.infer<typeof Scores>;
-export type TeamBudget = z.infer<typeof TeamBudgets>;
 
-/**
- * COLLECTION REGISTRY
- */
 export const COLLECTIONS = {
-  // Core entities
-  COLLEGE_PLAYERS: 'college_players',
-  SCHOOLS: 'schools',  // Renamed from 'teams'
-  GAMES: 'games',
+  ACTIVITYLOG: 'activity_log',
   RANKINGS: 'rankings',
-  
-  // League management
-  LEAGUES: 'leagues',
-  FANTASY_TEAMS: 'fantasy_teams',  // Renamed from 'user_teams'
-  LEAGUE_MEMBERSHIPS: 'league_memberships',
-  CLIENTS: 'clients',  // Renamed from 'users'
-  
-  // Draft & auction
-  DRAFTS: 'drafts',
-  DRAFT_EVENTS: 'draft_events',
-  DRAFT_STATES: 'draft_states',
   AUCTIONS: 'auctions',
   BIDS: 'bids',
-  
-  // Gameplay
+  CLIENTS: 'clients',
+  COLLEGEPLAYERS: 'college_players',
+  MIGRATIONS: 'migrations',
+  DRAFTSTATES: 'draft_states',
+  DRAFTEVENTS: 'draft_events',
+  DRAFTS: 'drafts',
+  FANTASYTEAMS: 'fantasy_teams',
+  GAMES: 'games',
+  INVITES: 'invites',
+  LEAGUEMEMBERSHIPS: 'league_memberships',
+  LEAGUES: 'leagues',
   LINEUPS: 'lineups',
   MATCHUPS: 'matchups',
-  TRANSACTIONS: 'transactions',
-  ROSTER_SLOTS: 'roster_slots',
-  
-  // Projections & stats
-  PLAYER_STATS: 'player_stats',
+  MESHYJOBS: 'meshy_jobs',
+  MODELVERSIONS: 'model_versions',
+  MODELRUNS: 'model_runs',
+  PLAYERSTATS: 'player_stats',
   PROJECTIONS: 'projections',
-  MODEL_RUNS: 'model_runs',
-  // MODEL_VERSIONS: 'modelVersions', // removed: no schema defined
-  
-  // System
-  ACTIVITY_LOG: 'activity_log',
-  INVITES: 'invites',
-  MESHY_JOBS: 'meshy_jobs',
-  MIGRATIONS: 'migrations',
+  ROSTERSLOTS: 'roster_slots',
+  SCHOOLS: 'schools',
+  TRANSACTIONS: 'transactions',
 } as const;
 
-/**
- * SCHEMA REGISTRY - Maps collection IDs to Zod schemas
- */
-export const SCHEMA_REGISTRY = {
-  [COLLECTIONS.COLLEGE_PLAYERS]: CollegePlayers,
-  [COLLECTIONS.SCHOOLS]: Teams,
-  [COLLECTIONS.GAMES]: Games, 
-  [COLLECTIONS.RANKINGS]: Rankings,
-  [COLLECTIONS.LEAGUES]: Leagues,
-  [COLLECTIONS.FANTASY_TEAMS]: FantasyTeams,
-  [COLLECTIONS.LINEUPS]: Lineups,
-  [COLLECTIONS.AUCTIONS]: Auctions,
-  [COLLECTIONS.BIDS]: Bids,
-  [COLLECTIONS.PLAYER_STATS]: PlayerStats,
-  [COLLECTIONS.ACTIVITY_LOG]: ActivityLog,
-  [COLLECTIONS.DRAFTS]: Drafts,
-  [COLLECTIONS.DRAFT_EVENTS]: DraftEvents,
-  [COLLECTIONS.DRAFT_STATES]: DraftStates,
-  [COLLECTIONS.MATCHUPS]: Matchups,
-  [COLLECTIONS.PROJECTIONS]: PlayerProjections,
-  [COLLECTIONS.MODEL_RUNS]: ProjectionRuns,
-  // [COLLECTIONS.MODEL_VERSIONS]: ModelVersions, // removed: no schema defined
-  [COLLECTIONS.MESHY_JOBS]: MeshyJobs,
-  [COLLECTIONS.INVITES]: Invites,
-  [COLLECTIONS.MIGRATIONS]: Migrations,
+export const COLLECTION_NAMES = {
+  'activity_log': 'activity_log',
+  'rankings': 'AP Rankings',
+  'auctions': 'Auctions',
+  'bids': 'Bids',
+  'clients': 'clients',
+  'college_players': 'College Players',
+  'migrations': 'Database Migrations',
+  'draft_states': 'Draft States',
+  'draft_events': 'draft_events',
+  'drafts': 'drafts',
+  'fantasy_teams': 'fantasy_teams',
+  'games': 'Games',
+  'invites': 'invites',
+  'league_memberships': 'league_memberships',
+  'leagues': 'Leagues',
+  'lineups': 'Lineups',
+  'matchups': 'Matchups',
+  'meshy_jobs': 'meshy_jobs',
+  'model_versions': 'Model Versions',
+  'model_runs': 'model_runs',
+  'player_stats': 'Player Stats',
+  'projections': 'projections',
+  'roster_slots': 'roster_slots',
+  'schools': 'schools',
+  'transactions': 'Transactions',
 } as const;
-
-/**
- * VALIDATION UTILITIES
- */
-export function validateData<T>(collectionId: keyof typeof SCHEMA_REGISTRY, data: unknown): {
-  success: boolean;
-  data?: T;
-  errors?: string[];
-} {
-  const schema = SCHEMA_REGISTRY[collectionId];
-  if (!schema) {
-    return { success: false, errors: [`Unknown collection: ${collectionId}`] };
-  }
-
-  try {
-    const validated = schema.parse(data);
-    return { success: true, data: validated as T };
-  } catch (error: any) {
-    if (error instanceof z.ZodError) {
-      return {
-        success: false,
-        errors: error.errors.map(err => `${err.path.join('.')}: ${err.message}`)
-      };
-    }
-    return { success: false, errors: [error.message || 'Unknown validation error'] };
-  }
-}
-
-/**
- * TYPE-SAFE REPOSITORY BASE
- */
-export abstract class ZodRepository<T> {
-  constructor(
-    protected collectionId: keyof typeof SCHEMA_REGISTRY,
-    protected schema: z.ZodSchema<T>
-  ) {}
-
-  protected validate(data: unknown): T {
-    const result = this.schema.parse(data);
-    return result;
-  }
-
-  protected safeValidate(data: unknown): { success: boolean; data?: T; errors?: string[] } {
-    return validateData<T>(this.collectionId, data);
-  }
-}
