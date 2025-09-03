@@ -116,7 +116,7 @@ export default function DraftDiagramsPage() {
           
           <div className="border border-gray-200 rounded">
             <iframe
-              src={`/diagrams/${selectedDiagram}`}
+              src={`/api/docs/diagrams/${selectedDiagram}`}
               className="w-full h-[80vh]"
               title={selectedDiagram}
             />
