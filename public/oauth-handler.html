@@ -146,15 +146,48 @@
                     const user = await account.get();
                     
                     if (user) {
-                        console.log('✅ User already authenticated via cookies:', user.email);
-                        document.getElementById('status').textContent = 'Already authenticated! Redirecting...';
+                        console.log('✅ User authenticated via OAuth:', user.email);
+                        document.getElementById('status').textContent = 'OAuth successful! Syncing session...';
+                        
+                        // Get the current session to sync with our API
+                        try {
+                            const session = await account.getSession('current');
+                            console.log('📦 Current session:', session.$id);
+                            
+                            // Sync the session with our API
+                            const syncResponse = await fetch('/api/auth/sync-oauth', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    secret: session.secret || session.$id,
+                                    sessionId: session.$id,
+                                    userId: user.$id,
+                                    email: user.email,
+                                    name: user.name
+                                })
+                            });
+                            
+                            if (syncResponse.ok) {
+                                console.log('✅ Session synced with API');
+                                document.getElementById('status').textContent = 'Session synced! Redirecting to dashboard...';
+                            } else {
+                                console.error('❌ Failed to sync session with API');
+                                document.getElementById('status').textContent = 'Session sync failed, but you are logged in. Redirecting...';
+                            }
+                        } catch (syncErr) {
+                            console.error('⚠️ Could not sync session:', syncErr);
+                        }
+                        
+                        // Redirect to dashboard regardless
                         setTimeout(() => {
                             window.location.href = '/dashboard';
-                        }, 500);
+                        }, 1000);
                         return;
                     }
                 } catch (checkErr) {
-                    console.log('❌ Not authenticated via cookies either');
+                    console.log('❌ Not authenticated via cookies either:', checkErr);
                 }
                 
                 document.getElementById('status').textContent = 'No authentication data found. Redirecting...';

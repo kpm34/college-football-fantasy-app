@@ -9,20 +9,52 @@ function DiagramsContent() {
   const file = params.get('file') || ''
   const debug = params.get('debug') === '1'
   const [signed, setSigned] = useState('')
-  const [probe, setProbe] = useState<{ status?: number; ok?: boolean; error?: string } | null>(null)
+  const [probe, setProbe] = useState<{
+    status?: number
+    ok?: boolean
+    error?: string
+    headers?: Record<string, string>
+    durationMs?: number
+  } | null>(null)
   useEffect(() => {
     let cancelled = false
     if (!file) return
     const run = async () => {
       try {
-        const res = await fetch(`/api/docs/diagrams/sign?file=${encodeURIComponent(file)}`)
+        const startedAt = performance.now()
+        const res = await fetch(`/api/docs/diagrams/sign?file=${encodeURIComponent(file)}`, {
+          cache: 'no-store',
+        })
         const data = await res.json()
         if (!cancelled) setSigned(data.url || '')
         // Probe the URL so we can surface errors
         if (data?.url) {
           try {
             const head = await fetch(data.url, { method: 'GET', cache: 'no-store', mode: 'cors' })
-            if (!cancelled) setProbe({ status: head.status, ok: head.ok })
+            const headers: Record<string, string> = {}
+            head.headers.forEach((v, k) => {
+              if (
+                [
+                  'content-type',
+                  'content-length',
+                  'access-control-allow-origin',
+                  'access-control-allow-methods',
+                  'access-control-expose-headers',
+                  'cross-origin-resource-policy',
+                  'x-content-type-options',
+                  'content-disposition',
+                ].includes(k)
+              ) {
+                headers[k] = v
+              }
+            })
+            if (!cancelled)
+              setProbe({
+                status: head.status,
+                ok: head.ok,
+                headers,
+                durationMs: Math.round(performance.now() - startedAt),
+              })
           } catch (e: any) {
             if (!cancelled) setProbe({ error: e?.message || 'fetch failed' })
           }
@@ -70,32 +102,97 @@ function DiagramsContent() {
   return (
     <>
       {debug && (
-        <div className="fixed top-2 left-2 z-50 bg-black/70 text-white text-xs p-3 rounded">
-          <div className="font-semibold mb-1">Debug</div>
-          <div>file: {file}</div>
-          <div className="truncate max-w-[70vw]">signed: {signed}</div>
-          <div>
-            probe: {probe?.status ?? '-'}{' '}
-            {probe?.ok ? '(ok)' : probe?.error ? `(error: ${probe.error})` : ''}
+        <div className="fixed top-2 left-2 z-50 bg-black/80 text-white text-xs p-3 rounded max-w-[90vw]">
+          <div className="flex items-center justify-between gap-4">
+            <div className="font-semibold">Debug</div>
+            <div className="opacity-80">
+              {viewerHost.replace('https://', '')}
+              {useMx ? ' · mxgraph' : frameLoaded ? ' · iframe-loaded' : ' · iframe-loading'}
+            </div>
           </div>
-          <div className="mt-1 space-x-2">
-            <a href={signed} target="_blank" className="underline">
-              Open raw
-            </a>
-            <a
-              href={`${viewerHost}/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(signed)}`}
-              target="_blank"
-              className="underline"
-            >
-              Open viewer
-            </a>
-            <a
-              href={`https://app.diagrams.net/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(signed)}`}
-              target="_blank"
-              className="underline"
-            >
-              Open via app.diagrams.net
-            </a>
+          <div className="mt-2 space-y-2">
+            <div>file: {file}</div>
+            <div className="truncate max-w-[70vw]">signed: {signed}</div>
+            <div>
+              probe: {probe?.status ?? '-'}{' '}
+              {probe?.ok ? '(ok)' : probe?.error ? `(error: ${probe.error})` : ''}{' '}
+              {probe?.durationMs ? `· ${probe.durationMs}ms` : ''}
+            </div>
+            {probe?.headers && (
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 opacity-90">
+                {Object.entries(probe.headers).map(([k, v]) => (
+                  <div key={k} className="flex justify-between gap-2">
+                    <span className="text-white/70">{k}</span>
+                    <span className="truncate max-w-[40vw]">{v}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-wrap gap-2 mt-1">
+              <button
+                onClick={() => navigator.clipboard.writeText(signed)}
+                className="px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+              >
+                Copy URL
+              </button>
+              <button
+                onClick={() =>
+                  setViewerHost(h =>
+                    h.includes('viewer')
+                      ? 'https://app.diagrams.net'
+                      : 'https://viewer.diagrams.net'
+                  )
+                }
+                className="px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+              >
+                Toggle viewer host
+              </button>
+              <button
+                onClick={() => {
+                  setUseMx(false)
+                  setViewerHost('https://viewer.diagrams.net')
+                  setFrameLoaded(false)
+                }}
+                className="px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+              >
+                Force iframe
+              </button>
+              <button
+                onClick={() => setUseMx(true)}
+                className="px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+              >
+                Force mxgraph
+              </button>
+              <a
+                href={signed}
+                target="_blank"
+                className="px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+              >
+                Open raw
+              </a>
+              <a
+                href={`${viewerHost}/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(signed)}`}
+                target="_blank"
+                className="px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+              >
+                Open viewer
+              </a>
+              <a
+                href={`https://app.diagrams.net/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(signed)}`}
+                target="_blank"
+                className="px-2 py-1 rounded bg-white/10 hover:bg-white/20"
+              >
+                Open app.diagrams.net
+              </a>
+            </div>
+            <div className="opacity-70">
+              cookies:{' '}
+              {typeof document !== 'undefined'
+                ? document.cookie.includes('appwrite-session')
+                  ? 'appwrite-session present'
+                  : 'no appwrite-session'
+                : 'n/a'}
+            </div>
           </div>
         </div>
       )}
