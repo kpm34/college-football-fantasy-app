@@ -99,8 +99,41 @@ function DiagramsContent() {
   if (!file) return <div className="p-8">No diagram specified.</div>
   if (!signed) return <div className="p-8 text-neutral-100">Signing URL…</div>
 
+  // Quick test URL for bypass
+  const testUrl = `http://localhost:3001/api/docs/diagrams/draft-diagrams/mock-draft-flow.drawio?bypass=1`
+
   return (
     <>
+      {/* Quick test buttons */}
+      <div className="fixed top-16 left-2 z-40 space-y-2">
+        <div className="bg-green-600 text-white px-3 py-2 rounded text-sm">
+          <a
+            href={`/admin/diagrams?file=draft-diagrams/mock-draft-flow.drawio&debug=1`}
+            className="underline"
+          >
+            Test Mock Draft Flow
+          </a>
+        </div>
+        <div className="bg-blue-600 text-white px-3 py-2 rounded text-sm">
+          <a
+            href={`http://localhost:3001/api/docs/diagrams/draft-diagrams/mock-draft-flow.drawio?bypass=1`}
+            target="_blank"
+            className="underline"
+          >
+            Raw Diagram File
+          </a>
+        </div>
+        <div className="bg-purple-600 text-white px-3 py-2 rounded text-sm">
+          <a
+            href={`https://viewer.diagrams.net/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(testUrl)}`}
+            target="_blank"
+            className="underline"
+          >
+            Direct Viewer Test
+          </a>
+        </div>
+      </div>
+
       {debug && (
         <div className="fixed top-2 left-2 z-50 bg-black/80 text-white text-xs p-3 rounded max-w-[90vw]">
           <div className="flex items-center justify-between gap-4">

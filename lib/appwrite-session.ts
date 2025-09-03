@@ -15,25 +15,32 @@ export function createSessionClient(request?: NextRequest) {
     // Try multiple cookie formats
     const cookies = request.cookies;
     
+    // Log all cookies for debugging
+    console.log('All cookies available:', cookies.getAll().map(c => c.name));
+    
     // Check for various session cookie formats
+    // The actual Appwrite session cookie format is: a_session_[projectId]_legacy
     const possibleCookies = [
-      'a_session_college-football-fantasy-app',
       'a_session_college-football-fantasy-app_legacy',
+      'a_session_college-football-fantasy-app',
+      'a_session_cfbfantasy.app_legacy',
       'appwrite-session',
       ...Array.from(cookies.getAll())
-        .filter(c => c.name.startsWith('a_session'))
+        .filter(c => c.name.includes('session'))
         .map(c => c.name)
     ];
     
     for (const cookieName of possibleCookies) {
       const sessionValue = cookies.get(cookieName)?.value;
       if (sessionValue) {
-        console.log(`Found session cookie: ${cookieName}`);
+        console.log(`Found session cookie: ${cookieName} (length: ${sessionValue.length})`);
         // Set the session directly on the client
         client.setSession(sessionValue);
-        break;
+        return { client, account: new Account(client), databases: new Databases(client) };
       }
     }
+    
+    console.log('No session cookie found in request');
   }
 
   return {
