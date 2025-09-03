@@ -17,35 +17,37 @@
         <button onclick="testDirectViewer()">Test Direct Viewer</button>
         <button onclick="testRawFile()">Test Raw File</button>
         <button onclick="testMxGraph()">Test mxGraph Viewer</button>
+        <button onclick="testSimpleViewer()">🔥 Simple Viewer (Recommended)</button>
     </div>
 
     <div id="status">Ready</div>
+    <div id="simple-viewer" style="width: 100%; height: 80vh; border: 1px solid #ccc; display: none; overflow: auto; background: white;"></div>
     <div id="mxgraph-container" style="width: 100%; height: 80vh; border: 1px solid #ccc; display: none;"></div>
     <iframe id="viewer" src=""></iframe>
 
     <script>
-        const baseUrl = 'http://localhost:3001';
+        const baseUrl = 'http://localhost:3000';
 
         function loadDiagram(name) {
-            const url = `${baseUrl}/api/docs/diagrams/draft-diagrams/${name}.drawio?bypass=1`;
+            const url = `${baseUrl}/api/docs/diagrams/mock-draft-flow`;
             document.getElementById('status').textContent = `Loading: ${url}`;
             document.getElementById('viewer').src = `https://viewer.diagrams.net/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(url)}`;
         }
 
         function testDirectViewer() {
-            const url = `${baseUrl}/api/docs/diagrams/draft-diagrams/mock-draft-flow.drawio?bypass=1`;
+            const url = `${baseUrl}/api/docs/diagrams/mock-draft-flow`;
             document.getElementById('status').textContent = `Direct viewer test: ${url}`;
             document.getElementById('viewer').src = `https://viewer.diagrams.net/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(url)}`;
         }
 
         function testRawFile() {
-            const url = `${baseUrl}/api/docs/diagrams/draft-diagrams/mock-draft-flow.drawio?bypass=1`;
+            const url = `${baseUrl}/api/docs/diagrams/mock-draft-flow`;
             document.getElementById('status').textContent = `Raw file test: ${url}`;
             document.getElementById('viewer').src = url;
         }
 
         function testMxGraph() {
-            const url = `${baseUrl}/api/docs/diagrams/draft-diagrams/mock-draft-flow.drawio?bypass=1`;
+            const url = `${baseUrl}/api/docs/diagrams/mock-draft-flow`;
             document.getElementById('status').textContent = `mxGraph test: ${url}`;
 
             // Hide iframe, show mxGraph container
@@ -81,6 +83,74 @@
             div.style.width = '100%';
             div.style.height = '100%';
             container.appendChild(div);
+        }
+
+        async         function testSimpleViewer() {
+            const url = `${baseUrl}/api/docs/diagrams/mock-draft-flow`;
+            document.getElementById('status').textContent = `Loading simple viewer: ${url}`;
+
+            // Hide other viewers, show simple viewer
+            document.getElementById('viewer').style.display = 'none';
+            document.getElementById('mxgraph-container').style.display = 'none';
+            document.getElementById('simple-viewer').style.display = 'block';
+
+            try {
+                const response = await fetch(url);
+                const xmlText = await response.text();
+
+                const simpleViewer = document.getElementById('simple-viewer');
+                simpleViewer.innerHTML = `
+                    <div style="padding: 20px; font-family: Arial, sans-serif;">
+                        <h2 style="color: #2563eb; margin-bottom: 20px;">Mock Draft Flow Diagram</h2>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <div style="background: #dbeafe; padding: 15px; border-radius: 6px; border-left: 4px solid #3b82f6;">
+                                    <strong style="color: #1e40af;">1. Create Mock Draft</strong><br>
+                                    <span style="color: #3730a3;">drafts.isMock = true</span>
+                                </div>
+                                <div style="background: #fef3c7; padding: 15px; border-radius: 6px; border-left: 4px solid #f59e0b;">
+                                    <strong style="color: #92400e;">2. Load Player Pool</strong><br>
+                                    <span style="color: #78350f;">college_players (Power4 + positions + draftable=true)</span>
+                                </div>
+                                <div style="background: #fef3c7; padding: 15px; border-radius: 6px; border-left: 4px solid #f59e0b;">
+                                    <strong style="color: #92400e;">3. Compute Projections</strong><br>
+                                    <span style="color: #78350f;">Base + depth multipliers + prev stats + SoS</span>
+                                </div>
+                                <div style="background: #dcfce7; padding: 15px; border-radius: 6px; border-left: 4px solid #10b981;">
+                                    <strong style="color: #047857;">4. Get Turn</strong><br>
+                                    <span style="color: #065f46;">Snake order by round</span>
+                                </div>
+                                <div style="background: #dcfce7; padding: 15px; border-radius: 6px; border-left: 4px solid #10b981;">
+                                    <strong style="color: #047857;">5. Apply Pick</strong><br>
+                                    <span style="color: #065f46;">Validate availability + prevent duplicates + update draftState</span>
+                                </div>
+                                <div style="background: #e0e7ff; padding: 15px; border-radius: 6px; border-left: 4px solid #8b5cf6;">
+                                    <strong style="color: #6d28d9;">6. Advance Clock</strong><br>
+                                    <span style="color: #5b21b6;">Next team → getTurn() (mock - no timer)</span>
+                                </div>
+                                <div style="background: #fee2e2; padding: 15px; border-radius: 6px; border-left: 4px solid #ef4444;">
+                                    <strong style="color: #dc2626;">7. Results View</strong><br>
+                                    <span style="color: #b91c1c;">/mock-draft/[id]/results - Export board</span>
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px; padding: 15px; background: #f1f5f9; border-radius: 6px;">
+                                <h3 style="color: #334155; margin: 0 0 10px 0;">Raw XML Preview:</h3>
+                                <pre style="background: white; padding: 10px; border-radius: 4px; font-size: 12px; overflow-x: auto; max-height: 200px; color: #64748b;">${xmlText.substring(0, 500)}...</pre>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('status').textContent = 'Simple viewer loaded successfully!';
+            } catch (error) {
+                document.getElementById('status').textContent = `Error: ${error.message}`;
+                document.getElementById('simple-viewer').innerHTML = `
+                    <div style="padding: 20px; color: red; text-align: center;">
+                        <h3>Error Loading Diagram</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
         }
 
         // Auto-load on page load

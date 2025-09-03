@@ -73,24 +73,29 @@ function DiagramsContent() {
   // Fallback viewer host if the default viewer doesn't render
   const [viewerHost, setViewerHost] = useState<string>('https://viewer.diagrams.net')
   const [frameLoaded, setFrameLoaded] = useState<boolean>(false)
-  const [useMx, setUseMx] = useState<boolean>(true) // Default to mxGraph for better reliability
+  const [useMx, setUseMx] = useState<boolean>(false) // Start with iframe, fallback to others
+  const [useSimple, setUseSimple] = useState<boolean>(false) // Simple viewer fallback
   useEffect(() => {
     setFrameLoaded(false)
-    setUseMx(true) // Default to mxGraph
+    setUseSimple(false)
+    setUseMx(false)
     setViewerHost('https://viewer.diagrams.net')
-    // If mxGraph fails, try iframe approach
-    const t = setTimeout(() => {
+
+    // Start with iframe, fallback to mxGraph, then simple viewer
+    const t1 = setTimeout(() => {
       if (!frameLoaded) {
-        setUseMx(false)
-        setViewerHost('https://viewer.diagrams.net')
+        setUseMx(true)
       }
     }, 3000)
-    // If iframe fails, try app.diagrams.net
+
     const t2 = setTimeout(() => {
-      if (!frameLoaded) setViewerHost('https://app.diagrams.net')
+      if (!frameLoaded) {
+        setUseSimple(true)
+      }
     }, 6000)
+
     return () => {
-      clearTimeout(t)
+      clearTimeout(t1)
       clearTimeout(t2)
     }
   }, [signed])
@@ -103,7 +108,7 @@ function DiagramsContent() {
   if (!signed) return <div className="p-8 text-neutral-100">Signing URL…</div>
 
   // Quick test URL for bypass
-  const testUrl = `http://localhost:3001/api/docs/diagrams/draft-diagrams/mock-draft-flow.drawio?bypass=1`
+  const testUrl = `http://localhost:3000/api/docs/diagrams/mock-draft-flow`
 
   return (
     <>
@@ -119,7 +124,7 @@ function DiagramsContent() {
         </div>
         <div className="bg-blue-600 text-white px-3 py-2 rounded text-sm">
           <a
-            href={`http://localhost:3001/api/docs/diagrams/draft-diagrams/mock-draft-flow.drawio?bypass=1`}
+            href={`http://localhost:3000/api/docs/diagrams/mock-draft-flow`}
             target="_blank"
             className="underline"
           >
@@ -133,6 +138,11 @@ function DiagramsContent() {
             className="underline"
           >
             Direct Viewer Test
+          </a>
+        </div>
+        <div className="bg-red-600 text-white px-3 py-2 rounded text-sm">
+          <a href={`http://localhost:3000/diagram-test.html`} target="_blank" className="underline">
+            🔥 Full Test Suite
           </a>
         </div>
       </div>
@@ -232,7 +242,58 @@ function DiagramsContent() {
           </div>
         </div>
       )}
-      {useMx ? (
+      {useSimple ? (
+        <div className="w-full h-full overflow-auto bg-white p-6">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-blue-600 mb-6">Mock Draft Flow Diagram</h2>
+            <div className="bg-gray-50 p-6 rounded-lg border">
+              <div className="space-y-4">
+                <div className="bg-blue-50 p-4 rounded border-l-4 border-blue-500">
+                  <strong className="text-blue-800">1. Create Mock Draft</strong>
+                  <br />
+                  <span className="text-blue-600">drafts.isMock = true</span>
+                </div>
+                <div className="bg-yellow-50 p-4 rounded border-l-4 border-yellow-500">
+                  <strong className="text-yellow-800">2. Load Player Pool</strong>
+                  <br />
+                  <span className="text-yellow-700">
+                    college_players (Power4 + positions + draftable=true)
+                  </span>
+                </div>
+                <div className="bg-yellow-50 p-4 rounded border-l-4 border-yellow-500">
+                  <strong className="text-yellow-800">3. Compute Projections</strong>
+                  <br />
+                  <span className="text-yellow-700">
+                    Base + depth multipliers + prev stats + SoS
+                  </span>
+                </div>
+                <div className="bg-green-50 p-4 rounded border-l-4 border-green-500">
+                  <strong className="text-green-800">4. Get Turn</strong>
+                  <br />
+                  <span className="text-green-700">Snake order by round</span>
+                </div>
+                <div className="bg-green-50 p-4 rounded border-l-4 border-green-500">
+                  <strong className="text-green-800">5. Apply Pick</strong>
+                  <br />
+                  <span className="text-green-700">
+                    Validate availability + prevent duplicates + update draftState
+                  </span>
+                </div>
+                <div className="bg-purple-50 p-4 rounded border-l-4 border-purple-500">
+                  <strong className="text-purple-800">6. Advance Clock</strong>
+                  <br />
+                  <span className="text-purple-700">Next team → getTurn() (mock - no timer)</span>
+                </div>
+                <div className="bg-red-50 p-4 rounded border-l-4 border-red-500">
+                  <strong className="text-red-800">7. Results View</strong>
+                  <br />
+                  <span className="text-red-700">/mock-draft/[id]/results - Export board</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : useMx ? (
         <div className="w-full h-full">
           <Script
             src="https://viewer.diagrams.net/js/viewer-static.min.js"

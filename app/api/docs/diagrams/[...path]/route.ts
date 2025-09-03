@@ -48,14 +48,20 @@ async function isAuthorized(request: NextRequest): Promise<boolean> {
   }
 }
 
-export async function GET(request: NextRequest, { params }: { params: { path: string[] } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
   try {
+    // Next.js 15 requires params to be awaited
+    const resolvedParams = await params
+
     // Quick bypass for testing
     const { searchParams } = new URL(request.url)
     if (searchParams.get('bypass') !== '1' && !(await isAuthorized(request))) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 })
     }
-    const filePath = params.path.join('/')
+    const filePath = resolvedParams.path.join('/')
     const fullPath = path.join(process.cwd(), 'docs', 'diagrams', filePath)
 
     // Debug logging
@@ -101,7 +107,13 @@ export async function GET(request: NextRequest, { params }: { params: { path: st
   }
 }
 
-export async function OPTIONS() {
+export async function OPTIONS(
+  request: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
+  // Next.js 15 requires params to be awaited even for OPTIONS
+  await params
+
   return new NextResponse(null, {
     status: 204,
     headers: {

@@ -16,7 +16,11 @@ export async function GET(request: NextRequest) {
     }
 
     // For quick testing, use direct public access (remove auth requirement temporarily)
-    const relative = `/api/docs/diagrams/${file}?bypass=1`
+    let relative = `/api/docs/diagrams/${file}`
+    // If it's the mock draft flow, use the working endpoint
+    if (file === 'draft-diagrams/mock-draft-flow.drawio') {
+      relative = `/api/docs/diagrams/mock-draft-flow`
+    }
     const origin = request.nextUrl.origin
     const absolute = `${origin}${relative}`
     return NextResponse.json({ url: absolute }, { status: 200 })
