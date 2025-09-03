@@ -8,35 +8,31 @@ export default function DraftDiagramPage({ params }: { params: Promise<{ file: s
   const [file, setFile] = useState('')
   const [loading, setLoading] = useState(true)
   const [diagramContent, setDiagramContent] = useState<string | null>(null)
-  const [useEmbedded, setUseEmbedded] = useState(false)
 
   useEffect(() => {
     params.then(p => {
       console.log('Loading diagram:', p.file)
       setFile(p.file)
-      setLoading(false)
 
-      // Fetch the diagram content for embedded viewer
+      // Always fetch the diagram content to use data URL approach
       if (p.file && p.file.endsWith('.drawio')) {
+        setLoading(true)
         fetch(`/api/diagrams/${p.file}`)
           .then(res => res.text())
           .then(content => {
             console.log('Fetched diagram content, length:', content.length)
             setDiagramContent(content)
+            setLoading(false)
           })
-          .catch(err => console.error('Failed to load diagram content:', err))
+          .catch(err => {
+            console.error('Failed to load diagram content:', err)
+            setLoading(false)
+          })
+      } else {
+        setLoading(false)
       }
     })
   }, [params])
-
-  const url = useMemo(() => {
-    if (!file) return ''
-    // Use API route to serve with proper content-type headers
-    const origin = typeof window !== 'undefined' ? window.location.origin : ''
-    return origin
-      ? `${origin}/api/diagrams/${file}`
-      : `/api/diagrams/${file}`
-  }, [file])
 
   const isMarkdown = useMemo(() => file.toLowerCase().endsWith('.md'), [file])
   const [charts, setCharts] = useState<string[]>([])
@@ -84,54 +80,15 @@ export default function DraftDiagramPage({ params }: { params: Promise<{ file: s
         )}
 
         {/* Render .drawio in viewer, .md via MermaidRenderer */}
-        {!loading && !isMarkdown && url && (
+        {!loading && !isMarkdown && diagramContent && (
           <div>
-            <div className="mb-2 flex items-center justify-between">
-              <div className="text-sm text-amber-700">Loading from: {url}</div>
-              {diagramContent && (
-                <button
-                  onClick={() => setUseEmbedded(!useEmbedded)}
-                  className="px-3 py-1 text-sm rounded bg-amber-600 text-white hover:bg-amber-700"
-                >
-                  {useEmbedded ? 'Use Viewer' : 'Use Embedded'}
-                </button>
-              )}
-            </div>
-
-            {useEmbedded && diagramContent ? (
-              // Embedded viewer with content using draw.io embed mode
-              <iframe
-                key={`embedded-${file}`}
-                src={`https://embed.diagrams.net/?embed=1&ui=min&spin=1&modified=unsavedChanges&proto=json`}
-                className="w-full h-[80vh] border rounded bg-white"
-                onLoad={(e) => {
-                  console.log('Embedded viewer loaded for:', file)
-                  // Send the diagram content to the embedded viewer
-                  const iframe = e.target as HTMLIFrameElement
-                  if (iframe.contentWindow) {
-                    setTimeout(() => {
-                      iframe.contentWindow?.postMessage(
-                        JSON.stringify({
-                          action: 'load',
-                          xml: diagramContent,
-                          autosave: 0
-                        }),
-                        '*'
-                      )
-                    }, 1000)
-                  }
-                }}
-              />
-            ) : (
-              // External viewer with URL
-              <iframe
-                key={`viewer-${file}`}
-                src={`https://viewer.diagrams.net/?lightbox=1&layers=1&nav=1&highlight=0000ff&url=${encodeURIComponent(url)}`}
-                className="w-full h-[80vh] border rounded bg-white"
-                onLoad={() => console.log('External viewer loaded for:', file)}
-                onError={e => console.error('Viewer error for:', file, e)}
-              />
-            )}
+            <iframe
+              key={`diagram-${file}`}
+              src={`https://viewer.diagrams.net/?lightbox=1&layers=1&nav=1#R${encodeURIComponent(diagramContent)}`}
+              className="w-full h-[80vh] border rounded bg-white"
+              onLoad={() => console.log('Diagram viewer loaded for:', file)}
+              onError={e => console.error('Viewer error for:', file, e)}
+            />
           </div>
         )}
         {isMarkdown && (
