@@ -134,6 +134,9 @@
                 console.log('⚠️ No userId/secret in URL params');
                 console.log('🔍 Checking if already authenticated via cookies...');
                 
+                // Wait a moment for Appwrite to set cookies from OAuth
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
                 // Check if we're already authenticated (OAuth2Session sets cookies directly)
                 try {
                     const { Client, Account } = await import('https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/appwrite.js');
@@ -143,7 +146,21 @@
                         .setProject('college-football-fantasy-app');
                     
                     const account = new Account(client);
-                    const user = await account.get();
+                    
+                    // Try multiple times as OAuth might take a moment
+                    let user = null;
+                    let attempts = 0;
+                    while (!user && attempts < 3) {
+                        try {
+                            user = await account.get();
+                            console.log('✅ Got user on attempt', attempts + 1);
+                            break;
+                        } catch (e) {
+                            console.log(`⏳ Attempt ${attempts + 1} failed, waiting...`);
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            attempts++;
+                        }
+                    }
                     
                     if (user) {
                         console.log('✅ User authenticated via OAuth:', user.email);
