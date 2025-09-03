@@ -1,0 +1,113 @@
+### Draft System API Tests
+# Run these with REST Client extension in VS Code
+
+@baseUrl = http://localhost:3001
+@session = {{$dotenv APPWRITE_SESSION}}
+@leagueId = {{$dotenv TEST_LEAGUE_ID}}
+@playerId = {{$dotenv TEST_PLAYER_ID}}
+
+### Get Draft Status
+GET {{baseUrl}}/api/drafts/{{leagueId}}/state
+Cookie: appwrite-session={{session}}
+
+### Start Draft (Commissioner)
+POST {{baseUrl}}/api/drafts/{{leagueId}}/start
+Cookie: appwrite-session={{session}}
+
+### Make Draft Pick
+POST {{baseUrl}}/api/drafts/{{leagueId}}/pick
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "playerId": "{{playerId}}"
+}
+
+### Get Available Players
+POST {{baseUrl}}/api/draft/players
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "filters": {
+    "position": ["QB", "RB"],
+    "conference": "sec",
+    "available": true
+  },
+  "sort": {
+    "field": "fantasy_points",
+    "order": "desc"
+  },
+  "pagination": {
+    "page": 1,
+    "limit": 50
+  }
+}
+
+### Search Players
+GET {{baseUrl}}/api/players/search
+  ?q=Milroe
+  &position=QB
+  &conference=sec
+Cookie: appwrite-session={{session}}
+
+### Pause Draft (Commissioner)
+POST {{baseUrl}}/api/drafts/{{leagueId}}/pause
+Cookie: appwrite-session={{session}}
+
+### Resume Draft (Commissioner)
+POST {{baseUrl}}/api/drafts/{{leagueId}}/resume
+Cookie: appwrite-session={{session}}
+
+### Trigger Autopick
+POST {{baseUrl}}/api/drafts/{{leagueId}}/autopick
+Cookie: appwrite-session={{session}}
+
+### Get Draft History
+GET {{baseUrl}}/api/drafts/{{leagueId}}/history
+Cookie: appwrite-session={{session}}
+
+### Mock Draft - Create Session
+POST {{baseUrl}}/api/mock-draft/create
+Content-Type: application/json
+
+{
+  "conference": "sec",
+  "teamCount": 10
+}
+
+### Mock Draft - Make Pick
+POST {{baseUrl}}/api/mock-draft/{{mockDraftId}}/pick
+Content-Type: application/json
+
+{
+  "playerId": "{{playerId}}",
+  "teamIndex": 0
+}
+
+### Get Player Projections
+GET {{baseUrl}}/api/players/{{playerId}}/projections
+Cookie: appwrite-session={{session}}
+
+### Auction - Place Bid
+POST {{baseUrl}}/api/auctions/{{leagueId}}/bid
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "playerId": "{{playerId}}",
+  "amount": 25
+}
+
+### Auction - Get Current Item
+GET {{baseUrl}}/api/auctions/{{leagueId}}/current
+Cookie: appwrite-session={{session}}
+
+### Complete Draft
+POST {{baseUrl}}/api/draft/complete
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "leagueId": "{{leagueId}}"
+}

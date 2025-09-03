@@ -2,7 +2,7 @@
   "database": "college-football-fantasy",
   "endpoint": "https://nyc.cloud.appwrite.io/v1",
   "project": "college-football-fantasy-app",
-  "timestamp": "2025-09-01T21:59:30.309Z",
+  "timestamp": "2025-09-03T09:05:10.182Z",
   "collections": {
     "rankings": {
       "name": "AP Rankings",

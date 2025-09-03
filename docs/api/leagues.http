@@ -1,0 +1,103 @@
+### League Management API Tests
+# Run these with REST Client extension in VS Code
+
+@baseUrl = http://localhost:3001
+@session = {{$dotenv APPWRITE_SESSION}}
+@leagueId = {{$dotenv TEST_LEAGUE_ID}}
+
+### Create League
+POST {{baseUrl}}/api/leagues/create
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "name": "Test League 2025",
+  "maxTeams": 10,
+  "scoringType": "standard",
+  "draftType": "snake",
+  "draftDate": "2025-08-25T18:00:00Z",
+  "selectedConference": "sec",
+  "password": "optional-password"
+}
+
+### Search Public Leagues
+GET {{baseUrl}}/api/leagues/search
+
+### Search with Query
+GET {{baseUrl}}/api/leagues/search
+  ?q=Test
+  &conference=sec
+  &includeFull=false
+
+### Get My Leagues
+GET {{baseUrl}}/api/leagues/mine
+Cookie: appwrite-session={{session}}
+
+### Get League Details
+GET {{baseUrl}}/api/leagues/{{leagueId}}
+Cookie: appwrite-session={{session}}
+
+### Join League
+POST {{baseUrl}}/api/leagues/join
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "leagueId": "{{leagueId}}",
+  "password": "league-password"
+}
+
+### Join with Invite Token
+POST {{baseUrl}}/api/leagues/join
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "inviteToken": "abc123xyz"
+}
+
+### Generate Invite Link
+POST {{baseUrl}}/api/leagues/invite
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "leagueId": "{{leagueId}}"
+}
+
+### Get League Members
+GET {{baseUrl}}/api/leagues/{{leagueId}}/members
+Cookie: appwrite-session={{session}}
+
+### Update Team Name
+POST {{baseUrl}}/api/leagues/{{leagueId}}/update-team
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "teamName": "My Awesome Team"
+}
+
+### Get League Schedule
+GET {{baseUrl}}/api/leagues/{{leagueId}}/schedule
+Cookie: appwrite-session={{session}}
+
+### Commissioner - Update League Settings
+POST {{baseUrl}}/api/leagues/{{leagueId}}/commissioner
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "name": "Updated League Name",
+  "maxTeams": 12,
+  "draftDate": "2025-08-28T19:00:00Z"
+}
+
+### Sync League Members (Admin)
+POST {{baseUrl}}/api/admin/leagues/sync-members
+Content-Type: application/json
+Cookie: appwrite-session={{session}}
+
+{
+  "leagueId": "{{leagueId}}"
+}

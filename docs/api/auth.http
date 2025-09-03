@@ -1,0 +1,66 @@
+### Authentication API Tests
+# Run these with REST Client extension in VS Code
+
+@baseUrl = {{$dotenv API_BASE_URL}}
+@localUrl = http://localhost:3001
+@prodUrl = https://cfbfantasy.app
+
+### Health Check
+GET {{localUrl}}/api/health
+
+### Login
+POST {{localUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "testpassword123"
+}
+
+### Signup
+POST {{localUrl}}/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "newuser@example.com",
+  "password": "securepassword123",
+  "name": "New User"
+}
+
+### Get Current User
+GET {{localUrl}}/api/auth/user
+Cookie: appwrite-session={{$dotenv APPWRITE_SESSION}}
+
+### Logout
+POST {{localUrl}}/api/auth/logout
+Cookie: appwrite-session={{$dotenv APPWRITE_SESSION}}
+
+### OAuth Success Handler
+GET {{localUrl}}/api/auth/oauth/callback?userId=123&secret=abc123
+
+### Test OAuth Flow
+# This shows the OAuth URL structure
+GET https://nyc.cloud.appwrite.io/v1/account/sessions/oauth2/google
+  ?project=college-football-fantasy-app
+  &success={{localUrl}}/api/auth/oauth/callback
+  &failure={{localUrl}}/login?error=oauth_failed
+
+### Update Profile
+POST {{localUrl}}/api/auth/update-profile
+Content-Type: application/json
+Cookie: appwrite-session={{$dotenv APPWRITE_SESSION}}
+
+{
+  "name": "Updated Name",
+  "prefs": {
+    "favoriteTeam": "Alabama"
+  }
+}
+
+### Sync OAuth Session
+POST {{localUrl}}/api/auth/sync-oauth
+Content-Type: application/json
+
+{
+  "secret": "oauth-secret-from-callback"
+}
