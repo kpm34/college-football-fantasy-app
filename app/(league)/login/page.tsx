@@ -86,6 +86,7 @@ function LoginPageContent() {
       
       // Check our API
       let apiUser = null
+      let debugData = null
       try {
         const response = await fetch('/api/auth/user', { 
           cache: 'no-store',
@@ -93,6 +94,15 @@ function LoginPageContent() {
         })
         if (response.ok) {
           apiUser = await response.json()
+        }
+        
+        // Also get debug info
+        const debugResponse = await fetch('/api/auth/debug', {
+          cache: 'no-store',
+          credentials: 'include'
+        })
+        if (debugResponse.ok) {
+          debugData = await debugResponse.json()
         }
       } catch (e) {
         // API check failed
@@ -124,6 +134,7 @@ function LoginPageContent() {
           userId: apiUser?.$id || apiUser?.data?.$id,
           userEmail: apiUser?.email || apiUser?.data?.email
         },
+        debug: debugData?.debug || null,
         url: {
           origin: window.location.origin,
           pathname: window.location.pathname,
