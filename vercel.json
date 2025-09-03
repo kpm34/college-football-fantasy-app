@@ -47,7 +47,7 @@
     },
     "app/api/docs/mermaid/[slug]/route.ts": {
       "maxDuration": 10,
-      "includeFiles": "docs/**"
+      "includeFiles": ["docs/**/*"]
     }
   }
 }
