@@ -103,9 +103,13 @@ function LoginPageContent() {
         cookies: {
           count: Object.keys(cookies).length,
           hasAppwriteSession: Object.keys(cookies).some(k => k.includes('appwrite')),
+          hasNativeSession: !!cookies['a_session_college-football-fantasy-app'],
+          hasCustomSession: !!cookies['appwrite-session'],
           hasOAuthSuccess: cookies['oauth_success'] === 'true',
+          allCookies: Object.entries(cookies)
+            .map(([k, v]) => `${k}=${v?.substring(0, 30)}...`),
           relevantCookies: Object.entries(cookies)
-            .filter(([k]) => k.includes('appwrite') || k.includes('session') || k.includes('oauth'))
+            .filter(([k]) => k.includes('appwrite') || k.includes('session') || k.includes('oauth') || k.includes('a_session'))
             .map(([k, v]) => `${k}=${v?.substring(0, 20)}...`)
         },
         appwrite: {
@@ -274,6 +278,20 @@ function LoginPageContent() {
         >
           {loading ? 'Logging in...' : 'Login'}
         </button>
+        
+        {/* Show dashboard link if already authenticated */}
+        {debugInfo?.appwrite?.hasSession && (
+          <div className="mt-4 p-3 rounded-lg" style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
+            <p className="text-sm text-green-700 mb-2">✅ You're already logged in!</p>
+            <Link
+              href="/dashboard"
+              className="block w-full text-center px-4 py-2 rounded-lg font-semibold transition-colors"
+              style={{ backgroundColor: '#22C55E', color: '#FFFFFF' }}
+            >
+              Go to Dashboard →
+            </Link>
+          </div>
+        )}
 
         {(googleAvailable || appleAvailable) && (
           <div className="mt-6">
