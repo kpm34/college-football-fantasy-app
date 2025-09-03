@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft Database Schema & Board Generation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            min-height: 100vh;
+            color: #1a202c;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        
+        .data-table th {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .data-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .data-table tr:hover {
+            background: #f7fafc;
+        }
+        
+        .data-table .field-name {
+            font-family: monospace;
+            background: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+        }
+        
+        .data-table .type-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-family: monospace;
+        }
+        
+        .type-string {
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+        
+        .type-number {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .type-boolean {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .type-datetime {
+            background: #fce7f3;
+            color: #9f1239;
+        }
+        
+        .type-json {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+        
+        .index-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: #10b981;
+            color: white;
+            margin-right: 0.5rem;
+        }
+        
+        .index-unique {
+            background: #8b5cf6;
+        }
+        
+        .index-composite {
+            background: #ec4899;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #059669;
+            margin: 1.5rem 0;
+        }
+        
+        .info-card h3 {
+            color: #047857;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-card li {
+            padding: 0.25rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .info-card li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #059669;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .code-block .comment {
+            color: #94a3b8;
+        }
+        
+        .code-block .keyword {
+            color: #c084fc;
+        }
+        
+        .code-block .string {
+            color: #86efac;
+        }
+        
+        .code-block .function {
+            color: #60a5fa;
+        }
+        
+        .diagram-container {
+            background: #fafafa;
+            border-radius: 0.5rem;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .export-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .export-card:hover {
+            border-color: #059669;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .export-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .export-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+        
+        .export-desc {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗄️ Draft Database Schema & Board Generation</h1>
+            <p>Complete database architecture and draft board export system</p>
+        </div>
+        
+        <div class="content-card">
+            <h2>Database Schema</h2>
+            
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem;">📊 drafts Collection</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Indexes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="field-name">id</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>Unique draft identifier</td>
+                        <td><span class="index-badge">Primary</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">league_id</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>Associated league</td>
+                        <td><span class="index-badge index-composite">Composite</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">season</span></td>
+                        <td><span class="type-badge type-number">number</span></td>
+                        <td>Draft year/season</td>
+                        <td><span class="index-badge index-composite">Composite</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">is_mock</span></td>
+                        <td><span class="type-badge type-boolean">boolean</span></td>
+                        <td>Mock vs real draft flag</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">draft_type</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>snake | auction</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">draft_start_at</span></td>
+                        <td><span class="type-badge type-datetime">datetime</span></td>
+                        <td>Scheduled start time</td>
+                        <td><span class="index-badge">Index</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">draft_room_open_at</span></td>
+                        <td><span class="type-badge type-datetime">datetime</span></td>
+                        <td>Room access time</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">pick_time_seconds</span></td>
+                        <td><span class="type-badge type-number">number</span></td>
+                        <td>Timer per pick</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">status</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>pending | active | completed</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">board_md</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>Mermaid board markdown</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem;">⚡ draft_states Collection</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Indexes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="field-name">draft_id</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>Draft reference</td>
+                        <td><span class="index-badge index-unique">Unique</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">current_pick</span></td>
+                        <td><span class="type-badge type-number">number</span></td>
+                        <td>Overall pick number</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">current_team_id</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>Team on clock</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">deadline</span></td>
+                        <td><span class="type-badge type-datetime">datetime</span></td>
+                        <td>Pick deadline</td>
+                        <td><span class="index-badge">Index</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">is_paused</span></td>
+                        <td><span class="type-badge type-boolean">boolean</span></td>
+                        <td>Pause state</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem;">📝 draft_picks Collection</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Indexes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="field-name">id</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>Pick identifier</td>
+                        <td><span class="index-badge">Primary</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">draft_id</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>Draft reference</td>
+                        <td><span class="index-badge index-composite">Composite</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">team_id</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>Picking team</td>
+                        <td><span class="index-badge index-composite">Composite</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">player_id</span></td>
+                        <td><span class="type-badge type-string">string</span></td>
+                        <td>Selected player</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">overall</span></td>
+                        <td><span class="type-badge type-number">number</span></td>
+                        <td>Overall pick number</td>
+                        <td><span class="index-badge index-composite">Composite</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">round</span></td>
+                        <td><span class="type-badge type-number">number</span></td>
+                        <td>Draft round</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">pick_in_round</span></td>
+                        <td><span class="type-badge type-number">number</span></td>
+                        <td>Pick within round</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">is_autopick</span></td>
+                        <td><span class="type-badge type-boolean">boolean</span></td>
+                        <td>Autopick flag</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field-name">timestamp</span></td>
+                        <td><span class="type-badge type-datetime">datetime</span></td>
+                        <td>Pick timestamp</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="info-card">
+                <h3>🗄️ Critical Performance Indexes</h3>
+                <ul>
+                    <li><strong>(league_id, season)</strong> on drafts - Find league's drafts</li>
+                    <li><strong>(draft_id)</strong> unique on draft_states - Current state lookup</li>
+                    <li><strong>(deadline)</strong> on draft_states - Autopick sweep queries</li>
+                    <li><strong>(draft_id, overall)</strong> on draft_picks - Ordered pick retrieval</li>
+                    <li><strong>(draft_id, team_id)</strong> on draft_picks - Team pick history</li>
+                    <li><strong>(draft_start_at)</strong> on drafts - Upcoming drafts query</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <h2>Entity Relationship Diagram</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+erDiagram
+    DRAFTS ||--|| DRAFT_STATES : has
+    DRAFTS ||--o{ DRAFT_PICKS : contains
+    DRAFTS ||--o{ DRAFT_EVENTS : logs
+    DRAFTS }o--|| LEAGUES : belongs_to
+    DRAFT_PICKS }o--|| FANTASY_TEAMS : picked_by
+    DRAFT_PICKS }o--|| COLLEGE_PLAYERS : selects
+    FANTASY_TEAMS ||--o{ ROSTER_SLOTS : owns
+    FANTASY_TEAMS ||--o{ TRANSACTIONS : records
+    
+    DRAFTS {
+        string id PK
+        string league_id FK
+        number season
+        boolean is_mock
+        string draft_type
+        datetime draft_start_at
+        datetime draft_room_open_at
+        string status
+    }
+    
+    DRAFT_STATES {
+        string draft_id PK
+        number current_pick
+        string current_team_id
+        datetime deadline
+        boolean is_paused
+    }
+    
+    DRAFT_PICKS {
+        string id PK
+        string draft_id FK
+        string team_id FK
+        string player_id FK
+        number overall
+        number round
+        boolean is_autopick
+    }
+    
+    ROSTER_SLOTS {
+        string id PK
+        string team_id FK
+        string player_id FK
+        string position
+        string acquired_via
+    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <h2>Draft Board Generation System</h2>
+            
+            <div class="export-grid">
+                <div class="export-card">
+                    <div class="export-icon">📊</div>
+                    <div class="export-title">Mermaid Diagram</div>
+                    <div class="export-desc">.md format</div>
+                </div>
+                <div class="export-card">
+                    <div class="export-icon">📄</div>
+                    <div class="export-title">CSV Export</div>
+                    <div class="export-desc">Spreadsheet</div>
+                </div>
+                <div class="export-card">
+                    <div class="export-icon">📑</div>
+                    <div class="export-title">PDF Report</div>
+                    <div class="export-desc">Printable</div>
+                </div>
+                <div class="export-card">
+                    <div class="export-icon">📋</div>
+                    <div class="export-title">JSON Data</div>
+                    <div class="export-desc">Raw export</div>
+                </div>
+                <div class="export-card">
+                    <div class="export-icon">👥</div>
+                    <div class="export-title">Team Sheets</div>
+                    <div class="export-desc">By team</div>
+                </div>
+                <div class="export-card">
+                    <div class="export-icon">📈</div>
+                    <div class="export-title">Analytics</div>
+                    <div class="export-desc">Statistics</div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<span class="comment">// Generate Mermaid draft board after completion</span>
+<span class="keyword">async function</span> <span class="function">generateDraftBoard</span>(draftId: string): Promise<string> {
+  <span class="keyword">const</span> events = <span class="keyword">await</span> getDraftEvents(draftId)
+  <span class="keyword">const</span> picks = events.filter(e => e.type === <span class="string">'pick'</span>)
+  <span class="keyword">const</span> teams = <span class="keyword">await</span> getTeamsInDraft(draftId)
+  
+  <span class="keyword">let</span> mermaid = <span class="string">`graph TD\n`</span>
+  mermaid += <span class="string">`  subgraph "Draft Results - ${new Date().getFullYear()}"\n`</span>
+  
+  <span class="comment">// Add round headers</span>
+  <span class="keyword">const</span> rounds = Math.ceil(picks.length / teams.length)
+  <span class="keyword">for</span> (<span class="keyword">let</span> round = 1; round <= rounds; round++) {
+    mermaid += <span class="string">`    subgraph "Round ${round}"\n`</span>
+    
+    <span class="keyword">const</span> roundPicks = picks.filter(p => p.round === round)
+    roundPicks.forEach((pick, i) => {
+      <span class="keyword">const</span> nodeId = <span class="string">`R${round}P${i + 1}`</span>
+      <span class="keyword">const</span> label = <span class="string">`${pick.player_name}\\n${pick.position} - ${pick.team_name}`</span>
+      mermaid += <span class="string">`      ${nodeId}["${label}"]\n`</span>
+      
+      <span class="comment">// Add connections within round</span>
+      <span class="keyword">if</span> (i > 0) {
+        <span class="keyword">const</span> prevNode = <span class="string">`R${round}P${i}`</span>
+        mermaid += <span class="string">`      ${prevNode} --> ${nodeId}\n`</span>
+      }
+    })
+    
+    mermaid += <span class="string">`    end\n`</span>
+  }
+  
+  mermaid += <span class="string">`  end\n`</span>
+  
+  <span class="comment">// Save to file system</span>
+  <span class="keyword">const</span> filename = <span class="string">`${draftId}-${new Date().getFullYear()}.md`</span>
+  <span class="keyword">const</span> path = <span class="string">`docs/diagrams/draft-boards/${filename}`</span>
+  <span class="keyword">await</span> saveFile(path, mermaid)
+  
+  <span class="comment">// Update draft record with board location</span>
+  <span class="keyword">await</span> updateDraft(draftId, { 
+    board_asset_uri: path,
+    board_md: mermaid,
+    completed_at: <span class="keyword">new</span> Date().toISOString()
+  })
+  
+  <span class="keyword">return</span> path
+}
+
+<span class="comment">// Generate CSV export</span>
+<span class="keyword">async function</span> <span class="function">generateCSVExport</span>(draftId: string): Promise<string> {
+  <span class="keyword">const</span> picks = <span class="keyword">await</span> getDraftPicks(draftId)
+  <span class="keyword">const</span> headers = [
+    <span class="string">'Overall'</span>,
+    <span class="string">'Round'</span>,
+    <span class="string">'Pick'</span>,
+    <span class="string">'Team'</span>,
+    <span class="string">'Player'</span>,
+    <span class="string">'Position'</span>,
+    <span class="string">'College'</span>,
+    <span class="string">'Autopick'</span>,
+    <span class="string">'Timestamp'</span>
+  ]
+  
+  <span class="keyword">let</span> csv = headers.join(<span class="string">','</span>) + <span class="string">'\n'</span>
+  
+  picks.forEach(pick => {
+    <span class="keyword">const</span> row = [
+      pick.overall,
+      pick.round,
+      pick.pick_in_round,
+      pick.team_name,
+      pick.player_name,
+      pick.position,
+      pick.college,
+      pick.is_autopick ? <span class="string">'Yes'</span> : <span class="string">'No'</span>,
+      pick.timestamp
+    ]
+    csv += row.join(<span class="string">','</span>) + <span class="string">'\n'</span>
+  })
+  
+  <span class="keyword">return</span> csv
+}
+
+<span class="comment">// Generate team-by-team breakdown</span>
+<span class="keyword">async function</span> <span class="function">generateTeamBreakdown</span>(draftId: string): Promise<TeamBreakdown[]> {
+  <span class="keyword">const</span> picks = <span class="keyword">await</span> getDraftPicks(draftId)
+  <span class="keyword">const</span> teams = <span class="keyword">await</span> getTeamsInDraft(draftId)
+  
+  <span class="keyword">return</span> teams.map(team => {
+    <span class="keyword">const</span> teamPicks = picks.filter(p => p.team_id === team.id)
+    
+    <span class="keyword">return</span> {
+      teamId: team.id,
+      teamName: team.name,
+      picks: teamPicks,
+      positionBreakdown: {
+        QB: teamPicks.filter(p => p.position === <span class="string">'QB'</span>).length,
+        RB: teamPicks.filter(p => p.position === <span class="string">'RB'</span>).length,
+        WR: teamPicks.filter(p => p.position === <span class="string">'WR'</span>).length,
+        TE: teamPicks.filter(p => p.position === <span class="string">'TE'</span>).length,
+        K: teamPicks.filter(p => p.position === <span class="string">'K'</span>).length,
+        DEF: teamPicks.filter(p => p.position === <span class="string">'DEF'</span>).length
+      },
+      autopickCount: teamPicks.filter(p => p.is_autopick).length,
+      averagePickTime: calculateAveragePickTime(teamPicks)
+    }
+  })
+}
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <h2>Database Operations</h2>
+            
+            <div class="info-card">
+                <h3>📝 Mock Draft Operations</h3>
+                <ul>
+                    <li>Write to draft_picks for history</li>
+                    <li>Update draft_states for current position</li>
+                    <li>Save board_md for review</li>
+                    <li>NO roster_slots creation</li>
+                    <li>NO transactions recording</li>
+                    <li>NO fantasy_teams budget updates</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>🏆 Real Draft Operations</h3>
+                <ul>
+                    <li>Write to draft_picks for history</li>
+                    <li>Update draft_states for current position</li>
+                    <li>Create roster_slots for each pick</li>
+                    <li>Record transactions with type='draft'</li>
+                    <li>Update fantasy_teams.budget for auctions</li>
+                    <li>Generate and save final board</li>
+                    <li>Send completion notifications</li>
+                </ul>
+            </div>
+            
+            <div class="code-block">
+<span class="comment">// Differentiated persistence logic</span>
+<span class="keyword">async function</span> <span class="function">persistDraftPick</span>(
+  pick: DraftPick,
+  draft: Draft
+): Promise<void> {
+  <span class="comment">// Always save to draft_picks</span>
+  <span class="keyword">await</span> saveDraftPick({
+    draft_id: draft.id,
+    team_id: pick.team_id,
+    player_id: pick.player_id,
+    overall: pick.overall,
+    round: pick.round,
+    pick_in_round: pick.pick_in_round,
+    is_autopick: pick.is_autopick,
+    timestamp: <span class="keyword">new</span> Date()
+  })
+  
+  <span class="comment">// Update current state</span>
+  <span class="keyword">await</span> updateDraftState({
+    draft_id: draft.id,
+    current_pick: pick.overall + 1,
+    current_team_id: getNextTeam(draft, pick.overall + 1),
+    deadline: <span class="keyword">new</span> Date(Date.now() + draft.pick_time_seconds * 1000)
+  })
+  
+  <span class="comment">// Only persist to season for real drafts</span>
+  <span class="keyword">if</span> (!draft.is_mock) {
+    <span class="comment">// Create roster slot</span>
+    <span class="keyword">await</span> createRosterSlot({
+      team_id: pick.team_id,
+      player_id: pick.player_id,
+      position: pick.position,
+      acquired_via: <span class="string">'draft'</span>,
+      acquisition_date: <span class="keyword">new</span> Date()
+    })
+    
+    <span class="comment">// Record transaction</span>
+    <span class="keyword">await</span> recordTransaction({
+      type: <span class="string">'draft'</span>,
+      team_id: pick.team_id,
+      player_id: pick.player_id,
+      draft_round: pick.round,
+      draft_pick: pick.pick_in_round,
+      cost: pick.auction_amount || 0,
+      timestamp: <span class="keyword">new</span> Date()
+    })
+    
+    <span class="comment">// Update budget for auction drafts</span>
+    <span class="keyword">if</span> (draft.draft_type === <span class="string">'auction'</span> && pick.auction_amount) {
+      <span class="keyword">await</span> updateTeamBudget(
+        pick.team_id,
+        -pick.auction_amount
+      )
+    }
+  }
+  
+  <span class="comment">// Broadcast to all clients</span>
+  <span class="keyword">await</span> broadcastPickUpdate(pick)
+}
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <h2>Query Examples</h2>
+            
+            <div class="code-block">
+<span class="comment">-- Find drafts with expired timers (for autopick sweep)</span>
+SELECT ds.*, d.pick_time_seconds, d.is_mock
+FROM draft_states ds
+JOIN drafts d ON d.id = ds.draft_id
+WHERE ds.deadline < NOW()
+  AND d.status = 'active'
+  AND ds.is_paused = false
+ORDER BY ds.deadline ASC;
+
+<span class="comment">-- Get draft board for display</span>
+SELECT 
+  dp.*,
+  cp.name as player_name,
+  cp.position,
+  cp.college,
+  ft.name as team_name
+FROM draft_picks dp
+JOIN college_players cp ON cp.id = dp.player_id
+JOIN fantasy_teams ft ON ft.id = dp.team_id
+WHERE dp.draft_id = ?
+ORDER BY dp.overall ASC;
+
+<span class="comment">-- Find upcoming drafts for a league</span>
+SELECT 
+  d.*,
+  COUNT(DISTINCT dp.team_id) as teams_ready
+FROM drafts d
+LEFT JOIN draft_picks dp ON dp.draft_id = d.id
+WHERE d.league_id = ?
+  AND d.season = ?
+  AND d.draft_start_at > NOW()
+GROUP BY d.id
+ORDER BY d.draft_start_at ASC;
+
+<span class="comment">-- Calculate average pick time by team</span>
+SELECT 
+  team_id,
+  AVG(TIMESTAMPDIFF(SECOND, lag_timestamp, timestamp)) as avg_seconds
+FROM (
+  SELECT 
+    team_id,
+    timestamp,
+    LAG(timestamp) OVER (PARTITION BY draft_id ORDER BY overall) as lag_timestamp
+  FROM draft_picks
+  WHERE draft_id = ?
+    AND is_autopick = false
+) t
+WHERE lag_timestamp IS NOT NULL
+GROUP BY team_id;
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#059669',
+                primaryTextColor: '#1a202c',
+                primaryBorderColor: '#047857',
+                lineColor: '#10b981',
+                secondaryColor: '#ecfdf5',
+                tertiaryColor: '#d1fae5'
+            }
+        });
+    </script>
+</body>
+</html>

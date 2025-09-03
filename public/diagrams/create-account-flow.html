@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account Flow - Interactive Diagram</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1a202c;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            animation: slideDown 0.6s ease-out;
+        }
+        
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: none;
+            border-radius: 0.5rem 0.5rem 0 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .content-area {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .diagram-container {
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .info-card h3 {
+            color: #667eea;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-card li {
+            padding: 0.25rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .info-card li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .data-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .data-table tr:hover {
+            background: #f7fafc;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .status-error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .status-info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Create Account Flow</h1>
+            <p>Client account creation using Appwrite Auth with Google OAuth and email/password options</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('flow')">Flow Diagram</button>
+            <button class="tab-button" onclick="showTab('sequence')">Sequence Diagram</button>
+            <button class="tab-button" onclick="showTab('data')">Data Interactions</button>
+            <button class="tab-button" onclick="showTab('validation')">Validation & Errors</button>
+        </div>
+        
+        <div class="content-area">
+            <!-- Flow Diagram Tab -->
+            <div id="flow" class="tab-content active">
+                <h2 style="margin-bottom: 1.5rem;">Client Flow Overview</h2>
+                <div class="diagram-container">
+                    <div class="mermaid">
+flowchart TB
+  classDef client fill:#fef3c7,stroke:#f59e0b,stroke-width:2,color:#92400e
+  classDef auth fill:#dbeafe,stroke:#3b82f6,stroke-width:2,color:#1e3a8a
+  classDef db fill:#d1fae5,stroke:#10b981,stroke-width:2,color:#064e3b
+  classDef api fill:#fce7f3,stroke:#ec4899,stroke-width:2,color:#831843
+  
+  Start([Client visits app]):::client
+  Login[Login Page]:::client
+  Choice{Auth Method}:::client
+  
+  GoogleAuth[Google OAuth]:::auth
+  EmailAuth[Email/Password]:::auth
+  AppwriteAuth[Appwrite Auth Service]:::auth
+  
+  Callback[OAuth Success Page]:::api
+  CreateSession[Create Session - Appwrite]:::auth
+  
+  CheckClient{Client Exists?}:::db
+  CreateClient[Create Client Record]:::db
+  UpdateClient[Update Client]:::db
+  
+  ActivityLog[Log Activity]:::db
+  Dashboard[Redirect to Dashboard]:::client
+  
+  Start --> Login
+  Login --> Choice
+  Choice -->|Google| GoogleAuth
+  Choice -->|Email| EmailAuth
+  
+  GoogleAuth --> AppwriteAuth
+  EmailAuth --> AppwriteAuth
+  AppwriteAuth --> Callback
+  Callback --> CreateSession
+  
+  CreateSession --> CheckClient
+  CheckClient -->|No| CreateClient
+  CheckClient -->|Yes| UpdateClient
+  
+  CreateClient --> ActivityLog
+  UpdateClient --> ActivityLog
+  ActivityLog --> Dashboard
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🔑 Authentication Methods</h3>
+                        <ul>
+                            <li>Google OAuth integration</li>
+                            <li>Email/Password registration</li>
+                            <li>Session management via Appwrite</li>
+                            <li>Secure cookie handling</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>📁 Related Files</h3>
+                        <ul>
+                            <li>/app/(league)/login/oauth-success/page.tsx</li>
+                            <li>/app/(league)/login/page.tsx</li>
+                            <li>/lib/appwrite-server.ts</li>
+                            <li>Appwrite Users API</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sequence Diagram Tab -->
+            <div id="sequence" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Detailed Sequence Flow</h2>
+                <div class="diagram-container">
+                    <div class="mermaid">
+sequenceDiagram
+  participant C as Client
+  participant UI as Login Page
+  participant Auth as Appwrite Auth
+  participant API as API Route
+  participant DAL as Data Layer
+  participant DB as Database
+  
+  C->>UI: Visit /login
+  UI->>C: Show auth options
+  
+  alt Google OAuth
+    C->>UI: Click Google
+    UI->>Auth: Initiate OAuth
+    Auth->>C: Redirect to Google
+    C->>Auth: Authorize
+    Auth->>UI: Redirect to OAuth Success
+  else Email/Password
+    C->>UI: Enter credentials
+    UI->>Auth: Create account
+    Auth->>API: Session created
+  end
+  
+  API->>DAL: Get/Create client
+  DAL->>DB: Query clients
+  
+  alt New Client
+    DB-->>DAL: Not found
+    DAL->>DB: INSERT clients
+    DAL->>DB: INSERT activity_log
+  else Existing Client
+    DB-->>DAL: Client found
+    DAL->>DB: UPDATE last_login
+    DAL->>DB: INSERT activity_log
+  end
+  
+  DAL-->>API: Client record
+  API-->>C: Redirect to dashboard
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🔐 OAuth Flow</h3>
+                        <ul>
+                            <li>Redirect to Google auth</li>
+                            <li>User authorizes permissions</li>
+                            <li>Callback to success page</li>
+                            <li>Session creation in Appwrite</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>📧 Email/Password Flow</h3>
+                        <ul>
+                            <li>Form validation on client</li>
+                            <li>Account creation in Auth service</li>
+                            <li>Automatic session creation</li>
+                            <li>Direct API integration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Interactions Tab -->
+            <div id="data" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Database Operations</h2>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Collection</th>
+                            <th>Operation</th>
+                            <th>Attributes Set</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="status-badge status-info">clients</span></td>
+                            <td>READ</td>
+                            <td>authUserId</td>
+                            <td>Check if client exists</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-info">clients</span></td>
+                            <td>CREATE</td>
+                            <td>authUserId, displayName, email, avatarUrl, createdAt</td>
+                            <td>New client registration</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-info">clients</span></td>
+                            <td>UPDATE</td>
+                            <td>lastLogin</td>
+                            <td>Existing client login</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-success">activity_log</span></td>
+                            <td>CREATE</td>
+                            <td>action, clientId, metadata, createdAt</td>
+                            <td>Track signup/login events</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-info">leagues</span></td>
+                            <td>READ</td>
+                            <td>-</td>
+                            <td>Load client leagues after login</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-info">league_memberships</span></td>
+                            <td>READ</td>
+                            <td>authUserId</td>
+                            <td>Find client memberships</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="info-card" style="margin-top: 2rem;">
+                    <h3>📊 Data Flow Summary</h3>
+                    <ul>
+                        <li>Client existence check via authUserId</li>
+                        <li>Automatic client record creation for new users</li>
+                        <li>Activity logging for all auth events</li>
+                        <li>Post-login league membership loading</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Validation & Errors Tab -->
+            <div id="validation" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Validation & Error Handling</h2>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>✅ Zod Schema Validation</h3>
+                        <ul>
+                            <li>clientsSchema - Validates client data structure</li>
+                            <li>Email validation in auth forms</li>
+                            <li>Password strength requirements</li>
+                            <li>Display name constraints</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>⚠️ Error States</h3>
+                        <ul>
+                            <li><span class="status-badge status-error">OAuth failure</span> → Show error, redirect to login</li>
+                            <li><span class="status-badge status-error">Email exists</span> → Prompt to login instead</li>
+                            <li><span class="status-badge status-error">Weak password</span> → Show requirements</li>
+                            <li><span class="status-badge status-error">Network error</span> → Retry with backoff</li>
+                            <li><span class="status-badge status-error">Session expired</span> → Re-authenticate</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+// Example validation schema
+const clientsSchema = z.object({
+  authUserId: z.string(),
+  displayName: z.string().min(2).max(50),
+  email: z.string().email(),
+  avatarUrl: z.string().url().optional(),
+  createdAt: z.string().datetime(),
+  lastLogin: z.string().datetime().optional()
+});
+
+// Password requirements
+const passwordSchema = z.string()
+  .min(8, "Password must be at least 8 characters")
+  .regex(/[A-Z]/, "Must contain uppercase letter")
+  .regex(/[a-z]/, "Must contain lowercase letter")
+  .regex(/[0-9]/, "Must contain number");
+                </div>
+                
+                <div class="info-card" style="margin-top: 2rem;">
+                    <h3>🔄 Retry Strategy</h3>
+                    <ul>
+                        <li>Exponential backoff for network failures</li>
+                        <li>Maximum 3 retry attempts</li>
+                        <li>User feedback on each attempt</li>
+                        <li>Graceful degradation on persistent failure</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#667eea',
+                primaryTextColor: '#1a202c',
+                primaryBorderColor: '#764ba2',
+                lineColor: '#5a67d8',
+                secondaryColor: '#f7fafc',
+                tertiaryColor: '#e2e8f0'
+            }
+        });
+        
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
