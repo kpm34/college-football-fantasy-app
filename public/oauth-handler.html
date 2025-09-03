@@ -42,17 +42,37 @@
     <script type="module">
         // This runs on the client side after OAuth redirect
         async function handleOAuthCallback() {
+            console.log('🔍 OAuth Handler Started');
+            console.log('📍 Full URL:', window.location.href);
+            console.log('🔎 Search params:', window.location.search);
+            console.log('#️⃣ Hash params:', window.location.hash);
+            
             const params = new URLSearchParams(window.location.search);
             const hashParams = new URLSearchParams(window.location.hash.slice(1));
+            
+            // Debug all parameters
+            console.log('📋 All query params:');
+            for (const [key, value] of params) {
+                console.log(`  ${key}: ${value}`);
+            }
+            console.log('📋 All hash params:');
+            for (const [key, value] of hashParams) {
+                console.log(`  ${key}: ${value}`);
+            }
             
             // Check for parameters in both query and hash
             const userId = params.get('userId') || hashParams.get('userId');
             const secret = params.get('secret') || hashParams.get('secret');
             const error = params.get('error') || hashParams.get('error');
             
-            console.log('OAuth callback params:', { userId: !!userId, secret: !!secret, error });
+            console.log('🔐 OAuth callback params:', { 
+                userId: userId ? `${userId.substring(0, 8)}...` : null, 
+                secret: secret ? `${secret.substring(0, 8)}...` : null, 
+                error 
+            });
             
             if (error) {
+                console.error('❌ OAuth error detected:', error);
                 document.getElementById('status').textContent = 'Authentication failed. Redirecting...';
                 setTimeout(() => {
                     window.location.href = '/login?error=' + error;
@@ -61,6 +81,7 @@
             }
             
             if (userId && secret) {
+                console.log('✅ Credentials found, attempting to create session...');
                 try {
                     // Import Appwrite SDK
                     const { Client, Account } = await import('https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/appwrite.js');
@@ -69,29 +90,73 @@
                         .setEndpoint('https://nyc.cloud.appwrite.io/v1')
                         .setProject('college-football-fantasy-app');
                     
+                    console.log('📦 Appwrite client initialized');
+                    
                     const account = new Account(client);
                     
                     // Create session with the OAuth credentials
+                    console.log('🔑 Creating session with userId and secret...');
                     const session = await account.createSession(userId, secret);
-                    console.log('Session created:', session.$id);
+                    console.log('✅ Session created successfully:', session.$id);
+                    
+                    // Check if session is really active
+                    try {
+                        const user = await account.get();
+                        console.log('👤 Current user verified:', user.email);
+                    } catch (verifyErr) {
+                        console.error('⚠️ Could not verify session:', verifyErr);
+                    }
                     
                     // Session is now stored in cookies by Appwrite SDK
                     document.getElementById('status').textContent = 'Login successful! Redirecting to dashboard...';
                     
                     // Redirect to dashboard
                     setTimeout(() => {
+                        console.log('🚀 Redirecting to dashboard...');
                         window.location.href = '/dashboard';
                     }, 500);
                     
                 } catch (err) {
-                    console.error('Session creation failed:', err);
+                    console.error('❌ Session creation failed:', err);
+                    console.error('Error details:', {
+                        message: err.message,
+                        code: err.code,
+                        type: err.type,
+                        response: err.response
+                    });
                     document.getElementById('status').textContent = 'Authentication error. Redirecting...';
                     setTimeout(() => {
-                        window.location.href = '/login?error=session_failed';
+                        window.location.href = '/login?error=session_failed&details=' + encodeURIComponent(err.message || 'unknown');
                     }, 1000);
                 }
             } else {
-                // No credentials found
+                // No credentials found - this might be normal for OAuth2Session flow
+                console.log('⚠️ No userId/secret in URL params');
+                console.log('🔍 Checking if already authenticated via cookies...');
+                
+                // Check if we're already authenticated (OAuth2Session sets cookies directly)
+                try {
+                    const { Client, Account } = await import('https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/appwrite.js');
+                    
+                    const client = new Client()
+                        .setEndpoint('https://nyc.cloud.appwrite.io/v1')
+                        .setProject('college-football-fantasy-app');
+                    
+                    const account = new Account(client);
+                    const user = await account.get();
+                    
+                    if (user) {
+                        console.log('✅ User already authenticated via cookies:', user.email);
+                        document.getElementById('status').textContent = 'Already authenticated! Redirecting...';
+                        setTimeout(() => {
+                            window.location.href = '/dashboard';
+                        }, 500);
+                        return;
+                    }
+                } catch (checkErr) {
+                    console.log('❌ Not authenticated via cookies either');
+                }
+                
                 document.getElementById('status').textContent = 'No authentication data found. Redirecting...';
                 setTimeout(() => {
                     window.location.href = '/login?error=no_credentials';

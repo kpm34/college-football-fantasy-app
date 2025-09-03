@@ -1,22 +1,25 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { MermaidRenderer } from '@components/docs/MermaidRenderer'
-import { useAuth } from '@lib/hooks/useAuth';
+import { useAuth } from '@lib/hooks/useAuth'
+import Link from 'next/link'
+import { useState } from 'react'
 
 export default function AdminDashboard() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuth()
   const [showDiagram, setShowDiagram] = useState<null | { slug: string; title: string }>(null)
   const [charts, setCharts] = useState<string[]>([])
   const [lastUpdated, setLastUpdated] = useState<string>('')
   const [debugInfo, setDebugInfo] = useState<any>(null)
   const [subscriptions, setSubscriptions] = useState({
     appwrite: { status: 'Pro', features: 'Unlimited functions, 100GB storage, priority support' },
-    vercel: { status: 'Pro', features: 'Advanced analytics, unlimited functions, team collaboration' },
+    vercel: {
+      status: 'Pro',
+      features: 'Advanced analytics, unlimited functions, team collaboration',
+    },
     claude: { status: 'Pro', features: 'Deep reasoning, 5x usage, priority access' },
     gpt: { status: 'Max', features: 'Long context, vision capabilities, fastest response' },
-  });
+  })
   // Admin tools state
   const [season, setSeason] = useState<number>(new Date().getFullYear())
   const [applyChanges, setApplyChanges] = useState<boolean>(false)
@@ -29,7 +32,7 @@ export default function AdminDashboard() {
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-stone-50 flex items-center justify-center">
         <div className="text-amber-900 font-semibold">Loading…</div>
       </div>
-    );
+    )
   }
 
   if (!user || (user.email || '').toLowerCase() !== 'kashpm2002@gmail.com') {
@@ -38,10 +41,12 @@ export default function AdminDashboard() {
         <div className="text-center text-amber-900">
           <div className="text-2xl font-bold mb-2">Unauthorized</div>
           <div className="text-amber-800 mb-6">This dashboard is restricted to administrators.</div>
-          <Link href="/" className="text-sky-700 hover:text-sky-900 underline font-medium">Return Home</Link>
+          <Link href="/" className="text-sky-700 hover:text-sky-900 underline font-medium">
+            Return Home
+          </Link>
         </div>
       </div>
-    );
+    )
   }
 
   const loadDiagram = async (slug: string, title: string) => {
@@ -83,9 +88,12 @@ export default function AdminDashboard() {
   }
 
   const refreshPlayers = () => postJSON('/api/admin/players/refresh', { season })
-  const reconcileDepth = () => postJSON('/api/admin/players/reconcile-depth', { season, apply: applyChanges })
-  const cronCleanup = () => postJSON('/api/admin/players/cron-cleanup', { season, apply: applyChanges })
-  const dedupePlayers = () => postJSON('/api/admin/dedupe/players', { dryRun: !applyChanges, limit: 1000, offset: 0 })
+  const reconcileDepth = () =>
+    postJSON('/api/admin/players/reconcile-depth', { season, apply: applyChanges })
+  const cronCleanup = () =>
+    postJSON('/api/admin/players/cron-cleanup', { season, apply: applyChanges })
+  const dedupePlayers = () =>
+    postJSON('/api/admin/dedupe/players', { dryRun: !applyChanges, limit: 1000, offset: 0 })
   const syncLeagueMembers = () => {
     if (!leagueIdInput.trim()) {
       setActionResult({ error: 'League ID required' })
@@ -95,64 +103,73 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #FAEEE1 0%, #FFF8ED 40%, #F2E5D5 100%)' }}>
+    <div
+      className="min-h-screen"
+      style={{ background: 'linear-gradient(135deg, #FAEEE1 0%, #FFF8ED 40%, #F2E5D5 100%)' }}
+    >
       <div className="mx-auto max-w-[1400px] px-6 py-8">
-        <h1 className="text-4xl font-extrabold" style={{ color: '#5B2E0F' }}>Admin Dashboard</h1>
-        <p className="mt-1 mb-8" style={{ color: '#7A4A24' }}>Quick access to maps, flows, and architecture</p>
-        
+        <h1 className="text-4xl font-extrabold" style={{ color: '#5B2E0F' }}>
+          Admin Dashboard
+        </h1>
+        <p className="mt-1 mb-8" style={{ color: '#7A4A24' }}>
+          Quick access to maps, flows, and architecture
+        </p>
+
         {/* Project Map Section */}
         <div className="mb-10">
-          <h3 className="text-xl font-semibold mb-3" style={{ color: '#5B2E0F' }}>🗺️ Project Map</h3>
+          <h3 className="text-xl font-semibold mb-3" style={{ color: '#5B2E0F' }}>
+            🗺️ Project Map
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-3">
             <Link
               href="/admin/project-map"
               className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
-              style={{ background:'#2B6CB0', color:'#fff' }}
+              style={{ background: '#2B6CB0', color: '#fff' }}
             >
               <div className="font-semibold">🗺️ Interactive Project Map</div>
               <div className="text-sm text-sky-100">Navigate repository structure</div>
             </Link>
-            
+
             <button
               onClick={() => loadDiagram('project-map:app', '📱 App Structure')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#C2410C', color:'#fff' }}
+              style={{ background: '#C2410C', color: '#fff' }}
             >
               <div className="font-semibold">📱 App Structure</div>
               <div className="text-sm text-rose-100">App directory overview</div>
             </button>
-            
+
             <button
               onClick={() => loadDiagram('project-map:components', '🧩 Components')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#9A3412', color:'#fff' }}
+              style={{ background: '#9A3412', color: '#fff' }}
             >
               <div className="font-semibold">🧩 Components</div>
               <div className="text-sm text-orange-100">Component library</div>
             </button>
-            
+
             <button
               onClick={() => loadDiagram('project-map:lib', '📚 Libraries')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#92400E', color:'#fff' }}
+              style={{ background: '#92400E', color: '#fff' }}
             >
               <div className="font-semibold">📚 Libraries</div>
               <div className="text-sm text-amber-100">Core libraries</div>
             </button>
-            
+
             <button
               onClick={() => loadDiagram('project-map:schema', '🗄️ Schema (Live)')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#4B5563', color:'#fff' }}
+              style={{ background: '#4B5563', color: '#fff' }}
             >
               <div className="font-semibold">🗄️ Schema (Live)</div>
               <div className="text-sm text-stone-100">From Appwrite API</div>
             </button>
-            
+
             <button
               onClick={() => loadDiagram('project-map:ops', '⚙️ Operations')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#1E3A8A', color:'#fff' }}
+              style={{ background: '#1E3A8A', color: '#fff' }}
             >
               <div className="font-semibold">⚙️ Operations</div>
               <div className="text-sm text-sky-100">Ops & scripts</div>
@@ -162,7 +179,7 @@ export default function AdminDashboard() {
             <button
               onClick={() => loadDiagram('project-map:app:api', '🔌 App API Overview')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#7C3AED', color:'#fff' }}
+              style={{ background: '#7C3AED', color: '#fff' }}
             >
               <div className="font-semibold">🔌 App API Overview</div>
               <div className="text-sm text-violet-100">Route groups and structure</div>
@@ -170,7 +187,7 @@ export default function AdminDashboard() {
             <button
               onClick={() => loadDiagram('project-map:app:api:admin', '🔐 App API — Admin')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#047857', color:'#fff' }}
+              style={{ background: '#047857', color: '#fff' }}
             >
               <div className="font-semibold">🔐 App API — Admin</div>
               <div className="text-sm text-emerald-100">app/api/(backend)/admin</div>
@@ -178,7 +195,7 @@ export default function AdminDashboard() {
             <button
               onClick={() => loadDiagram('project-map:app:api:docs', '📄 App API — Docs')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#4338CA', color:'#fff' }}
+              style={{ background: '#4338CA', color: '#fff' }}
             >
               <div className="font-semibold">📄 App API — Docs</div>
               <div className="text-sm text-indigo-100">Documentation maps</div>
@@ -188,21 +205,23 @@ export default function AdminDashboard() {
 
         {/* Functional Flow Section */}
         <div className="mb-10">
-          <h3 className="text-xl font-semibold mb-3" style={{ color: '#5B2E0F' }}>⚡ Functional Flow</h3>
+          <h3 className="text-xl font-semibold mb-3" style={{ color: '#5B2E0F' }}>
+            ⚡ Functional Flow
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-3">
             <button
               onClick={() => loadDiagram('functional-flow:create-account', '👤 Create Account')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#2563EB', color:'#fff' }}
+              style={{ background: '#2563EB', color: '#fff' }}
             >
               <div className="font-semibold">👤 Create Account</div>
               <div className="text-sm text-sky-100">User registration flow</div>
             </button>
-            
+
             <button
               onClick={() => loadDiagram('functional-flow:create-league', '🏆 Create League')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#DC2626', color:'#fff' }}
+              style={{ background: '#DC2626', color: '#fff' }}
             >
               <div className="font-semibold">🏆 Create League</div>
               <div className="text-sm text-rose-100">League setup & scheduling</div>
@@ -211,7 +230,7 @@ export default function AdminDashboard() {
             <button
               onClick={() => loadDiagram('functional-flow:join-league', '🤝 Join League')}
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#EA580C', color:'#fff' }}
+              style={{ background: '#EA580C', color: '#fff' }}
             >
               <div className="font-semibold">🤝 Join League</div>
               <div className="text-sm text-orange-100">Join via invite or browse</div>
@@ -220,9 +239,9 @@ export default function AdminDashboard() {
             <Link
               href="/admin/draft-diagrams"
               className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
-              style={{ background:'#B45309', color:'#fff' }}
+              style={{ background: '#B45309', color: '#fff' }}
             >
-              <div className="font-semibold">📋 Draft System</div>
+              <div className="font-semibold">Draft system</div>
               <div className="text-sm text-amber-100">Open draft diagrams</div>
             </Link>
           </div>
@@ -230,10 +249,14 @@ export default function AdminDashboard() {
 
         {/* System Architecture Section */}
         <div className="mb-10">
-          <h3 className="text-xl font-semibold mb-3" style={{ color: '#5B2E0F' }}>🏗️ System Architecture</h3>
+          <h3 className="text-xl font-semibold mb-3" style={{ color: '#5B2E0F' }}>
+            🏗️ System Architecture
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-3">
             <button
-              onClick={() => loadDiagram('system-architecture:projections-overview', '📊 Projections Overview')}
+              onClick={() =>
+                loadDiagram('system-architecture:projections-overview', '📊 Projections Overview')
+              }
               className="px-4 py-3 rounded-lg bg-sky-700 text-white transition-all hover:bg-sky-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
             >
               <div className="font-semibold">📊 Projections Overview</div>
@@ -243,28 +266,32 @@ export default function AdminDashboard() {
             <a
               href="/admin/diagrams?file=projections.drawio"
               className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background:'#1D4ED8', color:'#fff' }}
+              style={{ background: '#1D4ED8', color: '#fff' }}
             >
               <div className="font-semibold">📈 Projections (draw.io)</div>
               <div className="text-sm text-indigo-100">Feature → weights → outputs</div>
             </a>
-            
+
             <button
-              onClick={() => loadDiagram('system-architecture:yearly-projections', '📈 Yearly Projections')}
+              onClick={() =>
+                loadDiagram('system-architecture:yearly-projections', '📈 Yearly Projections')
+              }
               className="px-4 py-3 rounded-lg bg-rose-600 text-white transition-all hover:bg-rose-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
             >
               <div className="font-semibold">📈 Yearly Projections</div>
               <div className="text-sm text-rose-100">Draft season projections</div>
             </button>
-            
+
             <button
-              onClick={() => loadDiagram('system-architecture:weekly-projections', '📅 Weekly Projections')}
+              onClick={() =>
+                loadDiagram('system-architecture:weekly-projections', '📅 Weekly Projections')
+              }
               className="px-4 py-3 rounded-lg bg-orange-700 text-white transition-all hover:bg-orange-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
             >
               <div className="font-semibold">📅 Weekly Projections</div>
               <div className="text-sm text-orange-100">In-season with weather & injuries</div>
             </button>
-            
+
             <button
               onClick={() => loadDiagram('system-architecture:weight-tuning', '⚖️ Weight Tuning')}
               className="px-4 py-3 rounded-lg bg-amber-600 text-white transition-all hover:bg-amber-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
@@ -280,10 +307,15 @@ export default function AdminDashboard() {
           <h3 className="text-xl font-bold text-amber-900 mb-4">💎 Premium Subscriptions</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {Object.entries(subscriptions).map(([service, details]) => (
-              <div key={service} className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-lg border border-amber-300">
+              <div
+                key={service}
+                className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-lg border border-amber-300"
+              >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-semibold text-amber-900 capitalize">{service}</span>
-                  <span className="text-xs bg-gradient-to-r from-amber-600 to-orange-600 text-white px-2 py-1 rounded-full">{details.status}</span>
+                  <span className="text-xs bg-gradient-to-r from-amber-600 to-orange-600 text-white px-2 py-1 rounded-full">
+                    {details.status}
+                  </span>
                 </div>
                 <p className="text-sm text-amber-800">{details.features}</p>
               </div>
@@ -337,12 +369,16 @@ export default function AdminDashboard() {
                   <input
                     type="number"
                     value={season}
-                    onChange={(e) => setSeason(Number(e.target.value || season))}
+                    onChange={e => setSeason(Number(e.target.value || season))}
                     className="w-28 rounded border border-amber-300 px-2 py-1 bg-white/70 text-amber-900"
                   />
                 </div>
                 <label className="inline-flex items-center gap-2 text-sm text-amber-900">
-                  <input type="checkbox" checked={applyChanges} onChange={(e) => setApplyChanges(e.target.checked)} />
+                  <input
+                    type="checkbox"
+                    checked={applyChanges}
+                    onChange={e => setApplyChanges(e.target.checked)}
+                  />
                   Apply changes (otherwise dry run)
                 </label>
                 <div className="flex items-center gap-3">
@@ -350,7 +386,7 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     value={leagueIdInput}
-                    onChange={(e) => setLeagueIdInput(e.target.value)}
+                    onChange={e => setLeagueIdInput(e.target.value)}
                     placeholder="leagues/$id"
                     className="flex-1 rounded border border-amber-300 px-2 py-1 bg-white/70 text-amber-900"
                   />
@@ -361,16 +397,73 @@ export default function AdminDashboard() {
             {/* Actions */}
             <div className="bg-gradient-to-br from-sky-50 to-sky-100 p-4 rounded-lg border border-sky-300">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <button onClick={refreshPlayers} disabled={running} className="px-3 py-2 rounded bg-sky-700 text-white hover:bg-sky-800 disabled:opacity-50">Refresh Players (CFBD)</button>
-                <button onClick={reconcileDepth} disabled={running} className="px-3 py-2 rounded bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-50">Reconcile Depth</button>
-                <button onClick={cronCleanup} disabled={running} className="px-3 py-2 rounded bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50">Cron Cleanup</button>
-                <button onClick={dedupePlayers} disabled={running} className="px-3 py-2 rounded bg-slate-700 text-white hover:bg-slate-800 disabled:opacity-50">Dedupe Players</button>
-                <button onClick={syncLeagueMembers} disabled={running} className="px-3 py-2 rounded bg-emerald-700 text-white hover:bg-emerald-800 disabled:opacity-50">Sync League Members</button>
-                <a href={`/api/admin/players/export?season=${season}&format=csv`} target="_blank" className="px-3 py-2 rounded bg-indigo-700 text-white text-center hover:bg-indigo-800">Export Players CSV</a>
-                <a href={`/api/admin/players/export?season=${season}&format=json`} target="_blank" className="px-3 py-2 rounded bg-indigo-500 text-white text-center hover:bg-indigo-600">Export Players JSON</a>
-                <a href="/admin/cache-status" className="px-3 py-2 rounded bg-blue-600 text-white text-center hover:bg-blue-700">Cache Status</a>
-                <a href="/admin/sync-status" className="px-3 py-2 rounded bg-blue-500 text-white text-center hover:bg-blue-600">Sync Status</a>
-                <a href="/admin/sec-survey" className="px-3 py-2 rounded bg-red-600 text-white text-center hover:bg-red-700">SEC → NFL Survey</a>
+                <button
+                  onClick={refreshPlayers}
+                  disabled={running}
+                  className="px-3 py-2 rounded bg-sky-700 text-white hover:bg-sky-800 disabled:opacity-50"
+                >
+                  Refresh Players (CFBD)
+                </button>
+                <button
+                  onClick={reconcileDepth}
+                  disabled={running}
+                  className="px-3 py-2 rounded bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-50"
+                >
+                  Reconcile Depth
+                </button>
+                <button
+                  onClick={cronCleanup}
+                  disabled={running}
+                  className="px-3 py-2 rounded bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50"
+                >
+                  Cron Cleanup
+                </button>
+                <button
+                  onClick={dedupePlayers}
+                  disabled={running}
+                  className="px-3 py-2 rounded bg-slate-700 text-white hover:bg-slate-800 disabled:opacity-50"
+                >
+                  Dedupe Players
+                </button>
+                <button
+                  onClick={syncLeagueMembers}
+                  disabled={running}
+                  className="px-3 py-2 rounded bg-emerald-700 text-white hover:bg-emerald-800 disabled:opacity-50"
+                >
+                  Sync League Members
+                </button>
+                <a
+                  href={`/api/admin/players/export?season=${season}&format=csv`}
+                  target="_blank"
+                  className="px-3 py-2 rounded bg-indigo-700 text-white text-center hover:bg-indigo-800"
+                >
+                  Export Players CSV
+                </a>
+                <a
+                  href={`/api/admin/players/export?season=${season}&format=json`}
+                  target="_blank"
+                  className="px-3 py-2 rounded bg-indigo-500 text-white text-center hover:bg-indigo-600"
+                >
+                  Export Players JSON
+                </a>
+                <a
+                  href="/admin/cache-status"
+                  className="px-3 py-2 rounded bg-blue-600 text-white text-center hover:bg-blue-700"
+                >
+                  Cache Status
+                </a>
+                <a
+                  href="/admin/sync-status"
+                  className="px-3 py-2 rounded bg-blue-500 text-white text-center hover:bg-blue-600"
+                >
+                  Sync Status
+                </a>
+                <a
+                  href="/admin/sec-survey"
+                  className="px-3 py-2 rounded bg-red-600 text-white text-center hover:bg-red-700"
+                >
+                  SEC → NFL Survey
+                </a>
               </div>
             </div>
 
@@ -380,7 +473,9 @@ export default function AdminDashboard() {
               {!actionResult ? (
                 <p className="text-sm text-amber-700">No action run yet.</p>
               ) : (
-                <pre className="text-xs bg-amber-50 text-amber-900 p-3 rounded overflow-auto max-h-64">{JSON.stringify(actionResult, null, 2)}</pre>
+                <pre className="text-xs bg-amber-50 text-amber-900 p-3 rounded overflow-auto max-h-64">
+                  {JSON.stringify(actionResult, null, 2)}
+                </pre>
               )}
             </div>
           </div>
@@ -412,9 +507,7 @@ export default function AdminDashboard() {
                       </div>
                     ))}
                     {lastUpdated && (
-                      <p className="text-sm text-amber-700 mt-4">
-                        Last updated: {lastUpdated}
-                      </p>
+                      <p className="text-sm text-amber-700 mt-4">Last updated: {lastUpdated}</p>
                     )}
                   </div>
                 ) : (
@@ -433,5 +526,5 @@ export default function AdminDashboard() {
         )}
       </div>
     </div>
-  );
+  )
 }

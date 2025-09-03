@@ -24,10 +24,110 @@ function LoginPageContent() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [debugInfo, setDebugInfo] = useState<any>({})
+  const [showDebug, setShowDebug] = useState(true) // Always show debug in dev
   const searchParams = useSearchParams()
   // OAuth providers – toggle via env vars
   const googleAvailable = process.env.NEXT_PUBLIC_ENABLE_OAUTH_GOOGLE !== 'false'
   const appleAvailable = process.env.NEXT_PUBLIC_ENABLE_OAUTH_APPLE === 'true'
+  
+  // Check authentication status on mount and after OAuth
+  React.useEffect(() => {
+    checkAuthStatus()
+    
+    // Check URL params for OAuth errors
+    const urlError = searchParams?.get('error')
+    const urlDetails = searchParams?.get('details')
+    if (urlError) {
+      setError(`OAuth Error: ${urlError}${urlDetails ? ` - ${urlDetails}` : ''}`)
+    }
+    
+    // Poll auth status every 2 seconds if we're expecting OAuth callback
+    const interval = setInterval(() => {
+      checkAuthStatus()
+    }, 2000)
+    
+    return () => clearInterval(interval)
+  }, [searchParams])
+  
+  async function checkAuthStatus() {
+    try {
+      // Check cookies
+      const cookies = document.cookie.split(';').reduce((acc, cookie) => {
+        const [key, value] = cookie.trim().split('=')
+        acc[key] = value
+        return acc
+      }, {} as Record<string, string>)
+      
+      // Check Appwrite session
+      const { Account } = await import('appwrite')
+      const account = new Account(client)
+      
+      let session = null
+      let user = null
+      
+      try {
+        session = await account.getSession('current')
+        user = await account.get()
+      } catch (e) {
+        // No active session
+      }
+      
+      // Check our API
+      let apiUser = null
+      try {
+        const response = await fetch('/api/auth/user', { 
+          cache: 'no-store',
+          credentials: 'include'
+        })
+        if (response.ok) {
+          apiUser = await response.json()
+        }
+      } catch (e) {
+        // API check failed
+      }
+      
+      setDebugInfo({
+        timestamp: new Date().toLocaleTimeString(),
+        cookies: {
+          count: Object.keys(cookies).length,
+          hasAppwriteSession: Object.keys(cookies).some(k => k.includes('appwrite')),
+          hasOAuthSuccess: cookies['oauth_success'] === 'true',
+          relevantCookies: Object.entries(cookies)
+            .filter(([k]) => k.includes('appwrite') || k.includes('session') || k.includes('oauth'))
+            .map(([k, v]) => `${k}=${v?.substring(0, 20)}...`)
+        },
+        appwrite: {
+          hasSession: !!session,
+          sessionId: session?.$id,
+          userId: user?.$id,
+          userEmail: user?.email,
+          userName: user?.name
+        },
+        api: {
+          hasUser: !!apiUser,
+          userId: apiUser?.$id || apiUser?.data?.$id,
+          userEmail: apiUser?.email || apiUser?.data?.email
+        },
+        url: {
+          origin: window.location.origin,
+          pathname: window.location.pathname,
+          search: window.location.search,
+          hash: window.location.hash
+        }
+      })
+      
+      // If authenticated, redirect to dashboard
+      if (user && user.$id) {
+        console.log('🎉 User authenticated, redirecting to dashboard...')
+        setTimeout(() => {
+          window.location.href = '/dashboard'
+        }, 1000)
+      }
+    } catch (err) {
+      console.error('Auth check error:', err)
+    }
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -190,25 +290,154 @@ function LoginPageContent() {
             </Link>
           </p>
         )}
-
-        {/* Debug info - remove in production */}
-        {process.env.NODE_ENV === 'development' && (
-          <div
-            className="mt-4 p-2 rounded text-xs"
-            style={{ backgroundColor: '#9256A4', color: '#FFF4EC' }}
-          >
-            <p>
-              Endpoint:{' '}
-              {process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1'}
-            </p>
-            <p>
-              Project:{' '}
-              {process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app'}
-            </p>
-            <p>Domain: {typeof window !== 'undefined' ? window.location.hostname : 'SSR'}</p>
-          </div>
-        )}
       </form>
+      
+      {/* Debug Panel - Shows auth status in real-time */}
+      {showDebug && (
+        <div className="fixed bottom-4 right-4 w-96 max-h-[600px] overflow-auto rounded-xl shadow-2xl border-2"
+          style={{ backgroundColor: '#1a1a1a', borderColor: '#EC0B8F', color: '#FFF4EC' }}
+        >
+          <div className="p-4">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-lg font-bold text-white">🔍 Auth Debug Panel</h3>
+              <button 
+                onClick={() => setShowDebug(false)}
+                className="text-gray-400 hover:text-white"
+              >✕</button>
+            </div>
+            
+            {/* Timestamp */}
+            <div className="text-xs text-gray-400 mb-3">
+              Last check: {debugInfo.timestamp || 'Loading...'}
+            </div>
+            
+            {/* Quick Status */}
+            <div className="mb-4 p-3 rounded" style={{ backgroundColor: '#2a2a2a' }}>
+              <div className="text-sm font-semibold mb-2 text-yellow-400">Quick Status</div>
+              <div className="space-y-1 text-xs">
+                <div className="flex justify-between">
+                  <span>Appwrite Session:</span>
+                  <span className={debugInfo.appwrite?.hasSession ? 'text-green-400' : 'text-red-400'}>
+                    {debugInfo.appwrite?.hasSession ? '✅ Active' : '❌ None'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>API User:</span>
+                  <span className={debugInfo.api?.hasUser ? 'text-green-400' : 'text-red-400'}>
+                    {debugInfo.api?.hasUser ? '✅ Found' : '❌ None'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Cookies:</span>
+                  <span className={debugInfo.cookies?.hasAppwriteSession ? 'text-green-400' : 'text-yellow-400'}>
+                    {debugInfo.cookies?.count || 0} total
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Appwrite Details */}
+            {debugInfo.appwrite && (
+              <div className="mb-4 p-3 rounded" style={{ backgroundColor: '#2a2a2a' }}>
+                <div className="text-sm font-semibold mb-2 text-blue-400">Appwrite Client</div>
+                <div className="space-y-1 text-xs font-mono">
+                  {debugInfo.appwrite.hasSession ? (
+                    <>
+                      <div>Session ID: {debugInfo.appwrite.sessionId}</div>
+                      <div>User ID: {debugInfo.appwrite.userId}</div>
+                      <div>Email: {debugInfo.appwrite.userEmail}</div>
+                      <div>Name: {debugInfo.appwrite.userName || 'Not set'}</div>
+                    </>
+                  ) : (
+                    <div className="text-gray-500">No active session</div>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            {/* API Status */}
+            {debugInfo.api && (
+              <div className="mb-4 p-3 rounded" style={{ backgroundColor: '#2a2a2a' }}>
+                <div className="text-sm font-semibold mb-2 text-green-400">API /auth/user</div>
+                <div className="space-y-1 text-xs font-mono">
+                  {debugInfo.api.hasUser ? (
+                    <>
+                      <div>User ID: {debugInfo.api.userId}</div>
+                      <div>Email: {debugInfo.api.userEmail}</div>
+                    </>
+                  ) : (
+                    <div className="text-gray-500">No user data from API</div>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            {/* Cookies */}
+            {debugInfo.cookies && (
+              <div className="mb-4 p-3 rounded" style={{ backgroundColor: '#2a2a2a' }}>
+                <div className="text-sm font-semibold mb-2 text-purple-400">Cookies ({debugInfo.cookies.count})</div>
+                <div className="space-y-1 text-xs font-mono">
+                  {debugInfo.cookies.relevantCookies?.length > 0 ? (
+                    debugInfo.cookies.relevantCookies.map((cookie: string, i: number) => (
+                      <div key={i} className="break-all text-gray-300">{cookie}</div>
+                    ))
+                  ) : (
+                    <div className="text-gray-500">No auth-related cookies found</div>
+                  )}
+                  {debugInfo.cookies.hasOAuthSuccess && (
+                    <div className="text-yellow-400 mt-2">⚠️ OAuth success cookie detected</div>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            {/* URL Info */}
+            {debugInfo.url && (
+              <div className="mb-4 p-3 rounded" style={{ backgroundColor: '#2a2a2a' }}>
+                <div className="text-sm font-semibold mb-2 text-orange-400">Current URL</div>
+                <div className="space-y-1 text-xs font-mono">
+                  <div className="break-all">Origin: {debugInfo.url.origin}</div>
+                  <div>Path: {debugInfo.url.pathname}</div>
+                  {debugInfo.url.search && <div>Params: {debugInfo.url.search}</div>}
+                  {debugInfo.url.hash && <div>Hash: {debugInfo.url.hash}</div>}
+                </div>
+              </div>
+            )}
+            
+            {/* Action Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => checkAuthStatus()}
+                className="flex-1 px-3 py-2 text-xs rounded bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                🔄 Refresh Status
+              </button>
+              <button
+                onClick={() => {
+                  document.cookie.split(";").forEach(c => {
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+                  });
+                  checkAuthStatus();
+                }}
+                className="flex-1 px-3 py-2 text-xs rounded bg-red-600 hover:bg-red-700 text-white"
+              >
+                🗑️ Clear Cookies
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Toggle Debug Button */}
+      {!showDebug && (
+        <button
+          onClick={() => setShowDebug(true)}
+          className="fixed bottom-4 right-4 p-3 rounded-full shadow-lg"
+          style={{ backgroundColor: '#EC0B8F', color: 'white' }}
+        >
+          🐛
+        </button>
+      )}
     </main>
   )
 }
@@ -225,6 +454,15 @@ function OAuthButtons({
 
   const handleOAuth = async (provider: 'google' | 'apple') => {
     setLoading(provider)
+    
+    // Add debug logging
+    console.log('🔐 Starting OAuth flow for:', provider)
+    console.log('📍 Current location:', window.location.href)
+    console.log('🔧 Environment:', {
+      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
+      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID,
+      origin: window.location.origin
+    })
 
     try {
       // Import Appwrite client-side SDK
@@ -238,12 +476,42 @@ function OAuthButtons({
       // Use static HTML handler to bypass Vercel protection
       if (providerName === 'google') {
         // Direct OAuth URL that we know works
-        const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT
-        const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
+        const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1'
+        const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app'
         const origin = window.location.origin
+        
+        // Try using the oauth-handler.html for callback
+        const successUrl = `${origin}/oauth-handler.html`
+        const failureUrl = `${origin}/login?error=oauth_failed`
 
-        const oauthUrl = `${endpoint}/account/sessions/oauth2/google?project=${projectId}&success=${encodeURIComponent(`${origin}/dashboard`)}&failure=${encodeURIComponent(`${origin}/login`)}`
-        window.location.href = oauthUrl
+        console.log('🚀 Attempting Google OAuth with:', {
+          endpoint,
+          projectId,
+          successUrl,
+          failureUrl
+        })
+
+        // Use createOAuth2Session which properly handles the OAuth flow
+        try {
+          console.log('📞 Calling account.createOAuth2Session...')
+          await account.createOAuth2Session(
+            OAuthProvider.Google,
+            successUrl,
+            failureUrl
+          )
+        } catch (sessionError: any) {
+          console.error('❌ OAuth session creation failed:', sessionError)
+          
+          // If createOAuth2Session fails, try the direct URL approach
+          if (sessionError?.message?.includes('Missing required parameter')) {
+            console.log('⚠️ Falling back to direct OAuth URL...')
+            const oauthUrl = `${endpoint}/account/sessions/oauth2/google?project=${projectId}&success=${encodeURIComponent(successUrl)}&failure=${encodeURIComponent(failureUrl)}`
+            console.log('🔗 Redirecting to:', oauthUrl)
+            window.location.href = oauthUrl
+          } else {
+            throw sessionError
+          }
+        }
       } else {
         // Fallback for other providers
         const origin = window.location.origin
@@ -260,10 +528,16 @@ function OAuthButtons({
           }
         }
       }
-    } catch (error) {
-      console.error('OAuth error:', error)
+    } catch (error: any) {
+      console.error('❌ OAuth error:', error)
+      console.error('Error details:', {
+        message: error?.message,
+        code: error?.code,
+        type: error?.type,
+        stack: error?.stack
+      })
       setLoading(null)
-      alert('OAuth login failed. Please try again.')
+      alert(`OAuth login failed: ${error?.message || 'Unknown error'}. Please check the console for details.`)
     }
   }
 
