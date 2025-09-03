@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft System Comparison & Timing Control</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            min-height: 100vh;
+            color: #1a202c;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .comparison-card {
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 2px solid #e5e7eb;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .mock-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #f59e0b;
+        }
+        
+        .real-card {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-color: #3b82f6;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .mock-card .card-header {
+            color: #92400e;
+        }
+        
+        .real-card .card-header {
+            color: #1e3a8a;
+        }
+        
+        .card-icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+        }
+        
+        .timing-visual {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem;
+            background: linear-gradient(to right, #fee2e2, #fef3c7, #dcfce7);
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .timing-phase {
+            text-align: center;
+            flex: 1;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        .timing-phase:not(:last-child):after {
+            content: '→';
+            position: absolute;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #6b7280;
+        }
+        
+        .phase-time {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .phase-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+        
+        .phase-desc {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+        
+        .feature-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        
+        .feature-table th {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .feature-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .feature-table tr:hover {
+            background: #f7fafc;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .status-error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .status-info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        
+        .status-warning {
+            background: #fef3c7;
+            color: #78350f;
+        }
+        
+        .diagram-container {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #8b5cf6;
+            margin-top: 1.5rem;
+        }
+        
+        .info-card h3 {
+            color: #6d28d9;
+            margin-bottom: 0.75rem;
+        }
+        
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-card li {
+            padding: 0.25rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .info-card li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #8b5cf6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚖️ Draft System Comparison & Timing</h1>
+            <p>Mock vs Real drafts comparison with timing control system</p>
+        </div>
+        
+        <div class="content-card">
+            <h2>Mock vs Real Draft Comparison</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-card mock-card">
+                    <div class="card-header">
+                        <span class="card-icon">🎮</span>
+                        Mock Draft (Practice)
+                    </div>
+                    <ul>
+                        <li>✅ Instant start</li>
+                        <li>✅ No scheduling required</li>
+                        <li>✅ AI fills empty slots</li>
+                        <li>✅ Reset anytime</li>
+                        <li>✅ Practice unlimited times</li>
+                        <li>❌ No roster commits</li>
+                        <li>❌ No transactions</li>
+                        <li>❌ No budget impact</li>
+                        <li>🎯 Purpose: Practice & preparation</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-card real-card">
+                    <div class="card-header">
+                        <span class="card-icon">🏆</span>
+                        Real Draft (League)
+                    </div>
+                    <ul>
+                        <li>📅 Scheduled date/time</li>
+                        <li>⏰ 60-min preview window</li>
+                        <li>👥 All managers required</li>
+                        <li>🔒 One-time event</li>
+                        <li>📊 Commissioner controls</li>
+                        <li>✅ Creates rosters</li>
+                        <li>✅ Records transactions</li>
+                        <li>✅ Updates budgets</li>
+                        <li>🎯 Purpose: Season team selection</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <table class="feature-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Mock Draft</th>
+                        <th>Real Draft</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Start Method</strong></td>
+                        <td><span class="status-badge status-warning">Instant</span></td>
+                        <td><span class="status-badge status-info">Scheduled</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Preview Window</strong></td>
+                        <td>None needed</td>
+                        <td>60 minutes before</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Team Fill</strong></td>
+                        <td>AI bots available</td>
+                        <td>Human managers only</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pick Timer</strong></td>
+                        <td>Adjustable on-fly</td>
+                        <td>Fixed per league</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pause/Resume</strong></td>
+                        <td>Any user</td>
+                        <td>Commissioner only</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reset Draft</strong></td>
+                        <td><span class="status-badge status-success">Yes</span></td>
+                        <td><span class="status-badge status-error">No</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Creates Rosters</strong></td>
+                        <td><span class="status-badge status-error">No</span></td>
+                        <td><span class="status-badge status-success">Yes</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Records Transactions</strong></td>
+                        <td><span class="status-badge status-error">No</span></td>
+                        <td><span class="status-badge status-success">Yes</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Updates Budget</strong></td>
+                        <td><span class="status-badge status-error">No</span></td>
+                        <td><span class="status-badge status-success">Yes (Auction)</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Export Results</strong></td>
+                        <td>CSV, PDF, Markdown</td>
+                        <td>Full board + transactions</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="content-card">
+            <h2>Timing Control System</h2>
+            
+            <div class="timing-visual">
+                <div class="timing-phase">
+                    <div class="phase-time">Before T-60min</div>
+                    <div class="phase-title">🔒 Room Closed</div>
+                    <div class="phase-desc">No access</div>
+                </div>
+                <div class="timing-phase">
+                    <div class="phase-time">T-60min to T-0</div>
+                    <div class="phase-title">👁️ Preview Mode</div>
+                    <div class="phase-desc">Read-only access</div>
+                </div>
+                <div class="timing-phase">
+                    <div class="phase-time">T-0 onwards</div>
+                    <div class="phase-title">✅ Draft Live</div>
+                    <div class="phase-desc">Full functionality</div>
+                </div>
+            </div>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant UI as Draft Room UI
+    participant API as API Routes
+    participant WS as WebSocket
+    participant DB as Database
+    participant Clock as Server Clock
+    
+    rect rgb(240, 248, 255)
+        note over U,Clock: ROOM STATE CALCULATION
+        U->>UI: Enter Draft Room
+        UI->>API: GET /api/drafts/:id/room-state
+        
+        API->>Clock: Get current time
+        API->>DB: Get draft settings
+        DB-->>API: draft_start_at, room_open_at
+        
+        API->>API: Calculate state
+        note over API: isOpen = now >= room_open_at<br/>isLive = now >= draft_start_at
+        
+        API-->>UI: Return room state
+    end
+    
+    alt Room Not Open (Before T-60min)
+        rect rgb(255, 240, 240)
+            note over U,UI: CLOSED STATE
+            UI-->>U: Show "Room opens in X minutes"
+        end
+    else Room Open, Not Live (T-60 to T-0)
+        rect rgb(255, 250, 240)
+            note over U,WS: PREVIEW STATE
+            UI-->>U: Show preview + countdown
+            UI->>WS: Connect WebSocket
+            
+            loop Every Second until draft start
+                Clock->>WS: Time update
+                WS-->>UI: Countdown tick
+                UI-->>U: Update timer display
+            end
+            
+            Clock->>WS: Draft start signal
+            WS-->>UI: Enable draft controls
+        end
+    else Draft Live (T-0 onwards)
+        rect rgb(240, 255, 240)
+            note over U,DB: LIVE DRAFT STATE
+            UI-->>U: Full draft interface
+            
+            loop For each pick
+                WS-->>UI: Pick event broadcast
+                UI-->>U: Update draft board
+            end
+        end
+    end
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3>🔐 Three-Phase Access Control</h3>
+                <ul>
+                    <li><strong>Phase 1 - Closed (Before T-60min):</strong> No access to draft room, redirect to league page</li>
+                    <li><strong>Phase 2 - Preview (T-60min to T-0):</strong> Read-only access, view positions, player rankings</li>
+                    <li><strong>Phase 3 - Live (T-0 onwards):</strong> Full draft functionality, pick timer active</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>⏱️ Pick Timer Management</h3>
+                <ul>
+                    <li>Configurable per league: 30-180 seconds</li>
+                    <li>Visual countdown with progress bar</li>
+                    <li>Audio warning at 10 seconds</li>
+                    <li>Auto-pick Best Player Available on expiry</li>
+                    <li>Commissioner can pause/resume</li>
+                    <li>Reduced time in later rounds (optional)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="content-card">
+            <h2>Data Persistence Comparison</h2>
+            
+            <table class="feature-table">
+                <thead>
+                    <tr>
+                        <th>Collection</th>
+                        <th>Mock Draft</th>
+                        <th>Real Draft</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="status-badge status-info">drafts</span></td>
+                        <td>READ/WRITE</td>
+                        <td>READ/WRITE</td>
+                        <td>is_mock flag differentiates</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-badge status-info">draft_states</span></td>
+                        <td>WRITE</td>
+                        <td>WRITE</td>
+                        <td>Current pick state</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-badge status-info">draft_events</span></td>
+                        <td>WRITE</td>
+                        <td>WRITE</td>
+                        <td>All pick events</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-badge status-success">roster_slots</span></td>
+                        <td>❌ NO</td>
+                        <td>✅ WRITE</td>
+                        <td>Only real drafts commit</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-badge status-success">transactions</span></td>
+                        <td>❌ NO</td>
+                        <td>✅ WRITE</td>
+                        <td>Only real drafts record</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-badge status-warning">fantasy_teams</span></td>
+                        <td>❌ NO</td>
+                        <td>✅ UPDATE</td>
+                        <td>Budget only for auction</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-badge status-info">activity_log</span></td>
+                        <td>WRITE</td>
+                        <td>WRITE</td>
+                        <td>Both log activity</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="info-card">
+                <h3>🎯 When to Use Each Draft Type</h3>
+                <ul>
+                    <li><strong>Mock Draft:</strong> Pre-season preparation, strategy testing, learning the interface, practicing with timer pressure</li>
+                    <li><strong>Real Draft:</strong> Official league draft for the season, binding team selection, permanent roster creation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#8b5cf6',
+                primaryTextColor: '#1a202c',
+                primaryBorderColor: '#6d28d9',
+                lineColor: '#8b5cf6',
+                secondaryColor: '#f3f4f6',
+                tertiaryColor: '#e5e7eb'
+            },
+            sequence: {
+                diagramMarginX: 50,
+                diagramMarginY: 30,
+                actorMargin: 50,
+                width: 150,
+                height: 65,
+                boxMargin: 10,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageMargin: 35
+            }
+        });
+    </script>
+</body>
+</html>

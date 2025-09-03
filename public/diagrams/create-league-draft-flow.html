@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create League Flow with Draft Scheduling</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            min-height: 100vh;
+            color: #1a202c;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            animation: slideDown 0.6s ease-out;
+        }
+        
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: none;
+            border-radius: 0.5rem 0.5rem 0 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            color: white;
+        }
+        
+        .content-area {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .diagram-container {
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #0ea5e9;
+            transition: transform 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .info-card h3 {
+            color: #0284c7;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-card li {
+            padding: 0.25rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .info-card li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #0ea5e9;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        
+        .data-table th {
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .data-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .data-table tr:hover {
+            background: #f7fafc;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .code-block .comment {
+            color: #94a3b8;
+        }
+        
+        .code-block .keyword {
+            color: #818cf8;
+        }
+        
+        .code-block .string {
+            color: #86efac;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .status-error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .status-info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        
+        .status-warning {
+            background: #fef3c7;
+            color: #78350f;
+        }
+        
+        .draft-config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: #f0f9ff;
+            border-radius: 0.5rem;
+            border: 2px dashed #0ea5e9;
+        }
+        
+        .config-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .config-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+        
+        .config-value {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .timeline-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            left: 2rem;
+            top: 3.5rem;
+            width: 2px;
+            height: 2rem;
+            background: linear-gradient(to bottom, #0ea5e9, transparent);
+        }
+        
+        .timeline-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-desc {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏈 Create League Flow with Draft Scheduling</h1>
+            <p>Complete flow for creating a fantasy football league with draft scheduling and configuration</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('flow')">Main Flow</button>
+            <button class="tab-button" onclick="showTab('sequence')">Sequence Diagram</button>
+            <button class="tab-button" onclick="showTab('draft')">Draft Configuration</button>
+            <button class="tab-button" onclick="showTab('data')">Data Operations</button>
+            <button class="tab-button" onclick="showTab('validation')">Validation & Errors</button>
+            <button class="tab-button" onclick="showTab('timing')">Timing Gates</button>
+        </div>
+        
+        <div class="content-area">
+            <!-- Main Flow Tab -->
+            <div id="flow" class="tab-content active">
+                <h2 style="margin-bottom: 1.5rem;">League Creation Flowchart</h2>
+                <div class="diagram-container">
+                    <div class="mermaid">
+flowchart TD
+    Start([User Clicks Create League]) --> Form[League Creation Form]
+    Form --> Validate{Validate Input}
+    Validate -->|Invalid| ShowError[Show Validation Errors]
+    ShowError --> Form
+    Validate -->|Valid| AuthCheck{Check Auth}
+    AuthCheck -->|Not Authenticated| LoginRedirect[Redirect to Login]
+    AuthCheck -->|Authenticated| APICall[POST /api/leagues/create]
+    
+    APICall --> Normalize[Normalize & Validate Data]
+    Normalize --> CreateLeague[Create League in DB]
+    
+    CreateLeague --> SetSchedule[Set Draft Schedule Fields]
+    SetSchedule --> CalcOpenTime[Calculate draft_room_open_at]
+    CalcOpenTime --> CreateMembership[Create Owner Membership]
+    
+    CreateMembership --> LogActivity[Log to activity_log]
+    LogActivity --> Response[Return League Data]
+    Response --> Redirect[Redirect to League Dashboard]
+    
+    subgraph "Draft Scheduling Fields"
+        SetSchedule --> DS1[draft_type: snake/auction]
+        SetSchedule --> DS2[draft_start_at: ISO datetime]
+        SetSchedule --> DS3[draft_room_open_offset: 60min]
+        SetSchedule --> DS4[pick_time_seconds: per-pick]
+        SetSchedule --> DS5[draft_order_json: team order]
+        SetSchedule --> DS6[scoring_rules: JSON config]
+    end
+    
+    style Start fill:#e0f2fe
+    style Redirect fill:#dcfce7
+    style LoginRedirect fill:#fee2e2
+    style ShowError fill:#fef3c7
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🎯 API Endpoints</h3>
+                        <ul>
+                            <li>/api/leagues/create - Main creation endpoint</li>
+                            <li>Appwrite Account endpoint - Session validation</li>
+                            <li>In-route validation (no separate validate endpoint)</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>⚙️ League Configuration</h3>
+                        <ul>
+                            <li>Public or Private leagues</li>
+                            <li>4-20 teams supported</li>
+                            <li>Snake or Auction draft types</li>
+                            <li>Conference mode optional (SEC, ACC, etc.)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sequence Diagram Tab -->
+            <div id="sequence" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Detailed Sequence Flow</h2>
+                <div class="diagram-container">
+                    <div class="mermaid">
+sequenceDiagram
+    participant U as User/Browser
+    participant C as CreateLeagueForm
+    participant A as API Route
+    participant V as Validator
+    participant D as DAL
+    participant DB as Appwrite DB
+    participant AL as Activity Logger
+    
+    U->>C: Fill league form
+    C->>C: Client validation
+    C->>A: POST /api/leagues/create
+    
+    A->>V: Validate session
+    V-->>A: User authenticated
+    
+    A->>V: Validate league data
+    Note over V: Check required fields<br/>Validate draft_start_at<br/>Validate scoring_rules JSON
+    V-->>A: Data valid
+    
+    A->>A: Normalize fields
+    Note over A: Map UI fields to DB schema<br/>Calculate draft_room_open_at<br/>UTC conversion
+    
+    A->>D: createLeague(data)
+    D->>DB: Create league document
+    Note over DB: Store with indexes:<br/>(season, draft_start_at)
+    DB-->>D: League created
+    
+    D->>DB: Create owner membership
+    DB-->>D: Membership created
+    
+    D->>AL: Log creation event
+    AL->>DB: Write to activity_log
+    
+    D-->>A: Return league + membership
+    A-->>C: Success response
+    C->>U: Redirect to /league/[id]
+                    </div>
+                </div>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon">1</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Form Submission</div>
+                            <div class="timeline-desc">User fills out league configuration and submits</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">2</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Authentication Check</div>
+                            <div class="timeline-desc">Verify user session is valid</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">3</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Data Normalization</div>
+                            <div class="timeline-desc">Convert UI fields to database schema, calculate timing</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">4</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">League Creation</div>
+                            <div class="timeline-desc">Create league and commissioner membership</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">5</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Dashboard Redirect</div>
+                            <div class="timeline-desc">Navigate to new league dashboard</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Draft Configuration Tab -->
+            <div id="draft" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Draft Scheduling Configuration</h2>
+                
+                <div class="draft-config-grid">
+                    <div class="config-item">
+                        <span class="config-label">Draft Type</span>
+                        <span class="config-value">Snake or Auction</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Draft Start Time</span>
+                        <span class="config-value">ISO 8601 DateTime</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Room Opens Before</span>
+                        <span class="config-value">60 minutes default</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Pick Timer</span>
+                        <span class="config-value">30-180 seconds</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Draft Order</span>
+                        <span class="config-value">JSON array (optional)</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Scoring Rules</span>
+                        <span class="config-value">JSON configuration</span>
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🕐 Status Gates Timeline</h3>
+                        <ul>
+                            <li><span class="status-badge status-error">Room Closed</span> Before draft_room_open_at</li>
+                            <li><span class="status-badge status-warning">Room Open</span> Read-only preview mode</li>
+                            <li><span class="status-badge status-success">Live Draft</span> At draft_start_at time</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>📅 Server-Side Calculations</h3>
+                        <ul>
+                            <li>UTC conversion for all timestamps</li>
+                            <li>draft_room_open_at = start - offset</li>
+                            <li>Timezone stored for display</li>
+                            <li>Automatic draft order generation if not provided</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+<span class="comment">// Calculate draft room open time (server-side in UTC)</span>
+<span class="keyword">const</span> draft_room_open_at = <span class="keyword">new</span> Date(
+  <span class="keyword">new</span> Date(draft_start_at).getTime() - 
+  (draft_room_open_offset_minutes * 60 * 1000)
+).toISOString()
+
+<span class="comment">// Store timezone if available for display purposes</span>
+<span class="keyword">const</span> timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+<span class="comment">// Generate draft order if not provided</span>
+<span class="keyword">if</span> (!draft_order_json) {
+  draft_order_json = generateRandomDraftOrder(max_teams)
+}
+                </div>
+            </div>
+            
+            <!-- Data Operations Tab -->
+            <div id="data" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Database Operations</h2>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Collection</th>
+                            <th>Operation</th>
+                            <th>Attributes Set</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="status-badge status-info">leagues</span></td>
+                            <td>WRITE</td>
+                            <td>name, draftType, pickTimeSeconds, scoringRules, draftDate, commissioner_auth_user_id, isPublic, season, selectedConference</td>
+                            <td>Primary league creation with scheduling</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-success">league_memberships</span></td>
+                            <td>WRITE</td>
+                            <td>league_id, auth_user_id, role='COMMISSIONER', status='ACTIVE', joined_at</td>
+                            <td>Auto-create owner membership</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-warning">activity_log</span></td>
+                            <td>WRITE</td>
+                            <td>actor_client_id, auth_user_id, action='league.create', object_type='league', object_id, payload_json, ts</td>
+                            <td>Audit trail for league creation</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3 style="margin-top: 2rem;">📊 Index Recommendations</h3>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>Performance Indexes</h3>
+                        <ul>
+                            <li>(season, draft_start_at) - Upcoming drafts query</li>
+                            <li>(commissioner_id, created_at) - User's leagues list</li>
+                            <li>(type, status, draft_start_at) - Public league discovery</li>
+                            <li>(invite_code) - Unique index for invite links</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Validation & Errors Tab -->
+            <div id="validation" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Validation Rules & Error Handling</h2>
+                
+                <div class="code-block">
+<span class="keyword">const</span> createLeagueSchema = z.object({
+  <span class="comment">// Basic league info</span>
+  name: z.string().min(3).max(50),
+  type: z.enum([<span class="string">'public'</span>, <span class="string">'private'</span>]),
+  max_teams: z.number().min(4).max(20),
+  scoring_settings: z.string(),
+  
+  <span class="comment">// Draft scheduling (required for real leagues)</span>
+  draft_type: z.enum([<span class="string">'snake'</span>, <span class="string">'auction'</span>]),
+  draft_start_at: z.string().datetime(),
+  draft_room_open_offset_minutes: z.number().default(60),
+  pick_time_seconds: z.number().min(30).max(180),
+  draft_order_json: z.array(z.string()).optional(),
+  scoring_rules: z.string(), <span class="comment">// JSON string with scoring configuration</span>
+  
+  <span class="comment">// Optional fields</span>
+  password: z.string().optional(),
+  conference: z.enum([<span class="string">'SEC'</span>, <span class="string">'ACC'</span>, <span class="string">'Big 12'</span>, <span class="string">'Big Ten'</span>]).optional()
+})
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>⚠️ Common Error States</h3>
+                        <ul>
+                            <li><span class="status-badge status-error">Validation Error</span> Invalid form data</li>
+                            <li><span class="status-badge status-error">Auth Error</span> Session expired</li>
+                            <li><span class="status-badge status-error">Duplicate Name</span> League exists</li>
+                            <li><span class="status-badge status-error">Invalid Time</span> Draft in past</li>
+                            <li><span class="status-badge status-error">Database Error</span> Write failure</li>
+                            <li><span class="status-badge status-error">Rate Limit</span> Too many creates</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>✅ Validation Checks</h3>
+                        <ul>
+                            <li>League name length (3-50 chars)</li>
+                            <li>Team count range (4-20 teams)</li>
+                            <li>Draft time must be future</li>
+                            <li>Pick timer range (30-180 seconds)</li>
+                            <li>Valid JSON for scoring rules</li>
+                            <li>Conference selection if mode enabled</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Timing Gates Tab -->
+            <div id="timing" class="tab-content">
+                <h2 style="margin-bottom: 1.5rem;">Draft Room Timing Gates</h2>
+                
+                <div class="diagram-container">
+                    <div class="mermaid">
+graph LR
+    subgraph "Time Before Draft"
+        T1[T-61min] --> RC[Room Closed]
+        T2[T-60min] --> RO[Room Opens]
+        T3[T-59min to T-1min] --> PRE[Preview Mode]
+        T4[T=0] --> LIVE[Draft Goes Live]
+    end
+    
+    RC --> Lock[🔒 No Access]
+    RO --> Read[👁️ Read-Only]
+    PRE --> Wait[⏳ Countdown]
+    LIVE --> Pick[✅ Can Pick]
+    
+    style RC fill:#fee2e2
+    style RO fill:#fef3c7
+    style PRE fill:#dbeafe
+    style LIVE fill:#d1fae5
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🔒 Room Closed (Before T-60min)</h3>
+                        <ul>
+                            <li>No access to draft room</li>
+                            <li>Redirect to league dashboard</li>
+                            <li>Show "Room opens at" message</li>
+                            <li>Commissioner can adjust settings</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>👁️ Preview Mode (T-60min to T-0)</h3>
+                        <ul>
+                            <li>Read-only access to draft room</li>
+                            <li>View draft position</li>
+                            <li>See countdown timer</li>
+                            <li>Review player rankings</li>
+                            <li>No pick actions enabled</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>✅ Live Draft (T=0 onwards)</h3>
+                        <ul>
+                            <li>Full draft functionality enabled</li>
+                            <li>Pick timer starts for on-clock team</li>
+                            <li>Real-time updates via WebSocket</li>
+                            <li>Auto-pick on timer expiration</li>
+                            <li>Commissioner pause/resume controls</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+<span class="comment">// Room state calculation logic</span>
+<span class="keyword">interface</span> RoomStateResponse {
+  now: string <span class="comment">// Server time ISO</span>
+  draft_start_at: string
+  draft_room_open_at: string
+  isOpen: boolean <span class="comment">// Can enter room</span>
+  isLive: boolean <span class="comment">// Can make picks</span>
+  isComplete: boolean
+  server_tz: string
+  timeToOpen?: number <span class="comment">// Milliseconds</span>
+  timeToStart?: number <span class="comment">// Milliseconds</span>
+}
+
+<span class="keyword">async function</span> getRoomState(draftId: string) {
+  <span class="keyword">const</span> draft = <span class="keyword">await</span> getDraft(draftId)
+  <span class="keyword">const</span> now = <span class="keyword">new</span> Date()
+  
+  <span class="keyword">return</span> {
+    now: now.toISOString(),
+    draft_start_at: draft.draft_start_at,
+    draft_room_open_at: draft.draft_room_open_at,
+    isOpen: now >= <span class="keyword">new</span> Date(draft.draft_room_open_at),
+    isLive: now >= <span class="keyword">new</span> Date(draft.draft_start_at),
+    isComplete: draft.status === <span class="string">'completed'</span>,
+    server_tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    timeToOpen: Math.max(0, <span class="keyword">new</span> Date(draft.draft_room_open_at) - now),
+    timeToStart: Math.max(0, <span class="keyword">new</span> Date(draft.draft_start_at) - now)
+  }
+}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#0ea5e9',
+                primaryTextColor: '#1a202c',
+                primaryBorderColor: '#0284c7',
+                lineColor: '#06b6d4',
+                secondaryColor: '#f0f9ff',
+                tertiaryColor: '#dbeafe'
+            }
+        });
+        
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
