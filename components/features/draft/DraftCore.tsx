@@ -1,44 +1,44 @@
-'use client';
+'use client'
 
-import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '@lib/hooks/useAuth';
-import { DraftPlayer } from '@lib/types/projections';
-import { FiSearch, FiFilter, FiTrendingUp, FiStar, FiWifi } from 'react-icons/fi';
+import { useAuth } from '@lib/hooks/useAuth'
+import { DraftPlayer } from '@lib/types/projections'
+import { useCallback, useEffect, useState } from 'react'
+import { FiFilter, FiSearch, FiStar } from 'react-icons/fi'
 
-export type DraftType = 'snake' | 'mock';
-export type Position = 'ALL' | 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF';
-export type Conference = 'ALL' | 'SEC' | 'Big Ten' | 'Big 12' | 'ACC';
-export type TeamFilter = 'ALL' | string;
+export type DraftType = 'snake' | 'mock'
+export type Position = 'ALL' | 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF'
+export type Conference = 'ALL' | 'SEC' | 'Big Ten' | 'Big 12' | 'ACC'
+export type TeamFilter = 'ALL' | string
 
 export interface DraftCoreState {
-  players: DraftPlayer[];
-  searchQuery: string;
-  positionFilter: Position;
-  conferenceFilter: Conference;
-  teamFilter: TeamFilter;
-  selectedPlayer: DraftPlayer | null;
-  activeTab: 'available' | 'myteam' | 'board';
-  loading: boolean;
-  error: string | null;
+  players: DraftPlayer[]
+  searchQuery: string
+  positionFilter: Position
+  conferenceFilter: Conference
+  teamFilter: TeamFilter
+  selectedPlayer: DraftPlayer | null
+  activeTab: 'available' | 'myteam' | 'board'
+  loading: boolean
+  error: string | null
 }
 
 export interface DraftCoreProps {
-  leagueId: string;
-  draftType: DraftType;
-  onPlayerSelect?: (player: DraftPlayer) => void;
-  onPlayerDraft?: (player: DraftPlayer) => void;
-  myPicks?: DraftPlayer[];
-  draftedPlayers?: DraftPlayer[];
-  children?: React.ReactNode;
-  canDraft?: boolean;
-  timeRemainingSec?: number;
-  currentPickNumber?: number;
-  currentTeamLabel?: string;
-  showBoardTab?: boolean; // allow hiding to avoid duplicate toggles
+  leagueId: string
+  draftType: DraftType
+  onPlayerSelect?: (player: DraftPlayer) => void
+  onPlayerDraft?: (player: DraftPlayer) => void
+  myPicks?: DraftPlayer[]
+  draftedPlayers?: DraftPlayer[]
+  children?: React.ReactNode
+  canDraft?: boolean
+  timeRemainingSec?: number
+  currentPickNumber?: number
+  currentTeamLabel?: string
+  showBoardTab?: boolean // allow hiding to avoid duplicate toggles
 }
 
-const POSITIONS: Position[] = ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
-const CONFERENCES: Conference[] = ['ALL', 'SEC', 'Big Ten', 'Big 12', 'ACC'];
+const POSITIONS: Position[] = ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DEF']
+const CONFERENCES: Conference[] = ['ALL', 'SEC', 'Big Ten', 'Big 12', 'ACC']
 
 export default function DraftCore({
   leagueId,
@@ -51,10 +51,11 @@ export default function DraftCore({
   canDraft = false,
   timeRemainingSec,
   currentPickNumber,
-  currentTeamLabel
+  currentTeamLabel,
+  showBoardTab = true,
 }: DraftCoreProps) {
-  const { user } = useAuth();
-  
+  const { user } = useAuth()
+
   const [state, setState] = useState<DraftCoreState>({
     players: [],
     searchQuery: '',
@@ -64,86 +65,98 @@ export default function DraftCore({
     selectedPlayer: null,
     activeTab: 'available',
     loading: true,
-    error: null
-  });
+    error: null,
+  })
 
   // Load players from database
   const loadPlayers = useCallback(async () => {
     try {
-      setState(prev => ({ ...prev, loading: true, error: null }));
-      const params = new URLSearchParams({ leagueId, draftType });
-      if (state.positionFilter && state.positionFilter !== 'ALL') params.set('position', state.positionFilter);
-      if (state.conferenceFilter && state.conferenceFilter !== 'ALL') params.set('conference', state.conferenceFilter);
-      if (state.teamFilter && state.teamFilter !== 'ALL') params.set('team', state.teamFilter);
-      params.set('orderBy', 'projection');
-      const response = await fetch(`/api/draft/players?${params.toString()}`);
+      setState(prev => ({ ...prev, loading: true, error: null }))
+      const params = new URLSearchParams({ leagueId, draftType })
+      if (state.positionFilter && state.positionFilter !== 'ALL')
+        params.set('position', state.positionFilter)
+      if (state.conferenceFilter && state.conferenceFilter !== 'ALL')
+        params.set('conference', state.conferenceFilter)
+      if (state.teamFilter && state.teamFilter !== 'ALL') params.set('team', state.teamFilter)
+      params.set('orderBy', 'projection')
+      const response = await fetch(`/api/draft/players?${params.toString()}`)
       if (!response.ok) {
-        throw new Error(`Failed to load players: ${response.status}`);
+        throw new Error(`Failed to load players: ${response.status}`)
       }
-      const data = await response.json();
-      setState(prev => ({ 
-        ...prev, 
-        players: data.players || [], 
-        loading: false 
-      }));
+      const data = await response.json()
+      setState(prev => ({
+        ...prev,
+        players: data.players || [],
+        loading: false,
+      }))
     } catch (error) {
-      console.error('Error loading players:', error);
-      setState(prev => ({ 
-        ...prev, 
-        loading: false, 
-        error: error instanceof Error ? error.message : 'Failed to load players' 
-      }));
+      console.error('Error loading players:', error)
+      setState(prev => ({
+        ...prev,
+        loading: false,
+        error: error instanceof Error ? error.message : 'Failed to load players',
+      }))
     }
-  }, [leagueId, draftType, state.positionFilter, state.conferenceFilter, state.teamFilter]);
+  }, [leagueId, draftType, state.positionFilter, state.conferenceFilter, state.teamFilter])
 
   // Initialize players on component mount
   useEffect(() => {
     if (leagueId) {
-      loadPlayers();
+      loadPlayers()
     }
-  }, [leagueId, loadPlayers]);
+  }, [leagueId, loadPlayers])
 
   // Filter available players (not drafted)
-  const availablePlayers = state.players.filter(player => 
-    !draftedPlayers.some(drafted => (drafted as any).id === (player as any).id || (drafted as any).playerId === (player as any).playerId)
-  );
+  const availablePlayers = state.players.filter(
+    player =>
+      !draftedPlayers.some(
+        drafted =>
+          (drafted as any).id === (player as any).id ||
+          (drafted as any).playerId === (player as any).playerId
+      )
+  )
 
   // Derive unique teams for team filter
-  const uniqueTeams = Array.from(new Set(state.players.map(p => p.team).filter(Boolean))).sort((a, b) => (a || '').localeCompare(b || ''));
+  const uniqueTeams = Array.from(new Set(state.players.map(p => p.team).filter(Boolean))).sort(
+    (a, b) => (a || '').localeCompare(b || '')
+  )
 
   // Apply search and position filters
   const filteredPlayers = availablePlayers.filter(player => {
-    const matchesSearch = state.searchQuery === '' || 
-      player.name.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
-      player.team?.toLowerCase().includes(state.searchQuery.toLowerCase());
-      
-    const matchesPosition = state.positionFilter === 'ALL' || 
-      player.position === state.positionFilter;
-      
-    const matchesConference = state.conferenceFilter === 'ALL' || 
-      player.conference === state.conferenceFilter;
+    const matchesSearch =
+      state.searchQuery === '' ||
+      (player.name && player.name.toLowerCase().includes(state.searchQuery.toLowerCase())) ||
+      player.team?.toLowerCase().includes(state.searchQuery.toLowerCase())
 
-    const matchesTeam = state.teamFilter === 'ALL' || player.team === state.teamFilter;
-      
-    return matchesSearch && matchesPosition && matchesConference && matchesTeam;
-  });
+    const matchesPosition =
+      state.positionFilter === 'ALL' || player.position === state.positionFilter
+
+    const matchesConference =
+      state.conferenceFilter === 'ALL' || player.conference === state.conferenceFilter
+
+    const matchesTeam = state.teamFilter === 'ALL' || player.team === state.teamFilter
+
+    return matchesSearch && matchesPosition && matchesConference && matchesTeam
+  })
 
   // Sort players by projected points (descending)
-  const sortedPlayers = filteredPlayers.sort((a, b) => 
-    ((b as any).projectedPoints ?? (b as any).projections?.fantasyPoints ?? 0) - ((a as any).projectedPoints ?? (a as any).projections?.fantasyPoints ?? 0)
-  );
+  const sortedPlayers = filteredPlayers.sort(
+    (a, b) =>
+      ((b as any).projectedPoints ?? (b as any).projections?.fantasyPoints ?? 0) -
+      ((a as any).projectedPoints ?? (a as any).projections?.fantasyPoints ?? 0)
+  )
 
   // Handle player selection
   const handlePlayerSelect = (player: DraftPlayer) => {
-    setState(prev => ({ ...prev, selectedPlayer: player }));
-    onPlayerSelect?.(player);
-  };
+    setState(prev => ({ ...prev, selectedPlayer: player }))
+    onPlayerSelect?.(player)
+  }
 
   // Handle player draft
   const handlePlayerDraft = (player: DraftPlayer) => {
-    onPlayerDraft?.(player);
-    setState(prev => ({ ...prev, selectedPlayer: null }));
-  };
+    onPlayerDraft?.(player)
+    setState(prev => ({ ...prev, selectedPlayer: null }))
+  }
 
   // Reset filters
   const resetFilters = () => {
@@ -152,22 +165,22 @@ export default function DraftCore({
       searchQuery: '',
       positionFilter: 'ALL',
       conferenceFilter: 'ALL',
-      teamFilter: 'ALL'
-    }));
-  };
+      teamFilter: 'ALL',
+    }))
+  }
 
   // Get position badge color
   const getPositionColor = (position: string) => {
     const colors: Record<string, string> = {
       QB: 'bg-red-100 text-red-800',
-      RB: 'bg-green-100 text-green-800', 
+      RB: 'bg-green-100 text-green-800',
       WR: 'bg-blue-100 text-blue-800',
       TE: 'bg-yellow-100 text-yellow-800',
       K: 'bg-purple-100 text-purple-800',
-      DEF: 'bg-gray-100 text-gray-800'
-    };
-    return colors[position] || 'bg-gray-100 text-gray-800';
-  };
+      DEF: 'bg-gray-100 text-gray-800',
+    }
+    return colors[position] || 'bg-gray-100 text-gray-800'
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -184,12 +197,15 @@ export default function DraftCore({
               )}
             </div>
             {timeRemainingSec !== undefined && (
-              <div className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-mono ${timeRemainingSec <= 10 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-800'}`}>
+              <div
+                className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-mono ${timeRemainingSec <= 10 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-800'}`}
+              >
                 {canDraft && (
                   <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse" />
                 )}
                 <span>
-                  {Math.floor((timeRemainingSec || 0) / 60)}:{String((timeRemainingSec || 0) % 60).padStart(2, '0')}
+                  {Math.floor((timeRemainingSec || 0) / 60)}:
+                  {String((timeRemainingSec || 0) % 60).padStart(2, '0')}
                 </span>
               </div>
             )}
@@ -200,17 +216,24 @@ export default function DraftCore({
       {Array.isArray(draftedPlayers) && draftedPlayers.length > 0 && (
         <div className="px-6 py-2 border-b border-gray-200 bg-white/70">
           <div className="overflow-x-auto whitespace-nowrap text-xs text-gray-600">
-            {draftedPlayers
-              .slice(-12)
-              .map((p, idx) => (
-                <span key={(p as any).id ?? (p as any).playerId ?? idx} className="inline-flex items-center gap-2 mr-4">
-                  <span className="text-gray-400">#{(p as any).draftPosition ?? (p as any).overall ?? ''}</span>
-                  <span className="font-medium text-gray-800">{(p as any).playerName ?? (p as any).name ?? 'Player'}</span>
-                  {p.position && (
-                    <span className="px-2 py-0.5 rounded bg-gray-100 text-gray-700">{p.position}</span>
-                  )}
+            {draftedPlayers.slice(-12).map((p, idx) => (
+              <span
+                key={(p as any).id ?? (p as any).playerId ?? idx}
+                className="inline-flex items-center gap-2 mr-4"
+              >
+                <span className="text-gray-400">
+                  #{(p as any).draftPosition ?? (p as any).overall ?? ''}
                 </span>
-              ))}
+                <span className="font-medium text-gray-800">
+                  {(p as any).playerName ?? (p as any).name ?? 'Player'}
+                </span>
+                {p.position && (
+                  <span className="px-2 py-0.5 rounded bg-gray-100 text-gray-700">
+                    {p.position}
+                  </span>
+                )}
+              </span>
+            ))}
           </div>
         </div>
       )}
@@ -224,7 +247,7 @@ export default function DraftCore({
               type="text"
               placeholder="Search players or teams..."
               value={state.searchQuery}
-              onChange={(e) => setState(prev => ({ ...prev, searchQuery: e.target.value }))}
+              onChange={e => setState(prev => ({ ...prev, searchQuery: e.target.value }))}
               className="w-full pl-10 pr-4 py-2 border rounded-lg bg-white text-gray-800 placeholder-gray-500 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
             />
           </div>
@@ -234,11 +257,15 @@ export default function DraftCore({
             <FiFilter className="text-gray-400 w-4 h-4" />
             <select
               value={state.positionFilter}
-              onChange={(e) => setState(prev => ({ ...prev, positionFilter: e.target.value as Position }))}
+              onChange={e =>
+                setState(prev => ({ ...prev, positionFilter: e.target.value as Position }))
+              }
               className="border rounded-lg px-3 py-2 bg-white text-gray-800 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
             >
               {POSITIONS.map(pos => (
-                <option key={pos} value={pos}>{pos}</option>
+                <option key={pos} value={pos}>
+                  {pos}
+                </option>
               ))}
             </select>
           </div>
@@ -247,11 +274,15 @@ export default function DraftCore({
           <div className="flex items-center gap-2">
             <select
               value={state.conferenceFilter}
-              onChange={(e) => setState(prev => ({ ...prev, conferenceFilter: e.target.value as Conference }))}
+              onChange={e =>
+                setState(prev => ({ ...prev, conferenceFilter: e.target.value as Conference }))
+              }
               className="border rounded-lg px-3 py-2 bg-white text-gray-800 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
             >
               {CONFERENCES.map(conf => (
-                <option key={conf} value={conf}>{conf}</option>
+                <option key={conf} value={conf}>
+                  {conf}
+                </option>
               ))}
             </select>
           </div>
@@ -260,12 +291,16 @@ export default function DraftCore({
           <div className="flex items-center gap-2">
             <select
               value={state.teamFilter}
-              onChange={(e) => setState(prev => ({ ...prev, teamFilter: (e.target.value || 'ALL') as TeamFilter }))}
+              onChange={e =>
+                setState(prev => ({ ...prev, teamFilter: (e.target.value || 'ALL') as TeamFilter }))
+              }
               className="border rounded-lg px-3 py-2 bg-white text-gray-800 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
             >
               <option value="ALL">ALL Teams</option>
               {uniqueTeams.map(team => (
-                <option key={team} value={team || ''}>{team}</option>
+                <option key={team} value={team || ''}>
+                  {team}
+                </option>
               ))}
             </select>
           </div>
@@ -279,9 +314,7 @@ export default function DraftCore({
           </button>
 
           {/* Results Count */}
-          <div className="text-sm text-gray-500">
-            {sortedPlayers.length} players available
-          </div>
+          <div className="text-sm text-gray-500">{sortedPlayers.length} players available</div>
         </div>
       </div>
       {/* Tab Navigation */}
@@ -354,9 +387,15 @@ export default function DraftCore({
                     {(myPicks || []).length === 0 ? (
                       <div className="text-xs text-gray-500">No players drafted yet</div>
                     ) : (
-                      (myPicks || []).map((p) => (
-                        <div key={p.id ?? p.$id} className="flex items-center justify-between text-sm py-1 border-b last:border-b-0" style={{ borderColor: '#e5e7eb' }}>
-                          <span className="font-medium text-gray-800">{(p as any).playerName ?? p.name}</span>
+                      (myPicks || []).map(p => (
+                        <div
+                          key={p.id ?? p.$id}
+                          className="flex items-center justify-between text-sm py-1 border-b last:border-b-0"
+                          style={{ borderColor: '#e5e7eb' }}
+                        >
+                          <span className="font-medium text-gray-800">
+                            {(p as any).playerName ?? p.name}
+                          </span>
                           <span className="text-gray-500">{p.position}</span>
                         </div>
                       ))
@@ -382,8 +421,9 @@ export default function DraftCore({
                     </thead>
                     <tbody>
                       {sortedPlayers.map((player, idx) => {
-                        const projected = (player.projectedPoints || (player as any).projections?.fantasyPoints || 0);
-                        const adp = (player as any).adp ?? (player as any).rankings?.adp ?? 9999;
+                        const projected =
+                          player.projectedPoints || (player as any).projections?.fantasyPoints || 0
+                        const adp = (player as any).adp ?? (player as any).rankings?.adp ?? 9999
                         return (
                           <tr
                             key={player.id}
@@ -396,17 +436,27 @@ export default function DraftCore({
                               <div className="font-semibold text-gray-900">{player.name}</div>
                             </td>
                             <td className="py-2 px-2 text-center">
-                              <span className={`inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded ${getPositionColor(player.position)}`}>{player.position}</span>
+                              <span
+                                className={`inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded ${getPositionColor(player.position)}`}
+                              >
+                                {player.position}
+                              </span>
                             </td>
-                            <td className="py-2 px-3 text-gray-600">{player.team || (player as any).school || '-'}</td>
-                            <td className="py-2 px-2 text-center font-semibold text-gray-900">{projected ? projected.toFixed(1) : '0.0'}</td>
-                            <td className="py-2 px-2 text-center text-gray-600">{Number.isFinite(adp) ? Number(adp).toFixed(1) : '-'}</td>
+                            <td className="py-2 px-3 text-gray-600">
+                              {player.team || (player as any).school || '-'}
+                            </td>
+                            <td className="py-2 px-2 text-center font-semibold text-gray-900">
+                              {projected ? projected.toFixed(1) : '0.0'}
+                            </td>
+                            <td className="py-2 px-2 text-center text-gray-600">
+                              {Number.isFinite(adp) ? Number(adp).toFixed(1) : '-'}
+                            </td>
                             <td className="py-2 px-3 text-center">
                               {canDraft && (
                                 <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handlePlayerDraft(player);
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    handlePlayerDraft(player)
                                   }}
                                   className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
                                 >
@@ -415,7 +465,7 @@ export default function DraftCore({
                               )}
                             </td>
                           </tr>
-                        );
+                        )
                       })}
                     </tbody>
                   </table>
@@ -429,9 +479,17 @@ export default function DraftCore({
                     <div className="text-sm font-semibold mb-2 text-gray-800">Teams</div>
                     <div className="space-y-1 max-h-64 overflow-auto text-sm">
                       {draftedPlayers.map((p, i) => (
-                        <div key={(p as any).id ?? i} className="flex items-center justify-between py-1 border-b last:border-b-0" style={{ borderColor: '#e5e7eb' }}>
-                          <span className="truncate text-gray-800">{(p as any).playerName ?? (p as any).name ?? 'Player'}</span>
-                          <span className="text-gray-500">T{(p as any).draftedBy || (p as any).draftPosition || ''}</span>
+                        <div
+                          key={(p as any).id ?? i}
+                          className="flex items-center justify-between py-1 border-b last:border-b-0"
+                          style={{ borderColor: '#e5e7eb' }}
+                        >
+                          <span className="truncate text-gray-800">
+                            {(p as any).playerName ?? (p as any).name ?? 'Player'}
+                          </span>
+                          <span className="text-gray-500">
+                            T{(p as any).draftedBy || (p as any).draftPosition || ''}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -443,25 +501,28 @@ export default function DraftCore({
         ) : state.activeTab === 'myteam' ? (
           <div className="p-6">
             <div className="grid gap-4">
-              {myPicks.map((player) => (
-                <div
-                  key={player.id}
-                  className="p-4 border border-green-200 bg-green-50 rounded-lg"
-                >
+              {myPicks.map(player => (
+                <div key={player.id} className="p-4 border border-green-200 bg-green-50 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <FiStar className="text-green-600 w-5 h-5" />
                       <div>
                         <h3 className="font-semibold text-gray-900">{player.name}</h3>
-                        <p className="text-sm text-gray-600">{player.team} • {player.class}</p>
+                        <p className="text-sm text-gray-600">
+                          {player.team} • {player.class}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPositionColor(player.position)}`}>
+                      <span
+                        className={`px-2 py-1 text-xs font-medium rounded-full ${getPositionColor(player.position)}`}
+                      >
                         {player.position}
                       </span>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900">{player.projectedPoints?.toFixed(1) || '0.0'}</p>
+                        <p className="font-semibold text-gray-900">
+                          {player.projectedPoints?.toFixed(1) || '0.0'}
+                        </p>
                         <p className="text-xs text-gray-500">proj pts</p>
                       </div>
                     </div>
@@ -469,24 +530,20 @@ export default function DraftCore({
                 </div>
               ))}
               {myPicks.length === 0 && (
-                <div className="text-center text-gray-500 py-8">
-                  No players drafted yet
-                </div>
+                <div className="text-center text-gray-500 py-8">No players drafted yet</div>
               )}
             </div>
           </div>
         ) : (
           <div className="p-6">
-            <div className="text-center text-gray-500 py-8">
-              Draft board coming soon
-            </div>
+            <div className="text-center text-gray-500 py-8">Draft board coming soon</div>
           </div>
         )}
       </div>
       {/* Children (custom content) */}
       {children}
     </div>
-  );
+  )
 }
 
 // Export hook for draft state management
@@ -495,18 +552,18 @@ export function useDraftCore(initialState?: Partial<DraftCoreState>) {
     players: [],
     searchQuery: '',
     positionFilter: 'ALL',
-    conferenceFilter: 'ALL', 
+    conferenceFilter: 'ALL',
     teamFilter: 'ALL',
     selectedPlayer: null,
     activeTab: 'available',
     loading: false,
     error: null,
-    ...initialState
-  });
+    ...initialState,
+  })
 
   const updateState = useCallback((updates: Partial<DraftCoreState>) => {
-    setState(prev => ({ ...prev, ...updates }));
-  }, []);
+    setState(prev => ({ ...prev, ...updates }))
+  }, [])
 
-  return { state, updateState };
+  return { state, updateState }
 }

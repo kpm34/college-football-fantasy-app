@@ -1,165 +1,175 @@
 #!/usr/bin/env tsx
-
 /**
- * Fetch all collections, attributes, and indexes from Appwrite
- * Outputs a complete schema audit
+ * Fetch Appwrite Schema using CLI
+ *
+ * This script uses the Appwrite CLI to fetch the complete schema
+ * The CLI is more reliable than the SDK for fetching all collections
+ *
+ * Usage: npx tsx scripts/fetch-appwrite-schema.ts
  */
 
-import { Client, Databases } from 'node-appwrite';
-import * as fs from 'fs';
-import * as path from 'path';
+import { execSync } from 'child_process'
+import * as fs from 'fs'
+import * as path from 'path'
 
-// Load environment variables
-import * as dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
+const DATABASE_ID = 'college-football-fantasy'
 
-// Initialize Appwrite client with API key for full access
-const client = new Client()
-  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
-  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app')
-  .setKey(process.env.APPWRITE_API_KEY || '');
+console.log('🔍 Fetching Appwrite Schema using CLI...')
+console.log('Database ID:', DATABASE_ID)
+console.log('-'.repeat(80))
 
-const databases = new Databases(client);
-const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'college-football-fantasy';
+try {
+  // Fetch collections using CLI (JSON format)
+  console.log('\n📥 Fetching collections from Appwrite...')
+  const collectionsJson = execSync(
+    `appwrite databases list-collections --database-id ${DATABASE_ID} --json`,
+    { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 } // 10MB buffer
+  )
 
-interface CollectionSchema {
-  id: string;
-  name: string;
-  attributes: any[];
-  indexes: any[];
-  documentSecurity: boolean;
-  enabled: boolean;
-  $createdAt: string;
-  $updatedAt: string;
-}
+  const collectionsData = JSON.parse(collectionsJson)
+  const collections = collectionsData.collections || []
 
-async function fetchAppwriteSchema() {
-  try {
-    console.log('🔍 Fetching Appwrite schema...\n');
-    console.log('📍 Endpoint:', process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT);
-    console.log('🏗️  Project:', process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
-    console.log('💾 Database:', DATABASE_ID);
-    console.log('\n' + '='.repeat(80) + '\n');
+  console.log(`✅ Found ${collections.length} collections\n`)
 
-    // Fetch all collections
-    const collectionsResponse = await databases.listCollections(DATABASE_ID);
-    const collections = collectionsResponse.collections;
-    
-    console.log(`📚 Found ${collections.length} collections\n`);
+  // Display collection summary
+  console.log('📋 Collections Found:')
+  console.log('-'.repeat(80))
 
-    const schemaData: any = {
-      database: DATABASE_ID,
-      timestamp: new Date().toISOString(),
-      collections: []
-    };
+  const sortedCollections = collections.sort((a: any, b: any) => a.name.localeCompare(b.name))
 
-    // Process each collection
-    for (const collection of collections) {
-      console.log(`\n📦 Collection: ${collection.name} (${collection.$id})`);
-      console.log('─'.repeat(60));
-      
-      // Fetch collection details including attributes and indexes
-      const collectionDetails = await databases.getCollection(DATABASE_ID, collection.$id);
-      
-      const collectionSchema: any = {
-        id: collection.$id,
-        name: collection.name,
-        enabled: collection.enabled,
-        documentSecurity: collection.documentSecurity,
-        createdAt: collection.$createdAt,
-        updatedAt: collection.$updatedAt,
-        attributes: [],
-        indexes: []
-      };
+  for (const col of sortedCollections) {
+    const attrCount = col.attributes?.length || 0
+    const indexCount = col.indexes?.length || 0
+    console.log(
+      `  ${col.name.padEnd(30)} (ID: ${col.$id.padEnd(25)}) - ${attrCount} attrs, ${indexCount} indexes`
+    )
+  }
+  console.log('-'.repeat(80))
 
-      // List attributes
-      const attributesResponse = await databases.listAttributes(DATABASE_ID, collection.$id);
-      console.log(`  📋 Attributes (${attributesResponse.attributes.length}):`);
-      
-      for (const attr of attributesResponse.attributes) {
-        const attrInfo: any = {
-          key: attr.key,
-          type: attr.type,
-          status: attr.status,
-          error: attr.error,
-          required: attr.required,
-        };
+  // Save to JSON file
+  const outputPath = path.join(__dirname, '../schema/appwrite-schema.json')
+  fs.writeFileSync(outputPath, JSON.stringify(collectionsData, null, 2))
+  console.log(`\n✅ Schema saved to: ${outputPath}`)
 
-        // Add type-specific properties
-        if (attr.type === 'string') {
-          attrInfo.size = (attr as any).size;
-          attrInfo.default = (attr as any).default;
-        } else if (attr.type === 'integer' || attr.type === 'double') {
-          attrInfo.min = (attr as any).min;
-          attrInfo.max = (attr as any).max;
-          attrInfo.default = (attr as any).default;
-        } else if (attr.type === 'boolean') {
-          attrInfo.default = (attr as any).default;
-        } else if (attr.type === 'datetime') {
-          attrInfo.default = (attr as any).default;
-        } else if (attr.type === 'enum') {
-          attrInfo.elements = (attr as any).elements;
-          attrInfo.default = (attr as any).default;
+  // Generate Markdown documentation
+  let markdown = `# Appwrite Schema Documentation\n\n`
+  markdown += `Generated: ${new Date().toISOString()}\n`
+  markdown += `Database: ${DATABASE_ID}\n`
+  markdown += `Total Collections: ${collections.length}\n\n`
+
+  markdown += `## Collections Overview\n\n`
+  markdown += `| Collection Name | Collection ID | Attributes | Indexes | Doc Security |\n`
+  markdown += `|-----------------|---------------|------------|---------|-------------|\n`
+
+  for (const col of sortedCollections) {
+    const attrCount = col.attributes?.length || 0
+    const indexCount = col.indexes?.length || 0
+    const docSec = col.documentSecurity ? 'Yes' : 'No'
+    markdown += `| ${col.name} | \`${col.$id}\` | ${attrCount} | ${indexCount} | ${docSec} |\n`
+  }
+
+  markdown += `\n## Collection Details\n\n`
+
+  for (const col of sortedCollections) {
+    markdown += `### ${col.name} (\`${col.$id}\`)\n\n`
+
+    if (col.documentSecurity) {
+      markdown += `⚠️ **Document Security**: ENABLED\n\n`
+    }
+
+    if (col.attributes && col.attributes.length > 0) {
+      markdown += `**Attributes:**\n\n`
+      markdown += `| Field | Type | Required | Details |\n`
+      markdown += `|-------|------|----------|---------||\n`
+
+      for (const attr of col.attributes) {
+        const required = attr.required ? '✅' : '❌'
+        const array = attr.array ? '[]' : ''
+        let details = ''
+
+        if (attr.type === 'string' && attr.size) {
+          details = `max: ${attr.size}`
+        } else if (attr.type === 'integer') {
+          if (attr.min !== undefined || attr.max !== undefined) {
+            details = `${attr.min || '*'} to ${attr.max || '*'}`
+          }
         }
 
-        collectionSchema.attributes.push(attrInfo);
-        
-        const required = attr.required ? '✓ required' : '○ optional';
-        const defaultVal = (attr as any).default !== undefined ? ` (default: ${(attr as any).default})` : '';
-        console.log(`     - ${attr.key}: ${attr.type} [${required}]${defaultVal}`);
+        if (attr.default !== null && attr.default !== undefined) {
+          details += details ? `, default: ${attr.default}` : `default: ${attr.default}`
+        }
+
+        markdown += `| \`${attr.key}\` | ${attr.type}${array} | ${required} | ${details || '-'} |\n`
       }
+      markdown += '\n'
+    }
 
-      // List indexes
-      const indexesResponse = await databases.listIndexes(DATABASE_ID, collection.$id);
-      console.log(`\n  🔍 Indexes (${indexesResponse.indexes.length}):`);
-      
-      for (const index of indexesResponse.indexes) {
-        const indexInfo = {
-          key: index.key,
-          type: index.type,
-          status: index.status,
-          error: index.error,
-          attributes: index.attributes,
-          orders: index.orders
-        };
-        collectionSchema.indexes.push(indexInfo);
-        
-        console.log(`     - ${index.key}: ${index.type} [${index.attributes.join(', ')}]`);
+    if (col.indexes && col.indexes.length > 0) {
+      markdown += `**Indexes:**\n\n`
+      for (const index of col.indexes) {
+        const type = index.type === 'unique' ? '🔑 UNIQUE' : '📍 KEY'
+        markdown += `- \`${index.key}\` (${type}): [${index.attributes.join(', ')}]\n`
       }
-
-      schemaData.collections.push(collectionSchema);
+      markdown += '\n'
     }
 
-    // Save to JSON file
-    const outputPath = path.join(process.cwd(), 'schema', 'appwrite-live-schema.json');
-    fs.writeFileSync(outputPath, JSON.stringify(schemaData, null, 2));
-    console.log('\n' + '='.repeat(80));
-    console.log(`\n✅ Schema saved to: ${outputPath}`);
-
-    // Generate summary
-    console.log('\n📊 Summary:');
-    console.log(`  - Total Collections: ${collections.length}`);
-    console.log(`  - Total Attributes: ${schemaData.collections.reduce((sum: number, c: any) => sum + c.attributes.length, 0)}`);
-    console.log(`  - Total Indexes: ${schemaData.collections.reduce((sum: number, c: any) => sum + c.indexes.length, 0)}`);
-    
-    // List collection names
-    console.log('\n📝 Collection Names:');
-    for (const col of schemaData.collections) {
-      console.log(`  - ${col.id}${col.name !== col.id ? ` (${col.name})` : ''}`);
-    }
-
-    return schemaData;
-
-  } catch (error: any) {
-    console.error('\n❌ Error fetching schema:', error.message);
-    if (error.code === 401) {
-      console.error('\n🔐 Authentication failed. Please check your APPWRITE_API_KEY in .env.local');
-    } else if (error.code === 404) {
-      console.error('\n📦 Database not found. Please check DATABASE_ID:', DATABASE_ID);
-    }
-    process.exit(1);
+    markdown += '---\n\n'
   }
-}
 
-// Run the script
-fetchAppwriteSchema().catch(console.error);
+  // Save markdown
+  const mdPath = path.join(__dirname, '../schema/APPWRITE_SCHEMA.md')
+  fs.writeFileSync(mdPath, markdown)
+  console.log(`✅ Documentation saved to: ${mdPath}`)
+
+  // Check for critical collections
+  console.log('\n🔍 Checking for critical collections:')
+  const criticalCollections = [
+    'draft_picks',
+    'draft_events',
+    'draft_states',
+    'drafts',
+    'leagues',
+    'fantasy_teams',
+    'college_players',
+    'roster_slots',
+  ]
+
+  for (const name of criticalCollections) {
+    const found = collections.find((c: any) => c.$id === name)
+    if (found) {
+      console.log(`  ✅ ${name}`)
+    } else {
+      console.log(`  ❌ ${name} - NOT FOUND!`)
+    }
+  }
+
+  // Generate TypeScript types update
+  console.log('\n📝 Generating TypeScript collection constants...\n')
+
+  const tsConstants = collections
+    .map((col: any) => {
+      const constName = col.$id.toUpperCase().replace(/-/g, '_')
+      return `  ${constName}: '${col.$id}',`
+    })
+    .join('\n')
+
+  console.log('Add these to lib/appwrite-generated.ts:')
+  console.log('-'.repeat(80))
+  console.log('export const COLLECTIONS = {')
+  console.log(tsConstants)
+  console.log('} as const;')
+  console.log('-'.repeat(80))
+
+  console.log('\n✨ Schema fetch complete!')
+} catch (error: any) {
+  console.error('\n❌ Error fetching schema:', error.message)
+
+  if (error.message.includes('command not found')) {
+    console.error('\n📌 Make sure Appwrite CLI is installed:')
+    console.error('   npm install -g appwrite')
+    console.error('\n📌 Then login:')
+    console.error('   appwrite login')
+  }
+
+  process.exit(1)
+}

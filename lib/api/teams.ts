@@ -1,10 +1,8 @@
-import apiClient from './client';
-import type { Team, TeamPlayer, TeamsResponse } from '@lib/types/team';
+import type { TeamPlayer, TeamsResponse } from '@lib/types/team'
+import apiClient from './client'
 
 export const teamsAPI = {
-  getAll: () => 
-    apiClient.get<TeamsResponse>('/teams'),
+  getAll: () => apiClient.get<TeamsResponse>('/teams'),
 
-  getRoster: (teamId: string) => 
-    apiClient.get<TeamPlayer[]>(`/teams/${fantasyTeamId}/roster`),
-};
+  getRoster: (teamId: string) => apiClient.get<TeamPlayer[]>(`/teams/${teamId}/roster`),
+}
