@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 const diagrams = [
@@ -68,6 +68,24 @@ const diagrams = [
 
 export default function DraftDiagramsPage() {
   const [selectedDiagram, setSelectedDiagram] = useState<string | null>(null)
+  const [diagramContent, setDiagramContent] = useState<string>('')
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (selectedDiagram) {
+      setLoading(true)
+      fetch(`/api/docs/diagrams/${selectedDiagram}`)
+        .then(res => res.text())
+        .then(html => {
+          setDiagramContent(html)
+          setLoading(false)
+        })
+        .catch(err => {
+          console.error('Error loading diagram:', err)
+          setLoading(false)
+        })
+    }
+  }, [selectedDiagram])
 
   return (
     <div className="container mx-auto p-6">
@@ -107,20 +125,25 @@ export default function DraftDiagramsPage() {
               {diagrams.find(d => d.file === selectedDiagram)?.name}
             </h2>
             <button
-              onClick={() => setSelectedDiagram(null)}
+              onClick={() => {
+                setSelectedDiagram(null)
+                setDiagramContent('')
+              }}
               className="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition-colors"
             >
               ← Back to List
             </button>
           </div>
           
-          <div className="border border-gray-200 rounded">
-            <iframe
-              src={`/api/docs/diagrams/${selectedDiagram}`}
-              className="w-full h-[80vh]"
-              title={selectedDiagram}
-            />
-          </div>
+          {loading ? (
+            <div className="flex justify-center items-center h-[80vh]">
+              <div className="text-gray-600">Loading diagram...</div>
+            </div>
+          ) : (
+            <div className="border border-gray-200 rounded overflow-auto h-[80vh]">
+              <div dangerouslySetInnerHTML={{ __html: diagramContent }} />
+            </div>
+          )}
         </div>
       )}
     </div>

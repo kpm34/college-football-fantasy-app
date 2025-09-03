@@ -20,12 +20,15 @@ export async function GET(
     // Read the file
     const content = await readFile(filePath, 'utf-8')
     
-    // Return with proper content type
+    // Return with proper content type and allow iframe embedding
     return new NextResponse(content, {
       status: 200,
       headers: {
         'Content-Type': 'text/html',
-        'Cache-Control': 'public, max-age=3600'
+        'Cache-Control': 'public, max-age=3600',
+        // Allow iframe embedding
+        'X-Frame-Options': 'SAMEORIGIN',
+        'Content-Security-Policy': "frame-ancestors 'self'"
       }
     })
   } catch (error) {
