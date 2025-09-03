@@ -1,334 +1,350 @@
-# College Football Fantasy App - Cursor AI Assistant Rules
+# College Football Fantasy App - AI Development Rules
 
-## 🤖 AI Model Selection Strategy
+## 🚀 AI Assistant Capabilities & Permissions
+You are empowered to:
+- **Create**: Build complete features, components, APIs, and tests
+- **Modify**: Refactor, optimize, and improve any code
+- **Debug**: Use all available tools to diagnose and fix issues
+- **Deploy**: Run builds, tests, and deployment commands
+- **Research**: Search codebase, documentation, and web for solutions
+- **Design**: Create UI/UX improvements and architectural solutions
+- **Document**: Update docs, add comments, create guides
 
-### Primary Model Assignments:
-- **Primary Coder**: Claude Opus 4.x / Sonnet 4 (day-to-day code edits & refactors)
-- **Planner/Agent**: GPT-5 (Thinking/High) for tricky multi-tool chains  
-- **Max Mode/Huge Context**: Claude Opus 4.1 for massive context requirements
-- **Available (Not Default)**: Grok 4 (keep accessible but don't auto-select)
-
-### Auto Model Selection Rules:
-```
-Code Generation/Edits → Claude Opus 4.x / Sonnet 4
-Code Refactoring → Claude Opus 4.x / Sonnet 4  
-Planning/Architecture → GPT-5 (Thinking/High)
-Multi-tool Workflows → GPT-5 (Thinking/High)
-Large Context Analysis → Claude Opus 4.1
-Complex Problem Solving → GPT-5 (Thinking/High)
-Daily Development → Claude Opus 4.x / Sonnet 4
-```
-
-### Model Preferences by Task:
-- **Default for coding**: Always start with Claude Opus 4.x/Sonnet 4
-- **Switch to GPT-5**: When dealing with complex planning, multi-step workflows, or agent-style tasks
-- **Escalate to Opus 4.1**: When context exceeds normal limits or need maximum reasoning
-- **Grok 4**: Manual selection only, keep in toolkit but don't auto-suggest
-
-### Trigger Keywords for Model Selection:
-**Claude Opus 4.x/Sonnet 4 (Primary Coder):**
-- "fix", "edit", "refactor", "update", "modify", "change"
-- "implement", "create component", "add feature", "write function"
-- "debug", "optimize", "clean up", "improve"
-
-**GPT-5 Thinking/High (Planner/Agent):**
-- "plan", "design", "architecture", "strategy", "approach"
-- "multi-step", "workflow", "pipeline", "automation"
-- "complex problem", "analyze system", "breakdown"
-- "integrate multiple", "coordinate", "orchestrate"
-
-**Claude Opus 4.1 (Max Mode/Huge Context):**
-- "analyze entire codebase", "large refactor", "massive context"
-- "understand whole project", "comprehensive review"
-- "max context", "full analysis", "complete understanding"
-
-## 🎯 Project Context
-Fantasy football platform for Power 4 conferences (SEC, ACC, Big 12, Big Ten) with unique eligibility rules where players only score against AP Top-25 teams or in conference games.
+## 🎯 Project Overview
+**Name**: College Football Fantasy App  
+**URL**: https://cfbfantasy.app  
+**Type**: Full-stack fantasy sports platform for Power 4 conferences  
+**Unique**: Players only score vs AP Top-25 teams or in conference games  
 
 ## 🛠️ Tech Stack
-- **Frontend**: Next.js 15.4.5, TypeScript, Tailwind CSS, Spline 3D
-- **Backend**: Appwrite BaaS (NYC region)
-- **Database**: Appwrite Collections
+- **Framework**: Next.js 15.4.5 (App Router), React 18, TypeScript 5.x
+- **Styling**: Tailwind CSS v3, Framer Motion, shadcn/ui
+- **Backend**: Appwrite BaaS (NYC), Edge Functions, Server Actions
+- **Database**: Appwrite Collections (document-based)
+- **3D Graphics**: Three.js, React Three Fiber, Spline
 - **APIs**: College Football Data API (CFBD), ESPN API
-- **Deployment**: Vercel Edge Functions
-- **3D**: Three.js, React Three Fiber, Spline
+- **AI**: Vercel AI SDK, Anthropic Claude, Chrome AI
+- **Deployment**: Vercel (Edge Runtime + Node.js)
+- **Monitoring**: Sentry, Vercel Analytics
 
 ## 📁 Project Structure
 ```
-/
-├── app/                    # Next.js 15 App Router
-│   ├── api/               # API routes
-│   ├── league/            # League pages
-│   ├── draft/             # Draft interfaces
-│   └── auction/           # Auction draft
-├── components/            # React components
-├── lib/                   # Utilities
-├── types/                 # TypeScript types
-├── scripts/               # Data sync scripts
-└── vendor/awwwards-rig/   # 3D submodule
-```
-
-## 🚀 Essential Commands
-
-### Development
-```bash
-npm run dev                 # Start Next.js (port 3001)
-npm run build              # Production build
-npm run start              # Production server
-npm run lint               # ESLint checks
-npm run typecheck          # TypeScript checking
-```
-
-### Data Management
-```bash
-npm run sync-data          # Sync from APIs to Appwrite
-npm test                   # Run API tests
-node scripts/setup-appwrite-indexes.ts  # Setup DB indexes
-```
-
-### Deployment
-```bash
-vercel                     # Deploy preview
-vercel --prod             # Deploy production
-vercel pull               # Pull env variables
-vercel logs               # View logs
+/app                    # Next.js 15 App Router
+  /(league)            # Public pages (login, signup, marketing)
+  /(dashboard)         # Authenticated user pages
+  /admin               # Admin tools (kashpm2002@gmail.com only)
+  /api                 # API routes organized by feature
+    /(backend)         # Server-side only routes
+    /(frontend)        # Client-accessible routes
+    /(external)        # Third-party integrations
+/components            # React components
+  /ui                  # shadcn/ui components
+  /features            # Feature-specific components
+  /layout              # Layout components
+/lib                   # Core utilities
+  /services            # Business logic
+  /repositories        # Data access layer
+  /hooks               # React hooks
+/public                # Static assets
+/ops                   # Operational scripts and tools
+/schema                # Database schemas (SSOT)
+/docs                  # Documentation
+/tests                 # Test files
 ```
 
 ## 🔑 Environment Variables
 ```bash
-# Appwrite
+# Appwrite (Required)
+APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
+APPWRITE_PROJECT_ID=college-football-fantasy-app
+APPWRITE_DATABASE_ID=college-football-fantasy
+APPWRITE_API_KEY=[server-only]
+
+# Client-safe (NEXT_PUBLIC_)
 NEXT_PUBLIC_APPWRITE_ENDPOINT=https://nyc.cloud.appwrite.io/v1
 NEXT_PUBLIC_APPWRITE_PROJECT_ID=college-football-fantasy-app
 NEXT_PUBLIC_APPWRITE_DATABASE_ID=college-football-fantasy
-APPWRITE_API_KEY=[server-side only]
 
-# APIs
+# Collections (all have NEXT_PUBLIC_APPWRITE_COLLECTION_ prefix)
+NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYERS=college_players
+NEXT_PUBLIC_APPWRITE_COLLECTION_LEAGUES=leagues
+NEXT_PUBLIC_APPWRITE_COLLECTION_DRAFTS=drafts
+NEXT_PUBLIC_APPWRITE_COLLECTION_USER_TEAMS=user_teams
+
+# External APIs
 CFBD_API_KEY=[configured]
-AI_GATEWAY_API_KEY=[configured]
+ESPN_USERNAME=kpm34@pitt.edu
+ESPN_PASSWORD=#Kash2002
+
+# AI & Tools
 ANTHROPIC_API_KEY=[configured]
-
-# AI Development Tools (Optional)
-OPENAI_API_KEY=[set as needed]
-RUNWAY_API_KEY=[configured]
-MESHY_API_KEY=[set as needed]
-FIGMA_ACCESS_TOKEN=[set as needed]
-CRON_SECRET=[required for job polling]
-
-# Collections (all prefixed with NEXT_PUBLIC_APPWRITE_COLLECTION_)
-- PLAYERS=college_players
-- LEAGUES=leagues
-- ROSTERS=rosters
-- GAMES=games
-- RANKINGS=rankings
-- AUCTIONS=auctions
-- BIDS=bids
+OPENAI_API_KEY=[optional]
+GITHUB_TOKEN=[configured]
+BRAVE_API_KEY=BSAQJHPdhjJ3hPcblDWtVJ8Z1qI6O2E
 ```
 
-## 📝 AI Assistant Instructions
+## 📊 Database Schema (SSOT)
+**Single Source of Truth**: `/schema/zod-schema.ts`
 
-### When Writing Code:
-1. **Always use TypeScript** with strict mode
-2. **Follow Next.js 15 App Router** patterns
-3. **Use Tailwind CSS** for styling (no inline styles)
-4. **Implement proper error boundaries** for all components
-5. **Use React Server Components** where possible
-6. **Validate all API responses** with Zod or TypeScript
-7. **Never expose API keys** in client code
+Key Collections:
+- `leagues` - Fantasy leagues with settings
+- `college_players` - Player data (NOT `players`)
+- `user_teams` - Drafted teams (NOT `rosters`)
+- `drafts` - Draft state and configuration
+- `draft_picks` - Individual picks
+- `games` - NCAA games schedule
+- `rankings` - AP Top 25 weekly
+- `player_stats` - Performance data
+- `lineups` - Weekly lineups
+- `activity_log` - User activity with inviteToken
 
-### Component Patterns:
-```typescript
-// Use this pattern for components
-'use client' // Only when needed
+Schema Rules:
+- Required fields CANNOT have defaults in Appwrite
+- Use optional fields with code defaults OR always provide values
+- Run `npm run generate:all` after schema changes
+- Sync with `npx tsx scripts/sync-appwrite-simple.ts`
 
-import { type FC } from 'react'
+## 🎨 Code Style & Patterns
+
+### Component Pattern
+```tsx
+'use client'; // Only when needed
+
+import { type FC } from 'react';
 
 interface ComponentProps {
-  // Always define props interface
+  // Always use TypeScript interfaces
 }
 
-export const Component: FC<ComponentProps> = ({ }) => {
-  // Implementation
-}
+export const Component: FC<ComponentProps> = ({ ...props }) => {
+  // Prefer const over function declarations
+  // Use early returns for conditionals
+  // Extract complex logic to custom hooks
+  return <div />;
+};
 ```
 
-### API Route Pattern:
-```typescript
-// app/api/[route]/route.ts
-import { NextRequest, NextResponse } from 'next/server'
+### API Route Pattern
+```ts
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 
-export async function GET(request: NextRequest) {
+// Define schema
+const requestSchema = z.object({
+  // Validate all inputs
+});
+
+export async function POST(request: NextRequest) {
   try {
-    // Implementation
-    return NextResponse.json({ data })
+    // Parse and validate
+    const body = await request.json();
+    const data = requestSchema.parse(body);
+    
+    // Business logic
+    
+    return NextResponse.json({ success: true, data });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 })
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: error.errors }, { status: 400 });
+    }
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }
 ```
 
-### Appwrite Query Pattern:
-```typescript
-import { Query } from 'appwrite'
-import { databases } from '@/lib/appwrite'
+### Data Fetching Pattern
+```tsx
+// Server Component (preferred)
+async function ServerComponent() {
+  const data = await fetchData(); // Direct DB call
+  return <Client data={data} />;
+}
 
-const response = await databases.listDocuments(
-  process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-  process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYERS!,
-  [
-    Query.equal('conference', 'SEC'),
-    Query.orderDesc('$createdAt'),
-    Query.limit(100)
-  ]
-)
+// Client Hook (only when needed)
+function useData() {
+  return useSWR('/api/data', fetcher);
+}
 ```
 
-## 🎮 Fantasy Rules to Enforce
-1. **Players only eligible** vs AP Top-25 or conference games
-2. **12-week regular season** (no playoffs/bowls)
-3. **Power 4 conferences only** (SEC, ACC, Big 12, Big Ten)
-4. **Snake draft** with timer and auto-pick
-5. **Auction draft** with $200 budget
-
-## 🐛 Common Issues & Fixes
+## 🚀 Development Commands
 ```bash
-# Port conflict
-lsof -i :3001 && kill -9 [PID]
+# Development
+npm run dev              # Start dev server (port 3001)
+npm run build            # Production build
+npm run lint             # ESLint check
+npm run typecheck        # TypeScript check
+npm run format           # Prettier format
 
-# Clear cache
-rm -rf .next
+# Testing
+npm test                 # Run tests
+npm run test:e2e         # Playwright tests
+npm run test:watch       # Watch mode
 
-# Reset dependencies
-rm -rf node_modules package-lock.json
-npm install
+# Database
+npm run generate:all     # Generate types from schema
+npm run sync:schema      # Sync schema to Appwrite
+npm run seed:data        # Seed test data
 
-# Type errors during build
-SKIP_ENV_VALIDATION=true npm run build
+# Deployment
+vercel                   # Deploy preview
+vercel --prod           # Deploy production
+vercel logs             # View logs
 ```
 
-## 🎨 UI/UX Guidelines
-1. **Mobile-first responsive design**
-2. **Dark mode by default** with light mode option
-3. **Smooth animations** with Framer Motion
-4. **3D elements** sparingly for impact
-5. **Loading states** for all async operations
-6. **Error messages** that are helpful, not technical
+## 🧪 Testing Requirements
+- Unit tests for utilities and hooks
+- Integration tests for API routes
+- E2E tests for critical user flows (auth, draft, league)
+- Test both authenticated and anonymous states
+- Mobile responsiveness testing
+- Performance testing (Core Web Vitals)
 
-## 📊 Database Collections & Schema Management
+## 🔍 Debugging Workflow
+1. **Browser**: Check console and network tab
+2. **Server**: Check Vercel logs (`vercel logs`)
+3. **Database**: Check Appwrite Console
+4. **Types**: Run `npm run typecheck`
+5. **Lint**: Run `npm run lint`
+6. **Build**: Test with `npm run build`
 
-### Single Source of Truth (SSOT) File Locations
-- **Schema Definition**: `schema/zod-schema.ts` - THE canonical source
-- **SSOT Guards**: `scripts/guards/validate-ssot-integrity.ts`, `scripts/guards/detect-schema-drift.ts`
-- **SSOT Scripts**: `scripts/validate-ssot-schema.ts`, `scripts/sync-appwrite-from-ssot.ts`, `scripts/test-ssot-workflow.ts`
-- **SSOT Documentation**: `SINGLE_SOURCE_OF_TRUTH.md`, `SCHEMA-GUARDRAILS.md`, `SCHEMA-IMPLEMENTATION.md`
-- **Auto-Generated Types**: `types/generated.ts` - Generated from SSOT
-- **Collection Config**: `lib/appwrite-generated.ts` - Generated from SSOT
-- **Environment Template**: `.env.template.generated` - Generated from SSOT
+## 🐛 Common Issues & Solutions
 
-### some Collections
-- `leagues` - Fantasy leagues
-- `college_players` - Player database
-- `player_stats` - Weekly stats
-- `games` - Game schedule/scores
-- `rankings` - AP Top 25
-- `auctions` - Auction drafts
-- `bids` - Auction bid history
-- `lineups` - Weekly lineups
+### OAuth Authentication
+- **Issue**: Redirect loop after Google login
+- **Solution**: Use direct Appwrite URLs, check Vercel protection settings
 
-### Schema Workflow
+### TypeScript Errors
+- **Issue**: Type errors during build
+- **Solution**: Run `npm run typecheck` locally first, use `SKIP_ENV_VALIDATION=true` if needed
+
+### Database Errors
+- **Issue**: Collection not found
+- **Solution**: Use `college_players` not `players`, check env vars
+
+### Port Conflicts
+- **Issue**: Port 3001 in use
+- **Solution**: `lsof -i :3001 && kill -9 [PID]`
+
+## 🎮 Business Rules to Enforce
+1. **Eligibility**: Players only score vs AP Top-25 or conference games
+2. **Season**: 12-week regular season (no playoffs/bowls)
+3. **Conferences**: Power 4 only (SEC, ACC, Big 12, Big Ten)
+4. **Draft Types**: Snake (with timer) and Auction ($200 budget)
+5. **Roster Limits**: Configurable by league commissioner
+6. **Scoring**: Standard fantasy scoring with conference bonuses
+
+## 📝 Git Workflow
 ```bash
-# 1. Edit the SSOT (ONLY place to make schema changes)
-vim schema/zod-schema.ts
+# Branch naming
+feat/feature-name      # New features
+fix/bug-description    # Bug fixes
+chore/task-name       # Maintenance
+docs/what-changed     # Documentation
 
-# 2. Generate everything automatically
-npm run generate:all
+# Commit format (Conventional Commits)
+feat: add user authentication
+fix: resolve OAuth redirect loop
+chore: update dependencies
+docs: add API documentation
+test: add league creation tests
+perf: optimize draft queries
 
-# 3. Sync to Appwrite
-npx tsx scripts/sync-appwrite-simple.ts
-
-# 4. Deploy with confidence
-vercel --prod
+# Pre-commit checklist
+- [ ] npm run lint
+- [ ] npm run typecheck
+- [ ] npm test (for changed code)
+- [ ] npm run build (before deploy)
 ```
 
-## 🔍 Quick Debugging
-```bash
-# Check TypeScript errors
-npm run typecheck
+## 🔌 API Development Guidelines
+1. **Validation**: Use Zod for all inputs
+2. **Auth**: Check session via cookies/headers
+3. **Errors**: Return proper HTTP status codes
+4. **Logging**: Log errors with context
+5. **Rate Limiting**: Apply to auth and draft endpoints
+6. **Caching**: Use Vercel KV for frequently accessed data
+7. **Documentation**: Update API docs for new endpoints
 
-# Verify Appwrite connection
-curl https://nyc.cloud.appwrite.io/v1/health
+## 🎨 UI/UX Standards
+1. **Responsive**: Mobile-first design
+2. **Accessibility**: WCAG 2.1 AA compliance
+3. **Performance**: < 3s page load, < 100ms interactions
+4. **Animations**: Smooth, purposeful, respect prefers-reduced-motion
+5. **Errors**: User-friendly messages with recovery actions
+6. **Loading**: Skeleton screens and progress indicators
+7. **Dark Mode**: System preference with manual override
 
-# Test API endpoint
-curl http://localhost:3001/api/games
-
-# View Vercel function logs
-vercel logs --follow
-```
-
-## 🚫 Never Do This
-- Don't commit .env files
-- Don't use var, always const/let
-- Don't use any type, be specific
-- Don't ignore TypeScript errors
-- Don't use synchronous file operations
-- Don't hardcode API URLs or keys
-- Don't use client-side data fetching for initial loads
-
-## ✅ Always Do This
-- Validate user input
-- Handle loading and error states
-- Use environment variables
-- Write semantic HTML
+## 🚀 Performance Guidelines
+- Lazy load heavy components
 - Optimize images with next/image
-- Use dynamic imports for heavy libraries
-- Test on mobile devices
-- Add proper SEO meta tags
+- Use React Server Components by default
+- Implement virtual scrolling for long lists
+- Bundle split by route automatically
+- Minimize client-side JavaScript
+- Cache API responses appropriately
 
-## 🎯 Current Priorities
-1. Complete draft system (snake + auction)
-2. Implement real-time scoring
-3. Add league management features
-4. Optimize 3D performance
-5. Setup email notifications
-6. Add social features (trash talk, etc.)
+## 🔐 Security Requirements
+- Never expose API keys in client code
+- Validate all user inputs
+- Sanitize data before display
+- Use HTTPS everywhere
+- Implement CSRF protection
+- Rate limit sensitive endpoints
+- Log security events
 
-## 📚 Useful Links
-- [Vercel Dashboard](https://vercel.com/kpm34s-projects)
-- [Appwrite Console](https://nyc.cloud.appwrite.io)
-- [CFBD API Docs](https://collegefootballdata.com)
-- [Next.js 15 Docs](https://nextjs.org/docs)
+## 📊 Monitoring & Analytics
+- Sentry for error tracking
+- Vercel Analytics for performance
+- Custom events for user actions
+- Database query performance
+- API response times
+- Core Web Vitals tracking
 
-## 🧭 AI Session Bootstrap (Claude Code + Cursor)
-- Always load these at session start so tools and capabilities are known:
-  - `toolbox/TOOLBOX_CLAUDE.md` – MCP integration guide for Claude Code
-  - `toolbox/TOOLBOX_CURSOR.md` – Development environment guide for Cursor AI
-  - `toolbox/CURSOR_COMMANDS.md` – Quick command reference
-  - `CLAUDE.md` – Project context and architecture (stays in root)
-  - `schema/zod-schema.ts` – Single Source of Truth for all schemas
-  - `docs/MCP_CONFIG.json` – Comprehensive MCP server configuration
-- If MCP is not active, prompt the user to configure `~/.cursor/mcp.json` with Appwrite and Vercel servers (see sections below).
+## 🤖 AI Development Tools
 
-## 📣 Change Reporting Protocol (MANDATORY)
-- Before making ANY change (code, schema, docs, CI), summarize the proposed change and its impact:
-  - Scope: files and directories to be edited
-  - Affected features/pages and API routes
-  - Collections and attributes involved (from `schema/zod-schema.ts`)
-  - Data migrations or backfills required (if any)
-  - Env/Secrets/CI implications
-- After edits: list exactly what changed and why; link to relevant sections in `PROJECT_MAP.md` and `docs/DATA_FLOW.md`.
-- When schema-related: never add defaults to required attributes. Either make optional and default-in-code, or always supply value at write time.
-- Keep SSOT synced: if behavior or shape changes, update `schema/zod-schema.ts`, `PROJECT_MAP.md`, and `docs/DATA_FLOW.md` in the same PR.
+### VS Code Extensions to Install
+```bash
+# Install all recommended extensions
+code --install-extension dbaeumer.vscode-eslint \
+  --install-extension esbenp.prettier-vscode \
+  --install-extension usernamehw.errorlens \
+  --install-extension Gruntfuggly.todo-tree \
+  --install-extension humao.rest-client \
+  --install-extension aaron-bond.better-comments \
+  --install-extension eamodio.gitlens \
+  --install-extension bradlc.vscode-tailwindcss \
+  --install-extension Prisma.prisma \
+  --install-extension ms-playwright.playwright \
+  --install-extension yzhang.markdown-all-in-one
+```
 
-## 🧰 MCP & AI Tooling
-- Configure MCP in `~/.cursor/mcp.json` so Cursor/Claude can operate our stack:
-  - Appwrite server (users/projects) via `uvx mcp-server-appwrite --users`
-  - Vercel CLI server (`VERCEL_TOKEN` required)
-- Keep this file and `CLAUDE.md`, `DATA_FLOW.md`, `docs/API_ROUTES.md`, and `docs/PROJECT_MAP.md` in sync so every AI session knows the system model.
+### Extension Usage Guide
 
-## Appwrite MCP (Cursor/Claude) — Setup and Usage
+**Error Lens** (`usernamehw.errorlens`)
+- Shows errors/warnings inline in code
+- Helps catch issues immediately
+- Configure highlight colors in settings
 
-### Quick setup
-1. Install uv (if not already): see `https://docs.astral.sh/uv/` (uvx is included).
-2. Create or update `~/.cursor/mcp.json` with an Appwrite server entry:
+**TODO Tree** (`Gruntfuggly.todo-tree`)
+- Find all TODOs, FIXMEs, HACKs in codebase
+- Custom tags: BUG, OPTIMIZE, REFACTOR
+- Great for tracking technical debt
+
+**REST Client** (`humao.rest-client`)
+- Test APIs directly in VS Code
+- Create `.http` files with requests
+- Example: `/docs/api/test-auth.http`
+
+**Better Comments** (`aaron-bond.better-comments`)
+- Highlight important comments
+- ! Red for warnings
+- ? Blue for questions
+- // Gray for deprecated
+- * Green for highlights
+- TODO Orange for todos
+
+### MCP Server Configuration
+Add to `~/.cursor/mcp.json`:
 ```json
 {
   "mcpServers": {
@@ -338,105 +354,14 @@ vercel logs --follow
       "env": {
         "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
         "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
-        "APPWRITE_DATABASE_ID": "college-football-fantasy",
-        "APPWRITE_API_KEY": "set-in-local-env"
+        "APPWRITE_DATABASE_ID": "college-football-fantasy"
       }
-    }
-  }
-}
-```
-- Do not commit keys. Prefer setting `APPWRITE_API_KEY` as an OS env var and leave the value as `"set-in-local-env"` or omit the `env` block entirely to inherit from your shell.
-- Reference example (no secrets) lives in `docs/MCP_CONFIG.json`.
-
-### What you can ask the assistant to do (via Appwrite MCP)
-- List users/sessions, create users, update names/emails, enable/disable MFA, issue JWTs.
-- Rotate sessions or invalidate tokens for a user.
-- Review user activity logs and memberships.
-- Validate account targets (email/SMS/push) and manage messaging targets.
-
-Examples:
-- “List the last 10 users and show their email verification status.”
-- “Create a new test user with email X and temporary password Y, then issue a JWT.”
-- “Disable MFA for user U, regenerate recovery codes, and fetch them.”
-- “Delete all active sessions for user U.”
-
-### Guardrails
-- Never write secrets into the repo. Keep keys in your local `~/.cursor/mcp.json` or shell env.
-- For data writes in production, the assistant will summarize the change before executing and prefer least-privilege actions.
-- Use Node runtime + Appwrite SDK for app logic; Appwrite MCP is for dev-time admin ops only.
-
-### Troubleshooting
-- If the Appwrite server doesn’t appear in tools: re-open Cursor, then check `~/.cursor/mcp.json` formatting.
-- Verify connectivity: `curl https://nyc.cloud.appwrite.io/v1/health`
-- Rotate any leaked API key immediately in Appwrite Console and update your local MCP config.
-
-## Appwrite Schema Rules
-- Required attributes cannot have default values in Appwrite. If you need a default:
-  - Make the attribute optional (required=false) and set the default in API code or via migrations; or
-  - Keep it required=true and always supply the value at creation/update time.
-- Avoid combining `required=true` with `default` in collection definitions; Appwrite will reject it during schema sync/creation.
-
-## 🔌 SDK vs API vs CLI vs MCP (Usage)
-- SDK: Use server-side (Node runtime) for type-safe Appwrite operations inside API routes/repos. Avoid in Edge.
-- API: Use raw HTTP `fetch` for Edge functions or minimal footprint; handle auth manually (Appwrite cookie header).
-- CLI: Use for deploys, env pulls, logs, and automation in CI.
-- MCP: Dev-time automation inside Cursor (schema tasks, ops, inspections), not for app runtime.
-
-## 🌐 Domains & Deployment
-- Primary prod alias: `cfbfantasy.app` (always point latest prod to this)
-- Secondary: `collegefootballfantasy.app` (only as needed)
-- Common commands:
-  - `vercel pull --environment=production`
-  - `vercel --prod --force` (cache-busting deploy)
-  - `vercel alias set <deployment> cfbfantasy.app`
-
-## 🗄️ Data Collections (Extended)
-- `projections_yearly`, `projections_weekly`, `model_inputs`, `user_custom_projections`
-- Ensure env has: `NEXT_PUBLIC_APPWRITE_COLLECTION_PLAYER_PROJECTIONS`, `NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_WEEKLY`, `NEXT_PUBLIC_APPWRITE_COLLECTION_PROJECTIONS_YEARLY`, `NEXT_PUBLIC_APPWRITE_COLLECTION_MODEL_INPUTS`, `NEXT_PUBLIC_APPWRITE_COLLECTION_USER_CUSTOM_PROJECTIONS`
-
-## 🔐 Env & Runtime Notes
-- Never expose server keys in client. Use API routes for server work.
-- Edge vs Node:
-  - Use Node runtime for Appwrite SDK usage
-  - Use Edge/runtime `fetch` for light endpoints without SDK
-
-## 🐙 GitHub Access & Workflow Management
-### GitHub CLI & Token Setup
-```bash
-# Set GitHub token for CLI access (add to shell profile)
-export GH_TOKEN="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"
-
-# Verify authentication
-gh auth status
-
-# Common workflow commands
-gh run list --limit 5           # List recent workflow runs
-gh run view <run-id>            # View workflow details  
-gh run view <run-id> --log-failed # View failed step logs
-gh workflow list                # List all workflows
-gh workflow run <workflow-name> # Trigger manual workflow
-```
-
-### GitHub MCP Configuration
-Add to `~/.cursor/mcp.json` for Claude/Cursor GitHub access:
-```json
-{
-  "mcpServers": {
+    },
     "github": {
       "command": "npx",
       "args": ["mcp-server-github"],
       "env": {
-        "GITHUB_TOKEN": "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"
-      }
-    },
-    "appwrite": {
-      "command": "uvx", 
-      "args": ["mcp-server-appwrite", "--users"],
-      "env": {
-        "APPWRITE_ENDPOINT": "https://nyc.cloud.appwrite.io/v1",
-        "APPWRITE_PROJECT_ID": "college-football-fantasy-app",
-        "APPWRITE_DATABASE_ID": "college-football-fantasy",
-        "APPWRITE_API_KEY": "set-in-local-env"
+        "GITHUB_TOKEN": "from_env"
       }
     },
     "brave-search": {
@@ -450,68 +375,72 @@ Add to `~/.cursor/mcp.json` for Claude/Cursor GitHub access:
 }
 ```
 
-### AI Assistant GitHub Workflow Instructions
-When assisting with GitHub issues:
-1. **Always check workflow status first**: Use `gh run list` to see recent runs
-2. **Get detailed error logs**: Use `gh run view <id> --log-failed` for failures  
-3. **Reference current token**: Use token from `.env.local` file: `GITHUB_PERSONAL_ACCESS_TOKEN`
-4. **Common workflow files**:
-   - `.github/workflows/e2e-tests.yml` - End-to-end testing
-   - `.github/workflows/schema-sync.yml` - Database schema sync
-   - `.github/workflows/post-deploy-smoke.yml` - Smoke tests
-   - `.github/workflows/projection-updater-SECURE.yml` - Data updates
+## 📋 Task Execution Framework
 
-### Web Search Capabilities (Brave API)
-With Brave Search MCP server enabled, AI assistants can:
-- **Real-time web search**: Current events, documentation, error solutions
-- **API research**: Find API documentation and examples  
-- **Technology lookup**: Latest framework versions, best practices
-- **Troubleshooting**: Search for specific error messages and solutions
-- **Industry updates**: College football news, fantasy sports trends
+### When asked to implement a feature:
+1. **Understand**: Restate the requirements
+2. **Plan**: List affected files and approach
+3. **Implement**: Write code with proper patterns
+4. **Test**: Add/update tests
+5. **Document**: Update relevant docs
+6. **Verify**: Run checks and manual test
 
-Usage examples:
-- "Search for Next.js 15 App Router best practices"
-- "Find the latest College Football API documentation"
-- "Look up solutions for Appwrite authentication errors"
+### When debugging an issue:
+1. **Reproduce**: Get exact steps
+2. **Investigate**: Use all available tools
+3. **Diagnose**: Identify root cause
+4. **Fix**: Implement solution
+5. **Prevent**: Add tests to prevent regression
+6. **Document**: Note in troubleshooting guide
 
-### Workflow Debugging Checklist
-- ✅ URLs updated to use `https://cfbfantasy.app` (not old Vercel URLs)
-- ✅ Collection names match current schema (`user_teams` not `rosters`)  
-- ✅ GitHub token has sufficient permissions
-- ✅ Environment secrets properly configured in GitHub
-- ✅ No hardcoded API keys or sensitive data in workflow files
+### When optimizing performance:
+1. **Measure**: Get baseline metrics
+2. **Profile**: Identify bottlenecks
+3. **Optimize**: Apply targeted fixes
+4. **Verify**: Confirm improvements
+5. **Monitor**: Set up ongoing tracking
 
-## 🔗 Key API Routes (Core)
-- `POST /api/leagues/create` → Creates league; normalizes UI fields:
-  - Maps `leagueName` → `name`
-  - Maps `gameMode` + `selectedConference` → `'power4'|'sec'|'acc'|'big12'|'bigten'`
-  - Coerces numbers; joins commissioner automatically
-- `POST /api/leagues/join` → Validates capacity, membership, and password/invite; creates roster; updates league count
-- `GET /api/leagues/search` → Returns `$id`, `id`, `teams`, `type`, `hasPassword` for UI compatibility; excludes full leagues unless `includeClosed=true`
-- `GET /api/leagues/invite` → Validates token and returns league, or generates invite links
+## 🚫 Never Do This
+- Expose API keys in client code
+- Use `any` type without justification
+- Ignore TypeScript errors
+- Skip error handling
+- Hardcode environment-specific values
+- Commit directly to main branch
+- Deploy without testing
+- Use synchronous operations in API routes
+- Manipulate DOM directly in React
+- Import server code in client components
 
-## 🔁 Join & Invite Flow (Important)
-- Join page expects league objects with `$id` and `type` (`private` when `password` present)
-- Search API must return `$id` and `hasPassword` so UI opens password modal
-- Invite links support `token` and optional `league` param; token-only resolves league via API
+## ✅ Always Do This
+- Validate all inputs with Zod
+- Handle loading and error states
+- Use semantic HTML elements
+- Add proper TypeScript types
+- Test on mobile devices
+- Check accessibility
+- Optimize for performance
+- Document complex logic
+- Follow existing patterns
+- Clean up resources (timeouts, subscriptions)
 
-## 🧪 Operational Checklists
-- Bootstrap: `vercel pull` → `npm run typecheck` → `npm run lint` → `curl /api/health`
-- Cache clear: `vercel --prod --force`
-- Appwrite verify: `curl https://nyc.cloud.appwrite.io/v1/health`
+## 🎯 Current Priorities
+1. Fix OAuth authentication flow
+2. Complete draft system (timer, auto-pick)
+3. Implement real-time scoring
+4. Add league commissioner tools
+5. Optimize 3D performance
+6. Setup email notifications
+7. Add social features
+8. Improve mobile experience
 
-## 🧱 Architecture Notes
-- Repository pattern with Vercel KV caching and Appwrite persistence
-- Real-time: Appwrite Realtime + Functions; draft timer/auto-pick in background job
-- Edge Functions for low-latency search; server functions for DB writes
-
-## 🎯 Product Priorities (Live)
-1. Real-time draft (snake + auction) with timer and auto-pick
-2. Live scoring via ESPN/CFBD + Appwrite Functions
-3. League management UX polish (commissioner tools, invites)
-4. Projections system and data inputs consolidation
-5. Performance & 3D optimization
-6. Email notifications and social features
+## 📚 Resources
+- [Project Docs](/docs)
+- [API Documentation](/docs/api)
+- [Vercel Dashboard](https://vercel.com/kpm34s-projects)
+- [Appwrite Console](https://nyc.cloud.appwrite.io)
+- [CFBD API](https://collegefootballdata.com)
+- [Next.js 15 Docs](https://nextjs.org/docs)
 
 ---
-**Remember**: This is a production app. Code quality, performance, and user experience are paramount. Always test thoroughly before deploying.
+**Remember**: You have full autonomy to create, modify, and improve any aspect of this application. Be confident, thorough, and always prioritize user experience and code quality.

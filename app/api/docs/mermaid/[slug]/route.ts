@@ -1,7 +1,7 @@
+import { DATABASE_ID, isServerConfigured, serverDatabases } from '@/lib/appwrite-server'
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'node:fs'
 import path from 'node:path'
-import { serverDatabases, DATABASE_ID, isServerConfigured } from '@/lib/appwrite-server'
 
 export const runtime = 'nodejs'
 
@@ -9,7 +9,7 @@ function extractMermaidBlocks(markdown: string): string[] {
   // Simple, reliable regex that definitely works
   const mermaidRegex = /```mermaid\s*\n([\s\S]*?)\n```/g
   const blocks: string[] = []
-  
+
   let match
   while ((match = mermaidRegex.exec(markdown)) !== null) {
     const content = match[1].trim()
@@ -17,7 +17,7 @@ function extractMermaidBlocks(markdown: string): string[] {
       blocks.push(content)
     }
   }
-  
+
   return blocks
 }
 
@@ -26,7 +26,7 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug: rawSlug } = await params
-  
+
   // Decode the slug to handle URL encoding
   const slug = decodeURIComponent(rawSlug)
 
@@ -46,7 +46,7 @@ export async function GET(
         path: '(dynamic) appwrite-schema',
         slug,
         chartsCount: charts.length,
-        source: 'appwrite-live'
+        source: 'appwrite-live',
       })
     } catch (error: any) {
       // On error, fall back to static file if available
@@ -54,7 +54,7 @@ export async function GET(
       return NextResponse.json({
         ...fallback,
         error: error?.message || String(error),
-        source: 'error-fallback'
+        source: 'error-fallback',
       })
     }
   }
@@ -78,29 +78,35 @@ export async function GET(
     'project-map:docs': 'diagrams/project-map/docs.md',
     'project-map:ops': 'diagrams/project-map/ops.md',
     'project-map:public': 'diagrams/project-map/public.md',
-    
+
     // Functional Flow (user journeys and features)
     'functional-flow:create-account': 'diagrams/functional-flow/create-account-flow.md',
-    'functional-flow:create-league': 'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
+    'functional-flow:create-league':
+      'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
     'functional-flow:join-league': 'diagrams/functional-flow/join-league-flow-invite.md',
     'functional-flow:draft': 'diagrams/functional-flow/draft-system-flow-mock-vs-real-scheduled.md',
     'functional-flow:draft:mock': 'diagrams/functional-flow/draft-mock.md',
     'functional-flow:draft:real': 'diagrams/functional-flow/draft-real.md',
-    
+
     // System Architecture (technical systems)
-    'system-architecture:projections-overview': 'diagrams/system-architecture/projections-system-overview.md',
-    'system-architecture:yearly-projections': 'diagrams/system-architecture/yearly-projections-flow-draft.md',
-    'system-architecture:weekly-projections': 'diagrams/system-architecture/weekly-projections-flow-in-season.md',
+    'system-architecture:projections-overview':
+      'diagrams/system-architecture/projections-system-overview.md',
+    'system-architecture:yearly-projections':
+      'diagrams/system-architecture/yearly-projections-flow-draft.md',
+    'system-architecture:weekly-projections':
+      'diagrams/system-architecture/weekly-projections-flow-in-season.md',
     'system-architecture:weight-tuning': 'diagrams/system-architecture/weight-tuning-loop.md',
-    
+
     // API Documentation (generated)
     'api:routes': 'diagrams/api/routes.md',
     'api:external': 'diagrams/api/external.md',
     'api:data-sources': 'diagrams/api/data-sources.md',
-    
+
     // Reports
     'report:main': 'diagrams/report.md',
     'report:route-status': 'diagrams/runtime/route-status.json',
+
+    // Draft (custom mermaid diagrams) — moved to .drawio; mermaid slugs removed
   }
 
   // Handle dynamic multi-level project map paths
@@ -111,14 +117,14 @@ export async function GET(
       // project-map:app:api:admin -> diagrams/project-map/app.api.admin.md
       const pathParts = parts.slice(1) // Remove 'project-map'
       const filePath = `diagrams/project-map/${pathParts.join('.')}.md`
-      
+
       // Also check for index.md in folder structure
       const folderIndexPath = `diagrams/project-map/${pathParts.join('/')}/index.md`
-      
+
       const docsPath = path.join(process.cwd(), 'docs')
       const fullFilePath = path.join(docsPath, filePath)
       const fullIndexPath = path.join(docsPath, folderIndexPath)
-      
+
       // Prioritize index.md in nested folder, otherwise use dotted file
       if (fs.existsSync(fullIndexPath)) {
         fileMap[slug] = folderIndexPath
@@ -189,18 +195,18 @@ export async function GET(
     const fb = resolveFallback(slug)
     if (fb) filePath = fb
   }
-  
+
   if (!filePath) {
     console.error(`Diagram not found for slug: ${slug}`)
     console.error('Available slugs:', Object.keys(fileMap))
-    
+
     return NextResponse.json(
-      { 
-        error: 'Diagram not found', 
+      {
+        error: 'Diagram not found',
         slug,
         receivedSlug: rawSlug,
         decodedSlug: slug,
-        availableKeys: Object.keys(fileMap)
+        availableKeys: Object.keys(fileMap),
       },
       { status: 404 }
     )
@@ -211,13 +217,13 @@ export async function GET(
     return NextResponse.json(result)
   } catch (error: any) {
     console.error(`Error reading diagram for slug ${slug}:`, error)
-    
+
     return NextResponse.json(
-      { 
-        error: 'Failed to read diagram', 
+      {
+        error: 'Failed to read diagram',
         details: error?.message || 'Unknown error',
         path: filePath,
-        slug
+        slug,
       },
       { status: 500 }
     )
@@ -235,7 +241,7 @@ async function buildChartsFromFile(filePath: string) {
       fullPath: fullPath.replace(process.cwd(), '...'),
       exists: false,
       charts: [],
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     }
   }
 
@@ -248,16 +254,12 @@ async function buildChartsFromFile(filePath: string) {
     updatedAt: stats.mtime.toISOString(),
     path: filePath,
     slug: filePath,
-    chartsCount: charts.length
+    chartsCount: charts.length,
   }
 }
 
 function esc(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '\\"')
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '\\"')
 }
 
 async function buildLiveSchemaMermaid(): Promise<string[]> {
@@ -265,18 +267,22 @@ async function buildLiveSchemaMermaid(): Promise<string[]> {
   const collections: any[] = collectionsRes.collections || []
 
   // Pull attributes and indexes per collection in parallel
-  const details = await Promise.all(collections.map(async (c) => {
-    const [attrs, idxs] = await Promise.all([
-      serverDatabases.listAttributes(DATABASE_ID, c.$id as string).catch(() => ({ attributes: [] })),
-      serverDatabases.listIndexes(DATABASE_ID, c.$id as string).catch(() => ({ indexes: [] })),
-    ])
-    return {
-      id: c.$id as string,
-      name: (c.name as string) || c.$id,
-      attributes: (attrs as any).attributes || [],
-      indexes: (idxs as any).indexes || []
-    }
-  }))
+  const details = await Promise.all(
+    collections.map(async c => {
+      const [attrs, idxs] = await Promise.all([
+        serverDatabases
+          .listAttributes(DATABASE_ID, c.$id as string)
+          .catch(() => ({ attributes: [] })),
+        serverDatabases.listIndexes(DATABASE_ID, c.$id as string).catch(() => ({ indexes: [] })),
+      ])
+      return {
+        id: c.$id as string,
+        name: (c.name as string) || c.$id,
+        attributes: (attrs as any).attributes || [],
+        indexes: (idxs as any).indexes || [],
+      }
+    })
+  )
 
   // Sort for stable output
   details.sort((a, b) => a.id.localeCompare(b.id))
@@ -289,19 +295,26 @@ async function buildLiveSchemaMermaid(): Promise<string[]> {
 
   for (const d of details) {
     const attrsLines: string[] = []
-    const sortedAttrs = [...d.attributes].sort((a: any, b: any) => String(a.key || '').localeCompare(String(b.key || '')))
+    const sortedAttrs = [...d.attributes].sort((a: any, b: any) =>
+      String(a.key || '').localeCompare(String(b.key || ''))
+    )
     for (const a of sortedAttrs) {
       const key = esc(String(a.key || a.name || ''))
       const type = esc(String(a.type || a.kind || ''))
       const req = a.required ? 'required' : 'optional'
-      const def = a.default !== undefined && a.default !== null ? ` = ${esc(String(a.default))}` : ''
+      const def =
+        a.default !== undefined && a.default !== null ? ` = ${esc(String(a.default))}` : ''
       attrsLines.push(`- ${key}: ${type} (${req})${def}`)
     }
     const idxLines: string[] = []
-    const sortedIdxs = [...d.indexes].sort((a: any, b: any) => String(a.key || a.name || '').localeCompare(String(b.key || b.name || '')))
+    const sortedIdxs = [...d.indexes].sort((a: any, b: any) =>
+      String(a.key || a.name || '').localeCompare(String(b.key || b.name || ''))
+    )
     for (const ix of sortedIdxs) {
       const name = esc(String(ix.key || ix.name || 'index'))
-      const fields = Array.isArray(ix.attributes) ? ix.attributes.map((f: string) => esc(f)).join(' | ') : ''
+      const fields = Array.isArray(ix.attributes)
+        ? ix.attributes.map((f: string) => esc(f)).join(' | ')
+        : ''
       const unique = ix.unique ? 'unique' : 'normal'
       idxLines.push(`${name}: [${fields}] ${unique}`)
     }
