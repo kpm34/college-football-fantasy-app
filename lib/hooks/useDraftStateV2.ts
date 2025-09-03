@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback } from 'react'
-import { client, DATABASE_ID, COLLECTIONS, databases } from '@/lib/appwrite'
-import { RealtimeResponseEvent, Query } from 'appwrite'
+import { client, COLLECTIONS, DATABASE_ID, databases } from '@/lib/appwrite'
+import { RealtimeResponseEvent } from 'appwrite'
+import { useCallback, useEffect, useState } from 'react'
 
 export interface DraftStateSnapshot {
   _id: string
@@ -25,7 +25,9 @@ export function useDraftStateV2(leagueId: string): UseDraftStateV2Return {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const channel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.DRAFT_STATES}.documents.${leagueId}`
+  // Support either doc id == leagueId or a separate draftId field
+  const directDocChannel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.DRAFT_STATES}.documents.${leagueId}`
+  const collectionChannel = `databases.${DATABASE_ID}.collections.${COLLECTIONS.DRAFT_STATES}.documents`
 
   const refresh = useCallback(async () => {
     try {
@@ -43,25 +45,53 @@ export function useDraftStateV2(leagueId: string): UseDraftStateV2Return {
   useEffect(() => {
     if (!leagueId) return
     refresh()
-    const unsubscribe = client.subscribe(channel, (evt: RealtimeResponseEvent<any>) => {
-      if (evt.events.some(e => e.endsWith('.update') || e.endsWith('.create'))) {
-        setState(evt.payload as DraftStateSnapshot)
-      }
-    })
-    return () => unsubscribe()
-  }, [leagueId, channel, refresh])
+    // Subscribe to both specific doc and collection filtered by draftId
+    const unsubs: Array<() => void> = []
+    try {
+      unsubs.push(
+        client.subscribe(directDocChannel, (evt: RealtimeResponseEvent<any>) => {
+          if (evt.events.some(e => e.endsWith('.update') || e.endsWith('.create'))) {
+            setState(evt.payload as DraftStateSnapshot)
+          }
+        })
+      )
+    } catch {}
+    try {
+      unsubs.push(
+        client.subscribe(collectionChannel, (evt: RealtimeResponseEvent<any>) => {
+          const payload = evt.payload as any
+          if (!payload) return
+          if (payload.$id === leagueId || String(payload.draftId) === String(leagueId)) {
+            if (evt.events.some(e => e.endsWith('.update') || e.endsWith('.create'))) {
+              setState(payload as DraftStateSnapshot)
+            }
+          }
+        })
+      )
+    } catch {}
+    return () => {
+      unsubs.forEach(u => {
+        try {
+          u()
+        } catch {}
+      })
+    }
+  }, [leagueId, directDocChannel, collectionChannel, refresh])
 
-  const makePick = useCallback(async ({ teamId, playerId }: { teamId: string; playerId: string }) => {
-    const res = await fetch(`/api/drafts/${leagueId}/pick`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Idempotency-Key': crypto.randomUUID(),
-      },
-      body: JSON.stringify({ teamId, playerId }),
-    })
-    if (!res.ok) throw new Error(await res.text())
-  }, [leagueId])
+  const makePick = useCallback(
+    async ({ teamId, playerId }: { teamId: string; playerId: string }) => {
+      const res = await fetch(`/api/drafts/${leagueId}/pick`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Idempotency-Key': crypto.randomUUID(),
+        },
+        body: JSON.stringify({ teamId, playerId }),
+      })
+      if (!res.ok) throw new Error(await res.text())
+    },
+    [leagueId]
+  )
 
   return { state, loading, error, refresh, makePick }
 }

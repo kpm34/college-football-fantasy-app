@@ -1,10 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useDraftStateV2 } from '@/lib/hooks/useDraftStateV2'
-import { useDraftRealtime } from '@/lib/hooks/useDraftRealtime'
-import { DraftPlayer } from '@/lib/types/projections'
 import DraftCore from '@/components/features/draft/DraftCore'
+import { useDraftRealtime } from '@/lib/hooks/useDraftRealtime'
+import { useDraftStateV2 } from '@/lib/hooks/useDraftStateV2'
+import { useEffect, useState } from 'react'
 
 interface Props {
   params: { leagueId: string }
@@ -18,10 +17,22 @@ export default function DraftRoomPage({ params }: Props) {
   // Fetch league meta once to know engine version
   useEffect(() => {
     const load = async () => {
-      const res = await fetch(`/api/leagues/${leagueId}`)
-      if (!res.ok) { setNotFound(true); return }
-      const { data } = await res.json()
-      setEngineVersion((data.engineVersion as 'v2') ?? 'v1')
+      try {
+        const res = await fetch(`/api/leagues/${leagueId}`, { cache: 'no-store' })
+        if (!res.ok) {
+          setNotFound(true)
+          return
+        }
+        const json = await res.json()
+        const league = json?.league || json?.data || null
+        const engine =
+          (league?.engineVersion as 'v1' | 'v2' | undefined) ||
+          (league?.draftEngine as 'v1' | 'v2' | undefined) ||
+          'v2' // default to v2 engine
+        setEngineVersion(engine)
+      } catch {
+        setEngineVersion('v2')
+      }
     }
     load()
   }, [leagueId])
@@ -44,7 +55,9 @@ export default function DraftRoomPage({ params }: Props) {
           <p>Loading state…</p>
         ) : (
           <div>
-            <p>Round {state.round} – Pick {state.pickIndex}</p>
+            <p>
+              Round {state.round} – Pick {state.pickIndex}
+            </p>
             <p>On the clock: {state.onClockTeamId}</p>
             <p>Deadline: {new Date(state.deadlineAt).toLocaleTimeString()}</p>
           </div>
@@ -70,7 +83,9 @@ export default function DraftRoomPage({ params }: Props) {
       leagueId={leagueId}
       draftType="snake"
       canDraft={draft.isMyTurn}
-      timeRemainingSec={draft.deadlineAt ? (new Date(draft.deadlineAt).getTime() - Date.now()) / 1000 : undefined}
+      timeRemainingSec={
+        draft.deadlineAt ? (new Date(draft.deadlineAt).getTime() - Date.now()) / 1000 : undefined
+      }
     />
   )
 }
