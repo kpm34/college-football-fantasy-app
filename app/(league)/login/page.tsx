@@ -1,33 +1,38 @@
-'use client';
+'use client'
 
-import React, { Suspense, useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { client } from '@lib/appwrite';
+import { client } from '@lib/appwrite'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import React, { Suspense, useState } from 'react'
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<main className="min-h-screen flex items-center justify-center px-4"><div className="text-white/70">Loading...</div></main>}>
+    <Suspense
+      fallback={
+        <main className="min-h-screen flex items-center justify-center px-4">
+          <div className="text-white/70">Loading...</div>
+        </main>
+      }
+    >
       <LoginPageContent />
     </Suspense>
-  );
+  )
 }
 
 function LoginPageContent() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const searchParams = useSearchParams();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const searchParams = useSearchParams()
   // OAuth providers – toggle via env vars
-  const googleAvailable = process.env.NEXT_PUBLIC_ENABLE_OAUTH_GOOGLE !== 'false';
-  const appleAvailable = process.env.NEXT_PUBLIC_ENABLE_OAUTH_APPLE === 'true';
+  const googleAvailable = process.env.NEXT_PUBLIC_ENABLE_OAUTH_GOOGLE !== 'false'
+  const appleAvailable = process.env.NEXT_PUBLIC_ENABLE_OAUTH_APPLE === 'true'
 
   async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
     try {
       // Use our secure server-side API route - no CORS issues!
       const response = await fetch('/api/auth/login', {
@@ -37,166 +42,231 @@ function LoginPageContent() {
         },
         credentials: 'include', // ensure cookies from response are stored
         body: JSON.stringify({ email, password }),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (!response.ok) {
         // Handle specific error codes
         if (response.status === 401 || data.code === 401) {
-          throw new Error('Invalid email or password');
+          throw new Error('Invalid email or password')
         } else if (data.message) {
-          throw new Error(data.message);
+          throw new Error(data.message)
         } else {
-          throw new Error('Login failed');
+          throw new Error('Login failed')
         }
       }
 
       // Success! Redirect back if redirect param present
-      const redirectParam = searchParams?.get('redirect');
+      const redirectParam = searchParams?.get('redirect')
       if (redirectParam) {
         try {
-          const decoded = decodeURIComponent(redirectParam);
+          const decoded = decodeURIComponent(redirectParam)
           // Only allow internal redirects
           if (decoded.startsWith('/')) {
-            window.location.href = decoded;
-            return;
+            window.location.href = decoded
+            return
           }
         } catch {}
       }
       // Fallback
-      window.location.href = '/dashboard';
+      window.location.href = '/dashboard'
     } catch (err: any) {
-      console.error('Login error:', err);
-      setError(err?.message || 'Login failed');
+      console.error('Login error:', err)
+      setError(err?.message || 'Login failed')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#5B2B8C' }}>
-      <form onSubmit={onSubmit} className="w-full max-w-md rounded-xl p-8 shadow-xl" style={{ backgroundColor: '#FFF4EC', border: '1px solid #9256A4', borderTop: '4px solid #EC0B8F' }}>
-        <h1 className="text-3xl font-bold mb-6 text-center" style={{ color: '#5B2B8C' }}>Welcome Back</h1>
-        {error && <p className="mb-4 text-center py-2 px-3 rounded-lg" style={{ backgroundColor: 'rgba(180,31,36,0.12)', color: '#B41F24' }}>{error}</p>}
-        
+    <main
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{ backgroundColor: '#5B2B8C' }}
+    >
+      <form
+        onSubmit={onSubmit}
+        className="w-full max-w-md rounded-xl p-8 shadow-xl"
+        style={{
+          backgroundColor: '#FFF4EC',
+          border: '1px solid #9256A4',
+          borderTop: '4px solid #EC0B8F',
+        }}
+      >
+        <h1 className="text-3xl font-bold mb-6 text-center" style={{ color: '#5B2B8C' }}>
+          Welcome Back
+        </h1>
+        {error && (
+          <p
+            className="mb-4 text-center py-2 px-3 rounded-lg"
+            style={{ backgroundColor: 'rgba(180,31,36,0.12)', color: '#B41F24' }}
+          >
+            {error}
+          </p>
+        )}
+
         <div className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm mb-2 font-medium" style={{ color: '#6B4A35' }}>Email</label>
+            <label
+              htmlFor="email"
+              className="block text-sm mb-2 font-medium"
+              style={{ color: '#6B4A35' }}
+            >
+              Email
+            </label>
             <input
               id="email"
               name="email"
-              className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors" 
+              className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors"
               style={{ borderColor: '#9256A4', backgroundColor: '#FFFFFF', color: '#5B2B8C' }}
-              type="email" 
+              type="email"
               autoComplete="email" // allow browser autofill email
-              required 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
+              required
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               placeholder="your@email.com"
             />
           </div>
-          
+
           <div>
-            <label htmlFor="password" className="block text-sm mb-2 font-medium" style={{ color: '#6B4A35' }}>Password</label>
-            <input 
+            <label
+              htmlFor="password"
+              className="block text-sm mb-2 font-medium"
+              style={{ color: '#6B4A35' }}
+            >
+              Password
+            </label>
+            <input
               id="password"
               name="password"
-              className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors" 
+              className="w-full px-4 py-3 rounded-lg border focus:outline-none transition-colors"
               style={{ borderColor: '#9256A4', backgroundColor: '#FFFFFF', color: '#5B2B8C' }}
-              type="password" 
+              type="password"
               autoComplete="current-password" // allow browser autofill password
-              required 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••" 
+              required
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="••••••••"
             />
           </div>
         </div>
-        
-        <button disabled={loading} className="w-full mt-6 rounded-lg px-4 py-3 font-semibold disabled:opacity-60 transition-colors" style={{ backgroundColor: '#9256A4', color: '#FFFFFF' }}>{loading ? 'Logging in...' : 'Login'}</button>
-        
+
+        <button
+          disabled={loading}
+          className="w-full mt-6 rounded-lg px-4 py-3 font-semibold disabled:opacity-60 transition-colors"
+          style={{ backgroundColor: '#9256A4', color: '#FFFFFF' }}
+        >
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+
         {(googleAvailable || appleAvailable) && (
           <div className="mt-6">
             <div className="relative">
-              <div className="absolute inset-0 flex items-center"><div className="w-full" style={{ borderTop: '1px solid #E6CFBF' }}></div></div>
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full" style={{ borderTop: '1px solid #E6CFBF' }}></div>
+              </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4" style={{ color: '#6B4A35' }}>Or continue with</span>
+                <span className="px-4" style={{ color: '#6B4A35' }}>
+                  Or continue with
+                </span>
               </div>
             </div>
-            
+
             <div className="mt-4">
               <OAuthButtons googleEnabled={googleAvailable} appleEnabled={appleAvailable} />
             </div>
           </div>
         )}
-        
+
         {process.env.NEXT_PUBLIC_DISABLE_SIGNUPS !== 'true' && (
           <p className="text-sm mt-6 text-center" style={{ color: '#6B4A35' }}>
-            Don't have an account? <Link href="/signup" className="font-semibold hover:underline" style={{ color: '#EC0B8F' }}>Sign up</Link>
+            Don't have an account?{' '}
+            <Link
+              href="/signup"
+              className="font-semibold hover:underline"
+              style={{ color: '#EC0B8F' }}
+            >
+              Sign up
+            </Link>
           </p>
         )}
-        
+
         {/* Debug info - remove in production */}
         {process.env.NODE_ENV === 'development' && (
-          <div className="mt-4 p-2 rounded text-xs" style={{ backgroundColor: '#9256A4', color: '#FFF4EC' }}>
-            <p>Endpoint: {process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || "https://nyc.cloud.appwrite.io/v1"}</p>
-            <p>Project: {process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || "college-football-fantasy-app"}</p>
+          <div
+            className="mt-4 p-2 rounded text-xs"
+            style={{ backgroundColor: '#9256A4', color: '#FFF4EC' }}
+          >
+            <p>
+              Endpoint:{' '}
+              {process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1'}
+            </p>
+            <p>
+              Project:{' '}
+              {process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app'}
+            </p>
             <p>Domain: {typeof window !== 'undefined' ? window.location.hostname : 'SSR'}</p>
           </div>
         )}
       </form>
     </main>
-  );
+  )
 }
 
-function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean; appleEnabled: boolean }) {
-  const [loading, setLoading] = useState<'google' | 'apple' | null>(null);
-  const router = useRouter();
-  
+function OAuthButtons({
+  googleEnabled,
+  appleEnabled,
+}: {
+  googleEnabled: boolean
+  appleEnabled: boolean
+}) {
+  const [loading, setLoading] = useState<'google' | 'apple' | null>(null)
+  const router = useRouter()
+
   const handleOAuth = async (provider: 'google' | 'apple') => {
-    setLoading(provider);
-    
+    setLoading(provider)
+
     try {
       // Import Appwrite client-side SDK
-      const { Account, OAuthProvider } = await import('appwrite');
+      const { Account, OAuthProvider } = await import('appwrite')
       // Reuse shared initialized client to avoid project header mismatches
-      const account = new Account(client);
-      
+      const account = new Account(client)
+
       // Initiate OAuth2 session
-      const providerName = provider === 'google' ? OAuthProvider.Google : OAuthProvider.Apple;
-      
+      const providerName = provider === 'google' ? OAuthProvider.Google : OAuthProvider.Apple
+
       // Use static HTML handler to bypass Vercel protection
       if (providerName === 'google') {
         // Direct OAuth URL that we know works
-        const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
-        const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
-        const origin = window.location.origin;
-        
-        const oauthUrl = `${endpoint}/account/sessions/oauth2/google?project=${projectId}&success=${encodeURIComponent(`${origin}/dashboard`)}&failure=${encodeURIComponent(`${origin}/login`)}`;
-        window.location.href = oauthUrl;
+        const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT
+        const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
+        const origin = window.location.origin
+
+        const oauthUrl = `${endpoint}/account/sessions/oauth2/google?project=${projectId}&success=${encodeURIComponent(`${origin}/dashboard`)}&failure=${encodeURIComponent(`${origin}/login`)}`
+        window.location.href = oauthUrl
       } else {
         // Fallback for other providers
-        const origin = window.location.origin;
-        const successUrl = `${origin}/oauth-handler.html`;
-        const failureUrl = `${origin}/oauth-handler.html?error=oauth_failed`;
-        
-        console.log('OAuth URLs:', { successUrl, failureUrl, provider: providerName });
-        
+        const origin = window.location.origin
+        const successUrl = `${origin}/oauth-handler.html`
+        const failureUrl = `${origin}/oauth-handler.html?error=oauth_failed`
+
+        console.log('OAuth URLs:', { successUrl, failureUrl, provider: providerName })
+
         // Use createOAuth2Token for the token flow (returns userId/secret)
         if (typeof window !== 'undefined') {
-          const authUrl = await account.createOAuth2Token(providerName, successUrl, failureUrl);
-          window.location.href = authUrl;
+          const authUrl = await account.createOAuth2Token(providerName, successUrl, failureUrl)
+          if (authUrl) {
+            window.location.href = authUrl
+          }
         }
       }
-      
     } catch (error) {
-      console.error('OAuth error:', error);
-      setLoading(null);
-      alert('OAuth login failed. Please try again.');
+      console.error('OAuth error:', error)
+      setLoading(null)
+      alert('OAuth login failed. Please try again.')
     }
-  };
-  
+  }
+
   return (
     <div className="space-y-3">
       {googleEnabled && (
@@ -210,16 +280,28 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
             <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
           ) : (
             <svg className="w-5 h-5" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              />
             </svg>
           )}
           <span>Continue with Google</span>
         </button>
       )}
-      
+
       {appleEnabled && (
         <button
           type="button"
@@ -238,7 +320,5 @@ function OAuthButtons({ googleEnabled, appleEnabled }: { googleEnabled: boolean;
         </button>
       )}
     </div>
-  );
+  )
 }
-
-

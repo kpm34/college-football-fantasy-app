@@ -47,6 +47,8 @@
     "mock:human:e2e:10": "NUM_TEAMS=10 ROUNDS=12 npx tsx ops/common/scripts/mock-draft/human-e2e.ts",
     "mock:human:e2e:12": "NUM_TEAMS=12 ROUNDS=10 npx tsx ops/common/scripts/mock-draft/human-e2e.ts",
     "mock:human:e2e:14": "NUM_TEAMS=14 ROUNDS=8 npx tsx ops/common/scripts/mock-draft/human-e2e.ts",
+    "appwrite:test": "npx tsx scripts/test-appwrite-access.ts",
+    "appwrite:fetch": "npx tsx scripts/fetch-appwrite-schema-sdk.ts",
     "mock:human:e2e:24": "NUM_TEAMS=24 ROUNDS=5 TIMER_SEC=1 npx tsx ops/common/scripts/mock-draft/human-e2e.ts",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",

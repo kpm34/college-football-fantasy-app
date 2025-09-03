@@ -3,40 +3,40 @@
  * Handles all league-related database operations with caching
  */
 
-import { BaseRepository, QueryOptions } from './base.repository';
-import { ValidationError, ForbiddenError } from '../../domain/errors/app-error';
-import { ID } from 'appwrite';
-import { env } from '../../config/environment';
-import type { League } from '../../types/league';
-import { RosterRepository } from './roster.repository';
-import { SchemaValidator, enforceSchema } from '../../domain/validation/schema-enforcer';
+import { env } from '../../config/environment'
+import { ForbiddenError, ValidationError } from '../../domain/errors/app-error'
+import { SchemaValidator } from '../../domain/validation/schema-enforcer'
+import type { League } from '../../types/league'
+import { BaseRepository, QueryOptions } from './base.repository'
+import { RosterRepository } from './roster.repository'
 
 export interface CreateLeagueData {
-  leagueName: string;
-  maxTeams: number;
-  draftType: 'snake' | 'auction';
-  gameMode: 'power4' | 'sec' | 'acc' | 'big12' | 'bigten';
-  isPublic: boolean;
-  pickTimeSeconds: number;
-  commissionerAuthUserId: string;
-  scoringRules?: Record<string, number>;
-  draftDate?: string;
-  season?: number;
-  selectedConference?: string; // For conference mode leagues
+  leagueName: string
+  maxTeams: number
+  draftType: 'snake' | 'auction'
+  gameMode: 'power4' | 'sec' | 'acc' | 'big12' | 'bigten'
+  isPublic: boolean
+  pickTimeSeconds: number
+  commissionerAuthUserId: string
+  scoringRules?: Record<string, number>
+  draftDate?: string
+  season?: number
+  selectedConference?: string // For conference mode leagues
+  password?: string // For private leagues
 }
 
 export interface UpdateLeagueData {
-  name?: string;
-  maxTeams?: number;
-  isPublic?: boolean;
-  pickTimeSeconds?: number;
-  scoringRules?: Record<string, number>;
-  draftDate?: string;
+  name?: string
+  maxTeams?: number
+  isPublic?: boolean
+  pickTimeSeconds?: number
+  scoringRules?: Record<string, number>
+  draftDate?: string
 }
 
 export class LeagueRepository extends BaseRepository<League> {
-  protected collectionId = 'leagues';
-  protected cachePrefix = 'league';
+  protected collectionId = 'leagues'
+  protected cachePrefix = 'league'
 
   /**
    * Create a new league with proper defaults
@@ -54,68 +54,78 @@ export class LeagueRepository extends BaseRepository<League> {
       commissionerAuthUserId: String(data.commissionerAuthUserId),
       // Avoid writing attributes not present in some live schemas (leagueStatus/draftStatus/currentTeams)
       season: Number(data.season || new Date().getFullYear()),
-      scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules())
-    };
+      scoringRules: JSON.stringify(data.scoringRules || this.getDefaultScoringRules()),
+    }
 
     // Add selectedConference if provided (for conference mode leagues)
     if (data.selectedConference) {
-      leagueData.selectedConference = String(data.selectedConference);
+      leagueData.selectedConference = String(data.selectedConference)
     }
 
     // Add draftDate if provided
     if (data.draftDate) {
-      leagueData.draftDate = data.draftDate;
+      leagueData.draftDate = data.draftDate
+    }
+
+    // Add password if provided (for private leagues)
+    if ((data as any).password) {
+      ;(leagueData as any).password = String((data as any).password)
     }
 
     // Schema validation - ensure data conforms to canonical schema
-    const validation = SchemaValidator.validate('leagues', leagueData);
+    const validation = SchemaValidator.validate('leagues', leagueData)
     if (!validation.success) {
-      throw new ValidationError(`League creation failed schema validation: ${validation.errors?.join(', ')}`);
+      throw new ValidationError(
+        `League creation failed schema validation: ${validation.errors?.join(', ')}`
+      )
     }
 
     return this.create(validation.data, {
-      invalidateCache: ['league:public:*', `league:user:${data.commissionerAuthUserId}:*`]
-    });
+      invalidateCache: ['league:public:*', `league:user:${data.commissionerAuthUserId}:*`],
+    })
   }
 
   /**
    * Find leagues a user is part of
    */
-  async findUserLeagues(userId: string, options?: QueryOptions): Promise<{ leagues: League[]; total: number }> {
+  async findUserLeagues(
+    userId: string,
+    options?: QueryOptions
+  ): Promise<{ leagues: League[]; total: number }> {
     // First get all rosters for the user
-    const rosterRepo = new RosterRepository(this.isServer, this.client);
+    const rosterRepo = new RosterRepository(this.isServer, this.client)
     const { documents: rosters } = await rosterRepo.find({
       filters: { authUserId: userId }, // use new field
       cache: {
         key: `roster:user:${userId}`,
-        ttl: 300
-      }
-    });
+        ttl: 300,
+      },
+    })
 
     if (rosters.length === 0) {
-      return { leagues: [], total: 0 };
+      return { leagues: [], total: 0 }
     }
 
     // Get unique league IDs
-    const leagueIds = [...new Set(rosters.map(r => r.leagueId))];
+    const leagueIds = [...new Set(rosters.map(r => r.leagueId))]
 
     // Fetch leagues
     const result = await this.find({
       ...options,
       filters: {
         ...options?.filters,
-        $id: leagueIds
+        $id: leagueIds,
       },
       cache: {
         key: `league:user:${userId}:list`,
-        ttl: 300
-      }
-    });
+        ttl: 300,
+      },
+    })
 
     return {
       leagues: result.documents,
-      total: result.total
-    };
+      total: result.total,
+    }
   }
 
   /**
@@ -127,68 +137,68 @@ export class LeagueRepository extends BaseRepository<League> {
       filters: {
         ...options?.filters,
         isPublic: true,
-        leagueStatus: 'open'
+        // leagueStatus: 'open', // Not in schema
       },
       orderBy: 'createdAt',
       orderDirection: 'desc',
       cache: {
         key: 'league:public:list',
-        ttl: 60 // Cache for 1 minute since these change frequently
-      }
-    });
+        ttl: 60, // Cache for 1 minute since these change frequently
+      },
+    })
 
     // Filter out full leagues
     const availableLeagues = result.documents.filter(
       league => league.currentTeams < league.maxTeams
-    );
+    )
 
     return {
       leagues: availableLeagues,
-      total: availableLeagues.length
-    };
+      total: availableLeagues.length,
+    }
   }
 
   /**
    * Join a league
    */
   async joinLeague(
-    leagueId: string, 
-    userId: string, 
+    leagueId: string,
+    userId: string,
     teamName: string,
     abbreviation?: string
   ): Promise<{ league: League; fantasyTeamId: string }> {
     // Get league with fresh data (bypass cache)
-    const league = await this.findById(leagueId, { cache: { bypass: true } });
+    const league = await this.findById(leagueId, { cache: { bypass: true } })
     if (!league) {
-      throw new ValidationError('League not found');
+      throw new ValidationError('League not found')
     }
 
     // Validate join conditions (treat missing leagueStatus as 'open' by default for backwards-compat)
-    const effectiveStatus = (league as any).leagueStatus || 'open';
+    const effectiveStatus = (league as any).leagueStatus || 'open'
     if (effectiveStatus !== 'open') {
-      throw new ValidationError('League is not open for joining');
+      throw new ValidationError('League is not open for joining')
     }
 
     if (league.currentTeams >= league.maxTeams) {
-      throw new ValidationError('League is full');
+      throw new ValidationError('League is full')
     }
 
     // Check if user already in league
-    const rosterRepo = new RosterRepository(this.isServer, this.client);
+    const rosterRepo = new RosterRepository(this.isServer, this.client)
     const existingRoster = await rosterRepo.find({
       filters: {
         leagueId,
-        ownerAuthUserId: userId // Use correct field name from Appwrite schema
-      }
-    });
+        ownerAuthUserId: userId, // Use correct field name from Appwrite schema
+      },
+    })
 
     if (existingRoster.total > 0) {
-      throw new ValidationError('You are already in this league');
+      throw new ValidationError('You are already in this league')
     }
 
     // Create roster entry (using field names that exist in Appwrite collection)
-    // Based on Appwrite console: leagueId, teamName, abbrev, logoUrl, wins, losses, ties, 
-    // pointsFor, pointsAgainst, draftPosition, auctionBudgetTotal, auctionBudgetRemaining, 
+    // Based on Appwrite console: leagueId, teamName, abbrev, logoUrl, wins, losses, ties,
+    // pointsFor, pointsAgainst, draftPosition, auctionBudgetTotal, auctionBudgetRemaining,
     // displayName, ownerAuthUserId
     const cleanRosterData = {
       leagueId: String(leagueId),
@@ -202,35 +212,37 @@ export class LeagueRepository extends BaseRepository<League> {
       losses: 0,
       ties: 0,
       pointsFor: 0,
-      pointsAgainst: 0
-    };
+      pointsAgainst: 0,
+    }
 
     // Schema validation for roster data
-    const rosterValidation = SchemaValidator.validate('fantasy_teams', cleanRosterData);
+    const rosterValidation = SchemaValidator.validate('fantasy_teams', cleanRosterData)
     if (!rosterValidation.success) {
-      throw new ValidationError(`Roster creation failed schema validation: ${rosterValidation.errors?.join(', ')}`);
+      throw new ValidationError(
+        `Roster creation failed schema validation: ${rosterValidation.errors?.join(', ')}`
+      )
     }
-    
-    const roster = await rosterRepo.create(rosterValidation.data);
+
+    const roster = await rosterRepo.create(rosterValidation.data)
 
     // Update league team count
-    let updatedLeague: League;
+    let updatedLeague: League
     try {
-      updatedLeague = await this.update(leagueId, {
-        currentTeams: (league as any).currentTeams ? (league as any).currentTeams + 1 : 1,
-        leagueStatus: ((league as any).currentTeams ? (league as any).currentTeams + 1 : 1) >= league.maxTeams ? 'closed' : 'open'
-      }, {
-        invalidateCache: [
-          'league:public:*',
-          `league:user:${userId}:*`
-        ]
-      });
+      updatedLeague = await this.update(
+        leagueId,
+        {
+          currentTeams: (league as any).currentTeams ? (league as any).currentTeams + 1 : 1,
+        },
+        {
+          invalidateCache: ['league:public:*', `league:user:${userId}:*`],
+        }
+      )
     } catch {
       // If schema does not allow these fields, return the original league
-      updatedLeague = league;
+      updatedLeague = league
     }
 
-    return { league: updatedLeague, fantasyTeamId: roster.$id };
+    return { league: updatedLeague, fantasyTeamId: roster.$id }
   }
 
   /**
@@ -241,81 +253,86 @@ export class LeagueRepository extends BaseRepository<League> {
     userId: string,
     updates: UpdateLeagueData
   ): Promise<League> {
-    const league = await this.findById(leagueId);
+    const league = await this.findById(leagueId)
     if (!league) {
-      throw new ValidationError('League not found');
+      throw new ValidationError('League not found')
     }
 
     if (league.commissioner !== userId) {
-      throw new ForbiddenError('Only the commissioner can update league settings');
+      throw new ForbiddenError('Only the commissioner can update league settings')
     }
 
     // Don't allow certain changes after draft starts
     if ((league as any).draftStatus === 'drafting') {
-      delete updates.maxTeams;
-      delete updates.scoringRules;
+      delete updates.maxTeams
+      delete updates.scoringRules
     }
 
-    return this.update(leagueId, {
-      ...updates
-    }, {
-      partial: true,
-      invalidateCache: [
-        'league:public:*',
-        `league:user:*`
-      ]
-    });
+    return this.update(
+      leagueId,
+      {
+        ...updates,
+      },
+      {
+        partial: true,
+        invalidateCache: ['league:public:*', `league:user:*`],
+      }
+    )
   }
 
   /**
    * Start draft (commissioner only)
    */
   async startDraft(leagueId: string, userId: string): Promise<League> {
-    const league = await this.findById(leagueId);
+    const league = await this.findById(leagueId)
     if (!league) {
-      throw new ValidationError('League not found');
+      throw new ValidationError('League not found')
     }
 
     if (league.commissioner !== userId) {
-      throw new ForbiddenError('Only the commissioner can start the draft');
+      throw new ForbiddenError('Only the commissioner can start the draft')
     }
 
     if (league.currentTeams < league.maxTeams) {
-      throw new ValidationError('League must be full to start draft');
+      throw new ValidationError('League must be full to start draft')
     }
 
     // Create draft order
-    const rosterRepo = new RosterRepository(this.isServer, this.client);
+    const rosterRepo = new RosterRepository(this.isServer, this.client)
     const { documents: rosters } = await rosterRepo.find({
       filters: { leagueId },
       orderBy: 'draftPosition',
-      orderDirection: 'asc'
-    });
+      orderDirection: 'asc',
+    })
 
     // Initialize draft state in Vercel KV for real-time performance
     if (env.features.caching) {
       try {
-        const { kv } = await import('@vercel/kv');
+        const { kv } = await import('@vercel/kv')
         await kv.hset(`draft:${leagueId}`, {
           currentRound: 1,
           currentPick: 1,
           totalPicks: 0,
           draftOrder: rosters.map(r => r.$id),
           startTime: new Date().toISOString(),
-          pickDeadline: new Date(Date.now() + league.pickTimeSeconds * 1000).toISOString()
-        });
+          pickDeadline: new Date(Date.now() + league.pickTimeSeconds * 1000).toISOString(),
+        })
       } catch (error) {
-        console.warn('Failed to initialize draft state in KV:', error);
+        console.warn('Failed to initialize draft state in KV:', error)
       }
     }
 
-    return this.update(leagueId, {
-      draftStatus: 'drafting',
-      draftStartedAt: new Date().toISOString()
-    }, {
-      partial: true,
-      invalidateCache: [`league:${leagueId}:*`]
-    });
+    return this.update(
+      leagueId,
+      {
+        draftStatus: 'drafting',
+        draftStartedAt: new Date().toISOString(),
+      },
+      {
+        partial: true,
+        invalidateCache: [`league:${leagueId}:*`],
+      }
+    )
   }
 
   /**
@@ -324,19 +341,19 @@ export class LeagueRepository extends BaseRepository<League> {
   private getDefaultScoringRules(): Record<string, number> {
     return {
       // Passing
-      passingYards: 0.04,      // 1 point per 25 yards
+      passingYards: 0.04, // 1 point per 25 yards
       passingTouchdowns: 4,
       passingInterceptions: -2,
-      
+
       // Rushing
-      rushingYards: 0.1,       // 1 point per 10 yards
+      rushingYards: 0.1, // 1 point per 10 yards
       rushingTouchdowns: 6,
-      
+
       // Receiving
-      receivingYards: 0.1,     // 1 point per 10 yards
+      receivingYards: 0.1, // 1 point per 10 yards
       receivingTouchdowns: 6,
-      receptions: 1,           // PPR
-      
+      receptions: 1, // PPR
+
       // Defense
       sacks: 1,
       interceptions: 2,
@@ -344,34 +361,34 @@ export class LeagueRepository extends BaseRepository<League> {
       fumbleRecoveries: 2,
       defensiveTouchdowns: 6,
       safeties: 2,
-      
+
       // Kicking
       fieldGoalMade: 3,
       fieldGoalMissed: -1,
       extraPointMade: 1,
       extraPointMissed: -1,
-    };
+    }
   }
 
   /**
    * Validate league creation data
    */
   protected async validateCreate(data: Partial<League>): Promise<void> {
-    const effectiveName = (data as any).leagueName || data.name;
+    const effectiveName = (data as any).leagueName || data.name
     if (!effectiveName || String(effectiveName).trim().length < 3) {
-      throw new ValidationError('League name must be at least 3 characters');
+      throw new ValidationError('League name must be at least 3 characters')
     }
 
     if (!data.maxTeams || data.maxTeams < 4 || data.maxTeams > 20) {
-      throw new ValidationError('League must have between 4 and 20 teams');
+      throw new ValidationError('League must have between 4 and 20 teams')
     }
 
     if (!['snake', 'auction'].includes(data.draftType!)) {
-      throw new ValidationError('Invalid draft type');
+      throw new ValidationError('Invalid draft type')
     }
 
     if (!['power4', 'sec', 'acc', 'big12', 'bigten'].includes(data.gameMode!)) {
-      throw new ValidationError('Invalid game mode');
+      throw new ValidationError('Invalid game mode')
     }
   }
 }

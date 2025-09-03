@@ -3,76 +3,78 @@
  * Provides common database operations with caching and platform optimization
  */
 
-import { Client, Databases, Query, Models, ID as ClientID } from 'appwrite';
-import { Client as ServerClient, Databases as ServerDatabases, ID as ServerID } from 'node-appwrite';
-import { env } from '../../config/environment';
-import { AppError, NotFoundError, ValidationError } from '../../domain/errors/app-error';
-import { SchemaValidator } from '../../domain/validation/schema-enforcer';
+import { Client, ID as ClientID, Databases, Models, Query } from 'appwrite'
+import { Client as ServerClient, Databases as ServerDatabases, ID as ServerID } from 'node-appwrite'
+import { env } from '../../config/environment'
+import { AppError, NotFoundError } from '../../domain/errors/app-error'
+import { SchemaValidator } from '../../domain/validation/schema-enforcer'
 
 // Conditionally import KV only if configured
-let kv: any = null;
+let kv: any = null
 if (env.features.caching) {
-  import('@vercel/kv').then(module => {
-    kv = module.kv;
-  }).catch(() => {
-    console.warn('Vercel KV not available - caching disabled');
-  });
+  import('@vercel/kv')
+    .then(module => {
+      kv = module.kv
+    })
+    .catch(() => {
+      console.warn('Vercel KV not available - caching disabled')
+    })
 }
 
 export interface QueryOptions {
-  limit?: number;
-  offset?: number;
-  orderBy?: string;
-  orderDirection?: 'asc' | 'desc';
-  search?: string;
-  filters?: Record<string, any>;
+  limit?: number
+  offset?: number
+  orderBy?: string
+  orderDirection?: 'asc' | 'desc'
+  search?: string
+  filters?: Record<string, any>
   cache?: {
-    key?: string;
-    ttl?: number; // seconds
-    bypass?: boolean;
-  };
+    key?: string
+    ttl?: number // seconds
+    bypass?: boolean
+  }
 }
 
 export interface CreateOptions {
-  invalidateCache?: string[];
+  invalidateCache?: string[]
 }
 
 export interface UpdateOptions extends CreateOptions {
-  partial?: boolean;
+  partial?: boolean
 }
 
 export abstract class BaseRepository<T extends Models.Document> {
-  protected databases: Databases | ServerDatabases;
-  protected databaseId: string;
-  protected collectionId: string;
-  protected cachePrefix: string;
-  protected defaultCacheTTL: number = 300; // 5 minutes
+  protected databases: Databases | ServerDatabases
+  protected databaseId: string
+  protected collectionId: string = ''
+  protected cachePrefix: string = ''
+  protected defaultCacheTTL: number = 300 // 5 minutes
 
   constructor(
     protected isServer: boolean = true,
     protected client?: Client | ServerClient
   ) {
-    this.databaseId = env.client.appwrite.databaseId;
-    
+    this.databaseId = env.client.appwrite.databaseId
+
     if (isServer) {
       if (!client) {
         // Create server client with API key
         const serverClient = new ServerClient()
           .setEndpoint(env.server.appwrite.endpoint)
           .setProject(env.server.appwrite.projectId)
-          .setKey(env.server.appwrite.apiKey);
-        this.client = serverClient;
+          .setKey(env.server.appwrite.apiKey)
+        this.client = serverClient
       }
-      this.databases = new ServerDatabases(this.client as ServerClient);
+      this.databases = new ServerDatabases(this.client as ServerClient)
     } else {
       if (!client) {
         // Create client instance
         const browserClient = new Client()
           .setEndpoint(env.client.appwrite.endpoint)
-          .setProject(env.client.appwrite.projectId);
-        this.client = browserClient;
+          .setProject(env.client.appwrite.projectId)
+        this.client = browserClient
       }
-      this.databases = new Databases(this.client as Client);
+      this.databases = new Databases(this.client as Client)
     }
   }
 
@@ -82,30 +84,30 @@ export abstract class BaseRepository<T extends Models.Document> {
   async findById(id: string, options?: QueryOptions): Promise<T | null> {
     try {
       // Check cache if enabled
-      const cacheKey = options?.cache?.key || `${this.cachePrefix}:${id}`;
+      const cacheKey = options?.cache?.key || `${this.cachePrefix}:${id}`
       if (!options?.cache?.bypass && env.features.caching) {
-        const cached = await this.getFromCache<T>(cacheKey);
-        if (cached) return cached;
+        const cached = await this.getFromCache<T>(cacheKey)
+        if (cached) return cached
       }
 
       // Fetch from database
-      const document = await this.databases.getDocument(
+      const document = (await (this.databases.getDocument as any)(
         this.databaseId,
         this.collectionId,
         id
-      ) as T;
+      )) as T
 
       // Cache the result
       if (env.features.caching) {
-        await this.setCache(cacheKey, document, options?.cache?.ttl || this.defaultCacheTTL);
+        await this.setCache(cacheKey, document, options?.cache?.ttl || this.defaultCacheTTL)
       }
 
-      return document;
+      return document
     } catch (error: any) {
       if (error.code === 404) {
-        return null;
+        return null
       }
-      throw new AppError(500, 'REPOSITORY_ERROR', `Failed to find document: ${error.message}`);
+      throw new AppError(500, 'REPOSITORY_ERROR', `Failed to find document: ${error.message}`)
     }
   }
 
@@ -114,23 +116,24 @@ export abstract class BaseRepository<T extends Models.Document> {
    */
   async find(options?: QueryOptions): Promise<{ documents: T[]; total: number }> {
     try {
-      const queries: string[] = [];
+      const queries: string[] = []
 
       // Build queries
       if (options?.limit) {
-        queries.push(Query.limit(options.limit));
+        queries.push(Query.limit(options.limit))
       }
       if (options?.offset) {
-        queries.push(Query.offset(options.offset));
+        queries.push(Query.offset(options.offset))
       }
       if (options?.orderBy) {
-        const order = options.orderDirection === 'asc' 
-          ? Query.orderAsc(options.orderBy)
-          : Query.orderDesc(options.orderBy);
-        queries.push(order);
+        const order =
+          options.orderDirection === 'asc'
+            ? Query.orderAsc(options.orderBy)
+            : Query.orderDesc(options.orderBy)
+        queries.push(order)
       }
       if (options?.search) {
-        queries.push(Query.search('search', options.search));
+        queries.push(Query.search('search', options.search))
       }
 
       // Add custom filters
@@ -141,51 +144,51 @@ export abstract class BaseRepository<T extends Models.Document> {
           const fieldName = (() => {
             switch (key) {
               case 'userId':
-                return 'clientId';
+                return 'clientId'
               case 'leagueId':
-                return 'leagueId';
+                return 'leagueId'
               default:
-                return key; // fall back to whatever the repo asked for
+                return key // fall back to whatever the repo asked for
             }
-          })();
+          })()
 
           if (Array.isArray(value)) {
-            queries.push(Query.equal(fieldName, value));
+            queries.push(Query.equal(fieldName, value))
           } else if (value !== null && value !== undefined) {
-            queries.push(Query.equal(fieldName, [value]));
+            queries.push(Query.equal(fieldName, [value]))
           }
-        });
+        })
       }
 
       // Check cache for list queries
-      const cacheKey = options?.cache?.key || 
-        `${this.cachePrefix}:list:${JSON.stringify({ queries, options })}`;
-      
+      const cacheKey =
+        options?.cache?.key || `${this.cachePrefix}:list:${JSON.stringify({ queries, options })}`
+
       if (!options?.cache?.bypass && env.features.caching) {
-        const cached = await this.getFromCache<{ documents: T[]; total: number }>(cacheKey);
-        if (cached) return cached;
+        const cached = await this.getFromCache<{ documents: T[]; total: number }>(cacheKey)
+        if (cached) return cached
       }
 
       // Fetch from database
-      const response = await this.databases.listDocuments(
+      const response = await (this.databases.listDocuments as any)(
         this.databaseId,
         this.collectionId,
         queries
-      );
+      )
 
       const result = {
         documents: response.documents as T[],
-        total: response.total
-      };
+        total: response.total,
+      }
 
       // Cache the result
       if (env.features.caching) {
-        await this.setCache(cacheKey, result, options?.cache?.ttl || this.defaultCacheTTL);
+        await this.setCache(cacheKey, result, options?.cache?.ttl || this.defaultCacheTTL)
       }
 
-      return result;
+      return result
     } catch (error: any) {
-      throw new AppError(500, 'REPOSITORY_ERROR', `Failed to find documents: ${error.message}`);
+      throw new AppError(500, 'REPOSITORY_ERROR', `Failed to find documents: ${error.message}`)
     }
   }
 
@@ -195,85 +198,88 @@ export abstract class BaseRepository<T extends Models.Document> {
   async create(data: Partial<T>, options?: CreateOptions): Promise<T> {
     try {
       // Validate data
-      await this.validateCreate(data);
+      await this.validateCreate(data)
 
       // Transform data for schema compliance
-      const transformedData = SchemaValidator.transform(this.collectionId, data);
+      const transformedData = SchemaValidator.transform(this.collectionId, data)
 
       // Never allow caller-provided IDs to leak into create payload
       // Appwrite determines ID from the third argument only
       if ((transformedData as any).$id) {
-        delete (transformedData as any).$id;
+        delete (transformedData as any).$id
       }
 
       // Create document with retry on rare duplicate-ID collisions
-      let lastError: any | null = null;
-      let idToUse: string = ''; // Move declaration outside try block
-      
+      let lastError: any | null = null
+      let idToUse: string = '' // Move declaration outside try block
+
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
           // Generate a unique ID - use timestamp + random for extra uniqueness
-          const ID = this.isServer ? ServerID : ClientID;
-          
+          const ID = this.isServer ? ServerID : ClientID
+
           if (attempt === 0) {
             // First attempt: use Appwrite's ID.unique()
-            idToUse = ID.unique();
+            idToUse = ID.unique()
           } else {
             // Retry attempts: use timestamp + random string to ensure uniqueness
-            const timestamp = Date.now().toString(36);
-            const random = Math.random().toString(36).substring(2, 15);
-            idToUse = `${timestamp}_${random}`;
+            const timestamp = Date.now().toString(36)
+            const random = Math.random().toString(36).substring(2, 15)
+            idToUse = `${timestamp}_${random}`
           }
 
-          console.log(`[Repository] create ${this.collectionId} attempt=${attempt + 1} id=${idToUse}`);
+          console.log(
+            `[Repository] create ${this.collectionId} attempt=${attempt + 1} id=${idToUse}`
+          )
 
-          const document = await this.databases.createDocument(
+          const document = (await (this.databases.createDocument as any)(
             this.databaseId,
             this.collectionId,
             idToUse,
             transformedData
-          ) as T;
+          )) as T
 
           // Invalidate related caches
           if (options?.invalidateCache) {
-            await this.invalidateCache(options.invalidateCache);
+            await this.invalidateCache(options.invalidateCache)
           }
 
           // Invalidate list caches
-          await this.invalidateCache([`${this.cachePrefix}:list:*`]);
+          await this.invalidateCache([`${this.cachePrefix}:list:*`])
 
-          return document;
+          return document
         } catch (err: any) {
-          lastError = err;
-          const message = String(err?.message || '');
-          const isDuplicateId = message.includes('requested ID already exists') || message.includes('already exists');
-          
+          lastError = err
+          const message = String(err?.message || '')
+          const isDuplicateId =
+            message.includes('requested ID already exists') || message.includes('already exists')
+
           console.error(`[Repository] create ${this.collectionId} attempt=${attempt + 1} failed:`, {
             error: message,
             code: err.code,
             type: err.type,
-            idUsed: idToUse
-          });
-          
+            idUsed: idToUse,
+          })
+
           // Retry only on duplicate ID errors; otherwise throw immediately
           if (!isDuplicateId) {
-            throw err;
+            throw err
           }
-          
+
           // Wait a bit before retry to avoid race conditions
           if (attempt < 2) {
-            await new Promise(resolve => setTimeout(resolve, 100 * (attempt + 1)));
+            await new Promise(resolve => setTimeout(resolve, 100 * (attempt + 1)))
           }
         }
       }
 
       // If we exhausted retries, throw enriched error
-      throw lastError;
+      throw lastError
     } catch (error: any) {
-      if (error instanceof AppError) throw error;
-      const message = `Failed to create document in collection '${this.collectionId}': ${error.message}`;
-      console.error(message);
-      throw new AppError(500, 'REPOSITORY_ERROR', message);
+      if (error instanceof AppError) throw error
+      const message = `Failed to create document in collection '${this.collectionId}': ${error.message}`
+      console.error(message)
+      throw new AppError(500, 'REPOSITORY_ERROR', message)
     }
   }
 
@@ -283,40 +289,40 @@ export abstract class BaseRepository<T extends Models.Document> {
   async update(id: string, data: Partial<T>, options?: UpdateOptions): Promise<T> {
     try {
       // Validate data
-      await this.validateUpdate(id, data);
+      await this.validateUpdate(id, data)
 
       // Get existing document if doing partial update
-      let updateData = data;
+      let updateData = data
       if (options?.partial) {
-        const existing = await this.findById(id);
+        const existing = await this.findById(id)
         if (!existing) {
-          throw new NotFoundError(`Document ${id} not found`);
+          throw new NotFoundError(`Document ${id} not found`)
         }
-        updateData = { ...existing, ...data, $id: id };
+        updateData = { ...existing, ...data, $id: id }
       }
 
       // Transform data for schema compliance
-      const transformedData = SchemaValidator.transform(this.collectionId, updateData);
+      const transformedData = SchemaValidator.transform(this.collectionId, updateData)
 
       // Update document
-      const document = await this.databases.updateDocument(
+      const document = (await (this.databases.updateDocument as any)(
         this.databaseId,
         this.collectionId,
         id,
         transformedData
-      ) as T;
+      )) as T
 
       // Invalidate caches
       await this.invalidateCache([
         `${this.cachePrefix}:${id}`,
         `${this.cachePrefix}:list:*`,
-        ...(options?.invalidateCache || [])
-      ]);
+        ...(options?.invalidateCache || []),
+      ])
 
-      return document;
+      return document
     } catch (error: any) {
-      if (error instanceof AppError) throw error;
-      throw new AppError(500, 'REPOSITORY_ERROR', `Failed to update document: ${error.message}`);
+      if (error instanceof AppError) throw error
+      throw new AppError(500, 'REPOSITORY_ERROR', `Failed to update document: ${error.message}`)
     }
   }
 
@@ -325,20 +331,16 @@ export abstract class BaseRepository<T extends Models.Document> {
    */
   async delete(id: string, options?: UpdateOptions): Promise<void> {
     try {
-      await this.databases.deleteDocument(
-        this.databaseId,
-        this.collectionId,
-        id
-      );
+      await this.databases.deleteDocument(this.databaseId, this.collectionId, id)
 
       // Invalidate caches
       await this.invalidateCache([
         `${this.cachePrefix}:${id}`,
         `${this.cachePrefix}:list:*`,
-        ...(options?.invalidateCache || [])
-      ]);
+        ...(options?.invalidateCache || []),
+      ])
     } catch (error: any) {
-      throw new AppError(500, 'REPOSITORY_ERROR', `Failed to delete document: ${error.message}`);
+      throw new AppError(500, 'REPOSITORY_ERROR', `Failed to delete document: ${error.message}`)
     }
   }
 
@@ -346,16 +348,16 @@ export abstract class BaseRepository<T extends Models.Document> {
    * Count documents matching criteria
    */
   async count(options?: QueryOptions): Promise<number> {
-    const result = await this.find({ ...options, limit: 1 });
-    return result.total;
+    const result = await this.find({ ...options, limit: 1 })
+    return result.total
   }
 
   /**
    * Check if a document exists
    */
   async exists(id: string): Promise<boolean> {
-    const document = await this.findById(id);
-    return document !== null;
+    const document = await this.findById(id)
+    return document !== null
   }
 
   /**
@@ -363,12 +365,12 @@ export abstract class BaseRepository<T extends Models.Document> {
    */
   protected async getFromCache<R>(key: string): Promise<R | null> {
     try {
-      if (!env.features.caching) return null;
-      const cached = await kv.get<R>(key);
-      return cached;
+      if (!env.features.caching) return null
+      const cached = (await kv.get(key)) as R | null
+      return cached
     } catch (error) {
-      console.warn(`Cache get failed for ${key}:`, error);
-      return null;
+      console.warn(`Cache get failed for ${key}:`, error)
+      return null
     }
   }
 
@@ -377,10 +379,10 @@ export abstract class BaseRepository<T extends Models.Document> {
    */
   protected async setCache(key: string, value: any, ttl: number): Promise<void> {
     try {
-      if (!env.features.caching) return;
-      await kv.setex(key, ttl, value);
+      if (!env.features.caching) return
+      await kv.setex(key, ttl, value)
     } catch (error) {
-      console.warn(`Cache set failed for ${key}:`, error);
+      console.warn(`Cache set failed for ${key}:`, error)
     }
   }
 
@@ -389,22 +391,22 @@ export abstract class BaseRepository<T extends Models.Document> {
    */
   protected async invalidateCache(patterns: string[]): Promise<void> {
     try {
-      if (!env.features.caching) return;
-      
+      if (!env.features.caching) return
+
       for (const pattern of patterns) {
         if (pattern.endsWith('*')) {
           // Pattern matching - scan and delete
-          const keys = await kv.keys(pattern);
+          const keys = await kv.keys(pattern)
           if (keys.length > 0) {
-            await kv.del(...keys);
+            await kv.del(...keys)
           }
         } else {
           // Direct key deletion
-          await kv.del(pattern);
+          await kv.del(pattern)
         }
       }
     } catch (error) {
-      console.warn('Cache invalidation failed:', error);
+      console.warn('Cache invalidation failed:', error)
     }
   }
 
@@ -425,19 +427,16 @@ export abstract class BaseRepository<T extends Models.Document> {
   /**
    * Subscribe to realtime changes
    */
-  subscribeToChanges(
-    callback: (event: any) => void,
-    documentId?: string
-  ): () => void {
+  subscribeToChanges(callback: (event: any) => void, documentId?: string): () => void {
     if (this.isServer) {
-      throw new Error('Realtime subscriptions are only available on client side');
+      throw new Error('Realtime subscriptions are only available on client side')
     }
 
     const channel = documentId
       ? `databases.${this.databaseId}.collections.${this.collectionId}.documents.${documentId}`
-      : `databases.${this.databaseId}.collections.${this.collectionId}.documents`;
+      : `databases.${this.databaseId}.collections.${this.collectionId}.documents`
 
-    const unsubscribe = (this.client as Client).subscribe(channel, callback);
-    return unsubscribe;
+    const unsubscribe = (this.client as Client).subscribe(channel, callback)
+    return unsubscribe
   }
 }

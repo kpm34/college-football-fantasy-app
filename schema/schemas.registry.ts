@@ -1,214 +1,160 @@
 /**
  * Schema Registry
- * Central registry for all database schemas and their TypeScript types
- * 
- * This file maps collection names to their schema definitions and provides
- * type-safe access to all collections in the database.
+ * Central registry for all database schemas
+ * Auto-generated from live Appwrite schema
+ * Generated: 2025-09-03T10:03:13.520Z
  */
 
-import { SCHEMA, type SchemaCollection } from './schema';
-import { 
-  COLLECTIONS as ZOD_COLLECTIONS,
-  SCHEMA_REGISTRY as ZOD_SCHEMA_REGISTRY,
-  type FantasyTeam,
-  type League,
-  type CollegePlayer,
-  type Game,
-  type Ranking,
-  type DraftEvent,
-  type DraftState,
-  type Lineup,
-  type PlayerStat,
-  type Auction,
-  type Bid,
-} from './zod-schema';
+import {
+  ActivityLog,
+  Auctions,
+  Bids,
+  Clients,
+  CollegePlayers,
+  DraftEvents,
+  DraftPicks,
+  DraftStates,
+  Drafts,
+  FantasyTeams,
+  Games,
+  Invites,
+  LeagueMemberships,
+  Leagues,
+  Lineups,
+  MascotDownloadTasks,
+  MascotJobs,
+  MascotPresets,
+  Matchups,
+  MeshyJobs,
+  Migrations,
+  ModelRuns,
+  ModelVersions,
+  PlayerStats,
+  Projections,
+  Rankings,
+  RosterSlots,
+  Schools,
+  Transactions
+} from './zod-schema'
 
-/**
- * Collection Name Constants
- * Use these constants throughout the application for type-safe collection references
- */
-export const COLLECTIONS = {
-  // Core Collections
-  FANTASY_TEAMS: 'fantasy_teams' as const,  // User fantasy teams within leagues
-  LEAGUES: 'leagues' as const,               // Fantasy leagues
-  COLLEGE_PLAYERS: 'college_players' as const, // Player pool
-  GAMES: 'games' as const,                   // Game schedule
-  RANKINGS: 'rankings' as const,             // AP Top 25 rankings
-  SCHOOLS: 'schools' as const,               // College teams/schools
-  
-  // Draft Collections
-  DRAFT_EVENTS: 'draft_events' as const,     // Draft event log
-  DRAFT_STATES: 'draft_states' as const,     // Draft state snapshots
-  DRAFTS: 'drafts' as const,                 // Draft configurations
-  
-  // Roster Management
-  ROSTER_SLOTS: 'roster_slots' as const,     // Individual player slots
-  LINEUPS: 'lineups' as const,               // Weekly lineups
-  
-  // League Management
-  LEAGUE_MEMBERSHIPS: 'league_memberships' as const, // User-league associations
-  CLIENTS: 'clients' as const,               // User profiles
-  MATCHUPS: 'matchups' as const,             // Weekly matchups
-  TRANSACTIONS: 'transactions' as const,     // Trades, waivers, etc.
-  
-  // Auction Draft
-  AUCTIONS: 'auctions' as const,             // Auction sessions
-  BIDS: 'bids' as const,                     // Auction bids
-  
-  // Stats & Projections
-  PLAYER_STATS: 'player_stats' as const,     // Historical stats
-  PROJECTIONS: 'projections' as const,       // Player projections
-  MODEL_RUNS: 'model_runs' as const,         // Projection model runs
-  
-  // System Collections
-  ACTIVITY_LOG: 'activity_log' as const,     // User activity tracking
-  INVITES: 'invites' as const,               // League invites
-  MIGRATIONS: 'migrations' as const,         // Database migrations
-  MESHY_JOBS: 'meshy_jobs' as const,        // 3D model generation jobs
-  MODEL_VERSIONS: 'model_versions' as const, // 3D model versions
-} as const;
+// Collection ID to Schema mapping
+export const schemas = {
+  activity_log: ActivityLog,
+  auctions: Auctions,
+  bids: Bids,
+  clients: Clients,
+  college_players: CollegePlayers,
+  draft_events: DraftEvents,
+  draft_picks: DraftPicks,
+  draft_states: DraftStates,
+  drafts: Drafts,
+  fantasy_teams: FantasyTeams,
+  games: Games,
+  invites: Invites,
+  league_memberships: LeagueMemberships,
+  leagues: Leagues,
+  lineups: Lineups,
+  mascot_download_tasks: MascotDownloadTasks,
+  mascot_jobs: MascotJobs,
+  mascot_presets: MascotPresets,
+  matchups: Matchups,
+  meshy_jobs: MeshyJobs,
+  migrations: Migrations,
+  model_runs: ModelRuns,
+  model_versions: ModelVersions,
+  player_stats: PlayerStats,
+  projections: Projections,
+  rankings: Rankings,
+  roster_slots: RosterSlots,
+  schools: Schools,
+  transactions: Transactions,
+} as const
 
-/**
- * Type definitions for collection documents
- * These types are inferred from the Zod schemas for type safety
- */
-export type Collections = {
-  [COLLECTIONS.FANTASY_TEAMS]: FantasyTeam;
-  [COLLECTIONS.LEAGUES]: League;
-  [COLLECTIONS.COLLEGE_PLAYERS]: CollegePlayer;
-  [COLLECTIONS.GAMES]: Game;
-  [COLLECTIONS.RANKINGS]: Ranking;
-  [COLLECTIONS.DRAFT_EVENTS]: DraftEvent;
-  [COLLECTIONS.DRAFT_STATES]: DraftState;
-  [COLLECTIONS.LINEUPS]: Lineup;
-  [COLLECTIONS.PLAYER_STATS]: PlayerStat;
-  [COLLECTIONS.AUCTIONS]: Auction;
-  [COLLECTIONS.BIDS]: Bid;
-  // Add more as needed from zod-schema types
-};
+// Collection names for reference
+export const COLLECTION_NAMES = {
+  'activity_log': 'activity_log',
+  'auctions': 'Auctions',
+  'bids': 'Bids',
+  'clients': 'clients',
+  'college_players': 'College Players',
+  'draft_events': 'draft_events',
+  'draft_picks': 'Draft Picks',
+  'draft_states': 'Draft States',
+  'drafts': 'drafts',
+  'fantasy_teams': 'fantasy_teams',
+  'games': 'Games',
+  'invites': 'invites',
+  'league_memberships': 'league_memberships',
+  'leagues': 'Leagues',
+  'lineups': 'Lineups',
+  'mascot_download_tasks': 'Mascot Download Tasks',
+  'mascot_jobs': 'Mascot Jobs',
+  'mascot_presets': 'Mascot Presets',
+  'matchups': 'Matchups',
+  'meshy_jobs': 'meshy_jobs',
+  'migrations': 'Database Migrations',
+  'model_runs': 'model_runs',
+  'model_versions': 'Model Versions',
+  'player_stats': 'Player Stats',
+  'projections': 'projections',
+  'rankings': 'AP Rankings',
+  'roster_slots': 'roster_slots',
+  'schools': 'schools',
+  'transactions': 'Transactions',
+} as const
 
-/**
- * Schema Registry
- * Maps collection IDs to their schema definitions
- */
-export const SCHEMA_REGISTRY = {
-  // Map from collection ID to schema
-  ...Object.fromEntries(
-    Object.entries(SCHEMA).map(([id, schema]) => [id, schema])
-  ),
-  
-  // Ensure Zod schemas are also accessible
-  ...ZOD_SCHEMA_REGISTRY,
-} as const;
+// Type exports
+export type SchemaRegistry = typeof schemas
+export type CollectionId = keyof SchemaRegistry
+export type CollectionSchema<T extends CollectionId> = typeof schemas[T]
 
-/**
- * Helper Functions
- */
-
-/**
- * Get schema for a collection
- */
-export function getCollectionSchema(collectionId: string): SchemaCollection | undefined {
-  return SCHEMA[collectionId];
+// Helper to get schema by collection ID
+export function getSchema<T extends CollectionId>(collectionId: T) {
+  return schemas[collectionId]
 }
 
-/**
- * Get Zod schema for a collection
- */
-export function getZodSchema(collectionId: string) {
-  return ZOD_SCHEMA_REGISTRY[collectionId as keyof typeof ZOD_SCHEMA_REGISTRY];
+// Helper to validate data against schema
+export function validateSchema<T extends CollectionId>(
+  collectionId: T,
+  data: unknown
+) {
+  const schema = schemas[collectionId]
+  return schema.parse(data)
 }
 
-/**
- * Check if a collection exists
- */
-export function isValidCollection(collectionId: string): boolean {
-  return collectionId in SCHEMA || collectionId in ZOD_SCHEMA_REGISTRY;
-}
-
-/**
- * Get all collection IDs
- */
-export function getAllCollectionIds(): string[] {
-  return Object.keys(COLLECTIONS).map(key => COLLECTIONS[key as keyof typeof COLLECTIONS]);
-}
-
-/**
- * Collection Metadata
- * Additional information about collections for UI and documentation
- */
-export const COLLECTION_METADATA = {
-  [COLLECTIONS.FANTASY_TEAMS]: {
-    displayName: 'Fantasy Teams',
-    description: 'User fantasy teams within leagues',
-    icon: '🏈',
-    category: 'core',
-  },
-  [COLLECTIONS.LEAGUES]: {
-    displayName: 'Leagues',
-    description: 'Fantasy football leagues',
-    icon: '🏆',
-    category: 'core',
-  },
-  [COLLECTIONS.COLLEGE_PLAYERS]: {
-    displayName: 'College Players',
-    description: 'Power 4 conference players',
-    icon: '👤',
-    category: 'core',
-  },
-  [COLLECTIONS.GAMES]: {
-    displayName: 'Games',
-    description: 'College football game schedule',
-    icon: '🏟️',
-    category: 'core',
-  },
-  [COLLECTIONS.RANKINGS]: {
-    displayName: 'Rankings',
-    description: 'AP Top 25 weekly rankings',
-    icon: '📊',
-    category: 'core',
-  },
-  [COLLECTIONS.DRAFT_EVENTS]: {
-    displayName: 'Draft Events',
-    description: 'Draft pick events and history',
-    icon: '📝',
-    category: 'draft',
-  },
-  [COLLECTIONS.DRAFT_STATES]: {
-    displayName: 'Draft States',
-    description: 'Draft state snapshots',
-    icon: '💾',
-    category: 'draft',
-  },
-  [COLLECTIONS.ROSTER_SLOTS]: {
-    displayName: 'Roster Slots',
-    description: 'Individual player roster slots',
-    icon: '📋',
-    category: 'roster',
-  },
-  [COLLECTIONS.LINEUPS]: {
-    displayName: 'Lineups',
-    description: 'Weekly starting lineups',
-    icon: '📑',
-    category: 'roster',
-  },
-  // Add more metadata as needed
-} as const;
-
-/**
- * Export everything for convenience
- */
-export {
-  SCHEMA,
-  ZOD_COLLECTIONS,
-  ZOD_SCHEMA_REGISTRY,
-  type SchemaCollection,
-  type SchemaAttribute,
-  type SchemaIndex,
-} from './schema';
-
-export * from './zod-schema';
-
-// Backwards compatibility aliases (deprecated)
-export const USER_TEAMS = COLLECTIONS.FANTASY_TEAMS;  // @deprecated Use FANTASY_TEAMS
-export const ROSTERS = COLLECTIONS.FANTASY_TEAMS;     // @deprecated Use FANTASY_TEAMS
+// Export collection statistics
+export const SCHEMA_STATS = {
+  totalCollections: 29,
+  lastUpdated: '2025-09-03T10:03:13.521Z',
+  collections: [
+    'activity_log',
+    'auctions',
+    'bids',
+    'clients',
+    'college_players',
+    'draft_events',
+    'draft_picks',
+    'draft_states',
+    'drafts',
+    'fantasy_teams',
+    'games',
+    'invites',
+    'league_memberships',
+    'leagues',
+    'lineups',
+    'mascot_download_tasks',
+    'mascot_jobs',
+    'mascot_presets',
+    'matchups',
+    'meshy_jobs',
+    'migrations',
+    'model_runs',
+    'model_versions',
+    'player_stats',
+    'projections',
+    'rankings',
+    'roster_slots',
+    'schools',
+    'transactions',
+  ]
+} as const

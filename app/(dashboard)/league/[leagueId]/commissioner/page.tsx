@@ -1,105 +1,105 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@hooks/useAuth';
-import Link from 'next/link';
-import { ChevronLeftIcon, ShareIcon } from '@heroicons/react/24/outline';
-import { leagueColors } from '@/lib/theme/colors';
-import { InviteModal } from '@components/features/leagues/InviteModal';
+import { leagueColors } from '@/lib/theme/colors'
+import { InviteModal } from '@components/features/leagues/InviteModal'
+import { ChevronLeftIcon, ShareIcon } from '@heroicons/react/24/outline'
+import { useAuth } from '@hooks/useAuth'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 interface ScoringRules {
   // Passing
-  passingYards: number;
-  passingTouchdowns: number;
-  interceptions: number;
-  
+  passingYards: number
+  passingTouchdowns: number
+  interceptions: number
+
   // Rushing
-  rushingYards: number;
-  rushingTouchdowns: number;
-  
+  rushingYards: number
+  rushingTouchdowns: number
+
   // Receiving
-  receptions: number;
-  receivingYards: number;
-  receivingTouchdowns: number;
-  
+  receptions: number
+  receivingYards: number
+  receivingTouchdowns: number
+
   // Kicking
   // Back-compat generic fields
-  fieldGoalMade: number;
-  fieldGoalMissed: number;
-  extraPointMade: number;
-  extraPointMissed: number;
+  fieldGoalMade: number
+  fieldGoalMissed: number
+  extraPointMade: number
+  extraPointMissed: number
 
   // Distance-based field goals (new)
-  fieldGoal_0_39: number;
-  fieldGoal_40_49: number;
-  fieldGoal_50_plus: number;
+  fieldGoal_0_39: number
+  fieldGoal_40_49: number
+  fieldGoal_50_plus: number
 }
 
 interface League {
-  $id: string;
-  name: string;
-  maxTeams: number;
-  isPublic: boolean;
-  draftDate?: string;
-  pickTimeSeconds?: number;
-  scoringRules?: string;
-  commissionerId: string;
-  commissioner?: string;
-  gameMode?: string;
-  selectedConference?: string;
-  seasonStartWeek?: number;
-  playoffTeams?: number;
-  playoffStartWeek?: number;
-  waiverType?: string;
-  waiverBudget?: number;
-  primaryColor?: string;
-  secondaryColor?: string;
-  leagueTrophyName?: string;
+  $id: string
+  name: string
+  maxTeams: number
+  isPublic: boolean
+  draftDate?: string
+  pickTimeSeconds?: number
+  scoringRules?: string
+  commissionerId: string
+  commissioner?: string
+  gameMode?: string
+  selectedConference?: string
+  seasonStartWeek?: number
+  playoffTeams?: number
+  playoffStartWeek?: number
+  waiverType?: string
+  waiverBudget?: number
+  primaryColor?: string
+  secondaryColor?: string
+  leagueTrophyName?: string
 }
 
 interface Member {
-  $id: string;
-  name?: string;
-  teamName?: string;
-  owner?: string;
-  email?: string;
-  wins?: number;
-  losses?: number;
+  $id: string
+  name?: string
+  teamName?: string
+  owner?: string
+  email?: string
+  wins?: number
+  losses?: number
 }
 
 export default function CommissionerSettings({ params }: { params: { leagueId: string } }) {
-  const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [league, setLeague] = useState<League | null>(null);
-  const [members, setMembers] = useState<Member[]>([]);
-  const [savedMessage, setSavedMessage] = useState('');
-  const [showInviteModal, setShowInviteModal] = useState(false);
-  
+  const router = useRouter()
+  const { user, loading: authLoading } = useAuth()
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [league, setLeague] = useState<League | null>(null)
+  const [members, setMembers] = useState<Member[]>([])
+  const [savedMessage, setSavedMessage] = useState('')
+  const [showInviteModal, setShowInviteModal] = useState(false)
+
   // Form states
-  const [leagueName, setLeagueName] = useState('');
-  const [maxTeams, setMaxTeams] = useState(12);
-  const [isPublic, setIsPublic] = useState(true);
-  const [draftDate, setDraftDate] = useState('');
-  const [draftTime, setDraftTime] = useState('');
-  const [pickTimeSeconds, setPickTimeSeconds] = useState(90);
-  const [draftType, setDraftType] = useState('snake');
-  const [gameMode, setGameMode] = useState('power4');
-  const [selectedConference, setSelectedConference] = useState('');
-  const [seasonStartWeek, setSeasonStartWeek] = useState(1);
-  const [playoffTeams, setPlayoffTeams] = useState(4);
-  const [playoffStartWeek, setPlayoffStartWeek] = useState(13);
-  const [waiverType, setWaiverType] = useState<'FAAB' | 'Rolling'>('FAAB');
-  const [waiverBudget, setWaiverBudget] = useState<number>(100);
-  const [primaryColor, setPrimaryColor] = useState('#8C1818');
-  const [secondaryColor, setSecondaryColor] = useState('#DAA520');
-  const [leagueTrophyName, setLeagueTrophyName] = useState('Championship Trophy');
+  const [leagueName, setLeagueName] = useState('')
+  const [maxTeams, setMaxTeams] = useState(12)
+  const [isPublic, setIsPublic] = useState(true)
+  const [draftDate, setDraftDate] = useState('')
+  const [draftTime, setDraftTime] = useState('')
+  const [pickTimeSeconds, setPickTimeSeconds] = useState(90)
+  const [draftType, setDraftType] = useState('snake')
+  const [gameMode, setGameMode] = useState('power4')
+  const [selectedConference, setSelectedConference] = useState('')
+  const [seasonStartWeek, setSeasonStartWeek] = useState(1)
+  const [playoffTeams, setPlayoffTeams] = useState(4)
+  const [playoffStartWeek, setPlayoffStartWeek] = useState(13)
+  const [waiverType, setWaiverType] = useState<'FAAB' | 'Rolling'>('FAAB')
+  const [waiverBudget, setWaiverBudget] = useState<number>(100)
+  const [primaryColor, setPrimaryColor] = useState('#8C1818')
+  const [secondaryColor, setSecondaryColor] = useState('#DAA520')
+  const [leagueTrophyName, setLeagueTrophyName] = useState('Championship Trophy')
   // Draft order management
-  const [orderMode, setOrderMode] = useState<'custom'|'random'>('custom');
-  const [draftOrder, setDraftOrder] = useState<string[]>([]);
-  
+  const [orderMode, setOrderMode] = useState<'custom' | 'random'>('custom')
+  const [draftOrder, setDraftOrder] = useState<string[]>([])
+
   // Scoring rules
   const [scoringRules, setScoringRules] = useState<ScoringRules>({
     passingYards: 0.04,
@@ -117,112 +117,113 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
     fieldGoal_0_39: 3,
     fieldGoal_40_49: 4,
     fieldGoal_50_plus: 5,
-  });
+  })
 
   useEffect(() => {
     // Wait for auth to finish resolving before deciding
-    if (authLoading) return;
+    if (authLoading) return
     if (!user) {
-      const next = encodeURIComponent(`/league/${params.leagueId}/commissioner`);
-      router.replace(`/login?next=${next}`);
-      return;
+      const next = encodeURIComponent(`/league/${params.leagueId}/commissioner`)
+      router.replace(`/login?next=${next}`)
+      return
     }
-    loadSettings();
-  }, [authLoading, user, params.leagueId, router]);
+    loadSettings()
+  }, [authLoading, user, params.leagueId, router])
 
   const loadSettings = async () => {
     try {
-      const response = await fetch(`/api/leagues/${params.leagueId}/commissioner`);
+      const response = await fetch(`/api/leagues/${params.leagueId}/commissioner`)
       if (!response.ok) {
         if (response.status === 403) {
-          router.push(`/league/${params.leagueId}`);
-          return;
+          router.push(`/league/${params.leagueId}`)
+          return
         }
         if (response.status === 401) {
-          console.log('Authentication failed, redirecting to login');
-          const next = encodeURIComponent(`/league/${params.leagueId}/commissioner`);
-          router.replace(`/login?next=${next}`);
-          return;
+          console.log('Authentication failed, redirecting to login')
+          const next = encodeURIComponent(`/league/${params.leagueId}/commissioner`)
+          router.replace(`/login?next=${next}`)
+          return
         }
         try {
-          const err = await response.json();
-          console.error('Commissioner settings load failed:', err);
+          const err = await response.json()
+          console.error('Commissioner settings load failed:', err)
         } catch {}
-        throw new Error('Failed to load settings');
+        throw new Error('Failed to load settings')
       }
-      
-      const data = await response.json();
-      const league = data.league;
-      
+
+      const data = await response.json()
+      const league = data.league
+
       setLeague({
         ...league,
-        commissionerId: league.commissioner || (league as any).commissioner_id || league.commissionerId
-      });
-      setMembers(data.members || []);
-      
+        commissionerId:
+          league.commissioner || (league as any).commissioner_id || league.commissionerId,
+      })
+      setMembers(data.members || [])
+
       // Initialize form with league data
-      setLeagueName(league.leagueName || league.name || '');
-      setMaxTeams(league.maxTeams || 12);
-      setIsPublic(league.isPublic ?? true);
-      setPickTimeSeconds(league.pickTimeSeconds || 90);
-      setDraftType(league.draftType || 'snake');
-      setGameMode(league.gameMode || 'power4');
-      setSelectedConference(league.selectedConference || '');
-      setSeasonStartWeek(league.seasonStartWeek || 1);
-      setPlayoffTeams(league.playoffTeams || 4);
-      setPlayoffStartWeek(league.playoffStartWeek || 13);
-      setWaiverType((league.waiverType as any) || 'FAAB');
-      setWaiverBudget(typeof league.waiverBudget === 'number' ? league.waiverBudget : 100);
-      setPrimaryColor(league.primaryColor || '#8C1818');
-      setSecondaryColor(league.secondaryColor || '#DAA520');
-      setLeagueTrophyName(league.leagueTrophyName || 'Championship Trophy');
+      setLeagueName(league.leagueName || league.name || '')
+      setMaxTeams(league.maxTeams || 12)
+      setIsPublic(league.isPublic ?? true)
+      setPickTimeSeconds(league.pickTimeSeconds || 90)
+      setDraftType(league.draftType || 'snake')
+      setGameMode(league.gameMode || 'power4')
+      setSelectedConference(league.selectedConference || '')
+      setSeasonStartWeek(league.seasonStartWeek || 1)
+      setPlayoffTeams(league.playoffTeams || 4)
+      setPlayoffStartWeek(league.playoffStartWeek || 13)
+      setWaiverType((league.waiverType as any) || 'FAAB')
+      setWaiverBudget(typeof league.waiverBudget === 'number' ? league.waiverBudget : 100)
+      setPrimaryColor(league.primaryColor || '#8C1818')
+      setSecondaryColor(league.secondaryColor || '#DAA520')
+      setLeagueTrophyName(league.leagueTrophyName || 'Championship Trophy')
       // Draft order – default EMPTY unless an explicit saved order exists
       try {
-        const isHuman = (id: unknown) => typeof id === 'string' && !/^BOT-/i.test(id);
-        const rawOrder = (league as any).draftOrder;
+        const isHuman = (id: unknown) => typeof id === 'string' && !/^BOT-/i.test(id)
+        const rawOrder = (league as any).draftOrder
         if (rawOrder) {
-          const parsed = Array.isArray(rawOrder) ? rawOrder : JSON.parse(rawOrder);
-          if (Array.isArray(parsed)) setDraftOrder(parsed.filter(isHuman));
-          else setDraftOrder([]);
+          const parsed = Array.isArray(rawOrder) ? rawOrder : JSON.parse(rawOrder)
+          if (Array.isArray(parsed)) setDraftOrder(parsed.filter(isHuman))
+          else setDraftOrder([])
         } else if (league.scoringRules) {
           try {
-            const parsedRules = JSON.parse(league.scoringRules);
+            const parsedRules = JSON.parse(league.scoringRules)
             if (Array.isArray(parsedRules?.draftOrderOverride)) {
-              setDraftOrder(parsedRules.draftOrderOverride.filter(isHuman));
+              setDraftOrder(parsedRules.draftOrderOverride.filter(isHuman))
             } else {
-              setDraftOrder([]);
+              setDraftOrder([])
             }
           } catch {
-            setDraftOrder([]);
+            setDraftOrder([])
           }
         } else {
-          setDraftOrder([]);
+          setDraftOrder([])
         }
       } catch {
-        setDraftOrder([]);
+        setDraftOrder([])
       }
-      setOrderMode(((league as any).orderMode as any) || 'custom');
-      
+      setOrderMode(((league as any).orderMode as any) || 'custom')
+
       // Parse draft date/time (handle local timezone correctly)
       if (league.draftDate) {
-        const date = new Date(league.draftDate);
+        const date = new Date(league.draftDate)
         // Use local date components to avoid timezone shifts
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        setDraftDate(`${year}-${month}-${day}`);
-        
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        setDraftTime(`${hours}:${minutes}`);
+        const year = date.getFullYear()
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0')
+        setDraftDate(`${year}-${month}-${day}`)
+
+        const hours = String(date.getHours()).padStart(2, '0')
+        const minutes = String(date.getMinutes()).padStart(2, '0')
+        setDraftTime(`${hours}:${minutes}`)
       }
-      
+
       // Parse scoring rules
       if (league.scoringRules) {
         try {
-          const parsed = JSON.parse(league.scoringRules);
+          const parsed = JSON.parse(league.scoringRules)
           setScoringRules(prev => {
-            const merged = { ...prev, ...parsed } as ScoringRules;
+            const merged = { ...prev, ...parsed } as ScoringRules
             // Backward compatibility: if old generic FG is set but no distance fields provided,
             // use generic value for 0-39 and keep sensible defaults for longer distances.
             if (
@@ -231,88 +232,88 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
               parsed.fieldGoal_40_49 === undefined &&
               parsed.fieldGoal_50_plus === undefined
             ) {
-              merged.fieldGoal_0_39 = Number(parsed.fieldGoalMade) || prev.fieldGoal_0_39;
+              merged.fieldGoal_0_39 = Number(parsed.fieldGoalMade) || prev.fieldGoal_0_39
             }
-            return merged;
-          });
+            return merged
+          })
         } catch (e) {
-          console.error('Failed to parse scoring rules:', e);
+          console.error('Failed to parse scoring rules:', e)
         }
       }
-      
-      console.log('Loaded commissioner settings:', league);
+
+      console.log('Loaded commissioner settings:', league)
     } catch (error) {
-      console.error('Error loading settings:', error);
+      console.error('Error loading settings:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const saveDraftSettings = async () => {
     if (!draftDate || !draftTime) {
-      alert('Please set both draft date and time');
-      return;
+      alert('Please set both draft date and time')
+      return
     }
-    
-    const draftDateTime = new Date(`${draftDate}T${draftTime}`).toISOString();
-    setSaving(true);
-    
+
+    const draftDateTime = new Date(`${draftDate}T${draftTime}`).toISOString()
+    setSaving(true)
+
     try {
       const response = await fetch(`/api/leagues/${params.leagueId}/commissioner`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ draftDate: draftDateTime, pickTimeSeconds, draftType })
-      });
-      
-      const result = await response.json();
+        body: JSON.stringify({ draftDate: draftDateTime, pickTimeSeconds, draftType }),
+      })
+
+      const result = await response.json()
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to update draft settings');
+        throw new Error(result.error || 'Failed to update draft settings')
       }
-      
-      console.log('Draft settings saved:', result);
-      setSavedMessage('Draft settings saved!');
-      setTimeout(() => setSavedMessage(''), 3000);
-      setTimeout(() => loadSettings(), 1000);
+
+      console.log('Draft settings saved:', result)
+      setSavedMessage('Draft settings saved!')
+      setTimeout(() => setSavedMessage(''), 3000)
+      setTimeout(() => loadSettings(), 1000)
     } catch (error: any) {
-      console.error('Error saving draft settings:', error);
-      alert(`Failed to save draft settings: ${error.message}`);
+      console.error('Error saving draft settings:', error)
+      alert(`Failed to save draft settings: ${error.message}`)
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
-  };
+  }
 
   const saveScoringRules = async () => {
-    setSaving(true);
-    
+    setSaving(true)
+
     try {
       const response = await fetch(`/api/leagues/${params.leagueId}/commissioner`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ scoringRules: JSON.stringify(scoringRules) })
-      });
-      
-      const result = await response.json();
+        body: JSON.stringify({ scoringRules: JSON.stringify(scoringRules) }),
+      })
+
+      const result = await response.json()
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to save scoring rules');
+        throw new Error(result.error || 'Failed to save scoring rules')
       }
-      
-      console.log('Scoring rules saved:', result);
-      setSavedMessage('Scoring rules saved!');
-      setTimeout(() => setSavedMessage(''), 3000);
-      setTimeout(() => loadSettings(), 1000);
+
+      console.log('Scoring rules saved:', result)
+      setSavedMessage('Scoring rules saved!')
+      setTimeout(() => setSavedMessage(''), 3000)
+      setTimeout(() => loadSettings(), 1000)
     } catch (error: any) {
-      console.error('Error saving scoring rules:', error);
-      alert(`Failed to save scoring rules: ${error.message}`);
+      console.error('Error saving scoring rules:', error)
+      alert(`Failed to save scoring rules: ${error.message}`)
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
-  };
+  }
 
   const saveAllSettings = async () => {
-    setSaving(true);
-    
+    setSaving(true)
+
     try {
       const updates: any = {
         leagueName: leagueName,
@@ -325,57 +326,57 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         waiverType,
         waiverBudget,
         // primaryColor, secondaryColor, leagueTrophyName not in DB yet
-        scoringRules: JSON.stringify(scoringRules)
-      };
-      
-      if (draftDate && draftTime) {
-        updates.draftDate = new Date(`${draftDate}T${draftTime}`).toISOString();
+        scoringRules: JSON.stringify(scoringRules),
       }
-      updates.pickTimeSeconds = pickTimeSeconds;
-      updates.draftType = draftType;
+
+      if (draftDate && draftTime) {
+        updates.draftDate = new Date(`${draftDate}T${draftTime}`).toISOString()
+      }
+      updates.pickTimeSeconds = pickTimeSeconds
+      updates.draftType = draftType
       // Save draft order as a separate field (include BOT-* entries when user clicks Fill With Bots)
-      const finalOrder = draftOrder.filter((id) => typeof id === 'string').filter(Boolean);
-      updates.draftOrder = finalOrder;
-      updates.scoringRules = JSON.stringify(scoringRules);
-      
-      console.log('Saving settings with updates:', updates);
-      
+      const finalOrder = draftOrder.filter(id => typeof id === 'string').filter(Boolean)
+      updates.draftOrder = finalOrder
+      updates.scoringRules = JSON.stringify(scoringRules)
+
+      console.log('Saving settings with updates:', updates)
+
       const response = await fetch(`/api/leagues/${params.leagueId}/commissioner`, {
         method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json'
+        headers: {
+          'Content-Type': 'application/json',
         },
         credentials: 'include', // Ensure cookies are sent
-        body: JSON.stringify(updates)
-      });
-      
-      const result = await response.json();
-      
+        body: JSON.stringify(updates),
+      })
+
+      const result = await response.json()
+
       if (!response.ok) {
-        console.error('Save failed:', result);
-        throw new Error(result.error || 'Failed to save settings');
+        console.error('Save failed:', result)
+        throw new Error(result.error || 'Failed to save settings')
       }
-      
-      console.log('Settings saved successfully:', result);
-      setSavedMessage('All settings saved successfully!');
-      setTimeout(() => setSavedMessage(''), 3000);
-      
+
+      console.log('Settings saved successfully:', result)
+      setSavedMessage('All settings saved successfully!')
+      setTimeout(() => setSavedMessage(''), 3000)
+
       // Reload settings to confirm they were saved
-      setTimeout(() => loadSettings(), 1000);
+      setTimeout(() => loadSettings(), 1000)
     } catch (error: any) {
-      console.error('Error saving settings:', error);
-      alert(`Failed to save settings: ${error.message}`);
+      console.error('Error saving settings:', error)
+      alert(`Failed to save settings: ${error.message}`)
     } finally {
-      setSaving(false);
+      setSaving(false)
     }
-  };
+  }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
         <div className="text-gray-600">Loading commissioner settings...</div>
       </div>
-    );
+    )
   }
 
   if (!league) {
@@ -396,7 +397,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   // Commissioner page palette (provided)
@@ -404,22 +405,27 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
     brown: '#6b321c',
     steel: '#7399ad',
     gold: '#c5aa12',
-    charcoal: '#332c1f'
-  } as const;
+    charcoal: '#332c1f',
+  } as const
 
   return (
-    <div className="min-h-screen" style={{ background: `linear-gradient(135deg, ${palette.brown} 0%, ${palette.steel} 38%, ${palette.gold} 72%, ${palette.charcoal} 100%)` }}>
+    <div
+      className="min-h-screen"
+      style={{
+        background: `linear-gradient(135deg, ${palette.brown} 0%, ${palette.steel} 38%, ${palette.gold} 72%, ${palette.charcoal} 100%)`,
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <Link 
+          <Link
             href={`/league/${params.leagueId}`}
             className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 rounded-md border border-white/30 bg-white/10 text-white hover:bg-white/20 hover:border-white/40 transition-colors backdrop-blur-sm"
           >
             <ChevronLeftIcon className="w-4 h-4" />
             Back to League
           </Link>
-          
+
           <h1 className="text-4xl font-bold" style={{ color: leagueColors.text.primary }}>
             Commissioner Settings
           </h1>
@@ -430,7 +436,13 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
 
         {/* Saved Message */}
         {savedMessage && (
-          <div className="mb-6 p-4 rounded-lg" style={{ backgroundColor: leagueColors.success.light, color: leagueColors.success.main }}>
+          <div
+            className="mb-6 p-4 rounded-lg"
+            style={{
+              backgroundColor: leagueColors.success.light,
+              color: leagueColors.success.main,
+            }}
+          >
             {savedMessage}
           </div>
         )}
@@ -438,42 +450,70 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         {/* Settings Sections */}
         <div className="space-y-8">
           {/* League Info */}
-          <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
-            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>League Information</h2>
-            
+          <div
+            className="rounded-xl p-6"
+            style={{
+              backgroundColor: leagueColors.background.card,
+              border: `1px solid ${leagueColors.border.light}`,
+            }}
+          >
+            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>
+              League Information
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>League Name</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  League Name
+                </label>
                 <input
                   type="text"
                   value={leagueName}
-                  onChange={(e) => setLeagueName(e.target.value)}
+                  onChange={e => setLeagueName(e.target.value)}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.primary,
+                  }}
                 />
               </div>
-              
+
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Max Teams</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Max Teams
+                </label>
                 <select
                   value={maxTeams}
-                  onChange={(e) => setMaxTeams(Number(e.target.value))}
+                  onChange={e => setMaxTeams(Number(e.target.value))}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.primary,
+                  }}
                 >
                   {[8, 10, 12, 14, 16].map(n => (
-                    <option key={n} value={n}>{n} Teams</option>
+                    <option key={n} value={n}>
+                      {n} Teams
+                    </option>
                   ))}
                 </select>
               </div>
-              
+
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Visibility</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Visibility
+                </label>
                 <select
                   value={isPublic ? 'public' : 'private'}
-                  onChange={(e) => setIsPublic(e.target.value === 'public')}
+                  onChange={e => setIsPublic(e.target.value === 'public')}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.primary,
+                  }}
                 >
                   <option value="public">Public</option>
                   <option value="private">Private</option>
@@ -482,8 +522,17 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
 
               {/* Game Mode - Read Only */}
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Game Mode</label>
-                <div className="w-full px-3 py-2 rounded-lg bg-gray-100" style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.secondary }}>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Game Mode
+                </label>
+                <div
+                  className="w-full px-3 py-2 rounded-lg bg-gray-100"
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.secondary,
+                  }}
+                >
                   {gameMode === 'power4' && 'Power 4 (All Power 4 Conferences)'}
                   {gameMode === 'sec' && 'SEC Conference Only'}
                   {gameMode === 'acc' && 'ACC Conference Only'}
@@ -496,39 +545,65 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
           </div>
 
           {/* Draft Settings */}
-          <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
-            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Draft Settings</h2>
-            
+          <div
+            className="rounded-xl p-6"
+            style={{
+              backgroundColor: leagueColors.background.card,
+              border: `1px solid ${leagueColors.border.light}`,
+            }}
+          >
+            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>
+              Draft Settings
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Draft Date</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Draft Date
+                </label>
                 <input
                   type="date"
                   value={draftDate}
-                  onChange={(e) => setDraftDate(e.target.value)}
+                  onChange={e => setDraftDate(e.target.value)}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.primary,
+                  }}
                 />
               </div>
-              
+
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Draft Time</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Draft Time
+                </label>
                 <input
                   type="time"
                   value={draftTime}
-                  onChange={(e) => setDraftTime(e.target.value)}
+                  onChange={e => setDraftTime(e.target.value)}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.primary,
+                  }}
                 />
               </div>
-              
+
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Seconds Per Pick</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Seconds Per Pick
+                </label>
                 <select
                   value={pickTimeSeconds}
-                  onChange={(e) => setPickTimeSeconds(Number(e.target.value))}
+                  onChange={e => setPickTimeSeconds(Number(e.target.value))}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.primary,
+                  }}
                 >
                   <option value="60">1 minute</option>
                   <option value="90">1.5 minutes</option>
@@ -541,68 +616,96 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                   <option value="300">5 minutes</option>
                 </select>
               </div>
-              
+
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Draft Type</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Draft Type
+                </label>
                 <select
                   value={draftType}
-                  onChange={(e) => setDraftType(e.target.value)}
+                  onChange={e => setDraftType(e.target.value)}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.primary,
+                  }}
                 >
                   <option value="snake">Snake Draft</option>
                   {/* <option value="auction">Auction Draft</option> - Add when implemented */}
                 </select>
               </div>
             </div>
-            
+
             <button
               onClick={saveDraftSettings}
               disabled={saving}
               className="mt-4 px-4 py-2 rounded-lg transition-colors"
-              style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
+              style={{
+                backgroundColor: leagueColors.primary.crimson,
+                color: leagueColors.text.inverse,
+              }}
             >
               {saving ? 'Saving...' : 'Save Draft Settings'}
             </button>
           </div>
 
           {/* Draft Order */}
-          <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
-            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Draft Order</h2>
+          <div
+            className="rounded-xl p-6"
+            style={{
+              backgroundColor: leagueColors.background.card,
+              border: `1px solid ${leagueColors.border.light}`,
+            }}
+          >
+            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>
+              Draft Order
+            </h2>
             <div className="mb-3 flex items-center gap-3">
-              <label className="text-sm" style={{ color: leagueColors.text.secondary }}>Mode</label>
+              <label className="text-sm" style={{ color: leagueColors.text.secondary }}>
+                Mode
+              </label>
               <select
                 value={orderMode}
-                onChange={(e)=> setOrderMode(e.target.value as any)}
+                onChange={e => setOrderMode(e.target.value as any)}
                 className="px-3 py-2 rounded-lg"
-                style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                style={{
+                  backgroundColor: leagueColors.background.overlay,
+                  border: `1px solid ${leagueColors.border.light}`,
+                  color: leagueColors.text.primary,
+                }}
               >
                 <option value="custom">Custom</option>
                 <option value="random">Randomize</option>
               </select>
               <button
                 onClick={() => {
-                  if (members.length === 0) return;
-                  const base = members.map(m => (m as any).clientId || (m as any).authUserId || m.$id);
-                  const shuffled = [...base].sort(() => Math.random() - 0.5);
-                  setDraftOrder(shuffled);
-                  setOrderMode('custom');
+                  if (members.length === 0) return
+                  const base = members.map(
+                    m => (m as any).clientId || (m as any).authUserId || m.$id
+                  )
+                  const shuffled = [...base].sort(() => Math.random() - 0.5)
+                  setDraftOrder(shuffled)
+                  setOrderMode('custom')
                 }}
                 className="px-3 py-2 rounded-lg text-sm"
-                style={{ backgroundColor: leagueColors.accent.pink, color: leagueColors.text.inverse }}
+                style={{
+                  backgroundColor: leagueColors.accent.pink,
+                  color: leagueColors.text.inverse,
+                }}
               >
                 Randomize Now
               </button>
               <button
                 onClick={() => {
-                  const target = maxTeams || 12;
-                  const next = new Set(draftOrder);
-                  let i = 1;
+                  const target = maxTeams || 12
+                  const next = new Set(draftOrder)
+                  let i = 1
                   while (next.size < target) {
-                    const id = `BOT-${i++}`;
-                    next.add(id);
+                    const id = `BOT-${i++}`
+                    next.add(id)
                   }
-                  setDraftOrder(Array.from(next));
+                  setDraftOrder(Array.from(next))
                 }}
                 className="px-3 py-2 rounded-lg text-sm"
                 style={{ backgroundColor: '#6b7280', color: leagueColors.text.inverse }}
@@ -612,17 +715,22 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[15px]">
               <div>
-                <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>Available Members</div>
-                <div className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900" style={{ border: `1px solid ${leagueColors.border.light}` }}>
+                <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>
+                  Available Members
+                </div>
+                <div
+                  className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900"
+                  style={{ border: `1px solid ${leagueColors.border.light}` }}
+                >
                   {members.map((m, idx) => {
-                    const mid = (m as any).clientId || (m as any).authUserId || m.$id;
-                    const selectedIdx = draftOrder.findIndex(id => id === mid);
-                    const selected = selectedIdx !== -1;
+                    const mid = (m as any).clientId || (m as any).authUserId || m.$id
+                    const selectedIdx = draftOrder.findIndex(id => id === mid)
+                    const selected = selectedIdx !== -1
                     return (
                       <button
                         key={m.$id}
                         onClick={() => {
-                          setDraftOrder(prev => (prev.includes(mid) ? prev : [...prev, mid]));
+                          setDraftOrder(prev => (prev.includes(mid) ? prev : [...prev, mid]))
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2 rounded border text-left ${selected ? 'opacity-60 cursor-not-allowed' : 'hover:bg-gray-50'}`}
                         style={{ borderColor: leagueColors.border.light }}
@@ -635,48 +743,91 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                               {selectedIdx + 1}
                             </span>
                           )}
-                          <span className="truncate">{m.teamName || `${m.name}'s Team` || m.$id}</span>
+                          <span className="truncate">
+                            {m.teamName || `${m.name}'s Team` || m.$id}
+                          </span>
                         </div>
                         {!selected && (
-                          <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}>Add</span>
+                          <span
+                            className="text-xs px-2 py-0.5 rounded"
+                            style={{
+                              backgroundColor: leagueColors.primary.crimson,
+                              color: leagueColors.text.inverse,
+                            }}
+                          >
+                            Add
+                          </span>
                         )}
                       </button>
-                    );
+                    )
                   })}
                 </div>
               </div>
               <div>
-                <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>Order</div>
-                <div className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900" style={{ border: `1px solid ${leagueColors.border.light}` }}>
+                <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>
+                  Order
+                </div>
+                <div
+                  className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900"
+                  style={{ border: `1px solid ${leagueColors.border.light}` }}
+                >
                   {draftOrder.filter(Boolean).map((id, idx) => {
-                    const m = members.find(mm => mm.$id === id || (mm as any).clientId === id || (mm as any).authUserId === id);
+                    const m = members.find(
+                      mm =>
+                        mm.$id === id ||
+                        (mm as any).clientId === id ||
+                        (mm as any).authUserId === id
+                    )
                     // Get display name - prefer teamName for consistency
-                    const displayName = id.startsWith('BOT-') 
-                      ? id 
-                      : (m?.teamName || (m?.name ? `${m.name}'s Team` : `User ${idx + 1}`));
+                    const displayName = id.startsWith('BOT-')
+                      ? id
+                      : m?.teamName || (m?.name ? `${m.name}'s Team` : `User ${idx + 1}`)
                     return (
-                      <div key={`${id}-${idx}`} className="flex items-center gap-3 px-3 py-2 rounded border" style={{ borderColor: leagueColors.border.light }}>
-                        <div className="w-6 text-center font-medium">{idx+1}</div>
+                      <div
+                        key={`${id}-${idx}`}
+                        className="flex items-center gap-3 px-3 py-2 rounded border"
+                        style={{ borderColor: leagueColors.border.light }}
+                      >
+                        <div className="w-6 text-center font-medium">{idx + 1}</div>
                         <div className="flex-1 truncate" title={displayName}>
                           {displayName}
                         </div>
                         <div className="flex items-center gap-2">
-                          <button onClick={() => setDraftOrder(prev => {
-                            if (idx === 0) return prev;
-                            const clone = [...prev];
-                            [clone[idx-1], clone[idx]] = [clone[idx], clone[idx-1]];
-                            return clone;
-                          })} className="text-sm px-3 py-1 rounded border">Up</button>
-                          <button onClick={() => setDraftOrder(prev => {
-                            if (idx === prev.length -1) return prev;
-                            const clone = [...prev];
-                            [clone[idx+1], clone[idx]] = [clone[idx], clone[idx+1]];
-                            return clone;
-                          })} className="text-sm px-3 py-1 rounded border">Down</button>
-                          <button onClick={() => setDraftOrder(prev => prev.filter(x => x !== id))} className="text-sm px-3 py-1 rounded border">Remove</button>
+                          <button
+                            onClick={() =>
+                              setDraftOrder(prev => {
+                                if (idx === 0) return prev
+                                const clone = [...prev]
+                                ;[clone[idx - 1], clone[idx]] = [clone[idx], clone[idx - 1]]
+                                return clone
+                              })
+                            }
+                            className="text-sm px-3 py-1 rounded border"
+                          >
+                            Up
+                          </button>
+                          <button
+                            onClick={() =>
+                              setDraftOrder(prev => {
+                                if (idx === prev.length - 1) return prev
+                                const clone = [...prev]
+                                ;[clone[idx + 1], clone[idx]] = [clone[idx], clone[idx + 1]]
+                                return clone
+                              })
+                            }
+                            className="text-sm px-3 py-1 rounded border"
+                          >
+                            Down
+                          </button>
+                          <button
+                            onClick={() => setDraftOrder(prev => prev.filter(x => x !== id))}
+                            className="text-sm px-3 py-1 rounded border"
+                          >
+                            Remove
+                          </button>
                         </div>
                       </div>
-                    );
+                    )
                   })}
                 </div>
               </div>
@@ -686,7 +837,10 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                 onClick={saveAllSettings}
                 disabled={saving}
                 className="px-4 py-2 rounded-lg"
-                style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
+                style={{
+                  backgroundColor: leagueColors.primary.crimson,
+                  color: leagueColors.text.inverse,
+                }}
               >
                 {saving ? 'Saving...' : 'Save Draft Order'}
               </button>
@@ -694,28 +848,48 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
           </div>
 
           {/* Season Settings */}
-          <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
-            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Season Settings</h2>
+          <div
+            className="rounded-xl p-6"
+            style={{
+              backgroundColor: leagueColors.background.card,
+              border: `1px solid ${leagueColors.border.light}`,
+            }}
+          >
+            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>
+              Season Settings
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Season Start Week</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Season Start Week
+                </label>
                 <input
                   type="number"
                   min={1}
                   max={20}
                   value={seasonStartWeek}
-                  onChange={(e) => setSeasonStartWeek(parseInt(e.target.value) || 1)}
+                  onChange={e => setSeasonStartWeek(parseInt(e.target.value) || 1)}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.primary,
+                  }}
                 />
               </div>
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Playoff Teams</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Playoff Teams
+                </label>
                 <select
                   value={playoffTeams}
-                  onChange={(e) => setPlayoffTeams(parseInt(e.target.value))}
+                  onChange={e => setPlayoffTeams(parseInt(e.target.value))}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.primary,
+                  }}
                 >
                   <option value="0">No Playoffs</option>
                   <option value="4">4 Teams</option>
@@ -724,20 +898,23 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                 </select>
               </div>
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Playoff Start Week</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Playoff Start Week
+                </label>
                 <input
                   type="number"
                   min={1}
                   max={20}
                   value={playoffStartWeek}
-                  onChange={(e) => setPlayoffStartWeek(parseInt(e.target.value) || 13)}
+                  onChange={e => setPlayoffStartWeek(parseInt(e.target.value) || 13)}
                   className="w-full px-3 py-2 rounded-lg"
                   disabled={playoffTeams === 0}
-                  style={{ 
-                    backgroundColor: playoffTeams === 0 ? '#e5e5e5' : leagueColors.background.overlay, 
-                    border: `1px solid ${leagueColors.border.light}`, 
+                  style={{
+                    backgroundColor:
+                      playoffTeams === 0 ? '#e5e5e5' : leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
                     color: playoffTeams === 0 ? '#999' : leagueColors.text.primary,
-                    cursor: playoffTeams === 0 ? 'not-allowed' : 'auto'
+                    cursor: playoffTeams === 0 ? 'not-allowed' : 'auto',
                   }}
                 />
               </div>
@@ -745,16 +922,30 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
           </div>
 
           {/* Waivers */}
-          <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
-            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Waiver Settings</h2>
+          <div
+            className="rounded-xl p-6"
+            style={{
+              backgroundColor: leagueColors.background.card,
+              border: `1px solid ${leagueColors.border.light}`,
+            }}
+          >
+            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>
+              Waiver Settings
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>Waiver Type</label>
+                <label className="block mb-1" style={{ color: leagueColors.text.secondary }}>
+                  Waiver Type
+                </label>
                 <select
                   value={waiverType}
-                  onChange={(e) => setWaiverType(e.target.value as any)}
+                  onChange={e => setWaiverType(e.target.value as any)}
                   className="w-full px-3 py-2 rounded-lg"
-                  style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                  style={{
+                    backgroundColor: leagueColors.background.overlay,
+                    border: `1px solid ${leagueColors.border.light}`,
+                    color: leagueColors.text.primary,
+                  }}
                 >
                   <option value="FAAB">FAAB (Free Agent Acquisition Budget)</option>
                   <option value="Rolling">Rolling Waivers</option>
@@ -769,21 +960,28 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                   <input
                     type="number"
                     value={waiverBudget}
-                    onChange={(e) => setWaiverBudget(parseInt(e.target.value) || 0)}
+                    onChange={e => setWaiverBudget(parseInt(e.target.value) || 0)}
                     min={0}
                     max={1000}
                     className="w-full px-3 py-2 rounded-lg"
-                    style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                    style={{
+                      backgroundColor: leagueColors.background.overlay,
+                      border: `1px solid ${leagueColors.border.light}`,
+                      color: leagueColors.text.primary,
+                    }}
                   />
                 ) : (
                   <select
                     className="w-full px-3 py-2 rounded-lg"
                     disabled={waiverType === ('None' as any)}
-                    style={{ 
-                      backgroundColor: (waiverType as any) === 'None' ? '#e5e5e5' : leagueColors.background.overlay, 
-                      border: `1px solid ${leagueColors.border.light}`, 
+                    style={{
+                      backgroundColor:
+                        (waiverType as any) === 'None'
+                          ? '#e5e5e5'
+                          : leagueColors.background.overlay,
+                      border: `1px solid ${leagueColors.border.light}`,
                       color: (waiverType as any) === 'None' ? '#999' : leagueColors.text.primary,
-                      cursor: (waiverType as any) === 'None' ? 'not-allowed' : 'auto'
+                      cursor: (waiverType as any) === 'None' ? 'not-allowed' : 'auto',
                     }}
                   >
                     <option>Weekly - Inverse Standings</option>
@@ -795,43 +993,86 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
           </div>
 
           {/* Scoring Rules */}
-          <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
-            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>Scoring Rules</h2>
-            
+          <div
+            className="rounded-xl p-6"
+            style={{
+              backgroundColor: leagueColors.background.card,
+              border: `1px solid ${leagueColors.border.light}`,
+            }}
+          >
+            <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>
+              Scoring Rules
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Passing */}
               <div>
-                <h3 className="font-semibold mb-3" style={{ color: leagueColors.text.primary }}>Passing</h3>
+                <h3 className="font-semibold mb-3" style={{ color: leagueColors.text.primary }}>
+                  Passing
+                </h3>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>Passing Yards (per yard)</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      Passing Yards (per yard)
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.passingYards}
-                      onChange={(e) => setScoringRules({...scoringRules, passingYards: parseFloat(e.target.value)})}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          passingYards: parseFloat(e.target.value),
+                        })
+                      }
                       step="0.01"
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>Passing TDs</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      Passing TDs
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.passingTouchdowns}
-                      onChange={(e) => setScoringRules({...scoringRules, passingTouchdowns: parseInt(e.target.value)})}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          passingTouchdowns: parseInt(e.target.value),
+                        })
+                      }
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>Interceptions</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      Interceptions
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.interceptions}
-                      onChange={(e) => setScoringRules({...scoringRules, interceptions: parseInt(e.target.value)})}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          interceptions: parseInt(e.target.value),
+                        })
+                      }
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                 </div>
@@ -839,27 +1080,51 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
 
               {/* Rushing */}
               <div>
-                <h3 className="font-semibold mb-3" style={{ color: leagueColors.text.primary }}>Rushing</h3>
+                <h3 className="font-semibold mb-3" style={{ color: leagueColors.text.primary }}>
+                  Rushing
+                </h3>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>Rushing Yards (per yard)</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      Rushing Yards (per yard)
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.rushingYards}
-                      onChange={(e) => setScoringRules({...scoringRules, rushingYards: parseFloat(e.target.value)})}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          rushingYards: parseFloat(e.target.value),
+                        })
+                      }
                       step="0.01"
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>Rushing TDs</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      Rushing TDs
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.rushingTouchdowns}
-                      onChange={(e) => setScoringRules({...scoringRules, rushingTouchdowns: parseInt(e.target.value)})}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          rushingTouchdowns: parseInt(e.target.value),
+                        })
+                      }
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                 </div>
@@ -867,38 +1132,70 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
 
               {/* Receiving */}
               <div>
-                <h3 className="font-semibold mb-3" style={{ color: leagueColors.text.primary }}>Receiving</h3>
+                <h3 className="font-semibold mb-3" style={{ color: leagueColors.text.primary }}>
+                  Receiving
+                </h3>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>Receptions (PPR)</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      Receptions (PPR)
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.receptions}
-                      onChange={(e) => setScoringRules({...scoringRules, receptions: parseFloat(e.target.value)})}
+                      onChange={e =>
+                        setScoringRules({ ...scoringRules, receptions: parseFloat(e.target.value) })
+                      }
                       step="0.5"
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>Receiving Yards (per yard)</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      Receiving Yards (per yard)
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.receivingYards}
-                      onChange={(e) => setScoringRules({...scoringRules, receivingYards: parseFloat(e.target.value)})}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          receivingYards: parseFloat(e.target.value),
+                        })
+                      }
                       step="0.01"
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>Receiving TDs</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      Receiving TDs
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.receivingTouchdowns}
-                      onChange={(e) => setScoringRules({...scoringRules, receivingTouchdowns: parseInt(e.target.value)})}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          receivingTouchdowns: parseInt(e.target.value),
+                        })
+                      }
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                 </div>
@@ -906,85 +1203,162 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
 
               {/* Kicking */}
               <div>
-                <h3 className="font-semibold mb-3" style={{ color: leagueColors.text.primary }}>Kicking</h3>
+                <h3 className="font-semibold mb-3" style={{ color: leagueColors.text.primary }}>
+                  Kicking
+                </h3>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>FG 0-39 yards</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      FG 0-39 yards
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.fieldGoal_0_39}
-                      onChange={(e) => setScoringRules({ ...scoringRules, fieldGoal_0_39: parseFloat(e.target.value) })}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          fieldGoal_0_39: parseFloat(e.target.value),
+                        })
+                      }
                       step="0.5"
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>FG 40-49 yards</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      FG 40-49 yards
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.fieldGoal_40_49}
-                      onChange={(e) => setScoringRules({ ...scoringRules, fieldGoal_40_49: parseFloat(e.target.value) })}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          fieldGoal_40_49: parseFloat(e.target.value),
+                        })
+                      }
                       step="0.5"
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>FG 50+ yards</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      FG 50+ yards
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.fieldGoal_50_plus}
-                      onChange={(e) => setScoringRules({ ...scoringRules, fieldGoal_50_plus: parseFloat(e.target.value) })}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          fieldGoal_50_plus: parseFloat(e.target.value),
+                        })
+                      }
                       step="0.5"
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>XP Made</label>
+                      <label
+                        className="block text-sm"
+                        style={{ color: leagueColors.text.secondary }}
+                      >
+                        XP Made
+                      </label>
                       <input
                         type="number"
                         value={scoringRules.extraPointMade}
-                        onChange={(e) => setScoringRules({ ...scoringRules, extraPointMade: parseFloat(e.target.value) })}
+                        onChange={e =>
+                          setScoringRules({
+                            ...scoringRules,
+                            extraPointMade: parseFloat(e.target.value),
+                          })
+                        }
                         step="0.5"
                         className="w-full px-3 py-1.5 rounded text-sm"
-                        style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                        style={{
+                          backgroundColor: leagueColors.background.overlay,
+                          border: `1px solid ${leagueColors.border.light}`,
+                          color: leagueColors.text.primary,
+                        }}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>XP Missed</label>
+                      <label
+                        className="block text-sm"
+                        style={{ color: leagueColors.text.secondary }}
+                      >
+                        XP Missed
+                      </label>
                       <input
                         type="number"
                         value={scoringRules.extraPointMissed}
-                        onChange={(e) => setScoringRules({ ...scoringRules, extraPointMissed: parseFloat(e.target.value) })}
+                        onChange={e =>
+                          setScoringRules({
+                            ...scoringRules,
+                            extraPointMissed: parseFloat(e.target.value),
+                          })
+                        }
                         step="0.5"
                         className="w-full px-3 py-1.5 rounded text-sm"
-                        style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                        style={{
+                          backgroundColor: leagueColors.background.overlay,
+                          border: `1px solid ${leagueColors.border.light}`,
+                          color: leagueColors.text.primary,
+                        }}
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>FG Missed (any distance)</label>
+                    <label className="block text-sm" style={{ color: leagueColors.text.secondary }}>
+                      FG Missed (any distance)
+                    </label>
                     <input
                       type="number"
                       value={scoringRules.fieldGoalMissed}
-                      onChange={(e) => setScoringRules({ ...scoringRules, fieldGoalMissed: parseFloat(e.target.value) })}
+                      onChange={e =>
+                        setScoringRules({
+                          ...scoringRules,
+                          fieldGoalMissed: parseFloat(e.target.value),
+                        })
+                      }
                       step="0.5"
                       className="w-full px-3 py-1.5 rounded text-sm"
-                      style={{ backgroundColor: leagueColors.background.overlay, border: `1px solid ${leagueColors.border.light}`, color: leagueColors.text.primary }}
+                      style={{
+                        backgroundColor: leagueColors.background.overlay,
+                        border: `1px solid ${leagueColors.border.light}`,
+                        color: leagueColors.text.primary,
+                      }}
                     />
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <button
               onClick={saveScoringRules}
               disabled={saving}
               className="mt-6 px-4 py-2 rounded-lg transition-colors"
-              style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
+              style={{
+                backgroundColor: leagueColors.primary.crimson,
+                color: leagueColors.text.inverse,
+              }}
             >
               {saving ? 'Saving...' : 'Save Scoring Rules'}
             </button>
@@ -996,17 +1370,28 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
               onClick={saveAllSettings}
               disabled={saving}
               className="px-6 py-3 rounded-lg font-semibold transition-colors"
-              style={{ backgroundColor: leagueColors.primary.crimson, color: leagueColors.text.inverse }}
+              style={{
+                backgroundColor: leagueColors.primary.crimson,
+                color: leagueColors.text.inverse,
+              }}
             >
               {saving ? 'Saving All Settings...' : 'Save All Settings'}
             </button>
           </div>
 
           {/* Members */}
-          <div className="rounded-xl p-6" style={{ backgroundColor: leagueColors.background.card, border: `1px solid ${leagueColors.border.light}` }}>
+          <div
+            className="rounded-xl p-6"
+            style={{
+              backgroundColor: leagueColors.background.card,
+              border: `1px solid ${leagueColors.border.light}`,
+            }}
+          >
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-xl font-semibold" style={{ color: leagueColors.text.primary }}>League Members</h2>
+                <h2 className="text-xl font-semibold" style={{ color: leagueColors.text.primary }}>
+                  League Members
+                </h2>
                 <p className="text-sm" style={{ color: leagueColors.text.secondary }}>
                   {members.length} of {league?.maxTeams || 12} spots filled
                 </p>
@@ -1014,19 +1399,23 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
               <button
                 onClick={() => setShowInviteModal(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
-                style={{ 
-                  backgroundColor: leagueColors.accent.pink, 
-                  color: leagueColors.text.inverse 
+                style={{
+                  backgroundColor: leagueColors.accent.pink,
+                  color: leagueColors.text.inverse,
                 }}
               >
                 <ShareIcon className="w-4 h-4" />
                 Invite Players
               </button>
             </div>
-            
+
             <div className="space-y-2">
-              {members.map((member) => (
-                <div key={member.$id} className="flex items-center justify-between py-2 px-3 rounded" style={{ backgroundColor: leagueColors.background.overlay }}>
+              {members.map(member => (
+                <div
+                  key={member.$id}
+                  className="flex items-center justify-between py-2 px-3 rounded"
+                  style={{ backgroundColor: leagueColors.background.overlay }}
+                >
                   <div>
                     <div className="font-medium" style={{ color: leagueColors.text.primary }}>
                       {member.name || member.teamName || 'Unnamed Team'}
@@ -1041,23 +1430,35 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                   <div className="flex items-center gap-2">
                     <button
                       onClick={async () => {
-                        if (!confirm('Remove this member from the league? This will delete their team, lineups, and membership.')) return;
+                        if (
+                          !confirm(
+                            'Remove this member from the league? This will delete their team, lineups, and membership.'
+                          )
+                        )
+                          return
                         try {
-                          const res = await fetch(`/api/leagues/${params.leagueId}/members?authUserId=${encodeURIComponent((member as any).authUserId || member.$id)}`, {
-                            method: 'DELETE',
-                            credentials: 'include'
-                          });
+                          const res = await fetch(
+                            `/api/leagues/${params.leagueId}/members?authUserId=${encodeURIComponent((member as any).authUserId || member.$id)}`,
+                            {
+                              method: 'DELETE',
+                              credentials: 'include',
+                            }
+                          )
                           if (!res.ok) {
-                            const t = await res.text();
-                            throw new Error(t || 'Failed to remove member');
+                            const t = await res.text()
+                            throw new Error(t || 'Failed to remove member')
                           }
-                          await loadSettings();
+                          await loadSettings()
                         } catch (e: any) {
-                          alert(e.message || 'Failed to remove member');
+                          alert(e.message || 'Failed to remove member')
                         }
                       }}
                       className="px-3 py-1 rounded text-sm"
-                      style={{ backgroundColor: '#991b1b', color: '#fff', border: `1px solid ${leagueColors.border.light}` }}
+                      style={{
+                        backgroundColor: '#991b1b',
+                        color: '#fff',
+                        border: `1px solid ${leagueColors.border.light}`,
+                      }}
                     >
                       Remove
                     </button>
@@ -1068,16 +1469,16 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
           </div>
         </div>
       </div>
-      
+
       {/* Invite Modal */}
       {showInviteModal && league && (
         <InviteModal
           isOpen={showInviteModal}
           onClose={() => setShowInviteModal(false)}
           leagueId={league.$id}
-          leagueName={league.leagueName || league.name}
+          leagueName={(league as any).leagueName || league.name}
         />
       )}
     </div>
-  );
+  )
 }

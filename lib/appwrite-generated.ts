@@ -4,9 +4,11 @@
  */
 
 // Database Configuration
-export const DATABASE_ID = 'college-football-fantasy';
-export const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1';
-export const APPWRITE_PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app';
+export const DATABASE_ID = 'college-football-fantasy'
+export const APPWRITE_ENDPOINT =
+  process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1'
+export const APPWRITE_PROJECT_ID =
+  process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app'
 
 // Collection IDs
 export const COLLECTIONS = {
@@ -19,6 +21,7 @@ export const COLLECTIONS = {
   MIGRATIONS: 'migrations',
   DRAFT_STATES: 'draft_states',
   DRAFT_EVENTS: 'draft_events',
+  DRAFT_PICKS: 'draft_picks',
   DRAFTS: 'drafts',
   FANTASY_TEAMS: 'fantasy_teams',
   GAMES: 'games',
@@ -26,6 +29,9 @@ export const COLLECTIONS = {
   LEAGUE_MEMBERSHIPS: 'league_memberships',
   LEAGUES: 'leagues',
   LINEUPS: 'lineups',
+  MASCOT_DOWNLOAD_TASKS: 'mascot_download_tasks',
+  MASCOT_JOBS: 'mascot_jobs',
+  MASCOT_PRESETS: 'mascot_presets',
   MATCHUPS: 'matchups',
   MESHY_JOBS: 'meshy_jobs',
   MODEL_VERSIONS: 'model_versions',
@@ -35,37 +41,45 @@ export const COLLECTIONS = {
   ROSTER_SLOTS: 'roster_slots',
   SCHOOLS: 'schools',
   TRANSACTIONS: 'transactions',
-} as const;
+} as const
+
+// Backwards compatibility aliases
+export const COLLECTIONS_COMPAT = {
+  ...COLLECTIONS,
+  PLAYERS: COLLECTIONS.COLLEGE_PLAYERS,
+  ROSTERS: COLLECTIONS.ROSTER_SLOTS,
+  USER_TEAMS: COLLECTIONS.FANTASY_TEAMS,
+} as const
 
 // Collection Names
 export const COLLECTION_NAMES = {
-  'activity_log': 'activity_log',
-  'rankings': 'AP Rankings',
-  'auctions': 'Auctions',
-  'bids': 'Bids',
-  'clients': 'clients',
-  'college_players': 'College Players',
-  'migrations': 'Database Migrations',
-  'draft_states': 'Draft States',
-  'draft_events': 'draft_events',
-  'drafts': 'drafts',
-  'fantasy_teams': 'fantasy_teams',
-  'games': 'Games',
-  'invites': 'invites',
-  'league_memberships': 'league_memberships',
-  'leagues': 'Leagues',
-  'lineups': 'Lineups',
-  'matchups': 'Matchups',
-  'meshy_jobs': 'meshy_jobs',
-  'model_versions': 'Model Versions',
-  'model_runs': 'model_runs',
-  'player_stats': 'Player Stats',
-  'projections': 'projections',
-  'roster_slots': 'roster_slots',
-  'schools': 'schools',
-  'transactions': 'Transactions',
-} as const;
+  activity_log: 'activity_log',
+  rankings: 'AP Rankings',
+  auctions: 'Auctions',
+  bids: 'Bids',
+  clients: 'clients',
+  college_players: 'College Players',
+  migrations: 'Database Migrations',
+  draft_states: 'Draft States',
+  draft_events: 'draft_events',
+  drafts: 'drafts',
+  fantasy_teams: 'fantasy_teams',
+  games: 'Games',
+  invites: 'invites',
+  league_memberships: 'league_memberships',
+  leagues: 'Leagues',
+  lineups: 'Lineups',
+  matchups: 'Matchups',
+  meshy_jobs: 'meshy_jobs',
+  model_versions: 'Model Versions',
+  model_runs: 'model_runs',
+  player_stats: 'Player Stats',
+  projections: 'projections',
+  roster_slots: 'roster_slots',
+  schools: 'schools',
+  transactions: 'Transactions',
+} as const
 
 // Type exports for collection IDs
-export type CollectionId = typeof COLLECTIONS[keyof typeof COLLECTIONS];
-export type CollectionName = typeof COLLECTION_NAMES[keyof typeof COLLECTION_NAMES];
+export type CollectionId = (typeof COLLECTIONS)[keyof typeof COLLECTIONS]
+export type CollectionName = (typeof COLLECTION_NAMES)[keyof typeof COLLECTION_NAMES]
