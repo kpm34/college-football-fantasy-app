@@ -1,40 +1,38 @@
 # Appwrite Schema Documentation
 
-✅ **Updated**: All collections including `draft_picks` are now properly fetched using SDK with pagination.
-
-Generated: 2025-09-03T09:47:51.070Z
+Generated: 2025-09-04T18:30:43.179Z
 Database: college-football-fantasy
 Total Collections: 25
 
 ## Collections Overview
 
-| Collection Name     | Collection ID        | Attributes | Indexes | Doc Security |
-| ------------------- | -------------------- | ---------- | ------- | ------------ |
-| activity_log        | `activity_log`       | 20         | 8       | No           |
-| AP Rankings         | `rankings`           | 9          | 7       | No           |
-| Auctions            | `auctions`           | 6          | 3       | No           |
-| Bids                | `bids`               | 11         | 3       | No           |
-| clients             | `clients`            | 6          | 2       | No           |
-| College Players     | `college_players`    | 16         | 7       | No           |
-| Database Migrations | `migrations`         | 6          | 1       | No           |
-| Draft States        | `draft_states`       | 6          | 2       | Yes          |
-| draft_events        | `draft_events`       | 8          | 2       | No           |
-| drafts              | `drafts`             | 22         | 2       | No           |
-| fantasy_teams       | `fantasy_teams`      | 16         | 5       | No           |
-| Games               | `games`              | 16         | 5       | No           |
-| invites             | `invites`            | 9          | 2       | No           |
-| league_memberships  | `league_memberships` | 7          | 3       | No           |
-| Leagues             | `leagues`            | 22         | 3       | No           |
-| Lineups             | `lineups`            | 8          | 1       | No           |
-| Matchups            | `matchups`           | 10         | 1       | No           |
-| meshy_jobs          | `meshy_jobs`         | 11         | 0       | No           |
-| Model Versions      | `model_versions`     | 11         | 4       | No           |
-| model_runs          | `model_runs`         | 13         | 1       | No           |
-| Player Stats        | `player_stats`       | 9          | 5       | No           |
-| projections         | `projections`        | 21         | 1       | No           |
-| roster_slots        | `roster_slots`       | 5          | 2       | No           |
-| schools             | `schools`            | 8          | 2       | No           |
-| Transactions        | `transactions`       | 7          | 3       | No           |
+| Collection Name | Collection ID | Attributes | Indexes | Doc Security |
+|-----------------|---------------|------------|---------|-------------|
+| activity_log | `activity_log` | 20 | 8 | No |
+| AP Rankings | `rankings` | 9 | 7 | No |
+| Auctions | `auctions` | 6 | 3 | No |
+| Bids | `bids` | 11 | 3 | No |
+| clients | `clients` | 6 | 2 | No |
+| College Players | `college_players` | 16 | 7 | No |
+| Database Migrations | `migrations` | 6 | 1 | No |
+| Draft States | `draft_states` | 6 | 2 | Yes |
+| draft_events | `draft_events` | 8 | 2 | No |
+| drafts | `drafts` | 22 | 2 | No |
+| fantasy_teams | `fantasy_teams` | 16 | 5 | No |
+| Games | `games` | 16 | 5 | No |
+| invites | `invites` | 9 | 2 | No |
+| league_memberships | `league_memberships` | 7 | 3 | No |
+| Leagues | `leagues` | 22 | 3 | No |
+| Lineups | `lineups` | 8 | 1 | No |
+| Matchups | `matchups` | 10 | 1 | No |
+| meshy_jobs | `meshy_jobs` | 11 | 0 | No |
+| Model Versions | `model_versions` | 11 | 4 | No |
+| model_runs | `model_runs` | 13 | 1 | No |
+| Player Stats | `player_stats` | 9 | 5 | No |
+| projections | `projections` | 21 | 1 | No |
+| roster_slots | `roster_slots` | 5 | 2 | No |
+| schools | `schools` | 8 | 2 | No |
+| Transactions | `transactions` | 7 | 3 | No |
 
 ## Collection Details
 
@@ -184,7 +182,7 @@ Total Collections: 25
 | `team` | string | ✅ | max: 50 |
 | `conference` | string | ✅ | max: 20 |
 | `year` | string | ❌ | max: 10 |
-| `jerseyNumber` | integer | ❌ | \* to 99 |
+| `jerseyNumber` | integer | ❌ | * to 99 |
 | `height` | string | ❌ | max: 10 |
 | `weight` | integer | ❌ | 150 to 400 |
 | `eligible` | boolean | ❌ | - |
@@ -317,8 +315,8 @@ Total Collections: 25
 | `teamName` | string | ✅ | max: 128 |
 | `abbrev` | string | ❌ | max: 8 |
 | `logoUrl` | string | ❌ | max: 512 |
-| `wins` | integer | ❌ | _ to 25 |
-| `losses` | integer | ❌ | _ to 25 |
+| `wins` | integer | ❌ | * to 25 |
+| `losses` | integer | ❌ | * to 25 |
 | `ties` | integer | ❌ | -9223372036854775808 to 9223372036854775807 |
 | `pointsFor` | double | ❌ | - |
 | `pointsAgainst` | double | ❌ | - |
@@ -352,8 +350,8 @@ Total Collections: 25
 | `date` | datetime | ✅ | - |
 | `homeTeam` | string | ✅ | max: 50 |
 | `awayTeam` | string | ✅ | max: 50 |
-| `homeScore` | integer | ❌ | _ to 200 |
-| `awayScore` | integer | ❌ | _ to 200 |
+| `homeScore` | integer | ❌ | * to 200 |
+| `awayScore` | integer | ❌ | * to 200 |
 | `status` | string | ❌ | max: 20 |
 | `eligible` | boolean | ❌ | - |
 | `startDate` | datetime | ✅ | - |
@@ -431,15 +429,15 @@ Total Collections: 25
 | `gameMode` | string | ❌ | max: 20 |
 | `draftType` | string | ❌ | max: 20 |
 | `isPublic` | boolean | ❌ | - |
-| `currentTeams` | integer | ❌ | _ to 20 |
+| `currentTeams` | integer | ❌ | * to 20 |
 | `pickTimeSeconds` | integer | ❌ | 30 to 600 |
 | `draftDate` | datetime | ❌ | - |
 | `selectedConference` | string | ❌ | max: 50 |
 | `seasonStartWeek` | integer | ❌ | 1 to 20 |
-| `playoffTeams` | integer | ❌ | _ to 20 |
+| `playoffTeams` | integer | ❌ | * to 20 |
 | `playoffStartWeek` | integer | ❌ | 1 to 20 |
 | `waiverType` | string | ❌ | max: 20 |
-| `waiverBudget` | integer | ❌ | \* to 1000 |
+| `waiverBudget` | integer | ❌ | * to 1000 |
 | `password` | string | ❌ | max: 50 |
 | `commissionerAuthUserId` | string | ❌ | max: 64 |
 | `scoringRules` | string | ❌ | max: 65535 |
@@ -694,3 +692,4 @@ Total Collections: 25
 - `team_idx` (📍 KEY): [fantasyTeamId]
 
 ---
+
