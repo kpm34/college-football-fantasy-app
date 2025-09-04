@@ -36,8 +36,13 @@ export function GoogleAuthButton() {
       const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app'
       
       // Use the client-side callback page to handle OAuth redirect
-      const successUrl = `${window.location.origin}/auth/callback`
-      const failureUrl = `${window.location.origin}/login?error=google_auth_failed`
+      // For production, use the actual domain to avoid cookie issues
+      const baseUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://cfbfantasy.app'
+        : window.location.origin;
+      
+      const successUrl = `${baseUrl}/auth/callback`
+      const failureUrl = `${baseUrl}/login?error=google_auth_failed`
       
       // Direct OAuth URL
       const oauthUrl = `${endpoint}/account/sessions/oauth2/google` +

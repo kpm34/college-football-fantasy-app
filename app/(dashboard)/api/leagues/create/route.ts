@@ -39,6 +39,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   const maxTeams: number | undefined =
     typeof requestData.maxTeams === 'number' ? requestData.maxTeams : parseInt(requestData.maxTeams)
   const draftType: string = requestData.draftType || 'snake'
+  const scoringType: string | undefined = requestData.scoringType || requestData.scoringMode
   const isPrivate: boolean = Boolean(requestData.isPrivate)
   const password: string | undefined = requestData.password
   const pickTimeSeconds: number =
@@ -76,6 +77,56 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     throw new ValidationError('Missing required fields: leagueName, maxTeams, gameMode')
   }
 
+  // Default scoring rule templates (can be extended later)
+  const DEFAULT_STANDARD = {
+    passingYards: 0.04, // 1 pt per 25 yards
+    passingTouchdowns: 4,
+    interceptions: -2,
+    rushingYards: 0.1, // 1 pt per 10 yards
+    rushingTouchdowns: 6,
+    receptions: 0, // Standard = 0 PPR
+    receivingYards: 0.1,
+    receivingTouchdowns: 6,
+    fieldGoal_0_39: 3,
+    fieldGoal_40_49: 4,
+    fieldGoal_50_plus: 5,
+    fieldGoalMissed: -1,
+    extraPointMade: 1,
+    extraPointMissed: -1,
+  }
+  const DEFAULT_PPR = { ...DEFAULT_STANDARD, receptions: 1 }
+
+  // Resolve scoring rules
+  let scoringRulesToPersist: string | undefined = undefined
+  try {
+    const customRules = requestData.customScoringRules || requestData.scoringRules
+    if (String(scoringType || '').toUpperCase() === 'PPR') {
+      scoringRulesToPersist = JSON.stringify(DEFAULT_PPR)
+    } else if (String(scoringType || '').toUpperCase() === 'STANDARD') {
+      scoringRulesToPersist = JSON.stringify(DEFAULT_STANDARD)
+    } else if (String(scoringType || '').toUpperCase() === 'CUSTOM') {
+      if (typeof customRules === 'string') {
+        JSON.parse(customRules) // validate
+        scoringRulesToPersist = customRules
+      } else if (typeof customRules === 'object' && customRules) {
+        scoringRulesToPersist = JSON.stringify(customRules)
+      } else {
+        scoringRulesToPersist = JSON.stringify(DEFAULT_STANDARD)
+      }
+    } else if (requestData.scoringRules) {
+      // Fallback to provided string
+      if (typeof requestData.scoringRules === 'string') JSON.parse(requestData.scoringRules)
+      scoringRulesToPersist =
+        typeof requestData.scoringRules === 'string'
+          ? requestData.scoringRules
+          : JSON.stringify(requestData.scoringRules)
+    } else {
+      scoringRulesToPersist = JSON.stringify(DEFAULT_STANDARD)
+    }
+  } catch {
+    scoringRulesToPersist = JSON.stringify(DEFAULT_STANDARD)
+  }
+
   // Use repositories
   const { leagues, rosters } = serverRepositories
 
@@ -90,7 +141,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     password: isPrivate && password ? String(password) : undefined,
     pickTimeSeconds,
     commissionerAuthUserId: user.$id,
-    scoringRules: requestData.scoringRules,
+    scoringRules: scoringRulesToPersist,
     draftDate: requestData.draftDate,
     season: requestData.season || new Date().getFullYear(),
     // Save selectedConference when in conference mode
