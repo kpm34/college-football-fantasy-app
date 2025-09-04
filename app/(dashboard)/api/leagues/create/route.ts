@@ -77,6 +77,11 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     throw new ValidationError('Missing required fields: leagueName, maxTeams, gameMode')
   }
 
+  // Enforce privacy rule: if private, password is required
+  if (isPrivate && (!password || String(password).trim().length === 0)) {
+    return NextResponse.json({ error: 'Password is required for private leagues' }, { status: 400 })
+  }
+
   // Default scoring rule templates (can be extended later)
   const DEFAULT_STANDARD = {
     passingYards: 0.04, // 1 pt per 25 yards

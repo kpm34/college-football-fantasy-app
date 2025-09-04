@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 interface FormData {
   leagueName: string;
   gameMode: 'CONFERENCE' | 'POWER4';
   selectedConference: string;
-  scoringType: 'PPR' | 'STANDARD';
+  scoringType: 'PPR' | 'STANDARD' | 'CUSTOM';
   maxTeams: number;
   seasonStartWeek: number;
   draftDate: string;
@@ -92,7 +92,7 @@ export default function CreateLeaguePage() {
     }, 300);
   };
 
-  const handleScoringTypeSelect = (type: 'PPR' | 'STANDARD') => {
+  const handleScoringTypeSelect = (type: 'PPR' | 'STANDARD' | 'CUSTOM') => {
     setFormData(prev => ({ ...prev, scoringType: type }));
     setTimeout(() => {
       setCurrentStep(5);
@@ -164,6 +164,10 @@ export default function CreateLeaguePage() {
       
       if (!formData.scoringType) {
         alert('Please select a scoring type');
+        return;
+      }
+      if (formData.isPrivate && !(formData.password && formData.password.trim().length > 0)) {
+        alert('Password is required for private leagues.');
         return;
       }
       
@@ -507,6 +511,35 @@ export default function CreateLeaguePage() {
                       Values touchdowns and big plays more, traditional fantasy format
                     </p>
                   </div>
+                  <div 
+                    className={`p-6 rounded-xl cursor-pointer transition-all transform hover:scale-105`}
+                    style={{
+                      border: `2px solid ${formData.scoringType === 'CUSTOM' ? palette.gold : `${palette.maroon}99`}`,
+                      background: formData.scoringType === 'CUSTOM' ? `${palette.gold}22` : `${palette.maroon}0D`,
+                      boxShadow: formData.scoringType === 'CUSTOM' ? `0 0 0 4px ${palette.gold}33` : 'none',
+                    }}
+                    onClick={() => handleScoringTypeSelect('CUSTOM')}
+                  >
+                    <div className="flex items-center mb-3">
+                      <div className={`w-6 h-6 rounded-full border-2 mr-3 transition-all ${
+                        formData.scoringType === 'CUSTOM' ? 'border-[#DAA520] bg-[#DAA520]' : 'border-[#3A1220]/40'
+                      }`}>
+                        {formData.scoringType === 'CUSTOM' && (
+                          <div className="w-3 h-3 bg-white rounded-full m-auto mt-0.5"></div>
+                        )}
+                      </div>
+                      <h3 className="text-xl font-bold text-[#3A1220]">Custom</h3>
+                    </div>
+                    <p className="text-lg text-[#3A1220] mb-3">Define your own rules</p>
+                    <div className="bg-[#DAA520]/10 rounded-lg p-3">
+                      <p className="text-sm text-[#3A1220] font-medium">
+                        Configure points for passing, rushing, receiving and kicking
+                      </p>
+                    </div>
+                    <p className="text-xs text-[#2D0E17] font-medium mt-3">
+                      Flexible per-league scoring configuration
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
@@ -520,12 +553,81 @@ export default function CreateLeaguePage() {
                   Step 5: Final Details
                 </label>
                 <p className="text-[#2D0E17] mb-6 font-medium">Configure the last few settings for your league</p>
+                {formData.scoringType === 'CUSTOM' && (
+                  <div className="mb-8 rounded-xl p-6" style={{ background: '#fff', border: `1px solid ${palette.tan}66` }}>
+                    <h3 className="text-lg font-bold text-[#3A1220] mb-4">Custom Scoring</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                      <div>
+                        <div className="font-semibold text-[#3A1220] mb-2">Passing</div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <label className="text-[#2D0E17]">Yards per yard
+                            <input name="passingYards" type="number" step="0.01" defaultValue={0.04} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                          <label className="text-[#2D0E17]">TD
+                            <input name="passingTouchdowns" type="number" step="1" defaultValue={4} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                          <label className="text-[#2D0E17]">INT
+                            <input name="interceptions" type="number" step="1" defaultValue={-2} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-[#3A1220] mb-2">Rushing</div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <label className="text-[#2D0E17]">Yards per yard
+                            <input name="rushingYards" type="number" step="0.01" defaultValue={0.1} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                          <label className="text-[#2D0E17]">TD
+                            <input name="rushingTouchdowns" type="number" step="1" defaultValue={6} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-[#3A1220] mb-2">Receiving</div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <label className="text-[#2D0E17]">Receptions
+                            <input name="receptions" type="number" step="0.1" defaultValue={1} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                          <label className="text-[#2D0E17]">Yards per yard
+                            <input name="receivingYards" type="number" step="0.01" defaultValue={0.1} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                          <label className="text-[#2D0E17]">TD
+                            <input name="receivingTouchdowns" type="number" step="1" defaultValue={6} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-[#3A1220] mb-2">Kicking</div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <label className="text-[#2D0E17]">FG 0–39
+                            <input name="fieldGoal_0_39" type="number" step="1" defaultValue={3} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                          <label className="text-[#2D0E17]">FG 40–49
+                            <input name="fieldGoal_40_49" type="number" step="1" defaultValue={4} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                          <label className="text-[#2D0E17]">FG 50+
+                            <input name="fieldGoal_50_plus" type="number" step="1" defaultValue={5} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                          <label className="text-[#2D0E17]">FG Miss
+                            <input name="fieldGoalMissed" type="number" step="1" defaultValue={-1} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                          <label className="text-[#2D0E17]">XP Made
+                            <input name="extraPointMade" type="number" step="1" defaultValue={1} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                          <label className="text-[#2D0E17]">XP Miss
+                            <input name="extraPointMissed" type="number" step="1" defaultValue={-1} className="mt-1 w-full px-3 py-2 rounded border" />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   
                   {/* Max Teams */}
                   <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
                     <label htmlFor="maxTeams" className="block text-lg font-semibold mb-3 text-[#3A1220]">
-                      🏆 Max Teams
+                      Max Teams
                     </label>
                     <select
                       id="maxTeams"
@@ -546,7 +648,7 @@ export default function CreateLeaguePage() {
                   {/* Season Start Week */}
                   <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
                     <label htmlFor="seasonStartWeek" className="block text-lg font-semibold mb-3 text-[#3A1220]">
-                      📅 Start Week
+                      Start Week
                     </label>
                     <select
                       id="seasonStartWeek"
@@ -567,7 +669,7 @@ export default function CreateLeaguePage() {
                   {/* Draft Date */}
                   <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
                     <label htmlFor="draftDate" className="block text-lg font-semibold mb-3 text-[#3A1220]">
-                      🎯 Draft Date
+                      Draft Date
                     </label>
                     <input
                       type="datetime-local"
@@ -586,7 +688,7 @@ export default function CreateLeaguePage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
                   <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
                     <label className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
-                      🔒 Private League
+                      Private League
                     </label>
                     <div className="flex items-center gap-3">
                       <input
@@ -601,29 +703,32 @@ export default function CreateLeaguePage() {
                       </label>
                     </div>
                   </div>
-                  <div className="md:col-span-2 bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
-                    <label htmlFor="password" className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
-                      🧷 Optional Password
-                    </label>
-                    <input
-                      type="text"
-                      id="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
-                      style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
-                      placeholder="Set a simple password for entry (optional)"
-                    />
-                    <p className="text-xs mt-2 text-[#2D0E17] font-medium">Useful for friends-only leagues.</p>
-                  </div>
+                  {formData.isPrivate && (
+                    <div className="md:col-span-2 bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
+                      <label htmlFor="password" className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
+                        League Password
+                      </label>
+                      <input
+                        type="text"
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 rounded-lg focus:ring-4 text-lg"
+                        style={{ border: `2px solid ${palette.tan}`, background: '#fff', color: palette.maroon }}
+                        placeholder="Enter password to enforce private access"
+                        required={!!formData.isPrivate}
+                      />
+                      <p className="text-xs mt-2 text-[#2D0E17] font-medium">Members will need this password to join.</p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Roster Settings */}
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
                     <label className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
-                      🏃‍♂️ RB Slots
+                      RB Slots
                     </label>
                     <input
                       type="number"
@@ -639,7 +744,7 @@ export default function CreateLeaguePage() {
                   </div>
                   <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
                     <label className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
-                      🟦 WR Slots
+                      WR Slots
                     </label>
                     <input
                       type="number"
@@ -655,7 +760,7 @@ export default function CreateLeaguePage() {
                   </div>
                   <div className="bg-[#F5F5DC]/10 rounded-xl p-6 border border-[#3A1220]/20">
                     <label className="block text-lg font-semibold mb-3" style={{ color: palette.maroon }}>
-                      🛋️ Bench Size
+                      Bench Size
                     </label>
                     <input
                       type="number"
