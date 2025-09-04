@@ -38,54 +38,58 @@ export default function DraftRoomPage({ params }: Props) {
   }, [leagueId])
 
   if (leagueNotFound) {
-    return <div className="p-8 text-center">League not found.</div>
-  }
-
-  if (!engineVersion) {
-    return <div className="p-4">Loading draft room...</div>
-  }
-
-  if (engineVersion === 'v2') {
-    const { state, loading, makePick } = useDraftStateV2(leagueId)
-    // Basic UI placeholder
     return (
-      <div className="p-4 space-y-4">
-        <h1 className="text-xl font-bold">Draft Room (v2)</h1>
-        {loading || !state ? (
-          <p>Loading state…</p>
-        ) : (
-          <div>
-            <p>
-              Round {state.round} – Pick {state.pickIndex}
-            </p>
-            <p>On the clock: {state.onClockTeamId}</p>
-            <p>Deadline: {new Date(state.deadlineAt).toLocaleTimeString()}</p>
-          </div>
-        )}
-        {/* DraftCore component here if you want full UI */}
-        {/* Example button to test pick */}
-        <button
-          className="px-4 py-2 bg-blue-600 text-white rounded"
-          onClick={() =>
-            makePick({ teamId: state?.onClockTeamId || '', playerId: prompt('Player ID') || '' })
-          }
-        >
-          Draft Player
-        </button>
-      </div>
+      <div className="min-h-screen bg-white text-gray-900 p-8 text-center">League not found.</div>
     )
   }
 
-  // Fallback to legacy realtime hook/UI
-  const draft = useDraftRealtime(leagueId)
+  // Always call hooks in a fixed order; decide which data to show after
+  const v2 = useDraftStateV2(leagueId)
+  const legacy = useDraftRealtime(leagueId)
+
+  if (!engineVersion) {
+    return <div className="min-h-screen bg-white text-gray-900 p-4">Loading draft room...</div>
+  }
+
+  const showV2 = engineVersion === 'v2'
+  const round = showV2 ? v2.state?.round : legacy.currentRound
+  const pickIndex = showV2 ? v2.state?.pickIndex : legacy.currentPick
+  const onClock = showV2 ? v2.state?.onClockTeamId : legacy.onTheClock
+  const deadline = showV2 ? v2.state?.deadlineAt : legacy.deadlineAt
+  const loading = showV2 ? v2.loading : legacy.loading
+  const error = showV2 ? v2.error : legacy.error
+
   return (
-    <DraftCore
-      leagueId={leagueId}
-      draftType="snake"
-      canDraft={draft.isMyTurn}
-      timeRemainingSec={
-        draft.deadlineAt ? (new Date(draft.deadlineAt).getTime() - Date.now()) / 1000 : undefined
-      }
-    />
+    <div className="min-h-screen bg-white text-gray-900">
+      <div className="p-4 space-y-4">
+        <h1 className="text-xl font-bold">Draft Room ({showV2 ? 'v2' : 'legacy'})</h1>
+        {loading && <p>Loading state…</p>}
+        {!loading && error && (
+          <div className="rounded border border-yellow-400 bg-yellow-50 text-yellow-800 p-3">
+            {error.includes('not started') || error.includes('404')
+              ? 'Draft has not started yet. The commissioner can start the draft from league settings.'
+              : `Error: ${error}`}
+          </div>
+        )}
+        {!loading && (round || pickIndex) && (
+          <div>
+            <p>
+              Round {round} – Pick {pickIndex}
+            </p>
+            <p>On the clock: {onClock}</p>
+            {deadline && <p>Deadline: {new Date(deadline).toLocaleTimeString()}</p>}
+          </div>
+        )}
+
+        <DraftCore
+          leagueId={leagueId}
+          draftType="snake"
+          canDraft={showV2 ? false : legacy.isMyTurn}
+          timeRemainingSec={
+            deadline ? (new Date(deadline).getTime() - Date.now()) / 1000 : undefined
+          }
+        />
+      </div>
+    </div>
   )
 }

@@ -1,5 +1,6 @@
-import { Client, Databases, Users, Storage, Functions, Messaging } from 'node-appwrite';
+import { Client, Databases, Users, Storage, Functions, Messaging, Account } from 'node-appwrite';
 import { DATABASE_ID, COLLECTIONS } from './appwrite-generated';
+import { cookies } from 'next/headers';
 
 // Server-side Appwrite client configuration (with API key)
 // This should only be used in API routes, never exposed to client
@@ -185,4 +186,54 @@ export async function validateCollections(): Promise<{ valid: boolean; missing: 
  */
 export function getCollectionMetadata(collectionId: string) {
   return COLLECTION_METADATA[collectionId as keyof typeof COLLECTION_METADATA];
+}
+
+/**
+ * Create a client with session from cookies (for API routes)
+ */
+export async function createSessionClient() {
+  const client = new Client()
+    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app');
+
+  // Get session from cookies
+  const cookieStore = cookies();
+  
+  // Try to find the Appwrite session cookie
+  // Appwrite sets cookies like: a_session_[projectId]
+  const sessionNames = [
+    'a_session_college-football-fantasy-app',
+    'a_session_college-football-fantasy-app_legacy'
+  ];
+  
+  let session = null;
+  for (const name of sessionNames) {
+    const cookie = cookieStore.get(name);
+    if (cookie?.value) {
+      session = cookie.value;
+      console.log(`Found session cookie ${name}`);
+      break;
+    }
+  }
+  
+  // Also check for any cookie starting with a_session_
+  if (!session) {
+    const allCookies = cookieStore.getAll();
+    const sessionCookie = allCookies.find(c => c.name.startsWith('a_session_'));
+    if (sessionCookie) {
+      session = sessionCookie.value;
+      console.log(`Found session cookie ${sessionCookie.name}`);
+    }
+  }
+  
+  if (session) {
+    client.setSession(session);
+  }
+
+  return {
+    client,
+    account: new Account(client),
+    databases: new Databases(client),
+    hasSession: !!session
+  };
 }
