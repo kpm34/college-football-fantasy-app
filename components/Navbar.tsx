@@ -40,11 +40,6 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const { user, loading: authLoading, logout } = useAuth();
-  
-  // Don't show navbar on login/signup pages
-  if (pathname === '/login' || pathname === '/signup') {
-    return null;
-  }
 
   // Prevent body scroll when drawer is open
   useEffect(() => {
@@ -96,6 +91,11 @@ export default function Navbar() {
       setOpen(false);
       router.push("/");
     }
+  }
+
+  // Don't show navbar on login/signup pages
+  if (pathname === '/login' || pathname === '/signup') {
+    return null;
   }
 
   return (
