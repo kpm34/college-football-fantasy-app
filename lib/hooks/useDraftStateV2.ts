@@ -1,4 +1,4 @@
-import { client, COLLECTIONS, DATABASE_ID, databases } from '@/lib/appwrite'
+import { client, COLLECTIONS, DATABASE_ID } from '@/lib/appwrite'
 import { RealtimeResponseEvent } from 'appwrite'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -32,11 +32,20 @@ export function useDraftStateV2(leagueId: string): UseDraftStateV2Return {
   const refresh = useCallback(async () => {
     try {
       setLoading(true)
-      const doc = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFT_STATES, leagueId)
-      setState(doc as unknown as DraftStateSnapshot)
+      // Use server API so 403/permissions don't block initial load
+      const res = await fetch(`/api/drafts/${leagueId}/state`, { cache: 'no-store' })
+      if (!res.ok) {
+        const txt = await res.text()
+        throw new Error(txt || `Failed to load draft state (${res.status})`)
+      }
+      const json = await res.json()
+      const doc = json?.data
+      if (!doc) throw new Error('Draft not started')
+      setState(doc as DraftStateSnapshot)
       setError(null)
     } catch (err: any) {
       setError(err.message)
+      setState(null)
     } finally {
       setLoading(false)
     }

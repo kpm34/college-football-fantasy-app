@@ -1,6 +1,6 @@
 import { COLLECTIONS, DATABASE_ID, serverDatabases as databases } from '@lib/appwrite-server'
 import { NextRequest, NextResponse } from 'next/server'
-import { Query } from 'node-appwrite'
+import { Permission, Query, Role } from 'node-appwrite'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -45,6 +45,16 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // Helper to shuffle arrays (Fisher–Yates)
+    function shuffle<T>(arr: T[]): T[] {
+      const a = [...arr]
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[a[i], a[j]] = [a[j], a[i]]
+      }
+      return a
+    }
+
     for (const draft of toStart) {
       try {
         // Compute on-the-clock and deadline from orderJson + clockSeconds
@@ -52,7 +62,29 @@ export async function GET(request: NextRequest) {
         try {
           orderJson = draft.orderJson ? JSON.parse(draft.orderJson) : {}
         } catch {}
-        const draftOrder: string[] = Array.isArray(orderJson.draftOrder) ? orderJson.draftOrder : []
+        let draftOrder: string[] = Array.isArray(orderJson.draftOrder) ? orderJson.draftOrder : []
+
+        // Fallback: if no order exists, derive from fantasy_teams in this league
+        if (!draftOrder || draftOrder.length === 0) {
+          try {
+            const teams = await databases.listDocuments(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, [
+              Query.equal('leagueId', draft.leagueId),
+              Query.limit(200),
+            ])
+            const teamIds = (teams.documents || []).map((t: any) => String(t.$id))
+            if (teamIds.length > 0) {
+              draftOrder = shuffle(teamIds)
+              orderJson.draftOrder = draftOrder
+              await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draft.$id, {
+                orderJson: JSON.stringify(orderJson),
+              })
+              console.log('[CRON] Generated fallback draft order for league', draft.leagueId)
+            }
+          } catch (e) {
+            console.warn('[CRON] Failed to generate fallback draft order', e)
+          }
+        }
+
         const onClockTeamId: string | null = draftOrder.length > 0 ? String(draftOrder[0]) : null
         const clockSeconds = Number((draft as any).clockSeconds || orderJson.pickTimeSeconds || 90)
         const deadlineAt = new Date(Date.now() + clockSeconds * 1000).toISOString()
@@ -80,7 +112,11 @@ export async function GET(request: NextRequest) {
                 round: 1,
                 pickIndex: 1,
                 draftStatus: 'drafting',
-              }
+              },
+              [
+                // Allow authenticated clients to read the state; writes remain server-only
+                Permission.read(Role.users()),
+              ]
             )
           } catch (e: any) {
             try {
@@ -94,7 +130,8 @@ export async function GET(request: NextRequest) {
                   DATABASE_ID,
                   COLLECTIONS.DRAFT_STATES,
                   existing.documents[0].$id,
-                  { onClockTeamId, deadlineAt, round: 1, pickIndex: 1, draftStatus: 'drafting' }
+                  { onClockTeamId, deadlineAt, round: 1, pickIndex: 1, draftStatus: 'drafting' },
+                  [Permission.read(Role.users())]
                 )
               }
             } catch {}
