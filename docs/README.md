@@ -9,4 +9,8 @@ Quick links to the canonical docs:
 - Project Summary: ./PROJECT_SUMMARY.md
 - Page Audit Report: ./PAGE_AUDIT_REPORT.md
 
+Additional Guides:
+
+- 3D UI Implementation Guide: ./guides/3D_UI_IMPLEMENTATION_GUIDE.md
+
 Archived plans and historical docs are under `./archive/`.

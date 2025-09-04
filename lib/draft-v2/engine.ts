@@ -263,6 +263,16 @@ export async function applyPick({
       pickIndex: next.pickIndex,
       draftStatus: next.phase === 'complete' ? 'complete' : 'drafting',
     } as any)
+    // If draft completed, persist final rosters into fantasy_teams
+    if (next.phase === 'complete') {
+      try {
+        await persistFinalRosters(leagueId)
+      } catch (err) {
+        // Non-fatal: log and continue
+        // eslint-disable-next-line no-console
+        console.warn('[Draft] persistFinalRosters failed:', err)
+      }
+    }
     // success
     return next
   } catch (err: any) {
@@ -315,6 +325,39 @@ export async function maybeAutopick(leagueId: string): Promise<void> {
   const autoPlayerId = await bestAvailable(leagueId, state.onClockTeamId || '')
   const idemKey = `AUTOPICK-${Date.now()}`
   await applyPick({ leagueId, teamId: state.onClockTeamId || '', playerId: autoPlayerId, idemKey })
+}
+
+/**
+ * Persist final rosters to fantasy_teams.players as JSON array of playerIds for convenience in Locker Room.
+ */
+async function persistFinalRosters(leagueId: string): Promise<void> {
+  // Gather all picks ordered by overall
+  const picksRes = await serverDatabases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_PICKS, [
+    Query.equal('leagueId', leagueId),
+    Query.orderAsc('round'),
+    Query.orderAsc('pick'),
+    Query.limit(10000),
+  ])
+  const teamToPlayers = new Map<string, string[]>()
+  for (const p of picksRes.documents || []) {
+    const teamId = String((p as any).teamId)
+    const playerId = String((p as any).playerId)
+    const arr = teamToPlayers.get(teamId) || []
+    arr.push(playerId)
+    teamToPlayers.set(teamId, arr)
+  }
+  if (teamToPlayers.size === 0) return
+  // Update fantasy_team documents
+  for (const [teamId, playerIds] of teamToPlayers) {
+    try {
+      await serverDatabases.updateDocument(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, teamId, {
+        players: JSON.stringify(playerIds),
+      } as any)
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn('[Draft] Failed to update team roster', { teamId, error: (e as any)?.message })
+    }
+  }
 }
 
 export async function pauseDraft(leagueId: string): Promise<DraftState> {

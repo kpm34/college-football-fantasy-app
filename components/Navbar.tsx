@@ -1,101 +1,99 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useAuth } from '@lib/hooks/useAuth';
-import CFPLoadingScreen from "./CFPLoadingScreen";
 import {
-  HomeIcon,
-  RectangleGroupIcon,
   ChartBarIcon,
+  HomeIcon,
+  LockClosedIcon,
+  RectangleGroupIcon,
   TrophyIcon,
   UserGroupIcon,
-  LockClosedIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline'
+import { useAuth } from '@lib/hooks/useAuth'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import CFPLoadingScreen from './CFPLoadingScreen'
 
 function NavLink({ href, label }: { href: string; label: string }) {
-  const pathname = usePathname();
-  const isActive = pathname === href;
+  const pathname = usePathname()
+  const isActive = pathname === href
   return (
     <Link
       href={href}
       className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-        isActive
-          ? "bg-white/10 text-white"
-          : "text-white/80 hover:text-white hover:bg-white/5"
+        isActive ? 'bg-white/10 text-white' : 'text-white/80 hover:text-white hover:bg-white/5'
       }`}
     >
       {label}
     </Link>
-  );
+  )
 }
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);
-  const [leagues, setLeagues] = useState<Array<{ id: string; name: string; leagueName?: string; isCommissioner?: boolean }>>(
-    []
-  );
-  const router = useRouter();
-  const pathname = usePathname();
-  const { user, loading: authLoading, logout } = useAuth();
+  const [open, setOpen] = useState(false)
+  const [isNavigating, setIsNavigating] = useState(false)
+  const [leagues, setLeagues] = useState<
+    Array<{ id: string; name: string; leagueName?: string; isCommissioner?: boolean }>
+  >([])
+  const router = useRouter()
+  const pathname = usePathname()
+  const { user, loading: authLoading, logout } = useAuth()
 
   // Prevent body scroll when drawer is open
   useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
+      document.body.style.overflow = prev
+    }
+  }, [open])
 
   // Load user's leagues via the unified server endpoint (Auth-driven; no direct DB reads)
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
+    let cancelled = false
+    ;(async () => {
       try {
-        const res = await fetch('/api/leagues/mine', { cache: 'no-store' });
+        const res = await fetch('/api/leagues/mine', { cache: 'no-store' })
         if (res.ok) {
-          const data = await res.json();
+          const data = await res.json()
           if (!cancelled && Array.isArray(data.leagues)) {
-            setLeagues(data.leagues);
+            setLeagues(data.leagues)
           }
         }
       } catch (e) {
-        console.error('Failed to load user leagues', e);
+        console.error('Failed to load user leagues', e)
       }
-    })();
+    })()
     return () => {
-      cancelled = true;
-    };
-  }, [user?.$id]);
+      cancelled = true
+    }
+  }, [user?.$id])
 
   function handleNavigateWithLoading(href: string) {
-    setIsNavigating(true);
-    setOpen(false);
+    setIsNavigating(true)
+    setOpen(false)
     setTimeout(() => {
-      router.push(href);
-      setTimeout(() => setIsNavigating(false), 500);
-    }, 100);
+      router.push(href)
+      setTimeout(() => setIsNavigating(false), 500)
+    }, 100)
   }
 
   async function handleLogout() {
     try {
-      setOpen(false);
-      await logout();
+      setOpen(false)
+      await logout()
     } catch (e) {
-      console.error("Logout failed", e);
+      console.error('Logout failed', e)
       // Even if logout fails, close the menu and redirect
-      setOpen(false);
-      router.push("/");
+      setOpen(false)
+      router.push('/')
     }
   }
 
   // Don't show navbar on login/signup pages
   if (pathname === '/login' || pathname === '/signup') {
-    return null;
+    return null
   }
 
   return (
@@ -115,7 +113,7 @@ export default function Navbar() {
               <NavLink href="/standings" label="Standings" />
               <NavLink href="/draft/mock" label="Mock Draft" />
               <Link
-                href={user ? "/league/create" : "/login"}
+                href={user ? '/league/create' : '/login'}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors text-white/80 hover:text-white hover:bg-white/5`}
               >
                 Create League
@@ -131,7 +129,7 @@ export default function Navbar() {
       {/* Overlay above navbar to avoid overlap issues */}
       <div
         className={`fixed inset-0 z-50 bg-black/50 transition-opacity duration-300 ${
-          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         onClick={() => setOpen(false)}
       />
@@ -139,16 +137,14 @@ export default function Navbar() {
       {/* Left drawer */}
       <aside
         className={`fixed left-0 top-0 z-50 h-full w-80 max-w-[85vw] transform bg-[#1c1117] text-white border-r border-white/10 shadow-2xl transition-transform duration-300 ${
-          open ? "translate-x-0" : "-translate-x-full"
+          open ? 'translate-x-0' : '-translate-x-full'
         }`}
         aria-hidden={!open}
       >
         <div className="px-5 py-4 flex items-center justify-between border-b border-white/10">
           <div>
             <div className="text-xl font-bebas tracking-wide">CFB Fantasy</div>
-            {!!user && (
-              <div className="text-xs text-white/70">{user.name || user.email}</div>
-            )}
+            {!!user && <div className="text-xs text-white/70">{user.name || user.email}</div>}
           </div>
           <button
             className="rounded-md p-2 hover:bg-white/10"
@@ -198,7 +194,7 @@ export default function Navbar() {
                   <div className="px-3 pb-1 text-white/60 text-xs uppercase tracking-wider">
                     My Leagues
                   </div>
-                  {leagues.map((lg) => (
+                  {leagues.map(lg => (
                     <div key={lg.id} className="mb-3">
                       <button
                         onClick={() => handleNavigateWithLoading(`/league/${lg.id}`)}
@@ -219,7 +215,9 @@ export default function Navbar() {
                         </button>
                         {lg.isCommissioner && (
                           <button
-                            onClick={() => handleNavigateWithLoading(`/league/${lg.id}/commissioner`)}
+                            onClick={() =>
+                              handleNavigateWithLoading(`/league/${lg.id}/commissioner`)
+                            }
                             className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm flex items-center gap-1.5 transition-colors"
                             aria-label="Commissioner Settings"
                             title="Commissioner Settings"
@@ -269,7 +267,7 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href={user ? "/league/create" : "/login"}
+            href={user ? '/league/create' : '/login'}
             onClick={() => setOpen(false)}
             className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden"
           >
@@ -319,7 +317,7 @@ export default function Navbar() {
         <div className="mt-auto" />
       </aside>
     </>
-  );
+  )
 }
 
 function UserMenu({
@@ -327,40 +325,38 @@ function UserMenu({
   loading,
   onLogout,
 }: {
-  user: any;
-  loading: boolean;
-  onLogout?: () => Promise<void> | void;
+  user: any
+  loading: boolean
+  onLogout?: () => Promise<void> | void
 }) {
-  const router = useRouter();
-  const { logout } = useAuth();
-  
+  const router = useRouter()
+  const { logout } = useAuth()
+
   const handleLogout = async () => {
     try {
       if (onLogout) {
-        await onLogout();
+        await onLogout()
       } else {
-        await logout();
+        await logout()
       }
     } catch (e) {
-      console.error("Logout failed", e);
+      console.error('Logout failed', e)
       // Even if logout fails, redirect to home
-      router.push("/");
+      router.push('/')
     }
-  };
+  }
 
   if (loading) {
     return (
-      <div className="text-sm px-3 py-1.5 rounded-md bg-white/10 text-white/50">
-        Loading...
-      </div>
-    );
+      <div className="text-sm px-3 py-1.5 rounded-md bg-white/10 text-white/50">Loading...</div>
+    )
   }
-  
+
   if (user) {
     return (
       <div className="flex items-center gap-2">
-        <Link 
-          href="/account-settings" 
+        <Link
+          href="/account-settings"
           className="text-sm px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/15 text-white/90 hover:text-white transition-colors"
         >
           {user.name || user.email}
@@ -374,9 +370,9 @@ function UserMenu({
           Logout
         </button>
       </div>
-    );
+    )
   }
-  
+
   return (
     <Link
       href="/login"
@@ -384,17 +380,11 @@ function UserMenu({
     >
       Login
     </Link>
-  );
+  )
 }
 
-function HamburgerButton({
-  isOpen,
-  onClick,
-}: {
-  isOpen: boolean;
-  onClick: () => void;
-}) {
-  const [isHovered, setIsHovered] = useState(false);
+function HamburgerButton({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) {
+  const [isHovered, setIsHovered] = useState(false)
   return (
     <button
       className="relative w-12 h-12 flex items-center justify-center group"
@@ -403,89 +393,111 @@ function HamburgerButton({
       onMouseLeave={() => setIsHovered(false)}
       aria-label="Open menu"
     >
-      {/* Football outline */}
-      <div
-        className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ${
-          isHovered || isOpen ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-90 rotate-12"
-        }`}
-      >
+      {/* Crossfade between hamburger and football states (no flip) */}
+      <div className="relative w-8 h-8">
+        {/* Hamburger lines */}
         <div
-          className="relative w-10 h-7"
-          style={{
-            background:
-              "linear-gradient(145deg, #8B4513 0%, #A0522D 25%, #654321 50%, #8B4513 75%, #654321 100%)",
-            borderRadius: "50% / 40%",
-            boxShadow:
-              "inset 0 2px 4px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.2)",
-            transform: `rotate(${isHovered || isOpen ? "0deg" : "15deg"})`,
-          }}
+          className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${isHovered || isOpen ? 'opacity-0' : 'opacity-100'}`}
         >
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 4px)",
-              borderRadius: "inherit",
-            }}
-          />
-          <div
-            className="absolute top-1 left-1/2 -translate-x-1/2 w-4/5 h-1/3"
-            style={{
-              background: "ellipse at center, rgba(255,255,255,0.2) 0%, transparent 60%",
-              filter: "blur(2px)",
-            }}
-          />
+          <div className="relative w-6 h-5 flex flex-col justify-between">
+            <span className="hamburger-line" />
+            <span className="hamburger-line" />
+            <span className="hamburger-line" />
+          </div>
+        </div>
+        {/* Football with laces */}
+        <div
+          className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${isHovered || isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+        >
+          <svg
+            width="28"
+            height="22"
+            viewBox="0 0 28 22"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <ellipse
+              cx="14"
+              cy="11"
+              rx="12"
+              ry="8"
+              fill="url(#fbGrad)"
+              stroke="rgba(255,255,255,0.35)"
+              strokeWidth="1"
+            />
+            <path
+              d="M4 11C6 9 10 8 14 8C18 8 22 9 24 11"
+              stroke="rgba(0,0,0,0.25)"
+              strokeWidth="1"
+            />
+            <path
+              d="M4 11C6 13 10 14 14 14C18 14 22 13 24 11"
+              stroke="rgba(255,255,255,0.25)"
+              strokeWidth="1"
+            />
+            <line
+              x1="9"
+              y1="11"
+              x2="19"
+              y2="11"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <line
+              x1="12"
+              y1="9"
+              x2="12"
+              y2="13"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <line
+              x1="14"
+              y1="9"
+              x2="14"
+              y2="13"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <line
+              x1="16"
+              y1="9"
+              x2="16"
+              y2="13"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <defs>
+              <linearGradient
+                id="fbGrad"
+                x1="2"
+                y1="3"
+                x2="24"
+                y2="19"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop stopColor="#8B4513" />
+                <stop offset="0.5" stopColor="#A0522D" />
+                <stop offset="1" stopColor="#5A2E12" />
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
       </div>
-
-      {/* Hamburger lines */}
-      <div className="relative z-10 w-6 h-5 flex flex-col justify-between">
-        <span
-          className={`block bg-white transition-all duration-500 ${
-            isHovered || isOpen
-              ? "w-[2px] h-[8px] rotate-[20deg] translate-x-[3px] -translate-y-[1px] bg-white shadow-sm"
-              : "w-full h-[2px]"
-          }`}
-          style={{ transformOrigin: "center" }}
-        />
-        <span
-          className={`block bg-white transition-all duration-500 ${
-            isHovered || isOpen
-              ? "w-[2px] h-[10px] rotate-0 bg-white shadow-sm"
-              : "w-full h-[2px]"
-          }`}
-          style={{ transformOrigin: "center" }}
-        />
-        <span
-          className={`block bg-white transition-all duration-500 ${
-            isHovered || isOpen
-              ? "w-[2px] h-[8px] rotate-[-20deg] translate-x-[3px] translate-y-[1px] bg-white shadow-sm"
-              : "w-full h-[2px]"
-          }`}
-          style={{ transformOrigin: "center" }}
-        />
-        <div
-          className={`absolute inset-0 flex flex-col justify-center items-center gap-[3px] transition-opacity duration-300 ${
-            isHovered || isOpen ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <span className="block w-[10px] h-[1.5px] bg-white shadow-sm" />
-          <span className="block w-[12px] h-[1.5px] bg-white shadow-sm" />
-          <span className="block w-[10px] h-[1.5px] bg-white shadow-sm" />
-        </div>
-      </div>
+      {/* Ambient glow */}
       <div
         className={`absolute inset-0 rounded-full transition-opacity duration-500 pointer-events-none ${
-          isHovered ? "opacity-100" : "opacity-0"
+          isHovered ? 'opacity-100' : 'opacity-0'
         }`}
         style={{
-          background:
-            "radial-gradient(circle, rgba(165,42,42,0.2) 0%, transparent 60%)",
-          filter: "blur(10px)",
+          background: 'radial-gradient(circle, rgba(165,42,42,0.2) 0%, transparent 60%)',
+          filter: 'blur(10px)',
         }}
       />
     </button>
-  );
+  )
 }
-
-

@@ -198,7 +198,7 @@ export default function DraftCore({
             </div>
             {timeRemainingSec !== undefined && (
               <div
-                className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-mono ${timeRemainingSec <= 10 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-800'}`}
+                className={`flex items-center gap-2 px-3 py-1 ui-chip-3d text-sm font-mono ${timeRemainingSec <= 10 ? 'ring-1 ring-red-300' : ''}`}
               >
                 {canDraft && (
                   <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse" />
@@ -214,31 +214,34 @@ export default function DraftCore({
       )}
       {/* Recent picks ticker */}
       {Array.isArray(draftedPlayers) && draftedPlayers.length > 0 && (
-        <div className="px-6 py-2 border-b border-gray-200 bg-white/70">
-          <div className="overflow-x-auto whitespace-nowrap text-xs text-gray-600">
-            {draftedPlayers.slice(-12).map((p, idx) => (
-              <span
-                key={(p as any).id ?? (p as any).playerId ?? idx}
-                className="inline-flex items-center gap-2 mr-4"
-              >
-                <span className="text-gray-400">
-                  #{(p as any).draftPosition ?? (p as any).overall ?? ''}
-                </span>
-                <span className="font-medium text-gray-800">
-                  {(p as any).playerName ?? (p as any).name ?? 'Player'}
-                </span>
-                {p.position && (
-                  <span className="px-2 py-0.5 rounded bg-gray-100 text-gray-700">
-                    {p.position}
+        <div className="px-6 py-3 ui-panel-3d">
+          <div className="overflow-x-auto whitespace-nowrap text-sm text-gray-700">
+            {draftedPlayers.slice(-12).map((p, idx) => {
+              const pos = (p as any).position || '-'
+              const cls = getPositionColor(pos)
+              return (
+                <span
+                  key={(p as any).id ?? (p as any).playerId ?? idx}
+                  className={`inline-flex items-center gap-2 mr-6 align-middle ${idx === draftedPlayers.slice(-12).length - 1 ? 'slide-in-right' : ''}`}
+                >
+                  <span className="text-gray-400">#{(p as any).overall ?? ''}</span>
+                  <span
+                    className={`inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded ${cls}`}
+                  >
+                    {pos}
                   </span>
-                )}
-              </span>
-            ))}
+                  <span className="font-semibold text-gray-900">
+                    {(p as any).playerName ?? (p as any).name ?? 'Player'}
+                  </span>
+                  <span className="text-gray-500">{(p as any).team || '-'}</span>
+                </span>
+              )
+            })}
           </div>
         </div>
       )}
       {/* Filter Bar */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="ui-panel-3d px-6 py-4">
         <div className="flex flex-wrap items-center gap-4">
           {/* Search */}
           <div className="relative flex-1 min-w-64">
@@ -248,7 +251,7 @@ export default function DraftCore({
               placeholder="Search players or teams..."
               value={state.searchQuery}
               onChange={e => setState(prev => ({ ...prev, searchQuery: e.target.value }))}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg bg-white text-gray-800 placeholder-gray-500 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+              className="w-full pl-10 pr-4 py-2 ui-input-3d placeholder-gray-500 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
             />
           </div>
 
@@ -260,7 +263,7 @@ export default function DraftCore({
               onChange={e =>
                 setState(prev => ({ ...prev, positionFilter: e.target.value as Position }))
               }
-              className="border rounded-lg px-3 py-2 bg-white text-gray-800 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+              className="ui-input-3d px-3 py-2"
             >
               {POSITIONS.map(pos => (
                 <option key={pos} value={pos}>
@@ -277,7 +280,7 @@ export default function DraftCore({
               onChange={e =>
                 setState(prev => ({ ...prev, conferenceFilter: e.target.value as Conference }))
               }
-              className="border rounded-lg px-3 py-2 bg-white text-gray-800 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+              className="ui-input-3d px-3 py-2"
             >
               {CONFERENCES.map(conf => (
                 <option key={conf} value={conf}>
@@ -294,7 +297,7 @@ export default function DraftCore({
               onChange={e =>
                 setState(prev => ({ ...prev, teamFilter: (e.target.value || 'ALL') as TeamFilter }))
               }
-              className="border rounded-lg px-3 py-2 bg-white text-gray-800 border-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+              className="ui-input-3d px-3 py-2"
             >
               <option value="ALL">ALL Teams</option>
               {uniqueTeams.map(team => (
@@ -308,7 +311,7 @@ export default function DraftCore({
           {/* Reset Button */}
           <button
             onClick={resetFilters}
-            className="px-4 py-2 text-sm text-gray-700 border border-gray-400 rounded-lg hover:bg-gray-100 transition-colors"
+            className="px-4 py-2 text-sm ui-chip-3d hover:brightness-105 transition-colors"
           >
             Reset
           </button>
@@ -406,9 +409,9 @@ export default function DraftCore({
 
               {/* Middle: Available Players */}
               <div className="lg:col-span-6 order-1 lg:order-2">
-                <div className="overflow-x-auto border border-gray-200 rounded-lg">
+                <div className="overflow-x-auto ui-panel-3d">
                   <table className="min-w-full text-sm">
-                    <thead className="bg-gray-50 text-gray-600 text-xs uppercase tracking-wide">
+                    <thead className="text-gray-600 text-xs uppercase tracking-wide">
                       <tr>
                         <th className="text-left py-2 px-3">#</th>
                         <th className="text-left py-2 px-3">Player</th>
@@ -458,7 +461,7 @@ export default function DraftCore({
                                     e.stopPropagation()
                                     handlePlayerDraft(player)
                                   }}
-                                  className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
+                                  className="px-3 py-1 ui-button-3d text-xs"
                                 >
                                   Draft
                                 </button>
@@ -475,7 +478,7 @@ export default function DraftCore({
               {/* Right: Team viewer */}
               <aside className="lg:col-span-3 order-3">
                 {Array.isArray(draftedPlayers) && draftedPlayers.length > 0 && (
-                  <div className="border rounded-lg p-4">
+                  <div className="ui-panel-3d p-4">
                     <div className="text-sm font-semibold mb-2 text-gray-800">Teams</div>
                     <div className="space-y-1 max-h-64 overflow-auto text-sm">
                       {draftedPlayers.map((p, i) => (
