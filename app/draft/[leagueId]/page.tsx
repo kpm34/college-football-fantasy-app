@@ -13,6 +13,11 @@ export default function DraftRoomPage({ params }: Props) {
   const { leagueId } = params
   const [engineVersion, setEngineVersion] = useState<'v1' | 'v2' | null>(null)
   const [leagueNotFound, setNotFound] = useState(false)
+  const [initial, setInitial] = useState<{
+    picks: any[]
+    teams: { $id: string; teamName: string; ownerAuthUserId: string }[]
+    state: any | null
+  } | null>(null)
 
   // Fetch league meta once to know engine version
   useEffect(() => {
@@ -30,6 +35,16 @@ export default function DraftRoomPage({ params }: Props) {
           (league?.draftEngine as 'v1' | 'v2' | undefined) ||
           'v2' // default to v2 engine
         setEngineVersion(engine)
+        // Load consolidated draft data (picks/teams/state)
+        const dataRes = await fetch(`/api/drafts/${leagueId}/data`, { cache: 'no-store' })
+        if (dataRes.ok) {
+          const dj = await dataRes.json()
+          setInitial({
+            picks: dj?.data?.picks?.items || [],
+            teams: dj?.data?.teams || [],
+            state: dj?.data?.state || null,
+          })
+        }
       } catch {
         setEngineVersion('v2')
       }
@@ -52,27 +67,29 @@ export default function DraftRoomPage({ params }: Props) {
   }
 
   const showV2 = engineVersion === 'v2'
-  const round = showV2 ? v2.state?.round : legacy.currentRound
-  const pickIndex = showV2 ? v2.state?.pickIndex : legacy.currentPick
-  const onClock = showV2 ? v2.state?.onClockTeamId : legacy.onTheClock
-  const deadline = showV2 ? v2.state?.deadlineAt : legacy.deadlineAt
-  const loading = showV2 ? v2.loading : legacy.loading
+  const round = showV2 ? (v2.state?.round ?? initial?.state?.round) : legacy.currentRound
+  const pickIndex = showV2 ? (v2.state?.pickIndex ?? initial?.state?.pickIndex) : legacy.currentPick
+  const onClock = showV2
+    ? (v2.state?.onClockTeamId ?? initial?.state?.onClockTeamId)
+    : legacy.onTheClock
+  const deadline = showV2 ? (v2.state?.deadlineAt ?? initial?.state?.deadlineAt) : legacy.deadlineAt
+  const loading = showV2 ? v2.loading && !initial : legacy.loading
   const error = showV2 ? v2.error : legacy.error
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen ui-surface">
       <div className="p-4 space-y-4">
         <h1 className="text-xl font-bold">Draft Room ({showV2 ? 'v2' : 'legacy'})</h1>
         {loading && <p>Loading state…</p>}
         {!loading && error && (
-          <div className="rounded border border-yellow-400 bg-yellow-50 text-yellow-800 p-3">
+          <div className="ui-panel-3d text-yellow-800 p-3">
             {error.includes('not started') || error.includes('404')
               ? 'Draft has not started yet. The commissioner can start the draft from league settings.'
               : `Error: ${error}`}
           </div>
         )}
         {!loading && (round || pickIndex) && (
-          <div>
+          <div className="ui-panel-3d p-3">
             <p>
               Round {round} – Pick {pickIndex}
             </p>
@@ -88,6 +105,7 @@ export default function DraftRoomPage({ params }: Props) {
           timeRemainingSec={
             deadline ? (new Date(deadline).getTime() - Date.now()) / 1000 : undefined
           }
+          draftedPlayers={initial?.picks || []}
         />
       </div>
     </div>
