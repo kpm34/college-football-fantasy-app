@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Client, Account, OAuthProvider } from 'appwrite'
 
 export function GoogleAuthButton() {
   const [loading, setLoading] = useState(false)
@@ -11,29 +12,25 @@ export function GoogleAuthButton() {
     setError(null)
     
     try {
+      // Initialize Appwrite client
+      const client = new Client()
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app')
+      
+      const account = new Account(client)
+      
       // First, clear any existing sessions to avoid conflicts
+      try {
+        await account.deleteSession('current')
+      } catch (e) {
+        // Ignore error if no session exists
+      }
+      
+      // Clear cookies as well
       await fetch('/api/auth/logout', { 
         method: 'POST',
         credentials: 'include'
-      });
-      
-      // Clear client-side cookies as well
-      document.cookie.split(";").forEach(c => {
-        const cookie = c.trim();
-        const eqPos = cookie.indexOf("=");
-        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        if (name.includes('session') || name.includes('appwrite')) {
-          document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-          document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${window.location.hostname}`;
-        }
-      });
-      
-      // Small delay to ensure cookies are cleared
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      // Direct redirect to Appwrite OAuth URL
-      const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1'
-      const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app'
+      }).catch(() => {});
       
       // Use the client-side callback page to handle OAuth redirect
       // For production, use the actual domain to avoid cookie issues
@@ -44,16 +41,15 @@ export function GoogleAuthButton() {
       const successUrl = `${baseUrl}/auth/callback`
       const failureUrl = `${baseUrl}/login?error=google_auth_failed`
       
-      // Direct OAuth URL
-      const oauthUrl = `${endpoint}/account/sessions/oauth2/google` +
-        `?project=${projectId}` +
-        `&success=${encodeURIComponent(successUrl)}` +
-        `&failure=${encodeURIComponent(failureUrl)}`
+      // Use createOAuth2Token for better compatibility (avoids third-party cookie issues)
+      // This creates a URL that will handle the OAuth flow
+      account.createOAuth2Token(
+        OAuthProvider.Google,
+        successUrl,
+        failureUrl
+      );
       
-      console.log('🚀 Redirecting to Google OAuth (after clearing sessions):', oauthUrl)
-      
-      // Redirect directly to the OAuth URL
-      window.location.href = oauthUrl
+      // The above method will automatically redirect to Google
     } catch (err) {
       console.error('Failed to initiate OAuth:', err)
       setError('Failed to connect to Google. Please try again.')

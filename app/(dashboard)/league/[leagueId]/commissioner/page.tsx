@@ -118,6 +118,41 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
     fieldGoal_40_49: 4,
     fieldGoal_50_plus: 5,
   })
+  type ScoringMode = 'STANDARD' | 'PPR' | 'CUSTOM'
+  const DEFAULT_STANDARD: ScoringRules = {
+    passingYards: 0.04,
+    passingTouchdowns: 4,
+    interceptions: -2,
+    rushingYards: 0.1,
+    rushingTouchdowns: 6,
+    receptions: 0,
+    receivingYards: 0.1,
+    receivingTouchdowns: 6,
+    fieldGoal_0_39: 3,
+    fieldGoal_40_49: 4,
+    fieldGoal_50_plus: 5,
+    fieldGoalMissed: -1,
+    extraPointMade: 1,
+    extraPointMissed: -1,
+  }
+  const DEFAULT_PPR: ScoringRules = { ...DEFAULT_STANDARD, receptions: 1 }
+  const [scoringMode, setScoringMode] = useState<ScoringMode>('PPR')
+
+  const rulesEqual = (a: ScoringRules, b: ScoringRules) =>
+    a.passingYards === b.passingYards &&
+    a.passingTouchdowns === b.passingTouchdowns &&
+    a.interceptions === b.interceptions &&
+    a.rushingYards === b.rushingYards &&
+    a.rushingTouchdowns === b.rushingTouchdowns &&
+    a.receptions === b.receptions &&
+    a.receivingYards === b.receivingYards &&
+    a.receivingTouchdowns === b.receivingTouchdowns &&
+    a.fieldGoal_0_39 === b.fieldGoal_0_39 &&
+    a.fieldGoal_40_49 === b.fieldGoal_40_49 &&
+    a.fieldGoal_50_plus === b.fieldGoal_50_plus &&
+    a.fieldGoalMissed === b.fieldGoalMissed &&
+    a.extraPointMade === b.extraPointMade &&
+    a.extraPointMissed === b.extraPointMissed
 
   useEffect(() => {
     // Wait for auth to finish resolving before deciding
@@ -236,6 +271,13 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
             }
             return merged
           })
+          // Infer scoring mode from parsed rules
+          const inferred: ScoringMode = rulesEqual(parsed, DEFAULT_STANDARD)
+            ? 'STANDARD'
+            : rulesEqual(parsed, DEFAULT_PPR)
+              ? 'PPR'
+              : 'CUSTOM'
+          setScoringMode(inferred)
         } catch (e) {
           console.error('Failed to parse scoring rules:', e)
         }
@@ -287,11 +329,17 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
     setSaving(true)
 
     try {
+      const effectiveRules =
+        scoringMode === 'STANDARD'
+          ? DEFAULT_STANDARD
+          : scoringMode === 'PPR'
+            ? DEFAULT_PPR
+            : scoringRules
       const response = await fetch(`/api/leagues/${params.leagueId}/commissioner`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ scoringRules: JSON.stringify(scoringRules) }),
+        body: JSON.stringify({ scoringRules: JSON.stringify(effectiveRules) }),
       })
 
       const result = await response.json()
@@ -1003,6 +1051,30 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
             <h2 className="text-xl font-semibold mb-4" style={{ color: leagueColors.text.primary }}>
               Scoring Rules
             </h2>
+            <div className="flex gap-2 mb-4">
+              {(['STANDARD', 'PPR', 'CUSTOM'] as ScoringMode[]).map(mode => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => {
+                    setScoringMode(mode)
+                    if (mode === 'STANDARD') setScoringRules(DEFAULT_STANDARD)
+                    if (mode === 'PPR') setScoringRules(DEFAULT_PPR)
+                  }}
+                  className={`px-3 py-1.5 rounded border text-sm ${
+                    scoringMode === mode
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-transparent'
+                  }`}
+                  style={{
+                    borderColor: leagueColors.border.light,
+                    color: leagueColors.text.primary,
+                  }}
+                >
+                  {mode}
+                </button>
+              ))}
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Passing */}
@@ -1031,6 +1103,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                   <div>
@@ -1052,6 +1125,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                   <div>
@@ -1073,6 +1147,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                 </div>
@@ -1104,6 +1179,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                   <div>
@@ -1125,6 +1201,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                 </div>
@@ -1153,6 +1230,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                   <div>
@@ -1175,6 +1253,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                   <div>
@@ -1196,6 +1275,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                 </div>
@@ -1227,6 +1307,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                   <div>
@@ -1249,6 +1330,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                   <div>
@@ -1271,6 +1353,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                         border: `1px solid ${leagueColors.border.light}`,
                         color: leagueColors.text.primary,
                       }}
+                      disabled={scoringMode !== 'CUSTOM'}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-3">

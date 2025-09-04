@@ -15,6 +15,10 @@ function AuthCallbackContent() {
         console.log('OAuth callback - Starting...');
         console.log('URL search params:', searchParams.toString());
         
+        // Check for OAuth2 token parameters
+        const userId = searchParams.get('userId');
+        const secret = searchParams.get('secret');
+        
         // Initialize Appwrite client
         const client = new Client()
           .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
@@ -22,54 +26,95 @@ function AuthCallbackContent() {
         
         const account = new Account(client)
         
-        // Check if we have a session
-        try {
-          const session = await account.getSession('current')
-          console.log('OAuth session found:', session.$id)
+        // If we have userId and secret from OAuth2Token flow, create session
+        if (userId && secret) {
+          console.log('OAuth2 token parameters found, creating session...');
           
-          // Get user details
-          const user = await account.get()
-          console.log('OAuth user:', user.email)
-          
-          // Now we need to sync this session with our backend
-          // Call our API to create a server-side session
-          const response = await fetch('/api/auth/sync-session', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-              sessionId: session.$id,
-              secret: session.secret,
-              userId: user.$id
-            })
-          });
-          
-          if (response.ok) {
-            console.log('Session synced with backend');
-            // Session synced! Redirect to dashboard
-            router.push('/dashboard');
-          } else {
-            console.error('Failed to sync session with backend');
-            setError('Failed to complete sign in. Please try again.');
+          try {
+            // Create session using the OAuth2 token
+            const session = await account.createSession(userId, secret);
+            console.log('Session created from OAuth2 token:', session.$id);
+            
+            // Get user details
+            const user = await account.get();
+            console.log('User authenticated:', user.email);
+            
+            // Sync with backend
+            const response = await fetch('/api/auth/sync-session', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+              body: JSON.stringify({
+                sessionId: session.$id,
+                secret: session.secret,
+                userId: user.$id
+              })
+            });
+            
+            if (response.ok) {
+              console.log('Session synced with backend');
+              router.push('/dashboard');
+            } else {
+              console.error('Failed to sync session with backend');
+              setError('Failed to complete sign in. Please try again.');
+              setTimeout(() => router.push('/login?error=sync_failed'), 3000);
+            }
+          } catch (e) {
+            console.error('Failed to create session from OAuth2 token:', e);
+            setError('Failed to authenticate. Please try again.');
+            setTimeout(() => router.push('/login?error=session_creation_failed'), 3000);
           }
-        } catch (e) {
-          console.error('No session after OAuth callback:', e)
-          
-          // Check if we got error in URL params
-          const errorParam = searchParams.get('error')
-          if (errorParam) {
-            console.error('OAuth error from Appwrite:', errorParam)
-            setError(`Authentication failed: ${errorParam}`)
-          } else {
-            setError('No session found. Please try signing in again.')
+        } else {
+          // Try to check if session already exists (fallback for session-based flow)
+          try {
+            const session = await account.getSession('current')
+            console.log('Existing OAuth session found:', session.$id)
+            
+            // Get user details
+            const user = await account.get()
+            console.log('OAuth user:', user.email)
+            
+            // Sync with backend
+            const response = await fetch('/api/auth/sync-session', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+              body: JSON.stringify({
+                sessionId: session.$id,
+                secret: session.secret,
+                userId: user.$id
+              })
+            });
+            
+            if (response.ok) {
+              console.log('Session synced with backend');
+              router.push('/dashboard');
+            } else {
+              console.error('Failed to sync session with backend');
+              setError('Failed to complete sign in. Please try again.');
+              setTimeout(() => router.push('/login?error=sync_failed'), 3000);
+            }
+          } catch (e) {
+            console.error('No session after OAuth callback:', e)
+            
+            // Check if we got error in URL params
+            const errorParam = searchParams.get('error')
+            if (errorParam) {
+              console.error('OAuth error from Appwrite:', errorParam)
+              setError(`Authentication failed: ${errorParam}`)
+            } else {
+              setError('No session found. Please try signing in again.')
+            }
+            
+            // Wait a bit then redirect to login
+            setTimeout(() => {
+              router.push('/login?error=oauth_session_failed')
+            }, 3000)
           }
-          
-          // Wait a bit then redirect to login
-          setTimeout(() => {
-            router.push('/login?error=oauth_session_failed')
-          }, 3000)
         }
       } catch (error) {
         console.error('OAuth callback error:', error)
