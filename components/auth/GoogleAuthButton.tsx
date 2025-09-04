@@ -35,8 +35,8 @@ export function GoogleAuthButton() {
       const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1'
       const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app'
       
-      // Use the dashboard directly as success URL
-      const successUrl = `${window.location.origin}/dashboard`
+      // Use the client-side callback page to handle OAuth redirect
+      const successUrl = `${window.location.origin}/auth/callback`
       const failureUrl = `${window.location.origin}/login?error=google_auth_failed`
       
       // Direct OAuth URL

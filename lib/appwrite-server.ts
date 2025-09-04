@@ -197,11 +197,12 @@ export async function createSessionClient() {
     .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'college-football-fantasy-app');
 
   // Get session from cookies
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   
   // Try to find the Appwrite session cookie
-  // Appwrite sets cookies like: a_session_[projectId]
+  // Appwrite sets cookies like: a_session_[projectId] or just appwrite-session
   const sessionNames = [
+    'appwrite-session',
     'a_session_college-football-fantasy-app',
     'a_session_college-football-fantasy-app_legacy'
   ];
@@ -211,7 +212,7 @@ export async function createSessionClient() {
     const cookie = cookieStore.get(name);
     if (cookie?.value) {
       session = cookie.value;
-      console.log(`Found session cookie ${name}`);
+      console.log(`Found session cookie ${name} (length: ${cookie.value.length})`);
       break;
     }
   }
@@ -219,11 +220,15 @@ export async function createSessionClient() {
   // Also check for any cookie starting with a_session_
   if (!session) {
     const allCookies = cookieStore.getAll();
-    const sessionCookie = allCookies.find(c => c.name.startsWith('a_session_'));
+    const sessionCookie = allCookies.find(c => c.name.startsWith('a_session_') || c.name.includes('appwrite'));
     if (sessionCookie) {
       session = sessionCookie.value;
-      console.log(`Found session cookie ${sessionCookie.name}`);
+      console.log(`Found session cookie ${sessionCookie.name} (length: ${sessionCookie.value.length})`);
     }
+  }
+  
+  if (!session) {
+    console.log('No session cookie found. Available cookies:', cookieStore.getAll().map(c => c.name).join(', '));
   }
   
   if (session) {
