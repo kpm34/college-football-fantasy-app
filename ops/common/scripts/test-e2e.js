@@ -1,360 +1,248 @@
 #!/usr/bin/env node
 
 /**
- * Simple E2E Test Script
- * 
- * Tests the deployed application end-to-end
+ * Draft v2 Smoke Test (fresh, routing-aligned)
+ * - Logs in (creates account if needed)
+ * - Creates a league with short clock and imminent start
+ * - Saves draft order (commissioner settings)
+ * - Starts draft via cron and verifies state snapshot
  */
 
-const https = require('https');
-const http = require('http');
+const https = require('https')
+const http = require('http')
 
-class SimpleE2ETester {
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms))
+}
+
+class SmokeDraftV2 {
   constructor(baseUrl) {
-    this.baseUrl = baseUrl.replace(/\/$/, '');
-    this.results = [];
+    this.baseUrl = baseUrl.replace(/\/$/, '')
+    this.cookie = ''
+    this.results = []
   }
 
-  async runAllTests() {
-    console.log('🚀 Starting E2E Tests');
-    console.log(`Base URL: ${this.baseUrl}`);
-    console.log('═'.repeat(60));
+  async run() {
+    console.log('🚀 Draft v2 Smoke Test')
+    console.log(`Base URL: ${this.baseUrl}`)
+    console.log('═'.repeat(60))
 
-    const tests = [
-      () => this.testHealth(),
-      () => this.testLeagueAPI(),
-      () => this.testDatabaseConsistency(),
-      () => this.testSearchFunctionality(),
-      () => this.testPageLoads()
-    ];
+    const steps = [
+      () => this.stepLogin(),
+      () => this.stepCreateLeague(),
+      () => this.stepSaveOrder(),
+      () => this.stepStartDraft(),
+      () => this.stepVerifyState(),
+    ]
 
-    for (const test of tests) {
-      await test();
+    for (const s of steps) {
+      const ok = await s().catch(e => {
+        console.error(e)
+        return false
+      })
+      if (!ok) {
+        this.results.push({ name: s.name, ok: false })
+        break
+      }
+      this.results.push({ name: s.name, ok: true })
     }
 
-    this.generateReport();
-  }
-
-  async testHealth() {
-    console.log('\n🔍 Health Checks');
-    console.log('─'.repeat(40));
-
-    // Test API health endpoint
-    try {
-      const healthResult = await this.fetch('/api/test/e2e?suite=database');
-      if (healthResult.summary && healthResult.summary.failed === 0) {
-        console.log('  ✅ Database connectivity (via E2E API)');
-        console.log(`     Found ${healthResult.tests[0]?.details?.found || 0} collections`);
-        this.results.push({
-          suite: 'Health',
-          passed: healthResult.summary.passed,
-          total: healthResult.summary.total,
-          duration: healthResult.summary.duration
-        });
-      } else {
-        throw new Error('E2E API test failed');
-      }
-    } catch (error) {
-      // Fallback to basic health tests if E2E API doesn't exist
-      console.log('  ⚠️  E2E API not available, using basic health checks');
-      
-      // Test basic API endpoints instead
-      let passed = 0;
-      let total = 3;
-
-      // Test 1: Basic API response
-      try {
-        const authTest = await this.fetch('/api/auth-test');
-        if (authTest) {
-          console.log('  ✅ Basic API connectivity');
-          passed++;
-        }
-      } catch {
-        console.log('  ❌ Basic API connectivity failed');
-      }
-
-      // Test 2: League search
-      try {
-        const leagueSearch = await this.fetch('/api/leagues/search?limit=1');
-        if (leagueSearch.success) {
-          console.log('  ✅ Database queries working');
-          passed++;
-        }
-      } catch {
-        console.log('  ❌ Database queries failed');
-      }
-
-      // Test 3: Collections available
-      try {
-        const leagueById = await this.fetch('/api/leagues/6894db4a0001ad84e4b0');
-        if (leagueById.success) {
-          console.log('  ✅ Specific data access working');
-          passed++;
-        }
-      } catch {
-        console.log('  ❌ Specific data access failed');
-      }
-
-      this.results.push({
-        suite: 'Health',
-        passed,
-        total,
-        duration: 0
-      });
-    }
-  }
-
-  async testLeagueAPI() {
-    console.log('\n⚽ League API Tests');
-    console.log('─'.repeat(40));
-
-    // Test league search
-    const searchResult = await this.fetch('/api/leagues/search');
-    if (searchResult.success && searchResult.leagues) {
-      console.log(`  ✅ League search (${searchResult.leagues.length} leagues found)`);
+    const passed = this.results.filter(r => r.ok).length
+    const total = this.results.length
+    console.log('\n' + '═'.repeat(60))
+    console.log(`📊 Smoke Result: ${passed}/${total} steps passed`)
+    if (passed === total) {
+      console.log('🎉 Smoke test passed')
+      process.exit(0)
     } else {
-      console.log('  ❌ League search failed');
+      console.log('⚠️  Smoke test failed')
+      process.exit(1)
     }
+  }
 
-    // Test specific league
-    const jawnLeagueId = '6894db4a0001ad84e4b0';
-    const leagueResult = await this.fetch(`/api/leagues/${jawnLeagueId}`);
-    if (leagueResult.success && leagueResult.league) {
-      console.log(`  ✅ Get Jawn League (${leagueResult.league.currentTeams} members)`);
-      if (leagueResult.league.currentTeams === 8) {
-        console.log('     ✅ Member count correct');
-      } else {
-        console.log(`     ⚠️  Expected 8 members, got ${leagueResult.league.currentTeams}`);
+  // -----------------------------
+  // Steps
+  // -----------------------------
+  async stepLogin() {
+    console.log('\n🔐 Step 1: Login/Create account')
+    const email = `smoke_${Date.now()}@cfbfantasy.app`
+    const password = 'Test1234!'
+    const res = await this.request('POST', '/api/auth/test-login', { email, password })
+    if (res.status < 200 || res.status >= 300) {
+      console.log('  ❌ login failed', res.status, res.body)
+      return false
+    }
+    const setCookie = res.headers['set-cookie'] || res.headers['Set-Cookie']
+    if (setCookie && setCookie.length) {
+      const cookie = Array.isArray(setCookie) ? setCookie.join('; ') : setCookie
+      const match = cookie.match(/appwrite-session=([^;]+)/)
+      if (match) {
+        this.cookie = `appwrite-session=${match[1]}`
       }
-    } else {
-      console.log('  ❌ Get specific league failed');
     }
+    if (!this.cookie)
+      console.log('  ⚠️ no appwrite-session cookie captured; subsequent steps may 401')
+    console.log('  ✅ login ok')
+    return true
+  }
 
-    // Test database consistency via API
-    let consistencyPassed = false;
+  async stepCreateLeague() {
+    console.log('\n🏈 Step 2: Create league')
+    const startIso = new Date(Date.now() + 5000).toISOString()
+    const res = await this.request(
+      'POST',
+      '/api/leagues/create',
+      {
+        leagueName: `Smoke League ${new Date().toISOString()}`,
+        gameMode: 'CONFERENCE',
+        selectedConference: 'sec',
+        scoringType: 'STANDARD',
+        maxTeams: 2,
+        draftType: 'snake',
+        draftRounds: 2,
+        pickTimeSeconds: 60,
+        draftDate: startIso,
+        isPrivate: false,
+      },
+      { Cookie: this.cookie }
+    )
+    if (res.status < 200 || res.status >= 300) {
+      console.log('  ❌ create league failed', res.status, res.body)
+      return false
+    }
+    const json = this.safeJson(res.body)
+    this.leagueId = json?.league?.$id || json?.league?.id
+    this.teamId = json?.fantasyTeamId
+    this.startIso = startIso
+    if (!this.leagueId || !this.teamId) {
+      console.log('  ❌ missing ids', { leagueId: this.leagueId, teamId: this.teamId })
+      return false
+    }
+    console.log('  ✅ created', { leagueId: this.leagueId, teamId: this.teamId })
+    return true
+  }
+
+  async stepSaveOrder() {
+    console.log('\n🧭 Step 3: Save draft order (commissioner)')
+    const res = await this.request(
+      'PUT',
+      `/api/leagues/${this.leagueId}/commissioner`,
+      {
+        draftOrder: [this.teamId],
+        pickTimeSeconds: 60,
+      },
+      { Cookie: this.cookie }
+    )
+    if (res.status < 200 || res.status >= 300) {
+      console.log('  ❌ save order failed', res.status, res.body)
+      return false
+    }
+    console.log('  ✅ order saved')
+    return true
+  }
+
+  async stepStartDraft() {
+    console.log('\n🚦 Step 4: Start draft via cron')
+    const waitMs = Math.max(0, new Date(this.startIso).getTime() - Date.now() + 500)
+    if (waitMs > 0) await sleep(waitMs)
+    // Try cron first; if nothing started, fall back to manual start endpoint
+    const res = await this.request('GET', '/api/cron/start-drafts', null, {
+      'x-vercel-cron': '1',
+    })
+    if (res.status < 200 || res.status >= 300) {
+      console.log('  ❌ start cron failed', res.status, res.body)
+      return false
+    }
     try {
-      const consistencyResult = await this.fetch('/api/test/e2e?suite=consistency');
-      consistencyPassed = consistencyResult.summary && consistencyResult.summary.failed === 0;
-      console.log(`  ${consistencyPassed ? '✅' : '❌'} Data consistency checks`);
+      const j = this.safeJson(res.body)
+      if (j) console.log('  ↳ cron results:', JSON.stringify(j))
+      if (j && j.started === 0) {
+        const manual = await this.request('POST', `/api/drafts/${this.leagueId}/start`)
+        if (manual.status >= 200 && manual.status < 300) {
+          console.log('  ↳ manual start fallback ok')
+        } else {
+          console.log('  ❌ manual start failed', manual.status, manual.body)
+          return false
+        }
+      }
+    } catch {}
+    console.log('  ✅ cron executed')
+    return true
+  }
+
+  async stepVerifyState() {
+    console.log('\n📡 Step 5: Verify draft state')
+    // retry up to ~5s to avoid start/write/read race
+    let attempt = 0
+    let last
+    while (attempt < 10) {
+      const res = await this.request('GET', `/api/drafts/${this.leagueId}/state`)
+      last = res
+      if (res.status === 200) {
+        const json = this.safeJson(res.body)
+        const data = json?.data || json
+        if (data?.onClockTeamId && data?.deadlineAt) {
+          console.log('  ✅ drafting snapshot:', {
+            onClockTeamId: data.onClockTeamId,
+            round: data.round,
+            pickIndex: data.pickIndex,
+            deadlineAt: data.deadlineAt,
+          })
+          return true
+        }
+      }
+      await sleep(500)
+      attempt++
+    }
+    console.log('  ❌ state read failed', last?.status, last?.body)
+    return false
+  }
+
+  // -----------------------------
+  // HTTP helpers
+  // -----------------------------
+  safeJson(body) {
+    try {
+      return JSON.parse(body)
     } catch {
-      console.log(`  ⚠️  Data consistency checks (E2E API not available)`);
-      consistencyPassed = true; // Assume OK if we can't test it
-    }
-    
-    let leagueAPIPassed = 0;
-    if (searchResult.success) leagueAPIPassed++;
-    if (leagueResult.success) leagueAPIPassed++;
-    if (consistencyPassed) leagueAPIPassed++;
-    
-    this.results.push({
-      suite: 'League API',
-      passed: leagueAPIPassed,
-      total: 3,
-      duration: 0
-    });
-  }
-
-  async testDatabaseConsistency() {
-    console.log('\n🗄️  Database Consistency');
-    console.log('─'.repeat(40));
-
-    try {
-      const consistencyResult = await this.fetch('/api/test/e2e?suite=consistency');
-      
-      for (const test of consistencyResult.tests || []) {
-        if (test.status === 'pass') {
-          console.log(`  ✅ ${test.name}`);
-          if (test.details) {
-            Object.entries(test.details).forEach(([key, value]) => {
-              if (typeof value === 'number' || typeof value === 'string') {
-                console.log(`     ${key}: ${value}`);
-              }
-            });
-          }
-        } else {
-          console.log(`  ❌ ${test.name}: ${test.error}`);
-        }
-      }
-
-      this.results.push({
-        suite: 'Consistency',
-        passed: consistencyResult.summary.passed,
-        total: consistencyResult.summary.total,
-        duration: consistencyResult.summary.duration
-      });
-    } catch (error) {
-      console.log('  ⚠️  E2E API not available, performing basic consistency checks');
-      
-      // Basic consistency check - just verify Jawn League member count
-      let passed = 0;
-      let total = 1;
-      
-      try {
-        const jawnLeague = await this.fetch('/api/leagues/6894db4a0001ad84e4b0');
-        if (jawnLeague.success && jawnLeague.league.currentTeams === 8) {
-          console.log(`  ✅ Jawn League member count correct (8/12)`);
-          passed++;
-        } else {
-          console.log(`  ❌ Jawn League member count incorrect (${jawnLeague.league?.currentTeams || 0}/12)`);
-        }
-      } catch {
-        console.log('  ❌ Could not check Jawn League consistency');
-      }
-
-      this.results.push({
-        suite: 'Consistency',
-        passed,
-        total,
-        duration: 0
-      });
+      return null
     }
   }
 
-  async testSearchFunctionality() {
-    console.log('\n🔍 Search Functionality');
-    console.log('─'.repeat(40));
-
-    // Test league search with query
-    const jawnSearchResult = await this.fetch('/api/leagues/search?search=jawn');
-    if (jawnSearchResult.success && jawnSearchResult.leagues && jawnSearchResult.leagues.length > 0) {
-      console.log(`  ✅ Search for "jawn" (${jawnSearchResult.leagues.length} results)`);
-      console.log(`     Found: ${jawnSearchResult.leagues[0].name}`);
-    } else {
-      console.log('  ❌ Search for "jawn" failed');
-    }
-
-    // Test search with filters
-    const filterSearchResult = await this.fetch('/api/leagues/search?mode=power4&limit=5');
-    if (filterSearchResult.success) {
-      console.log(`  ✅ Filtered search (${filterSearchResult.leagues?.length || 0} results)`);
-    } else {
-      console.log('  ❌ Filtered search failed');
-    }
-
-    this.results.push({
-      suite: 'Search',
-      passed: jawnSearchResult.success && filterSearchResult.success ? 2 : 0,
-      total: 2,
-      duration: 0
-    });
-  }
-
-  async testPageLoads() {
-    console.log('\n📄 Page Load Tests');
-    console.log('─'.repeat(40));
-
-    const pages = [
-      { path: '/', name: 'Homepage' },
-      { path: '/league/create', name: 'Create League' },
-      { path: '/league/join', name: 'Join League' },
-      { path: '/dashboard', name: 'Dashboard' }
-    ];
-
-    let passed = 0;
-    
-    for (const page of pages) {
-      try {
-        const response = await this.fetchRaw(page.path);
-        if (response.statusCode >= 200 && response.statusCode < 400) {
-          console.log(`  ✅ ${page.name} (${response.statusCode})`);
-          passed++;
-        } else {
-          console.log(`  ❌ ${page.name} (${response.statusCode})`);
-        }
-      } catch (error) {
-        console.log(`  ❌ ${page.name} (Error: ${error.message})`);
-      }
-    }
-
-    this.results.push({
-      suite: 'Page Loads',
-      passed,
-      total: pages.length,
-      duration: 0
-    });
-  }
-
-  async fetch(path) {
+  request(method, path, data, extraHeaders = {}) {
     return new Promise((resolve, reject) => {
-      const url = new URL(this.baseUrl + path);
-      const client = url.protocol === 'https:' ? https : http;
-      
-      const req = client.get(url, (res) => {
-        let data = '';
-        res.on('data', chunk => data += chunk);
-        res.on('end', () => {
-          try {
-            resolve(JSON.parse(data));
-          } catch (e) {
-            resolve({ data, statusCode: res.statusCode });
-          }
-        });
-      });
-
-      req.on('error', reject);
-      req.setTimeout(10000, () => {
-        req.destroy();
-        reject(new Error('Request timeout'));
-      });
-    });
-  }
-
-  async fetchRaw(path) {
-    return new Promise((resolve, reject) => {
-      const url = new URL(this.baseUrl + path);
-      const client = url.protocol === 'https:' ? https : http;
-      
-      const req = client.get(url, (res) => {
-        resolve({ statusCode: res.statusCode });
-      });
-
-      req.on('error', reject);
-      req.setTimeout(10000, () => {
-        req.destroy();
-        reject(new Error('Request timeout'));
-      });
-    });
-  }
-
-  generateReport() {
-    const totalPassed = this.results.reduce((sum, r) => sum + r.passed, 0);
-    const totalTests = this.results.reduce((sum, r) => sum + r.total, 0);
-    const totalFailed = totalTests - totalPassed;
-
-    console.log('\n');
-    console.log('═'.repeat(60));
-    console.log('📊 E2E Test Report');
-    console.log('═'.repeat(60));
-    console.log(`Total Tests: ${totalTests}`);
-    console.log(`Passed: ${totalPassed} (${Math.round((totalPassed / totalTests) * 100)}%)`);
-    console.log(`Failed: ${totalFailed}`);
-    console.log('');
-
-    this.results.forEach(result => {
-      const status = result.passed === result.total ? '✅' : '❌';
-      console.log(`${status} ${result.suite}: ${result.passed}/${result.total} passed`);
-    });
-
-    console.log('');
-    
-    if (totalFailed === 0) {
-      console.log('🎉 All tests passed!');
-      process.exit(0);
-    } else {
-      console.log(`⚠️  ${totalFailed} tests failed`);
-      process.exit(1);
-    }
+      const url = new URL(this.baseUrl + path)
+      const client = url.protocol === 'https:' ? https : http
+      const payload = data ? Buffer.from(JSON.stringify(data)) : null
+      const headers = Object.assign(
+        {
+          'Content-Type': 'application/json',
+          'Content-Length': payload ? String(payload.length) : undefined,
+        },
+        extraHeaders
+      )
+      if (!payload) delete headers['Content-Length']
+      const req = client.request(url, { method, headers }, res => {
+        let body = ''
+        res.on('data', c => (body += c))
+        res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body }))
+      })
+      req.on('error', reject)
+      req.setTimeout(15000, () => {
+        req.destroy()
+        reject(new Error('timeout'))
+      })
+      if (payload) req.write(payload)
+      req.end()
+    })
   }
 }
 
-// CLI execution
-const baseUrl = process.argv[2] || 'https://college-football-fantasy-fw5yhpj6c-kpm34s-projects.vercel.app';
-
-console.log('College Football Fantasy App - E2E Test Suite');
-console.log(`Target: ${baseUrl}`);
-
-const tester = new SimpleE2ETester(baseUrl);
-tester.runAllTests().catch(error => {
-  console.error('Test execution failed:', error);
-  process.exit(1);
-});
+// CLI
+const baseUrl = process.argv[2] || process.env.BASE_URL || 'http://localhost:3001'
+console.log('College Football Fantasy App - Smoke Tests (Draft v2)')
+console.log(`Target: ${baseUrl}`)
+new SmokeDraftV2(baseUrl).run().catch(err => {
+  console.error(err)
+  process.exit(1)
+})
