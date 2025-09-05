@@ -38,6 +38,7 @@ export default function Navbar() {
   const router = useRouter()
   const pathname = usePathname()
   const { user, loading: authLoading, logout } = useAuth()
+  const isHome = pathname === '/'
 
   // Prevent body scroll when drawer is open
   useEffect(() => {
@@ -100,10 +101,15 @@ export default function Navbar() {
     <>
       <CFPLoadingScreen isLoading={isNavigating} />
       <nav className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-[#3A1220]/50 bg-[#3A1220]/70 border-b border-white/10">
+        {isHome && (
+          <div className="fixed left-6 top-24 z-50">
+            <HamburgerButton isOpen={open} onClick={() => setOpen(true)} />
+          </div>
+        )}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 items-center justify-between">
             <div className="flex items-center gap-3">
-              <HamburgerButton isOpen={open} onClick={() => setOpen(true)} />
+              {!isHome && <HamburgerButton isOpen={open} onClick={() => setOpen(true)} />}
               <Link href="/" className="text-white font-bebas tracking-wide text-2xl">
                 CFB Fantasy
               </Link>
