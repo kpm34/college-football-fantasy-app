@@ -149,7 +149,38 @@ export async function startDraft(leagueId: string): Promise<DraftState> {
     throw new Error(`Cannot start draft; league.phase=${league.phase}`)
   }
 
-  const order: string[] = await loadDraftOrder(leagueId)
+  let order: string[] = await loadDraftOrder(leagueId)
+  if (!order.length) {
+    // Fallback: derive from fantasy_teams for this league (commissioner-only league just created)
+    try {
+      const teams = await serverDatabases.listDocuments(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, [
+        Query.equal('leagueId', leagueId),
+        Query.limit(200),
+      ])
+      const derived = (teams.documents || []).map((t: any) => String(t.$id))
+      if (derived.length > 0) {
+        order = derived
+        // Persist to drafts.orderJson for future calls
+        try {
+          const drafts = await serverDatabases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFTS, [
+            Query.equal('leagueId', leagueId),
+            Query.limit(1),
+          ])
+          const draftDoc: any = drafts.documents?.[0]
+          if (draftDoc) {
+            let orderJson: any = {}
+            try {
+              orderJson = draftDoc.orderJson ? JSON.parse(draftDoc.orderJson) : {}
+            } catch {}
+            orderJson.draftOrder = order
+            await serverDatabases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draftDoc.$id, {
+              orderJson: JSON.stringify(orderJson),
+            } as any)
+          }
+        } catch {}
+      }
+    } catch {}
+  }
   if (!order.length) throw new Error('League missing draftOrder')
 
   const pickTimeSeconds: number = league.pickTimeSeconds ?? league.clockSeconds ?? 60
@@ -183,7 +214,7 @@ export async function startDraft(leagueId: string): Promise<DraftState> {
       COLLECTIONS.DRAFT_STATES,
       leagueId,
       stateDoc as any,
-      [Permission.read(Role.users())]
+      [Permission.read(Role.any()), Permission.read(Role.users())]
     )
   } catch (err: any) {
     if (err.code !== 409) throw err // 409 = already exists

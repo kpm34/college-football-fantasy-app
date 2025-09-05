@@ -97,11 +97,17 @@ export async function GET(request: NextRequest) {
             currentRound: 1,
             currentPick: 1,
           })
-          // Ensure read permission on draft_states (engine sets on create; skip if exists)
-          try {
+          // Ensure draft_states is readable before returning (tiny wait/retry)
+          let ok = false
+          for (let i = 0; i < 5; i++) {
             const st = await loadState(leagueId)
-            if (!st) throw new Error('state_missing_after_start')
-          } catch {}
+            if (st && st.onClockTeamId) {
+              ok = true
+              break
+            }
+            await new Promise(r => setTimeout(r, 200))
+          }
+          if (!ok) throw new Error('state_missing_after_start')
         } catch (e: any) {
           results.push({ draftId: draft.$id, ok: false, error: e?.message || 'start_failed' })
           continue
