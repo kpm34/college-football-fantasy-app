@@ -1,6 +1,7 @@
+import { loadState, startDraft } from '@/lib/draft-v2/engine'
 import { COLLECTIONS, DATABASE_ID, serverDatabases as databases } from '@lib/appwrite-server'
 import { NextRequest, NextResponse } from 'next/server'
-import { Permission, Query, Role } from 'node-appwrite'
+import { Query } from 'node-appwrite'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -45,97 +46,65 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Helper to shuffle arrays (Fisher–Yates)
-    function shuffle<T>(arr: T[]): T[] {
-      const a = [...arr]
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        ;[a[i], a[j]] = [a[j], a[i]]
-      }
-      return a
-    }
-
     for (const draft of toStart) {
       try {
-        // Compute on-the-clock and deadline from orderJson + clockSeconds
+        const leagueId = String(draft.leagueId || draft.league_id || '')
+        if (!leagueId) {
+          results.push({ draftId: draft.$id, ok: false, error: 'missing_league_id' })
+          continue
+        }
+
+        // Ensure league is still scheduled
+        try {
+          const lg = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, leagueId)
+          const phase = (lg as any).phase || (lg as any).draftStatus || 'scheduled'
+          if (phase !== 'scheduled') {
+            results.push({ draftId: draft.$id, ok: false, error: 'not_scheduled' })
+            continue
+          }
+        } catch {
+          results.push({ draftId: draft.$id, ok: false, error: 'league_not_found' })
+          continue
+        }
+
+        // Skip if picks already exist
+        const picks = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_PICKS, [
+          Query.equal('leagueId', leagueId),
+          Query.limit(1),
+        ])
+        if (picks.total > 0) {
+          results.push({ draftId: draft.$id, ok: false, error: 'picks_exist' })
+          continue
+        }
+
+        // Ensure order exists
         let orderJson: any = {}
         try {
           orderJson = draft.orderJson ? JSON.parse(draft.orderJson) : {}
         } catch {}
-        let draftOrder: string[] = Array.isArray(orderJson.draftOrder) ? orderJson.draftOrder : []
-
-        // Fallback: if no order exists, derive from fantasy_teams in this league
+        const draftOrder: string[] = Array.isArray(orderJson.draftOrder) ? orderJson.draftOrder : []
         if (!draftOrder || draftOrder.length === 0) {
-          try {
-            const teams = await databases.listDocuments(DATABASE_ID, COLLECTIONS.FANTASY_TEAMS, [
-              Query.equal('leagueId', draft.leagueId),
-              Query.limit(200),
-            ])
-            const teamIds = (teams.documents || []).map((t: any) => String(t.$id))
-            if (teamIds.length > 0) {
-              draftOrder = shuffle(teamIds)
-              orderJson.draftOrder = draftOrder
-              await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draft.$id, {
-                orderJson: JSON.stringify(orderJson),
-              })
-              console.log('[CRON] Generated fallback draft order for league', draft.leagueId)
-            }
-          } catch (e) {
-            console.warn('[CRON] Failed to generate fallback draft order', e)
-          }
+          results.push({ draftId: draft.$id, ok: false, error: 'missing_order' })
+          continue
         }
 
-        const onClockTeamId: string | null = draftOrder.length > 0 ? String(draftOrder[0]) : null
-        const clockSeconds = Number((draft as any).clockSeconds || orderJson.pickTimeSeconds || 90)
-        const deadlineAt = new Date(Date.now() + clockSeconds * 1000).toISOString()
-
-        // Update the draft status to drafting
-        await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draft.$id, {
-          draftStatus: 'drafting',
-          currentRound: 1,
-          currentPick: 1,
-        })
-
-        // Create or update a draft_state snapshot for this draft/league
-        const leagueId = draft.leagueId || draft.league_id
-        if (leagueId && onClockTeamId) {
+        // Idempotent start via engine
+        try {
+          const state = await startDraft(leagueId)
+          // Mark drafts doc as drafting for convenience
+          await databases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFTS, draft.$id, {
+            draftStatus: 'drafting',
+            currentRound: 1,
+            currentPick: 1,
+          })
+          // Ensure read permission on draft_states (engine sets on create; skip if exists)
           try {
-            await databases.createDocument(
-              DATABASE_ID,
-              COLLECTIONS.DRAFT_STATES,
-              String(leagueId),
-              {
-                _id: String(leagueId),
-                draftId: String(leagueId),
-                onClockTeamId,
-                deadlineAt,
-                round: 1,
-                pickIndex: 1,
-                draftStatus: 'drafting',
-              },
-              [
-                // Allow authenticated clients to read the state; writes remain server-only
-                Permission.read(Role.users()),
-              ]
-            )
-          } catch (e: any) {
-            try {
-              const existing = await databases.listDocuments(
-                DATABASE_ID,
-                COLLECTIONS.DRAFT_STATES,
-                [Query.equal('draftId', String(leagueId)), Query.limit(1)]
-              )
-              if (existing.documents.length > 0) {
-                await databases.updateDocument(
-                  DATABASE_ID,
-                  COLLECTIONS.DRAFT_STATES,
-                  existing.documents[0].$id,
-                  { onClockTeamId, deadlineAt, round: 1, pickIndex: 1, draftStatus: 'drafting' },
-                  [Permission.read(Role.users())]
-                )
-              }
-            } catch {}
-          }
+            const st = await loadState(leagueId)
+            if (!st) throw new Error('state_missing_after_start')
+          } catch {}
+        } catch (e: any) {
+          results.push({ draftId: draft.$id, ok: false, error: e?.message || 'start_failed' })
+          continue
         }
 
         results.push({

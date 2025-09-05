@@ -62,9 +62,11 @@ export default function DraftRoomPage({ params }: Props) {
   const v2 = useDraftStateV2(leagueId)
   const legacy = useDraftRealtime(leagueId)
 
-  if (!engineVersion) {
-    return <div className="min-h-screen bg-white text-gray-900 p-4">Loading draft room...</div>
-  }
+  // Determine my team id from initial teams once available
+  const sessionUserId = (typeof window !== 'undefined' && (window as any).__authUserId) || null
+  const myTeamId = (initial?.teams || []).find(
+    t => String(t.ownerAuthUserId) === String(sessionUserId)
+  )?.$id
 
   const showV2 = engineVersion === 'v2'
   const round = showV2 ? (v2.state?.round ?? initial?.state?.round) : legacy.currentRound
@@ -75,6 +77,34 @@ export default function DraftRoomPage({ params }: Props) {
   const deadline = showV2 ? (v2.state?.deadlineAt ?? initial?.state?.deadlineAt) : legacy.deadlineAt
   const loading = showV2 ? v2.loading && !initial : legacy.loading
   const error = showV2 ? v2.error : legacy.error
+
+  const canDraft = showV2
+    ? v2.state?.onClockTeamId === myTeamId && (v2.state as any)?.draftStatus === 'drafting'
+    : legacy.isMyTurn
+
+  if (!engineVersion) {
+    return <div className="min-h-screen bg-white text-gray-900 p-4">Loading draft room...</div>
+  }
+
+  const [isSubmitting, setSubmitting] = useState(false)
+  const handleDraft = async (player: any) => {
+    if (!showV2) return
+    if (!myTeamId || !player?.id) return
+    try {
+      setSubmitting(true)
+      const idem =
+        typeof crypto !== 'undefined' && 'randomUUID' in crypto
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random()}`
+      await fetch(`/api/drafts/${leagueId}/pick`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Idempotency-Key': idem },
+        body: JSON.stringify({ teamId: myTeamId, playerId: player.id }),
+      })
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <div className="min-h-screen ui-surface">
@@ -101,11 +131,12 @@ export default function DraftRoomPage({ params }: Props) {
         <DraftCore
           leagueId={leagueId}
           draftType="snake"
-          canDraft={showV2 ? false : legacy.isMyTurn}
+          canDraft={canDraft && !isSubmitting}
           timeRemainingSec={
             deadline ? (new Date(deadline).getTime() - Date.now()) / 1000 : undefined
           }
           draftedPlayers={initial?.picks || []}
+          onPlayerDraft={player => handleDraft(player)}
         />
       </div>
     </div>

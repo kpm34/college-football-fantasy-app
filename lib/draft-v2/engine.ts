@@ -30,21 +30,36 @@ export interface DraftState {
 export function computeNextState(
   prev: DraftState,
   order: string[],
-  pickTimeSeconds: number
+  pickTimeSeconds: number,
+  totalRounds: number = 15
 ): DraftState {
-  const picksPerRound = Math.max(1, order.length)
-  const nextPickIndex = prev.pickIndex + 1
-  const nextRound = Math.ceil(nextPickIndex / picksPerRound)
-  const onClockTeamId =
-    nextPickIndex > order.length ? null : order[(nextPickIndex - 1) % order.length]
+  const teams = Math.max(1, order.length)
+  const totalPicks = teams * Math.max(1, totalRounds)
+  const nextOverall = prev.pickIndex + 1
+
+  // Determine next phase and on-clock team using serpentine order
+  let phase: DraftState['phase'] = 'drafting'
+  let nextTeamId: string | null = null
+  let nextRound = Math.ceil(nextOverall / teams)
+  if (nextOverall > totalPicks) {
+    phase = 'complete'
+    nextTeamId = null
+    nextRound = prev.round
+  } else {
+    const idxInRound = (nextOverall - 1) % teams
+    const forward = nextRound % 2 === 1
+    const orderIdx = forward ? idxInRound : teams - 1 - idxInRound
+    nextTeamId = order[orderIdx]
+  }
+
   return {
     ...prev,
     version: prev.version + 1,
     round: nextRound,
-    pickIndex: nextPickIndex,
-    onClockTeamId,
-    picksPerRound,
-    phase: onClockTeamId ? 'drafting' : 'complete',
+    pickIndex: nextOverall,
+    onClockTeamId: nextTeamId,
+    picksPerRound: teams,
+    phase,
     deadlineAt: new Date(Date.now() + pickTimeSeconds * 1000).toISOString(),
     serverNow: new Date().toISOString(),
   }
@@ -202,13 +217,28 @@ export async function validatePick({
   playerId: string
   idemKey: string
 }) {
-  invariant(idemKey, 'Missing Idempotency-Key header')
+  if (!idemKey) throw new Error('missing_idempotency_key')
+
   const state = await loadState(leagueId)
-  invariant(state, 'Draft not started')
-  invariant(state.phase === 'drafting', 'Draft not active')
-  invariant(state.onClockTeamId === teamId, 'Not your turn')
+  if (!state) throw new Error('unknown_league_or_state')
+  if (state.phase !== 'drafting') throw new Error('unknown_league_or_state')
+  if (state.onClockTeamId !== teamId) throw new Error('not_on_clock')
   const now = Date.now()
-  invariant(now < new Date(state.deadlineAt).getTime(), 'Pick window expired')
+  if (now >= new Date(state.deadlineAt).getTime()) throw new Error('window_expired')
+
+  // Ensure the team belongs to this league
+  try {
+    const team = await serverDatabases.getDocument(
+      DATABASE_ID,
+      COLLECTIONS.FANTASY_TEAMS,
+      String(teamId)
+    )
+    if (!team || String((team as any).leagueId) !== String(leagueId)) {
+      throw new Error('unknown_league_or_state')
+    }
+  } catch {
+    throw new Error('unknown_league_or_state')
+  }
 
   // Ensure player not already drafted in this league
   const dup = await serverDatabases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_PICKS, [
@@ -216,10 +246,7 @@ export async function validatePick({
     Query.equal('playerId', playerId),
     Query.limit(1),
   ])
-  invariant(dup.total === 0, 'Player already drafted')
-
-  // ensure idempotency (if idemKey already used accept as success)
-  if (state.lastPickId === idemKey) return state
+  if (dup.total > 0) throw new Error('player_already_drafted')
 }
 
 export async function applyPick({
@@ -235,26 +262,51 @@ export async function applyPick({
 }): Promise<DraftState> {
   // Re-fetch state to be safe
   const state = await loadState(leagueId)
-  if (!state) throw new Error('Draft state missing')
-  const pickId = `p_${leagueId}_${state.pickIndex}`
-  // 1. Create pick
-  await serverDatabases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_PICKS, pickId, {
-    leagueId,
-    teamId,
-    playerId,
-    round: state.round,
-    pick: state.pickIndex,
-    timestamp: new Date().toISOString(),
-  })
+  if (!state) throw new Error('unknown_league_or_state')
+  if (state.onClockTeamId !== teamId) throw new Error('not_on_clock')
+  if (Date.now() >= new Date(state.deadlineAt).getTime()) throw new Error('window_expired')
 
-  // 2. Compute next snapshot
+  const pickId = `p_${leagueId}_${state.pickIndex}`
+  // 1. Create pick (idempotent by deterministic id)
+  try {
+    await serverDatabases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_PICKS, pickId, {
+      leagueId,
+      fantasyTeamId: teamId,
+      teamId, // keep for backward compatibility
+      playerId,
+      round: state.round,
+      pick: state.pickIndex,
+      overallPick: state.pickIndex,
+      timestamp: new Date().toISOString(),
+    } as any)
+  } catch (e: any) {
+    // If already exists, treat as idempotent no-op
+    if (
+      String(e?.message || '')
+        .toLowerCase()
+        .includes('already exists')
+    ) {
+      // continue
+    } else {
+      throw e
+    }
+  }
+
+  // 2. Compute next snapshot (serpentine across total rounds)
   const league = await loadLeague(leagueId)
   const order: string[] = await loadDraftOrder(leagueId)
   const pickTimeSeconds: number = league.pickTimeSeconds ?? league.clockSeconds ?? 60
-  const next = computeNextState(state, order, pickTimeSeconds)
-  next.lastPickId = idemKey
+  let totalRounds = 15
+  try {
+    const drafts = await serverDatabases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFTS, [
+      Query.equal('leagueId', leagueId),
+      Query.limit(1),
+    ])
+    totalRounds = Number((drafts.documents?.[0] as any)?.maxRounds || 15)
+  } catch {}
+  const next = computeNextState(state, order, pickTimeSeconds, totalRounds)
 
-  // 3. Update draft_states with optimistic concurrency (version match)
+  // 3. Update draft_states
   try {
     await serverDatabases.updateDocument(DATABASE_ID, COLLECTIONS.DRAFT_STATES, leagueId, {
       onClockTeamId: next.onClockTeamId,
@@ -263,21 +315,19 @@ export async function applyPick({
       pickIndex: next.pickIndex,
       draftStatus: next.phase === 'complete' ? 'complete' : 'drafting',
     } as any)
-    // If draft completed, persist final rosters into fantasy_teams
     if (next.phase === 'complete') {
       try {
         await persistFinalRosters(leagueId)
       } catch (err) {
-        // Non-fatal: log and continue
-        // eslint-disable-next-line no-console
         console.warn('[Draft] persistFinalRosters failed:', err)
       }
     }
-    // success
     return next
-  } catch (err: any) {
-    // If version conflict, somebody else updated first; return fresh state
-    return (await loadState(leagueId)) as DraftState
+  } catch {
+    // Version conflict or race; return latest state so caller can refresh
+    const latest = await loadState(leagueId)
+    if (!latest) throw new Error('unknown_league_or_state')
+    return latest
   }
 }
 

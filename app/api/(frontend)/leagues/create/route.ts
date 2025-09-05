@@ -135,6 +135,17 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   // Use repositories
   const { leagues, rosters } = serverRepositories
 
+  // Normalize draft date to ISO string (UTC) if provided
+  let draftDateIso: string | null = null
+  try {
+    if (requestData.draftDate) {
+      const d = new Date(String(requestData.draftDate))
+      if (!isNaN(d.getTime())) {
+        draftDateIso = d.toISOString()
+      }
+    }
+  } catch {}
+
   // Create the league using repository
   const league = await leagues.createLeague({
     leagueName,
@@ -147,7 +158,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     pickTimeSeconds,
     commissionerAuthUserId: user.$id,
     scoringRules: scoringRulesToPersist,
-    draftDate: requestData.draftDate,
+    draftDate: draftDateIso,
     season: requestData.season || new Date().getFullYear(),
     // Save selectedConference when in conference mode
     selectedConference:
@@ -188,7 +199,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
       currentRound: 0,
       currentPick: 0,
       maxRounds: requestData.draftRounds || 15,
-      startTime: requestData.draftDate || null,
+      startTime: draftDateIso || null,
       isMock: false,
       clockSeconds: pickTimeSeconds,
       orderJson: JSON.stringify({

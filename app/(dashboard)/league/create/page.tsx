@@ -222,7 +222,7 @@ export default function CreateLeaguePage() {
         ...formData,
         leagueName: trimmedName,
         maxTeams: Number(formData.maxTeams),
-        draftDate: formData.draftDate || null,
+        draftDate: formData.draftDate ? new Date(formData.draftDate).toISOString() : null,
         commissionerId: 'auto', // server resolves user from session
         season: 2025,
       }
@@ -753,7 +753,7 @@ export default function CreateLeaguePage() {
                         <div className="font-semibold text-[#3A1220] mb-2">Rushing</div>
                         <div className="grid grid-cols-2 gap-3">
                           <label className="text-[#2D0E17]">
-                            Yards per yard
+                            Pts per yard
                             <input
                               name="rushingYards"
                               type="number"
@@ -806,7 +806,7 @@ export default function CreateLeaguePage() {
                             />
                           </label>
                           <label className="text-[#2D0E17]">
-                            Yards per yard
+                            Pts per yard
                             <input
                               name="receivingYards"
                               type="number"

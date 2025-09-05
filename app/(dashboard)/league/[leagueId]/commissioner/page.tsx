@@ -1,5 +1,6 @@
 'use client'
 
+import { useDraftStateV2 } from '@/lib/hooks/useDraftStateV2'
 import { leagueColors } from '@/lib/theme/colors'
 import { InviteModal } from '@components/features/leagues/InviteModal'
 import { ChevronLeftIcon, ShareIcon } from '@heroicons/react/24/outline'
@@ -71,10 +72,14 @@ interface Member {
 export default function CommissionerSettings({ params }: { params: { leagueId: string } }) {
   const router = useRouter()
   const { user, loading: authLoading } = useAuth()
+  const v2 = useDraftStateV2(params.leagueId)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [league, setLeague] = useState<League | null>(null)
   const [members, setMembers] = useState<Member[]>([])
+  const [teams, setTeams] = useState<{ $id: string; teamName: string; ownerAuthUserId: string }[]>(
+    []
+  )
   const [savedMessage, setSavedMessage] = useState('')
   const [showInviteModal, setShowInviteModal] = useState(false)
 
@@ -239,6 +244,20 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
         setDraftOrder([])
       }
       setOrderMode(((league as any).orderMode as any) || 'custom')
+
+      // Load teams for this league to drive draft order with fantasyTeamIds
+      try {
+        const dataRes = await fetch(`/api/drafts/${params.leagueId}/data`, { cache: 'no-store' })
+        if (dataRes.ok) {
+          const dj = await dataRes.json()
+          const t = (dj?.data?.teams || []) as {
+            $id: string
+            teamName: string
+            ownerAuthUserId: string
+          }[]
+          setTeams(t)
+        }
+      } catch {}
 
       // Parse draft date/time (handle local timezone correctly)
       if (league.draftDate) {
@@ -498,6 +517,25 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
 
         {/* Settings Sections */}
         <div className="space-y-8">
+          {/* Live Draft Banner */}
+          <div
+            className="rounded-xl p-4"
+            style={{
+              backgroundColor: leagueColors.background.card,
+              border: `1px solid ${leagueColors.border.light}`,
+            }}
+          >
+            <div className="text-sm" style={{ color: leagueColors.text.primary }}>
+              Draft status: {v2.state?.phase || v2.state?.draftStatus || 'pre-draft'} | On clock:{' '}
+              {(() => {
+                const id = (v2.state as any)?.onClockTeamId
+                const map = new Map(teams.map(t => [t.$id, t.teamName]))
+                return id ? map.get(String(id)) || String(id) : '-'
+              })()}{' '}
+              | Deadline:{' '}
+              {v2.state?.deadlineAt ? new Date(v2.state.deadlineAt).toLocaleTimeString() : '-'}
+            </div>
+          </div>
           {/* League Info */}
           <div
             className="rounded-xl p-6"
@@ -697,6 +735,30 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
             >
               {saving ? 'Saving...' : 'Save Draft Settings'}
             </button>
+            <button
+              onClick={async () => {
+                try {
+                  const res = await fetch(`/api/drafts/${params.leagueId}/start`, {
+                    method: 'POST',
+                  })
+                  if (!res.ok) {
+                    const t = await res.text()
+                    throw new Error(t || 'Failed to start draft')
+                  }
+                  setSavedMessage('Draft started!')
+                  setTimeout(() => setSavedMessage(''), 3000)
+                } catch (e: any) {
+                  alert(e.message || 'Failed to start draft')
+                }
+              }}
+              className="mt-4 ml-3 px-4 py-2 rounded-lg transition-colors"
+              style={{
+                backgroundColor: leagueColors.accent.pink,
+                color: leagueColors.text.inverse,
+              }}
+            >
+              Start Draft
+            </button>
           </div>
 
           {/* Draft Order */}
@@ -765,26 +827,26 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[15px]">
               <div>
                 <div className="text-base mb-2" style={{ color: leagueColors.text.secondary }}>
-                  Available Members
+                  Available Teams
                 </div>
                 <div
                   className="space-y-2 max-h-64 overflow-y-auto p-3 rounded bg-white text-gray-900"
                   style={{ border: `1px solid ${leagueColors.border.light}` }}
                 >
-                  {members.map((m, idx) => {
-                    const mid = (m as any).clientId || (m as any).authUserId || m.$id
+                  {(teams.length > 0 ? teams : []).map((t, idx) => {
+                    const mid = t.$id
                     const selectedIdx = draftOrder.findIndex(id => id === mid)
                     const selected = selectedIdx !== -1
                     return (
                       <button
-                        key={m.$id}
+                        key={mid}
                         onClick={() => {
                           setDraftOrder(prev => (prev.includes(mid) ? prev : [...prev, mid]))
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2 rounded border text-left ${selected ? 'opacity-60 cursor-not-allowed' : 'hover:bg-gray-50'}`}
                         style={{ borderColor: leagueColors.border.light }}
                         disabled={selected}
-                        title={m.name || m.teamName || m.$id}
+                        title={t.teamName}
                       >
                         <div className="flex items-center gap-2 truncate">
                           {selected && (
@@ -792,9 +854,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                               {selectedIdx + 1}
                             </span>
                           )}
-                          <span className="truncate">
-                            {m.teamName || `${m.name}'s Team` || m.$id}
-                          </span>
+                          <span className="truncate">{t.teamName}</span>
                         </div>
                         {!selected && (
                           <span
@@ -821,16 +881,8 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
                   style={{ border: `1px solid ${leagueColors.border.light}` }}
                 >
                   {draftOrder.filter(Boolean).map((id, idx) => {
-                    const m = members.find(
-                      mm =>
-                        mm.$id === id ||
-                        (mm as any).clientId === id ||
-                        (mm as any).authUserId === id
-                    )
-                    // Get display name - prefer teamName for consistency
-                    const displayName = id.startsWith('BOT-')
-                      ? id
-                      : m?.teamName || (m?.name ? `${m.name}'s Team` : `User ${idx + 1}`)
+                    const t = teams.find(tt => tt.$id === id)
+                    const displayName = id.startsWith('BOT-') ? id : t?.teamName || id
                     return (
                       <div
                         key={`${id}-${idx}`}
