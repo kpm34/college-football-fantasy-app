@@ -1,6 +1,7 @@
 import { COLLECTIONS, DATABASE_ID, serverDatabases as databases } from '@/lib/appwrite-server'
 import { loadState, startDraft } from '@/lib/draft-v2/engine'
 import { NextRequest, NextResponse } from 'next/server'
+import { Permission, Role } from 'node-appwrite'
 
 export async function POST(request: NextRequest, { params }: { params: { leagueId: string } }) {
   try {
@@ -18,21 +19,23 @@ export async function POST(request: NextRequest, { params }: { params: { leagueI
     }
     if (!snap) {
       // As a last-resort, upsert the state document using the computed state
-      try {
-        await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_STATES, leagueId, {
-          draftId: String(leagueId),
-          onClockTeamId: state.onClockTeamId,
-          deadlineAt: state.deadlineAt,
-          round: state.round,
-          pickIndex: state.pickIndex,
-          draftStatus: 'drafting',
-        } as any)
-        const s2 = await loadState(leagueId)
-        if (s2) snap = s2
-      } catch (e: any) {
-        // ignore if already exists
-      }
+              try {
+          await databases.createDocument(DATABASE_ID, COLLECTIONS.DRAFT_STATES, leagueId, {
+            draftId: String(leagueId),
+            onClockTeamId: state.onClockTeamId,
+            deadlineAt: state.deadlineAt,
+            round: state.round,
+            pickIndex: state.pickIndex,
+            draftStatus: 'drafting',
+          } as any, [Permission.read(Role.any()), Permission.read(Role.users())])
+          const s2 = await loadState(leagueId)
+          if (s2) snap = s2
+        } catch (e: any) {
+          // ignore if already exists
+          console.warn('[Start] Last-resort createDocument failed:', e?.message || e)
+        }
     }
+    console.log('[Start] Final state check:', { leagueId, hasSnap: !!snap, state: snap ? 'ok' : 'missing' })
     return NextResponse.json({ data: snap || state })
   } catch (error) {
     console.error('startDraft error', error)
