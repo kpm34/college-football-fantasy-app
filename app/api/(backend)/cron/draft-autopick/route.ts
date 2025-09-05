@@ -1,4 +1,4 @@
-import { maybeAutopick } from '@/lib/draft-v2/engine'
+import { loadState, maybeAutopick } from '@/lib/draft-v2/engine'
 import { COLLECTIONS, DATABASE_ID, serverDatabases as databases } from '@lib/appwrite-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { Query } from 'node-appwrite'
@@ -20,7 +20,8 @@ export async function GET(request: NextRequest) {
     const res = await databases.listDocuments(DATABASE_ID, COLLECTIONS.DRAFT_STATES, [
       Query.equal('draftStatus', 'drafting'),
       Query.lessThanEqual('deadlineAt', nowIso),
-      Query.limit(100),
+      Query.orderAsc('deadlineAt'),
+      Query.limit(200),
     ])
 
     const due = res.documents || []
@@ -29,16 +30,31 @@ export async function GET(request: NextRequest) {
 
     for (const st of due as any[]) {
       try {
-        const leagueId = String(st.draftId || st.$id || '')
+        const leagueId = String(st.$id || st.draftId || '')
         if (!leagueId) {
           results.push({ id: null, ok: false, error: 'missing leagueId' })
+          continue
+        }
+        // Re-fetch state to avoid racing on stale snapshot
+        const fresh = await loadState(leagueId)
+        if (!fresh) {
+          results.push({ id: leagueId, ok: false, error: 'state_missing' })
+          continue
+        }
+        if (Date.now() < new Date(fresh.deadlineAt).getTime()) {
+          results.push({ id: leagueId, ok: false, error: 'not_overdue' })
+          continue
+        }
+        // If round/pick changed since list, skip
+        if (fresh.round !== Number(st.round) || fresh.pickIndex !== Number(st.pickIndex)) {
+          results.push({ id: leagueId, ok: false, error: 'stale' })
           continue
         }
         await maybeAutopick(leagueId)
         successes += 1
         results.push({ id: leagueId, ok: true })
       } catch (e: any) {
-        results.push({ id: (st as any)?.draftId, ok: false, error: e?.message })
+        results.push({ id: (st as any)?.draftId || st?.$id, ok: false, error: e?.message })
       }
     }
 
