@@ -154,3 +154,44 @@ Acceptance:
 
 Deliverables: file(s) + link
 ```
+
+## 9) Inspiration → Wireframe (from screenshots)
+```
+Goal:
+Propose a wireframe and component plan for <route/feature> using provided screenshots and intake notes.
+
+Context:
+- Screenshots: list files from docs/inspiration/screenshots/*
+- Intake notes: paste entries from SCREENSHOT_INTAKE.md
+- Brand: tokens, typography, motion rules (3D_UI_IMPLEMENTATION_GUIDE)
+
+Constraints:
+- SSR-first; shadcn/ui; minimal client JS
+- Motion: CSS/Anime.js microinteractions; respect prefers-reduced-motion
+
+Acceptance:
+- Wireframe sections + component mapping to existing code
+- List of new atoms/compounds if any
+
+Deliverables: wireframe outline + component map
+```
+
+## 10) Design → Code (Figma/Anima/Code Connect)
+```
+Goal:
+Convert Figma designs to production-ready code following our patterns.
+
+Context:
+- Figma component names mapped to code (Code Connect)
+- Anima export reference (for layout scaffolds)
+
+Constraints:
+- App Router patterns; Zod validation where applicable
+- No client secrets; lazy-load heavy parts
+
+Acceptance:
+- PR-ready diffs; lint/typecheck clean
+- Feature-flagged rollout if impactful
+
+Deliverables: diffs + notes on bindings
+```

@@ -49,3 +49,9 @@ client_secret_*.json
 cookies*.txt
 .next-dev.pid
 .next-dev.log
+
+# Local design artifacts
+.anima/
+*.vsix
+*.bak*
+
