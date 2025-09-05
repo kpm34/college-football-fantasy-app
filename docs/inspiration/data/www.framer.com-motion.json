@@ -1,0 +1,119 @@
+{
+  "url": "https://www.framer.com/motion/",
+  "title": "Motion — JavaScript & React animation library",
+  "description": "Motion (prev Framer Motion) is a fast, production-grade web animation library for React, JavaScript and Vue. Build smooth UI animations with examples, tutorials, and a tiny footprint.",
+  "colors": [
+    {
+      "value": "rgb(255, 255, 255)",
+      "count": 140
+    },
+    {
+      "value": "rgb(158, 158, 255)",
+      "count": 82
+    },
+    {
+      "value": "rgba(255, 255, 255, 0.6)",
+      "count": 28
+    },
+    {
+      "value": "rgb(56, 56, 56)",
+      "count": 5
+    },
+    {
+      "value": "rgba(245, 245, 245, 0.6)",
+      "count": 5
+    },
+    {
+      "value": "rgb(245, 245, 245)",
+      "count": 4
+    },
+    {
+      "value": "rgb(12, 16, 18)",
+      "count": 3
+    },
+    {
+      "value": "rgb(141, 240, 204)",
+      "count": 2
+    },
+    {
+      "value": "rgb(0, 0, 0)",
+      "count": 1
+    },
+    {
+      "value": "rgb(131, 230, 247)",
+      "count": 1
+    },
+    {
+      "value": "rgba(255, 255, 255, 0.5)",
+      "count": 1
+    },
+    {
+      "value": "rgb(8, 8, 8)",
+      "count": 1
+    }
+  ],
+  "fonts": [
+    {
+      "family": "Inter Variable",
+      "count": 168
+    },
+    {
+      "family": "sans-serif",
+      "count": 105
+    }
+  ],
+  "features": [
+    "video"
+  ],
+  "headings": [
+    "Motion. A production-grade animation library forReact, JavaScript, and Vue.",
+    "Animations that move",
+    "Simple API",
+    "Independent transforms",
+    "Scroll animation",
+    "Spring physics",
+    "Exit animation",
+    "Gestures",
+    "Layout animation",
+    "Timeline sequences",
+    "Learn by doing",
+    "Trusted by the world's leading teams",
+    "Selected by the community",
+    "Updates",
+    "Example:",
+    "Cursor: Floating Target",
+    "Example:",
+    "Card Stack",
+    "Example:",
+    "Material Design Ripple",
+    "Level up your animations with Motion+",
+    "Delight the web with Motion",
+    "Most popular",
+    "React animation",
+    "Layout animation",
+    "SVG animation",
+    "Motion component",
+    "AnimatePresence",
+    "Cursor",
+    "Components",
+    "Site",
+    "Social"
+  ],
+  "nav": [
+    "JavaScript",
+    "React",
+    "Vue",
+    "Custom Cursor",
+    "Number animations",
+    "Ticker",
+    "Blog",
+    "Docs",
+    "Examples",
+    "Motion+",
+    "Discord",
+    "GitHub",
+    "X/Twitter",
+    "Bluesky"
+  ],
+  "timestamp": "2025-09-05T04:26:00.433Z"
+}

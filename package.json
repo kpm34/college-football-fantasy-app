@@ -4,6 +4,8 @@
   "description": "Fantasy football platform for Power 4 conferences",
   "private": true,
   "scripts": {
+    "design:capture": "tsx ops/common/scripts/capture-inspiration.ts",
+    "design:tokens": "tsx ops/design/export-tokens.ts",
     "generate:types": "tsx schema/generators/generate-appwrite-types.ts",
     "schema:pull": "appwrite pull collections",
     "schema:push": "appwrite push collections --force",
@@ -121,7 +123,8 @@
     "indexes:ensure": "tsx scripts/guards/ensure-indexes.ts",
     "validate:relationships": "tsx scripts/guards/validate-relationships.ts",
     "diagrams:plan": "node scripts/organize-diagrams.js --plan",
-    "diagrams:apply": "node scripts/organize-diagrams.js --apply"
+    "diagrams:apply": "node scripts/organize-diagrams.js --apply",
+    "design:tokens": "tsx ops/design/export-tokens.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",

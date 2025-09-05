@@ -44,6 +44,9 @@ INNGEST_EVENT_KEY=your-event-key
 
 # Feature Flags (if using Edge Config)
 EDGE_CONFIG=your-edge-config-url
+
+# Design tooling
+CODE_TO_DESIGN_API_KEY=your-code-to-design-api-key
 ```
 
 ## Important Notes
@@ -56,8 +59,9 @@ EDGE_CONFIG=your-edge-config-url
 
 ## Local Development
 
-Copy to `frontend/.env.local`:
+Copy to `.env.local` at the project root:
 ```bash
 # Copy all NEXT_PUBLIC_* variables from above
 # Add any server-side keys you need locally
+# Include CODE_TO_DESIGN_API_KEY for Figma html.to.design imports
 ```

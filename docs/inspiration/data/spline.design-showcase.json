@@ -1,0 +1,102 @@
+{
+  "url": "https://spline.design/showcase",
+  "title": "Spline - 3D Design tool in the browser with real-time collaboration",
+  "description": "Spline is a free 3D design software with real-time collaboration to create web interactive experiences in the browser. Easy 3d modeling, animation, textures, and more.",
+  "colors": [
+    {
+      "value": "rgba(255, 255, 255, 0.4)",
+      "count": 87
+    },
+    {
+      "value": "rgb(255, 255, 255)",
+      "count": 35
+    },
+    {
+      "value": "rgba(255, 255, 255, 0.8)",
+      "count": 35
+    },
+    {
+      "value": "rgb(212, 212, 212)",
+      "count": 16
+    },
+    {
+      "value": "rgba(255, 255, 255, 0.6)",
+      "count": 13
+    },
+    {
+      "value": "rgba(255, 255, 255, 0.7)",
+      "count": 7
+    },
+    {
+      "value": "rgb(78, 201, 176)",
+      "count": 6
+    },
+    {
+      "value": "rgb(156, 220, 254)",
+      "count": 4
+    },
+    {
+      "value": "rgb(206, 145, 120)",
+      "count": 4
+    }
+  ],
+  "fonts": [
+    {
+      "family": "Spline Sans",
+      "count": 177
+    },
+    {
+      "family": "Spline Sans Mono",
+      "count": 30
+    }
+  ],
+  "features": [
+    "canvas/webgl"
+  ],
+  "headings": [
+    "Spline, a place to design and collaborate in 3D.",
+    "Explore the latest examples",
+    "Companies using Spline",
+    "3D design has never been easier",
+    "Tools to express your creativity in 3D",
+    "Realtime Collaboration",
+    "3D Modeling",
+    "Animation",
+    "Interactive Experiences",
+    "Material Layers",
+    "3D Sculpting",
+    "Physics",
+    "Game Controls",
+    "And there is more!",
+    "Teams, Projects & Folders",
+    "Image, Video, and 3D Exports",
+    "3D Modeling & Booleans",
+    "Code Export",
+    "Material Assets",
+    "Templates Library",
+    "3D Vector Editing",
+    "Camera Controls",
+    "Web Browser Events",
+    "Drag & Drop",
+    "Video Textures",
+    "Components",
+    "Create and collaborate in real-time",
+    "Integrate your 3D designs with your pipeline",
+    "Bring your spatial design content to visionOS",
+    "Get Spline Now",
+    "Loved by teams around the world",
+    "We are starting (and hiring!) 🤓",
+    "Product",
+    "Resources",
+    "Company",
+    "Contact"
+  ],
+  "nav": [
+    "Customers",
+    "Enterprise",
+    "Pricing",
+    "Log In",
+    "Get Started"
+  ],
+  "timestamp": "2025-09-05T04:26:13.783Z"
+}
