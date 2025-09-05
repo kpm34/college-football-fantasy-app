@@ -128,6 +128,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
     receptions: 0,
     receivingYards: 0.1,
     receivingTouchdowns: 6,
+    fieldGoalMade: 3,
     fieldGoal_0_39: 3,
     fieldGoal_40_49: 4,
     fieldGoal_50_plus: 5,
