@@ -5,8 +5,6 @@
 # Generate everything from Single Source of Truth
 npm run generate:all
 
-# Sync schema to Appwrite
-// Removed: sync-appwrite-simple.ts (deprecated)
 
 # Seed Appwrite database (collections/attributes/indexes)
 node schema/generators/seed-appwrite.ts
