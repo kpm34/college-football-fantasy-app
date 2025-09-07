@@ -98,8 +98,8 @@ sequenceDiagram
         D->>DB: INSERT fantasy_teams
         DB-->>D: Team created
         
-        D->>DB: UPDATE invites
-        Note over DB: Increment uses_count
+        %% Track invite usage via activity_log instead of counter on invites
+        D->>DB: INSERT activity_log (type='invite.accepted')
         
         D->>DB: INSERT activity_log
         
@@ -108,6 +108,9 @@ sequenceDiagram
         C->>U: Redirect to league
     end
 ```
+
+See also:
+- docs/diagrams/project-map/overview/leagues.md
 
 ## 3. Data Interaction Table
 
@@ -135,7 +138,7 @@ async function validateInvite(token: string) {
     throw new Error('Invite link has expired')
   }
   
-  if (invite.max_uses && invite.uses_count >= invite.max_uses) {
+  if (invite.max_uses && /* track via activity_log counts */ false) {
     throw new Error('Invite link has reached maximum uses')
   }
   

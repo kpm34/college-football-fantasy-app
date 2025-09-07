@@ -21,7 +21,9 @@
 - Essential Pages: Home/landing (explain modes, value prop, latest, contact); Dashboard (all leagues/teams + quick actions); League Home (overview, standings, schedule, news, activity); Draft Room (snake/auction, auto-pick, queue, projections); Locker Room (set lineup, review injuries, projections, news inline); Waivers (claims, budget, priority, results); Live Scores (real-time college stats & fantasy); League Scoreboard (weekly H2H updates in real-time); History (H2H history, all-time rankings, trophy room lore).
 - Competition Look: Sleeper-like polish, mobile-friendly.
 - Key Differentiators: Mobile-first speed; offline resilience for draft/lineup; frictionless onboarding; mock draft; transparent scoring rules.
-- Works / Not: Working — create league, homepage, dashboard, commissioner settings. In development — locker room flow, projections, live scoring pipeline, studio. Yet to begin — injury/news integration, live scoring of games, history artifacts, drafting.
+- Works / in dev /yet to begin  — works: create league, homepage, dashboard,side nav, commissioner settings. 
+In development — locker room flow, projections, live scoring pipeline, studio, drafting. 
+Yet to begin — injury/news integration, live scoring of games, history artifacts, weekly lacthups scoreboard, standings, weekly power rankings, pro tier.
 
 ## Info
 - Contact: Kash Maheshwari

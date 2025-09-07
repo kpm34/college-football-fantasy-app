@@ -115,91 +115,28 @@ export default function AdminDashboard() {
           Quick access to maps, flows, and architecture
         </p>
 
-        {/* Project Map Section */}
+        {/* Diagrams — Domain Hubs */}
         <div className="mb-10">
           <h3 className="text-xl font-semibold mb-3" style={{ color: '#5B2E0F' }}>
-            🗺️ Project Map
+            🧭 Diagrams
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-3">
-            <Link
-              href="/admin/project-map"
-              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
-              style={{ background: '#2B6CB0', color: '#fff' }}
-            >
-              <div className="font-semibold">🗺️ Interactive Project Map</div>
-              <div className="text-sm text-sky-100">Navigate repository structure</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+            <Link href="/admin/diagrams/project-map" className="px-4 py-4 rounded-xl shadow-md text-left block transition-all" style={{ background: '#2B6CB0', color: '#fff' }}>
+              <div className="font-semibold">🗺️ Project Map</div>
+              <div className="text-sm text-sky-100">Overview · User Flow · Entity Relation · API/Events</div>
             </Link>
-
-            <button
-              onClick={() => loadDiagram('project-map:app', '📱 App Structure')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#C2410C', color: '#fff' }}
-            >
-              <div className="font-semibold">📱 App Structure</div>
-              <div className="text-sm text-rose-100">App directory overview</div>
-            </button>
-
-            <button
-              onClick={() => loadDiagram('project-map:components', '🧩 Components')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#9A3412', color: '#fff' }}
-            >
-              <div className="font-semibold">🧩 Components</div>
-              <div className="text-sm text-orange-100">Component library</div>
-            </button>
-
-            <button
-              onClick={() => loadDiagram('project-map:lib', '📚 Libraries')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#92400E', color: '#fff' }}
-            >
-              <div className="font-semibold">📚 Libraries</div>
-              <div className="text-sm text-amber-100">Core libraries</div>
-            </button>
-
-            <button
-              onClick={() => loadDiagram('project-map:schema', '🗄️ Schema (Live)')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#4B5563', color: '#fff' }}
-            >
-              <div className="font-semibold">🗄️ Schema (Live)</div>
-              <div className="text-sm text-stone-100">From Appwrite API</div>
-            </button>
-
-            <button
-              onClick={() => loadDiagram('project-map:ops', '⚙️ Operations')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#1E3A8A', color: '#fff' }}
-            >
-              <div className="font-semibold">⚙️ Operations</div>
-              <div className="text-sm text-sky-100">Ops & scripts</div>
-            </button>
-
-            {/* App API diagrams */}
-            <button
-              onClick={() => loadDiagram('project-map:app:api', '🔌 App API Overview')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#7C3AED', color: '#fff' }}
-            >
-              <div className="font-semibold">🔌 App API Overview</div>
-              <div className="text-sm text-violet-100">Route groups and structure</div>
-            </button>
-            <button
-              onClick={() => loadDiagram('project-map:app:api:admin', '🔐 App API — Admin')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#047857', color: '#fff' }}
-            >
-              <div className="font-semibold">🔐 App API — Admin</div>
-              <div className="text-sm text-emerald-100">app/api/(backend)/admin</div>
-            </button>
-            <button
-              onClick={() => loadDiagram('project-map:app:api:docs', '📄 App API — Docs')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#4338CA', color: '#fff' }}
-            >
-              <div className="font-semibold">📄 App API — Docs</div>
-              <div className="text-sm text-indigo-100">Documentation maps</div>
-            </button>
+            <Link href="/admin/diagrams/system-architecture" className="px-4 py-4 rounded-xl shadow-md text-left block transition-all" style={{ background: '#1D4ED8', color: '#fff' }}>
+              <div className="font-semibold">🏗️ System Architecture</div>
+              <div className="text-sm text-indigo-100">Projections · Weight Tuning · Data Flow</div>
+            </Link>
+            <Link href="/admin/diagrams/functional-flow" className="px-4 py-4 rounded-xl shadow-md text-left block transition-all" style={{ background: '#DC2626', color: '#fff' }}>
+              <div className="font-semibold">⚡ Functional Flow</div>
+              <div className="text-sm text-rose-100">Create/Join League · Auth · Draft</div>
+            </Link>
+            <Link href="/admin/diagrams/draft" className="px-4 py-4 rounded-xl shadow-md text-left block transition-all" style={{ background: '#B45309', color: '#fff' }}>
+              <div className="font-semibold">🏈 Draft</div>
+              <div className="text-sm text-amber-100">User Flow · Entity Relation · API Routing</div>
+            </Link>
           </div>
         </div>
 
@@ -236,14 +173,14 @@ export default function AdminDashboard() {
               <div className="text-sm text-orange-100">Join via invite or browse</div>
             </button>
 
-            <Link
-              href="/admin/draft-diagrams"
-              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
+            <button
+              onClick={() => loadDiagram('project-map:overview', '🗺️ Project Map Overview')}
+              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
               style={{ background: '#B45309', color: '#fff' }}
             >
-              <div className="font-semibold">Draft system</div>
-              <div className="text-sm text-amber-100">Open draft diagrams</div>
-            </Link>
+              <div className="font-semibold">Project Map Overview</div>
+              <div className="text-sm text-amber-100">New canonical diagram set</div>
+            </button>
           </div>
         </div>
 

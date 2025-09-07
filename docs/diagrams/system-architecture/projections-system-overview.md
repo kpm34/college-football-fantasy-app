@@ -67,7 +67,8 @@ graph TB
     subgraph "Scoring Overlay"
         YP --> SO[Apply League<br/>Scoring Rules]
         WP --> SO
-        SO --> SR[scoring_profile_hash]
+        %% scoring_profile_hash is a computed concept; not persisted as a field
+        SO --> SR[scoring profile hash (computed)]
     end
     
     subgraph "Persistence"
@@ -82,12 +83,10 @@ graph TB
         MRU --> VER[Version Display]
     end
     
-    style CS fill:#fef3c7
-    style EA fill:#dbeafe
-    style AW fill:#dcfce7
-    style FE fill:#fce7f3
-    style WE fill:#e9d5ff
-    style PRJ fill:#ccfbf1
+    %% Minimal styling to reduce size
+    style CS fill:#fff7ed
+    style EA fill:#eff6ff
+    style AW fill:#ecfdf5
 ```
 
 ## System Components
@@ -131,3 +130,8 @@ graph TB
 - Draft UI loads yearly projections
 - Lineup pages show weekly projections
 - Transparency features show projection components
+
+See also:
+- docs/diagrams/project-map/overview/projections.md
+- docs/diagrams/project-map/api-and-events/projections-apis-and-events.md
+- docs/diagrams/project-map/data-and-entity-relation/projections-entity-relation.md

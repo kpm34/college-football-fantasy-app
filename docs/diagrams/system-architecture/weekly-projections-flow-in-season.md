@@ -69,7 +69,7 @@ sequenceDiagram
     
     Cron->>Runner: runWeekly.ts
     Runner->>DB: Create model_runs entry
-    DB-->>Runner: run_id
+    DB-->>Runner: runId
     
     Runner->>DB: Load current stats
     DB-->>Runner: Player stats (current)
@@ -113,12 +113,12 @@ sequenceDiagram
 
 | Collection | Operation | Key Fields | Notes |
 |------------|-----------|------------|-------|
-| model_runs | WRITE/UPDATE | run_id, week, inputs_json, metrics_json | Track weekly run |
-| projections | WRITE | player_id, period='weekly', season, week, version, fantasy_points, components_json, scoring_profile_hash? | Weekly projections |
-| leagues | READ | league_id, scoring_rules | Get scoring profiles |
-| games | READ | week, home_team, away_team, weather_json | Game context |
-| player_stats | READ | player_id, season, week | Current season stats |
-| rankings | READ | week, team_rank | For SOS calculation |
+| model_runs | WRITE/UPDATE | runId, week, inputsJson, metricsJson | Track weekly run |
+| projections | WRITE | playerId, period='weekly', season, week, version, fantasyPoints, componentsJson | Weekly projections |
+| leagues | READ | leagueId, scoringRules | Get scoring profiles |
+| games | READ | week, homeTeam, awayTeam | Game context |
+| player_stats | READ | playerId, season, week | Current season stats |
+| rankings | READ | week, team | For SOS calculation |
 
 ## Implementation
 
@@ -240,3 +240,7 @@ function calculateWeatherImpact(weather: Weather): WeatherImpact {
 - **Cron**: Tuesday 6 AM (after MNF, before waivers)
 - **Manual**: Via admin dashboard
 - **Event-driven**: On significant injury news
+
+See also:
+- docs/diagrams/project-map/overview/projections.md
+- docs/diagrams/project-map/user-flow/projections-user-flow.md
