@@ -16,17 +16,14 @@ export default function DraftDiagramsPage() {
         <h1 className="text-2xl font-bold mb-4">Draft Diagrams</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {items.map(i => (
-            <button
+            <a
               key={i.slug}
-              onClick={async () => {
-                await fetch(`/api/docs/mermaid/${encodeURIComponent(i.slug)}`)
-                window.dispatchEvent(new CustomEvent('open-mermaid', { detail: { slug: i.slug, title: i.title } }))
-              }}
+              href={`/admin?open=${encodeURIComponent(i.slug)}&title=${encodeURIComponent(i.title)}`}
               className="px-4 py-3 rounded bg-amber-700 text-white text-left shadow hover:bg-amber-800"
             >
               <div className="font-semibold">{i.title}</div>
               <div className="text-xs opacity-80 truncate">{i.slug}</div>
-            </button>
+            </a>
           ))}
         </div>
       </div>

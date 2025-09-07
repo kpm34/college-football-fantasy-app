@@ -10,7 +10,7 @@ export default function ProjectMapDiagramsPage() {
   useEffect(() => {
     const run = async () => {
       try {
-        const res = await fetch('/docs/diagrams/project-map/_inventory.json', { cache: 'no-store' })
+        const res = await fetch('/api/docs/project-map-inventory', { cache: 'no-store' })
         const data = await res.json()
         const list = (data?.canonical_diagrams || []).filter((p: string) => p.endsWith('.md'))
         setItems(list)
@@ -32,17 +32,13 @@ export default function ProjectMapDiagramsPage() {
             const name = p.split('/').slice(-1)[0].replace(/\.md$/, '')
             return (
               <div key={p} className="flex gap-2">
-                <button
-                  onClick={async () => {
-                    await fetch(`/api/docs/mermaid/${encodeURIComponent(slug)}`)
-                    // open modal via window event consumed by Admin page
-                    window.dispatchEvent(new CustomEvent('open-mermaid', { detail: { slug, title: name } }))
-                  }}
+                <a
+                  href={`/admin?open=${encodeURIComponent(slug)}&title=${encodeURIComponent(name)}`}
                   className="px-4 py-3 rounded bg-sky-700 text-white text-left shadow hover:bg-sky-800 flex-1"
                 >
                   <div className="font-semibold truncate">{name}</div>
                   <div className="text-xs opacity-80 truncate">{slug}</div>
-                </button>
+                </a>
                 <button
                   onClick={async () => {
                     try {
