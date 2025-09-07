@@ -157,7 +157,9 @@ class SmokeDraftV2 {
       const j = this.safeJson(res.body)
       if (j) console.log('  ↳ cron results:', JSON.stringify(j))
       if (j && j.started === 0) {
-        const manual = await this.request('POST', `/api/drafts/${this.leagueId}/start`, null, { Cookie: this.cookie })
+        const manual = await this.request('POST', `/api/drafts/${this.leagueId}/start`, null, {
+          Cookie: this.cookie,
+        })
         if (manual.status >= 200 && manual.status < 300) {
           console.log('  ↳ manual start fallback ok')
         } else {
