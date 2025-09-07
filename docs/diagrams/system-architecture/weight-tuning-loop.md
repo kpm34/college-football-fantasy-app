@@ -125,75 +125,13 @@ interface WeightVector {
 }
 ```
 
-## Search Strategies
+## Search Strategies (Summary)
 
-### Grid Search
-```typescript
-function gridSearch(config: {
-  paramRanges: Record<string, [min: number, max: number, step: number]>
-  evaluator: (weights: WeightVector) => Promise<Metrics>
-}) {
-  const grid = generateGrid(config.paramRanges)
-  const results = []
-  
-  for (const weights of grid) {
-    const metrics = await config.evaluator(weights)
-    results.push({ weights, metrics })
-  }
-  
-  return results.sort((a, b) => a.metrics.mae - b.metrics.mae)[0]
-}
-```
+- Grid Search: systematic parameter sweep
+- Random Search: Monte Carlo sampling of weight space
+- Bayesian Optimization: model-based search (e.g., GP with EI/UCB/POI)
 
-### Random Search
-```typescript
-function randomSearch(config: {
-  paramRanges: Record<string, [min: number, max: number]>
-  iterations: number
-  evaluator: (weights: WeightVector) => Promise<Metrics>
-}) {
-  const results = []
-  
-  for (let i = 0; i < config.iterations; i++) {
-    const weights = randomSample(config.paramRanges)
-    const metrics = await config.evaluator(weights)
-    results.push({ weights, metrics })
-  }
-  
-  return results.sort((a, b) => a.metrics.mae - b.metrics.mae)[0]
-}
-```
-
-### Bayesian Optimization
-```typescript
-function bayesianOptimization(config: {
-  paramRanges: Record<string, [min: number, max: number]>
-  acquisitionFunction: 'ei' | 'ucb' | 'poi'
-  iterations: number
-  evaluator: (weights: WeightVector) => Promise<Metrics>
-}) {
-  const gp = new GaussianProcess()
-  const observed = []
-  
-  // Initial random samples
-  for (let i = 0; i < 5; i++) {
-    const weights = randomSample(config.paramRanges)
-    const metrics = await config.evaluator(weights)
-    observed.push({ weights, metrics })
-    gp.addObservation(weights, metrics.mae)
-  }
-  
-  // Optimization loop
-  for (let i = 0; i < config.iterations; i++) {
-    const next = gp.maximize(config.acquisitionFunction)
-    const metrics = await config.evaluator(next)
-    gp.addObservation(next, metrics.mae)
-    observed.push({ weights: next, metrics })
-  }
-  
-  return observed.sort((a, b) => a.metrics.mae - b.metrics.mae)[0]
-}
-```
+Tip: keep per-iteration artifacts (weights, metrics) in-memory; persist only the best vector and run metrics.
 
 ## Evaluation Metrics
 
@@ -290,3 +228,7 @@ async function fit(options: {
   console.log('Spearman:', best.metrics.spearman)
 }
 ```
+
+See also:
+- docs/diagrams/project-map/overview/projections.md
+- docs/diagrams/project-map/api-and-events/projections-apis-and-events.md

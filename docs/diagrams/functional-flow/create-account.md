@@ -54,6 +54,9 @@ flowchart TB
   ActivityLog --> Dashboard
 ```
 
+See also:
+- docs/diagrams/project-map/overview/auth.md
+
 ## Sequence Diagram
 ```mermaid
 sequenceDiagram
@@ -88,7 +91,7 @@ sequenceDiagram
     DAL->>DB: INSERT activity_log
   else Existing Client
     DB-->>DAL: Client found
-    DAL->>DB: UPDATE last_login
+    DAL->>DB: UPDATE lastLogin
     DAL->>DB: INSERT activity_log
   end
   
@@ -103,7 +106,7 @@ sequenceDiagram
 | `clients` | READ | `authUserId` | Check if client exists |
 | `clients` | CREATE | `authUserId`, `displayName`, `email`, `avatarUrl`, `createdAt` | New client registration |
 | `clients` | UPDATE | `lastLogin` | Existing client login |
-| `activity_log` | CREATE | `action`, `clientId`, `metadata`, `createdAt` | Track signup/login events |
+| `activity_log` | CREATE | `action`, `actorClientId`, `payloadJson`, `createdAt` | Track signup/login events |
 | `leagues` | READ | - | Load client leagues after login |
 | `league_memberships` | READ | `authUserId` | Find client memberships |
 

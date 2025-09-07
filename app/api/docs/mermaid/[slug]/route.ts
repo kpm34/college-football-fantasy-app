@@ -134,6 +134,45 @@ export async function GET(
     }
   }
 
+  // Generic resolver for new project-map folder structure
+  if (slug.startsWith('project-map:')) {
+    const parts = slug.split(':').slice(1)
+    if (parts.length) {
+      const folderPath = `diagrams/project-map/${parts.join('/')}.md`
+      const docsPath = path.join(process.cwd(), 'docs')
+      const fullFolderPath = path.join(docsPath, folderPath)
+      if (fs.existsSync(fullFolderPath)) {
+        fileMap[slug] = folderPath
+      }
+    }
+  }
+
+  // Generic resolver for draft domain folder structure
+  if (slug.startsWith('draft:')) {
+    const parts = slug.split(':').slice(1)
+    if (parts.length) {
+      const folderPath = `diagrams/draft/${parts.join('/')}.md`
+      const docsPath = path.join(process.cwd(), 'docs')
+      const fullFolderPath = path.join(docsPath, folderPath)
+      if (fs.existsSync(fullFolderPath)) {
+        fileMap[slug] = folderPath
+      }
+    }
+  }
+
+  // Generic resolver for functional-flow folder structure
+  if (slug.startsWith('functional-flow:')) {
+    const parts = slug.split(':').slice(1)
+    if (parts.length) {
+      const folderPath = `diagrams/functional-flow/${parts.join('/')}.md`
+      const docsPath = path.join(process.cwd(), 'docs')
+      const fullFolderPath = path.join(docsPath, folderPath)
+      if (fs.existsSync(fullFolderPath)) {
+        fileMap[slug] = folderPath
+      }
+    }
+  }
+
   // Helper: attempt to resolve a diagram path using new flattened filenames
   const docsRoot = path.join(process.cwd(), 'docs')
   function existsRel(rel: string): boolean {

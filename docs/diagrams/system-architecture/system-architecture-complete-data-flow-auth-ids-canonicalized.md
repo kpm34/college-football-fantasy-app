@@ -9,11 +9,11 @@ flowchart TB
   end
 
   subgraph API[Next.js API Routes]
-    Mine[/GET /(dashboard)/api/leagues/mine/]
-    Members[/GET /(dashboard)/api/leagues/:id/members/]
-    LockerAPI[/GET /(dashboard)/api/leagues/:id/locker-room/]
-    Join[/POST /(dashboard)/api/leagues/join]
-    Create[/POST /(dashboard)/api/leagues/create]
+    Mine[/GET /api/leagues/mine]
+    Members[/GET /api/leagues/:id/members]
+    LockerAPI[/GET /api/leagues/:id/locker-room]
+    Join[/POST /api/leagues/join]
+    Create[/POST /api/leagues/create]
   end
 
   subgraph Appwrite[Appwrite BaaS]
@@ -52,3 +52,7 @@ flowchart TB
   RT --> UI
   DB --> RT
 ```
+
+See also:
+- docs/diagrams/project-map/overview/leagues.md
+- docs/diagrams/project-map/api-and-events/leagues-apis-and-events.md

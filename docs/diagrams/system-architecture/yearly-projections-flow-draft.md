@@ -66,7 +66,7 @@ sequenceDiagram
     
     CLI->>Runner: runYearly.ts
     Runner->>DB: Create model_runs entry
-    DB-->>Runner: run_id
+    DB-->>Runner: runId
     
     Runner->>Loaders: Load static inputs
     Note over Loaders: Depth charts<br/>EA ratings<br/>Mock drafts
@@ -88,7 +88,7 @@ sequenceDiagram
     Note over DB: period='yearly'<br/>version=V
     
     Runner->>DB: Update model_runs
-    Note over DB: metrics_json<br/>weights_json
+    Note over DB: metricsJson<br/>weightsJson
     
     Runner-->>CLI: Complete
 ```
@@ -98,10 +98,10 @@ sequenceDiagram
 | Collection | Operation | Key Fields | Notes |
 |------------|-----------|------------|-------|
 | model_versions | READ | version, weights, status | Get active weight vector |
-| model_runs | WRITE/UPDATE | run_id, started_at, inputs_json, metrics_json, weights_json | Track run metadata |
-| projections | WRITE | player_id, period='yearly', version, season, fantasy_points, components_json | Store yearly projections |
-| college_players | READ | player_id, name, position, team | Player base data |
-| player_stats | READ | player_id, season, stats | Historical performance |
+| model_runs | WRITE/UPDATE | runId, startedAt, inputsJson, metricsJson, weightsJson | Track run metadata |
+| projections | WRITE | playerId, period='yearly', version, season, fantasyPoints, componentsJson | Store yearly projections |
+| college_players | READ | playerId, name, position, team | Player base data |
+| player_stats | READ | playerId, season, stats | Historical performance |
 
 ## Implementation
 
@@ -174,3 +174,7 @@ async function runYearlyProjections(options: {
 - **Manual**: Via admin dashboard or CLI
 - **Cron**: Daily at 3 AM during August (pre-draft season)
 - **On-demand**: When new depth charts or ratings available
+
+See also:
+- docs/diagrams/project-map/overview/draft.md
+- docs/diagrams/project-map/data-and-entity-relation/draft-entity-relation.md

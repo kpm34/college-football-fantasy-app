@@ -4,7 +4,7 @@
 Complete flow for creating a new fantasy football league, including draft scheduling and configuration.
 
 ## Auth Route Handlers Detected
-- `/app/(dashboard)/api/leagues/create` - Main league creation endpoint
+- `/api/leagues/create` - Main league creation endpoint
 - Appwrite Account endpoint via cookie for session validation
 - Validation handled in-route; no separate `/api/leagues/validate`
 
@@ -32,12 +32,12 @@ flowchart TD
     Response --> Redirect[Redirect to League Dashboard]
     
     subgraph "Draft Scheduling Fields"
-        SetSchedule --> DS1[draft_type: snake/auction]
-        SetSchedule --> DS2[draft_start_at: ISO datetime]
-        SetSchedule --> DS3[draft_room_open_offset_minutes: 60]
-        SetSchedule --> DS4[pick_time_seconds: per-pick clock]
-        SetSchedule --> DS5[draft_order_json: team order array]
-        SetSchedule --> DS6[scoring_rules: JSON string]
+        SetSchedule --> DS1[draftType: snake/auction]
+        SetSchedule --> DS2[draftDate: ISO datetime]
+        SetSchedule --> DS3[draftRoomOpenOffsetMinutes: 60]
+        SetSchedule --> DS4[pickTimeSeconds: per-pick clock]
+        SetSchedule --> DS5[draftOrder: team order array]
+        SetSchedule --> DS6[scoringRules: JSON string]
     end
     
     subgraph "Status Gates"
@@ -72,15 +72,15 @@ sequenceDiagram
     V-->>A: User authenticated
     
     A->>V: Validate league data
-    Note over V: Check required fields<br/>Validate draft_start_at<br/>Validate scoring_rules JSON
+    Note over V: Check required fields<br/>Validate draftDate<br/>Validate scoringRules JSON
     V-->>A: Data valid
     
     A->>A: Normalize fields
-    Note over A: Map UI fields to DB schema<br/>Calculate draft_room_open_at<br/>UTC conversion
+    Note over A: Map UI fields to DB schema<br/>Calculate draftRoomOpenAt (derived)<br/>UTC conversion
     
     A->>D: createLeague(data)
     D->>DB: Create league document
-    Note over DB: Store with indexes:<br/>(season, draft_start_at)
+    Note over DB: Store with indexes:<br/>(season, draftDate)
     DB-->>D: League created
     
     D->>DB: Create owner membership
@@ -98,30 +98,29 @@ sequenceDiagram
 
 | Collection | Operation | Attributes Set | Notes |
 |------------|-----------|----------------|-------|
-| leagues | WRITE | name, draftType, pickTimeSeconds, scoringRules, draftDate, commissioner_auth_user_id, isPublic, season, selectedConference (if mode=conference) | Primary league creation with scheduling |
-| league_memberships | WRITE | league_id, auth_user_id (commissioner), role='COMMISSIONER', status='ACTIVE', joined_at | Auto-create owner membership |
-| activity_log | WRITE | actor_client_id/auth_user_id, action='league.create', object_type='league', object_id, payload_json, ts | Audit trail for league creation |
+| leagues | WRITE | leagueName, draftType, pickTimeSeconds, scoringRules, draftDate, commissionerAuthUserId, isPublic, season, selectedConference (if mode=conference) | Primary league creation with scheduling |
+| league_memberships | WRITE | leagueId, authUserId (commissioner), role='COMMISSIONER', status='ACTIVE', joinedAt | Auto-create owner membership |
+| activity_log | WRITE | actorClientId/authUserId, action='league.create', objectType='league', objectId, payloadJson, ts | Audit trail for league creation |
 
 ## 4. Validation Rules (Zod Schema)
 
 ```typescript
 const createLeagueSchema = z.object({
-  name: z.string().min(3).max(50),
+  leagueName: z.string().min(3).max(50),
   type: z.enum(['public', 'private']),
-  max_teams: z.number().min(4).max(20),
-  scoring_settings: z.string(),
+  maxTeams: z.number().min(4).max(24),
+  scoringRules: z.string(),
   
   // Draft scheduling (required for real leagues)
-  draft_type: z.enum(['snake', 'auction']),
-  draft_start_at: z.string().datetime(),
-  draft_room_open_offset_minutes: z.number().default(60),
-  pick_time_seconds: z.number().min(30).max(180),
-  draft_order_json: z.array(z.string()).optional(), // Generated if not provided
-  scoring_rules: z.string(), // JSON string with scoring configuration
+  draftType: z.enum(['snake', 'auction']),
+  draftDate: z.string().datetime(),
+  draftRoomOpenOffsetMinutes: z.number().default(60),
+  pickTimeSeconds: z.number().min(30).max(600),
+  draftOrder: z.array(z.string()).optional(), // Generated if not provided
   
   // Optional fields
   password: z.string().optional(),
-  conference: z.enum(['SEC', 'ACC', 'Big 12', 'Big Ten']).optional()
+  selectedConference: z.enum(['SEC', 'ACC', 'Big 12', 'Big Ten']).optional()
 })
 ```
 
@@ -138,9 +137,9 @@ const createLeagueSchema = z.object({
 
 ```typescript
 // Calculate draft room open time (server-side in UTC)
-const draft_room_open_at = new Date(
-  new Date(draft_start_at).getTime() - 
-  (draft_room_open_offset_minutes * 60 * 1000)
+const draftRoomOpenAt = new Date(
+  new Date(draftDate).getTime() - 
+  (draftRoomOpenOffsetMinutes * 60 * 1000)
 ).toISOString()
 
 // Store timezone if available for display purposes
@@ -149,7 +148,13 @@ const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 ## 7. Index Recommendations
 
-- **(season, draft_start_at)** - For querying upcoming drafts by season
-- **(commissioner_id, created_at)** - For user's leagues list
-- **(type, status, draft_start_at)** - For public league discovery
-- **(invite_code)** - Unique index for invite links
+- **(season, draftDate)** - For querying upcoming drafts by season
+- **(commissionerAuthUserId, createdAt)** - For user's leagues list
+- **(type, leagueStatus, draftDate)** - For public league discovery
+- **(inviteCode)** - Unique index for invite links
+
+Notes:
+- Immutable after creation: gameMode and selectedConference
+
+See also:
+- docs/diagrams/project-map/overview/leagues.md
