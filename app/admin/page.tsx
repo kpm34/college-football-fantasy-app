@@ -27,6 +27,16 @@ export default function AdminDashboard() {
   const [running, setRunning] = useState<boolean>(false)
   const [actionResult, setActionResult] = useState<any>(null)
 
+  // Bridge: handle open events from hub pages
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('admin-open-diagram', (window as any)._openDiagramHandler as any)
+    ;(window as any)._openDiagramHandler = (e: any) => {
+      const d = e?.detail || {}
+      if (d.open) loadDiagram(String(d.open), String(d.title || 'Diagram'))
+    }
+    window.addEventListener('admin-open-diagram', (window as any)._openDiagramHandler as any, { once: true })
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-stone-50 flex items-center justify-center">
@@ -51,7 +61,8 @@ export default function AdminDashboard() {
 
   const loadDiagram = async (slug: string, title: string) => {
     try {
-      const res = await fetch(`/api/docs/mermaid/${slug}`, { cache: 'no-store' })
+      const encoded = encodeURIComponent(slug).replace(/%3A/g, ':')
+      const res = await fetch(`/api/docs/mermaid/${encoded}`, { cache: 'no-store' })
       const data = await res.json()
       setDebugInfo({ endpoint: slug, response: data, status: res.status })
       setShowDiagram({ slug, title })
@@ -114,6 +125,28 @@ export default function AdminDashboard() {
         <p className="mt-1 mb-8" style={{ color: '#7A4A24' }}>
           Quick access to maps, flows, and architecture
         </p>
+
+        {/* Open diagram via query param from hub pages */}
+        {typeof window !== 'undefined' && !showDiagram ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              (function(){
+                try {
+                  var url = new URL(window.location.href);
+                  var open = url.searchParams.get('open');
+                  var title = url.searchParams.get('title') || 'Diagram';
+                  if (open) {
+                    window.dispatchEvent(new CustomEvent('admin-open-diagram', { detail: { open: open, title: title } }));
+                    url.searchParams.delete('open'); url.searchParams.delete('title');
+                    window.history.replaceState({}, '', url.toString());
+                  }
+                } catch {}
+              })();
+            `,
+            }}
+          />
+        ) : null}
 
         {/* Diagrams — Domain Hubs */}
         <div className="mb-10">
