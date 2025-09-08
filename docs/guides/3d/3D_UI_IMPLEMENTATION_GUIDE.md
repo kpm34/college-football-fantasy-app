@@ -194,4 +194,60 @@ Spline embed checklist
 - Spline: `https://spline.design/`
 - Awwwards 3D inspiration: `https://www.awwwards.com/`
 - Three.js Journey: `https://threejs-journey.com/`
+- three-bas (Buffer Animation System): `https://github.com/zadvorsky/three.bas`
 - Case studies: tinyPod, Peter Tarka, Clou Architects, Noomo Labs (3D sites)
+
+---
+
+### 3D Shader Pipeline Cheatsheet (for future R3F/GLSL work)
+
+- Spaces and matrices: `model → view → projection` (M, V, P). Clip-position = `P * V * M * vec4(pos, 1.0)`.
+- Perspective divide: after vertex stage do `ndc = clip.xyz / clip.w` → viewport mapping.
+- Clipping: clip triangles against near/far & frustum planes before rasterization to avoid artifacts.
+- Perspective-correct interpolation: divide varying attributes by `w`, interpolate, then re-multiply.
+- Normal transform: use normal matrix `N = inverseTranspose(mat3(M*V))` for correct lighting.
+- Depth precision: prefer tight near/far or reversed-Z if available; avoid huge ratios.
+- Culling: ensure winding (CW/CCW) is correct after transforms; flip `frontFace` if needed.
+- Gamma: compute lighting in linear, output sRGB.
+
+---
+
+### High-Performance Animation Options (When to Consider three-bas)
+
+Use plain Three.js/R3F (or CSS/Anime.js) for:
+- Microinteractions, decorative embeds, a few dynamic meshes per page
+- Simple timeline or CSS transform animations
+
+Consider `three-bas` when you need:
+- Thousands of instances with unique per-instance offsets/curves (GPU-driven)
+- Vertex-displacement animations (trails, ribbons, morph-like effects) authored via attributes
+- Keyframe blending in the vertex shader without CPU updates
+- Fine-grained control over interpolation/easing in GLSL across many objects
+
+Pros:
+- Offloads animation to the GPU (scales much better than CPU/JS timelines)
+- Attribute-based authoring model plays well with instancing
+- Battle-tested patterns for path, sprite, and text effects
+
+Cons / Caveats:
+- Custom GLSL required; adds complexity and a learning curve
+- Debuggability is lower than imperative JS timelines
+- Overkill for small counts or non-critical visuals
+
+Rule of thumb:
+- < 300 animated objects → try CSS/Anime.js/R3F basic materials first
+- 300–5,000 with shared material and unique timing → instancing; evaluate three-bas
+- > 5,000 and per-vertex effects → three-bas or custom GPU pipeline
+
+---
+
+### three-bas Integration Checklist (for later)
+
+- Dependencies: Three.js/R3F in place; verify WebGL2 support on target devices
+- Data model: encode per-instance attributes (start time, duration, offset, curve params)
+- Material: extend `ShaderMaterial` or `onBeforeCompile` to wire BAS chunks
+- Performance budgets: cap draw calls; batch instances; reuse materials; frustum cull
+- Fallbacks: reduce counts or swap to static assets on low-end devices / `prefers-reduced-motion`
+- QA: verify winding/culling, z-fighting, depth precision at extreme scales
+
+---

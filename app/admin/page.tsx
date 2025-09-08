@@ -272,61 +272,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Subscription Status */}
-        <div className="mb-10 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
-          <h3 className="text-xl font-bold text-amber-900 mb-4">💎 Premium Subscriptions</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {Object.entries(subscriptions).map(([service, details]) => (
-              <div
-                key={service}
-                className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-lg border border-amber-300"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-amber-900 capitalize">{service}</span>
-                  <span className="text-xs bg-gradient-to-r from-amber-600 to-orange-600 text-white px-2 py-1 rounded-full">
-                    {details.status}
-                  </span>
-                </div>
-                <p className="text-sm text-amber-800">{details.features}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Strategic Priorities */}
-        <div className="mb-10 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
-          <h3 className="text-xl font-bold text-amber-900 mb-4">🎯 Strategic Priorities</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-sky-50 to-sky-100 p-4 rounded-lg border border-sky-300">
-              <h4 className="font-semibold text-sky-900 mb-2">🤖 AI-First Platform</h4>
-              <ul className="text-sm space-y-1 text-sky-800">
-                <li>• Claude for strategy & analysis</li>
-                <li>• GPT-4 for content generation</li>
-                <li>• Custom models for projections</li>
-                <li>• Automated insights & recommendations</li>
-              </ul>
-            </div>
-            <div className="bg-gradient-to-br from-rose-50 to-rose-100 p-4 rounded-lg border border-rose-300">
-              <h4 className="font-semibold text-rose-900 mb-2">⚡ Real-Time Everything</h4>
-              <ul className="text-sm space-y-1 text-rose-800">
-                <li>• Live draft with &lt;100ms latency</li>
-                <li>• Real-time scoring updates</li>
-                <li>• Instant trade processing</li>
-                <li>• Live projection adjustments</li>
-              </ul>
-            </div>
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-300">
-              <h4 className="font-semibold text-orange-900 mb-2">💰 Premium Monetization</h4>
-              <ul className="text-sm space-y-1 text-orange-800">
-                <li>• $9.99/mo Pro tier</li>
-                <li>• $19.99/mo Dynasty tier</li>
-                <li>• Custom league features</li>
-                <li>• White-label solutions</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
         {/* Admin Tools */}
         <div className="mb-10 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
           <h3 className="text-xl font-bold text-amber-900 mb-4">🛠️ Admin Tools</h3>
@@ -457,16 +402,25 @@ export default function AdminDashboard() {
             <div className="bg-white rounded-none shadow-2xl w-screen h-screen overflow-hidden border-2 border-amber-300">
               <div className="sticky top-0 bg-gradient-to-r from-amber-100 to-orange-100 px-4 md:px-6 py-4 border-b border-amber-300 flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-amber-900">{showDiagram.title}</h2>
-                <button
-                  onClick={() => {
-                    setShowDiagram(null)
-                    setCharts([])
-                    setDebugInfo(null)
-                  }}
-                  className="text-amber-700 hover:text-amber-900 text-2xl font-bold transition-colors"
-                >
-                  ×
-                </button>
+                <div className="flex items-center gap-3">
+                  <a
+                    href={`/admin/diagrams/${encodeURIComponent(showDiagram.slug)}`}
+                    target="_blank"
+                    className="text-sky-700 hover:text-sky-900 underline text-sm"
+                  >
+                    Open as page
+                  </a>
+                  <button
+                    onClick={() => {
+                      setShowDiagram(null)
+                      setCharts([])
+                      setDebugInfo(null)
+                    }}
+                    className="text-amber-700 hover:text-amber-900 text-2xl font-bold transition-colors"
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
               <div className="px-2 md:px-4 py-2 md:py-4 h-[calc(100vh-72px)] overflow-auto">
                 {charts.length > 0 ? (
