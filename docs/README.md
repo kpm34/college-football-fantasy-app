@@ -1,16 +1,23 @@
 # Documentation Index
 
-Quick links to the canonical docs:
+Use these as the canonical entry points. Do not duplicate content across sections.
 
-- Project Canonical Memory: ./PROJECT_CANONICAL_MEMORY.md
-- Project Map: ./PROJECT_MAP.md
-- Data Flow: ./DATA_FLOW.md
-- API Routes: ./API_ROUTES.md
-- Project Summary: ./PROJECT_SUMMARY.md
-- Page Audit Report: ./PAGE_AUDIT_REPORT.md
+## Core
+- Reference: `./reference/README.md`
+- Guides: `./guides/README.md`
+- Architecture Decisions (ADR): `./architecture-decision-records/README.md`
+- Diagrams: `./diagrams/` (source of visual truth)
 
-Additional Guides:
+## API
+- API Routes: `./reference/API_ROUTES.md`
+- API .http examples: `./api/`
 
-- 3D UI Implementation Guide: ./guides/3D_UI_IMPLEMENTATION_GUIDE.md
+## Schema
+- Schema Documentation (generated SSOT): `./SCHEMA_DOCUMENTATION.md`
 
-Archived plans and historical docs are under `./archive/`.
+## Inspiration (non-canonical)
+- Inspiration and research: `./inspiration/`
+
+Notes:
+- Prefer linking to the ADR or Reference pages instead of copying content.
+- If terminology or architecture changes, update ADRs first, then cross-links.
