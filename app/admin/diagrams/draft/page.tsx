@@ -22,7 +22,6 @@ export default function DraftDiagramsPage() {
               className="px-4 py-3 rounded bg-amber-700 text-white text-left shadow hover:bg-amber-800"
             >
               <div className="font-semibold">{i.title}</div>
-              <div className="text-xs opacity-80 truncate">{i.slug}</div>
             </a>
           ))}
         </div>
