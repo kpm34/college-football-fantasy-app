@@ -21,251 +21,261 @@ function extractMermaidBlocks(markdown: string): string[] {
   return blocks
 }
 
-export async function GET(_request: NextRequest, { params }: { params: { slug: string } }) {
-  const { slug: rawSlug } = params
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    const { slug: rawSlug } = params
 
-  // Decode the slug to handle URL encoding
-  const slug = decodeURIComponent(rawSlug)
+    // Decode the slug to handle URL encoding
+    const slug = decodeURIComponent(rawSlug)
 
-  // Special dynamic slugs powered by live Appwrite schema
-  if (slug === 'project-map:schema' || slug === 'project-map:schema:live') {
-    try {
-      if (!isServerConfigured()) {
-        // Fallback to static docs if server credentials are missing
+    // Special dynamic slugs powered by live Appwrite schema
+    if (slug === 'project-map:schema' || slug === 'project-map:schema:live') {
+      try {
+        if (!isServerConfigured()) {
+          // Fallback to static docs if server credentials are missing
+          const fallback = await buildChartsFromFile('diagrams/project-map/schema.md')
+          return NextResponse.json({ ...fallback, source: 'static-fallback' })
+        }
+
+        const charts = await buildLiveSchemaMermaid()
+        return NextResponse.json({
+          charts,
+          updatedAt: new Date().toISOString(),
+          path: '(dynamic) appwrite-schema',
+          slug,
+          chartsCount: charts.length,
+          source: 'appwrite-live',
+        })
+      } catch (error: any) {
+        // On error, fall back to static file if available
         const fallback = await buildChartsFromFile('diagrams/project-map/schema.md')
-        return NextResponse.json({ ...fallback, source: 'static-fallback' })
-      }
-
-      const charts = await buildLiveSchemaMermaid()
-      return NextResponse.json({
-        charts,
-        updatedAt: new Date().toISOString(),
-        path: '(dynamic) appwrite-schema',
-        slug,
-        chartsCount: charts.length,
-        source: 'appwrite-live',
-      })
-    } catch (error: any) {
-      // On error, fall back to static file if available
-      const fallback = await buildChartsFromFile('diagrams/project-map/schema.md')
-      return NextResponse.json({
-        ...fallback,
-        error: error?.message || String(error),
-        source: 'error-fallback',
-      })
-    }
-  }
-
-  // Map slugs to file paths - organized into 3 main categories
-  const fileMap: Record<string, string> = {
-    // Project Map (repository structure)
-    'project-map:app': 'diagrams/project-map/app.md',
-    'project-map:app:dashboard': 'diagrams/project-map/app.dashboard.md',
-    'project-map:app:draft': 'diagrams/project-map/app.draft.md',
-    'project-map:app:marketing': 'diagrams/project-map/app.marketing.md',
-    'project-map:app:admin': 'diagrams/project-map/app.admin.md',
-    'project-map:app:api': 'diagrams/project-map/app.api.md',
-    'project-map:components': 'diagrams/project-map/components.md',
-    'project-map:lib': 'diagrams/project-map/lib.md',
-    'project-map:data': 'diagrams/project-map/data.md',
-    // schema slug is handled above dynamically; keep here only for explicit static access if needed elsewhere
-    'project-map:schema:static': 'diagrams/project-map/schema.md',
-    'project-map:future': 'diagrams/project-map/future.md',
-    'project-map:functions': 'diagrams/project-map/functions.md',
-    'project-map:docs': 'diagrams/project-map/docs.md',
-    'project-map:ops': 'diagrams/project-map/ops.md',
-    'project-map:public': 'diagrams/project-map/public.md',
-
-    // Functional Flow (user journeys and features)
-    'functional-flow:create-account': 'diagrams/functional-flow/create-account-flow.md',
-    'functional-flow:create-league':
-      'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
-    'functional-flow:join-league': 'diagrams/functional-flow/join-league-flow-invite.md',
-    'functional-flow:draft': 'diagrams/functional-flow/draft-system-flow-mock-vs-real-scheduled.md',
-    'functional-flow:draft:mock': 'diagrams/functional-flow/draft-mock.md',
-    'functional-flow:draft:real': 'diagrams/functional-flow/draft-real.md',
-
-    // System Architecture (technical systems)
-    'system-architecture:projections-overview':
-      'diagrams/system-architecture/projections-system-overview.md',
-    'system-architecture:yearly-projections':
-      'diagrams/system-architecture/yearly-projections-flow-draft.md',
-    'system-architecture:weekly-projections':
-      'diagrams/system-architecture/weekly-projections-flow-in-season.md',
-    'system-architecture:weight-tuning': 'diagrams/system-architecture/weight-tuning-loop.md',
-
-    // API Documentation (generated)
-    'api:routes': 'diagrams/api/routes.md',
-    'api:external': 'diagrams/api/external.md',
-    'api:data-sources': 'diagrams/api/data-sources.md',
-
-    // Reports
-    'report:main': 'diagrams/report.md',
-    'report:route-status': 'diagrams/runtime/route-status.json',
-
-    // Draft (custom mermaid diagrams) — moved to .drawio; mermaid slugs removed
-  }
-
-  // Handle dynamic multi-level project map paths
-  if (slug.startsWith('project-map:app:')) {
-    const parts = slug.split(':')
-    if (parts.length >= 3) {
-      // Convert slug parts to file path
-      // project-map:app:api:admin -> diagrams/project-map/app.api.admin.md
-      const pathParts = parts.slice(1) // Remove 'project-map'
-      const filePath = `diagrams/project-map/${pathParts.join('.')}.md`
-
-      // Also check for index.md in folder structure
-      const folderIndexPath = `diagrams/project-map/${pathParts.join('/')}/index.md`
-
-      const docsPath = path.join(process.cwd(), 'docs')
-      const fullFilePath = path.join(docsPath, filePath)
-      const fullIndexPath = path.join(docsPath, folderIndexPath)
-
-      // Prioritize index.md in nested folder, otherwise use dotted file
-      if (fs.existsSync(fullIndexPath)) {
-        fileMap[slug] = folderIndexPath
-      } else if (fs.existsSync(fullFilePath)) {
-        fileMap[slug] = filePath
+        return NextResponse.json({
+          ...fallback,
+          error: error?.message || String(error),
+          source: 'error-fallback',
+        })
       }
     }
-  }
 
-  // Generic resolver for new project-map folder structure
-  if (slug.startsWith('project-map:')) {
-    const parts = slug.split(':').slice(1)
-    if (parts.length) {
-      const folderPath = `diagrams/project-map/${parts.join('/')}.md`
-      const docsPath = path.join(process.cwd(), 'docs')
-      const fullFolderPath = path.join(docsPath, folderPath)
-      if (fs.existsSync(fullFolderPath)) {
-        fileMap[slug] = folderPath
-      }
+    // Map slugs to file paths - organized into 3 main categories
+    const fileMap: Record<string, string> = {
+      // Project Map (repository structure)
+      'project-map:app': 'diagrams/project-map/app.md',
+      'project-map:app:dashboard': 'diagrams/project-map/app.dashboard.md',
+      'project-map:app:draft': 'diagrams/project-map/app.draft.md',
+      'project-map:app:marketing': 'diagrams/project-map/app.marketing.md',
+      'project-map:app:admin': 'diagrams/project-map/app.admin.md',
+      'project-map:app:api': 'diagrams/project-map/app.api.md',
+      'project-map:components': 'diagrams/project-map/components.md',
+      'project-map:lib': 'diagrams/project-map/lib.md',
+      'project-map:data': 'diagrams/project-map/data.md',
+      // schema slug is handled above dynamically; keep here only for explicit static access if needed elsewhere
+      'project-map:schema:static': 'diagrams/project-map/schema.md',
+      'project-map:future': 'diagrams/project-map/future.md',
+      'project-map:functions': 'diagrams/project-map/functions.md',
+      'project-map:docs': 'diagrams/project-map/docs.md',
+      'project-map:ops': 'diagrams/project-map/ops.md',
+      'project-map:public': 'diagrams/project-map/public.md',
+
+      // Functional Flow (user journeys and features)
+      'functional-flow:create-account': 'diagrams/functional-flow/create-account-flow.md',
+      'functional-flow:create-league':
+        'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
+      'functional-flow:join-league': 'diagrams/functional-flow/join-league-flow-invite.md',
+      'functional-flow:draft': 'diagrams/functional-flow/draft-system-flow-mock-vs-real-scheduled.md',
+      'functional-flow:draft:mock': 'diagrams/functional-flow/draft-mock.md',
+      'functional-flow:draft:real': 'diagrams/functional-flow/draft-real.md',
+
+      // System Architecture (technical systems)
+      'system-architecture:projections-overview':
+        'diagrams/system-architecture/projections-system-overview.md',
+      'system-architecture:yearly-projections':
+        'diagrams/system-architecture/yearly-projections-flow-draft.md',
+      'system-architecture:weekly-projections':
+        'diagrams/system-architecture/weekly-projections-flow-in-season.md',
+      'system-architecture:weight-tuning': 'diagrams/system-architecture/weight-tuning-loop.md',
+
+      // API Documentation (generated)
+      'api:routes': 'diagrams/api/routes.md',
+      'api:external': 'diagrams/api/external.md',
+      'api:data-sources': 'diagrams/api/data-sources.md',
+
+      // Reports
+      'report:main': 'diagrams/report.md',
+      'report:route-status': 'diagrams/runtime/route-status.json',
+
+      // Draft (custom mermaid diagrams) — moved to .drawio; mermaid slugs removed
     }
-  }
 
-  // Generic resolver for draft domain folder structure
-  if (slug.startsWith('draft:')) {
-    const parts = slug.split(':').slice(1)
-    if (parts.length) {
-      const folderPath = `diagrams/draft/${parts.join('/')}.md`
-      const docsPath = path.join(process.cwd(), 'docs')
-      const fullFolderPath = path.join(docsPath, folderPath)
-      if (fs.existsSync(fullFolderPath)) {
-        fileMap[slug] = folderPath
-      }
-    }
-  }
+    // Handle dynamic multi-level project map paths
+    if (slug.startsWith('project-map:app:')) {
+      const parts = slug.split(':')
+      if (parts.length >= 3) {
+        // Convert slug parts to file path
+        // project-map:app:api:admin -> diagrams/project-map/app.api.admin.md
+        const pathParts = parts.slice(1) // Remove 'project-map'
+        const filePath = `diagrams/project-map/${pathParts.join('.')}.md`
 
-  // Generic resolver for functional-flow folder structure
-  if (slug.startsWith('functional-flow:')) {
-    const parts = slug.split(':').slice(1)
-    if (parts.length) {
-      const folderPath = `diagrams/functional-flow/${parts.join('/')}.md`
-      const docsPath = path.join(process.cwd(), 'docs')
-      const fullFolderPath = path.join(docsPath, folderPath)
-      if (fs.existsSync(fullFolderPath)) {
-        fileMap[slug] = folderPath
-      }
-    }
-  }
+        // Also check for index.md in folder structure
+        const folderIndexPath = `diagrams/project-map/${pathParts.join('/')}/index.md`
 
-  // Helper: attempt to resolve a diagram path using new flattened filenames
-  const docsRoot = path.join(process.cwd(), 'docs')
-  function existsRel(rel: string): boolean {
-    try {
-      return fs.existsSync(path.join(docsRoot, rel))
-    } catch (error) {
-      console.warn('Error checking file existence:', error)
-      return false
-    }
-  }
+        const docsPath = path.join(process.cwd(), 'docs')
+        const fullFilePath = path.join(docsPath, filePath)
+        const fullIndexPath = path.join(docsPath, folderIndexPath)
 
-  function resolveFallback(s: string): string | null {
-    // project-map:* fallbacks
-    if (s.startsWith('project-map:')) {
-      const parts = s.split(':').slice(1)
-      if (parts.length >= 1) {
-        // Try old dotted path first
-        const dotted = `diagrams/project-map/${parts.join('.')}.md`
-        if (existsRel(dotted)) return dotted
-        // Try flattened: project-map-<parts-joined-by-hyphen>.md
-        const flat = `diagrams/project-map/project-map-${parts.join('-')}.md`
-        if (existsRel(flat)) return flat
-        // For top-level roots also try <root>.md
-        if (parts.length === 1) {
-          const simple = `diagrams/project-map/${parts[0]}.md`
-          if (existsRel(simple)) return simple
+        // Prioritize index.md in nested folder, otherwise use dotted file
+        if (fs.existsSync(fullIndexPath)) {
+          fileMap[slug] = folderIndexPath
+        } else if (fs.existsSync(fullFilePath)) {
+          fileMap[slug] = filePath
         }
       }
     }
-    // functional-flow:* fallbacks
-    if (s.startsWith('functional-flow:')) {
-      const name = s.split(':')[1]
-      const dir = path.join(docsRoot, 'diagrams', 'functional-flow')
-      try {
-        const files = fs.readdirSync(dir)
-        const exact = `${name}.md`
-        if (files.includes(exact)) return path.join('diagrams', 'functional-flow', exact)
-        const starts = files.find(f => f.toLowerCase().startsWith(`${name}-`) && f.endsWith('.md'))
-        if (starts) return path.join('diagrams', 'functional-flow', starts)
-        const contains = files.find(f => f.toLowerCase().includes(name) && f.endsWith('.md'))
-        if (contains) return path.join('diagrams', 'functional-flow', contains)
-      } catch {}
+
+    // Generic resolver for new project-map folder structure
+    if (slug.startsWith('project-map:')) {
+      const parts = slug.split(':').slice(1)
+      if (parts.length) {
+        const folderPath = `diagrams/project-map/${parts.join('/')}.md`
+        const docsPath = path.join(process.cwd(), 'docs')
+        const fullFolderPath = path.join(docsPath, folderPath)
+        if (fs.existsSync(fullFolderPath)) {
+          fileMap[slug] = folderPath
+        }
+      }
     }
-    // system-architecture:* fallbacks
-    if (s.startsWith('system-architecture:')) {
-      const name = s.split(':')[1]
-      const dir = path.join(docsRoot, 'diagrams', 'system-architecture')
-      try {
-        const files = fs.readdirSync(dir)
-        const exact = `${name}.md`
-        if (files.includes(exact)) return path.join('diagrams', 'system-architecture', exact)
-        const starts = files.find(f => f.toLowerCase().startsWith(name) && f.endsWith('.md'))
-        if (starts) return path.join('diagrams', 'system-architecture', starts)
-        const contains = files.find(f => f.toLowerCase().includes(name) && f.endsWith('.md'))
-        if (contains) return path.join('diagrams', 'system-architecture', contains)
-      } catch {}
+
+    // Generic resolver for draft domain folder structure
+    if (slug.startsWith('draft:')) {
+      const parts = slug.split(':').slice(1)
+      if (parts.length) {
+        const folderPath = `diagrams/draft/${parts.join('/')}.md`
+        const docsPath = path.join(process.cwd(), 'docs')
+        const fullFolderPath = path.join(docsPath, folderPath)
+        if (fs.existsSync(fullFolderPath)) {
+          fileMap[slug] = folderPath
+        }
+      }
     }
-    return null
-  }
 
-  let filePath = fileMap[slug]
-  // If not mapped, or mapped path no longer exists after reorganization, try fallback resolvers
-  if (!filePath || !existsRel(filePath)) {
-    const fb = resolveFallback(slug)
-    if (fb) filePath = fb
-  }
+    // Generic resolver for functional-flow folder structure
+    if (slug.startsWith('functional-flow:')) {
+      const parts = slug.split(':').slice(1)
+      if (parts.length) {
+        const folderPath = `diagrams/functional-flow/${parts.join('/')}.md`
+        const docsPath = path.join(process.cwd(), 'docs')
+        const fullFolderPath = path.join(docsPath, folderPath)
+        if (fs.existsSync(fullFolderPath)) {
+          fileMap[slug] = folderPath
+        }
+      }
+    }
 
-  if (!filePath) {
-    console.error(`Diagram not found for slug: ${slug}`)
-    console.error('Available slugs:', Object.keys(fileMap))
+    // Helper: attempt to resolve a diagram path using new flattened filenames
+    const docsRoot = path.join(process.cwd(), 'docs')
+    function existsRel(rel: string): boolean {
+      try {
+        return fs.existsSync(path.join(docsRoot, rel))
+      } catch (error) {
+        console.warn('Error checking file existence:', error)
+        return false
+      }
+    }
 
+    function resolveFallback(s: string): string | null {
+      // project-map:* fallbacks
+      if (s.startsWith('project-map:')) {
+        const parts = s.split(':').slice(1)
+        if (parts.length >= 1) {
+          // Try old dotted path first
+          const dotted = `diagrams/project-map/${parts.join('.')}.md`
+          if (existsRel(dotted)) return dotted
+          // Try flattened: project-map-<parts-joined-by-hyphen>.md
+          const flat = `diagrams/project-map/project-map-${parts.join('-')}.md`
+          if (existsRel(flat)) return flat
+          // For top-level roots also try <root>.md
+          if (parts.length === 1) {
+            const simple = `diagrams/project-map/${parts[0]}.md`
+            if (existsRel(simple)) return simple
+          }
+        }
+      }
+      // functional-flow:* fallbacks
+      if (s.startsWith('functional-flow:')) {
+        const name = s.split(':')[1]
+        const dir = path.join(docsRoot, 'diagrams', 'functional-flow')
+        try {
+          const files = fs.readdirSync(dir)
+          const exact = `${name}.md`
+          if (files.includes(exact)) return path.join('diagrams', 'functional-flow', exact)
+          const starts = files.find(f => f.toLowerCase().startsWith(`${name}-`) && f.endsWith('.md'))
+          if (starts) return path.join('diagrams', 'functional-flow', starts)
+          const contains = files.find(f => f.toLowerCase().includes(name) && f.endsWith('.md'))
+          if (contains) return path.join('diagrams', 'functional-flow', contains)
+        } catch {}
+      }
+      // system-architecture:* fallbacks
+      if (s.startsWith('system-architecture:')) {
+        const name = s.split(':')[1]
+        const dir = path.join(docsRoot, 'diagrams', 'system-architecture')
+        try {
+          const files = fs.readdirSync(dir)
+          const exact = `${name}.md`
+          if (files.includes(exact)) return path.join('diagrams', 'system-architecture', exact)
+          const starts = files.find(f => f.toLowerCase().startsWith(name) && f.endsWith('.md'))
+          if (starts) return path.join('diagrams', 'system-architecture', starts)
+          const contains = files.find(f => f.toLowerCase().includes(name) && f.endsWith('.md'))
+          if (contains) return path.join('diagrams', 'system-architecture', contains)
+        } catch {}
+      }
+      return null
+    }
+
+    let filePath = fileMap[slug]
+    // If not mapped, or mapped path no longer exists after reorganization, try fallback resolvers
+    if (!filePath || !existsRel(filePath)) {
+      const fb = resolveFallback(slug)
+      if (fb) filePath = fb
+    }
+
+    if (!filePath) {
+      console.error(`Diagram not found for slug: ${slug}`)
+      console.error('Available slugs:', Object.keys(fileMap))
+
+      return NextResponse.json(
+        {
+          error: 'Diagram not found',
+          slug,
+          receivedSlug: rawSlug,
+          decodedSlug: slug,
+          availableKeys: Object.keys(fileMap),
+        },
+        { status: 404 }
+      )
+    }
+
+    try {
+      const result = await buildChartsFromFile(filePath)
+      return NextResponse.json(result)
+    } catch (error: any) {
+      console.error(`Error reading diagram for slug ${slug}:`, error)
+
+      return NextResponse.json(
+        {
+          error: 'Failed to read diagram',
+          details: error?.message || 'Unknown error',
+          path: filePath,
+          slug,
+        },
+        { status: 500 }
+      )
+    }
+  } catch (e: any) {
     return NextResponse.json(
-      {
-        error: 'Diagram not found',
-        slug,
-        receivedSlug: rawSlug,
-        decodedSlug: slug,
-        availableKeys: Object.keys(fileMap),
-      },
-      { status: 404 }
-    )
-  }
-
-  try {
-    const result = await buildChartsFromFile(filePath)
-    return NextResponse.json(result)
-  } catch (error: any) {
-    console.error(`Error reading diagram for slug ${slug}:`, error)
-
-    return NextResponse.json(
-      {
-        error: 'Failed to read diagram',
-        details: error?.message || 'Unknown error',
-        path: filePath,
-        slug,
-      },
+      { error: 'Unhandled error', message: e?.message || String(e), stack: e?.stack || null },
       { status: 500 }
     )
   }
@@ -311,7 +321,7 @@ async function buildChartsFromFile(filePath: string) {
 }
 
 function esc(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '\\"')
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '\\"')
 }
 
 async function buildLiveSchemaMermaid(): Promise<string[]> {
@@ -386,7 +396,7 @@ async function buildLiveSchemaMermaid(): Promise<string[]> {
     // One node per collection with multiline HTML label
     const nodeId = `col_${d.id.replace(/[^a-zA-Z0-9_]/g, '_')}`
     const label = labelParts.join('<br/>')
-    md += `  ${nodeId}["${label}"]:::coll\n`
+    md += `  ${nodeId}[\"${label}\"]:::coll\n`
   }
 
   return [md]

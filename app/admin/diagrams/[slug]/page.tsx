@@ -29,7 +29,8 @@ export default function DiagramBySlugPage() {
         window.history.replaceState({}, '', url.toString())
       }
     } catch {}
-    const lsToken = typeof window !== 'undefined' ? window.localStorage.getItem('admin-dev-token') || '' : ''
+    const lsToken =
+      typeof window !== 'undefined' ? window.localStorage.getItem('admin-dev-token') || '' : ''
     const userEmail = (user?.email || '').toLowerCase()
     if (envToken && lsToken && envToken === lsToken) return true
     if (envEmail && userEmail === envEmail) return true
