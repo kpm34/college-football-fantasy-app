@@ -23,9 +23,9 @@ function extractMermaidBlocks(markdown: string): string[] {
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: { slug: string } }
 ) {
-  const { slug: rawSlug } = await params
+  const { slug: rawSlug } = params
 
   // Decode the slug to handle URL encoding
   const slug = decodeURIComponent(rawSlug)
