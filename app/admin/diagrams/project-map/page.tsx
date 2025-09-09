@@ -35,7 +35,7 @@ export default function ProjectMapDiagramsPage() {
         .replace(/[-_]/g, ' ')
         .replace(/\s+/g, ' ')
         .trim()
-        .replace(/\b\w/g, (c) => c.toUpperCase())
+        .replace(/\b\w/g, c => c.toUpperCase())
 
     type Entry = { slug: string; title: string }
     const grouped = new Map<string, Entry[]>()
@@ -120,5 +120,3 @@ export default function ProjectMapDiagramsPage() {
     </div>
   )
 }
-
-

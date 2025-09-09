@@ -27,6 +27,29 @@ export default function AdminDashboard() {
   const [running, setRunning] = useState<boolean>(false)
   const [actionResult, setActionResult] = useState<any>(null)
 
+  // Dev-only admin bypass: allow access when in dev and token/email match
+  const devBypass = (() => {
+    if (typeof window === 'undefined') return false
+    if (process.env.NODE_ENV === 'production') return false
+    const envToken = process.env.NEXT_PUBLIC_ADMIN_DEV_TOKEN || ''
+    const envEmail = (process.env.NEXT_PUBLIC_ADMIN_DEV_EMAIL || '').toLowerCase()
+    // Support setting token via query param: ?devAdmin=TOKEN
+    try {
+      const url = new URL(window.location.href)
+      const qp = url.searchParams.get('devAdmin')
+      if (qp) {
+        window.localStorage.setItem('admin-dev-token', qp)
+        url.searchParams.delete('devAdmin')
+        window.history.replaceState({}, '', url.toString())
+      }
+    } catch {}
+    const lsToken = window.localStorage.getItem('admin-dev-token') || ''
+    const userEmail = (user?.email || '').toLowerCase()
+    if (envToken && lsToken && envToken === lsToken) return true
+    if (envEmail && userEmail === envEmail) return true
+    return false
+  })()
+
   // Bridge: handle open events from hub pages
   if (typeof window !== 'undefined') {
     window.removeEventListener('admin-open-diagram', (window as any)._openDiagramHandler as any)
@@ -34,7 +57,9 @@ export default function AdminDashboard() {
       const d = e?.detail || {}
       if (d.open) loadDiagram(String(d.open), String(d.title || 'Diagram'))
     }
-    window.addEventListener('admin-open-diagram', (window as any)._openDiagramHandler as any, { once: true })
+    window.addEventListener('admin-open-diagram', (window as any)._openDiagramHandler as any, {
+      once: true,
+    })
   }
 
   if (loading) {
@@ -45,7 +70,9 @@ export default function AdminDashboard() {
     )
   }
 
-  if (!user || (user.email || '').toLowerCase() !== 'kashpm2002@gmail.com') {
+  const hardcodedAdmin = (user?.email || '').toLowerCase() === 'kashpm2002@gmail.com'
+
+  if (!hardcodedAdmin && !devBypass) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-stone-50 flex items-center justify-center">
         <div className="text-center text-amber-900">
@@ -154,21 +181,41 @@ export default function AdminDashboard() {
             🧭 Diagrams
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-            <Link href="/admin/diagrams/project-map" className="px-4 py-4 rounded-xl shadow-md text-left block transition-all" style={{ background: '#2B6CB0', color: '#fff' }}>
+            <Link
+              href="/admin/diagrams/project-map"
+              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
+              style={{ background: '#2B6CB0', color: '#fff' }}
+            >
               <div className="font-semibold">🗺️ Project Map</div>
-              <div className="text-sm text-sky-100">Overview · User Flow · Entity Relation · API/Events</div>
+              <div className="text-sm text-sky-100">
+                Overview · User Flow · Entity Relation · API/Events
+              </div>
             </Link>
-            <Link href="/admin/diagrams/system-architecture" className="px-4 py-4 rounded-xl shadow-md text-left block transition-all" style={{ background: '#1D4ED8', color: '#fff' }}>
+            <Link
+              href="/admin/diagrams/system-architecture"
+              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
+              style={{ background: '#1D4ED8', color: '#fff' }}
+            >
               <div className="font-semibold">🏗️ System Architecture</div>
               <div className="text-sm text-indigo-100">Projections · Weight Tuning · Data Flow</div>
             </Link>
-            <Link href="/admin/diagrams/functional-flow" className="px-4 py-4 rounded-xl shadow-md text-left block transition-all" style={{ background: '#DC2626', color: '#fff' }}>
+            <Link
+              href="/admin/diagrams/functional-flow"
+              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
+              style={{ background: '#DC2626', color: '#fff' }}
+            >
               <div className="font-semibold">⚡ Functional Flow</div>
               <div className="text-sm text-rose-100">Create/Join League · Auth · Draft</div>
             </Link>
-            <Link href="/admin/diagrams/draft" className="px-4 py-4 rounded-xl shadow-md text-left block transition-all" style={{ background: '#B45309', color: '#fff' }}>
+            <Link
+              href="/admin/diagrams/draft"
+              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
+              style={{ background: '#B45309', color: '#fff' }}
+            >
               <div className="font-semibold">🏈 Draft</div>
-              <div className="text-sm text-amber-100">User Flow · Entity Relation · API Routing</div>
+              <div className="text-sm text-amber-100">
+                User Flow · Entity Relation · API Routing
+              </div>
             </Link>
           </div>
         </div>

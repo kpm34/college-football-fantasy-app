@@ -14,6 +14,28 @@ export default function DiagramBySlugPage() {
   const [error, setError] = useState<string | null>(null)
   const [updatedAt, setUpdatedAt] = useState<string>('')
 
+  // Dev-only admin bypass (mirrors /admin)
+  const devBypass = (() => {
+    if (typeof window === 'undefined') return false
+    if (process.env.NODE_ENV === 'production') return false
+    const envToken = process.env.NEXT_PUBLIC_ADMIN_DEV_TOKEN || ''
+    const envEmail = (process.env.NEXT_PUBLIC_ADMIN_DEV_EMAIL || '').toLowerCase()
+    try {
+      const url = new URL(window.location.href)
+      const qp = url.searchParams.get('devAdmin')
+      if (qp) {
+        window.localStorage.setItem('admin-dev-token', qp)
+        url.searchParams.delete('devAdmin')
+        window.history.replaceState({}, '', url.toString())
+      }
+    } catch {}
+    const lsToken = typeof window !== 'undefined' ? window.localStorage.getItem('admin-dev-token') || '' : ''
+    const userEmail = (user?.email || '').toLowerCase()
+    if (envToken && lsToken && envToken === lsToken) return true
+    if (envEmail && userEmail === envEmail) return true
+    return false
+  })()
+
   useEffect(() => {
     let cancelled = false
     async function load() {
@@ -52,7 +74,9 @@ export default function DiagramBySlugPage() {
     )
   }
 
-  if (!user || (user.email || '').toLowerCase() !== 'kashpm2002@gmail.com') {
+  const hardcodedAdmin = (user?.email || '').toLowerCase() === 'kashpm2002@gmail.com'
+
+  if (!hardcodedAdmin && !devBypass) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
