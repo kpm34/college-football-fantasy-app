@@ -21,10 +21,7 @@ function extractMermaidBlocks(markdown: string): string[] {
   return blocks
 }
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function GET(_request: NextRequest, { params }: { params: { slug: string } }) {
   const { slug: rawSlug } = params
 
   // Decode the slug to handle URL encoding

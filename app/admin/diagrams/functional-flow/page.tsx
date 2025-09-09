@@ -19,7 +19,6 @@ export default function FunctionalFlowDiagramsPage() {
               className="px-4 py-3 rounded bg-rose-600 text-white text-left shadow hover:bg-rose-700"
             >
               <div className="font-semibold">{i.title}</div>
-              <div className="text-xs opacity-80 truncate">{i.slug}</div>
             </a>
           ))}
         </div>
