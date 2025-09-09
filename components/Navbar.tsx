@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  ChartBarIcon,
   HomeIcon,
   LockClosedIcon,
   RectangleGroupIcon,
@@ -115,15 +114,10 @@ export default function Navbar() {
               </Link>
             </div>
             <div className="hidden md:flex items-center gap-1 ml-4">
+              {/* Non-essential top navigation */}
+              <NavLink href="/blog" label="Blog" />
               <NavLink href="/scoreboard" label="Scoreboard" />
-              <NavLink href="/standings" label="Standings" />
-              <NavLink href="/draft/mock" label="Mock Draft" />
-              <Link
-                href={user ? '/league/create' : '/login'}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors text-white/80 hover:text-white hover:bg-white/5`}
-              >
-                Create League
-              </Link>
+              <NavLink href="/about" label="About" />
             </div>
             <div className="ml-auto hidden md:flex items-center gap-3">
               <UserMenu user={user} loading={authLoading} onLogout={handleLogout} />
@@ -184,6 +178,7 @@ export default function Navbar() {
 
           {!!user && (
             <>
+              {/* Essential links for logged-in users */}
               <Link
                 href="/dashboard"
                 onClick={() => setOpen(false)}
@@ -192,6 +187,26 @@ export default function Navbar() {
                 <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
                 <RectangleGroupIcon className="h-5 w-5" />
                 <span className="font-medium">Dashboard</span>
+              </Link>
+
+              <Link
+                href="/dashboard"
+                onClick={() => setOpen(false)}
+                className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden"
+              >
+                <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+                <RectangleGroupIcon className="h-5 w-5" />
+                <span className="font-medium">Leagues</span>
+              </Link>
+
+              <Link
+                href="/standings"
+                onClick={() => setOpen(false)}
+                className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden"
+              >
+                <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+                <RectangleGroupIcon className="h-5 w-5" />
+                <span className="font-medium">Teams</span>
               </Link>
 
               {leagues.length > 0 && (
@@ -229,7 +244,7 @@ export default function Navbar() {
                             title="Commissioner Settings"
                           >
                             <UserGroupIcon className="h-3.5 w-3.5" />
-                            <span>Commissioner</span>
+                            <span>Commish</span>
                           </button>
                         )}
                       </div>
@@ -241,16 +256,6 @@ export default function Navbar() {
               <div className="pt-3 mt-3 border-t border-white/10" />
 
               <Link
-                href="/scoreboard"
-                onClick={() => setOpen(false)}
-                className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden"
-              >
-                <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
-                <ChartBarIcon className="h-5 w-5" />
-                <span className="font-medium">Scoreboard</span>
-              </Link>
-
-              <Link
                 href="/draft/mock"
                 onClick={() => setOpen(false)}
                 className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden"
@@ -259,31 +264,31 @@ export default function Navbar() {
                 <TrophyIcon className="h-5 w-5" />
                 <span className="font-medium">Mock Draft</span>
               </Link>
+
+              <Link
+                href="/league/create"
+                onClick={() => setOpen(false)}
+                className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden"
+              >
+                <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+                <RectangleGroupIcon className="h-5 w-5" />
+                <span className="font-medium">Create League</span>
+              </Link>
+
+              <Link
+                href="/league/join"
+                onClick={() => setOpen(false)}
+                className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden"
+              >
+                <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
+                <UserGroupIcon className="h-5 w-5" />
+                <span className="font-medium">Join League</span>
+              </Link>
             </>
           )}
 
-          <Link
-            href="/league/join"
-            onClick={() => setOpen(false)}
-            className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden"
-          >
-            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
-            <UserGroupIcon className="h-5 w-5" />
-            <span className="font-medium">Join League</span>
-          </Link>
-
-          <Link
-            href={user ? '/league/create' : '/login'}
-            onClick={() => setOpen(false)}
-            className="group flex items-center gap-3 px-3 py-2 rounded-md text-white/85 hover:text-white relative overflow-hidden"
-          >
-            <span className="absolute inset-0 -z-10 scale-x-0 group-hover:scale-x-100 origin-left bg-white/10 transition-transform duration-300" />
-            <RectangleGroupIcon className="h-5 w-5" />
-            <span className="font-medium">Create League</span>
-          </Link>
-
+          {/* Account & auth actions */}
           <div className="pt-3 mt-3 border-t border-white/10" />
-
           {!user ? (
             <div className="grid grid-cols-2 gap-2 px-1">
               <Link
