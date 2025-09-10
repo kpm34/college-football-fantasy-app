@@ -60,7 +60,7 @@ export async function GET(
       }
     }
 
-    // Map slugs to file paths - organized into 3 main categories
+    // Map slugs to file paths - organized into categories
     const fileMap: Record<string, string> = {
       // Project Map (repository structure)
       'project-map:app': 'diagrams/project-map/app.md',
@@ -80,7 +80,16 @@ export async function GET(
       'project-map:ops': 'diagrams/project-map/ops.md',
       'project-map:public': 'diagrams/project-map/public.md',
 
-      // Functional Flow (user journeys and features)
+      // User Journeys (formerly Functional Flow)
+      'user-journeys:auth-user-flow': 'diagrams/user-journeys/auth-user-flow.md',
+      'user-journeys:leagues-user-flow': 'diagrams/user-journeys/leagues-user-flow.md',
+      'user-journeys:draft-user-flow': 'diagrams/user-journeys/draft-user-flow.md',
+      'user-journeys:projections-user-flow': 'diagrams/user-journeys/projections-user-flow.md',
+      'user-journeys:scoring-user-flow': 'diagrams/user-journeys/scoring-user-flow.md',
+      'user-journeys:realtime-user-flow': 'diagrams/user-journeys/realtime-user-flow.md',
+      'user-journeys:ops-deploy-user-flow': 'diagrams/user-journeys/ops-deploy-user-flow.md',
+
+      // Functional Flow (legacy namespace retained for compatibility)
       'functional-flow:create-account': 'diagrams/functional-flow/create-account-flow.md',
       'functional-flow:create-league':
         'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
@@ -168,7 +177,33 @@ export async function GET(
       }
     }
 
-    // Generic resolver for functional-flow folder structure
+    // Generic resolver for entity-relations folder structure
+    if (slug.startsWith('entity-relations:')) {
+      const parts = slug.split(':').slice(1)
+      if (parts.length) {
+        const folderPath = `diagrams/entity-relations/${parts.join('/')}.md`
+        const docsPath = path.join(process.cwd(), 'docs')
+        const fullFolderPath = path.join(docsPath, folderPath)
+        if (fs.existsSync(fullFolderPath)) {
+          fileMap[slug] = folderPath
+        }
+      }
+    }
+
+    // Generic resolver for user-journeys folder structure
+    if (slug.startsWith('user-journeys:')) {
+      const parts = slug.split(':').slice(1)
+      if (parts.length) {
+        const folderPath = `diagrams/user-journeys/${parts.join('/')}.md`
+        const docsPath = path.join(process.cwd(), 'docs')
+        const fullFolderPath = path.join(docsPath, folderPath)
+        if (fs.existsSync(fullFolderPath)) {
+          fileMap[slug] = folderPath
+        }
+      }
+    }
+
+    // Generic resolver for functional-flow folder structure (legacy)
     if (slug.startsWith('functional-flow:')) {
       const parts = slug.split(':').slice(1)
       if (parts.length) {
@@ -177,6 +212,13 @@ export async function GET(
         const fullFolderPath = path.join(docsPath, folderPath)
         if (fs.existsSync(fullFolderPath)) {
           fileMap[slug] = folderPath
+        } else {
+          // Attempt redirect-style resolution into new user-journeys location
+          const altPath = `diagrams/user-journeys/${parts.join('/')}.md`
+          const fullAlt = path.join(docsPath, altPath)
+          if (fs.existsSync(fullAlt)) {
+            fileMap[slug] = altPath
+          }
         }
       }
     }

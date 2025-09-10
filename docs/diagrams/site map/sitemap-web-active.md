@@ -7,112 +7,58 @@ source: docs/diagrams/site map
 ---
 
 ### Purpose
-Active (current) site map for the web experience. Keep under ~120 lines; expand only as needed.
+Active (current) site map for the web experience in inverted tree form (top → down).
 
 ### Method
 Scanned Next.js App Router under `app/` including `(league)`, `(dashboard)`, `admin`, and `api/` subtrees, plus `middleware.ts`. No `src/app/` present. Cross-checked attic diagrams for gaps.
 
 ```mermaid
-flowchart TD
-  %% Site Map – generated 2025-09-10T14:19:14Z
-
-  %% Color classes
-  classDef public fill:#FFF7E6,stroke:#D97706,color:#78350F,stroke-width:1px;
-  classDef auth fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E,stroke-width:1px;
-  classDef user fill:#ECFEFF,stroke:#06B6D4,color:#164E63,stroke-width:1px;
-  classDef league fill:#F5F3FF,stroke:#7C3AED,color:#312E81,stroke-width:1px;
-  classDef commish fill:#ECFDF5,stroke:#10B981,color:#064E3B,stroke-width:1px;
-  classDef admin fill:#F3F4F6,stroke:#6B7280,color:#111827,stroke-width:1px;
-  classDef content fill:#FFE4E6,stroke:#F43F5E,color:#881337,stroke-width:1px;
-
-  %% Public
-  subgraph Public
-    root["/ (Landing)"]:::public
-    conf["/conference-showcase"]:::public
-    proj["/projection-showcase"]:::public
-    videos["/videos"]:::content
-    videosProgram["/videos/[program]"]:::content
-    launch["/launch"]:::public
-    offline["/offline"]:::public
-  end
-
-  %% Auth
-  subgraph Auth
-    login["/login"]:::auth
-    signup["/signup"]:::auth
-    authCallback["/auth/callback (OAuth)"]:::auth
-  end
-
-  %% Join / Invite
-  subgraph Join_Invite["Join / Invite"]
-    leagueJoin["/league/join"]:::public
-    invite["/invite/[leagueId]"]:::public
-  end
-
-  %% Dashboard
-  subgraph Dashboard
-    dash["/dashboard"]:::user
-    acct["/account-settings"]:::user
-    score["/scoreboard"]:::user
-    standings["/standings"]:::user
-  end
-
-  %% League
-  subgraph League
-    leagueHome["/league/[leagueId]"]:::league
-    locker["/league/[leagueId]/locker-room"]:::league
-    schedule["/league/[leagueId]/schedule"]:::league
-    scoreboardL["/league/[leagueId]/scoreboard"]:::league
-    standingsL["/league/[leagueId]/standings"]:::league
-    settings["/league/[leagueId]/commissioner"]:::commish
-    createLeague["/league/create"]:::league
-    joinLeague["/league/join"]:::league
-  end
-
-  %% Draft
-  subgraph Draft
-    draft["/draft/[leagueId]"]:::league
-  end
-
-  %% Admin
-  subgraph Admin
-    adminRoot["/admin"]:::admin
-    adminDiagrams["/admin/diagrams"]:::admin
-    adminSiteMap["/admin/diagrams/site-map"]:::admin
-    adminCache["/admin/cache-status"]:::admin
-    adminSync["/admin/sync-status"]:::admin
-    adminSurvey["/admin/sec-survey"]:::admin
-    adminPV["/admin/product-vision"]:::admin
-  end
-
-  %% API (summary)
-  subgraph API_Summary["API (summary)"]
-    apiAuth["/api/auth/*"]
-    apiLeagues["/api/leagues/*"]
-    apiDrafts["/api/drafts/*"]
-    apiPlayers["/api/players/*"]
-    apiGames["/api/games/*"]
-    apiRankings["/api/rankings/*"]
-    apiAdmin["/api/admin/*"]
-    apiCron["/api/cron/*"]
-    apiDocs["/api/docs/*"]
-    apiExternal["/api/external/*"]
-  end
-
-  %% Key flows / redirects
-  root --> login
-  login -. redirect if session .-> dash
-  authCallback -- redirect on success --> dash
-  root --> leagueJoin
-  invite -. server redirect .-> leagueJoin
-  dash --> leagueHome
-  leagueHome --> draft
-  leagueHome --> locker
-  joinLeague --> leagueHome
-  createLeague --> leagueHome
+mindmap
+  root((/ Landing))
+    Join & Invite
+      "/invite/[leagueId]" --> "/league/join"
+      "/league/join"
+    Auth
+      "/login"
+      "/signup"
+      "/auth/callback (OAuth)"
+    Dashboard
+      "/dashboard"
+      "/account-settings"
+      "/scoreboard"
+      "/standings"
+    League
+      "/league/create"
+      "league/[leagueId]"
+        "/league/[leagueId]/locker-room"
+        "/league/[leagueId]/schedule"
+        "/league/[leagueId]/scoreboard"
+        "/league/[leagueId]/standings"
+        "/league/[leagueId]/commissioner (role: commissioner)"
+    Draft
+      "/draft/[leagueId] (time-gated)"
+    Admin
+      "/admin"
+      Diagrams
+        "/admin/diagrams/site-map"
+        "/admin/diagrams/project-map"
+        "/admin/diagrams/functional-flow"
+        "/admin/diagrams/system-architecture"
+      Tools
+        "/admin/cache-status"
+        "/admin/sync-status"
+        "/admin/sec-survey"
+        "/admin/product-vision"
+    Public Content
+      "/conference-showcase"
+      "/projection-showcase"
+      "/videos"
+      "/videos/[program]"
+      "/launch"
+      "/offline"
 ```
 
 ### Legend
-- Public (amber), Auth (light blue), User/Dashboard (cyan), League (purple), Commissioner (green), Admin (gray), Content (rose)
-- Redirects shown with dashed edges
-- Draft access is typically time-gated by schedule
+- Inverted tree: root at top, branches expand downward
+- Role/time gates indicated inline (e.g., role: commissioner, time-gated)
+- Admin/tools grouped for brevity

@@ -193,7 +193,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>app/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -251,7 +251,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>components/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -303,7 +303,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>lib/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -356,7 +356,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>docs/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -398,7 +398,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>functions/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -441,7 +441,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>schema/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -486,7 +486,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>ops/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -528,7 +528,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>data/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -567,7 +567,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>public/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -605,7 +605,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>styles/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -641,7 +641,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>tests/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -680,7 +680,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>future/</code>
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
@@ -713,7 +713,7 @@ export default function DirectoryMapPage() {
                 <h3 className="text-lg font-semibold mb-2">
                   <code>frontend/</code> (legacy)
                 </h3>
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-4">
                   <div>
                     <div className="text-sm font-medium text-amber-900 mb-1">Description</div>
                     <ul className="text-sm text-amber-900/90 list-disc pl-5 space-y-1">
