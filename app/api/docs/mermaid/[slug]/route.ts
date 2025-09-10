@@ -109,6 +109,12 @@ export async function GET(
       'report:route-status': 'diagrams/runtime/route-status.json',
 
       // Draft (custom mermaid diagrams) — moved to .drawio; mermaid slugs removed
+
+      // Site Map (web/mobile; active/final)
+      'sitemap:web:active': 'diagrams/site map/sitemap-web-active.md',
+      'sitemap:mobile:active': 'diagrams/site map/sitemap-mobile-active.md',
+      'sitemap:web:final': 'diagrams/site map/sitemap-web-final.md',
+      'sitemap:mobile:final': 'diagrams/site map/sitemap-mobile-final.md',
     }
 
     // Handle dynamic multi-level project map paths
@@ -175,6 +181,19 @@ export async function GET(
       }
     }
 
+    // Generic resolver for sitemap folder (supports sitemap:web:active -> diagrams/site map/sitemap-web-active.md)
+    if (slug.startsWith('sitemap:')) {
+      const parts = slug.split(':').slice(1)
+      if (parts.length) {
+        const hyphenFile = `diagrams/site map/sitemap-${parts.join('-')}.md`
+        const docsPath = path.join(process.cwd(), 'docs')
+        const fullPath = path.join(docsPath, hyphenFile)
+        if (fs.existsSync(fullPath)) {
+          fileMap[slug] = hyphenFile
+        }
+      }
+    }
+
     // Helper: attempt to resolve a diagram path using new flattened filenames
     const docsRoot = path.join(process.cwd(), 'docs')
     function existsRel(rel: string): boolean {
@@ -232,6 +251,22 @@ export async function GET(
           if (starts) return path.join('diagrams', 'system-architecture', starts)
           const contains = files.find(f => f.toLowerCase().includes(name) && f.endsWith('.md'))
           if (contains) return path.join('diagrams', 'system-architecture', contains)
+        } catch {}
+      }
+      // sitemap:* fallbacks
+      if (s.startsWith('sitemap:')) {
+        const name = s.split(':').slice(1).join('-')
+        const dir = path.join(docsRoot, 'diagrams', 'site map')
+        try {
+          const files = fs.readdirSync(dir)
+          const exact = `sitemap-${name}.md`
+          if (files.includes(exact)) return path.join('diagrams', 'site map', exact)
+          const starts = files.find(
+            f => f.toLowerCase().startsWith(`sitemap-${name}`) && f.endsWith('.md')
+          )
+          if (starts) return path.join('diagrams', 'site map', starts)
+          const contains = files.find(f => f.toLowerCase().includes(name) && f.endsWith('.md'))
+          if (contains) return path.join('diagrams', 'site map', contains)
         } catch {}
       }
       return null
