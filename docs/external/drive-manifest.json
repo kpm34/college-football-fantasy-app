@@ -1,0 +1,25 @@
+{
+  "folderId": "1LBm850_NnebpbrYmlpH08B-tEaH_nVqh",
+  "folderUrl": "https://drive.google.com/drive/folders/1LBm850_NnebpbrYmlpH08B-tEaH_nVqh?usp=sharing",
+  "notes": "Canonical mapping of Google Drive assets to short aliases. Keep IDs only; contents remain in Drive.",
+  "files": {
+    "planning_guides": {
+      "type": "folder",
+      "id": "1HzBPyd6DZ5VTp1CMnsUoi_0S644VxwbN",
+      "name": "Planning Guides",
+      "description": "UX planning docs, user journeys (Drive folder)"
+    },
+    "diagramming_guides": {
+      "type": "folder",
+      "id": "10FsLx1yEHSZrEJdum_jdU3ukQvEAX21G",
+      "name": "Diagramming Guides",
+      "description": "Authoring guides for site maps, user journeys, directory maps"
+    },
+    "jl_all_time_rankings_2022_v2": {
+      "type": "file",
+      "id": "",
+      "name": "2022 JL All Time rankings 2.0.xlsx",
+      "description": "Excel rankings sheet (2022)"
+    }
+  }
+}

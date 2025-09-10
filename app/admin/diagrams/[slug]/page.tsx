@@ -11,6 +11,30 @@ export default function DiagramBySlugPage() {
   const [charts, setCharts] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [updatedAt, setUpdatedAt] = useState<string>('')
+
+  const formatET = (iso?: string) => {
+    try {
+      if (!iso) return ''
+      const d = new Date(iso)
+      const date = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric',
+      }).format(d)
+      const time = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      })
+        .format(d)
+        .replace(/\s?[AP]M/i, '')
+      return `${date} ${time} ET`
+    } catch {
+      return iso || ''
+    }
+  }
   const [markdown, setMarkdown] = useState<string>('')
 
   // Derive a human-readable title from slug
@@ -44,10 +68,10 @@ export default function DiagramBySlugPage() {
               try {
                 const p = String(data.path || '')
                 if (p) {
-                  const mdRes = await fetch(
-                    `/api/docs/diagrams/${encodeURIComponent(p)}?bypass=1`,
-                    { cache: 'no-store' }
-                  )
+                  const rel = p.replace(/^diagrams\//, '')
+                  const mdRes = await fetch(`/api/docs/diagrams/${encodeURI(rel)}?bypass=1`, {
+                    cache: 'no-store',
+                  })
                   if (mdRes.ok) setMarkdown(await mdRes.text())
                 }
               } catch {}
@@ -83,7 +107,7 @@ export default function DiagramBySlugPage() {
       >
         <h1 className="text-xl md:text-2xl font-semibold truncate">{prettyTitle}</h1>
         <div className="flex items-center gap-3 text-sm" style={{ color: '#374151' }}>
-          {updatedAt && <span className="opacity-75">Updated: {updatedAt}</span>}
+          {updatedAt && <span className="opacity-75">Updated: {formatET(updatedAt)}</span>}
           <Link href="/admin" className="underline hover:opacity-80" style={{ color: '#0EA5E9' }}>
             Admin
           </Link>
@@ -98,7 +122,37 @@ export default function DiagramBySlugPage() {
             {error}
           </div>
         ) : charts && charts.length > 0 ? (
-          <MermaidRenderer charts={charts} mode="modal" />
+          <div className="space-y-3">
+            {typeof slug === 'string' && slug.startsWith('user-journeys:') && (
+              <div
+                className="rounded border text-sm"
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  color: '#1F2937',
+                  borderColor: 'rgba(16,185,129,.35)',
+                }}
+              >
+                <div
+                  className="px-3 py-2 font-semibold"
+                  style={{ borderBottom: '1px solid rgba(16,185,129,.25)' }}
+                >
+                  Journey Legend
+                </div>
+                <div className="p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <div>Terminator: rounded (Start/End)</div>
+                    <div>Decision: diamond</div>
+                    <div>Process: rectangle</div>
+                  </div>
+                  <div>
+                    <div>Swimlanes: User | App (Next.js) | Appwrite | External</div>
+                    <div>Async operations: dashed lines</div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <MermaidRenderer charts={charts} mode="modal" />
+          </div>
         ) : markdown ? (
           <article className="prose max-w-none" style={{ color: '#1F2937' }}>
             <pre
