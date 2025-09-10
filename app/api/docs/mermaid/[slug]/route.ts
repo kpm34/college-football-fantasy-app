@@ -88,6 +88,9 @@ export async function GET(
       'user-journeys:scoring-user-flow': 'diagrams/user-journeys/scoring-user-flow.md',
       'user-journeys:realtime-user-flow': 'diagrams/user-journeys/realtime-user-flow.md',
       'user-journeys:ops-deploy-user-flow': 'diagrams/user-journeys/ops-deploy-user-flow.md',
+      'user-journeys:create-account': 'diagrams/functional-flow/create-account.md',
+      'user-journeys:create-league': 'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
+      'user-journeys:join-league': 'diagrams/functional-flow/join-league-flow-invite.md',
 
       // Functional Flow (legacy namespace retained for compatibility)
       'functional-flow:create-account': 'diagrams/functional-flow/create-account-flow.md',

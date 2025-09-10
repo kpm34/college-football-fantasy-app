@@ -215,15 +215,15 @@ export default function AdminDashboard() {
         <div className="mb-10 rounded-2xl border border-amber-200 bg-white/95 shadow-md p-4 md:p-6">
           <h3 className="text-xl font-semibold mb-4 text-amber-900">Diagrams</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            <Link href="/admin/diagrams/project-map" className="group block">
+            <Link href="/admin/diagrams/user-journeys" className="group block">
               <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
                 <div className="absolute inset-0 bg-gradient-to-br from-sky-600/20 via-emerald-500/10 to-transparent opacity-75" />
                 <div className="relative flex items-center gap-3 text-sky-900">
                   <MapTrifold size={20} weight="duotone" className="text-sky-700" />
-                  <div className="font-semibold">Project Map</div>
+                  <div className="font-semibold">User Journeys</div>
                 </div>
                 <div className="relative mt-1 text-sm text-sky-900/80">
-                  Overview · User Flow · Entity Relation · API/Events
+                  End‑to‑end flows · Auth · Draft · Leagues
                 </div>
               </div>
             </Link>
@@ -251,19 +251,19 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </Link>
-            <Link href="/admin/diagrams/system-architecture" className="group block">
+            <Link href="/admin/diagrams/entity-relations" className="group block">
               <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-fuchsia-500/10 to-transparent opacity-75" />
                 <div className="relative flex items-center gap-3 text-indigo-900">
                   <SquaresFour size={20} weight="duotone" className="text-indigo-700" />
-                  <div className="font-semibold">System Architecture</div>
+                  <div className="font-semibold">Entity Relations</div>
                 </div>
                 <div className="relative mt-1 text-sm text-indigo-900/80">
-                  Projections · Weight Tuning · Data Flow
+                  Auth · Leagues · Draft · Scoring · Realtime
                 </div>
               </div>
             </Link>
-            <Link href="/admin/diagrams/functional-flow" className="group block">
+            <Link href="/admin/diagrams/functional-flow" className="group block" style={{display:'none'}}>
               <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
                 <div className="absolute inset-0 bg-gradient-to-br from-rose-600/20 via-orange-500/10 to-transparent opacity-75" />
                 <div className="relative flex items-center gap-3 text-rose-900">
@@ -302,7 +302,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Functional Flow and System Architecture sections removed; use hub pages above */}
+        {/* Functional Flow and Project Map hubs deprecated in favor of User Journeys & Entity Relations */}
 
         {/* Admin Tools */}
         <div className="mb-10 bg-white/95 rounded-xl p-6 shadow-lg border border-amber-200">
