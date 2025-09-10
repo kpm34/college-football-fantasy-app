@@ -105,7 +105,7 @@ export default function DiagramBySlugPage() {
         className="px-4 md:px-6 py-3 flex items-center justify-between border-b"
         style={{ borderColor: 'rgba(0,0,0,0.08)' }}
       >
-        <h1 className="text-2xl md:text-3xl font-extrabold font-bebas text-3d bg-clip-text text-transparent bg-gradient-to-r from-emerald-800 via-sky-700 to-indigo-700 tracking-wide truncate">
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-wide truncate text-sky-600">
           {prettyTitle}
         </h1>
         <div className="flex items-center gap-3 text-sm" style={{ color: '#374151' }}>
