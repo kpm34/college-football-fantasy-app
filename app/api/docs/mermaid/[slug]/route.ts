@@ -103,20 +103,19 @@ export async function GET(
       'user-journeys:scoring-user-flow': 'diagrams/user-journeys/scoring-user-flow.md',
       'user-journeys:realtime-user-flow': 'diagrams/user-journeys/realtime-user-flow.md',
       'user-journeys:ops-deploy-user-flow': 'diagrams/user-journeys/ops-deploy-user-flow.md',
-      'user-journeys:create-account': 'diagrams/functional-flow/create-account.md',
-      'user-journeys:create-league':
-        'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
-      'user-journeys:join-league': 'diagrams/functional-flow/join-league-flow-invite.md',
+      // Back-compat aliases routed to current user-journeys sources
+      'user-journeys:create-account': 'diagrams/user-journeys/auth-sign-in-up.md',
+      'user-journeys:create-league': 'diagrams/user-journeys/leagues-user-flow.md',
+      'user-journeys:join-league': 'diagrams/user-journeys/auth-invite-join-and-draft-room.md',
 
       // Functional Flow (legacy namespace retained for compatibility)
-      'functional-flow:create-account': 'diagrams/functional-flow/create-account-flow.md',
-      'functional-flow:create-league':
-        'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
-      'functional-flow:join-league': 'diagrams/functional-flow/join-league-flow-invite.md',
-      'functional-flow:draft':
-        'diagrams/functional-flow/draft-system-flow-mock-vs-real-scheduled.md',
-      'functional-flow:draft:mock': 'diagrams/functional-flow/draft-mock.md',
-      'functional-flow:draft:real': 'diagrams/functional-flow/draft-real.md',
+      // Legacy Functional Flow slugs → current user journeys
+      'functional-flow:create-account': 'diagrams/user-journeys/auth-sign-in-up.md',
+      'functional-flow:create-league': 'diagrams/user-journeys/leagues-user-flow.md',
+      'functional-flow:join-league': 'diagrams/user-journeys/auth-invite-join-and-draft-room.md',
+      'functional-flow:draft': 'diagrams/user-journeys/draft-user-flow.md',
+      'functional-flow:draft:mock': 'diagrams/user-journeys/draft-user-flow.md',
+      'functional-flow:draft:real': 'diagrams/user-journeys/draft-user-flow.md',
 
       // System Architecture (technical systems)
       'system-architecture:projections-overview':
