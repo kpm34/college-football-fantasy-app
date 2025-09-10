@@ -7,7 +7,9 @@ export default function DiagramsHubPage() {
     <div className="min-h-screen bg-neutral-50">
       <div className="mx-auto max-w-5xl p-6">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold">Diagrams</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold font-bebas text-3d bg-clip-text text-transparent bg-gradient-to-r from-emerald-700 via-sky-600 to-indigo-700 tracking-wide">
+            Diagrams
+          </h1>
           <a href="/api/lucid/authorize" className="rounded px-4 py-2 bg-black text-white text-sm">
             Connect Lucid
           </a>
