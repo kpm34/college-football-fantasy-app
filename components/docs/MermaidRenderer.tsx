@@ -9,6 +9,11 @@ interface MermaidRendererProps {
   mode?: 'modal' | 'page'
   // Whether to hijack wheel for zooming; disable on long pages to allow scrolling
   wheelZoom?: boolean
+  // Per-step wheel zoom multiplier (lower = gentler). Defaults to 1.02 (~2%).
+  zoomStep?: number
+  // Optional scale bounds for zoom controls
+  zoomMin?: number
+  zoomMax?: number
 }
 
 export function MermaidRenderer({
@@ -16,6 +21,9 @@ export function MermaidRenderer({
   chart,
   mode = 'modal',
   wheelZoom = mode === 'modal',
+  zoomStep = 1.02,
+  zoomMin = 0.3,
+  zoomMax = 4,
 }: MermaidRendererProps) {
   const chartsToRender = charts || (chart ? [chart] : [])
   const containerRef = useRef<HTMLDivElement>(null)
@@ -99,8 +107,10 @@ export function MermaidRenderer({
         if (!wheelZoom) return // allow page scroll
         e.preventDefault()
         const delta = -e.deltaY
-        const factor = delta > 0 ? 1.1 : 0.9
-        const next = Math.min(4, Math.max(0.3, scale * factor))
+        // Gentler per-event step; ignore magnitude to avoid huge jumps on high-res trackpads
+        const step = zoomStep > 1 ? zoomStep : 1.02
+        const factor = delta > 0 ? step : 1 / step
+        const next = Math.min(zoomMax, Math.max(zoomMin, scale * factor))
         // Zoom towards cursor roughly
         const rect = host.getBoundingClientRect()
         const ox = (e.clientX - rect.left - translateX) / scale
@@ -140,7 +150,7 @@ export function MermaidRenderer({
       }
 
       const setScaleRelative = (factor: number) => {
-        const next = Math.max(0.3, Math.min(4, scale * factor))
+        const next = Math.max(zoomMin, Math.min(zoomMax, scale * factor))
         scale = next
         applyTransform()
         emitScale()
@@ -157,7 +167,7 @@ export function MermaidRenderer({
       const getScale = () => scale
 
       const setScaleAbsolute = (next: number) => {
-        const bounded = Math.max(0.3, Math.min(4, next))
+        const bounded = Math.max(zoomMin, Math.min(zoomMax, next))
         scale = bounded
         applyTransform()
         emitScale()
@@ -217,7 +227,7 @@ export function MermaidRenderer({
             const host = el.querySelector('.pz-host') as HTMLElement | null
             if (host) {
               host.style.display = 'block'
-              host.style.overflow = mode === 'modal' ? 'hidden' : 'visible'
+              host.style.overflow = mode === 'modal' ? 'hidden' : 'auto'
               host.style.background = '#FFF8ED'
               host.style.borderRadius = '0.25rem'
               host.style.padding = '0'
@@ -398,7 +408,13 @@ export function MermaidRenderer({
   return (
     <div ref={containerRef} className="space-y-8">
       {chartsToRender.map((code, idx) => (
-        <div key={idx} data-mermaid data-mermaid-code={code} className="min-h-[200px]" />
+        <div
+          key={idx}
+          data-mermaid
+          data-mermaid-code={code}
+          className="min-h-[200px] overflow-auto rounded-md"
+          style={{ background: '#FFF8ED', border: '1px solid rgba(16, 185, 129, 0.25)' }}
+        />
       ))}
     </div>
   )
