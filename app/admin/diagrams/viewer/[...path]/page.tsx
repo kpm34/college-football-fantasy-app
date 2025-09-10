@@ -66,13 +66,28 @@ export default function UniversalDiagramViewerPage() {
         <h1 className="text-xl md:text-2xl font-bold mb-3 break-all">Viewer: {relPath}</h1>
         {error && <div className="mb-3 text-red-700">{error}</div>}
         {(ext === 'drawio' || ext === 'xml') && (
-          <iframe
-            title="drawio-viewer"
-            className="w-full h-[80vh] rounded border"
-            src={`https://viewer.diagrams.net/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=${encodeURIComponent(relPath)}#R${encodeURIComponent(
-              text
-            )}`}
-          />
+          <div className="w-full">
+            <iframe
+              title="drawio-viewer"
+              className="w-full h-[80vh] rounded border"
+              src={`https://viewer.diagrams.net/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=${encodeURIComponent(relPath)}#R${encodeURIComponent(
+                text
+              )}`}
+            />
+            <div className="mt-2 flex gap-2 text-sm">
+              <a
+                href={`https://app.diagrams.net/?title=${encodeURIComponent(
+                  relPath
+                )}&libs=er;general;flowchart&url=${encodeURIComponent(fileUrl)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="px-2 py-1 rounded border border-neutral-300 bg-white hover:bg-neutral-50"
+              >
+                Edit in draw.io
+              </a>
+              <span className="text-neutral-500">(No configuration needed; the editor loads from the URL above.)</span>
+            </div>
+          </div>
         )}
         {ext === 'excalidraw' && json && (
           <div className="w-full h-[80vh] rounded border overflow-hidden bg-white">
