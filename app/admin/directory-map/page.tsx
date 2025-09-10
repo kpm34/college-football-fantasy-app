@@ -250,8 +250,8 @@ export default function DirectoryMapPage() {
           </div>
         </div>
 
-        {/* Body: three-column on large screens. Sidebar | Content | Diagrams */}
-        <div className="grid gap-6 lg:grid-cols-[280px,1fr,2fr] items-start">
+        {/* Body: two-column layout. Sidebar | Content */}
+        <div className="grid gap-6 lg:grid-cols-[280px,1fr] items-start">
           {/* Sidebar: Chapter navigation + Important files */}
           <aside className="hidden lg:block sticky top-24 self-start space-y-4">
             {/* Chapter Navigation (bar) */}
@@ -322,25 +322,27 @@ export default function DirectoryMapPage() {
               {error && <span className="text-rose-800 text-sm">{error}</span>}
             </div>
 
-            {/* Description */}
-            <section>
-              <h3 className="text-lg font-semibold mb-1">Overview</h3>
-              <p className="m-0 text-emerald-900/90 whitespace-pre-wrap">
-                {CHAPTER_CONTENT[active]?.overview || 'No overview available.'}
-              </p>
-            </section>
+            {/* Description (horizontal on large screens) */}
+            <div className="grid gap-6 lg:grid-cols-2 items-start">
+              <section>
+                <h3 className="text-lg font-semibold mb-1">Overview</h3>
+                <p className="m-0 text-emerald-900/90 whitespace-pre-wrap">
+                  {CHAPTER_CONTENT[active]?.overview || 'No overview available.'}
+                </p>
+              </section>
 
-            <section className="mt-4">
-              <h3 className="text-lg font-semibold mb-2">Key folders</h3>
-              <ul className="m-0">
-                {(CHAPTER_CONTENT[active]?.keyFolders || []).map(k => (
-                  <li key={k.name} className="mb-1">
-                    <span className="font-medium">{k.name}</span>
-                    <span className="text-emerald-900/80"> — {k.description}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
+              <section>
+                <h3 className="text-lg font-semibold mb-2">Key folders</h3>
+                <ul className="m-0">
+                  {(CHAPTER_CONTENT[active]?.keyFolders || []).map(k => (
+                    <li key={k.name} className="mb-1">
+                      <span className="font-medium">{k.name}</span>
+                      <span className="text-emerald-900/80"> — {k.description}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
 
             {/* Optional extra notes from chapter markdown (plain render) */}
             {markdown && (
@@ -352,20 +354,17 @@ export default function DirectoryMapPage() {
               </section>
             )}
 
-            {/* Diagrams moved to dedicated right panel for full-height viewing on desktop */}
+            {/* Diagrams under description */}
+            <section className="mt-6">
+              <h3 className="text-lg font-semibold mb-2">Diagrams</h3>
+              {charts && charts.length > 0 ? (
+                <MermaidRenderer charts={charts} mode="page" wheelZoom={false} />
+              ) : (
+                <div className="text-emerald-900/70 text-sm">No diagrams available for this chapter.</div>
+              )}
+            </section>
           </article>
-
-          {/* Right panel: Full-height diagram viewer */}
-          <section className="hidden lg:block sticky top-24 self-start rounded-2xl border border-emerald-200 bg-emerald-50/30 p-3 h-[calc(100vh-8rem)] overflow-auto">
-            <h3 className="text-lg font-semibold mb-2">Diagrams</h3>
-            {charts && charts.length > 0 ? (
-              <MermaidRenderer charts={charts} mode="modal" wheelZoom={true} />
-            ) : (
-              <div className="text-emerald-900/70 text-sm">
-                No diagrams available for this chapter.
-              </div>
-            )}
-          </section>
+          {/* No separate right panel; diagrams are shown within article */}
         </div>
       </div>
 
