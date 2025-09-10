@@ -11,7 +11,12 @@ interface MermaidRendererProps {
   wheelZoom?: boolean
 }
 
-export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mode === 'modal' }: MermaidRendererProps) {
+export function MermaidRenderer({
+  charts,
+  chart,
+  mode = 'modal',
+  wheelZoom = mode === 'modal',
+}: MermaidRendererProps) {
   const chartsToRender = charts || (chart ? [chart] : [])
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -21,7 +26,13 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
 
     const setupPanZoom = (host: HTMLElement) => {
       const svg = host.querySelector('svg') as SVGSVGElement | null
-      if (!svg) return { dispose: () => {}, setScaleRelative: (_f: number) => {}, reset: () => {}, getScale: () => 1 }
+      if (!svg)
+        return {
+          dispose: () => {},
+          setScaleRelative: (_f: number) => {},
+          reset: () => {},
+          getScale: () => 1,
+        }
       let isDragging = false
       let lastX = 0
       let lastY = 0
@@ -79,7 +90,9 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
       }
       const onPointerUp = (e: PointerEvent) => {
         isDragging = false
-        try { host.releasePointerCapture(e.pointerId) } catch {}
+        try {
+          host.releasePointerCapture(e.pointerId)
+        } catch {}
         svg.style.cursor = 'grab'
       }
       const onWheel = (e: WheelEvent) => {
@@ -159,8 +172,14 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
         mermaid.initialize({
           startOnLoad: false,
           securityLevel: 'loose',
-          theme: 'dark',
-          flowchart: { htmlLabels: true, useMaxWidth: true, nodeSpacing: 70, rankSpacing: 60, padding: 12 },
+          theme: 'base',
+          flowchart: {
+            htmlLabels: true,
+            useMaxWidth: true,
+            nodeSpacing: 70,
+            rankSpacing: 60,
+            padding: 12,
+          },
           sequence: {
             diagramMarginX: 30,
             diagramMarginY: 30,
@@ -172,19 +191,21 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
             rightAngles: false,
             showSequenceNumbers: false,
             useMaxWidth: true,
-            wrap: true
+            wrap: true,
           },
           themeVariables: {
-            background: '#0b1220',
-            primaryTextColor: '#ffffff',
-            secondaryTextColor: '#f5f7fb',
-            lineColor: '#cbd5e1',
-            nodeBorder: '#e2e8f0',
-            fontSize: '17px'
-          }
+            background: '#FFF8ED',
+            primaryTextColor: '#1F2937',
+            secondaryTextColor: '#374151',
+            lineColor: '#64748B',
+            nodeBorder: '#E5D5BF',
+            fontSize: '17px',
+          },
         })
         if (!isMounted || !containerRef.current) return
-        const nodes = Array.from(containerRef.current.querySelectorAll<HTMLElement>('[data-mermaid]'))
+        const nodes = Array.from(
+          containerRef.current.querySelectorAll<HTMLElement>('[data-mermaid]')
+        )
         for (const [index, el] of nodes.entries()) {
           const raw = el.getAttribute('data-mermaid-code') || ''
           // Light sanitization: escape characters that commonly break parsing in labels
@@ -197,7 +218,7 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
             if (host) {
               host.style.display = 'block'
               host.style.overflow = mode === 'modal' ? 'hidden' : 'visible'
-              host.style.background = 'transparent'
+              host.style.background = '#FFF8ED'
               host.style.borderRadius = '0.25rem'
               host.style.padding = '0'
               host.style.width = '100%'
@@ -219,7 +240,10 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
                   const cw = host.clientWidth
                   const sw = cw / vb.width
                   if (mode === 'modal') {
-                    const chAvail = Math.max(400, host.clientHeight || Math.floor((window.innerHeight || 800) * 0.85))
+                    const chAvail = Math.max(
+                      400,
+                      host.clientHeight || Math.floor((window.innerHeight || 800) * 0.85)
+                    )
                     const sh = chAvail / vb.height
                     const base = Math.min(sw, sh)
                     const scale = Math.max(0.5, base)
@@ -300,7 +324,7 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
                   const pct = Number(slider.value)
                   const next = pct / 100
                   if ((controller as any).setScaleAbsolute) {
-                    (controller as any).setScaleAbsolute(next)
+                    ;(controller as any).setScaleAbsolute(next)
                   } else {
                     controller.setScaleRelative(next / controller.getScale())
                   }
@@ -320,7 +344,7 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
                     controller.reset()
                     // absolute set if supported; else relative from 1
                     if ((controller as any).setScaleAbsolute) {
-                      (controller as any).setScaleAbsolute(scale)
+                      ;(controller as any).setScaleAbsolute(scale)
                     } else {
                       controller.setScaleRelative(scale)
                     }
@@ -331,7 +355,9 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
                 if (a === 'zout') setScale(1 / 1.15)
                 if (a === 'reset') controller.reset()
                 if (a === 'save' && svgForSave) {
-                  const blob = new Blob([svgForSave.outerHTML], { type: 'image/svg+xml;charset=utf-8' })
+                  const blob = new Blob([svgForSave.outerHTML], {
+                    type: 'image/svg+xml;charset=utf-8',
+                  })
                   const url = URL.createObjectURL(blob)
                   const link = document.createElement('a')
                   link.href = url
@@ -346,8 +372,10 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
           } catch (error) {
             console.error('Mermaid render failed:', error)
             // Do not show raw code; present a compact error placeholder instead
-            const message = (error as any)?.message ? String((error as any).message).slice(0, 140) : 'Unknown error'
-            el.innerHTML = `<div style="padding:0.75rem;border:1px dashed rgba(255,255,255,0.2);border-radius:0.5rem;color:#d1d5db;background:#111827">Diagram failed to render. ${message}</div>`
+            const message = (error as any)?.message
+              ? String((error as any).message).slice(0, 140)
+              : 'Unknown error'
+            el.innerHTML = `<div style="padding:0.75rem;border:1px dashed rgba(0,0,0,0.2);border-radius:0.5rem;color:#1f2937;background:#FFF8ED">Diagram failed to render. ${message}</div>`
           }
         }
       } catch (error) {
@@ -359,8 +387,10 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
 
     return () => {
       isMounted = false
-      disposers.forEach((d) => {
-        try { d() } catch {}
+      disposers.forEach(d => {
+        try {
+          d()
+        } catch {}
       })
     }
   }, [chartsToRender])
@@ -373,5 +403,3 @@ export function MermaidRenderer({ charts, chart, mode = 'modal', wheelZoom = mod
     </div>
   )
 }
-
-

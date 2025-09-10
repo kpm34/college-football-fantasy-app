@@ -1,0 +1,46 @@
+Section,Route,Access,Status,Notes
+Public,/,public,active,Landing page
+Public,/conference-showcase,public,active,Conference overview
+Public,/projection-showcase,public,active,Projections showcase
+Public,/videos,public,active,Video hub
+Public,/videos/[program],public,active,Team video page
+Public,/launch,public,active,Launch information
+Public,/offline,public,active,Offline fallback
+Auth,/login,public,active,Sign in
+Auth,/signup,public,active,Create account
+Auth,/auth/callback,public,active,OAuth callback -> redirects
+Join,/invite/[leagueId],public,active,Server redirect to /league/join
+Join,/league/join,public,active,Join leagues
+Dashboard,/dashboard,auth,active,User home
+Dashboard,/account-settings,auth,active,Account management
+Dashboard,/scoreboard,auth,active,Global scoreboard
+Dashboard,/standings,auth,active,Global standings
+League,/league/create,auth,active,Create league
+League,/league/[leagueId],auth,active,League home
+League,/league/[leagueId]/locker-room,auth,active,Lineup management
+League,/league/[leagueId]/schedule,auth,active,League schedule
+League,/league/[leagueId]/scoreboard,auth,active,League scoreboard
+League,/league/[leagueId]/standings,auth,active,League standings
+League,/league/[leagueId]/commissioner,role:commissioner,active,Commissioner tools
+Draft,/draft/[leagueId],auth,active,Live draft room (time-gated)
+Admin,/admin,role:admin,active,Admin dashboard
+Admin,/admin/diagrams,role:admin,active,Diagram hub
+Admin,/admin/diagrams/site-map,role:admin,active,Site map hub
+Admin,/admin/diagrams/project-map,role:admin,active,Project map hub
+Admin,/admin/diagrams/system-architecture,role:admin,active,System architecture hub
+Admin,/admin/diagrams/functional-flow,role:admin,active,Functional flow hub
+Admin,/admin/diagrams/draft,role:admin,active,Draft diagrams hub
+Admin,/admin/cache-status,role:admin,active,Cache status
+Admin,/admin/sync-status,role:admin,active,Sync status
+Admin,/admin/sec-survey,role:admin,active,SEC survey
+Admin,/admin/product-vision,role:admin,active,Product vision
+API,/api/auth/*,system,active,Auth endpoints
+API,/api/leagues/*,system,active,League endpoints
+API,/api/drafts/*,system,active,Drafts endpoints
+API,/api/players/*,system,active,Players endpoints
+API,/api/games/*,system,active,Games endpoints
+API,/api/rankings/*,system,active,Rankings endpoints
+API,/api/admin/*,system,active,Admin endpoints
+API,/api/cron/*,system,active,Cron endpoints
+API,/api/docs/*,system,active,Docs endpoints
+API,/api/{blender|meshy|runway}/*,system,active,External integrations

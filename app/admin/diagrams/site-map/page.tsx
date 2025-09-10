@@ -22,6 +22,13 @@ export default function SiteMapDiagramsPage() {
               <div className="font-semibold">{i.title}</div>
             </a>
           ))}
+          <a
+            href="/admin/diagrams/site-map/final-table"
+            className="px-4 py-3 rounded bg-emerald-900 text-white text-left shadow hover:bg-emerald-950"
+            title="Open interactive Final Version table"
+          >
+            <div className="font-semibold">Final Version Table</div>
+          </a>
         </div>
       </div>
     </div>

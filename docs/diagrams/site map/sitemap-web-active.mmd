@@ -1,21 +1,6 @@
----
-title: Sitemap — Web (Active)
-updated: 2025-09-10T14:19:14Z
-state: active
-platform: web
-source: docs/diagrams/site map
----
-
-### Purpose
-Active (current) site map for the web experience. Keep under ~120 lines; expand only as needed.
-
-### Method
-Scanned Next.js App Router under `app/` including `(league)`, `(dashboard)`, `admin`, and `api/` subtrees, plus `middleware.ts`. No `src/app/` present. Cross-checked attic diagrams for gaps.
-
-```mermaid
+%% CFB Fantasy - Site Map (Web Active)
+%% Generated: 2025-09-10T14:19:14Z
 flowchart TD
-  %% Site Map – generated 2025-09-10T14:19:14Z
-
   %% Color classes
   classDef public fill:#FFF7E6,stroke:#D97706,color:#78350F,stroke-width:1px;
   classDef auth fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E,stroke-width:1px;
@@ -25,8 +10,9 @@ flowchart TD
   classDef admin fill:#F3F4F6,stroke:#6B7280,color:#111827,stroke-width:1px;
   classDef content fill:#FFE4E6,stroke:#F43F5E,color:#881337,stroke-width:1px;
 
-  %% Public
+  %% ===== Public =====
   subgraph Public
+    direction TB
     root["/ (Landing)"]:::public
     conf["/conference-showcase"]:::public
     proj["/projection-showcase"]:::public
@@ -36,29 +22,33 @@ flowchart TD
     offline["/offline"]:::public
   end
 
-  %% Auth
+  %% ===== Auth =====
   subgraph Auth
+    direction TB
     login["/login"]:::auth
     signup["/signup"]:::auth
     authCallback["/auth/callback (OAuth)"]:::auth
   end
 
-  %% Join / Invite
+  %% ===== Join / Invite =====
   subgraph Join_Invite["Join / Invite"]
+    direction TB
     leagueJoin["/league/join"]:::public
     invite["/invite/[leagueId]"]:::public
   end
 
-  %% Dashboard
+  %% ===== Dashboard =====
   subgraph Dashboard
+    direction TB
     dash["/dashboard"]:::user
     acct["/account-settings"]:::user
     score["/scoreboard"]:::user
     standings["/standings"]:::user
   end
 
-  %% League
+  %% ===== League =====
   subgraph League
+    direction TB
     leagueHome["/league/[leagueId]"]:::league
     locker["/league/[leagueId]/locker-room"]:::league
     schedule["/league/[leagueId]/schedule"]:::league
@@ -69,24 +59,31 @@ flowchart TD
     joinLeague["/league/join"]:::league
   end
 
-  %% Draft
+  %% ===== Draft =====
   subgraph Draft
+    direction TB
     draft["/draft/[leagueId]"]:::league
   end
 
-  %% Admin
+  %% ===== Admin =====
   subgraph Admin
+    direction TB
     adminRoot["/admin"]:::admin
     adminDiagrams["/admin/diagrams"]:::admin
     adminSiteMap["/admin/diagrams/site-map"]:::admin
+    adminProjMap["/admin/diagrams/project-map"]:::admin
+    adminSysArch["/admin/diagrams/system-architecture"]:::admin
+    adminFlows["/admin/diagrams/functional-flow"]:::admin
+    adminDraft["/admin/diagrams/draft"]:::admin
     adminCache["/admin/cache-status"]:::admin
     adminSync["/admin/sync-status"]:::admin
     adminSurvey["/admin/sec-survey"]:::admin
     adminPV["/admin/product-vision"]:::admin
   end
 
-  %% API (summary)
+  %% ===== API (summary only) =====
   subgraph API_Summary["API (summary)"]
+    direction TB
     apiAuth["/api/auth/*"]
     apiLeagues["/api/leagues/*"]
     apiDrafts["/api/drafts/*"]
@@ -96,23 +93,18 @@ flowchart TD
     apiAdmin["/api/admin/*"]
     apiCron["/api/cron/*"]
     apiDocs["/api/docs/*"]
-    apiExternal["/api/external/*"]
+    apiExternal["/api/{blender|meshy|runway}/*"]
   end
 
-  %% Key flows / redirects
+  %% ===== Key flows / redirects =====
   root --> login
-  login -. redirect if session .-> dash
-  authCallback -- redirect on success --> dash
   root --> leagueJoin
+  login -. redirect if session .-> dash
+  signup --> dash
+  authCallback --> dash
   invite -. server redirect .-> leagueJoin
   dash --> leagueHome
   leagueHome --> draft
   leagueHome --> locker
   joinLeague --> leagueHome
   createLeague --> leagueHome
-```
-
-### Legend
-- Public (amber), Auth (light blue), User/Dashboard (cyan), League (purple), Commissioner (green), Admin (gray), Content (rose)
-- Redirects shown with dashed edges
-- Draft access is typically time-gated by schedule
