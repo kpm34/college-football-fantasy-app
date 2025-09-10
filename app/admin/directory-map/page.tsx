@@ -234,7 +234,7 @@ export default function DirectoryMapPage() {
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-stone-50">
       <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl md:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-700 via-sky-600 to-indigo-600">
+          <h1 className="text-3xl md:text-4xl font-extrabold font-bebas text-3d bg-clip-text text-transparent bg-gradient-to-r from-emerald-700 via-sky-600 to-indigo-700">
             Directory Map
           </h1>
           <div className="flex items-center gap-3">
