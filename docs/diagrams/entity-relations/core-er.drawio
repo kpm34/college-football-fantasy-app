@@ -1,0 +1,23 @@
+<mxfile host="app.diagrams.net" modified="2025-09-10T00:00:00Z" agent="CFB" version="22.1.0">
+  <diagram id="er-core" name="Core ER">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="tbl-leagues" value="leagues" style="shape=table;container=1;childLayout=tableLayout;strokeColor=#4f46e5;fillColor=#eef2ff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="140" width="360" height="152" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg-id" value="id,PK" style="shape=tableRow;" vertex="1" parent="tbl-leagues"><mxGeometry x="0" y="28" width="360" height="24" as="geometry"/></mxCell>
+        <mxCell id="lg-name" value="name,string" style="shape=tableRow;" vertex="1" parent="tbl-leagues"><mxGeometry x="0" y="52" width="360" height="24" as="geometry"/></mxCell>
+        <mxCell id="tbl-teams" value="user_teams" style="shape=table;container=1;childLayout=tableLayout;strokeColor=#6366f1;fillColor=#e0e7ff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="320" width="360" height="152" as="geometry"/>
+        </mxCell>
+        <mxCell id="tm-id" value="id,PK" style="shape=tableRow;" vertex="1" parent="tbl-teams"><mxGeometry x="0" y="28" width="360" height="24" as="geometry"/></mxCell>
+        <mxCell id="tm-league" value="leagueId,FKey" style="shape=tableRow;" vertex="1" parent="tbl-teams"><mxGeometry x="0" y="52" width="360" height="24" as="geometry"/></mxCell>
+        <mxCell id="edge-league-teams" edge="1" parent="1" source="tbl-leagues" target="tbl-teams" style="endArrow=classic;strokeColor=#334155;endSize=8;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

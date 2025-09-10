@@ -1,0 +1,24 @@
+<mxfile host="app.diagrams.net" modified="2025-09-10T00:00:00Z" agent="CFB" version="22.1.0">
+  <diagram id="er-auth" name="Auth ER">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="tbl-users" value="AUTH_USERS" style="shape=table;container=1;childLayout=tableLayout;strokeColor=#16a34a;fillColor=#dcfce7;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="180" width="340" height="176" as="geometry"/>
+        </mxCell>
+        <mxCell id="users-id" value="userId,PK" style="shape=tableRow;" vertex="1" parent="tbl-users"><mxGeometry x="0" y="28" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="users-email" value="email,string" style="shape=tableRow;" vertex="1" parent="tbl-users"><mxGeometry x="0" y="52" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="users-name" value="name,string" style="shape=tableRow;" vertex="1" parent="tbl-users"><mxGeometry x="0" y="76" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="tbl-sessions" value="SESSIONS" style="shape=table;container=1;childLayout=tableLayout;strokeColor=#22c55e;fillColor=#bbf7d0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="200" width="340" height="128" as="geometry"/>
+        </mxCell>
+        <mxCell id="sessions-id" value="sessionId,PK" style="shape=tableRow;" vertex="1" parent="tbl-sessions"><mxGeometry x="0" y="28" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="sessions-user" value="userId,FKey" style="shape=tableRow;" vertex="1" parent="tbl-sessions"><mxGeometry x="0" y="52" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="edge-users-sessions" edge="1" parent="1" source="tbl-users" target="tbl-sessions" style="endArrow=classic;strokeColor=#334155;endSize=8;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
