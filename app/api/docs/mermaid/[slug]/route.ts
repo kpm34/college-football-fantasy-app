@@ -212,11 +212,23 @@ export async function GET(
     if (slug.startsWith('user-journeys:')) {
       const parts = slug.split(':').slice(1)
       if (parts.length) {
-        const folderPath = `diagrams/user-journeys/${parts.join('/')}.md`
-        const docsPath = path.join(process.cwd(), 'docs')
-        const fullFolderPath = path.join(docsPath, folderPath)
-        if (fs.existsSync(fullFolderPath)) {
-          fileMap[slug] = folderPath
+        // First try flattened auth-* filenames
+        if (parts[0] === 'auth' && parts.length >= 2) {
+          const flat = `diagrams/user-journeys/auth-${parts.slice(1).join('-')}.md`
+          const docsPath = path.join(process.cwd(), 'docs')
+          const fullFlat = path.join(docsPath, flat)
+          if (fs.existsSync(fullFlat)) {
+            fileMap[slug] = flat
+          }
+        }
+        // Fallback to nested structure
+        if (!fileMap[slug]) {
+          const folderPath = `diagrams/user-journeys/${parts.join('/')}.md`
+          const docsPath = path.join(process.cwd(), 'docs')
+          const fullFolderPath = path.join(docsPath, folderPath)
+          if (fs.existsSync(fullFolderPath)) {
+            fileMap[slug] = folderPath
+          }
         }
       }
     }
@@ -412,9 +424,28 @@ async function buildChartsFromFile(filePath: string) {
     const charts = extractMermaidBlocks(content)
     const stats = fs.statSync(fullPath)
 
+    // Try to read updated timestamp from frontmatter if present
+    let updatedAt = stats.mtime.toISOString()
+    try {
+      const fmMatch = content.match(/^---\n([\s\S]*?)\n---/)
+      if (fmMatch) {
+        const fm = fmMatch[1]
+        const lines = fm.split(/\r?\n/)
+        for (const line of lines) {
+          const m = line.match(/^updated:\s*(.+)$/)
+          if (m) {
+            const iso = m[1].trim().replace(/^"|"$/g, '')
+            const d = new Date(iso)
+            if (!isNaN(d.getTime())) updatedAt = d.toISOString()
+            break
+          }
+        }
+      }
+    } catch {}
+
     return {
       charts,
-      updatedAt: stats.mtime.toISOString(),
+      updatedAt,
       path: filePath,
       slug: filePath,
       chartsCount: charts.length,
