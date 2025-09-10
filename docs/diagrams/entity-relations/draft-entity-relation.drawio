@@ -1,0 +1,38 @@
+<mxfile host="app.diagrams.net" modified="2025-09-10T00:00:00Z" agent="CFB" version="22.1.0">
+  <diagram id="er-draft" name="Draft ER">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <!-- DRAFTS -->
+        <mxCell id="tbl-drafts" value="DRAFTS" style="shape=table;container=1;childLayout=tableLayout;strokeColor=#0ea5e9;fillColor=#e0f2fe;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="140" width="340" height="152" as="geometry"/>
+        </mxCell>
+        <mxCell id="drafts-id" value="draftId,PK" style="shape=tableRow;" vertex="1" parent="tbl-drafts"><mxGeometry x="0" y="28" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="drafts-league" value="leagueId,FKey" style="shape=tableRow;" vertex="1" parent="tbl-drafts"><mxGeometry x="0" y="52" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="drafts-status" value="status,enum" style="shape=tableRow;" vertex="1" parent="tbl-drafts"><mxGeometry x="0" y="76" width="340" height="24" as="geometry"/></mxCell>
+        <!-- DRAFT_STATES -->
+        <mxCell id="tbl-states" value="DRAFT_STATES" style="shape=table;container=1;childLayout=tableLayout;strokeColor=#06b6d4;fillColor=#cffafe;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="140" width="340" height="128" as="geometry"/>
+        </mxCell>
+        <mxCell id="states-id" value="draftId,PK/FK" style="shape=tableRow;" vertex="1" parent="tbl-states"><mxGeometry x="0" y="28" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="states-clock" value="clockMs,number" style="shape=tableRow;" vertex="1" parent="tbl-states"><mxGeometry x="0" y="52" width="340" height="24" as="geometry"/></mxCell>
+        <!-- DRAFT_PICKS -->
+        <mxCell id="tbl-picks" value="DRAFT_PICKS" style="shape=table;container=1;childLayout=tableLayout;strokeColor=#10b981;fillColor=#d1fae5;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="360" width="340" height="176" as="geometry"/>
+        </mxCell>
+        <mxCell id="picks-id" value="pickId,PK" style="shape=tableRow;" vertex="1" parent="tbl-picks"><mxGeometry x="0" y="28" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="picks-draft" value="draftId,FKey" style="shape=tableRow;" vertex="1" parent="tbl-picks"><mxGeometry x="0" y="52" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="picks-team" value="teamId,FKey" style="shape=tableRow;" vertex="1" parent="tbl-picks"><mxGeometry x="0" y="76" width="340" height="24" as="geometry"/></mxCell>
+        <mxCell id="picks-player" value="playerId,FKey" style="shape=tableRow;" vertex="1" parent="tbl-picks"><mxGeometry x="0" y="100" width="340" height="24" as="geometry"/></mxCell>
+        <!-- Edges -->
+        <mxCell id="edge-drafts-states" edge="1" parent="1" source="tbl-drafts" target="tbl-states" style="endArrow=classic;strokeColor=#334155;endSize=8;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-drafts-picks" edge="1" parent="1" source="tbl-drafts" target="tbl-picks" style="endArrow=classic;strokeColor=#334155;endSize=8;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
