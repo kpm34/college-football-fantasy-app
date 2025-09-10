@@ -4,7 +4,7 @@ import { Animated } from '@components/dev/Animated'
 import { MermaidRenderer } from '@components/docs/MermaidRenderer'
 import { useAuth } from '@lib/hooks/useAuth'
 import Link from 'next/link'
-import { Lightning, MapTrifold, SquaresFour, Trophy } from 'phosphor-react'
+import { Lightning, MapPin, MapTrifold, SquaresFour, Trophy } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 
 export default function AdminDashboard() {
@@ -224,6 +224,30 @@ export default function AdminDashboard() {
                 </div>
                 <div className="relative mt-1 text-sm text-sky-900/80">
                   Overview · User Flow · Entity Relation · API/Events
+                </div>
+              </div>
+            </Link>
+            <Link href="/admin/directory-map" className="group block">
+              <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/20 via-sky-500/10 to-transparent opacity-75" />
+                <div className="relative flex items-center gap-3 text-emerald-900">
+                  <span className="inline-block h-5 w-5 rounded-sm bg-emerald-600" />
+                  <div className="font-semibold">Directory Map</div>
+                </div>
+                <div className="relative mt-1 text-sm text-emerald-900/80">
+                  What each folder contributes & key top-level files
+                </div>
+              </div>
+            </Link>
+            <Link href="/admin/diagrams/site-map" className="group block">
+              <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/20 via-teal-500/10 to-transparent opacity-75" />
+                <div className="relative flex items-center gap-3 text-emerald-900">
+                  <MapPin size={20} weight="duotone" className="text-emerald-700" />
+                  <div className="font-semibold">Site Map</div>
+                </div>
+                <div className="relative mt-1 text-sm text-emerald-900/80">
+                  Web · Mobile · Active · Final
                 </div>
               </div>
             </Link>
