@@ -80,7 +80,7 @@ export default function ProjectMapDiagramsPage() {
                   {entries.map(({ slug, title }) => (
                     <div key={slug} className="flex gap-2">
                       <a
-                        href={`/admin?open=${encodeURIComponent(slug)}&title=${encodeURIComponent(title)}`}
+                        href={`/admin/diagrams/${encodeURIComponent(slug)}`}
                         className="px-4 py-3 rounded bg-sky-700 text-white text-left shadow hover:bg-sky-800 flex-1"
                       >
                         <div className="font-semibold truncate">{title}</div>

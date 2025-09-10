@@ -1,9 +1,11 @@
 'use client'
 
+import { Animated } from '@components/dev/Animated'
 import { MermaidRenderer } from '@components/docs/MermaidRenderer'
 import { useAuth } from '@lib/hooks/useAuth'
 import Link from 'next/link'
-import { useState } from 'react'
+import { Lightning, MapTrifold, SquaresFour, Trophy } from 'phosphor-react'
+import { useEffect, useState } from 'react'
 
 export default function AdminDashboard() {
   const { user, loading } = useAuth()
@@ -11,6 +13,8 @@ export default function AdminDashboard() {
   const [charts, setCharts] = useState<string[]>([])
   const [lastUpdated, setLastUpdated] = useState<string>('')
   const [debugInfo, setDebugInfo] = useState<any>(null)
+  const [loadingDiagram, setLoadingDiagram] = useState<boolean>(false)
+  const [slugInput, setSlugInput] = useState<string>('')
   const [subscriptions, setSubscriptions] = useState({
     appwrite: { status: 'Pro', features: 'Unlimited functions, 100GB storage, priority support' },
     vercel: {
@@ -57,12 +61,25 @@ export default function AdminDashboard() {
       const d = e?.detail || {}
       if (d.open) loadDiagram(String(d.open), String(d.title || 'Diagram'))
     }
-    window.addEventListener('admin-open-diagram', (window as any)._openDiagramHandler as any, {
-      once: true,
-    })
+    window.addEventListener('admin-open-diagram', (window as any)._openDiagramHandler as any)
   }
 
-  if (loading) {
+  // Also support query param ?open=... reliably on mount
+  useEffect(() => {
+    try {
+      const url = new URL(window.location.href)
+      const open = url.searchParams.get('open')
+      const title = url.searchParams.get('title') || 'Diagram'
+      if (open) {
+        window.dispatchEvent(new CustomEvent('admin-open-diagram', { detail: { open, title } }))
+        url.searchParams.delete('open')
+        url.searchParams.delete('title')
+        window.history.replaceState({}, '', url.toString())
+      }
+    } catch {}
+  }, [])
+
+  if (loading && !devBypass) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-stone-50 flex items-center justify-center">
         <div className="text-amber-900 font-semibold">Loading…</div>
@@ -88,6 +105,7 @@ export default function AdminDashboard() {
 
   const loadDiagram = async (slug: string, title: string) => {
     try {
+      setLoadingDiagram(true)
       const encoded = encodeURIComponent(slug).replace(/%3A/g, ':')
       const res = await fetch(`/api/docs/mermaid/${encoded}`, { cache: 'no-store' })
       const data = await res.json()
@@ -100,6 +118,8 @@ export default function AdminDashboard() {
       const message = (error as any)?.message || 'Unknown error'
       setDebugInfo({ endpoint: slug, error: message })
       setCharts([])
+    } finally {
+      setLoadingDiagram(false)
     }
   }
 
@@ -146,185 +166,126 @@ export default function AdminDashboard() {
       style={{ background: 'linear-gradient(135deg, #FAEEE1 0%, #FFF8ED 40%, #F2E5D5 100%)' }}
     >
       <div className="mx-auto max-w-[1400px] px-6 py-8">
-        <h1 className="text-4xl font-extrabold" style={{ color: '#5B2E0F' }}>
-          Admin Dashboard
-        </h1>
-        <p className="mt-1 mb-8" style={{ color: '#7A4A24' }}>
-          Quick access to maps, flows, and architecture
-        </p>
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-amber-700 via-orange-600 to-emerald-600 text-3d">
+            Admin Dashboard
+          </h1>
+          <div className="hidden md:flex items-center gap-2 text-xs text-amber-800/80">
+            <span className="px-2 py-1 rounded-full bg-white/70 border border-amber-300">
+              Realtime
+            </span>
+            <span className="px-2 py-1 rounded-full bg-white/70 border border-amber-300">
+              Mermaid
+            </span>
+            <span className="px-2 py-1 rounded-full bg-white/70 border border-amber-300">
+              Lucid
+            </span>
+          </div>
+        </div>
+        <p className="mt-1 mb-8 text-amber-900/80">Quick access to maps, flows, and architecture</p>
 
-        {/* Open diagram via query param from hub pages */}
-        {typeof window !== 'undefined' && !showDiagram ? (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              (function(){
-                try {
-                  var url = new URL(window.location.href);
-                  var open = url.searchParams.get('open');
-                  var title = url.searchParams.get('title') || 'Diagram';
-                  if (open) {
-                    window.dispatchEvent(new CustomEvent('admin-open-diagram', { detail: { open: open, title: title } }));
-                    url.searchParams.delete('open'); url.searchParams.delete('title');
-                    window.history.replaceState({}, '', url.toString());
-                  }
-                } catch {}
-              })();
-            `,
+        {/* Query param handled in useEffect */}
+
+        {/* Quick Open (slug) */}
+        <div className="mb-6 rounded-xl border border-amber-200 bg-white/95 shadow p-3 md:p-4">
+          <form
+            className="flex items-center gap-2"
+            onSubmit={e => {
+              e.preventDefault()
+              const s = slugInput.trim()
+              if (s) loadDiagram(s, s)
             }}
-          />
-        ) : null}
+          >
+            <input
+              value={slugInput}
+              onChange={e => setSlugInput(e.target.value)}
+              placeholder="Open by slug (e.g., project-map:api-and-events:auth-apis-and-events)"
+              className="flex-1 rounded-xl border border-amber-300 bg-white px-3 py-2 text-amber-900 placeholder:text-amber-700/60"
+            />
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-xl bg-amber-700 text-white hover:bg-amber-800"
+            >
+              Open
+            </button>
+          </form>
+        </div>
 
         {/* Diagrams — Domain Hubs */}
-        <div className="mb-10">
-          <h3 className="text-xl font-semibold mb-3" style={{ color: '#5B2E0F' }}>
-            🧭 Diagrams
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-            <Link
-              href="/admin/diagrams/project-map"
-              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
-              style={{ background: '#2B6CB0', color: '#fff' }}
-            >
-              <div className="font-semibold">🗺️ Project Map</div>
-              <div className="text-sm text-sky-100">
-                Overview · User Flow · Entity Relation · API/Events
+        <div className="mb-10 rounded-2xl border border-amber-200 bg-white/95 shadow-md p-4 md:p-6">
+          <h3 className="text-xl font-semibold mb-4 text-amber-900">Diagrams</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <Link href="/admin/diagrams/project-map" className="group block">
+              <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
+                <div className="absolute inset-0 bg-gradient-to-br from-sky-600/20 via-emerald-500/10 to-transparent opacity-75" />
+                <div className="relative flex items-center gap-3 text-sky-900">
+                  <MapTrifold size={20} weight="duotone" className="text-sky-700" />
+                  <div className="font-semibold">Project Map</div>
+                </div>
+                <div className="relative mt-1 text-sm text-sky-900/80">
+                  Overview · User Flow · Entity Relation · API/Events
+                </div>
               </div>
             </Link>
-            <Link
-              href="/admin/diagrams/system-architecture"
-              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
-              style={{ background: '#1D4ED8', color: '#fff' }}
-            >
-              <div className="font-semibold">🏗️ System Architecture</div>
-              <div className="text-sm text-indigo-100">Projections · Weight Tuning · Data Flow</div>
+            <Link href="/admin/diagrams/system-architecture" className="group block">
+              <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-fuchsia-500/10 to-transparent opacity-75" />
+                <div className="relative flex items-center gap-3 text-indigo-900">
+                  <SquaresFour size={20} weight="duotone" className="text-indigo-700" />
+                  <div className="font-semibold">System Architecture</div>
+                </div>
+                <div className="relative mt-1 text-sm text-indigo-900/80">
+                  Projections · Weight Tuning · Data Flow
+                </div>
+              </div>
             </Link>
-            <Link
-              href="/admin/diagrams/functional-flow"
-              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
-              style={{ background: '#DC2626', color: '#fff' }}
-            >
-              <div className="font-semibold">⚡ Functional Flow</div>
-              <div className="text-sm text-rose-100">Create/Join League · Auth · Draft</div>
+            <Link href="/admin/diagrams/functional-flow" className="group block">
+              <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
+                <div className="absolute inset-0 bg-gradient-to-br from-rose-600/20 via-orange-500/10 to-transparent opacity-75" />
+                <div className="relative flex items-center gap-3 text-rose-900">
+                  <Lightning size={20} weight="duotone" className="text-rose-700" />
+                  <div className="font-semibold">Functional Flow</div>
+                </div>
+                <div className="relative mt-1 text-sm text-rose-900/80">
+                  Create/Join League · Auth · Draft
+                </div>
+              </div>
             </Link>
-            <Link
-              href="/admin/diagrams/draft"
-              className="px-4 py-4 rounded-xl shadow-md text-left block transition-all"
-              style={{ background: '#B45309', color: '#fff' }}
-            >
-              <div className="font-semibold">🏈 Draft</div>
-              <div className="text-sm text-amber-100">
-                User Flow · Entity Relation · API Routing
+            <Link href="/admin/diagrams/draft" className="group block">
+              <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-600/20 via-emerald-500/10 to-transparent opacity-75" />
+                <div className="relative flex items-center gap-3 text-amber-900">
+                  <Trophy size={20} weight="duotone" className="text-amber-700" />
+                  <div className="font-semibold">Draft</div>
+                </div>
+                <div className="relative mt-1 text-sm text-amber-900/80">
+                  User Flow · Entity Relation · API Routing
+                </div>
+              </div>
+            </Link>
+            <Link href="/admin/product-vision" className="group block">
+              <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 via-rose-400/10 to-transparent opacity-75" />
+                <div className="relative flex items-center gap-3 text-amber-900">
+                  <span className="inline-block h-5 w-5 rounded-sm bg-amber-600" />
+                  <div className="font-semibold">Product Vision</div>
+                </div>
+                <div className="relative mt-1 text-sm text-amber-900/80">
+                  UX planning, roadmap & principles
+                </div>
               </div>
             </Link>
           </div>
         </div>
 
-        {/* Functional Flow Section */}
-        <div className="mb-10">
-          <h3 className="text-xl font-semibold mb-3" style={{ color: '#5B2E0F' }}>
-            ⚡ Functional Flow
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-3">
-            <button
-              onClick={() => loadDiagram('functional-flow:create-account', '👤 Create Account')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#2563EB', color: '#fff' }}
-            >
-              <div className="font-semibold">👤 Create Account</div>
-              <div className="text-sm text-sky-100">User registration flow</div>
-            </button>
-
-            <button
-              onClick={() => loadDiagram('functional-flow:create-league', '🏆 Create League')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#DC2626', color: '#fff' }}
-            >
-              <div className="font-semibold">🏆 Create League</div>
-              <div className="text-sm text-rose-100">League setup & scheduling</div>
-            </button>
-
-            <button
-              onClick={() => loadDiagram('functional-flow:join-league', '🤝 Join League')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#EA580C', color: '#fff' }}
-            >
-              <div className="font-semibold">🤝 Join League</div>
-              <div className="text-sm text-orange-100">Join via invite or browse</div>
-            </button>
-
-            <button
-              onClick={() => loadDiagram('project-map:overview', '🗺️ Project Map Overview')}
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#B45309', color: '#fff' }}
-            >
-              <div className="font-semibold">Project Map Overview</div>
-              <div className="text-sm text-amber-100">New canonical diagram set</div>
-            </button>
-          </div>
-        </div>
-
-        {/* System Architecture Section */}
-        <div className="mb-10">
-          <h3 className="text-xl font-semibold mb-3" style={{ color: '#5B2E0F' }}>
-            🏗️ System Architecture
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-3">
-            <button
-              onClick={() =>
-                loadDiagram('system-architecture:projections-overview', '📊 Projections Overview')
-              }
-              className="px-4 py-3 rounded-lg bg-sky-700 text-white transition-all hover:bg-sky-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
-            >
-              <div className="font-semibold">📊 Projections Overview</div>
-              <div className="text-sm text-sky-100">Complete pipeline architecture</div>
-            </button>
-
-            <a
-              href="/admin/diagrams?file=projections.drawio"
-              className="px-4 py-4 rounded-xl shadow-md text-left transition-all"
-              style={{ background: '#1D4ED8', color: '#fff' }}
-            >
-              <div className="font-semibold">📈 Projections (draw.io)</div>
-              <div className="text-sm text-indigo-100">Feature → weights → outputs</div>
-            </a>
-
-            <button
-              onClick={() =>
-                loadDiagram('system-architecture:yearly-projections', '📈 Yearly Projections')
-              }
-              className="px-4 py-3 rounded-lg bg-rose-600 text-white transition-all hover:bg-rose-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
-            >
-              <div className="font-semibold">📈 Yearly Projections</div>
-              <div className="text-sm text-rose-100">Draft season projections</div>
-            </button>
-
-            <button
-              onClick={() =>
-                loadDiagram('system-architecture:weekly-projections', '📅 Weekly Projections')
-              }
-              className="px-4 py-3 rounded-lg bg-orange-700 text-white transition-all hover:bg-orange-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
-            >
-              <div className="font-semibold">📅 Weekly Projections</div>
-              <div className="text-sm text-orange-100">In-season with weather & injuries</div>
-            </button>
-
-            <button
-              onClick={() => loadDiagram('system-architecture:weight-tuning', '⚖️ Weight Tuning')}
-              className="px-4 py-3 rounded-lg bg-amber-600 text-white transition-all hover:bg-amber-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-left shadow-md"
-            >
-              <div className="font-semibold">⚖️ Weight Tuning</div>
-              <div className="text-sm text-amber-100">ML optimization loop</div>
-            </button>
-          </div>
-        </div>
+        {/* Functional Flow and System Architecture sections removed; use hub pages above */}
 
         {/* Admin Tools */}
-        <div className="mb-10 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
+        <div className="mb-10 bg-white/95 rounded-xl p-6 shadow-lg border border-amber-200">
           <h3 className="text-xl font-bold text-amber-900 mb-4">🛠️ Admin Tools</h3>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Controls */}
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-lg border border-amber-300">
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-2xl border border-amber-300 shadow-sm">
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <label className="text-sm text-amber-900 w-24">Season</label>
@@ -357,40 +318,40 @@ export default function AdminDashboard() {
             </div>
 
             {/* Actions */}
-            <div className="bg-gradient-to-br from-sky-50 to-sky-100 p-4 rounded-lg border border-sky-300">
+            <div className="bg-gradient-to-br from-sky-50 to-sky-100 p-4 rounded-2xl border border-sky-300 shadow-sm">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <button
                   onClick={refreshPlayers}
                   disabled={running}
-                  className="px-3 py-2 rounded bg-sky-700 text-white hover:bg-sky-800 disabled:opacity-50"
+                  className="px-3 py-2 rounded-xl bg-sky-700 text-white hover:bg-sky-800 disabled:opacity-50 shadow"
                 >
                   Refresh Players (CFBD)
                 </button>
                 <button
                   onClick={reconcileDepth}
                   disabled={running}
-                  className="px-3 py-2 rounded bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-50"
+                  className="px-3 py-2 rounded-xl bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-50 shadow"
                 >
                   Reconcile Depth
                 </button>
                 <button
                   onClick={cronCleanup}
                   disabled={running}
-                  className="px-3 py-2 rounded bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50"
+                  className="px-3 py-2 rounded-xl bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50 shadow"
                 >
                   Cron Cleanup
                 </button>
                 <button
                   onClick={dedupePlayers}
                   disabled={running}
-                  className="px-3 py-2 rounded bg-slate-700 text-white hover:bg-slate-800 disabled:opacity-50"
+                  className="px-3 py-2 rounded-xl bg-slate-700 text-white hover:bg-slate-800 disabled:opacity-50 shadow"
                 >
                   Dedupe Players
                 </button>
                 <button
                   onClick={syncLeagueMembers}
                   disabled={running}
-                  className="px-3 py-2 rounded bg-emerald-700 text-white hover:bg-emerald-800 disabled:opacity-50"
+                  className="px-3 py-2 rounded-xl bg-emerald-700 text-white hover:bg-emerald-800 disabled:opacity-50 shadow"
                 >
                   Sync League Members
                 </button>
@@ -430,7 +391,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Result */}
-            <div className="bg-white p-4 rounded-lg border border-amber-300">
+            <div className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl border border-amber-300 shadow-sm">
               <h4 className="font-semibold text-amber-900 mb-2">Result</h4>
               {!actionResult ? (
                 <p className="text-sm text-amber-700">No action run yet.</p>
@@ -470,7 +431,15 @@ export default function AdminDashboard() {
                 </div>
               </div>
               <div className="px-2 md:px-4 py-2 md:py-4 h-[calc(100vh-72px)] overflow-auto">
-                {charts.length > 0 ? (
+                {loadingDiagram ? (
+                  <div className="text-amber-800 flex flex-col items-center justify-center py-12">
+                    <Animated
+                      src="https://assets1.lottiefiles.com/packages/lf20_wqkcaibn.json"
+                      className="w-40 h-40"
+                    />
+                    <div className="mt-3 text-amber-800/80">Loading diagram…</div>
+                  </div>
+                ) : charts.length > 0 ? (
                   <div className="space-y-4 md:space-y-6">
                     {charts.map((chart: string, idx: number) => (
                       <div key={idx} className="p-0 bg-transparent">
@@ -478,7 +447,15 @@ export default function AdminDashboard() {
                       </div>
                     ))}
                     {lastUpdated && (
-                      <p className="text-sm text-amber-700 mt-4">Last updated: {lastUpdated}</p>
+                      <div className="mt-4 flex items-center gap-3">
+                        <p className="text-sm text-amber-700">Last updated: {lastUpdated}</p>
+                        <Animated
+                          src="https://assets8.lottiefiles.com/packages/lf20_c8m1r3.json"
+                          className="w-6 h-6"
+                          autoplay={true}
+                          loop={false}
+                        />
+                      </div>
                     )}
                   </div>
                 ) : (

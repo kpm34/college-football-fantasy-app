@@ -63,7 +63,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f2937;
 
   /* Typography Variables */
   --font-bebas: 'Bebas Neue', sans-serif;
@@ -72,23 +72,24 @@
   --font-roboto-mono: 'Roboto Mono', monospace;
 
   /* Graduation-inspired tokens */
-  --color-bg: #0d0b1a; /* Deep Space */
-  --color-surface: #18122b;
-  --color-primary: #ff2e9a; /* Hot Magenta */
-  --color-secondary: #6c2bd9; /* Grape */
-  --color-accent: #ffc300; /* Gold */
-  --color-info: #7cd4fd;
+  /* Light, calm palette inspired by Awwwards Minimal & Pastel collections */
+  --color-bg: #f7f7fb; /* light neutral */
+  --color-surface: #ffffff;
+  --color-primary: #3b82f6; /* sky */
+  --color-secondary: #a78bfa; /* violet */
+  --color-accent: #10b981; /* emerald */
+  --color-info: #38bdf8;
   --color-success: #22c55e;
-  --color-warning: #ff8a00;
+  --color-warning: #f59e0b;
   --color-danger: #ef4444;
-  --color-text: #f8fafc;
-  --color-text-muted: #cbd5e1;
+  --color-text: #0f172a; /* high contrast ink */
+  --color-text-muted: #475569;
 
-  --grad-primary: linear-gradient(135deg, #ff2e9a 0%, #6c2bd9 50%, #ffc300 100%);
+  --grad-primary: linear-gradient(135deg, #93c5fd 0%, #c4b5fd 50%, #a7f3d0 100%);
   --grad-aurora:
-    radial-gradient(120% 80% at 20% 10%, #ff47a3 0%, transparent 40%),
-    radial-gradient(120% 80% at 80% 30%, #6c2bd9 0%, transparent 45%),
-    radial-gradient(120% 80% at 50% 90%, #ffc300 0%, transparent 35%);
+    radial-gradient(120% 80% at 20% 10%, rgba(147, 197, 253, 0.5) 0%, transparent 40%),
+    radial-gradient(120% 80% at 80% 30%, rgba(196, 181, 253, 0.45) 0%, transparent 45%),
+    radial-gradient(120% 80% at 50% 90%, rgba(167, 243, 208, 0.45) 0%, transparent 35%);
 }
 
 @theme inline {
@@ -147,6 +148,15 @@ body {
 h1 {
   font-size: clamp(1.75rem, 4.5vw, 2.5rem);
   line-height: 1.15;
+}
+
+/* 3D Text utility inspired by subtle UI depth (light theme) */
+.text-3d {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6),
+    0 2px 0 rgba(255, 255, 255, 0.5),
+    0 3px 0 rgba(255, 255, 255, 0.4),
+    0 4px 10px rgba(2, 6, 23, 0.1);
 }
 h2 {
   font-size: clamp(1.25rem, 3.2vw, 1.75rem);

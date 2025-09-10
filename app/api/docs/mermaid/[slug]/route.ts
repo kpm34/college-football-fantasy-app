@@ -23,10 +23,10 @@ function extractMermaidBlocks(markdown: string): string[] {
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug: rawSlug } = params
+    const { slug: rawSlug } = await params
 
     // Decode the slug to handle URL encoding
     const slug = decodeURIComponent(rawSlug)
@@ -85,7 +85,8 @@ export async function GET(
       'functional-flow:create-league':
         'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
       'functional-flow:join-league': 'diagrams/functional-flow/join-league-flow-invite.md',
-      'functional-flow:draft': 'diagrams/functional-flow/draft-system-flow-mock-vs-real-scheduled.md',
+      'functional-flow:draft':
+        'diagrams/functional-flow/draft-system-flow-mock-vs-real-scheduled.md',
       'functional-flow:draft:mock': 'diagrams/functional-flow/draft-mock.md',
       'functional-flow:draft:real': 'diagrams/functional-flow/draft-real.md',
 
@@ -211,7 +212,9 @@ export async function GET(
           const files = fs.readdirSync(dir)
           const exact = `${name}.md`
           if (files.includes(exact)) return path.join('diagrams', 'functional-flow', exact)
-          const starts = files.find(f => f.toLowerCase().startsWith(`${name}-`) && f.endsWith('.md'))
+          const starts = files.find(
+            f => f.toLowerCase().startsWith(`${name}-`) && f.endsWith('.md')
+          )
           if (starts) return path.join('diagrams', 'functional-flow', starts)
           const contains = files.find(f => f.toLowerCase().includes(name) && f.endsWith('.md'))
           if (contains) return path.join('diagrams', 'functional-flow', contains)
