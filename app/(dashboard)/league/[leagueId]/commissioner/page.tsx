@@ -526,7 +526,7 @@ export default function CommissionerSettings({ params }: { params: { leagueId: s
             }}
           >
             <div className="text-sm" style={{ color: leagueColors.text.primary }}>
-              Draft status: {v2.state?.phase || v2.state?.draftStatus || 'pre-draft'} | On clock:{' '}
+              Draft status: {(v2.state as any)?.draftStatus || v2.state?.phase || 'pre-draft'} | On clock:{' '}
               {(() => {
                 const id = (v2.state as any)?.onClockTeamId
                 const map = new Map(teams.map(t => [t.$id, t.teamName]))
