@@ -180,6 +180,12 @@ export default function AdminDashboard() {
             <span className="px-2 py-1 rounded-full bg-white/70 border border-amber-300">
               Lucid
             </span>
+            <Link
+              href="/admin/resources"
+              className="px-2 py-1 rounded-full bg-emerald-700 text-white border border-emerald-800 hover:bg-emerald-800"
+            >
+              Resources
+            </Link>
           </div>
         </div>
         <p className="mt-1 mb-8 text-amber-900/80">Quick access to maps, flows, and architecture</p>
@@ -263,7 +269,11 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </Link>
-            <Link href="/admin/diagrams/functional-flow" className="group block" style={{display:'none'}}>
+            <Link
+              href="/admin/diagrams/functional-flow"
+              className="group block"
+              style={{ display: 'none' }}
+            >
               <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
                 <div className="absolute inset-0 bg-gradient-to-br from-rose-600/20 via-orange-500/10 to-transparent opacity-75" />
                 <div className="relative flex items-center gap-3 text-rose-900">

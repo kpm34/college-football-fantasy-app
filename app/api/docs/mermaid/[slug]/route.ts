@@ -80,8 +80,23 @@ export async function GET(
       'project-map:ops': 'diagrams/project-map/ops.md',
       'project-map:public': 'diagrams/project-map/public.md',
 
+      // Directory Map (doc-style)
+      'directory-map:index': 'diagrams/directory-map/index.md',
+      'directory-map:overview': 'diagrams/directory-map/overview.md',
+      'directory-map:chapters:app': 'diagrams/directory-map/chapters/app.md',
+      'directory-map:chapters:components': 'diagrams/directory-map/chapters/components.md',
+      'directory-map:chapters:lib': 'diagrams/directory-map/chapters/lib.md',
+      'directory-map:chapters:docs': 'diagrams/directory-map/chapters/docs.md',
+      'directory-map:chapters:functions': 'diagrams/directory-map/chapters/functions.md',
+      'directory-map:chapters:schema': 'diagrams/directory-map/chapters/schema.md',
+      'directory-map:chapters:ops': 'diagrams/directory-map/chapters/ops.md',
+
       // User Journeys (formerly Functional Flow)
       'user-journeys:auth-user-flow': 'diagrams/user-journeys/auth-user-flow.md',
+      'user-journeys:auth:sign-in-up': 'diagrams/user-journeys/auth-sign-in-up.md',
+      'user-journeys:auth:oauth-callback': 'diagrams/user-journeys/auth-oauth-callback.md',
+      'user-journeys:auth:invite-join-and-draft-room':
+        'diagrams/user-journeys/auth-invite-join-and-draft-room.md',
       'user-journeys:leagues-user-flow': 'diagrams/user-journeys/leagues-user-flow.md',
       'user-journeys:draft-user-flow': 'diagrams/user-journeys/draft-user-flow.md',
       'user-journeys:projections-user-flow': 'diagrams/user-journeys/projections-user-flow.md',
@@ -89,7 +104,8 @@ export async function GET(
       'user-journeys:realtime-user-flow': 'diagrams/user-journeys/realtime-user-flow.md',
       'user-journeys:ops-deploy-user-flow': 'diagrams/user-journeys/ops-deploy-user-flow.md',
       'user-journeys:create-account': 'diagrams/functional-flow/create-account.md',
-      'user-journeys:create-league': 'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
+      'user-journeys:create-league':
+        'diagrams/functional-flow/create-league-flow-with-draft-scheduling.md',
       'user-journeys:join-league': 'diagrams/functional-flow/join-league-flow-invite.md',
 
       // Functional Flow (legacy namespace retained for compatibility)
@@ -235,6 +251,19 @@ export async function GET(
         const fullPath = path.join(docsPath, hyphenFile)
         if (fs.existsSync(fullPath)) {
           fileMap[slug] = hyphenFile
+        }
+      }
+    }
+
+    // Generic resolver for directory-map folder structure
+    if (slug.startsWith('directory-map:')) {
+      const parts = slug.split(':').slice(1)
+      if (parts.length) {
+        const folderPath = `diagrams/directory-map/${parts.join('/')}.md`
+        const docsPath = path.join(process.cwd(), 'docs')
+        const fullFolderPath = path.join(docsPath, folderPath)
+        if (fs.existsSync(fullFolderPath)) {
+          fileMap[slug] = folderPath
         }
       }
     }

@@ -19,7 +19,7 @@ test.describe('Admin diagrams smoke', () => {
     )
 
     // Prewarm heavy endpoints to avoid first-hit compile flakiness in dev
-    await page.request.get(`${BASE}/api/docs/mermaid/functional-flow:create-account`)
+    await page.request.get(`${BASE}/api/docs/mermaid/user-journeys:create-account`)
     await page.request.get(`${BASE}/api/docs/mermaid/system-architecture:projections-overview`)
     await page.request.get(`${BASE}/api/docs/project-map-inventory`)
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' })
@@ -27,7 +27,7 @@ test.describe('Admin diagrams smoke', () => {
 
   test('Open a diagram via direct slug route', async ({ page }) => {
     await page.goto(
-      `${BASE}/admin/diagrams/functional-flow:create-account?devAdmin=${encodeURIComponent(DEV_TOKEN)}`,
+      `${BASE}/admin/diagrams/user-journeys:create-account?devAdmin=${encodeURIComponent(DEV_TOKEN)}`,
       { waitUntil: 'commit' }
     )
     // Expect at least one mermaid container to render
@@ -46,7 +46,7 @@ test.describe('Admin diagrams smoke', () => {
     await page.evaluate(() => {
       window.dispatchEvent(
         new CustomEvent('admin-open-diagram', {
-          detail: { open: 'functional-flow:create-account', title: 'Create Account' },
+          detail: { open: 'user-journeys:create-account', title: 'Create Account' },
         })
       )
     })
