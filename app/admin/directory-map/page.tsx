@@ -361,7 +361,9 @@ export default function DirectoryMapPage() {
             {charts && charts.length > 0 ? (
               <MermaidRenderer charts={charts} mode="modal" wheelZoom={true} />
             ) : (
-              <div className="text-emerald-900/70 text-sm">No diagrams available for this chapter.</div>
+              <div className="text-emerald-900/70 text-sm">
+                No diagrams available for this chapter.
+              </div>
             )}
           </section>
         </div>

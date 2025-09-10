@@ -2,6 +2,12 @@
 
 const items = [
   { slug: 'user-journeys:auth-user-flow', title: 'Auth — User Journey' },
+  { slug: 'user-journeys:auth:sign-in-up', title: 'Auth — Sign In / Sign Up' },
+  { slug: 'user-journeys:auth:oauth-callback', title: 'Auth — OAuth Callback' },
+  {
+    slug: 'user-journeys:auth:invite-join-and-draft-room',
+    title: 'Auth — Invite / Join / Draft Room',
+  },
   { slug: 'user-journeys:leagues-user-flow', title: 'Leagues — User Journey' },
   { slug: 'user-journeys:draft-user-flow', title: 'Draft — User Journey' },
   { slug: 'user-journeys:projections-user-flow', title: 'Projections — User Journey' },

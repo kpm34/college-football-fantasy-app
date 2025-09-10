@@ -21,10 +21,7 @@ export default function DiagramsHubPage() {
             <div className="font-semibold">🔗 Entity Relations</div>
             <div className="text-sm opacity-90">Auth · Leagues · Draft · Scoring · Realtime</div>
           </Link>
-          <Link href="/admin/diagrams/functional-flow" className="block rounded-lg p-4 bg-rose-600 text-white shadow">
-            <div className="font-semibold">⚡ Functional Flow</div>
-            <div className="text-sm opacity-90">Create/Join League · Auth · Draft</div>
-          </Link>
+          {/* Legacy Functional Flow hub removed in favor of User Journeys */}
           <Link href="/admin/diagrams/draft" className="block rounded-lg p-4 bg-amber-700 text-white shadow">
             <div className="font-semibold">🏈 Draft</div>
             <div className="text-sm opacity-90">User Flow · Entity Relation · API Routing</div>
