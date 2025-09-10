@@ -13,13 +13,13 @@ export default function DiagramsHubPage() {
           </a>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          <Link href="/admin/diagrams/project-map" className="block rounded-lg p-4 bg-sky-700 text-white shadow">
-            <div className="font-semibold">🗺️ Project Map</div>
-            <div className="text-sm opacity-90">Overview · User Flow · Entity Relation · API/Events</div>
+          <Link href="/admin/diagrams/user-journeys" className="block rounded-lg p-4 bg-sky-700 text-white shadow">
+            <div className="font-semibold">🛣️ User Journeys</div>
+            <div className="text-sm opacity-90">End‑to‑end flows · Auth · Draft · Leagues</div>
           </Link>
-          <Link href="/admin/diagrams/system-architecture" className="block rounded-lg p-4 bg-indigo-700 text-white shadow">
-            <div className="font-semibold">🏗️ System Architecture</div>
-            <div className="text-sm opacity-90">Projections · Weight Tuning · Data Flow</div>
+          <Link href="/admin/diagrams/entity-relations" className="block rounded-lg p-4 bg-indigo-700 text-white shadow">
+            <div className="font-semibold">🔗 Entity Relations</div>
+            <div className="text-sm opacity-90">Auth · Leagues · Draft · Scoring · Realtime</div>
           </Link>
           <Link href="/admin/diagrams/functional-flow" className="block rounded-lg p-4 bg-rose-600 text-white shadow">
             <div className="font-semibold">⚡ Functional Flow</div>

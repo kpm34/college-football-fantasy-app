@@ -61,7 +61,7 @@ export default function UniversalDiagramViewerPage() {
   }, [ext])
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#FFF8ED' }}>
       <div className="mx-auto max-w-[1200px] p-4 md:p-6">
         <h1 className="text-xl md:text-2xl font-bold mb-3 break-all">Viewer: {relPath}</h1>
         {error && <div className="mb-3 text-red-700">{error}</div>}
@@ -80,14 +80,11 @@ export default function UniversalDiagramViewerPage() {
           </div>
         )}
         {(ext === 'glb' || ext === 'gltf') && (
-          <model-viewer
-            src={fileUrl}
-            ar
-            auto-rotate
-            camera-controls
-            style={{ width: '100%', height: '80vh', background: '#111827', borderRadius: '8px' }}
-            exposure="1.0"
-            shadow-intensity="1.0"
+          // Use a div wrapper to satisfy TSX while we register the web component at runtime
+          <div
+            dangerouslySetInnerHTML={{
+              __html: `<model-viewer src="${fileUrl}" ar auto-rotate camera-controls style="width:100%;height:80vh;background:#FFF8ED;border-radius:8px" exposure="1.0" shadow-intensity="1.0"></model-viewer>`,
+            }}
           />
         )}
         {!(

@@ -1,61 +1,60 @@
 ---
 title: Sitemap — Web (Final)
-updated: 2025-09-10
+updated: 2025-09-10T16:44:37Z
 state: final
 platform: web
 source: docs/diagrams/site map
 ---
 
 ### Purpose
-Final/target state site map for the web experience. Include planned sections and future routes.
-
-### Editing guidelines
-- Mark future routes with (planned) or (v2)
-- Keep within ~120 lines max
-- Align with product roadmap
+Final/target web sitemap as inverted tree (top → down). Future/planned routes denoted in parentheses.
 
 ```mermaid
-flowchart LR
-  %% Top-level
-  Landing[Landing]
-  Login[Login]
-  Signup[Sign Up]
-  Dashboard[Dashboard]
-  Admin[Admin]
-  Help[Help / Docs (planned)]
-
-  %% Dashboard areas
-  subgraph Dashboard Areas
-    Dashboard --> MyTeams[My Teams]
-    Dashboard --> Leagues[Leagues]
-    Dashboard --> Players[Players]
-    Dashboard --> MockDraft[Mock Draft]
-    Dashboard --> Explore[Explore (planned)]
-  end
-
-  %% League hub
-  Leagues --> League[League Home]
-  League --> DraftRoom[Draft Room]
-  League --> Matchups[Matchups (planned)]
-  League --> Lineups[Lineups]
-  League --> Schedule[Schedule]
-  League --> Trades[Trades (planned)]
-  League --> Waivers[Waivers (planned)]
-  League --> Settings[Commissioner Settings]
-
-  %% Admin
-  Admin --> AdminDashboard[Admin Dashboard]
-  Admin --> AdminDiagrams[Diagrams]
-  Admin --> AdminTools[Tools]
-  Admin --> AdminReports[Reports (planned)]
-
-  %% Auth
-  Landing --> Login
-  Landing --> Signup
-  Login --> Dashboard
-  Signup --> Dashboard
-
-  %% Help
-  Landing --> Help
-  Dashboard --> Help
+mindmap
+  root((/ Landing))
+    Auth
+      "/login"
+      "/signup"
+      "/auth/callback"
+    Dashboard
+      "/dashboard"
+      "/account-settings"
+      "/scoreboard"
+      "/standings"
+      "My Teams (planned)"
+    League
+      "/league/create"
+      "league/[leagueId]"
+        "/league/[leagueId]/locker-room"
+        "/league/[leagueId]/lineups (planned)"
+        "/league/[leagueId]/matchups (planned)"
+        "/league/[leagueId]/waivers (planned)"
+        "/league/[leagueId]/trades (planned)"
+        "/league/[leagueId]/schedule"
+        "/league/[leagueId]/scoreboard"
+        "/league/[leagueId]/standings"
+        "/league/[leagueId]/commissioner"
+    Draft
+      "/draft/[leagueId] (time-gated)"
+      "Mock Draft (planned)"
+    Admin
+      "/admin"
+      Diagrams
+        "/admin/diagrams/site-map"
+        "/admin/diagrams/project-map"
+        "/admin/diagrams/functional-flow"
+        "/admin/diagrams/system-architecture"
+      Reports & Tools (planned)
+        "Admin Reports (planned)"
+        "/admin/cache-status"
+        "/admin/sync-status"
+        "/admin/sec-survey"
+        "/admin/product-vision"
+    Public Content
+      "/conference-showcase"
+      "/projection-showcase"
+      "/videos"
+      "/videos/[program]"
+      "/launch"
+      "/offline"
 ```
