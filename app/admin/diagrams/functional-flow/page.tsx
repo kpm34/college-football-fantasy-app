@@ -15,7 +15,7 @@ export default function FunctionalFlowDiagramsPage() {
           {items.map(i => (
             <a
               key={i.slug}
-              href={`/admin?open=${encodeURIComponent(i.slug)}&title=${encodeURIComponent(i.title)}`}
+              href={`/admin/diagrams/${encodeURIComponent(i.slug)}`}
               className="px-4 py-3 rounded bg-rose-600 text-white text-left shadow hover:bg-rose-700"
             >
               <div className="font-semibold">{i.title}</div>

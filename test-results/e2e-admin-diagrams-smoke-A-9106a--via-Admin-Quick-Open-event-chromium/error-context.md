@@ -1,0 +1,65 @@
+# Page snapshot
+
+```yaml
+- navigation:
+  - button "Open menu":
+    - img
+  - link "CFB Fantasy":
+    - /url: /
+  - link "Blog":
+    - /url: /blog
+  - link "Scoreboard":
+    - /url: /scoreboard
+  - link "About":
+    - /url: /about
+  - link "Login":
+    - /url: /login
+- heading "Admin Dashboard" [level=1]
+- text: Realtime Mermaid Lucid
+- paragraph: Quick access to maps, flows, and architecture
+- textbox "Open by slug (e.g., project-map:api-and-events:auth-apis-and-events)"
+- button "Open"
+- heading "Diagrams" [level=3]
+- link "Project Map Overview · User Flow · Entity Relation · API/Events":
+  - /url: /admin/diagrams/project-map
+  - img
+  - text: Project Map Overview · User Flow · Entity Relation · API/Events
+- link "System Architecture Projections · Weight Tuning · Data Flow":
+  - /url: /admin/diagrams/system-architecture
+  - img
+  - text: System Architecture Projections · Weight Tuning · Data Flow
+- link "Functional Flow Create/Join League · Auth · Draft":
+  - /url: /admin/diagrams/functional-flow
+  - img
+  - text: Functional Flow Create/Join League · Auth · Draft
+- link "Draft User Flow · Entity Relation · API Routing":
+  - /url: /admin/diagrams/draft
+  - img
+  - text: Draft User Flow · Entity Relation · API Routing
+- link "Project Vision High-level roadmap & plan (placeholder)":
+  - /url: /admin?open=project-map%3Aoverview%3Asystem-overview&title=Project%20Vision
+- heading "🛠️ Admin Tools" [level=3]
+- text: Season
+- spinbutton: "2025"
+- checkbox "Apply changes (otherwise dry run)"
+- text: Apply changes (otherwise dry run) League ID
+- textbox "leagues/$id"
+- button "Refresh Players (CFBD)"
+- button "Reconcile Depth"
+- button "Cron Cleanup"
+- button "Dedupe Players"
+- button "Sync League Members"
+- link "Export Players CSV":
+  - /url: /api/admin/players/export?season=2025&format=csv
+- link "Export Players JSON":
+  - /url: /api/admin/players/export?season=2025&format=json
+- link "Cache Status":
+  - /url: /admin/cache-status
+- link "Sync Status":
+  - /url: /admin/sync-status
+- link "SEC → NFL Survey":
+  - /url: /admin/sec-survey
+- heading "Result" [level=4]
+- paragraph: No action run yet.
+- alert
+```

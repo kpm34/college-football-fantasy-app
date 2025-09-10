@@ -16,7 +16,7 @@ export default function SystemArchitectureDiagramsPage() {
           {items.map(i => (
             <a
               key={i.slug}
-              href={`/admin?open=${encodeURIComponent(i.slug)}&title=${encodeURIComponent(i.title)}`}
+              href={`/admin/diagrams/${encodeURIComponent(i.slug)}`}
               className="px-4 py-3 rounded bg-indigo-700 text-white text-left shadow hover:bg-indigo-800"
             >
               <div className="font-semibold">{i.title}</div>

@@ -39,6 +39,22 @@ export default function Navbar() {
   const { user, loading: authLoading, logout } = useAuth()
   const isHome = pathname === '/'
 
+  // Dev admin bypass detection to avoid sticky loading indicators in dev
+  const devBypass = (() => {
+    if (typeof window === 'undefined') return false
+    if (process.env.NODE_ENV === 'production') return false
+    const envToken = process.env.NEXT_PUBLIC_ADMIN_DEV_TOKEN || ''
+    try {
+      const url = new URL(window.location.href)
+      const qp = url.searchParams.get('devAdmin')
+      if (qp) {
+        window.localStorage.setItem('admin-dev-token', qp)
+      }
+    } catch {}
+    const lsToken = window.localStorage.getItem('admin-dev-token') || ''
+    return Boolean(envToken && lsToken && envToken === lsToken)
+  })()
+
   // Prevent body scroll when drawer is open
   useEffect(() => {
     if (!open) return
@@ -120,7 +136,11 @@ export default function Navbar() {
               <NavLink href="/about" label="About" />
             </div>
             <div className="ml-auto hidden md:flex items-center gap-3">
-              <UserMenu user={user} loading={authLoading} onLogout={handleLogout} />
+              <UserMenu
+                user={user}
+                loading={devBypass ? false : authLoading}
+                onLogout={handleLogout}
+              />
             </div>
           </div>
         </div>

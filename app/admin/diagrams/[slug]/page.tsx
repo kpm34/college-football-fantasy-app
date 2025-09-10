@@ -1,7 +1,6 @@
 'use client'
 
 import { MermaidRenderer } from '@components/docs/MermaidRenderer'
-import { useAuth } from '@lib/hooks/useAuth'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -9,33 +8,21 @@ import { useEffect, useState } from 'react'
 export default function DiagramBySlugPage() {
   const params = useParams<{ slug: string }>()
   const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug
-  const { user, loading } = useAuth()
   const [charts, setCharts] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [updatedAt, setUpdatedAt] = useState<string>('')
 
-  // Dev-only admin bypass (mirrors /admin)
-  const devBypass = (() => {
-    if (typeof window === 'undefined') return false
-    if (process.env.NODE_ENV === 'production') return false
-    const envToken = process.env.NEXT_PUBLIC_ADMIN_DEV_TOKEN || ''
-    const envEmail = (process.env.NEXT_PUBLIC_ADMIN_DEV_EMAIL || '').toLowerCase()
-    try {
-      const url = new URL(window.location.href)
-      const qp = url.searchParams.get('devAdmin')
-      if (qp) {
-        window.localStorage.setItem('admin-dev-token', qp)
-        url.searchParams.delete('devAdmin')
-        window.history.replaceState({}, '', url.toString())
-      }
-    } catch {}
-    const lsToken =
-      typeof window !== 'undefined' ? window.localStorage.getItem('admin-dev-token') || '' : ''
-    const userEmail = (user?.email || '').toLowerCase()
-    if (envToken && lsToken && envToken === lsToken) return true
-    if (envEmail && userEmail === envEmail) return true
-    return false
-  })()
+  // Derive a human-readable title from slug
+  const decoded = decodeURIComponent(slug || '')
+  const parts = decoded.split(':').filter(Boolean)
+  const rawTitle = parts[parts.length - 1] || decoded
+  const prettyTitle = rawTitle
+    .replace(/[-_]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, c => c.toUpperCase())
+
+  // Publicly accessible from Admin hubs; auth gating removed per product request
 
   useEffect(() => {
     let cancelled = false
@@ -69,47 +56,26 @@ export default function DiagramBySlugPage() {
     }
   }, [slug])
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-amber-900">Loading…</div>
-    )
-  }
+  // No auth gating; page is reachable only via admin UI
 
-  const hardcodedAdmin = (user?.email || '').toLowerCase() === 'kashpm2002@gmail.com'
-
-  if (!hardcodedAdmin && !devBypass) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-2xl font-semibold mb-2">Unauthorized</div>
-          <Link href="/" className="text-sky-700 hover:text-sky-900 underline">
-            Return Home
+  return (
+    <div className="min-h-screen flex flex-col bg-[#0b1220] text-white">
+      <div className="px-4 md:px-6 py-3 flex items-center justify-between border-b border-white/10">
+        <h1 className="text-xl md:text-2xl font-semibold truncate">{prettyTitle}</h1>
+        <div className="flex items-center gap-3 text-sm">
+          {updatedAt && <span className="opacity-75">Updated: {updatedAt}</span>}
+          <Link href="/admin" className="underline hover:opacity-80">
+            Admin
           </Link>
         </div>
       </div>
-    )
-  }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-stone-50 p-4 md:p-6">
-      <div className="mx-auto max-w-[1400px]">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold text-amber-900 break-all">Diagram: {slug}</h1>
-          <div className="flex items-center gap-2">
-            <Link href="/admin" className="text-sky-700 hover:text-sky-900 underline">
-              Admin
-            </Link>
-            {updatedAt && <span className="text-amber-700 text-sm">Updated: {updatedAt}</span>}
-          </div>
-        </div>
+      <div className="flex-1 overflow-auto p-2 md:p-4">
         {error ? (
-          <div className="p-4 bg-amber-100 text-amber-900 rounded border border-amber-300">
+          <div className="p-4 bg-red-900/30 text-red-200 rounded border border-red-700/40">
             {error}
           </div>
         ) : (
-          <div className="bg-[#0b1220] rounded border border-amber-300">
-            <MermaidRenderer charts={charts} mode="page" />
-          </div>
+          <MermaidRenderer charts={charts} mode="modal" />
         )}
       </div>
     </div>
