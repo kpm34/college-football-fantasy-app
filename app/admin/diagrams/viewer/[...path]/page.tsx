@@ -85,7 +85,9 @@ export default function UniversalDiagramViewerPage() {
               >
                 Edit in draw.io
               </a>
-              <span className="text-neutral-500">(No configuration needed; the editor loads from the URL above.)</span>
+              <span className="text-neutral-500">
+                (No configuration needed; the editor loads from the URL above.)
+              </span>
             </div>
           </div>
         )}

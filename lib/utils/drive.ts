@@ -17,7 +17,10 @@ export function getDriveManifest(): DriveManifest | null {
       // Use fs only on server; fall back to dynamic import when bundled for edge
       // but both resolve to the same JSON content at build time
       typeof process !== 'undefined' && process.cwd
-        ? require('fs').readFileSync(require('path').join(process.cwd(), 'docs/external/drive-manifest.json'), 'utf-8')
+        ? require('fs').readFileSync(
+            require('path').join(process.cwd(), 'docs/external/drive-manifest.json'),
+            'utf-8'
+          )
         : '{}'
     ) as DriveManifest
     cached = data

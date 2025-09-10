@@ -14,8 +14,8 @@
     - /url: /about
   - link "Login":
     - /url: /login
-- 'heading "Diagram: functional-flow%3Acreate-account" [level=1]'
-- link "Admin":
-  - /url: /admin
+- text: Unauthorized This dashboard is restricted to administrators.
+- link "Return Home":
+  - /url: /
 - alert
 ```
