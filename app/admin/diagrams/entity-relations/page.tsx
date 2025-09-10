@@ -54,15 +54,18 @@ export default function EntityRelationsPage() {
       <div className="mx-auto max-w-5xl p-6">
         <h1 className="text-2xl font-bold mb-2">Entity Relations</h1>
         <p className="text-neutral-700 text-sm mb-4">
-          Prefer the Draw.io version for rich table-like shapes (headers, fields, PK/FK). Mermaid fallback is
-          available for quick edits.
+          Prefer the Draw.io version for rich table-like shapes (headers, fields, PK/FK). Mermaid
+          fallback is available for quick edits.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {items.map(i => {
             const drawioRel = drawioFileForSlug(i.slug)
             const showDrawio = Boolean(hasDrawio[i.slug])
             return (
-              <div key={i.slug} className="rounded border border-neutral-200 bg-white shadow-sm p-3">
+              <div
+                key={i.slug}
+                className="rounded border border-neutral-200 bg-white shadow-sm p-3"
+              >
                 <div className="font-semibold mb-2">{i.title}</div>
                 <div className="flex gap-2">
                   <a

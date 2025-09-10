@@ -18,7 +18,7 @@
     "migrate:commissioner": "node --import 'data:text/javascript,import%20%7B%20register%20%7D%20from%20%22node:module%22;%20import%20%7B%20pathToFileURL%20%7D%20from%20%22node:url%22;%20register(%22ts-node/esm%22,%20pathToFileURL(%22./%22));' scripts/migrations/2025-08-14-backfill-commissioner.ts",
     "enhance:appwrite": "tsx ops/common/scripts/appwrite-user-enhancements.ts",
     "eval_proj": "npx tsx ops/common/scripts/eval_proj.ts",
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "session:fixport": "bash ops/dev/session.sh fixport",
     "session:preflight": "bash ops/dev/session.sh preflight",
     "session:start": "bash ops/dev/session.sh start",
