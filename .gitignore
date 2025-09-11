@@ -72,3 +72,12 @@ ops/**
 *.pdf
 *.csv
 
+# Archives and binary bundles
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# Conference roster PDFs (source artifacts)
+data/conference rosters/**
+
