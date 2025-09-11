@@ -12,6 +12,9 @@ export default function DiagramBySlugPage() {
   const [viewMode, setViewMode] = useState<'default' | 'treemap' | 'syntax_error'>('default')
   const [error, setError] = useState<string | null>(null)
   const [updatedAt, setUpdatedAt] = useState<string>('')
+  const isUserJourney = typeof slug === 'string' && slug.startsWith('user-journeys:')
+  const isDirectoryMap = typeof slug === 'string' && slug.startsWith('directory-map:')
+  const isSiteMap = typeof slug === 'string' && slug.startsWith('sitemap:')
 
   const formatET = (iso?: string) => {
     try {
@@ -106,6 +109,18 @@ export default function DiagramBySlugPage() {
   }, [slug])
 
   // Alternate views: treemap, syntax error demo
+  function stripEmbeddedLegend(code: string): string {
+    try {
+      const lines = code.split('\n')
+      const kept = lines.filter(
+        ln => !/^\s*classDef\s+legend\b/i.test(ln) && !/^\s*Legend\s*\["?Legend:/i.test(ln)
+      )
+      return kept.join('\n')
+    } catch {
+      return code
+    }
+  }
+
   const displayCharts = useMemo(() => {
     if (!charts || charts.length === 0) return []
     if (viewMode === 'syntax_error') {
@@ -113,12 +128,12 @@ export default function DiagramBySlugPage() {
     }
     if (viewMode === 'treemap') {
       try {
-        return [buildTreemapFromCharts(charts)]
+        return [buildTreemapFromCharts(charts.map(stripEmbeddedLegend))]
       } catch {
-        return charts
+        return charts.map(stripEmbeddedLegend)
       }
     }
-    return charts
+    return charts.map(stripEmbeddedLegend)
   }, [charts, viewMode])
 
   function buildTreemapFromCharts(srcCharts: string[]): string {
@@ -255,7 +270,7 @@ export default function DiagramBySlugPage() {
           </div>
         ) : charts && charts.length > 0 ? (
           <div className="space-y-3">
-            {typeof slug === 'string' && slug.startsWith('user-journeys:') && (
+            {isUserJourney && (
               <div className="grid gap-3 md:grid-cols-[260px,1fr] items-start">
                 <aside className="sticky top-24 self-start hidden md:block">
                   <div
@@ -270,30 +285,83 @@ export default function DiagramBySlugPage() {
                       className="px-3 py-2 font-semibold"
                       style={{ borderBottom: '1px solid rgba(148,163,184,.25)' }}
                     >
-                      Key
+                      Legend
                     </div>
                     <div className="p-3 space-y-3">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="inline-block w-5 h-5 rounded-full border"
-                          style={{ background: '#93C5FD', borderColor: '#1D4ED8' }}
-                        />
-                        <span>Terminator</span>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#F5F5DC', border: '1px solid #C9C9A3' }} /> <span>User</span></div>
+                        <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#ADD8E6', border: '1px solid #6CB6D9' }} /> <span>Appwrite (DB)</span></div>
+                        <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#DE5D83', border: '1px solid #B34463' }} /> <span>Meshy AI</span></div>
+                        <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#9932CC', border: '1px solid #6E259B' }} /> <span>Vercel / API</span></div>
+                        <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#C41E3A', border: '1px solid #8E1F2E' }} /> <span>External (CFBD/ESPN)</span></div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="inline-block w-5 h-5 border rotate-45"
-                          style={{ background: '#EDE9FE', borderColor: '#7C3AED' }}
-                        />
-                        <span>Decision</span>
+                      <div className="pt-2 mt-2 border-t" style={{ borderColor: 'rgba(148,163,184,.25)' }}>
+                        <div className="font-medium mb-2">Shapes</div>
+                        <div className="flex items-center gap-2 mb-1"><span className="inline-block w-5 h-5 rounded-full border" style={{ background: '#93C5FD', borderColor: '#1D4ED8' }} /> <span>Terminator</span></div>
+                        <div className="flex items-center gap-2 mb-1"><span className="inline-block w-5 h-5 border rotate-45" style={{ background: '#EDE9FE', borderColor: '#7C3AED' }} /> <span>Decision</span></div>
+                        <div className="flex items-center gap-2"><span className="inline-block w-5 h-3 border" style={{ background: '#E5E7EB', borderColor: '#6B7280' }} /> <span>Process</span></div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="inline-block w-5 h-3 border"
-                          style={{ background: '#E5E7EB', borderColor: '#6B7280' }}
-                        />
-                        <span>Process</span>
-                      </div>
+                    </div>
+                  </div>
+                </aside>
+                <section>
+                  <div className="flex items-center gap-2 mb-2">
+                    <label className="text-sm" style={{ color: '#374151' }}>
+                      View:
+                    </label>
+                    <select
+                      value={viewMode}
+                      onChange={e => setViewMode(e.target.value as any)}
+                      className="border rounded px-2 py-1 text-sm"
+                    >
+                      <option value="default">Flowchart (default)</option>
+                      <option value="treemap">Treemap (fold by section)</option>
+                      <option value="syntax_error">Syntax error example</option>
+                    </select>
+                    <div className="ml-auto flex items-center gap-2">
+                      <button
+                        onClick={exportLucidCSV}
+                        className="border rounded px-2 py-1 text-sm hover:bg-emerald-50"
+                        style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}
+                      >
+                        Export Nodes CSV (Lucid)
+                      </button>
+                      <button
+                        onClick={exportLucidEdgesCSV}
+                        className="border rounded px-2 py-1 text-sm hover:bg-emerald-50"
+                        style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}
+                      >
+                        Export Edges CSV
+                      </button>
+                    </div>
+                  </div>
+                  <MermaidRenderer charts={displayCharts} mode="modal" />
+                </section>
+              </div>
+            )}
+            {(isDirectoryMap || isSiteMap) && (
+              <div className="grid gap-3 md:grid-cols-[260px,1fr] items-start">
+                <aside className="sticky top-24 self-start hidden md:block">
+                  <div
+                    className="rounded border text-sm"
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      color: '#1F2937',
+                      borderColor: 'rgba(148,163,184,.35)',
+                    }}
+                  >
+                    <div
+                      className="px-3 py-2 font-semibold"
+                      style={{ borderBottom: '1px solid rgba(148,163,184,.25)' }}
+                    >
+                      Legend
+                    </div>
+                    <div className="p-3 space-y-2">
+                      <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#ADD8E6', border: '1px solid #6CB6D9' }} /> <span>Folder</span></div>
+                      <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#F5F5DC', border: '1px solid #C9C9A3' }} /> <span>File</span></div>
+                      <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#9932CC', border: '1px solid #6E259B' }} /> <span>Config</span></div>
+                      <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#DE5D83', border: '1px solid #B34463' }} /> <span>Generated</span></div>
+                      <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#C41E3A', border: '1px solid #8E1F2E' }} /> <span>Tests</span></div>
                     </div>
                   </div>
                 </aside>
@@ -372,7 +440,7 @@ export default function DiagramBySlugPage() {
                 </div>
               </div>
             )}
-            {!String(slug).startsWith('user-journeys:') && (
+            {!isUserJourney && !isDirectoryMap && !isSiteMap && (
               <>
                 <div className="flex items-center gap-2 mb-2">
                   <label className="text-sm" style={{ color: '#374151' }}>
