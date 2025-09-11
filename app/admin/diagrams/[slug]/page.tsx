@@ -3,12 +3,13 @@
 import { MermaidRenderer } from '@components/docs/MermaidRenderer'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export default function DiagramBySlugPage() {
   const params = useParams<{ slug: string }>()
   const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug
   const [charts, setCharts] = useState<string[]>([])
+  const [viewMode, setViewMode] = useState<'default' | 'treemap' | 'syntax_error'>('default')
   const [error, setError] = useState<string | null>(null)
   const [updatedAt, setUpdatedAt] = useState<string>('')
 
@@ -104,6 +105,119 @@ export default function DiagramBySlugPage() {
     }
   }, [slug])
 
+  // Alternate views: treemap, syntax error demo
+  const displayCharts = useMemo(() => {
+    if (!charts || charts.length === 0) return []
+    if (viewMode === 'syntax_error') {
+      return [
+        [
+          'flowchart TD',
+          '  A["Unclosed label example'] ,',
+          '  A --> B',
+        ].join('\n'),
+      ]
+    }
+    if (viewMode === 'treemap') {
+      try {
+        return [buildTreemapFromCharts(charts)]
+      } catch {
+        return charts
+      }
+    }
+    return charts
+  }, [charts, viewMode])
+
+  function buildTreemapFromCharts(srcCharts: string[]): string {
+    const all = srcCharts.join('\n')
+    const routeMatches = Array.from(all.matchAll(/"\/[^"]+"/g)).map(m => m[0].slice(1, -1))
+    const routes = Array.from(new Set(routeMatches))
+    const groups: Record<string, string[]> = {}
+    const groupFor = (r: string) => {
+      const seg = (r.split('/')[1] || '').toLowerCase()
+      if (seg === 'login' || seg === 'signup' || seg === 'auth') return 'Auth'
+      if (seg === 'dashboard' || seg === 'account-settings') return 'Dashboard'
+      if (seg === 'league') return 'League'
+      if (seg === 'draft') return 'Draft'
+      if (seg === 'admin') return 'Admin'
+      if (seg === 'videos' || seg === 'projection-showcase' || seg === 'conference-showcase' || seg === 'launch' || seg === 'offline' || seg === 'scoreboard' || seg === 'standings' || seg === 'client-brief') return 'Public'
+      if (seg === 'invite') return 'Auth'
+      return 'Other'
+    }
+    for (const r of routes) {
+      const g = groupFor(r)
+      if (!groups[g]) groups[g] = []
+      groups[g].push(r)
+    }
+    const lines: string[] = []
+    lines.push('treemap TB')
+    lines.push('  ["Site Map"]')
+    const groupKeys = Object.keys(groups).sort()
+    for (const g of groupKeys) {
+      lines.push(`    ["${g}"]`)
+      for (const r of groups[g].sort()) {
+        lines.push(`      ["${r}"]`)
+      }
+    }
+    return lines.join('\n')
+  }
+
+  function download(text: string, filename: string, mime = 'text/plain') {
+    const blob = new Blob([text], { type: `${mime};charset=utf-8` })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  function exportLucidCSV() {
+    // Basic nodes CSV for Lucid Data panel: Id,Label,Group,URL
+    const code = charts.join('\n')
+    const labelMatches = Array.from(code.matchAll(/([A-Za-z0-9_]+)\["([^"]+)"\]/g))
+    const idToLabel = new Map<string, string>()
+    for (const m of labelMatches) idToLabel.set(m[1], m[2])
+    const directLabels = Array.from(code.matchAll(/"\/[^"]+"/g)).map(m => m[0].slice(1, -1))
+    const rows: Array<{ id: string; label: string; group: string; url: string }> = []
+    const seen = new Set<string>()
+    const add = (id: string, label: string) => {
+      if (seen.has(label)) return
+      seen.add(label)
+      const seg = (label.split('/')[1] || '').toLowerCase()
+      const group = seg ? seg[0].toUpperCase() + seg.slice(1) : 'Root'
+      const url = label.startsWith('/') ? `https://cfbfantasy.app${label}` : ''
+      rows.push({ id, label, group, url })
+    }
+    for (const [id, label] of idToLabel) add(id, label)
+    for (const label of directLabels) add(label, label)
+    const header = 'Id,Label,Group,URL\n'
+    const body = rows.map(r => [r.id, r.label, r.group, r.url].map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')).join('\n')
+    download(header + body + '\n', `lucid-nodes-${slug || 'diagram'}.csv`, 'text/csv')
+  }
+
+  function exportLucidEdgesCSV() {
+    // Edges CSV: From,To
+    const code = charts.join('\n')
+    const lines = code.split(/\n/)
+    const edges: Array<{ from: string; to: string }> = []
+    const idToLabel: Record<string, string> = {}
+    for (const m of code.matchAll(/([A-Za-z0-9_]+)\["([^"]+)"\]/g)) {
+      idToLabel[m[1]] = m[2]
+    }
+    for (const ln of lines) {
+      const m = ln.match(/\s*([^\s-]+)\s*--?>+\s*([^\s;]+)/)
+      if (!m) continue
+      const rawFrom = m[1]
+      const rawTo = m[2]
+      const toLabel = rawTo.startsWith('"') ? rawTo.slice(1, -1) : idToLabel[rawTo] || rawTo
+      const fromLabel = idToLabel[rawFrom] || (rawFrom.startsWith('"') ? rawFrom.slice(1, -1) : rawFrom)
+      edges.push({ from: fromLabel, to: toLabel })
+    }
+    const header = 'From,To\n'
+    const body = edges.map(e => [e.from, e.to].map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')).join('\n')
+    download(header + body + '\n', `lucid-edges-${slug || 'diagram'}.csv`, 'text/csv')
+  }
+
   // No auth gating; page is reachable only via admin UI
 
   return (
@@ -178,7 +292,23 @@ export default function DiagramBySlugPage() {
                   </div>
                 </aside>
                 <section>
-                  <MermaidRenderer charts={charts} mode="modal" />
+                  <div className="flex items-center gap-2 mb-2">
+                    <label className="text-sm" style={{ color: '#374151' }}>View:</label>
+                    <select
+                      value={viewMode}
+                      onChange={e => setViewMode(e.target.value as any)}
+                      className="border rounded px-2 py-1 text-sm"
+                    >
+                      <option value="default">Flowchart (default)</option>
+                      <option value="treemap">Treemap (fold by section)</option>
+                      <option value="syntax_error">Syntax error example</option>
+                    </select>
+                    <div className="ml-auto flex items-center gap-2">
+                      <button onClick={exportLucidCSV} className="border rounded px-2 py-1 text-sm hover:bg-emerald-50" style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}>Export Nodes CSV (Lucid)</button>
+                      <button onClick={exportLucidEdgesCSV} className="border rounded px-2 py-1 text-sm hover:bg-emerald-50" style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}>Export Edges CSV</button>
+                    </div>
+                  </div>
+                  <MermaidRenderer charts={displayCharts} mode="modal" />
                 </section>
               </div>
             )}
@@ -223,7 +353,25 @@ export default function DiagramBySlugPage() {
               </div>
             )}
             {!String(slug).startsWith('user-journeys:') && (
-              <MermaidRenderer charts={charts} mode="modal" />
+              <>
+                <div className="flex items-center gap-2 mb-2">
+                  <label className="text-sm" style={{ color: '#374151' }}>View:</label>
+                  <select
+                    value={viewMode}
+                    onChange={e => setViewMode(e.target.value as any)}
+                    className="border rounded px-2 py-1 text-sm"
+                  >
+                    <option value="default">Flowchart (default)</option>
+                    <option value="treemap">Treemap (fold by section)</option>
+                    <option value="syntax_error">Syntax error example</option>
+                  </select>
+                  <div className="ml-auto flex items-center gap-2">
+                    <button onClick={exportLucidCSV} className="border rounded px-2 py-1 text-sm hover:bg-emerald-50" style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}>Export Nodes CSV (Lucid)</button>
+                    <button onClick={exportLucidEdgesCSV} className="border rounded px-2 py-1 text-sm hover:bg-emerald-50" style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}>Export Edges CSV</button>
+                  </div>
+                </div>
+                <MermaidRenderer charts={displayCharts} mode="modal" />
+              </>
             )}
           </div>
         ) : markdown ? (
