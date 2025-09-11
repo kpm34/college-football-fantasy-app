@@ -5,9 +5,9 @@ import { Query as AwQuery } from 'node-appwrite'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: NextRequest, { params }: { params: { leagueId: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ leagueId: string  }> }) {
   try {
-    const { leagueId } = params
+    const { leagueId  } = await params
     if (!leagueId) {
       return NextRes.json({ error: 'leagueId required' }, { status: 400 })
     }

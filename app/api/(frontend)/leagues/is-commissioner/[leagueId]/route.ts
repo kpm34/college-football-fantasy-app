@@ -5,10 +5,10 @@ import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/ap
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { leagueId: string } }
+  { params }: { params: Promise<{ leagueId: string  }> }
 ) {
   try {
-    const { leagueId } = params;
+    const { leagueId  } = await params;
 
     // Resolve current user from session cookie
     const sessionId = request.cookies.get('appwrite-session')?.value;

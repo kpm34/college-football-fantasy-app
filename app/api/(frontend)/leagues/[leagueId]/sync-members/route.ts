@@ -7,10 +7,10 @@ import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@/lib/ap
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { leagueId: string } }
+  { params }: { params: Promise<{ leagueId: string  }> }
 ) {
   try {
-    const { leagueId } = params;
+    const { leagueId  } = await params;
 
     // Get the league first to check maxTeams
     const league = await databases.getDocument(

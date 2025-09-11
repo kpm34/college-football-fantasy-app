@@ -17,10 +17,10 @@ export async function OPTIONS() {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { leagueId: string } }
+  { params }: { params: Promise<{ leagueId: string  }> }
 ) {
   try {
-    const { leagueId } = params
+    const { leagueId  } = await params
 
     if (!leagueId) {
       return NextResponse.json(
@@ -171,9 +171,9 @@ export async function GET(
 }
 
 // DELETE remove a member (commissioner only): cascade delete memberships, fantasy teams, roster slots, lineups; update league currentTeams and draft order
-export async function DELETE(request: NextRequest, { params }: { params: { leagueId: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ leagueId: string  }> }) {
   try {
-    const { leagueId } = params
+    const { leagueId  } = await params
     const { searchParams } = new URL(request.url)
     const targetAuthUserId = searchParams.get('authUserId')
     if (!leagueId || !targetAuthUserId) {

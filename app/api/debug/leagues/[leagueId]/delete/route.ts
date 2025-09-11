@@ -25,7 +25,10 @@ async function deleteByQuery(collectionId: string, queries: string[]) {
   } catch {}
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: { leagueId: string } }) {
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: Promise<{ leagueId: string }> }
+) {
   try {
     // Protected debug endpoint
     const auth = _req.headers.get('authorization') || ''
@@ -33,7 +36,8 @@ export async function DELETE(_req: NextRequest, { params }: { params: { leagueId
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const leagueId = params.leagueId
+    const { leagueId: rawLeagueId } = await params
+    const leagueId = rawLeagueId
     if (!leagueId) return NextResponse.json({ error: 'leagueId required' }, { status: 400 })
 
     // Delete related docs first

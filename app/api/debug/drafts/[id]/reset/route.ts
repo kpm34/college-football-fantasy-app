@@ -6,13 +6,14 @@ export const runtime = 'nodejs';
 
 // DEV-ONLY: Reset a league draft to pre-draft (clears deadline and state)
 // Guarded by Authorization: Bearer <CRON_SECRET>
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string  }> }) {
   const auth = request.headers.get('authorization') || '';
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const leagueId = params.id;
+  const { id } = await params;
+  const leagueId = id;
   try {
     // Clear KV mirror
     try {

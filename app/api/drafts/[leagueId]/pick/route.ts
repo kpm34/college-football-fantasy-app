@@ -1,9 +1,9 @@
 import { applyPick, validatePick } from '@/lib/draft-v2/engine'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest, { params }: { params: { leagueId: string } }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ leagueId: string  }> }) {
   try {
-    const { leagueId } = params
+    const { leagueId  } = await params
     const idemKey =
       request.headers.get('Idempotency-Key') || request.headers.get('idempotency-key') || ''
     if (!idemKey) {

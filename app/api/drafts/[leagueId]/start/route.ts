@@ -3,9 +3,9 @@ import { loadState, startDraft } from '@/lib/draft-v2/engine'
 import { NextRequest, NextResponse } from 'next/server'
 import { Permission, Role } from 'node-appwrite'
 
-export async function POST(request: NextRequest, { params }: { params: { leagueId: string } }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ leagueId: string  }> }) {
   try {
-    const { leagueId } = params
+    const { leagueId  } = await params
     const state = await startDraft(leagueId)
     // Ensure state document is readable before returning
     let snap = null

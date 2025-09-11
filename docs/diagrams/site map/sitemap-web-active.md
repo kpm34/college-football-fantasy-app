@@ -77,7 +77,7 @@ flowchart TD
   ROOT --> P5
 
   %% Click mappings (open in new tab where external)
-  click L0 "/admin/diagrams/user-journeys%3Aleagues-user-flow" "Open leagues journey" _blank
+  click L0 "/admin/diagrams/user-journeys/leagues-user-flow" "Open leagues journey" _blank
 ```
 
 ### Legend

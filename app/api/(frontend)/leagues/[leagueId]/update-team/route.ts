@@ -1,7 +1,8 @@
 import { COLLECTIONS, DATABASE_ID, serverDatabases as databases } from '@/lib/appwrite-server'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function PUT(request: NextRequest, { params }: { params: { leagueId: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ leagueId: string }> }) {
+  const { leagueId } = await params;
   try {
     // Get user from session
     const sessionCookie = request.cookies.get('appwrite-session')?.value
@@ -46,12 +47,12 @@ export async function PUT(request: NextRequest, { params }: { params: { leagueId
     }
 
     // Verify the team belongs to the league in the URL
-    if ((teamDoc as any).leagueId !== params.leagueId) {
+    if ((teamDoc as any).leagueId !== resolvedParams.leagueId) {
       return NextResponse.json({ error: 'Team does not belong to this league' }, { status: 400 })
     }
 
     // Fetch league to determine commissioner privileges
-    const league = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, params.leagueId)
+    const league = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, resolvedParams.leagueId)
 
     const isOwner = (teamDoc as any).clientId === user.$id || (teamDoc as any).ownerId === user.$id
     const isCommissioner = Boolean(

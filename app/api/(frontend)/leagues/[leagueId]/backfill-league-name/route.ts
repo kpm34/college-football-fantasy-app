@@ -5,13 +5,13 @@ import { Query } from 'node-appwrite';
 export const runtime = 'nodejs';
 
 // POST: Backfill fantasy_teams.leagueName for a specific league
-export async function POST(req: NextRequest, { params }: { params: { leagueId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ leagueId: string }> }) {
   const auth = req.headers.get('authorization') || '';
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const leagueId = params.leagueId;
+  const { leagueId } = await params;
   if (!leagueId) {
     return NextResponse.json({ error: 'leagueId required' }, { status: 400 });
   }

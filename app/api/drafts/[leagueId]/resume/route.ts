@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { resumeDraft } from '@/lib/draft-v2/engine'
 
-export async function POST(_req: NextRequest, { params }: { params: { leagueId: string } }) {
+export async function POST(_req: NextRequest, { params }: { params: Promise<{ leagueId: string  }> }) {
   try {
-    const { leagueId } = params
+    const { leagueId  } = await params
     const state = await resumeDraft(leagueId)
     return NextResponse.json({ data: state })
   } catch (error) {

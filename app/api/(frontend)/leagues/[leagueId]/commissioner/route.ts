@@ -6,8 +6,9 @@ export const dynamic = 'force-dynamic';
 // GET commissioner settings and members
 export async function GET(
   request: NextRequest,
-  { params }: { params: { leagueId: string } }
+  { params }: { params: Promise<{ leagueId: string }> }
 ) {
+  const { leagueId } = await params;
   try {
     // Get user from session (support both proxy cookie and native Appwrite cookie)
     let sessionCookie = request.cookies.get('appwrite-session')?.value as string | undefined;
@@ -38,7 +39,7 @@ export async function GET(
     const league = await databases.getDocument(
       DATABASE_ID,
       COLLECTIONS.LEAGUES,
-      params.leagueId
+      leagueId
     );
     
     // Check if user is commissioner (support multiple field variants)
@@ -57,7 +58,7 @@ export async function GET(
       memberships = await databases.listDocuments(
         DATABASE_ID,
         'league_memberships',
-        [Query.equal('leagueId', params.leagueId), Query.equal('status', 'active'), Query.limit(200)]
+        [Query.equal('leagueId', resolvedParams.leagueId), Query.equal('status', 'active'), Query.limit(200)]
       );
       console.log(`Found ${memberships.documents.length} league memberships`);
     } catch (e) {
@@ -68,7 +69,7 @@ export async function GET(
     const fantasyTeams = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.FANTASY_TEAMS,
-      [Query.equal('leagueId', params.leagueId), Query.limit(200)]
+      [Query.equal('leagueId', resolvedParams.leagueId), Query.limit(200)]
     );
     console.log(`Found ${fantasyTeams.documents.length} fantasy teams`);
     
@@ -215,8 +216,9 @@ export async function GET(
 // PUT update all league settings
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { leagueId: string } }
+  { params }: { params: Promise<{ leagueId: string }> }
 ) {
+  const { leagueId } = await params;
   try {
     // Get user from session (support both proxy cookie and native Appwrite cookie)
     let sessionCookie = request.cookies.get('appwrite-session')?.value as string | undefined;
@@ -247,7 +249,7 @@ export async function PUT(
     const league = await databases.getDocument(
       DATABASE_ID,
       COLLECTIONS.LEAGUES,
-      params.leagueId
+      leagueId
     );
     
     // Use the actual DB field name: commissionerAuthUserId (now camelCase!)
@@ -354,7 +356,7 @@ export async function PUT(
     const result = await databases.updateDocument(
       DATABASE_ID,
       COLLECTIONS.LEAGUES,
-      params.leagueId,
+      leagueId,
       safePayload
     );
     
@@ -364,7 +366,7 @@ export async function PUT(
       const drafts = await databases.listDocuments(
         DATABASE_ID,
         COLLECTIONS.DRAFTS,
-        [Query.equal('leagueId', params.leagueId), Query.limit(1)]
+        [Query.equal('leagueId', resolvedParams.leagueId), Query.limit(1)]
       );
       
       if (drafts.documents.length > 0) {
@@ -437,7 +439,7 @@ export async function PUT(
           COLLECTIONS.DRAFTS,
           ID.unique(),
           {
-            leagueId: params.leagueId,
+            leagueId: resolvedParams.leagueId,
             leagueName: result.leagueName || league.leagueName,
             gameMode: result.gameMode || league.gameMode,
             selectedConference: result.selectedConference || league.selectedConference,
@@ -472,7 +474,7 @@ export async function PUT(
       code: error.code,
       type: error.type,
       stack: error.stack,
-      leagueId: params.leagueId
+      leagueId: resolvedParams.leagueId
     });
     
     // Return more specific error messages based on error type

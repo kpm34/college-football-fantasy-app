@@ -4,10 +4,10 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string  }> }
 ) {
   try {
-    const { clientId } = params;
+    const { clientId  } = await params;
 
     // Get user details from Appwrite Users API using server key
     const userRes = await fetch(`https://nyc.cloud.appwrite.io/v1/users/${clientId}`, {

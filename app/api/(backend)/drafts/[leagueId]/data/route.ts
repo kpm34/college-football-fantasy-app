@@ -5,8 +5,8 @@ import { Query } from 'node-appwrite'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: NextRequest, { params }: { params: { leagueId: string } }) {
-  const { leagueId } = params
+export async function GET(request: NextRequest, { params }: { params: Promise<{ leagueId: string }> }) {
+  const { leagueId } = await params
   try {
     // League
     const league = await databases.getDocument(DATABASE_ID, COLLECTIONS.LEAGUES, leagueId)

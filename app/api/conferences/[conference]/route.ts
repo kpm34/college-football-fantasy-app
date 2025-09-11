@@ -1,61 +1,55 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getTeamsByConference, normalizeColors } from '@lib/conference-data';
-import { serverDatabases as databases, DATABASE_ID, COLLECTIONS } from '@lib/appwrite-server';
-import { Query } from 'node-appwrite';
+import { COLLECTIONS, DATABASE_ID, serverDatabases as databases } from '@lib/appwrite-server'
+import { getTeamsByConference, normalizeColors } from '@lib/conference-data'
+import { NextRequest, NextResponse } from 'next/server'
+import { Query } from 'node-appwrite'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { conference: string } }
+  { params }: { params: Promise<{ conference: string }> }
 ) {
   try {
-    const conference = params.conference.toUpperCase().replace('-', '');
-    const { searchParams } = new URL(request.url);
-    const type = searchParams.get('type') || 'schools';
+    const { conference: rawConference } = await params
+    const conference = rawConference.toUpperCase().replace('-', '')
+    const { searchParams } = new URL(request.url)
+    const type = searchParams.get('type') || 'schools'
 
     // Normalize conference name
-    let normalizedConference = conference;
-    if (conference === 'BIG12') normalizedConference = 'Big 12';
-    if (conference === 'BIGTEN' || conference === 'BIG10') normalizedConference = 'Big Ten';
-    if (conference === 'ACC') normalizedConference = 'ACC';
-    if (conference === 'SEC') normalizedConference = 'SEC';
+    let normalizedConference = conference
+    if (conference === 'BIG12') normalizedConference = 'Big 12'
+    if (conference === 'BIGTEN' || conference === 'BIG10') normalizedConference = 'Big Ten'
+    if (conference === 'ACC') normalizedConference = 'ACC'
+    if (conference === 'SEC') normalizedConference = 'SEC'
 
     switch (type) {
       case 'schools': {
-        const teams = getTeamsByConference(conference);
+        const teams = getTeamsByConference(conference)
         if (teams.length === 0) {
-          return NextResponse.json(
-            { error: `Conference ${conference} not found` },
-            { status: 404 }
-          );
+          return NextResponse.json({ error: `Conference ${conference} not found` }, { status: 404 })
         }
 
         // Normalize colors to array format for consistent response
         const normalizedTeams = teams.map(team => ({
           ...team,
           colors: normalizeColors(team),
-          createdAt: new Date().toISOString()
-        }));
+          createdAt: new Date().toISOString(),
+        }))
 
         return NextResponse.json({
           success: true,
           conference: normalizedConference,
           data: normalizedTeams,
-          count: normalizedTeams.length
-        });
+          count: normalizedTeams.length,
+        })
       }
 
       case 'players': {
         try {
           // Fetch players from Appwrite database
-          const playersResponse = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.PLAYERS,
-            [
-              Query.equal('conference', normalizedConference),
-              Query.orderDesc('rating'),
-              Query.limit(100)
-            ]
-          );
+          const playersResponse = await databases.listDocuments(DATABASE_ID, COLLECTIONS.PLAYERS, [
+            Query.equal('conference', normalizedConference),
+            Query.orderDesc('rating'),
+            Query.limit(100),
+          ])
 
           const players = playersResponse.documents.map(player => ({
             id: player.$id,
@@ -68,53 +62,50 @@ export async function GET(
             height: player.height,
             weight: player.weight,
             jersey: player.jersey,
-            draftable: player.draftable !== false
-          }));
+            draftable: player.draftable !== false,
+          }))
 
           return NextResponse.json({
             success: true,
             conference: normalizedConference,
             data: players,
             count: players.length,
-            total: playersResponse.total
-          });
+            total: playersResponse.total,
+          })
         } catch (dbError) {
-          console.error('Database error fetching players:', dbError);
+          console.error('Database error fetching players:', dbError)
           // Return empty array if database fails
           return NextResponse.json({
             success: true,
             conference: normalizedConference,
             data: [],
             count: 0,
-            error: 'Unable to fetch players from database'
-          });
+            error: 'Unable to fetch players from database',
+          })
         }
       }
 
       case 'games': {
         try {
           // Fetch games from Appwrite database
-          const teams = getTeamsByConference(conference);
-          const teamNames = teams.map(t => t.name);
-          
-          const gamesResponse = await databases.listDocuments(
-            DATABASE_ID,
-            'games',
-            [
-              Query.orderAsc('week'),
-              Query.limit(100)
-            ]
-          );
+          const teams = getTeamsByConference(conference)
+          const teamNames = teams.map(t => t.name)
+
+          const gamesResponse = await databases.listDocuments(DATABASE_ID, 'games', [
+            Query.orderAsc('week'),
+            Query.limit(100),
+          ])
 
           // Filter games for this conference
-          const conferenceGames = gamesResponse.documents.filter(game => 
-            teamNames.some(team => 
-              game.homeTeam?.includes(team) || 
-              game.awayTeam?.includes(team) ||
-              game.homeTeam?.includes(team) || 
-              game.awayTeam?.includes(team)
+          const conferenceGames = gamesResponse.documents.filter(game =>
+            teamNames.some(
+              team =>
+                game.homeTeam?.includes(team) ||
+                game.awayTeam?.includes(team) ||
+                game.homeTeam?.includes(team) ||
+                game.awayTeam?.includes(team)
             )
-          );
+          )
 
           const games = conferenceGames.map(game => ({
             id: game.$id,
@@ -125,40 +116,36 @@ export async function GET(
             time: game.time || game.startTime,
             homeScore: game.homeScore || game.homeScore || null,
             awayScore: game.awayScore || game.awayScore || null,
-            status: game.status || 'scheduled'
-          }));
+            status: game.status || 'scheduled',
+          }))
 
           return NextResponse.json({
             success: true,
             conference: normalizedConference,
             data: games,
-            count: games.length
-          });
+            count: games.length,
+          })
         } catch (dbError) {
-          console.error('Database error fetching games:', dbError);
+          console.error('Database error fetching games:', dbError)
           return NextResponse.json({
             success: true,
             conference: normalizedConference,
             data: [],
             count: 0,
-            error: 'Unable to fetch games from database'
-          });
+            error: 'Unable to fetch games from database',
+          })
         }
       }
 
       case 'stats': {
         try {
-          const teams = getTeamsByConference(conference);
-          
+          const teams = getTeamsByConference(conference)
+
           // Get player count from database
-          const playersResponse = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.PLAYERS,
-            [
-              Query.equal('conference', normalizedConference),
-              Query.limit(1)
-            ]
-          );
+          const playersResponse = await databases.listDocuments(DATABASE_ID, COLLECTIONS.PLAYERS, [
+            Query.equal('conference', normalizedConference),
+            Query.limit(1),
+          ])
 
           return NextResponse.json({
             success: true,
@@ -166,9 +153,9 @@ export async function GET(
             data: {
               totalTeams: teams.length,
               totalPlayers: playersResponse.total || 0,
-              lastUpdated: new Date().toISOString()
-            }
-          });
+              lastUpdated: new Date().toISOString(),
+            },
+          })
         } catch (dbError) {
           return NextResponse.json({
             success: true,
@@ -176,25 +163,21 @@ export async function GET(
             data: {
               totalTeams: getTeamsByConference(conference).length,
               totalPlayers: 0,
-              lastUpdated: new Date().toISOString()
-            }
-          });
+              lastUpdated: new Date().toISOString(),
+            },
+          })
         }
       }
 
       case 'draft-board': {
         try {
           // Fetch draftable players from database
-          const playersResponse = await databases.listDocuments(
-            DATABASE_ID,
-            COLLECTIONS.PLAYERS,
-            [
-              Query.equal('conference', normalizedConference),
-              Query.equal('draftable', true),
-              Query.orderDesc('rating'),
-              Query.limit(200)
-            ]
-          );
+          const playersResponse = await databases.listDocuments(DATABASE_ID, COLLECTIONS.PLAYERS, [
+            Query.equal('conference', normalizedConference),
+            Query.equal('draftable', true),
+            Query.orderDesc('rating'),
+            Query.limit(200),
+          ])
 
           const draftBoard = playersResponse.documents.map((player, index) => ({
             id: player.$id,
@@ -208,24 +191,24 @@ export async function GET(
             draftable: true,
             year: player.year,
             height: player.height,
-            weight: player.weight
-          }));
+            weight: player.weight,
+          }))
 
           return NextResponse.json({
             success: true,
             conference: normalizedConference,
             data: draftBoard,
-            count: draftBoard.length
-          });
+            count: draftBoard.length,
+          })
         } catch (dbError) {
-          console.error('Database error fetching draft board:', dbError);
+          console.error('Database error fetching draft board:', dbError)
           return NextResponse.json({
             success: true,
             conference: normalizedConference,
             data: [],
             count: 0,
-            error: 'Unable to fetch draft board from database'
-          });
+            error: 'Unable to fetch draft board from database',
+          })
         }
       }
 
@@ -233,13 +216,10 @@ export async function GET(
         return NextResponse.json(
           { error: `Invalid type: ${type}. Use teams, players, games, stats, or draft-board` },
           { status: 400 }
-        );
+        )
     }
   } catch (error) {
-    console.error('Conference API Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch conference data' },
-      { status: 500 }
-    );
+    console.error('Conference API Error:', error)
+    return NextResponse.json({ error: 'Failed to fetch conference data' }, { status: 500 })
   }
 }

@@ -6,10 +6,10 @@ const databaseId = DATABASE_ID;
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { leagueId: string } }
+  { params }: { params: Promise<{ leagueId: string  }> }
 ) {
   try {
-    const { leagueId } = params;
+    const { leagueId  } = await params;
 
     // Resolve current user from cookie session header if present (optional)
     const client_id = request.headers.get('x-user-id') || request.headers.get('x-app-user') || '';
@@ -159,10 +159,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { leagueId: string } }
+  { params }: { params: Promise<{ leagueId: string  }> }
 ) {
   try {
-    const { leagueId } = params;
+    const { leagueId  } = await params;
     const body = await request.json();
     const { fantasyTeamId, name } = body;
     if (!fantasyTeamId || !name) {

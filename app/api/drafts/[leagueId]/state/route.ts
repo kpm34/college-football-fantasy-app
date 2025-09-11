@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from 'next/server'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-export async function GET(_request: NextRequest, { params }: { params: { leagueId: string } }) {
-  const { leagueId } = params
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ leagueId: string  }> }) {
+  const { leagueId  } = await params
   try {
     const doc: any = await databases.getDocument(DATABASE_ID, COLLECTIONS.DRAFT_STATES, leagueId)
 
