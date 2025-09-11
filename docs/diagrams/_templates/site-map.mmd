@@ -9,60 +9,62 @@ classDef vercel fill:#9932CC,stroke:#6E259B,color:#FFFFFF;
 classDef external fill:#C41E3A,stroke:#8E1F2E,color:#FFFFFF;
 classDef legend fill:#FAFAFA,stroke:#D9D9D9,color:#595959;
 
-flowchart TB
-  Legend["Legend:\n• Beige = User\n• Light Blue = Appwrite (DB)\n• Blush = Meshy AI\n• DarkOrchid = Vercel/API\n• Cardinal = External APIs (CFBD/ESPN)"]:::legend
+flowchart TD
 
   %% Root
-  Root((cfbfantasy.app)):::vercel
+  R0(("cfbfantasy.app")):::vercel
 
   %% Public
-  subgraph Public Pages
+  subgraph P0["Public Pages"]
     direction TB
-    Home[/Home/]:::vercel
-    SignIn[/Sign In/]:::vercel
-    SignUp[/Sign Up/]:::vercel
-    Scoreboard[/Scoreboard/]:::vercel
-    Standings[/Standings/]:::vercel
+    P1["/Home/"]:::vercel
+    P2["/Sign In/"]:::vercel
+    P3["/Sign Up/"]:::vercel
+    P4["/Scoreboard/"]:::vercel
+    P5["/Standings/"]:::vercel
   end
 
   %% Authenticated
-  subgraph Dashboard (Auth)
+  subgraph D0["Dashboard (Auth)"]
     direction TB
-    Dash[/Dashboard/]:::vercel
-    League[/League Overview/]:::vercel
-    Draft[/Draft Room/]:::vercel
-    Account[/Account Settings/]:::vercel
+    D1["/Dashboard/"]:::vercel
+    D2["/League Overview/"]:::vercel
+    D3["/Draft Room/"]:::vercel
+    D4["/Account Settings/"]:::vercel
   end
 
   %% Admin
-  subgraph Admin
+  subgraph A0["Admin"]
     direction TB
-    AdminHome[/Admin/]:::vercel
-    AdminDiagrams[/Admin Diagrams/]:::vercel
+    A1["/Admin/"]:::vercel
+    A2["/Admin Diagrams/"]:::vercel
   end
 
   %% External/Support
-  CFBD[[CFBD API]]:::external
-  ESPN[[ESPN API]]:::external
-  Appwrite[(Appwrite DB/Realtime/Auth)]:::appwrite
+  X1[["CFBD API"]]:::external
+  X2[["ESPN API"]]:::external
+  A1[("Appwrite DB/Realtime/Auth")]:::appwrite
 
   %% Edges
-  Root --> Home
-  Root --> SignIn
-  Root --> SignUp
-  Root --> Scoreboard
-  Root --> Standings
+  R0 --> P1
+  R0 --> P2
+  R0 --> P3
+  R0 --> P4
+  R0 --> P5
 
-  Home --> SignIn
-  SignIn --> Dash
+  P1 --> P2
+  P2 --> D1
 
-  Dash --> League
-  League --> Draft
-  Dash --> Account
+  D1 --> D2
+  D2 --> D3
+  D1 --> D4
 
-  Dash --> Appwrite
-  League --> Appwrite
-  Draft --> Appwrite
-  Dash --> CFBD
-  League --> CFBD
-  Draft --> ESPN
+  D1 --> A1
+  D2 --> A1
+  D3 --> A1
+  D1 --> X1
+  D2 --> X1
+  D3 --> X2
+
+  %% Legend (at end)
+  Legend["Legend:\n• Beige = User\n• Light Blue = Appwrite (DB)\n• Blush = Meshy AI\n• DarkOrchid = Vercel/API\n• Cardinal = External APIs (CFBD/ESPN)"]:::legend
