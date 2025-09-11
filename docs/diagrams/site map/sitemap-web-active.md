@@ -16,6 +16,10 @@ Generated from the live Next.js App Router by `ops/diagrams/generate-sitemap-fro
 
 ```mermaid
 graph TD
+  classDef l0 fill:#fed7aa,stroke:#9a3412,color:#7c2d12,rx:8,ry:8
+  classDef l1 fill:#e5effe,stroke:#60a5fa,color:#1f2937,rx:6,ry:6
+  classDef l2 fill:#fef3c7,stroke:#f59e0b,color:#7c2d12,rx:6,ry:6
+  classDef l3 fill:#eef5d7,stroke:#6B8E23,color:#1f2937,rx:6,ry:6
 root["/ (Landing)"]
 
 root --> join[Join & Invite]
@@ -65,6 +69,12 @@ tools --> pv["/admin/product-vision"]
   public --> vprog["/videos/:program"]
   public --> launch["/launch"]
   public --> offline["/offline"]
+
+  %% Apply level-based colors
+  class root l0;
+  class join,auth,dash,league,draft,admin,public l1;
+  class invite,joinLeague,login,signup,oauth,dhome,acct,scb,std,create,lid,draftId,aroot,diags,tools,conf,proj,vids,vprog,launch,offline l2;
+  class lr,sched,lscore,lstand,comm,sm,pm,ff,sa,cache,sync,sec,pv l3;
 ```
 
 ### Legend

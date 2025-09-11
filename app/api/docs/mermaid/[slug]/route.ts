@@ -143,6 +143,15 @@ export async function GET(
       'sitemap:mobile:active': 'diagrams/site map/sitemap-mobile-active.md',
       'sitemap:web:final': 'diagrams/site map/sitemap-web-final.md',
       'sitemap:mobile:final': 'diagrams/site map/sitemap-mobile-final.md',
+
+      // Workflows (new)
+      'workflows:index': 'diagrams/workflows/index.md',
+      'workflows:production-process': 'diagrams/workflows/production-process.md',
+      'workflows:incident-hotfix': 'diagrams/workflows/incident-hotfix.md',
+      'workflows:schema-migration': 'diagrams/workflows/schema-migration.md',
+      'workflows:analytics-instrumentation': 'diagrams/workflows/analytics-instrumentation.md',
+      'workflows:design-handoff-integration': 'diagrams/workflows/design-handoff-integration.md',
+      'workflows:campaign-launch': 'diagrams/workflows/campaign-launch.md',
     }
 
     // Handle dynamic multi-level project map paths
@@ -272,6 +281,19 @@ export async function GET(
       const parts = slug.split(':').slice(1)
       if (parts.length) {
         const folderPath = `diagrams/directory-map/${parts.join('/')}.md`
+        const docsPath = path.join(process.cwd(), 'docs')
+        const fullFolderPath = path.join(docsPath, folderPath)
+        if (fs.existsSync(fullFolderPath)) {
+          fileMap[slug] = folderPath
+        }
+      }
+    }
+
+    // Generic resolver for workflows folder structure
+    if (slug.startsWith('workflows:')) {
+      const parts = slug.split(':').slice(1)
+      if (parts.length) {
+        const folderPath = `diagrams/workflows/${parts.join('/')}.md`
         const docsPath = path.join(process.cwd(), 'docs')
         const fullFolderPath = path.join(docsPath, folderPath)
         if (fs.existsSync(fullFolderPath)) {
