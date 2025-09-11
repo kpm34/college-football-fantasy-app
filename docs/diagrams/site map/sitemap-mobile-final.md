@@ -11,35 +11,33 @@ source: docs/diagrams/site map
 Final/target mobile sitemap in inverted tree form.
 
 ```mermaid
-mindmap
-  root((/ Landing))
-    Auth
-      /login
-      /signup
-      /auth/callback
-    Tabs
-      Home (/dashboard)
-      Leagues
-      Activity
-      Profile
-    Leagues
-      /league/join
-      /league/create
-      /league/:leagueId
-        /league/:leagueId/locker-room
-        /league/:leagueId/lineups (planned)
-        /league/:leagueId/matchups (planned)
-        /league/:leagueId/waivers (planned)
-        /league/:leagueId/trades (planned)
-        /league/:leagueId/schedule
-        /league/:leagueId/scoreboard
-        /league/:leagueId/standings
-        /league/:leagueId/commissioner
-    Draft
-      /draft/:leagueId (time-gated)
-    Content
-      /conference-showcase
-      /projection-showcase
-      /videos
-      /videos/:program
+flowchart TD
+  ROOT["/ (Landing)"]
+  ROOT --> "/login"
+  ROOT --> "/signup"
+  ROOT --> "/auth/callback"
+  ROOT --> "/invite/:leagueId"
+  ROOT --> "/dashboard"
+
+  "/dashboard" --> "/league/:leagueId"
+  "/league/:leagueId" --> "/league/:leagueId/locker-room"
+  "/league/:leagueId" --> "/league/:leagueId/lineups" %% planned
+  "/league/:leagueId" --> "/league/:leagueId/matchups" %% planned
+  "/league/:leagueId" --> "/league/:leagueId/waivers" %% planned
+  "/league/:leagueId" --> "/league/:leagueId/trades" %% planned
+  "/league/:leagueId" --> "/league/:leagueId/schedule"
+  "/league/:leagueId" --> "/league/:leagueId/scoreboard"
+  "/league/:leagueId" --> "/league/:leagueId/standings"
+  "/league/:leagueId" --> "/league/:leagueId/commissioner"
+
+  "/league/:leagueId" --> "/draft/:leagueId"
+
+  %% Content (public)
+  ROOT --> "/conference-showcase"
+  ROOT --> "/projection-showcase"
+  ROOT --> "/videos"
+  "/videos" --> "/videos/:program"
+
+  %% Mobile-only branches
+  "Sheet: Team Switcher (mobile)"
 ```
