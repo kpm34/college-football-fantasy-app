@@ -12,7 +12,7 @@ Active (current) site map for the web experience in inverted tree form (top → 
 
 ### Method
 
-Scanned Next.js App Router under `app/` including `(league)`, `(dashboard)`, `admin`, and `api/` subtrees, plus `middleware.ts`. No `src/app/` present. Cross-checked attic diagrams for gaps.
+Generated from the live Next.js App Router by `ops/diagrams/generate-sitemap-from-routes.ts`.
 
 ```mermaid
 graph TD
