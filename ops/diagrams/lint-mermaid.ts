@@ -1,20 +1,28 @@
 #!/usr/bin/env tsx
+import { glob } from 'glob'
+import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
-import { glob } from 'glob'
 
-interface LintError { file: string; message: string }
+interface LintError {
+  file: string
+  message: string
+}
 
 const ROOT = process.cwd()
 const DIAGRAMS_DIR = path.join(ROOT, 'docs/diagrams')
 
-const IGNORES = [
-  '**/_includes/**',
-  '**/_templates/**',
-  '**/_generated.*',
-]
+const IGNORES = ['**/_includes/**', '**/_templates/**', '**/_generated.*']
 
-async function readFiles(): Promise<string[]> {
+async function readFiles(specificFiles?: string[]): Promise<string[]> {
+  if (specificFiles && specificFiles.length) {
+    // Filter to existing files under diagrams dir and with valid extensions
+    const picked = specificFiles
+      .map(f => path.resolve(ROOT, f))
+      .filter(f => f.startsWith(DIAGRAMS_DIR))
+      .filter(f => f.endsWith('.md') || f.endsWith('.mmd'))
+    return picked
+  }
   const patterns = ['**/*.md', '**/*.mmd']
   const files = (
     await Promise.all(
@@ -76,7 +84,11 @@ async function lintFile(file: string): Promise<LintError[]> {
     if (isTemplateOrInclude || isGenerated) return errors
     const body = text
     // mindmap check
-    const firstNonComment = body.split(/\n/).map(s => s.trim()).find(s => s && !s.startsWith('%%')) || ''
+    const firstNonComment =
+      body
+        .split(/\n/)
+        .map(s => s.trim())
+        .find(s => s && !s.startsWith('%%')) || ''
     if (/^mindmap\b/i.test(firstNonComment) || /```mindmap/.test(body)) {
       errors.push({ file: rel, message: 'mindmap usage is not allowed' })
     }
@@ -87,7 +99,10 @@ async function lintFile(file: string): Promise<LintError[]> {
     // label quoting
     const unquoted = findUnquotedLabels(body)
     if (unquoted.length) {
-      errors.push({ file: rel, message: `Labels with '/' or ':' must be quoted: ${[...new Set(unquoted)].slice(0,5).join(', ')}${unquoted.length>5?' …':''}` })
+      errors.push({
+        file: rel,
+        message: `Labels with '/' or ':' must be quoted: ${[...new Set(unquoted)].slice(0, 5).join(', ')}${unquoted.length > 5 ? ' …' : ''}`,
+      })
     }
     // Legend for user journeys
     if (isUserJourney && !/\bLegend\[/.test(body)) {
@@ -112,7 +127,11 @@ async function lintFile(file: string): Promise<LintError[]> {
 
   for (const b of mermaidBlocks) {
     const body = b.body
-    const firstNonComment = body.split(/\n/).map(s => s.trim()).find(s => s && !s.startsWith('%%')) || ''
+    const firstNonComment =
+      body
+        .split(/\n/)
+        .map(s => s.trim())
+        .find(s => s && !s.startsWith('%%')) || ''
     if (/^mindmap\b/i.test(firstNonComment)) {
       errors.push({ file: rel, message: 'mindmap usage inside mermaid fence is not allowed' })
     }
@@ -121,7 +140,10 @@ async function lintFile(file: string): Promise<LintError[]> {
     }
     const unquoted = findUnquotedLabels(body)
     if (unquoted.length) {
-      errors.push({ file: rel, message: `Labels with '/' or ':' must be quoted: ${[...new Set(unquoted)].slice(0,5).join(', ')}${unquoted.length>5?' …':''}` })
+      errors.push({
+        file: rel,
+        message: `Labels with '/' or ':' must be quoted: ${[...new Set(unquoted)].slice(0, 5).join(', ')}${unquoted.length > 5 ? ' …' : ''}`,
+      })
     }
     if (isUserJourney && !/\bLegend\[/.test(body)) {
       errors.push({ file: rel, message: 'User-journey is missing Legend block' })
@@ -131,8 +153,27 @@ async function lintFile(file: string): Promise<LintError[]> {
   return errors
 }
 
+function getStagedDiagramFiles(): string[] {
+  try {
+    const out = execSync('git diff --cached --name-only -- "docs/diagrams"', {
+      stdio: ['ignore', 'pipe', 'ignore'],
+    })
+      .toString()
+      .split(/\r?\n/)
+      .filter(Boolean)
+    return out
+  } catch {
+    return []
+  }
+}
+
 async function main() {
-  const files = await readFiles()
+  const args = process.argv.slice(2)
+  let targets: string[] | undefined
+  if (args.includes('--staged')) {
+    targets = getStagedDiagramFiles()
+  }
+  const files = await readFiles(targets)
   const allErrors: LintError[] = []
   for (const f of files) {
     const errs = await lintFile(f)
@@ -146,7 +187,7 @@ async function main() {
     }
     process.exit(1)
   } else {
-    console.log(`✅ Mermaid lint passed (${files.length} files checked)`) 
+    console.log(`✅ Mermaid lint passed (${files.length} files checked)`)
   }
 }
 

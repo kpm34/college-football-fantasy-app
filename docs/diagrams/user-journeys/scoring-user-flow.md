@@ -1,9 +1,11 @@
 # Scoring User Flow
 
 Season week:
+
 - Set lineups → lock before kickoff → games played → scores computed
 
 Commissioner:
+
 - Review weekly results → resolve disputes → finalize standings
 
 Related: ../overview/scoring.md
@@ -56,5 +58,3 @@ flowchart TD
   %% Legend at end
   Legend["Legend:\n• Beige = User\n• Light Blue = Appwrite (DB)\n• Blush = Meshy AI\n• DarkOrchid = Vercel/API\n• Cardinal = External APIs (CFBD/ESPN)"]:::legend
 ```
-
-
