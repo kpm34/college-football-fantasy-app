@@ -51,10 +51,13 @@ async function main() {
   const pages = await collectPages()
   const graph = toGraphTD(pages)
   const md = ['```mermaid', graph, '```'].join('\n')
-  const out = path.join(ROOT, 'docs/diagrams/site map/_generated.sitemap-web-active.md')
-  fs.mkdirSync(path.dirname(out), { recursive: true })
-  fs.writeFileSync(out, md)
-  console.log('✅ Generated sitemap from pages ->', out)
+  const outWeb = path.join(ROOT, 'docs/diagrams/site map/_generated.sitemap-web-active.md')
+  fs.mkdirSync(path.dirname(outWeb), { recursive: true })
+  fs.writeFileSync(outWeb, md)
+  console.log('✅ Generated sitemap from pages ->', outWeb)
+  const outMobile = path.join(ROOT, 'docs/diagrams/site map/_generated.sitemap-mobile-active.md')
+  fs.writeFileSync(outMobile, md)
+  console.log('✅ Generated mobile sitemap from pages ->', outMobile)
 }
 
 main().catch(err => {
