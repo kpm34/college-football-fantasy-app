@@ -9,15 +9,16 @@ Concise, actionable rules for creating repository site maps that are readable, c
 
 ## Visual style (top‑down inverted tree)
 - Root at the top: `"/ (Landing)"`.
-- Use Mermaid `graph TD` with left‑aligned labels.
+- Prefer Mermaid `mindmap` for compact hierarchical site maps. Use `graph TD` only when you need explicit edges or annotations not supported by `mindmap`.
 - Max depth per sheet: 3; split busy branches into sub‑maps.
-- Clusters (optional): Auth, Dashboard, League, Draft, Admin, Public Content.
-- Line semantics: solid for parent→child; dotted for redirects/aliases (rare).
+- Optional grouping branches: Auth, Dashboard, League, Draft, Admin, Public Content.
+- Line semantics (for `graph TD` only): solid for parent→child; dotted for redirects/aliases (rare).
 
 ## Labeling
-- Route nodes show path (use `:param` notation for dynamics).
+- Route nodes show path (use `:param` notation for dynamics, e.g., `/league/:leagueId`).
 - Add small inline notes only when critical (e.g., `time‑gated`, `role: commissioner`).
 - Avoid prose in nodes; keep to short labels.
+- In `mindmap`, avoid quoting labels. Use plain text when possible, e.g., `My Teams (planned)` not `"My Teams (planned)"`.
 
 ## Content rules
 - Include only currently implemented routes for the “Active” map.
@@ -25,12 +26,24 @@ Concise, actionable rules for creating repository site maps that are readable, c
 - Group admin tools and diagram hubs to reduce clutter.
 - Reflect Next.js App Router reality: generate baseline via `ops/diagrams/generate-sitemap-from-routes.ts`, then manually add minimal grouping nodes.
 
+## Parser‑safe Mermaid conventions
+- `mindmap` does not support subgraphs; represent groupings as top‑level branches under the root.
+- Avoid square‑bracket subgraph titles and shape variants; `mindmap` only needs plain lines with indentation.
+- Do not include trailing slashes in route labels.
+- Prefer `:param` over `[param]` in labels.
+
 ## Authoring steps
-1) Run code sync: `npm run diagrams:sitemap` (or execute the script directly).
+1) Generate baseline: `npm run diagrams:sitemap` (or run `tsx ops/diagrams/generate-sitemap-from-routes.ts`).
 2) Paste the generated Mermaid block into `docs/diagrams/site map/sitemap-web-active.md`.
-3) Add cluster headings and critical annotations.
-4) For mobile, mirror structure with Tabs section.
+3) Convert to `mindmap` if needed and add grouping branches (Auth, Dashboard, League, Draft, Admin, Public Content).
+4) For mobile, mirror structure and add a `Tabs` section (Home/Leagues/Activity/Profile).
 5) Add legend (depth, planned, gates, grouping).
+
+## Render & audit
+- Preview: `/admin/diagrams/sitemap:web:active`, `:final`, `:mobile:active`, `:mobile:final`.
+- Live audit (production):
+  - `BASE_URL=https://<deploy-url> npx tsx ops/common/scripts/audit-diagrams-live.ts`
+- Ensure 0 failures in `e2e-admin-diagrams-live-audit.json` before merging.
 
 ## Mermaid template (starter)
 ```mermaid
@@ -49,6 +62,10 @@ graph TD
   league --> create["/league/create"]
   league --> lid["/league/:leagueId"]
 ```
+
+### Citation
+- Drive PDS: [Diagram Guides Folder](https://drive.google.com/drive/folders/10FsLx1yEHSZrEJdum_jdU3ukQvEAX21G?usp=sharing)
+- Site Map PDS: [Section 1 PDF](https://drive.google.com/file/d/1SJHgcZrBx_ktqRObAhWe8YJMsUy-xMWr/view?usp=sharing)
 
 ## QA checklist
 - [ ] Root at top, depth ≤ 3
