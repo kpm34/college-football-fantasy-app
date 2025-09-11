@@ -3603,5 +3603,11 @@
       "size": 895,
       "duplicateOf": "project-map/app.api.blender.md"
     }
-  ]
+  ],
+  "api": {
+    "routes": "api/routes.md",
+    "external": "api/external.md",
+    "dataSources": "api/data-sources.md",
+    "generated": "2025-09-11T04:58:01.654Z"
+  }
 }

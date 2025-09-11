@@ -59,6 +59,34 @@ function Section({
   )
 }
 
+function SubSection({
+  title,
+  children,
+  defaultOpen = false,
+}: {
+  title: string
+  children: React.ReactNode
+  defaultOpen?: boolean
+}) {
+  const [open, setOpen] = useState<boolean>(defaultOpen)
+  return (
+    <div className="rounded-xl border border-amber-100 bg-amber-50/30">
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-amber-50 rounded-xl"
+        aria-expanded={open}
+      >
+        <span className="text-amber-900 font-medium">{title}</span>
+        <span className="text-amber-700">{open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}</span>
+      </button>
+      <div className={open ? 'px-4 pb-3' : 'hidden'}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
 export default function ProductVisionPage() {
   const [openMap, setOpenMap] = useState<OpenMap>(() => {
     if (typeof window !== 'undefined') {
@@ -325,78 +353,89 @@ export default function ProductVisionPage() {
               </ul>
 
               <h4 id="deliverables">1.4 Key Deliverables (Pages &amp; Flows)</h4>
-              <h5>Home/Landing Page</h5>
-              <ul>
-                <li>Marketing entry point</li>
-                <li>Game modes and value proposition</li>
-                <li>Latest news/content</li>
-                <li>Sign-up and league creation initiation</li>
-              </ul>
-              <h5>User Dashboard</h5>
-              <ul>
-                <li>Personalized hub for all leagues/teams</li>
-                <li>Quick actions for each league</li>
-                <li>Pending task notifications ("lineup not set")</li>
-                <li>Create/join new leagues functionality</li>
-              </ul>
-              <h5>League Home</h5>
-              <ul>
-                <li>League status overview</li>
-                <li>Standings display</li>
-                <li>Schedule and upcoming matchups</li>
-                <li>Recent news/chat</li>
-                <li>Activity feed (transactions, messages)</li>
-              </ul>
-              <h5>Draft Room</h5>
-              <ul>
-                <li>Live draft interface for snake/auction drafts</li>
-                <li>Draft board showing all teams' picks</li>
-                <li>Turn indicator with countdown timer</li>
-                <li>Player queue and autopick functionality</li>
-                <li>Available player list with search/filters</li>
-                <li>Instant updates for all participants</li>
-                <li>Mobile-optimized experience</li>
-              </ul>
-              <h5>Locker Room (Lineup Management)</h5>
-              <ul>
-                <li>Weekly lineup setting interface</li>
-                <li>Roster display with player statuses</li>
-                <li>Injury and bye week indicators</li>
-                <li>Projections and news blurbs</li>
-                <li>Drag-and-drop or tap-to-swap interactions</li>
-              </ul>
-              <h5>Waivers &amp; Free Agency</h5>
-              <ul>
-                <li>Available player browsing</li>
-                <li>Claim/bid submission</li>
-                <li>Budget balance display</li>
-                <li>Waiver order visibility</li>
-                <li>Clear process explanation for newcomers</li>
-              </ul>
-              <h5>Live Scores</h5>
-              <ul>
-                <li>Real-time scoring dashboard</li>
-                <li>Fantasy point translation</li>
-                <li>Ongoing matchup updates</li>
-                <li>Play-by-play updates option</li>
-                <li>Animated game visuals</li>
-              </ul>
-              <h5>League Scoreboard</h5>
-              <ul>
-                <li>Weekly head-to-head matchups</li>
-                <li>Live score updates</li>
-                <li>Projections and top performers</li>
-                <li>League-wide results overview</li>
-              </ul>
-              <h5>History/Archives</h5>
-              <ul>
-                <li>Past champions display</li>
-                <li>Win-loss histories</li>
-                <li>Rivalry records</li>
-                <li>All-time high scores</li>
-                <li>Trophy room</li>
-                <li>Past season recaps</li>
-              </ul>
+              <div className="space-y-3">
+                <SubSection title="Home / Landing Page">
+                  <ul>
+                    <li>Marketing entry point</li>
+                    <li>Game modes and value proposition</li>
+                    <li>Latest news/content</li>
+                    <li>Sign-up and league creation initiation</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="User Dashboard">
+                  <ul>
+                    <li>Personalized hub for all leagues/teams</li>
+                    <li>Quick actions for each league</li>
+                    <li>Pending task notifications ("lineup not set")</li>
+                    <li>Create/join new leagues functionality</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="League Home">
+                  <ul>
+                    <li>League status overview</li>
+                    <li>Standings display</li>
+                    <li>Schedule and upcoming matchups</li>
+                    <li>Recent news/chat</li>
+                    <li>Activity feed (transactions, messages)</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Draft Room" defaultOpen>
+                  <ul>
+                    <li>Live draft interface for snake/auction drafts</li>
+                    <li>Draft board showing all teams' picks</li>
+                    <li>Turn indicator with countdown timer</li>
+                    <li>Player queue and autopick functionality</li>
+                    <li>Available player list with search/filters</li>
+                    <li>Instant updates for all participants</li>
+                    <li>Mobile-optimized experience</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Locker Room (Lineup Management)">
+                  <ul>
+                    <li>Weekly lineup setting interface</li>
+                    <li>Roster display with player statuses</li>
+                    <li>Injury and bye week indicators</li>
+                    <li>Projections and news blurbs</li>
+                    <li>Drag-and-drop or tap-to-swap interactions</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Waivers &amp; Free Agency">
+                  <ul>
+                    <li>Available player browsing</li>
+                    <li>Claim/bid submission</li>
+                    <li>Budget balance display</li>
+                    <li>Waiver order visibility</li>
+                    <li>Clear process explanation for newcomers</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Live Scores">
+                  <ul>
+                    <li>Real-time scoring dashboard</li>
+                    <li>Fantasy point translation</li>
+                    <li>Ongoing matchup updates</li>
+                    <li>Play-by-play updates option</li>
+                    <li>Animated game visuals</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="League Scoreboard">
+                  <ul>
+                    <li>Weekly head-to-head matchups</li>
+                    <li>Live score updates</li>
+                    <li>Projections and top performers</li>
+                    <li>League-wide results overview</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="History / Archives">
+                  <ul>
+                    <li>Past champions display</li>
+                    <li>Win-loss histories</li>
+                    <li>Rivalry records</li>
+                    <li>All-time high scores</li>
+                    <li>Trophy room</li>
+                    <li>Past season recaps</li>
+                  </ul>
+                </SubSection>
+              </div>
             </Section>
 
             <Section
@@ -505,76 +544,70 @@ export default function ProductVisionPage() {
               </ul>
 
               <h4>2.2 Key Workflows &amp; Practices</h4>
-              <h5>Mobile-First &amp; Responsive Implementation</h5>
-              <p>
-                <strong>Adaptive Layouts:</strong>
-              </p>
-              <ul>
-                <li>Automatic grid adjustments for 8, 12, or 24-team drafts</li>
-                <li>Fluid grids and flexbox</li>
-                <li>Testing across phone, tablet, and desktop</li>
-                <li>Mobile layout prioritization</li>
-                <li>Desktop enhancements (not dependencies)</li>
-              </ul>
-              <h5>Real-Time Feedback Loop</h5>
-              <p>
-                <strong>Technologies:</strong>
-              </p>
-              <ul>
-                <li>Appwrite realtime subscriptions</li>
-                <li>WebSocket connections</li>
-                <li>Instant UI updates without refresh buttons</li>
-              </ul>
-              <p>
-                <strong>Design Implications:</strong>
-              </p>
-              <ul>
-                <li>"Always-live" mentality</li>
-                <li>Minimal loading indicators</li>
-                <li>Offline state considerations</li>
-                <li>Data caching for resilience</li>
-                <li>Action queuing when offline</li>
-              </ul>
-              <h5>Performance &amp; Accessibility Constraints</h5>
-              <p>
-                <strong>Animation Guidelines:</strong>
-              </p>
-              <ul>
-                <li>Use transforms and opacity only</li>
-                <li>Lazy-load heavy resources</li>
-                <li>30KB budget for UI effect scripts</li>
-              </ul>
-              <p>
-                <strong>Accessibility Requirements:</strong>
-              </p>
-              <ul>
-                <li>AA contrast minimum for text</li>
-                <li>44px minimum touch targets</li>
-                <li>Visible keyboard focus states</li>
-                <li>No scroll hijacking</li>
-                <li>Graceful degradation for 3D/AR features</li>
-              </ul>
-              <h5>Micro-interactions &amp; Delight</h5>
-              <p>
-                <strong>Implemented Effects:</strong>
-              </p>
-              <ul>
-                <li>3D button depression and bounce</li>
-                <li>Animated tile "pop-in" for new items</li>
-                <li>Pulsing alerts for draft timer (&lt;10 seconds)</li>
-                <li>Sliding ticker for recent picks</li>
-                <li>Lightweight CSS or Anime.js implementation</li>
-                <li>"Touchdown moments" for big events (confetti animations)</li>
-              </ul>
-
-              <h4>2.3 Workflow and Handoff</h4>
-              <ul>
-                <li>Design System Integration: Synchronized components between design and code</li>
-                <li>Reusable patterns and components</li>
-                <li>Rapid prototyping and validation</li>
-                <li>Comprehensive handoff checklist</li>
-                <li>All states designed (empty, loading, error)</li>
-              </ul>
+              <div className="space-y-3">
+                <SubSection title="Mobile-First &amp; Responsive Implementation" defaultOpen>
+                  <p className="m-0"><strong>Adaptive Layouts:</strong></p>
+                  <ul>
+                    <li>Automatic grid adjustments for 8, 12, or 24-team drafts</li>
+                    <li>Fluid grids and flexbox</li>
+                    <li>Testing across phone, tablet, and desktop</li>
+                    <li>Mobile layout prioritization</li>
+                    <li>Desktop enhancements (not dependencies)</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Real-Time Feedback Loop">
+                  <p className="m-0"><strong>Technologies:</strong></p>
+                  <ul>
+                    <li>Appwrite realtime subscriptions</li>
+                    <li>WebSocket connections</li>
+                    <li>Instant UI updates without refresh buttons</li>
+                  </ul>
+                  <p className="m-0"><strong>Design Implications:</strong></p>
+                  <ul>
+                    <li>"Always-live" mentality</li>
+                    <li>Minimal loading indicators</li>
+                    <li>Offline state considerations</li>
+                    <li>Data caching for resilience</li>
+                    <li>Action queuing when offline</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Performance &amp; Accessibility Constraints">
+                  <p className="m-0"><strong>Animation Guidelines:</strong></p>
+                  <ul>
+                    <li>Use transforms and opacity only</li>
+                    <li>Lazy-load heavy resources</li>
+                    <li>30KB budget for UI effect scripts</li>
+                  </ul>
+                  <p className="m-0"><strong>Accessibility Requirements:</strong></p>
+                  <ul>
+                    <li>AA contrast minimum for text</li>
+                    <li>44px minimum touch targets</li>
+                    <li>Visible keyboard focus states</li>
+                    <li>No scroll hijacking</li>
+                    <li>Graceful degradation for 3D/AR features</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Micro-interactions &amp; Delight">
+                  <p className="m-0"><strong>Implemented Effects:</strong></p>
+                  <ul>
+                    <li>3D button depression and bounce</li>
+                    <li>Animated tile "pop-in" for new items</li>
+                    <li>Pulsing alerts for draft timer (&lt;10 seconds)</li>
+                    <li>Sliding ticker for recent picks</li>
+                    <li>Lightweight CSS or Anime.js implementation</li>
+                    <li>"Touchdown moments" for big events (confetti animations)</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Workflow and Handoff">
+                  <ul>
+                    <li>Design System Integration: Synchronized components between design and code</li>
+                    <li>Reusable patterns and components</li>
+                    <li>Rapid prototyping and validation</li>
+                    <li>Comprehensive handoff checklist</li>
+                    <li>All states designed (empty, loading, error)</li>
+                  </ul>
+                </SubSection>
+              </div>
             </Section>
 
             <Section
@@ -598,49 +631,57 @@ export default function ProductVisionPage() {
                 <li>Maintain performance at scale</li>
               </ul>
               <h4>3.2 North Star Principles</h4>
-              <h5>Zero-Friction Onboarding</h5>
-              <ul>
-                <li>League creation in under 60 seconds</li>
-                <li>Minimal input requirements</li>
-                <li>Sensible defaults</li>
-                <li>Postponed non-essential settings</li>
-              </ul>
-              <h5>Always Live Feeling</h5>
-              <ul>
-                <li>Target update latency: &lt;100ms</li>
-                <li>Instantaneous interface responses</li>
-                <li>Subtle loading states</li>
-                <li>Seamless transitions</li>
-              </ul>
-              <h5>AI-First Intelligence</h5>
-              <ul>
-                <li>Smart draft suggestions</li>
-                <li>Lineup optimization alerts</li>
-                <li>Conversational interfaces</li>
-                <li>Proactive user assistance</li>
-              </ul>
-              <h5>Power without Complexity</h5>
-              <ul>
-                <li>Simple default experience</li>
-                <li>Progressive disclosure</li>
-                <li>Hidden advanced options</li>
-                <li>Clean primary paths</li>
-              </ul>
-              <h5>Mobile-First, Offline-Support</h5>
-              <ul>
-                <li>Progressive Web App architecture</li>
-                <li>Offline functionality</li>
-                <li>Sync-when-online mechanisms</li>
-                <li>Connection state indicators</li>
-              </ul>
-              <h5>Community-Driven</h5>
-              <ul>
-                <li>League chat integration</li>
-                <li>Social media sharing</li>
-                <li>Smack talk features</li>
-                <li>Trophy comparisons</li>
-                <li>Head-to-head records</li>
-              </ul>
+              <div className="space-y-3">
+                <SubSection title="Zero-Friction Onboarding" defaultOpen>
+                  <ul>
+                    <li>League creation in under 60 seconds</li>
+                    <li>Minimal input requirements</li>
+                    <li>Sensible defaults</li>
+                    <li>Postponed non-essential settings</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Always Live Feeling">
+                  <ul>
+                    <li>Target update latency: &lt;100ms</li>
+                    <li>Instantaneous interface responses</li>
+                    <li>Subtle loading states</li>
+                    <li>Seamless transitions</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="AI-First Intelligence">
+                  <ul>
+                    <li>Smart draft suggestions</li>
+                    <li>Lineup optimization alerts</li>
+                    <li>Conversational interfaces</li>
+                    <li>Proactive user assistance</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Power without Complexity">
+                  <ul>
+                    <li>Simple default experience</li>
+                    <li>Progressive disclosure</li>
+                    <li>Hidden advanced options</li>
+                    <li>Clean primary paths</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Mobile-First, Offline-Support">
+                  <ul>
+                    <li>Progressive Web App architecture</li>
+                    <li>Offline functionality</li>
+                    <li>Sync-when-online mechanisms</li>
+                    <li>Connection state indicators</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Community-Driven">
+                  <ul>
+                    <li>League chat integration</li>
+                    <li>Social media sharing</li>
+                    <li>Smack talk features</li>
+                    <li>Trophy comparisons</li>
+                    <li>Head-to-head records</li>
+                  </ul>
+                </SubSection>
+              </div>
               <h4>3.3 Unique Differentiators</h4>
               <h5>Dual AI Systems</h5>
               <ul>
@@ -684,45 +725,52 @@ export default function ProductVisionPage() {
                 <li>Voice-executable critical flows</li>
               </ul>
               <h4>3.4 Core Feature Pillars</h4>
-              <h5>1. AI Draft Genius</h5>
-              <ul>
-                <li>Live pick recommendations</li>
-                <li>Vision analysis during draft</li>
-                <li>Deep strategy mode</li>
-                <li>Voice command drafting</li>
-                <li>Smart auto-draft strategies</li>
-              </ul>
-              <h5>2. Real-Time Everything</h5>
-              <ul>
-                <li>Instant updates for all features</li>
-                <li>Live play-by-play animations</li>
-                <li>Real-time win probability</li>
-                <li>Notification system</li>
-              </ul>
-              <h5>3. Immersive 3D/AR</h5>
-              <ul>
-                <li>3D draft rooms</li>
-                <li>Custom team mascots</li>
-                <li>Victory animations</li>
-                <li>AR trophy case</li>
-                <li>Traditional alternatives available</li>
-              </ul>
-              <h5>4. Advanced Analytics</h5>
-              <ul>
-                <li>Historical data modeling</li>
-                <li>Live win probability</li>
-                <li>Trade simulator</li>
-                <li>Injury risk analytics</li>
-                <li>Opponent-adjusted projections</li>
-              </ul>
-              <h5>5. Intelligent Automation</h5>
-              <ul>
-                <li>Auto-lineup optimization</li>
-                <li>Smart waiver claims</li>
-                <li>Trade proposals</li>
-                <li>Commissioner co-pilot</li>
-                <li>Scheduled reports</li>
-              </ul>
+              <div className="space-y-3">
+                <SubSection title="1. AI Draft Genius" defaultOpen>
+                  <ul>
+                    <li>Live pick recommendations</li>
+                    <li>Vision analysis during draft</li>
+                    <li>Deep strategy mode</li>
+                    <li>Voice command drafting</li>
+                    <li>Smart auto-draft strategies</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="2. Real-Time Everything">
+                  <ul>
+                    <li>Instant updates for all features</li>
+                    <li>Live play-by-play animations</li>
+                    <li>Real-time win probability</li>
+                    <li>Notification system</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="3. Immersive 3D/AR">
+                  <ul>
+                    <li>3D draft rooms</li>
+                    <li>Custom team mascots</li>
+                    <li>Victory animations</li>
+                    <li>AR trophy case</li>
+                    <li>Traditional alternatives available</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="4. Advanced Analytics">
+                  <ul>
+                    <li>Historical data modeling</li>
+                    <li>Live win probability</li>
+                    <li>Trade simulator</li>
+                    <li>Injury risk analytics</li>
+                    <li>Opponent-adjusted projections</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="5. Intelligent Automation">
+                  <ul>
+                    <li>Auto-lineup optimization</li>
+                    <li>Smart waiver claims</li>
+                    <li>Trade proposals</li>
+                    <li>Commissioner co-pilot</li>
+                    <li>Scheduled reports</li>
+                  </ul>
+                </SubSection>
+              </div>
               <h4>3.5 Business Model</h4>
               <p>
                 <strong>Subscription Tiers:</strong>
@@ -751,38 +799,36 @@ export default function ProductVisionPage() {
               <p>
                 <strong>August-November 2025 Launch Schedule:</strong>
               </p>
-              <p>
-                <strong>Phase 1 (August):</strong> Core platform completion
-              </p>
-              <ul>
-                <li>Draft system</li>
-                <li>Scoring engine</li>
-                <li>Authentication</li>
-              </ul>
-              <p>
-                <strong>Phase 2 (September):</strong> Feature additions
-              </p>
-              <ul>
-                <li>Waivers and trades</li>
-                <li>Marketing site</li>
-                <li>Referral program</li>
-                <li>Public launch</li>
-              </ul>
-              <p>
-                <strong>Phase 3 (October):</strong> Scaling features
-              </p>
-              <ul>
-                <li>3D mascots</li>
-                <li>Tournament modes</li>
-                <li>Notifications</li>
-              </ul>
-              <p>
-                <strong>Phase 4 (November):</strong> AI integration
-              </p>
-              <ul>
-                <li>AI features</li>
-                <li>Voice control</li>
-              </ul>
+              <div className="space-y-3">
+                <SubSection title="Phase 1 (August) — Core platform completion" defaultOpen>
+                  <ul>
+                    <li>Draft system</li>
+                    <li>Scoring engine</li>
+                    <li>Authentication</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Phase 2 (September) — Feature additions">
+                  <ul>
+                    <li>Waivers and trades</li>
+                    <li>Marketing site</li>
+                    <li>Referral program</li>
+                    <li>Public launch</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Phase 3 (October) — Scaling features">
+                  <ul>
+                    <li>3D mascots</li>
+                    <li>Tournament modes</li>
+                    <li>Notifications</li>
+                  </ul>
+                </SubSection>
+                <SubSection title="Phase 4 (November) — AI integration">
+                  <ul>
+                    <li>AI features</li>
+                    <li>Voice control</li>
+                  </ul>
+                </SubSection>
+              </div>
             </Section>
 
             <Section
