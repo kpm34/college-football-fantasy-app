@@ -217,8 +217,10 @@ export function MermaidRenderer({
           containerRef.current.querySelectorAll<HTMLElement>('[data-mermaid]')
         )
         for (const [index, el] of nodes.entries()) {
-          const raw = el.getAttribute('data-mermaid-code') || ''
-          // Light sanitization: escape characters that commonly break parsing in labels
+          // Read raw code from a nested script tag to preserve newlines exactly
+          const rawNode = el.querySelector('[data-mermaid-raw]') as HTMLElement | null
+          const raw = rawNode?.textContent || ''
+          // Light sanitization for HTML special chars in labels
           const code = raw.replaceAll('&', '&amp;')
           try {
             const { svg } = await mermaid.render(`mermaid-${index}-${Date.now()}`, code)
@@ -411,10 +413,12 @@ export function MermaidRenderer({
         <div
           key={idx}
           data-mermaid
-          data-mermaid-code={code}
           className="min-h-[200px] overflow-auto rounded-md"
           style={{ background: '#FFF8ED', border: '1px solid rgba(16, 185, 129, 0.25)' }}
-        />
+        >
+          {/* Preserve newlines and all characters */}
+          <script type="text/plain" data-mermaid-raw>{code}</script>
+        </div>
       ))}
     </div>
   )
