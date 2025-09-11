@@ -109,13 +109,7 @@ export default function DiagramBySlugPage() {
   const displayCharts = useMemo(() => {
     if (!charts || charts.length === 0) return []
     if (viewMode === 'syntax_error') {
-      return [
-        [
-          'flowchart TD',
-          '  A["Unclosed label example',
-          '  A --> B',
-        ].join('\n'),
-      ]
+      return [['flowchart TD', '  A["Unclosed label example', '  A --> B'].join('\n')]
     }
     if (viewMode === 'treemap') {
       try {
@@ -139,7 +133,17 @@ export default function DiagramBySlugPage() {
       if (seg === 'league') return 'League'
       if (seg === 'draft') return 'Draft'
       if (seg === 'admin') return 'Admin'
-      if (seg === 'videos' || seg === 'projection-showcase' || seg === 'conference-showcase' || seg === 'launch' || seg === 'offline' || seg === 'scoreboard' || seg === 'standings' || seg === 'client-brief') return 'Public'
+      if (
+        seg === 'videos' ||
+        seg === 'projection-showcase' ||
+        seg === 'conference-showcase' ||
+        seg === 'launch' ||
+        seg === 'offline' ||
+        seg === 'scoreboard' ||
+        seg === 'standings' ||
+        seg === 'client-brief'
+      )
+        return 'Public'
       if (seg === 'invite') return 'Auth'
       return 'Other'
     }
@@ -191,7 +195,11 @@ export default function DiagramBySlugPage() {
     for (const [id, label] of idToLabel) add(id, label)
     for (const label of directLabels) add(label, label)
     const header = 'Id,Label,Group,URL\n'
-    const body = rows.map(r => [r.id, r.label, r.group, r.url].map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')).join('\n')
+    const body = rows
+      .map(r =>
+        [r.id, r.label, r.group, r.url].map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')
+      )
+      .join('\n')
     download(header + body + '\n', `lucid-nodes-${slug || 'diagram'}.csv`, 'text/csv')
   }
 
@@ -210,11 +218,14 @@ export default function DiagramBySlugPage() {
       const rawFrom = m[1]
       const rawTo = m[2]
       const toLabel = rawTo.startsWith('"') ? rawTo.slice(1, -1) : idToLabel[rawTo] || rawTo
-      const fromLabel = idToLabel[rawFrom] || (rawFrom.startsWith('"') ? rawFrom.slice(1, -1) : rawFrom)
+      const fromLabel =
+        idToLabel[rawFrom] || (rawFrom.startsWith('"') ? rawFrom.slice(1, -1) : rawFrom)
       edges.push({ from: fromLabel, to: toLabel })
     }
     const header = 'From,To\n'
-    const body = edges.map(e => [e.from, e.to].map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')).join('\n')
+    const body = edges
+      .map(e => [e.from, e.to].map(v => `"${String(v).replaceAll('"', '""')}"`).join(','))
+      .join('\n')
     download(header + body + '\n', `lucid-edges-${slug || 'diagram'}.csv`, 'text/csv')
   }
 
@@ -293,7 +304,9 @@ export default function DiagramBySlugPage() {
                 </aside>
                 <section>
                   <div className="flex items-center gap-2 mb-2">
-                    <label className="text-sm" style={{ color: '#374151' }}>View:</label>
+                    <label className="text-sm" style={{ color: '#374151' }}>
+                      View:
+                    </label>
                     <select
                       value={viewMode}
                       onChange={e => setViewMode(e.target.value as any)}
@@ -304,8 +317,20 @@ export default function DiagramBySlugPage() {
                       <option value="syntax_error">Syntax error example</option>
                     </select>
                     <div className="ml-auto flex items-center gap-2">
-                      <button onClick={exportLucidCSV} className="border rounded px-2 py-1 text-sm hover:bg-emerald-50" style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}>Export Nodes CSV (Lucid)</button>
-                      <button onClick={exportLucidEdgesCSV} className="border rounded px-2 py-1 text-sm hover:bg-emerald-50" style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}>Export Edges CSV</button>
+                      <button
+                        onClick={exportLucidCSV}
+                        className="border rounded px-2 py-1 text-sm hover:bg-emerald-50"
+                        style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}
+                      >
+                        Export Nodes CSV (Lucid)
+                      </button>
+                      <button
+                        onClick={exportLucidEdgesCSV}
+                        className="border rounded px-2 py-1 text-sm hover:bg-emerald-50"
+                        style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}
+                      >
+                        Export Edges CSV
+                      </button>
                     </div>
                   </div>
                   <MermaidRenderer charts={displayCharts} mode="modal" />
@@ -355,7 +380,9 @@ export default function DiagramBySlugPage() {
             {!String(slug).startsWith('user-journeys:') && (
               <>
                 <div className="flex items-center gap-2 mb-2">
-                  <label className="text-sm" style={{ color: '#374151' }}>View:</label>
+                  <label className="text-sm" style={{ color: '#374151' }}>
+                    View:
+                  </label>
                   <select
                     value={viewMode}
                     onChange={e => setViewMode(e.target.value as any)}
@@ -366,8 +393,20 @@ export default function DiagramBySlugPage() {
                     <option value="syntax_error">Syntax error example</option>
                   </select>
                   <div className="ml-auto flex items-center gap-2">
-                    <button onClick={exportLucidCSV} className="border rounded px-2 py-1 text-sm hover:bg-emerald-50" style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}>Export Nodes CSV (Lucid)</button>
-                    <button onClick={exportLucidEdgesCSV} className="border rounded px-2 py-1 text-sm hover:bg-emerald-50" style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}>Export Edges CSV</button>
+                    <button
+                      onClick={exportLucidCSV}
+                      className="border rounded px-2 py-1 text-sm hover:bg-emerald-50"
+                      style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}
+                    >
+                      Export Nodes CSV (Lucid)
+                    </button>
+                    <button
+                      onClick={exportLucidEdgesCSV}
+                      className="border rounded px-2 py-1 text-sm hover:bg-emerald-50"
+                      style={{ borderColor: 'rgba(16,185,129,.35)', color: '#065F46' }}
+                    >
+                      Export Edges CSV
+                    </button>
                   </div>
                 </div>
                 <MermaidRenderer charts={displayCharts} mode="modal" />
