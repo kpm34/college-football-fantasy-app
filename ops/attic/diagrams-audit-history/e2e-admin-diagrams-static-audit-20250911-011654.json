@@ -1,0 +1,386 @@
+{
+  "createdAt": "2025-09-11T04:02:56.739Z",
+  "root": "/Users/kashyapmaheshwari/college-football-fantasy-app",
+  "results": [
+    {
+      "section": "User Journeys",
+      "title": "user-journeys list",
+      "slug": "user-journeys:auth-user-flow",
+      "file": "diagrams/user-journeys/auth-user-flow.md",
+      "exists": true,
+      "mermaidBlocks": 2
+    },
+    {
+      "section": "User Journeys",
+      "title": "user-journeys list",
+      "slug": "user-journeys:auth:sign-in-up",
+      "file": "diagrams/user-journeys/auth-sign-in-up.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "User Journeys",
+      "title": "user-journeys list",
+      "slug": "user-journeys:auth:oauth-callback",
+      "file": "diagrams/user-journeys/auth-oauth-callback.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "User Journeys",
+      "title": "user-journeys list",
+      "slug": "user-journeys:auth:invite-join-and-draft-room",
+      "file": "diagrams/user-journeys/auth-invite-join-and-draft-room.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "User Journeys",
+      "title": "user-journeys list",
+      "slug": "user-journeys:leagues-user-flow",
+      "file": "diagrams/user-journeys/leagues-user-flow.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "User Journeys",
+      "title": "user-journeys list",
+      "slug": "user-journeys:draft-user-flow",
+      "file": "diagrams/user-journeys/draft-user-flow.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "User Journeys",
+      "title": "user-journeys list",
+      "slug": "user-journeys:projections-user-flow",
+      "file": "diagrams/user-journeys/projections-user-flow.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "User Journeys",
+      "title": "user-journeys list",
+      "slug": "user-journeys:scoring-user-flow",
+      "file": "diagrams/user-journeys/scoring-user-flow.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "User Journeys",
+      "title": "user-journeys list",
+      "slug": "user-journeys:realtime-user-flow",
+      "file": "diagrams/user-journeys/realtime-user-flow.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "User Journeys",
+      "title": "user-journeys list",
+      "slug": "user-journeys:ops-deploy-user-flow",
+      "file": "diagrams/user-journeys/ops-deploy-user-flow.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Site Map",
+      "title": "site map list",
+      "slug": "sitemap:web:active",
+      "file": "diagrams/site map/sitemap-web-active.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Site Map",
+      "title": "site map list",
+      "slug": "sitemap:mobile:active",
+      "file": "diagrams/site map/sitemap-mobile-active.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Site Map",
+      "title": "site map list",
+      "slug": "sitemap:web:final",
+      "file": "diagrams/site map/sitemap-web-final.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Site Map",
+      "title": "site map list",
+      "slug": "sitemap:mobile:final",
+      "file": "diagrams/site map/sitemap-mobile-final.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:user-flow:draft-room-entry",
+      "file": "diagrams/draft/user-flow/draft-room-entry.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:user-flow:league-creation-flow",
+      "file": "diagrams/draft/user-flow/league-creation-flow.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:user-flow:league-joining-flow",
+      "file": "diagrams/draft/user-flow/league-joining-flow.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:user-flow:mobile-draft-experience",
+      "file": "diagrams/draft/user-flow/mobile-draft-experience.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:user-flow:player-selection-flow",
+      "file": "diagrams/draft/user-flow/player-selection-flow.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:entity-relation:core-draft-entities",
+      "file": "diagrams/draft/entity-relation/core-draft-entities.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:entity-relation:league-team-entities",
+      "file": "diagrams/draft/entity-relation/league-team-entities.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:entity-relation:player-roster-entities",
+      "file": "diagrams/draft/entity-relation/player-roster-entities.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:api-routing:backend-apis",
+      "file": "diagrams/draft/api-routing/backend-apis.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:api-routing:frontend-apis",
+      "file": "diagrams/draft/api-routing/frontend-apis.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:api-routing:external-apis",
+      "file": "diagrams/draft/api-routing/external-apis.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:data-flow:draft-state-management",
+      "file": "diagrams/draft/data-flow/draft-state-management.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:data-flow:external-data-sources",
+      "file": "diagrams/draft/data-flow/external-data-sources.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:data-flow:projection-calculation",
+      "file": "diagrams/draft/data-flow/projection-calculation.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Draft",
+      "title": "draft list",
+      "slug": "draft:data-flow:real-time-updates",
+      "file": "diagrams/draft/data-flow/real-time-updates.md",
+      "exists": true,
+      "mermaidBlocks": 0
+    },
+    {
+      "section": "Entity Relations",
+      "title": "entity relations list",
+      "slug": "entity-relations:core-er",
+      "file": "diagrams/entity-relations/core-er.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Entity Relations",
+      "title": "entity relations list",
+      "slug": "entity-relations:auth-entity-relation",
+      "file": "diagrams/entity-relations/auth-entity-relation.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Entity Relations",
+      "title": "entity relations list",
+      "slug": "entity-relations:leagues-entity-relation",
+      "file": "diagrams/entity-relations/leagues-entity-relation.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Entity Relations",
+      "title": "entity relations list",
+      "slug": "entity-relations:draft-entity-relation",
+      "file": "diagrams/entity-relations/draft-entity-relation.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Entity Relations",
+      "title": "entity relations list",
+      "slug": "entity-relations:projections-entity-relation",
+      "file": "diagrams/entity-relations/projections-entity-relation.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Entity Relations",
+      "title": "entity relations list",
+      "slug": "entity-relations:scoring-entity-relation",
+      "file": "diagrams/entity-relations/scoring-entity-relation.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Entity Relations",
+      "title": "entity relations list",
+      "slug": "entity-relations:realtime-entity-relation",
+      "file": "diagrams/entity-relations/realtime-entity-relation.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Entity Relations",
+      "title": "entity relations list",
+      "slug": "entity-relations:ops-deploy-entity-relation",
+      "file": "diagrams/entity-relations/ops-deploy-entity-relation.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Directory Map",
+      "title": "directory chapters",
+      "slug": "directory-map:chapters:app",
+      "file": "diagrams/directory-map/chapters/app.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Directory Map",
+      "title": "directory chapters",
+      "slug": "directory-map:chapters:components",
+      "file": "diagrams/directory-map/chapters/components.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Directory Map",
+      "title": "directory chapters",
+      "slug": "directory-map:chapters:lib",
+      "file": "diagrams/directory-map/chapters/lib.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Directory Map",
+      "title": "directory chapters",
+      "slug": "directory-map:chapters:docs",
+      "file": "diagrams/directory-map/chapters/docs.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Directory Map",
+      "title": "directory chapters",
+      "slug": "directory-map:chapters:functions",
+      "file": "diagrams/directory-map/chapters/functions.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Directory Map",
+      "title": "directory chapters",
+      "slug": "directory-map:chapters:schema",
+      "file": "diagrams/directory-map/chapters/schema.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    },
+    {
+      "section": "Directory Map",
+      "title": "directory chapters",
+      "slug": "directory-map:chapters:ops",
+      "file": "diagrams/directory-map/chapters/ops.md",
+      "exists": true,
+      "mermaidBlocks": 1
+    }
+  ],
+  "summary": {
+    "User Journeys": {
+      "total": 10,
+      "renderable": 10,
+      "missing": 0
+    },
+    "Site Map": {
+      "total": 4,
+      "renderable": 4,
+      "missing": 0
+    },
+    "Draft": {
+      "total": 15,
+      "renderable": 0,
+      "missing": 15
+    },
+    "Entity Relations": {
+      "total": 8,
+      "renderable": 8,
+      "missing": 0
+    },
+    "Directory Map": {
+      "total": 7,
+      "renderable": 7,
+      "missing": 0
+    }
+  },
+  "note": "Renderable = markdown file exists and contains at least one ```mermaid``` block. This predicts diagram visibility without launching a browser."
+}
