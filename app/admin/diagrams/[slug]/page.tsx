@@ -61,7 +61,17 @@ export default function DiagramBySlugPage() {
         const data = await res.json().catch(() => ({}))
         if (!cancelled) {
           if (res.ok && Array.isArray(data.charts)) {
-            setCharts(data.charts)
+            const isUJ = typeof slug === 'string' && slug.startsWith('user-journeys:')
+            const filtered = isUJ
+              ? (data.charts as string[]).filter(
+                  (c: string) =>
+                    !/Legend\s*Only/i.test(c) &&
+                    !/subgraph\s+L\[/i.test(c) &&
+                    !/subgraph\s+L2\[/i.test(c) &&
+                    !/\bJourney\s+flow\s+key\b/i.test(c)
+                )
+              : data.charts
+            setCharts(filtered)
             setUpdatedAt(data.updatedAt || '')
             // When no mermaid charts, try to fetch raw markdown and render it plainly
             if (!data.charts || data.charts.length === 0) {
@@ -126,34 +136,95 @@ export default function DiagramBySlugPage() {
         ) : charts && charts.length > 0 ? (
           <div className="space-y-3">
             {typeof slug === 'string' && slug.startsWith('user-journeys:') && (
+              <div className="grid gap-3 md:grid-cols-[260px,1fr] items-start">
+                <aside className="sticky top-24 self-start hidden md:block">
+                  <div
+                    className="rounded border text-sm"
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      color: '#1F2937',
+                      borderColor: 'rgba(148,163,184,.35)',
+                    }}
+                  >
+                    <div
+                      className="px-3 py-2 font-semibold"
+                      style={{ borderBottom: '1px solid rgba(148,163,184,.25)' }}
+                    >
+                      Key
+                    </div>
+                    <div className="p-3 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block w-5 h-5 rounded-full border"
+                          style={{ background: '#93C5FD', borderColor: '#1D4ED8' }}
+                        />
+                        <span>Terminator</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block w-5 h-5 border rotate-45"
+                          style={{ background: '#EDE9FE', borderColor: '#7C3AED' }}
+                        />
+                        <span>Decision</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block w-5 h-3 border"
+                          style={{ background: '#E5E7EB', borderColor: '#6B7280' }}
+                        />
+                        <span>Process</span>
+                      </div>
+                    </div>
+                  </div>
+                </aside>
+                <section>
+                  <MermaidRenderer charts={charts} mode="modal" />
+                </section>
+              </div>
+            )}
+            {typeof slug === 'string' && slug.startsWith('workflows:') && (
               <div
                 className="rounded border text-sm"
                 style={{
                   backgroundColor: '#FFFFFF',
                   color: '#1F2937',
-                  borderColor: 'rgba(16,185,129,.35)',
+                  borderColor: 'rgba(59,130,246,.35)',
                 }}
               >
                 <div
                   className="px-3 py-2 font-semibold"
-                  style={{ borderBottom: '1px solid rgba(16,185,129,.25)' }}
+                  style={{ borderBottom: '1px solid rgba(59,130,246,.25)' }}
                 >
-                  Journey Legend
+                  Workflow Legend
                 </div>
-                <div className="p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <div>
-                    <div>Terminator: rounded (Start/End)</div>
-                    <div>Decision: diamond</div>
-                    <div>Process: rectangle</div>
+                <div className="p-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="inline-block w-3 h-3 rounded"
+                      style={{ background: '#ECFDF5', border: '1px solid #10B981' }}
+                    />
+                    <span>Lane: Design / Plan</span>
                   </div>
-                  <div>
-                    <div>Swimlanes: User | App (Next.js) | Appwrite | External</div>
-                    <div>Async operations: dashed lines</div>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="inline-block w-3 h-3 rounded"
+                      style={{ background: '#EFF6FF', border: '1px solid #3B82F6' }}
+                    />
+                    <span>Lane: Engineering / Pipeline</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="inline-block w-3 h-3 rounded"
+                      style={{ background: '#FFFBEB', border: '1px solid #F59E0B' }}
+                    />
+                    <span>Lane: Review / App / Launch</span>
                   </div>
                 </div>
               </div>
             )}
-            <MermaidRenderer charts={charts} mode="modal" />
+            {!String(slug).startsWith('user-journeys:') && (
+              <MermaidRenderer charts={charts} mode="modal" />
+            )}
           </div>
         ) : markdown ? (
           <article className="prose max-w-none" style={{ color: '#1F2937' }}>

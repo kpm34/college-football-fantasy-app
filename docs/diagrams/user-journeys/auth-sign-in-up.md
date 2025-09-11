@@ -36,6 +36,15 @@ flowchart TD
 
   %% Logout (separate entry)
   U0 -. click Logout .-> A6
+
+  %% Lane colors (match UI legend blues/purples)
+  classDef laneUser fill:#DBEAFE,stroke:#1D4ED8,color:#0B1020
+  classDef laneApp fill:#E5E7EB,stroke:#6B7280,color:#111827
+  classDef laneAppwrite fill:#EDE9FE,stroke:#7C3AED,color:#111827
+
+  class U0 laneUser
+  class A1,A2,A3,A4,A5,A6 laneApp
+  class W1,W2,W3 laneAppwrite
 ```
 
 #### Legend

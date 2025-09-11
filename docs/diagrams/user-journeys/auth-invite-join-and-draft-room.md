@@ -34,6 +34,14 @@ flowchart TD
   A5 -- no --> A8
   A6 -- in window or commissioner --> A7
   A6 -- else --> A8
+
+  %% Lane colors (match UI legend)
+  classDef laneUser fill:#DBEAFE,stroke:#1D4ED8,color:#0B1020
+  classDef laneApp fill:#E5E7EB,stroke:#6B7280,color:#111827
+  classDef laneAppwrite fill:#EDE9FE,stroke:#7C3AED,color:#111827
+  class U0 laneUser
+  class A1,A2,A3,A4,A5,A6,A7,A8 laneApp
+  class W1,W2,W3 laneAppwrite
 ```
 
 #### Legend

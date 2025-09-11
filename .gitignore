@@ -67,8 +67,10 @@ ops/**
 
 # E2E + test artifacts
 /test-results/**
-# Keep a small marker file if needed
-!test-results/.last-run.json
+
+# Playwright reports
+/playwright-report/**
+/blob-report/**
 
 # Media and docs to ignore
 *.pdf
