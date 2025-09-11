@@ -6,10 +6,11 @@ slug: user-journeys:auth:invite-join-and-draft-room
 
 ```mermaid
 flowchart TD
-  subgraph U[User]
+  %% Simplify subgraph titles to avoid bracket parsing issues
+  subgraph User
     U0((Start))
   end
-  subgraph A[App (Next.js)]
+  subgraph App
     %% Replace bracket params to avoid Mermaid NODE_ID parsing issues
     A1[/Open /invite/:leagueId or /league/join/]
     A2{Has session?}
@@ -20,7 +21,7 @@ flowchart TD
     A7[Show DRAFT ROOM]
     A8[Hide (not in window)]
   end
-  subgraph AW[Appwrite]
+  subgraph Appwrite
     W1[Leagues]
     W2[Drafts + States]
     W3[League Memberships]

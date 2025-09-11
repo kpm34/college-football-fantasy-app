@@ -18,10 +18,10 @@ mindmap
       /signup
       /auth/callback
     Tabs
-      "Home (/dashboard)"
-      "Leagues"
-      "Activity"
-      "Profile"
+      Home (/dashboard)
+      Leagues
+      Activity
+      Profile
     Leagues
       /league/join
       /league/create

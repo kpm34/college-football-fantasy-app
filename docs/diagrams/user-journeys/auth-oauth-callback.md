@@ -6,10 +6,11 @@ slug: user-journeys:auth:oauth-callback
 
 ```mermaid
 flowchart TD
-  subgraph U[User]
+  %% Lanes (use simple subgraph titles to avoid bracket parsing issues)
+  subgraph User
     U0((Click Continue with Google))
   end
-  subgraph A[App (Next.js)]
+  subgraph App
     A0[/GET /login (Google)/]
     A1[Create state+nonce; store]
     A2[Redirect to Google OAuth]
@@ -20,11 +21,11 @@ flowchart TD
     A7[Set app session cookie]
     A8[Redirect to returnTo or /dashboard]
   end
-  subgraph G[Google]
+  subgraph Google
     G1[OAuth consent]
     G2[Redirect with code+state]
   end
-  subgraph AW[Appwrite]
+  subgraph Appwrite
     W1[Create session]
   end
 
@@ -37,6 +38,7 @@ flowchart TD
 ```
 
 #### Legend
+
 - Terminator: rounded (Start/End)
 - Decision: diamond
 - Process: rectangle
