@@ -35,7 +35,6 @@ flowchart TD
 
   %% Errors
   G1 -. denied .-x A8
-<<<<<<< HEAD
 
   %% Lane colors (match UI legend)
   classDef laneUser fill:#DBEAFE,stroke:#1D4ED8,color:#0B1020
@@ -46,8 +45,6 @@ flowchart TD
   class A0,A1,A2,A3,A4,A5,A6,A7,A8 laneApp
   class W1 laneAppwrite
   class G1,G2 laneGoogle
-=======
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 ```
 
 #### Legend

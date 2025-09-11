@@ -1,23 +1,15 @@
 # Scoring User Flow
 
 Season week:
-<<<<<<< HEAD
 
 - Set lineups → lock before kickoff → games played → scores computed
 
 Commissioner:
-
-=======
-- Set lineups → lock before kickoff → games played → scores computed
-
-Commissioner:
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 - Review weekly results → resolve disputes → finalize standings
 
 Related: ../overview/scoring.md
 
 ```mermaid
-<<<<<<< HEAD
 flowchart TD
   %% Service classes
   classDef user fill:#F5F5DC,stroke:#C9C9A3,color:#262626;
@@ -65,13 +57,3 @@ flowchart TD
   %% Legend at end
   Legend["Legend:\n• Beige = User\n• Light Blue = Appwrite (DB)\n• Blush = Meshy AI\n• DarkOrchid = Vercel/API\n• Cardinal = External APIs (CFBD/ESPN)"]:::legend
 ```
-=======
-flowchart LR
-  L[Set Lineups] --> K[Lock Before Kickoff]
-  K --> G[Games Played]
-  G --> C[Compute Scores]
-  C --> S[Standings Updated]
-```
-
-
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4

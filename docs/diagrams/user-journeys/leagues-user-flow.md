@@ -1,30 +1,18 @@
 # Leagues User Flow
 
 Commissioner:
-<<<<<<< HEAD
 
-- Create league → configure rules → invite members → schedule draft
-
-Member:
-
-- Discover/join league → create team → view dashboard
-
-Post-creation:
-
-=======
 - Create league → configure rules → invite members → schedule draft
 
 Member:
 - Discover/join league → create team → view dashboard
 
 Post-creation:
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 - Manage settings (non-immutable only) → monitor join status → draft readiness
 
 Related: ../overview/leagues.md
 
 ```mermaid
-<<<<<<< HEAD
 flowchart TD
   %% Service classes
   classDef user fill:#F5F5DC,stroke:#C9C9A3,color:#262626;
@@ -67,14 +55,3 @@ flowchart TD
   %% Legend at end
   Legend["Legend:\n• Beige = User\n• Light Blue = Appwrite (DB)\n• Blush = Meshy AI\n• DarkOrchid = Vercel/API\n• Cardinal = External APIs (CFBD/ESPN)"]:::legend
 ```
-=======
-flowchart LR
-  C[Create League] --> CFG[Configure Rules]
-  CFG --> INV[Invite Members]
-  INV --> J[Members Join]
-  J --> SCH[Schedule Draft]
-  SCH --> D[Draft Ready]
-```
-
-
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4

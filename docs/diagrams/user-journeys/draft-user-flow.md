@@ -1,32 +1,20 @@
 # Draft User Flow
 
 Pre-draft:
-<<<<<<< HEAD
 
 - League setup → members join → draft scheduled
 
 In-draft:
-
-=======
-- League setup → members join → draft scheduled
-
-In-draft:
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 - Enter draft room → load state → subscribe realtime
 - Turn UI: round/pick, time remaining, on-clock team
 - Pick: validate → submit → realtime broadcast → advance
 
 Post-draft:
-<<<<<<< HEAD
-
-=======
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 - Results view → export board → roster management
 
 Related: ../overview/draft.md
 
 ```mermaid
-<<<<<<< HEAD
 flowchart TD
   %% Service classes
   classDef user fill:#F5F5DC,stroke:#C9C9A3,color:#262626;
@@ -71,28 +59,3 @@ flowchart TD
   %% Legend at end
   Legend["Legend:\n• Beige = User\n• Light Blue = Appwrite (DB)\n• Blush = Meshy AI\n• DarkOrchid = Vercel/API\n• Cardinal = External APIs (CFBD/ESPN)"]:::legend
 ```
-=======
-flowchart TB
-  subgraph PreDraft
-    L[League Setup] --> M[Members Join]
-    M --> S[Draft Scheduled]
-  end
-
-  subgraph InDraft
-    E[Enter Draft Room] --> C[Connect Realtime]
-    C --> T[On-Clock Turn]
-    T --> P[Pick Validation]
-    P --> R[Realtime Broadcast]
-  end
-
-  subgraph PostDraft
-    X[Results View] --> RO[Roster Management]
-  end
-
-  S --> E
-  R --> T
-  R --> X
-```
-
-
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4

@@ -6,7 +6,6 @@ slug: user-journeys:auth:sign-in-up
 
 ```mermaid
 flowchart TD
-<<<<<<< HEAD
   %% Service classes
   classDef user fill:#F5F5DC,stroke:#C9C9A3,color:#262626;
   classDef appwrite fill:#ADD8E6,stroke:#6CB6D9,color:#003A8C;
@@ -51,38 +50,6 @@ flowchart TD
 
   %% Legend at end
   Legend["Legend:\n• Beige = User\n• Light Blue = Appwrite (DB)\n• Blush = Meshy AI\n• DarkOrchid = Vercel/API\n• Cardinal = External APIs (CFBD/ESPN)"]:::legend
-=======
-  %% Lanes
-  subgraph User
-    U0((Start))
-  end
-  subgraph App
-    %% Avoid special shape variants to reduce parser ambiguity
-    A1[Open /login or /signup]
-    A2{Has session?}
-    A3[Post credentials to API]
-    A4[Set returnTo]
-    A5[Redirect to returnTo or /dashboard]
-    A6[Logout, clear cookie]
-  end
-  subgraph Appwrite
-    W1[Verify email+password]
-    W2[Create session]
-    W3[Issue httpOnly cookie]
-  end
-
-  U0 --> A1
-  A1 --> A2
-  A2 -- yes --> A5
-  A2 -- no --> A3
-  A3 --> W1 --> W2 --> W3 --> A5
-
-  %% Errors
-  A3 -. invalid creds .-x U0
-
-  %% Logout (separate entry)
-  U0 -. click Logout .-> A6
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 ```
 
 #### Legend
