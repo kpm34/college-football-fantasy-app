@@ -19,6 +19,8 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      TARGET_URL: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.target_url || 'https://cfbfantasy.app' }}
 
     steps:
       - name: Checkout code
@@ -34,8 +36,6 @@ jobs:
         run: npm ci
 
       - name: Run E2E Tests
-        env:
-          TARGET_URL: ${{ github.event.inputs.target_url || 'https://cfbfantasy.app' }}
         run: npm run test:e2e:prod
         continue-on-error: true
         id: e2e-test
