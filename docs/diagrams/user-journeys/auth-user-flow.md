@@ -28,7 +28,8 @@ flowchart TD
   A[Start] --> B{Entry Point}
   B -->|/login or /signup| S1[Auth — Sign In/Up]
   B -->|Google OAuth| S2[Auth — OAuth Callback]
-  B -->|/invite/[leagueId] or /league/join or /draft/[leagueId]| S3[Auth — Invite/Join & Draft Room]
+  %% Mermaid link labels do not like square brackets; use :leagueId for legibility
+  B -->|/invite/:leagueId or /league/join or /draft/:leagueId| S3[Auth — Invite/Join & Draft Room]
 
   S1 --> E[Session Ready]
   S2 --> E
