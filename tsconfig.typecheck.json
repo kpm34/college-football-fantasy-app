@@ -5,6 +5,7 @@
     "app/(dashboard)/**/*",
     "app/draft/**/*",
     "app/(league)/**/*",
+    "app/admin/**/*",
     "components/**/*",
     "lib/hooks/**/*",
     "lib/realtime/**/*",

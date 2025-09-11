@@ -124,7 +124,7 @@
     "indexes:ensure": "tsx scripts/guards/ensure-indexes.ts",
     "validate:relationships": "tsx scripts/guards/validate-relationships.ts",
     "diagrams:plan": "node scripts/organize-diagrams.js --plan",
-      "diagrams:apply": "node scripts/organize-diagrams.js --apply",
+    "diagrams:apply": "node scripts/organize-diagrams.js --apply",
     "diagrams:lint": "tsx ops/diagrams/lint-mermaid.ts",
     "diagrams:lint:staged": "tsx ops/diagrams/lint-mermaid.ts --staged",
     "diagrams:audit": "tsx ops/common/scripts/audit-diagrams-live.ts",
@@ -244,6 +244,6 @@
     "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.5",
-    "typescript": "^5.7.2"
+    "typescript": "^5.9.2"
   }
 }
