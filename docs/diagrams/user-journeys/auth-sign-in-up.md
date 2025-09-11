@@ -11,7 +11,8 @@ flowchart TD
     U0((Start))
   end
   subgraph A[App (Next.js)]
-    A1[/Open /login or /signup/]
+    %% Avoid special [/ ... /] shape to prevent parse ambiguity with slashes
+    A1[Open /login or /signup]
     A2{Has session?}
     A3[/Post credentials to API/]
     A4[Set returnTo]
@@ -38,6 +39,7 @@ flowchart TD
 ```
 
 #### Legend
+
 - Terminator: rounded (Start/End)
 - Decision: diamond
 - Process: rectangle

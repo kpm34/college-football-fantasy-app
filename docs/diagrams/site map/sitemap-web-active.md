@@ -18,7 +18,7 @@ Scanned Next.js App Router under `app/` including `(league)`, `(dashboard)`, `ad
 mindmap
   root((/ Landing))
     Join & Invite
-      /invite/[leagueId]
+      /invite/:leagueId
       /league/join
     Auth
       /login
@@ -31,14 +31,14 @@ mindmap
       /standings
     League
       /league/create
-      /league/[leagueId]
-        /league/[leagueId]/locker-room
-        /league/[leagueId]/schedule
-        /league/[leagueId]/scoreboard
-        /league/[leagueId]/standings
-        /league/[leagueId]/commissioner (role: commissioner)
+      /league/:leagueId
+        /league/:leagueId/locker-room
+        /league/:leagueId/schedule
+        /league/:leagueId/scoreboard
+        /league/:leagueId/standings
+        /league/:leagueId/commissioner (role: commissioner)
     Draft
-      /draft/[leagueId] (time-gated)
+      /draft/:leagueId (time-gated)
     Admin
       /admin
       Diagrams
@@ -55,7 +55,7 @@ mindmap
       /conference-showcase
       /projection-showcase
       /videos
-      /videos/[program]
+      /videos/:program
       /launch
       /offline
 ```
