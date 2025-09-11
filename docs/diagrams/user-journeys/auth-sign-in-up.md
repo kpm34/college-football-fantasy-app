@@ -7,19 +7,19 @@ slug: user-journeys:auth:sign-in-up
 ```mermaid
 flowchart TD
   %% Lanes
-  subgraph U[User]
+  subgraph User
     U0((Start))
   end
-  subgraph A[App (Next.js)]
-    %% Avoid special [/ ... /] shape to prevent parse ambiguity with slashes
+  subgraph App
+    %% Avoid special shape variants to reduce parser ambiguity
     A1[Open /login or /signup]
     A2{Has session?}
-    A3[/Post credentials to API/]
+    A3[Post credentials to API]
     A4[Set returnTo]
     A5[Redirect to returnTo or /dashboard]
-    A6[/Logout -> clear cookie/]
+    A6[Logout, clear cookie]
   end
-  subgraph AW[Appwrite]
+  subgraph Appwrite
     W1[Verify email+password]
     W2[Create session]
     W3[Issue httpOnly cookie]
