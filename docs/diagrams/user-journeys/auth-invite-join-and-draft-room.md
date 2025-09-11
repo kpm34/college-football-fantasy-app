@@ -18,8 +18,8 @@ flowchart TD
     A4[Fetch league + draft]
     A5{Member?}
     A6{Draft Window?}
-    A7[Show DRAFT ROOM]
-    A8[Hide (not in window)]
+    A7["Show DRAFT ROOM"]
+    A8["Hide (not in window)"]
   end
   subgraph Appwrite
     W1[Leagues]

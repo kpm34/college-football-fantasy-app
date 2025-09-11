@@ -11,10 +11,10 @@ flowchart TD
     U0((Click Continue with Google))
   end
   subgraph App
-    A0[GET /login (Google)]
+    A0["GET /login (Google)"]
     A1[Create state+nonce; store]
     A2[Redirect to Google OAuth]
-    A3[GET /auth/callback]
+    A3["GET /auth/callback"]
     A4{State/nonce valid?}
     A5[Exchange code for token]
     A6[Create Appwrite session]
