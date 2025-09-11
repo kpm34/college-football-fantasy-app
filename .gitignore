@@ -55,3 +55,20 @@ cookies*.txt
 *.vsix
 *.bak*
 
+# Heavy local folders and test outputs
+ops/**
+!ops/diagrams/**
+!ops/common/scripts/**
+!ops/README.md
+!ops/playbooks.md
+!ops/design/**
+!ops/config/**
+!ops/db/**
+
+# E2E + test artifacts
+/test-results/**
+
+# Media and docs to ignore
+*.pdf
+*.csv
+
