@@ -112,7 +112,7 @@ export default function DiagramBySlugPage() {
       return [
         [
           'flowchart TD',
-          '  A["Unclosed label example'] ,',
+          '  A["Unclosed label example',
           '  A --> B',
         ].join('\n'),
       ]
