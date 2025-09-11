@@ -71,3 +71,18 @@ flowchart LR
   B -- Yes --> C[Enter email address]:::process --> D[Enter password]:::process --> E([Continue]):::terminator
   B -- No --> F[Set up free account]:::process --> G[Enter name]:::process --> C
 ```
+
+```mermaid
+flowchart LR
+  %% Mirror legend block to ensure extractor compatibility in different contexts
+  classDef legend fill:#F3F4F6,stroke:#CBD5E1,color:#111827,rx:6,ry:6;
+  classDef terminator fill:#93C5FD,stroke:#1D4ED8,stroke-width:2,color:#0B1020,rx:12,ry:12;
+  classDef decision fill:#EDE9FE,stroke:#7C3AED,stroke-width:2,color:#111827;
+  classDef process fill:#E5E7EB,stroke:#6B7280,color:#111827;
+
+  subgraph L2[Key]
+    direction LR
+    t([Terminator]):::terminator
+    d{Decision}:::decision
+    p[Process]:::process
+  end
