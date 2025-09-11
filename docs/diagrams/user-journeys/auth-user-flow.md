@@ -25,7 +25,7 @@ High‑level guide to how users enter authentication flows from UI buttons and w
 
 ```mermaid
 flowchart TD
-  A[Start] --> B{Entry Point}
+  A([Start]) --> B{Entry Point}
   B -->|/login or /signup| S1[Auth — Sign In/Up]
   B -->|Google OAuth| S2[Auth — OAuth Callback]
   %% Mermaid link labels do not like square brackets; use :leagueId for legibility
