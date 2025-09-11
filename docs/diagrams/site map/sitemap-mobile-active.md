@@ -25,17 +25,17 @@ mindmap
     Leagues
       /league/join
       /league/create
-      /league/[leagueId]
-        /league/[leagueId]/locker-room
-        /league/[leagueId]/schedule
-        /league/[leagueId]/scoreboard
-        /league/[leagueId]/standings
-        /league/[leagueId]/commissioner (role: commissioner)
+      /league/:leagueId
+        /league/:leagueId/locker-room
+        /league/:leagueId/schedule
+        /league/:leagueId/scoreboard
+        /league/:leagueId/standings
+        /league/:leagueId/commissioner (role: commissioner)
     Draft
-      /draft/[leagueId] (time-gated)
+      /draft/:leagueId (time-gated)
     Content
       /conference-showcase
       /projection-showcase
       /videos
-      /videos/[program]
+      /videos/:program
 ```
