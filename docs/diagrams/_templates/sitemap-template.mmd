@@ -1,0 +1,10 @@
+flowchart TD
+  ROOT["/ (Landing)"]
+  ROOT --> "/login"
+  ROOT --> "/signup"
+  ROOT --> "/invite/:leagueId"
+  ROOT --> "/dashboard"
+  "/dashboard" --> "/league/:leagueId"
+  "/league/:leagueId" --> "/league/:leagueId/commissioner"
+  "/league/:leagueId" --> "/draft/:leagueId"
+  %% Add mobile-only branches as quoted labels, e.g. "Sheet: Team Switcher (mobile)"

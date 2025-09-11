@@ -269,6 +269,18 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </Link>
+            <Link href="/admin/diagrams/workflows" className="group block">
+              <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/20 via-sky-500/10 to-transparent opacity-75" />
+                <div className="relative flex items-center gap-3 text-emerald-900">
+                  <span className="inline-block h-5 w-5 rounded-sm bg-emerald-600" />
+                  <div className="font-semibold">Workflows</div>
+                </div>
+                <div className="relative mt-1 text-sm text-emerald-900/80">
+                  Production · Hotfix · Schema · Analytics · Handoff
+                </div>
+              </div>
+            </Link>
             <Link
               href="/admin/diagrams/functional-flow"
               className="group block"

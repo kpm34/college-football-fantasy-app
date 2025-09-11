@@ -68,7 +68,20 @@ ops/**
 # E2E + test artifacts
 /test-results/**
 
+# Playwright reports
+/playwright-report/**
+/blob-report/**
+
 # Media and docs to ignore
 *.pdf
 *.csv
+
+# Archives and binary bundles
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# Conference roster PDFs (source artifacts)
+data/conference rosters/**
 

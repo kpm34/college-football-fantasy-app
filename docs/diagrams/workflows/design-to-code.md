@@ -34,4 +34,20 @@ flowchart TD
   C1 -- no --> P1
   P1 -- no --> E6
   P1 -- yes --> R2 --> R3
+
+  %% Lane colors
+  classDef laneDesign fill:#ECFDF5,stroke:#10B981,color:#065F46
+  classDef laneEng fill:#EFF6FF,stroke:#3B82F6,color:#1E3A8A
+  classDef laneReview fill:#FEF2F2,stroke:#EF4444,color:#7F1D1D
+
+  class D1,D2,D3 laneDesign
+  class E1,E2,E3,E4,E5,E6 laneEng
+  class R1,C1,P1,R2,R3 laneReview
+
+  %% Legend
+  subgraph Legend
+    L1[Design]:::laneDesign
+    L2[Engineering]:::laneEng
+    L3[Review]:::laneReview
+  end
 ```
