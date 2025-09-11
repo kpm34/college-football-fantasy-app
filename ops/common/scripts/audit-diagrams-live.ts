@@ -61,6 +61,18 @@ const GROUPS: Array<{ section: string; slugs: string[] }> = [
       'directory-map:chapters:ops',
     ],
   },
+  {
+    section: 'Workflows',
+    slugs: [
+      'workflows:index',
+      'workflows:production-process',
+      'workflows:incident-hotfix',
+      'workflows:schema-migration',
+      'workflows:analytics-instrumentation',
+      'workflows:design-handoff-integration',
+      'workflows:campaign-launch',
+    ],
+  },
 ]
 
 async function audit(baseUrl: string) {

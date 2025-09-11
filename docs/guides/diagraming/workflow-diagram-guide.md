@@ -5,7 +5,7 @@ updated: 2025-09-11
 ---
 
 ## Purpose
-Define async/background processes (cron jobs, ETL, queues) with clear triggers, steps, and observability.
+Define async/background processes (cron jobs, ETL, queues) with clear triggers, steps, and observability. Workflows are organized under `docs/diagrams/workflows/`.
 
 ## Visual style
 - Use Mermaid `flowchart TD` or `sequenceDiagram` when interactions are time‑ordered.
@@ -17,10 +17,15 @@ Define async/background processes (cron jobs, ETL, queues) with clear triggers, 
 - Add monitoring hooks (Sentry, logs) and SLAs if defined.
 
 ## Authoring steps
-1) Name the workflow and its trigger.
-2) List steps in order; draw as nodes with concise verbs.
-3) Add error branches and compensation steps.
-4) Annotate time windows and rate limits.
+1. Name the workflow and its trigger.
+2. List steps in order; draw as nodes with concise verbs.
+3. Add error branches and compensation steps.
+4. Annotate time windows and rate limits.
+
+## Parser‑safe Mermaid conventions
+- Quote labels with slashes/parentheses: `["/api/jobs/run"]`.
+- Prefer simple lane titles; avoid bracketed subgraph titles.
+- Keep shapes consistent; avoid special variants like `[/ ... /]`.
 
 ## Mermaid template
 ```mermaid
@@ -31,8 +36,11 @@ flowchart TD
   step2 -->|Error| deadletter[(DLQ)]
 ```
 
-## QA checklist
-- [ ] Trigger clear; schedule documented
-- [ ] Happy path + error handling
-- [ ] Observability points noted
-- [ ] No UI steps mixed in
+## Render & audit
+- Preview via Admin: `/admin/diagrams/workflows:index` and specific slugs.
+- Live audit (production):
+  - `BASE_URL=https://<deploy-url> npx tsx ops/common/scripts/audit-diagrams-live.ts`
+
+### Citations
+- Drive PDS Folder: https://drive.google.com/drive/folders/1WDCsre-t8J5EBk_-cJrm-B0iSb7t0WzD?usp=sharing
+- Section 5: https://drive.google.com/file/d/1FPK9vfsEUfFGT6SWMVB1yZxbWPQxtEWT/view?usp=drive_link

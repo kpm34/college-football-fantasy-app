@@ -1,6 +1,7 @@
 # Realtime User Flow
 
 Connection lifecycle:
+
 - Connect → authenticate via cookie → subscribe to channels
 - Receive updates → UI refresh → handle reconnects
 
@@ -15,5 +16,3 @@ flowchart LR
   E --> R["Reconnect Handler"]
   R --> S
 ```
-
-
