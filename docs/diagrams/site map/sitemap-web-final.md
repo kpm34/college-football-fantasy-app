@@ -22,7 +22,7 @@ mindmap
       /account-settings
       /scoreboard
       /standings
-      "My Teams (planned)"
+      My Teams (planned)
     League
       /league/create
       /league/:leagueId
@@ -37,7 +37,7 @@ mindmap
         /league/:leagueId/commissioner
     Draft
       /draft/:leagueId (time-gated)
-      "Mock Draft (planned)"
+      Mock Draft (planned)
     Admin
       /admin
       Diagrams
@@ -46,7 +46,7 @@ mindmap
         /admin/diagrams/functional-flow
         /admin/diagrams/system-architecture
       Reports & Tools (planned)
-        "Admin Reports (planned)"
+        Admin Reports (planned)
         /admin/cache-status
         /admin/sync-status
         /admin/sec-survey
