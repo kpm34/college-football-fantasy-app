@@ -188,10 +188,7 @@ export function MermaidRenderer({
           theme: 'base',
           flowchart: {
             htmlLabels: true,
-<<<<<<< HEAD
             curve: 'linear',
-=======
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
             useMaxWidth: true,
             nodeSpacing: 70,
             rankSpacing: 60,
