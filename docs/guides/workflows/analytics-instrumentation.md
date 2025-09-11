@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 title: Track Events Correctly — Spec → QA → Dashboards
 updated: 2025-09-11
 ---
@@ -31,3 +32,15 @@ updated: 2025-09-11
 - Use Vercel AI SDK to generate test event payloads for QA
 
 Diagram: /admin/diagrams/workflows%3Atrack-events-correctly
+=======
+title: Event Instrumentation & Analytics
+updated: 2025-09-11
+---
+
+Checklist:
+- Event spec and naming
+- Implement tracking → QA
+- Deploy → dashboards → iterate KPIs
+
+Diagram: /admin/diagrams/workflows%3Aanalytics-instrumentation
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4

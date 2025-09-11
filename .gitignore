@@ -55,6 +55,7 @@ cookies*.txt
 *.vsix
 *.bak*
 
+<<<<<<< HEAD
 # Heavy local folders and test outputs
 ops/**
 !ops/diagrams/**
@@ -85,3 +86,5 @@ ops/**
 # Conference roster PDFs (source artifacts)
 data/conference rosters/**
 
+=======
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4

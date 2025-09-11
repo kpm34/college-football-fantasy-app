@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 title: Change the Database Safely — Compat + Canary
 updated: 2025-09-11
 ---
@@ -29,3 +30,15 @@ updated: 2025-09-11
 - Use MCP Appwrite server for live verification queries (read‑only)
 
 Diagram: /admin/diagrams/workflows%3Achange-database-safely
+=======
+title: Schema / Data Migration — Backward‑compat, Canary
+updated: 2025-09-11
+---
+
+Checklist:
+- Backward‑compatible design
+- Canary → verify → rollout
+- Cleanup legacy paths; rollback plan
+
+Diagram: /admin/diagrams/workflows%3Aschema-migration
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4

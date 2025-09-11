@@ -9,6 +9,7 @@ Related: ../overview/realtime.md
 
 ```mermaid
 flowchart LR
+<<<<<<< HEAD
   subgraph User
     C["Connect"]
   end
@@ -32,4 +33,12 @@ flowchart LR
   class C laneUser
   class A,U,R laneApp
   class S,E laneAppwrite
+=======
+  C["Connect"] --> A["Authenticate (cookie)"]
+  A --> S["Subscribe Channels"]
+  S --> E["Receive Events"]
+  E --> U["UI Update"]
+  E --> R["Reconnect Handler"]
+  R --> S
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 ```

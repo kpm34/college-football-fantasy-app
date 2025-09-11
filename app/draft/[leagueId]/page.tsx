@@ -18,11 +18,14 @@ export default function DraftRoomPage({ params }: Props) {
     teams: { $id: string; teamName: string; ownerAuthUserId: string }[]
     state: any | null
   } | null>(null)
+<<<<<<< HEAD
   const [isSubmitting, setSubmitting] = useState(false)
 
   // Always call hooks in a fixed order at the top
   const v2 = useDraftStateV2(leagueId)
   const legacy = useDraftRealtime(leagueId)
+=======
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 
   // Fetch league meta once to know engine version
   useEffect(() => {
@@ -63,6 +66,13 @@ export default function DraftRoomPage({ params }: Props) {
     )
   }
 
+<<<<<<< HEAD
+=======
+  // Always call hooks in a fixed order; decide which data to show after
+  const v2 = useDraftStateV2(leagueId)
+  const legacy = useDraftRealtime(leagueId)
+
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
   // Determine my team id from initial teams once available
   const sessionUserId = (typeof window !== 'undefined' && (window as any).__authUserId) || null
   const myTeamId = (initial?.teams || []).find(
@@ -86,6 +96,11 @@ export default function DraftRoomPage({ params }: Props) {
   if (!engineVersion) {
     return <div className="min-h-screen bg-white text-gray-900 p-4">Loading draft room...</div>
   }
+<<<<<<< HEAD
+=======
+
+  const [isSubmitting, setSubmitting] = useState(false)
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
   const handleDraft = async (player: any) => {
     if (!showV2) return
     if (!myTeamId || !player?.id) return

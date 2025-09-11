@@ -65,6 +65,7 @@ const GROUPS: Array<{ section: string; slugs: string[] }> = [
     section: 'Workflows',
     slugs: [
       'workflows:index',
+<<<<<<< HEAD
       'workflows:ship-feature',
       'workflows:fix-prod-incident',
       'workflows:change-database-safely',
@@ -72,6 +73,14 @@ const GROUPS: Array<{ section: string; slugs: string[] }> = [
       'workflows:design-to-code',
       'workflows:design-3d-animations',
       'workflows:launch-campaign',
+=======
+      'workflows:production-process',
+      'workflows:incident-hotfix',
+      'workflows:schema-migration',
+      'workflows:analytics-instrumentation',
+      'workflows:design-handoff-integration',
+      'workflows:campaign-launch',
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
     ],
   },
 ]

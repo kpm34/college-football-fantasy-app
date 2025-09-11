@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import driveManifestJson from '@docs/external/drive-manifest.json'
+=======
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 export type DriveManifest = {
   folderId: string
   folderUrl: string
@@ -14,9 +17,24 @@ let cached: DriveManifest | null = null
 export function getDriveManifest(): DriveManifest | null {
   try {
     if (cached) return cached
+<<<<<<< HEAD
     const json = driveManifestJson as DriveManifest
     cached = json
     return json
+=======
+    const data = JSON.parse(
+      // Use fs only on server; fall back to dynamic import when bundled for edge
+      // but both resolve to the same JSON content at build time
+      typeof process !== 'undefined' && process.cwd
+        ? require('fs').readFileSync(
+            require('path').join(process.cwd(), 'docs/external/drive-manifest.json'),
+            'utf-8'
+          )
+        : '{}'
+    ) as DriveManifest
+    cached = data
+    return data
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
   } catch {
     return null
   }

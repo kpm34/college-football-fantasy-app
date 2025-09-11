@@ -5,6 +5,7 @@ updated: 2025-09-11
 
 This folder documents our operational workflows and links to their diagrams.
 
+<<<<<<< HEAD
 - Ship a Feature
 - Fix a Production Incident
 - Change the Database Safely
@@ -12,6 +13,14 @@ This folder documents our operational workflows and links to their diagrams.
 - Design to Code
 - Design 3D & Animations
 - Launch a Campaign
+=======
+- Production Process (Backlog → Prod)
+- Incident / Hotfix Response (P1/P2)
+- Schema / Data Migration (Backward‑compat, Canary)
+- Campaign Launch & Content Pipeline
+- Event Instrumentation & Analytics
+- Design → Handoff → Code Integration
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 
 View diagrams in Admin → Diagrams → Workflows.
 

@@ -6,6 +6,7 @@ slug: user-journeys:auth:invite-join-and-draft-room
 
 ```mermaid
 flowchart TD
+<<<<<<< HEAD
   %% Service classes
   classDef user fill:#F5F5DC,stroke:#C9C9A3,color:#262626;
   classDef appwrite fill:#ADD8E6,stroke:#6CB6D9,color:#003A8C;
@@ -51,6 +52,36 @@ flowchart TD
 
   %% Legend at end
   Legend["Legend:\n• Beige = User\n• Light Blue = Appwrite (DB)\n• Blush = Meshy AI\n• DarkOrchid = Vercel/API\n• Cardinal = External APIs (CFBD/ESPN)"]:::legend
+=======
+  %% Simplify subgraph titles to avoid bracket parsing issues
+  subgraph User
+    U0((Start))
+  end
+  subgraph App
+    %% Replace bracket params to avoid Mermaid NODE_ID parsing issues
+    A1[/Open /invite/:leagueId or /league/join/]
+    A2{Has session?}
+    A3[Redirect to /login?returnTo=…]
+    A4[Fetch league + draft]
+    A5{Member?}
+    A6{Draft Window?}
+    A7["Show DRAFT ROOM"]
+    A8["Hide (not in window)"]
+  end
+  subgraph Appwrite
+    W1[Leagues]
+    W2[Drafts + States]
+    W3[League Memberships]
+  end
+
+  U0 --> A1 --> A2
+  A2 -- no --> A3
+  A2 -- yes --> A4 --> W1 --> W2 --> W3 --> A5
+  A5 -- yes --> A6
+  A5 -- no --> A8
+  A6 -- in window or commissioner --> A7
+  A6 -- else --> A8
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 ```
 
 #### Legend

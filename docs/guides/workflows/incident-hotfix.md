@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 title: Fix a Production Incident — Runbook & SLAs
 updated: 2025-09-11
 ---
@@ -58,3 +59,15 @@ updated: 2025-09-11
 - Sentry: https://docs.sentry.io
 
 Diagram: /admin/diagrams/workflows%3Afix-prod-incident
+=======
+title: Incident / Hotfix Response — P1/P2
+updated: 2025-09-11
+---
+
+Protocol:
+- Triage severity (P1/P2)
+- Page on‑call for P1; acknowledge and mitigate
+- Patch, verify in prod, postmortem, action items
+
+Diagram: /admin/diagrams/workflows%3Aincident-hotfix
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4

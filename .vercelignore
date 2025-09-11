@@ -58,6 +58,7 @@ ops/attic/**
 ops/diagrams/**
 ops/cursor-ops/**
 
+<<<<<<< HEAD
 # Ignore archives and heavy binaries in deploy context
 *.zip
 *.tar
@@ -67,6 +68,8 @@ ops/cursor-ops/**
 *.pdf
 data/conference rosters/**
 
+=======
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 # Local test files
 scoring_example.py
 test_rankings_refresh_local.py

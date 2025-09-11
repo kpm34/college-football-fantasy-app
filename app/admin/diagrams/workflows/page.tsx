@@ -1,5 +1,6 @@
 'use client'
 
+<<<<<<< HEAD
 const items = [
   { slug: 'workflows:index', title: 'Overview' },
   { slug: 'workflows:ship-feature', title: 'Ship a Feature' },
@@ -9,6 +10,18 @@ const items = [
   { slug: 'workflows:design-to-code', title: 'Design to Code' },
   { slug: 'workflows:design-3d-animations', title: 'Design 3D & Animations' },
   { slug: 'workflows:launch-campaign', title: 'Launch a Campaign' },
+=======
+import Link from 'next/link'
+
+const items = [
+  { slug: 'workflows:index', title: 'Overview' },
+  { slug: 'workflows:production-process', title: 'Production Process' },
+  { slug: 'workflows:incident-hotfix', title: 'Incident / Hotfix' },
+  { slug: 'workflows:schema-migration', title: 'Schema / Data Migration' },
+  { slug: 'workflows:analytics-instrumentation', title: 'Analytics Instrumentation' },
+  { slug: 'workflows:design-handoff-integration', title: 'Design → Handoff → Code Integration' },
+  { slug: 'workflows:campaign-launch', title: 'Campaign Launch' },
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 ]
 
 export default function WorkflowsPage() {
@@ -20,6 +33,7 @@ export default function WorkflowsPage() {
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {items.map(i => (
+<<<<<<< HEAD
             <div key={i.slug} className="flex items-center gap-2">
               <a
                 href={`/admin/diagrams/${encodeURIComponent(i.slug)}`}
@@ -36,6 +50,15 @@ export default function WorkflowsPage() {
                 Guide
               </a>
             </div>
+=======
+            <a
+              key={i.slug}
+              href={`/admin/diagrams/${encodeURIComponent(i.slug)}`}
+              className="px-4 py-3 rounded bg-emerald-700 text-white text-left shadow hover:bg-emerald-800"
+            >
+              <div className="font-semibold">{i.title}</div>
+            </a>
+>>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
           ))}
         </div>
       </div>
