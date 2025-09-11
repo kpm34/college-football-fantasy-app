@@ -10,7 +10,8 @@ flowchart TD
     U0((Start))
   end
   subgraph A[App (Next.js)]
-    A1[/Open /invite/[leagueId] or /league/join/]
+    %% Replace bracket params to avoid Mermaid NODE_ID parsing issues
+    A1[/Open /invite/:leagueId or /league/join/]
     A2{Has session?}
     A3[Redirect to /login?returnTo=…]
     A4[Fetch league + draft]
