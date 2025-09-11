@@ -152,6 +152,7 @@ export async function GET(
       'workflows:track-events-correctly': 'diagrams/workflows/track-events-correctly.md',
       'workflows:design-to-code': 'diagrams/workflows/design-to-code.md',
       'workflows:launch-campaign': 'diagrams/workflows/launch-campaign.md',
+      'workflows:design-3d-animations': 'diagrams/workflows/design-3d-animations.md',
     }
 
     // Handle dynamic multi-level project map paths

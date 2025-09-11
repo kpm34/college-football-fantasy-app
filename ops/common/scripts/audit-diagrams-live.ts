@@ -70,6 +70,7 @@ const GROUPS: Array<{ section: string; slugs: string[] }> = [
       'workflows:change-database-safely',
       'workflows:track-events-correctly',
       'workflows:design-to-code',
+      'workflows:design-3d-animations',
       'workflows:launch-campaign',
     ],
   },
