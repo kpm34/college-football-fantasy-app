@@ -3,20 +3,13 @@
 import { MermaidRenderer } from '@components/docs/MermaidRenderer'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-<<<<<<< HEAD
 import { useEffect, useMemo, useState } from 'react'
-=======
-import { useEffect, useState } from 'react'
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 
 export default function DiagramBySlugPage() {
   const params = useParams<{ slug: string }>()
   const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug
   const [charts, setCharts] = useState<string[]>([])
-<<<<<<< HEAD
   const [viewMode, setViewMode] = useState<'default' | 'treemap' | 'syntax_error'>('default')
-=======
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
   const [error, setError] = useState<string | null>(null)
   const [updatedAt, setUpdatedAt] = useState<string>('')
 
@@ -69,7 +62,6 @@ export default function DiagramBySlugPage() {
         const data = await res.json().catch(() => ({}))
         if (!cancelled) {
           if (res.ok && Array.isArray(data.charts)) {
-<<<<<<< HEAD
             const isUJ = typeof slug === 'string' && slug.startsWith('user-journeys:')
             const filtered = isUJ
               ? (data.charts as string[]).filter(
@@ -81,9 +73,6 @@ export default function DiagramBySlugPage() {
                 )
               : data.charts
             setCharts(filtered)
-=======
-            setCharts(data.charts)
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
             setUpdatedAt(data.updatedAt || '')
             // When no mermaid charts, try to fetch raw markdown and render it plainly
             if (!data.charts || data.charts.length === 0) {
@@ -116,7 +105,6 @@ export default function DiagramBySlugPage() {
     }
   }, [slug])
 
-<<<<<<< HEAD
   // Alternate views: treemap, syntax error demo
   const displayCharts = useMemo(() => {
     if (!charts || charts.length === 0) return []
@@ -208,9 +196,7 @@ export default function DiagramBySlugPage() {
     for (const label of directLabels) add(label, label)
     const header = 'Id,Label,Group,URL\n'
     const body = rows
-      .map(r =>
-        [r.id, r.label, r.group, r.url].map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')
-      )
+      .map(r => [r.id, r.label, r.group, r.url].map(v => `"${String(v).replaceAll('"', '""')}"`).join(','))
       .join('\n')
     download(header + body + '\n', `lucid-nodes-${slug || 'diagram'}.csv`, 'text/csv')
   }
@@ -230,19 +216,14 @@ export default function DiagramBySlugPage() {
       const rawFrom = m[1]
       const rawTo = m[2]
       const toLabel = rawTo.startsWith('"') ? rawTo.slice(1, -1) : idToLabel[rawTo] || rawTo
-      const fromLabel =
-        idToLabel[rawFrom] || (rawFrom.startsWith('"') ? rawFrom.slice(1, -1) : rawFrom)
+      const fromLabel = idToLabel[rawFrom] || (rawFrom.startsWith('"') ? rawFrom.slice(1, -1) : rawFrom)
       edges.push({ from: fromLabel, to: toLabel })
     }
     const header = 'From,To\n'
-    const body = edges
-      .map(e => [e.from, e.to].map(v => `"${String(v).replaceAll('"', '""')}"`).join(','))
-      .join('\n')
+    const body = edges.map(e => [e.from, e.to].map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')).join('\n')
     download(header + body + '\n', `lucid-edges-${slug || 'diagram'}.csv`, 'text/csv')
   }
 
-=======
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
   // No auth gating; page is reachable only via admin UI
 
   return (
@@ -275,7 +256,6 @@ export default function DiagramBySlugPage() {
         ) : charts && charts.length > 0 ? (
           <div className="space-y-3">
             {typeof slug === 'string' && slug.startsWith('user-journeys:') && (
-<<<<<<< HEAD
               <div className="grid gap-3 md:grid-cols-[260px,1fr] items-start">
                 <aside className="sticky top-24 self-start hidden md:block">
                   <div
@@ -353,23 +333,16 @@ export default function DiagramBySlugPage() {
               </div>
             )}
             {typeof slug === 'string' && slug.startsWith('workflows:') && (
-=======
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
               <div
                 className="rounded border text-sm"
                 style={{
                   backgroundColor: '#FFFFFF',
                   color: '#1F2937',
-<<<<<<< HEAD
                   borderColor: 'rgba(59,130,246,.35)',
-=======
-                  borderColor: 'rgba(16,185,129,.35)',
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
                 }}
               >
                 <div
                   className="px-3 py-2 font-semibold"
-<<<<<<< HEAD
                   style={{ borderBottom: '1px solid rgba(59,130,246,.25)' }}
                 >
                   Workflow Legend
@@ -395,26 +368,10 @@ export default function DiagramBySlugPage() {
                       style={{ background: '#FFFBEB', border: '1px solid #F59E0B' }}
                     />
                     <span>Lane: Review / App / Launch</span>
-=======
-                  style={{ borderBottom: '1px solid rgba(16,185,129,.25)' }}
-                >
-                  Journey Legend
-                </div>
-                <div className="p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <div>
-                    <div>Terminator: rounded (Start/End)</div>
-                    <div>Decision: diamond</div>
-                    <div>Process: rectangle</div>
-                  </div>
-                  <div>
-                    <div>Swimlanes: User | App (Next.js) | Appwrite | External</div>
-                    <div>Async operations: dashed lines</div>
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
                   </div>
                 </div>
               </div>
             )}
-<<<<<<< HEAD
             {!String(slug).startsWith('user-journeys:') && (
               <>
                 <div className="flex items-center gap-2 mb-2">
@@ -450,9 +407,6 @@ export default function DiagramBySlugPage() {
                 <MermaidRenderer charts={displayCharts} mode="modal" />
               </>
             )}
-=======
-            <MermaidRenderer charts={charts} mode="modal" />
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
           </div>
         ) : markdown ? (
           <article className="prose max-w-none" style={{ color: '#1F2937' }}>
