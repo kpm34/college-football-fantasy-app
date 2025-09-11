@@ -354,21 +354,26 @@ export default function DirectoryMapPage() {
               </section>
             )}
 
-            {/* Diagrams under description */}
-            <section className="mt-6">
-              <h3 className="text-lg font-semibold mb-2">Diagrams</h3>
-              {charts && charts.length > 0 ? (
-                <MermaidRenderer charts={charts} mode="page" wheelZoom={false} />
-              ) : (
-                <div className="text-emerald-900/70 text-sm">
-                  No diagrams available for this chapter.
-                </div>
-              )}
-            </section>
+            {/* Diagrams moved to full-width container below */}
           </article>
-          {/* No separate right panel; diagrams are shown within article */}
+          {/* No separate right panel; diagrams are now below in a full-width container */}
         </div>
       </div>
+
+      {/* Full-width diagrams container */}
+      <section className="mt-4 w-screen -mx-[calc((100vw-100%)/2)]">
+        <div className="px-2 sm:px-4">
+          <div className="rounded-2xl border border-emerald-200 bg-white/95 shadow p-3 sm:p-4">
+            {charts && charts.length > 0 ? (
+              <MermaidRenderer charts={charts} mode="page" wheelZoom={false} pageMinVh={70} />
+            ) : (
+              <div className="text-emerald-900/70 text-sm">
+                No diagrams available for this chapter.
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* Overlay for important files */}
       {overlay.open && (

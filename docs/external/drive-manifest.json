@@ -15,6 +15,12 @@
       "name": "Diagramming Guides",
       "description": "Authoring guides for site maps, user journeys, directory maps"
     },
+    "directory_map_pdf": {
+      "type": "file",
+      "id": "1SJHgcZrBx_ktqRObAhWe8YJMsUy-xMWr",
+      "name": "Directory Map — Reference PDF",
+      "description": "Source reference for directory map formatting"
+    },
     "jl_all_time_rankings_2022_v2": {
       "type": "file",
       "id": "",
