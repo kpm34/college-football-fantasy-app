@@ -1,14 +1,14 @@
 ---
-slug: workflows:incident-hotfix
+slug: workflows:fix-prod-incident
 ---
 
-### Workflow — Incident / Hotfix Response (P1/P2)
+### Workflow — Fix a Production Incident
 
 ```mermaid
 flowchart TD
   DETECT([Detect Incident]) --> TRIAGE{Severity?}
-  TRIAGE -- P1 --> PAGE[Page On‑call]
-  TRIAGE -- P2 --> ACK[Acknowledge]
+  TRIAGE -- Critical --> PAGE[Page On‑call]
+  TRIAGE -- Degraded --> ACK[Acknowledge]
   PAGE --> MITIGATE[Mitigate/Rollback]
   ACK --> MITIGATE
   MITIGATE --> FIX[Patch/Fix]

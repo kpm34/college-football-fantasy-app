@@ -4,12 +4,12 @@ import Link from 'next/link'
 
 const items = [
   { slug: 'workflows:index', title: 'Overview' },
-  { slug: 'workflows:production-process', title: 'Production Process' },
-  { slug: 'workflows:incident-hotfix', title: 'Incident / Hotfix' },
-  { slug: 'workflows:schema-migration', title: 'Schema / Data Migration' },
-  { slug: 'workflows:analytics-instrumentation', title: 'Analytics Instrumentation' },
-  { slug: 'workflows:design-handoff-integration', title: 'Design → Handoff → Code Integration' },
-  { slug: 'workflows:campaign-launch', title: 'Campaign Launch' },
+  { slug: 'workflows:ship-feature', title: 'Ship a Feature' },
+  { slug: 'workflows:fix-prod-incident', title: 'Fix a Production Incident' },
+  { slug: 'workflows:change-database-safely', title: 'Change the Database Safely' },
+  { slug: 'workflows:track-events-correctly', title: 'Track Events Correctly' },
+  { slug: 'workflows:design-to-code', title: 'Design to Code' },
+  { slug: 'workflows:launch-campaign', title: 'Launch a Campaign' },
 ]
 
 export default function WorkflowsPage() {

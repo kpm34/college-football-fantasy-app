@@ -1,8 +1,8 @@
 ---
-slug: workflows:design-handoff-integration
+slug: workflows:design-to-code
 ---
 
-### Workflow — Design → Handoff → Code Integration
+### Workflow — Design to Code (Handoff → Integration)
 
 ```mermaid
 flowchart TD

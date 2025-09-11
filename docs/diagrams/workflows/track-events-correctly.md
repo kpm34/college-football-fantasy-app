@@ -1,8 +1,8 @@
 ---
-slug: workflows:analytics-instrumentation
+slug: workflows:track-events-correctly
 ---
 
-### Workflow — Event Instrumentation & Analytics
+### Workflow — Track Events Correctly
 
 ```mermaid
 flowchart TD

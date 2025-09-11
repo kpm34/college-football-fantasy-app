@@ -1,8 +1,8 @@
 ---
-slug: workflows:production-process
+slug: workflows:ship-feature
 ---
 
-### Workflow — Production Process (Backlog → Prod)
+### Workflow — Ship a Feature (Backlog → Production)
 
 ```mermaid
 flowchart TD

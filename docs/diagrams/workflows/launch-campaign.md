@@ -1,8 +1,8 @@
 ---
-slug: workflows:campaign-launch
+slug: workflows:launch-campaign
 ---
 
-### Workflow — Campaign Launch & Content Pipeline
+### Workflow — Launch a Campaign (Content Pipeline)
 
 ```mermaid
 flowchart TD

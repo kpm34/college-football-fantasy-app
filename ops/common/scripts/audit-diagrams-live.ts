@@ -65,12 +65,12 @@ const GROUPS: Array<{ section: string; slugs: string[] }> = [
     section: 'Workflows',
     slugs: [
       'workflows:index',
-      'workflows:production-process',
-      'workflows:incident-hotfix',
-      'workflows:schema-migration',
-      'workflows:analytics-instrumentation',
-      'workflows:design-handoff-integration',
-      'workflows:campaign-launch',
+      'workflows:ship-feature',
+      'workflows:fix-prod-incident',
+      'workflows:change-database-safely',
+      'workflows:track-events-correctly',
+      'workflows:design-to-code',
+      'workflows:launch-campaign',
     ],
   },
 ]

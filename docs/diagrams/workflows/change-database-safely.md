@@ -1,8 +1,8 @@
 ---
-slug: workflows:schema-migration
+slug: workflows:change-database-safely
 ---
 
-### Workflow — Schema/Data Migration (Backward‑compat, Canary)
+### Workflow — Change the Database Safely (Backward‑compat + Canary)
 
 ```mermaid
 flowchart TD

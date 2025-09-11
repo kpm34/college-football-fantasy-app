@@ -146,12 +146,12 @@ export async function GET(
 
       // Workflows (new)
       'workflows:index': 'diagrams/workflows/index.md',
-      'workflows:production-process': 'diagrams/workflows/production-process.md',
-      'workflows:incident-hotfix': 'diagrams/workflows/incident-hotfix.md',
-      'workflows:schema-migration': 'diagrams/workflows/schema-migration.md',
-      'workflows:analytics-instrumentation': 'diagrams/workflows/analytics-instrumentation.md',
-      'workflows:design-handoff-integration': 'diagrams/workflows/design-handoff-integration.md',
-      'workflows:campaign-launch': 'diagrams/workflows/campaign-launch.md',
+      'workflows:ship-feature': 'diagrams/workflows/ship-feature.md',
+      'workflows:fix-prod-incident': 'diagrams/workflows/fix-prod-incident.md',
+      'workflows:change-database-safely': 'diagrams/workflows/change-database-safely.md',
+      'workflows:track-events-correctly': 'diagrams/workflows/track-events-correctly.md',
+      'workflows:design-to-code': 'diagrams/workflows/design-to-code.md',
+      'workflows:launch-campaign': 'diagrams/workflows/launch-campaign.md',
     }
 
     // Handle dynamic multi-level project map paths
