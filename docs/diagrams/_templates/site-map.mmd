@@ -1,0 +1,68 @@
+%% Site Map Template (Top→Bottom) with service color cues and legend
+%% Copy and adjust sections as needed
+
+%% --- Service class definitions (inline; renderer-proof) ---
+classDef user fill:#F5F5DC,stroke:#C9C9A3,color:#262626;
+classDef appwrite fill:#ADD8E6,stroke:#6CB6D9,color:#003A8C;
+classDef meshy fill:#DE5D83,stroke:#B34463,color:#FFFFFF;
+classDef vercel fill:#9932CC,stroke:#6E259B,color:#FFFFFF;
+classDef external fill:#C41E3A,stroke:#8E1F2E,color:#FFFFFF;
+classDef legend fill:#FAFAFA,stroke:#D9D9D9,color:#595959;
+
+flowchart TB
+  Legend["Legend:\n• Beige = User\n• Light Blue = Appwrite (DB)\n• Blush = Meshy AI\n• DarkOrchid = Vercel/API\n• Cardinal = External APIs (CFBD/ESPN)"]:::legend
+
+  %% Root
+  Root((cfbfantasy.app)):::vercel
+
+  %% Public
+  subgraph Public Pages
+    direction TB
+    Home[/Home/]:::vercel
+    SignIn[/Sign In/]:::vercel
+    SignUp[/Sign Up/]:::vercel
+    Scoreboard[/Scoreboard/]:::vercel
+    Standings[/Standings/]:::vercel
+  end
+
+  %% Authenticated
+  subgraph Dashboard (Auth)
+    direction TB
+    Dash[/Dashboard/]:::vercel
+    League[/League Overview/]:::vercel
+    Draft[/Draft Room/]:::vercel
+    Account[/Account Settings/]:::vercel
+  end
+
+  %% Admin
+  subgraph Admin
+    direction TB
+    AdminHome[/Admin/]:::vercel
+    AdminDiagrams[/Admin Diagrams/]:::vercel
+  end
+
+  %% External/Support
+  CFBD[[CFBD API]]:::external
+  ESPN[[ESPN API]]:::external
+  Appwrite[(Appwrite DB/Realtime/Auth)]:::appwrite
+
+  %% Edges
+  Root --> Home
+  Root --> SignIn
+  Root --> SignUp
+  Root --> Scoreboard
+  Root --> Standings
+
+  Home --> SignIn
+  SignIn --> Dash
+
+  Dash --> League
+  League --> Draft
+  Dash --> Account
+
+  Dash --> Appwrite
+  League --> Appwrite
+  Draft --> Appwrite
+  Dash --> CFBD
+  League --> CFBD
+  Draft --> ESPN

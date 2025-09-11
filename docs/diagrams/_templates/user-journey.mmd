@@ -1,0 +1,64 @@
+%% User Journey Template (Top→Bottom) with swimlanes and embedded legend
+%% Copy this file and replace placeholder nodes with real steps.
+
+%% --- Service class definitions (inline; renderer-proof) ---
+%% User (Beige – light bg → dark text)
+classDef user fill:#F5F5DC,stroke:#C9C9A3,color:#262626;
+
+%% Appwrite (Light Blue – light bg → dark text)
+classDef appwrite fill:#ADD8E6,stroke:#6CB6D9,color:#003A8C;
+
+%% Meshy AI (Blush – darker bg → light text)
+classDef meshy fill:#DE5D83,stroke:#B34463,color:#FFFFFF;
+
+%% Vercel/API (DarkOrchid – dark bg → light text)
+classDef vercel fill:#9932CC,stroke:#6E259B,color:#FFFFFF;
+
+%% External APIs (Cardinal – dark bg → light text)
+classDef external fill:#C41E3A,stroke:#8E1F2E,color:#FFFFFF;
+
+%% Legend box
+classDef legend fill:#FAFAFA,stroke:#D9D9D9,color:#595959;
+
+flowchart TB
+  %% --- Legend (keep near top for readability) ---
+  Legend["Legend:\n• Beige = User\n• Light Blue = Appwrite (DB)\n• Blush = Meshy AI\n• DarkOrchid = Vercel/API\n• Cardinal = External APIs (CFBD/ESPN)"]:::legend
+
+  %% --- Swimlanes ---
+  subgraph L1[User]:::user
+    direction TB
+    U0([User starts]):::user
+    U1[Step: Action / Click / Input]:::user
+  end
+
+  subgraph L2[Appwrite (DB/Realtime/Auth)]:::appwrite
+    direction TB
+    A0[(Auth / Session / Query)]:::appwrite
+    A1[(Read/Write Document)]:::appwrite
+  end
+
+  subgraph L3[Vercel/API (Server Actions/Edge)]:::vercel
+    direction TB
+    V0[[Server Action / API Route]]:::vercel
+    V1[[Business Logic]]:::vercel
+  end
+
+  subgraph L4[Meshy AI]:::meshy
+    direction TB
+    M0[[Generate Asset / Job]]:::meshy
+  end
+
+  subgraph L5[External APIs (CFBD/ESPN)]:::external
+    direction TB
+    X0[[Fetch Data / Poll Scores]]:::external
+  end
+
+  %% --- Flow (replace with real edges) ---
+  U0 --> U1
+  U1 --> V0
+  V0 --> V1
+  V1 --> A0
+  A0 --> A1
+  V1 --> M0
+  V1 --> X0
+  A1 --> U1
