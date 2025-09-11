@@ -75,26 +75,37 @@ async function audit(baseUrl: string) {
       const t0 = Date.now()
       try {
         await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 })
-        // give mermaid a moment to render
-        await page.waitForTimeout(1500)
-        const hasSVG = await page
-          .evaluate(() => document.querySelectorAll('[data-mermaid] svg').length > 0)
-          .catch(() => false)
-        const html = await page.content()
-        const errMatch =
-          html.match(/Diagram failed to render[\s\S]*?(?=<\/)/i) ||
-          html.match(/parse error|error:/i)
-        if (hasSVG && !errMatch) {
+        // Poll for either success (SVG present) or error text, up to ~6s
+        let hasSVG = false
+        let errorSnippet = ''
+        const deadline = Date.now() + 6000
+        while (Date.now() < deadline) {
+          hasSVG = await page
+            .evaluate(() => document.querySelectorAll('[data-mermaid] svg').length > 0)
+            .catch(() => false)
+          const html = await page.content()
+          const errMatch =
+            html.match(/Diagram failed to render[\s\S]*?(?=<\/)/i) ||
+            html.match(/parse error|error:/i)
+          if (hasSVG) {
+            errorSnippet = ''
+            break
+          }
+          if (errMatch) {
+            errorSnippet = String(errMatch[0]).slice(0, 280)
+            break
+          }
+          await page.waitForTimeout(250)
+        }
+        if (hasSVG && !errorSnippet) {
           results.push({ slug, url, ok: true, hasSVG: true, durationMs: Date.now() - t0 })
         } else {
-          // capture a short snippet if available
-          const snippet = errMatch ? String(errMatch[0]).slice(0, 280) : ''
           results.push({
             slug,
             url,
             ok: false,
             hasSVG: Boolean(hasSVG),
-            errorText: snippet,
+            errorText: errorSnippet,
             durationMs: Date.now() - t0,
           })
         }
