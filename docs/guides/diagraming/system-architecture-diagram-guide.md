@@ -50,3 +50,23 @@ flowchart TD
 - [ ] Clear cluster separations
 - [ ] Runtimes and externals labeled
 - [ ] Only essential flows
+
+## Parser‑safe Mermaid conventions
+- Use simple cluster titles without brackets (e.g., `subgraph API` not `subgraph API[Next API]`).
+- Quote labels that include slashes or parentheses.
+- Keep edges directional and label with protocol, e.g., `-- HTTP -->`, `-- WS -->`, `-- Cron -->`.
+- For planned components, append `(planned)` in label text.
+
+## Runtime & boundary notes
+- Tag nodes with runtime if helpful: `[EDGE]`, `[NODE]` (inline in label).
+- Draw boundaries as clusters: Client, Edge, API, Data, External.
+- Note TTL/latency annotations near edges (e.g., `KV TTL 60s`).
+
+## Render & audit
+- Preview via Admin pages under `system-architecture:*`.
+- Live audit on production:
+  - `BASE_URL=https://<deploy-url> npx tsx ops/common/scripts/audit-diagrams-live.ts`
+
+### Citation
+- Drive PDS: [Diagram Guides Folder](https://drive.google.com/drive/folders/10FsLx1yEHSZrEJdum_jdU3ukQvEAX21G?usp=sharing)
+- System & Architecture PDS: [Section 4 PDF](https://drive.google.com/file/d/1obMENHUFVtuphPBqNfsLXtugnSa_hxhO/view?usp=sharing)
