@@ -36,6 +36,7 @@ flowchart TD
 ```
 
 #### Legend
+
 - Terminator: rounded (Start/End)
 - Decision: diamond
 - Process: rectangle
