@@ -14,6 +14,8 @@ interface MermaidRendererProps {
   // Optional scale bounds for zoom controls
   zoomMin?: number
   zoomMax?: number
+  // In page mode, ensure the diagram host occupies at least this portion of the viewport
+  pageMinVh?: number
 }
 
 export function MermaidRenderer({
@@ -24,6 +26,7 @@ export function MermaidRenderer({
   zoomStep = 1.02,
   zoomMin = 0.3,
   zoomMax = 4,
+  pageMinVh = 50,
 }: MermaidRendererProps) {
   const chartsToRender = charts || (chart ? [chart] : [])
   const containerRef = useRef<HTMLDivElement>(null)
@@ -219,7 +222,14 @@ export function MermaidRenderer({
         for (const [index, el] of nodes.entries()) {
           // Read raw code from a nested script tag to preserve newlines exactly
           const rawNode = el.querySelector('[data-mermaid-raw]') as HTMLElement | null
-          const raw = rawNode?.textContent || ''
+          let raw = rawNode?.textContent || ''
+          // Decode common HTML entities that can sneak in when SSR encodes text
+          raw = raw
+            .replaceAll('&lt;', '<')
+            .replaceAll('&gt;', '>')
+            .replaceAll('&amp;', '&')
+            .replaceAll('&quot;', '"')
+            .replaceAll('&#39;', "'")
           // Light sanitization for HTML special chars in labels
           const code = raw.replaceAll('&', '&amp;')
           try {
@@ -240,7 +250,12 @@ export function MermaidRenderer({
                 host.style.minHeight = '80vh'
               } else {
                 host.style.height = 'auto'
-                host.style.minHeight = '320px'
+                try {
+                  const vh = Math.max(0, Number(pageMinVh) || 0)
+                  host.style.minHeight = vh > 0 ? `${vh}vh` : '320px'
+                } catch {
+                  host.style.minHeight = '320px'
+                }
               }
 
               // Fit-to-width once the SVG is in the DOM and keep responsive
@@ -262,8 +277,8 @@ export function MermaidRenderer({
                     svgEl.style.transformOrigin = '0 0'
                     svgEl.style.transform = `translate(0px, 0px) scale(${scale})`
                   } else {
-                    // Page mode: fit to width, let page scroll vertically
-                    const scale = Math.max(0.5, sw)
+                    // Page mode: fit to width, let page scroll vertically; bias larger
+                    const scale = Math.max(0.8, sw)
                     svgEl.style.transformOrigin = '0 0'
                     svgEl.style.transform = `translate(0px, 0px) scale(${scale})`
                   }
@@ -417,7 +432,9 @@ export function MermaidRenderer({
           style={{ background: '#FFF8ED', border: '1px solid rgba(16, 185, 129, 0.25)' }}
         >
           {/* Preserve newlines and all characters */}
-          <script type="text/plain" data-mermaid-raw>{code}</script>
+          <script type="text/plain" data-mermaid-raw>
+            {code}
+          </script>
         </div>
       ))}
     </div>
