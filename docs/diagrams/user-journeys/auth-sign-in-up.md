@@ -2,7 +2,7 @@
 slug: user-journeys:auth:sign-in-up
 ---
 
-### Auth — Sign In / Sign Up
+### Auth — Sign in/up
 
 ```mermaid
 flowchart TD
