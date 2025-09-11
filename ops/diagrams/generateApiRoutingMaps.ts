@@ -449,6 +449,4 @@ async function main() {
   console.log('\n✨ API routing maps generated successfully!')
 }
 
-if (require.main === module) {
-  main().catch(console.error)
-}
+main().catch(console.error)

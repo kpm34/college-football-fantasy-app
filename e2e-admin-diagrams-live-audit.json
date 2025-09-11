@@ -1,220 +1,214 @@
 {
-  "createdAt": "2025-09-11T04:25:59.480Z",
-  "base": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app",
+  "createdAt": "2025-09-11T04:58:07.836Z",
+  "base": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app",
   "summary": {
-    "ok": 22,
-    "fail": 7
+    "ok": 28,
+    "fail": 1
   },
   "results": [
     {
       "slug": "user-journeys:auth-user-flow",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aauth-user-flow",
-      "ok": true,
-      "hasSVG": true,
-      "durationMs": 2920
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aauth-user-flow",
+      "ok": false,
+      "hasSVG": false,
+      "errorText": "",
+      "durationMs": 4040
     },
     {
       "slug": "user-journeys:auth:sign-in-up",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aauth%3Asign-in-up",
-      "ok": false,
-      "hasSVG": false,
-      "errorText": "Diagram failed to render. Parse error on line 5:\n...nd  subgraph A[App (Next.js)]    A1[Op\n----------------------^\nExpecting 'SQE', 'DOUBLECIRCLEEND', 'PE', '-)', 'ST",
-      "durationMs": 1715
-    },
-    {
-      "slug": "user-journeys:auth:oauth-callback",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aauth%3Aoauth-callback",
-      "ok": false,
-      "hasSVG": false,
-      "errorText": "Diagram failed to render. Parse error on line 5:\n...nd  subgraph A[App (Next.js)]    A0[/G\n----------------------^\nExpecting 'SQE', 'DOUBLECIRCLEEND', 'PE', '-)', 'ST",
-      "durationMs": 1639
-    },
-    {
-      "slug": "user-journeys:auth:invite-join-and-draft-room",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aauth%3Ainvite-join-and-draft-room",
-      "ok": false,
-      "hasSVG": false,
-      "errorText": "Diagram failed to render. Parse error on line 5:\n...nd  subgraph A[App (Next.js)]    A1[/O\n----------------------^\nExpecting 'SQE', 'DOUBLECIRCLEEND', 'PE', '-)', 'ST",
-      "durationMs": 1647
-    },
-    {
-      "slug": "user-journeys:leagues-user-flow",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aleagues-user-flow",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aauth%3Asign-in-up",
       "ok": true,
       "hasSVG": true,
       "durationMs": 1640
     },
     {
+      "slug": "user-journeys:auth:oauth-callback",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aauth%3Aoauth-callback",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1648
+    },
+    {
+      "slug": "user-journeys:auth:invite-join-and-draft-room",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aauth%3Ainvite-join-and-draft-room",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1640
+    },
+    {
+      "slug": "user-journeys:leagues-user-flow",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aleagues-user-flow",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1625
+    },
+    {
       "slug": "user-journeys:draft-user-flow",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Adraft-user-flow",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Adraft-user-flow",
       "ok": true,
       "hasSVG": true,
       "durationMs": 1630
     },
     {
       "slug": "user-journeys:projections-user-flow",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aprojections-user-flow",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aprojections-user-flow",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 1647
+      "durationMs": 2431
     },
     {
       "slug": "user-journeys:scoring-user-flow",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Ascoring-user-flow",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Ascoring-user-flow",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 1651
+      "durationMs": 2065
     },
     {
       "slug": "user-journeys:realtime-user-flow",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Arealtime-user-flow",
-      "ok": false,
-      "hasSVG": false,
-      "errorText": "Diagram failed to render. Parse error on line 2:\n... --&gt; A[Authenticate (cookie)]  A --&gt; S[\n-----------------------^\nExpecting 'SQE', 'DOUBLECIRCLEEND', 'PE', '-)', '",
-      "durationMs": 1658
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Arealtime-user-flow",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1684
     },
     {
       "slug": "user-journeys:ops-deploy-user-flow",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aops-deploy-user-flow",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/user-journeys%3Aops-deploy-user-flow",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 1679
+      "durationMs": 1639
     },
     {
       "slug": "sitemap:web:active",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/sitemap%3Aweb%3Aactive",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/sitemap%3Aweb%3Aactive",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1608
+    },
+    {
+      "slug": "sitemap:mobile:active",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/sitemap%3Amobile%3Aactive",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1636
+    },
+    {
+      "slug": "sitemap:web:final",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/sitemap%3Aweb%3Afinal",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1629
+    },
+    {
+      "slug": "sitemap:mobile:final",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/sitemap%3Amobile%3Afinal",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1628
+    },
+    {
+      "slug": "entity-relations:core-er",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Acore-er",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1653
+    },
+    {
+      "slug": "entity-relations:auth-entity-relation",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Aauth-entity-relation",
       "ok": true,
       "hasSVG": true,
       "durationMs": 1633
     },
     {
-      "slug": "sitemap:mobile:active",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/sitemap%3Amobile%3Aactive",
-      "ok": false,
-      "hasSVG": false,
-      "errorText": "Diagram failed to render. Parse error on line 8:\n...  \"Home (/dashboard)\"      \"Leagues\"  \n-----------------------^\nExpecting 'SPACELINE', 'NL', 'EOF', got 'NODE_ID'",
-      "durationMs": 1648
-    },
-    {
-      "slug": "sitemap:web:final",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/sitemap%3Aweb%3Afinal",
-      "ok": false,
-      "hasSVG": false,
-      "errorText": "Diagram failed to render. Parse error on line 12:\n... \"My Teams (planned)\"    League      /\n-----------------------^\nExpecting 'SPACELINE', 'NL', 'EOF', got 'NODE_ID'",
-      "durationMs": 1621
-    },
-    {
-      "slug": "sitemap:mobile:final",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/sitemap%3Amobile%3Afinal",
-      "ok": false,
-      "hasSVG": false,
-      "errorText": "Diagram failed to render. Parse error on line 8:\n...  \"Home (/dashboard)\"      \"Leagues\"  \n-----------------------^\nExpecting 'SPACELINE', 'NL', 'EOF', got 'NODE_ID'",
-      "durationMs": 1640
-    },
-    {
-      "slug": "entity-relations:core-er",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Acore-er",
-      "ok": true,
-      "hasSVG": true,
-      "durationMs": 1621
-    },
-    {
-      "slug": "entity-relations:auth-entity-relation",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Aauth-entity-relation",
-      "ok": true,
-      "hasSVG": true,
-      "durationMs": 1750
-    },
-    {
       "slug": "entity-relations:leagues-entity-relation",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Aleagues-entity-relation",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Aleagues-entity-relation",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 1686
+      "durationMs": 1651
     },
     {
       "slug": "entity-relations:draft-entity-relation",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Adraft-entity-relation",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Adraft-entity-relation",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 1657
+      "durationMs": 1701
     },
     {
       "slug": "entity-relations:projections-entity-relation",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Aprojections-entity-relation",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Aprojections-entity-relation",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 1715
+      "durationMs": 1635
     },
     {
       "slug": "entity-relations:scoring-entity-relation",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Ascoring-entity-relation",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Ascoring-entity-relation",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 1707
+      "durationMs": 1642
     },
     {
       "slug": "entity-relations:realtime-entity-relation",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Arealtime-entity-relation",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Arealtime-entity-relation",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1643
+    },
+    {
+      "slug": "entity-relations:ops-deploy-entity-relation",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Aops-deploy-entity-relation",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1680
+    },
+    {
+      "slug": "directory-map:chapters:app",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Aapp",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1699
+    },
+    {
+      "slug": "directory-map:chapters:components",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Acomponents",
+      "ok": true,
+      "hasSVG": true,
+      "durationMs": 1642
+    },
+    {
+      "slug": "directory-map:chapters:lib",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Alib",
       "ok": true,
       "hasSVG": true,
       "durationMs": 1646
     },
     {
-      "slug": "entity-relations:ops-deploy-entity-relation",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/entity-relations%3Aops-deploy-entity-relation",
-      "ok": true,
-      "hasSVG": true,
-      "durationMs": 1669
-    },
-    {
-      "slug": "directory-map:chapters:app",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Aapp",
-      "ok": true,
-      "hasSVG": true,
-      "durationMs": 1775
-    },
-    {
-      "slug": "directory-map:chapters:components",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Acomponents",
-      "ok": true,
-      "hasSVG": true,
-      "durationMs": 2086
-    },
-    {
-      "slug": "directory-map:chapters:lib",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Alib",
-      "ok": true,
-      "hasSVG": true,
-      "durationMs": 2807
-    },
-    {
       "slug": "directory-map:chapters:docs",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Adocs",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Adocs",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 1940
+      "durationMs": 1654
     },
     {
       "slug": "directory-map:chapters:functions",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Afunctions",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Afunctions",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 2629
+      "durationMs": 1631
     },
     {
       "slug": "directory-map:chapters:schema",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Aschema",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Aschema",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 1750
+      "durationMs": 1624
     },
     {
       "slug": "directory-map:chapters:ops",
-      "url": "https://college-football-fantasy-foxcftmr0-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Aops",
+      "url": "https://college-football-fantasy-pbowhxkdi-kpm34s-projects.vercel.app/admin/diagrams/directory-map%3Achapters%3Aops",
       "ok": true,
       "hasSVG": true,
-      "durationMs": 1738
+      "durationMs": 1628
     }
   ]
 }

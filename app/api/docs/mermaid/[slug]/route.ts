@@ -6,8 +6,9 @@ import path from 'node:path'
 export const runtime = 'nodejs'
 
 function extractMermaidBlocks(markdown: string): string[] {
-  // Simple, reliable regex that definitely works
-  const mermaidRegex = /```mermaid\s*\n([\s\S]*?)\n```/g
+  // More permissive regex: allow optional trailing spaces after language
+  // and do not require a newline before the closing backticks
+  const mermaidRegex = /```mermaid[^\n]*\n([\s\S]*?)```/g
   const blocks: string[] = []
 
   let match
