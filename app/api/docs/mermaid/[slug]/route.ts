@@ -32,6 +32,20 @@ export async function GET(
     // Decode the slug to handle URL encoding
     const slug = decodeURIComponent(rawSlug)
 
+    // Live directory-map generator: reflect active filesystem state
+    if (slug.startsWith('directory-map:live')) {
+      const parts = slug.split(':').slice(2) // e.g., ["app", "api", "(backend)"]
+      const charts = await buildLiveDirectoryMap(parts)
+      return NextResponse.json({
+        charts,
+        updatedAt: new Date().toISOString(),
+        path: parts.join('/') || '(repo-root)',
+        slug,
+        chartsCount: charts.length,
+        source: 'live-filesystem',
+      })
+    }
+
     // Special dynamic slugs powered by live Appwrite schema
     if (slug === 'project-map:schema' || slug === 'project-map:schema:live') {
       try {
@@ -146,7 +160,6 @@ export async function GET(
 
       // Workflows (new)
       'workflows:index': 'diagrams/workflows/index.md',
-<<<<<<< HEAD
       'workflows:ship-feature': 'diagrams/workflows/ship-feature.md',
       'workflows:fix-prod-incident': 'diagrams/workflows/fix-prod-incident.md',
       'workflows:change-database-safely': 'diagrams/workflows/change-database-safely.md',
@@ -154,14 +167,6 @@ export async function GET(
       'workflows:design-to-code': 'diagrams/workflows/design-to-code.md',
       'workflows:launch-campaign': 'diagrams/workflows/launch-campaign.md',
       'workflows:design-3d-animations': 'diagrams/workflows/design-3d-animations.md',
-=======
-      'workflows:production-process': 'diagrams/workflows/production-process.md',
-      'workflows:incident-hotfix': 'diagrams/workflows/incident-hotfix.md',
-      'workflows:schema-migration': 'diagrams/workflows/schema-migration.md',
-      'workflows:analytics-instrumentation': 'diagrams/workflows/analytics-instrumentation.md',
-      'workflows:design-handoff-integration': 'diagrams/workflows/design-handoff-integration.md',
-      'workflows:campaign-launch': 'diagrams/workflows/campaign-launch.md',
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
     }
 
     // Handle dynamic multi-level project map paths
@@ -499,6 +504,98 @@ function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '\\"')
 }
 
+async function buildLiveDirectoryMap(pathParts: string[]): Promise<string[]> {
+  // Build a Mermaid diagram reflecting current filesystem for a given path under repo root
+  // pathParts: [] -> repo root; ["app"] -> app/; ["app","api"] -> app/api/
+  const base = path.join(process.cwd(), ...pathParts)
+  const relLabel = (pathParts.length ? pathParts.join('/') : 'Repo Root') + '/'
+  const entries: Array<{ name: string; type: 'file' | 'dir' }> = []
+  try {
+    const dir = fs.readdirSync(base, { withFileTypes: true })
+    for (const d of dir) {
+      if (d.name.startsWith('.')) continue
+      // Skip node_modules to keep diagram readable
+      if (d.name === 'node_modules' || d.name === '.next') continue
+      entries.push({ name: d.name, type: d.isDirectory() ? 'dir' : 'file' })
+    }
+  } catch (e) {
+    return [
+      [
+        'flowchart LR',
+        'classDef folder fill:#ADD8E6,stroke:#6CB6D9,color:#003A8C,rx:6,ry:6;',
+        'classDef file fill:#F5F5DC,stroke:#C9C9A3,color:#262626,rx:6,ry:6;',
+        'classDef config fill:#9932CC,stroke:#6E259B,color:#FFFFFF,rx:6,ry:6;',
+        'classDef generated fill:#DE5D83,stroke:#B34463,color:#FFFFFF,rx:6,ry:6;',
+        'classDef test fill:#C41E3A,stroke:#8E1F2E,color:#FFFFFF,rx:6,ry:6;',
+        'classDef legend fill:#FAFAFA,stroke:#D9D9D9,color:#595959,rx:6,ry:6;',
+        `R["${esc(relLabel)}"]:::folder`,
+        'Legend["Legend:\nFolder (Light Blue)\nFile (Beige)\n Config (DarkOrchid)\n Generated (Blush)\nTests (Cardinal)"]:::legend',
+      ].join('\n'),
+    ]
+  }
+
+  const lines: string[] = []
+  lines.push('flowchart LR')
+  lines.push('classDef folder fill:#ADD8E6,stroke:#6CB6D9,color:#003A8C,rx:6,ry:6;')
+  lines.push('classDef file fill:#F5F5DC,stroke:#C9C9A3,color:#262626,rx:6,ry:6;')
+  lines.push('classDef config fill:#9932CC,stroke:#6E259B,color:#FFFFFF,rx:6,ry:6;')
+  lines.push('classDef generated fill:#DE5D83,stroke:#B34463,color:#FFFFFF,rx:6,ry:6;')
+  lines.push('classDef test fill:#C41E3A,stroke:#8E1F2E,color:#FFFFFF,rx:6,ry:6;')
+  lines.push('classDef legend fill:#FAFAFA,stroke:#D9D9D9,color:#595959,rx:6,ry:6;')
+  lines.push(`R["${esc(relLabel)}"]:::folder`)
+
+  // Deterministic ordering: dirs first, then files, alpha
+  const sorted = entries.sort((a, b) =>
+    a.type === b.type ? a.name.localeCompare(b.name) : a.type === 'dir' ? -1 : 1
+  )
+  let idx = 0
+  for (const e of sorted) {
+    idx += 1
+    const id = `${e.type === 'dir' ? 'D' : 'F'}${idx}`
+    const label = e.name + (e.type === 'dir' ? '/' : '')
+    const cls = e.type === 'dir' ? 'folder' : classifyFile(e.name)
+    lines.push(`R --> ${id}["${esc(label)}"]:::${cls}`)
+    if (e.type === 'dir') {
+      const nextSlug = ['directory-map', 'live', ...pathParts, e.name].join(':')
+      lines.push(`click ${id} "/admin/diagrams/${nextSlug}" "Open ${esc(label)}" _blank`)
+    }
+  }
+
+  lines.push(
+    'Legend["Legend:\nFolder (Light Blue)\nFile (Beige)\n Config (DarkOrchid)\n Generated (Blush)\nTests (Cardinal)"]:::legend'
+  )
+  return [lines.join('\n')]
+}
+
+function classifyFile(name: string): 'file' | 'config' | 'generated' | 'test' {
+  const lower = name.toLowerCase()
+  if (
+    lower.endsWith('.config.js') ||
+    lower.endsWith('.config.ts') ||
+    lower === 'tsconfig.json' ||
+    lower === 'tailwind.config.js' ||
+    lower === 'next.config.js' ||
+    lower === 'postcss.config.mjs'
+  ) {
+    return 'config'
+  }
+  if (
+    lower.includes('.generated') ||
+    lower.includes('-generated') ||
+    lower.includes('appwrite-types')
+  ) {
+    return 'generated'
+  }
+  if (
+    lower.endsWith('.spec.ts') ||
+    lower.endsWith('.spec.tsx') ||
+    lower.endsWith('.test.ts') ||
+    lower.endsWith('.test.tsx')
+  ) {
+    return 'test'
+  }
+  return 'file'
+}
 async function buildLiveSchemaMermaid(): Promise<string[]> {
   const collectionsRes: any = await serverDatabases.listCollections(DATABASE_ID)
   const collections: any[] = collectionsRes.collections || []

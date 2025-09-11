@@ -1,7 +1,7 @@
-# Chapter: functions/
+# Chapter: tests/
 
-- Purpose: Appwrite/cron/workers functions.
-- Usage: One folder per function; document triggers and I/O; keep shared bits in `functions/_shared` or import `lib/**`.
+- Purpose: E2E and unit tests.
+- Usage: Keep setup in `tests/_setup`; E2E in `tests/e2e`.
 
 ```mermaid
 flowchart LR
@@ -13,12 +13,12 @@ classDef generated fill:#DE5D83,stroke:#B34463,color:#FFFFFF,rx:6,ry:6;
 classDef test fill:#C41E3A,stroke:#8E1F2E,color:#FFFFFF,rx:6,ry:6;
 classDef legend fill:#FAFAFA,stroke:#D9D9D9,color:#595959,rx:6,ry:6;
 
-F["functions/"]:::folder --> F1["appwrite/"]:::folder
-F --> F2["cron/"]:::folder
-F --> F3["workers/"]:::folder
-
-%% Click main folder to chapter
-click F "/admin/diagrams/directory-map:chapters:functions" "Open functions chapter" _blank
+T["tests/"]:::folder --> TS["_setup/"]:::folder
+T --> TE["e2e/"]:::folder
+TS --> F1["cleanup-test-results.ts"]:::test
+TE --> F2["admin-diagrams-audit.spec.ts"]:::test
+TE --> F3["admin-diagrams-smoke.spec.ts"]:::test
+TE --> F4["full-draft-flow.spec.ts"]:::test
 
 Legend["Legend:\nFolder (Light Blue)\nFile (Beige)\n Config (DarkOrchid)\n Generated (Blush)\nTests (Cardinal)"]:::legend
 ```

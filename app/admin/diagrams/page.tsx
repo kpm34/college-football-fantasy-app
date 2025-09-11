@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import { redirect } from 'next/navigation'
-
-export default function DiagramsHubPage() {
-  redirect('/admin')
-=======
 'use client'
 
 import Link from 'next/link'
@@ -56,5 +50,4 @@ export default function DiagramsHubPage() {
       </div>
     </div>
   )
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
 }

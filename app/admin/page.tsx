@@ -269,7 +269,6 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </Link>
-<<<<<<< HEAD
             <Link href="/admin/diagrams/workflows" className="group block">
               <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/20 via-sky-500/10 to-transparent opacity-75" />
@@ -282,8 +281,6 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </Link>
-=======
->>>>>>> 24f9fd624f579848150ad3605557a38310d191b4
             <Link
               href="/admin/diagrams/functional-flow"
               className="group block"

@@ -4,15 +4,13 @@
     "rootDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests",
     "forbidOnly": false,
     "fullyParallel": true,
-    "globalSetup": null,
+    "globalSetup": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/_setup/cleanup-test-results.ts",
     "globalTeardown": null,
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {
-      "actualWorkers": 1
-    },
+    "metadata": {},
     "preserveOutput": "always",
     "reporter": [
       [
@@ -40,9 +38,7 @@
         "outputDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "chromium",
         "name": "chromium",
         "testDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests",
@@ -50,15 +46,13 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 420000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "firefox",
         "name": "firefox",
         "testDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests",
@@ -66,15 +60,13 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 420000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "webkit",
         "name": "webkit",
         "testDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests",
@@ -82,15 +74,13 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 420000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
         "testDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests",
@@ -98,15 +88,13 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 420000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "Mobile Safari",
         "name": "Mobile Safari",
         "testDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests",
@@ -114,7 +102,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 420000
+        "timeout": 30000
       }
     ],
     "shard": null,
@@ -131,6 +119,331 @@
   },
   "suites": [
     {
+      "title": "e2e/admin-diagrams-audit.spec.ts",
+      "file": "e2e/admin-diagrams-audit.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Admin buttons and diagrams audit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "afa7fff4395609825ca9-bd5c56c722406f706af9",
+          "file": "e2e/admin-diagrams-audit.spec.ts",
+          "line": 20,
+          "column": 5
+        },
+        {
+          "title": "Admin buttons and diagrams audit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "afa7fff4395609825ca9-2fa55606ff0fca3fefc7",
+          "file": "e2e/admin-diagrams-audit.spec.ts",
+          "line": 20,
+          "column": 5
+        },
+        {
+          "title": "Admin buttons and diagrams audit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "afa7fff4395609825ca9-705aeaeb104b414cf0ee",
+          "file": "e2e/admin-diagrams-audit.spec.ts",
+          "line": 20,
+          "column": 5
+        },
+        {
+          "title": "Admin buttons and diagrams audit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "Mobile Chrome",
+              "projectName": "Mobile Chrome",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "afa7fff4395609825ca9-e6722bfdffefd72f0fe6",
+          "file": "e2e/admin-diagrams-audit.spec.ts",
+          "line": 20,
+          "column": 5
+        },
+        {
+          "title": "Admin buttons and diagrams audit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "Mobile Safari",
+              "projectName": "Mobile Safari",
+              "results": [],
+              "status": "skipped"
+            }
+          ],
+          "id": "afa7fff4395609825ca9-7854e9e8574230df424c",
+          "file": "e2e/admin-diagrams-audit.spec.ts",
+          "line": 20,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "e2e/admin-diagrams-smoke.spec.ts",
+      "file": "e2e/admin-diagrams-smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Admin diagrams smoke",
+          "file": "e2e/admin-diagrams-smoke.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Open a diagram via direct slug route",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-0eb4170384e0bda2ebe2",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 28,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via Admin Quick Open event",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-f406d7309961e5993211",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via direct slug route",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-d6b4049f197bc0fa5fa4",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 28,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via Admin Quick Open event",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-02220d74b9d2c2036b99",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via direct slug route",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-899c8839792e6489b327",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 28,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via Admin Quick Open event",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-19538154a84b00dccd97",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via direct slug route",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-3c38bd87259bfdd134ba",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 28,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via Admin Quick Open event",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-5bb9f1235f750a913886",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via direct slug route",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-89b97fbf4c7878e75240",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 28,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via Admin Quick Open event",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-db79e425f38a15f28fc2",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 37,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
       "title": "e2e/full-draft-flow.spec.ts",
       "file": "e2e/full-draft-flow.spec.ts",
       "column": 0,
@@ -138,82 +451,109 @@
       "specs": [],
       "suites": [
         {
-          "title": "Full Draft Flow E2E Test",
+          "title": "Draft v2 – full flow (auto-start + timer + autopick)",
           "file": "e2e/full-draft-flow.spec.ts",
-          "line": 26,
+          "line": 7,
           "column": 6,
           "specs": [
             {
-              "title": "Complete flow: Account → League → Draft Settings → Draft Start",
-              "ok": false,
+              "title": "creates account, league, sets order, auto-starts, autopicks to completion",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 300000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 309501,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 300000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 300000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 300000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/full-draft-flow.spec.ts",
-                            "column": 32,
-                            "line": 43
-                          },
-                          "message": "Error: locator.click: Test timeout of 300000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('a[href=\"/signup\"]').first()\u001b[22m\n\u001b[2m    - locator resolved to <a href=\"/signup\" class=\"text-center rounded-md px-3 py-2 bg-[#8091BB] hover:bg-[#6B7CA6] transition-colors\">Sign Up</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    579 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m        - element is visible, enabled and stable\u001b[22m\n\u001b[2m        - scrolling into view if needed\u001b[22m\n\u001b[2m        - done scrolling\u001b[22m\n\u001b[2m        - element is outside of the viewport\u001b[22m\n\u001b[2m      - retrying click action\u001b[22m\n\u001b[2m        - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n  41 |     const hasLink = await signUpLink.first().isVisible().catch(()=>false);\n  42 |     if (hasLink) {\n> 43 |       await signUpLink.first().click();\n     |                                ^\n  44 |     } else {\n  45 |       const byText = await page.locator('a:has-text(\"Sign up\")').first().isVisible().catch(()=>false);\n  46 |       if (byText) {\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/full-draft-flow.spec.ts:43:32"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "🧪 Starting E2E test with ID: 72e3934f\n"
-                        },
-                        {
-                          "text": "📝 Step 1: Creating account...\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-27T19:43:21.509Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-full-draft-flow-Full-D-6d021-raft-Settings-→-Draft-Start-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-full-draft-flow-Full-D-6d021-raft-Settings-→-Draft-Start-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-full-draft-flow-Full-D-6d021-raft-Settings-→-Draft-Start-chromium/error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
-              "id": "b124cbe6166d05a569c7-8e3d4c2daae450d0dc8c",
+              "id": "b124cbe6166d05a569c7-77ba78ca7ba060de841a",
               "file": "e2e/full-draft-flow.spec.ts",
-              "line": 29,
+              "line": 8,
+              "column": 7
+            },
+            {
+              "title": "creates account, league, sets order, auto-starts, autopicks to completion",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b124cbe6166d05a569c7-3848e56c99ef6d506f4f",
+              "file": "e2e/full-draft-flow.spec.ts",
+              "line": 8,
+              "column": 7
+            },
+            {
+              "title": "creates account, league, sets order, auto-starts, autopicks to completion",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b124cbe6166d05a569c7-4fa45b7a83e509d28771",
+              "file": "e2e/full-draft-flow.spec.ts",
+              "line": 8,
+              "column": 7
+            },
+            {
+              "title": "creates account, league, sets order, auto-starts, autopicks to completion",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b124cbe6166d05a569c7-b07a45a496a39834969a",
+              "file": "e2e/full-draft-flow.spec.ts",
+              "line": 8,
+              "column": 7
+            },
+            {
+              "title": "creates account, league, sets order, auto-starts, autopicks to completion",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b124cbe6166d05a569c7-703cac9ec0fa3db9cc6a",
+              "file": "e2e/full-draft-flow.spec.ts",
+              "line": 8,
               "column": 7
             }
           ]
@@ -223,11 +563,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-08-27T19:43:21.076Z",
-    "duration": 311882.27499999997,
+    "startTime": "2025-09-11T17:56:25.828Z",
+    "duration": 19.72199999999998,
     "expected": 0,
-    "skipped": 0,
-    "unexpected": 1,
+    "skipped": 20,
+    "unexpected": 0,
     "flaky": 0
   }
 }

@@ -6,25 +6,34 @@
 Key subfolders: `ui/`, `features/`, `layout/`, `tables/`, `charts/`.
 
 ```mermaid
-graph LR
-  classDef folder fill:#e5e7eb,stroke:#6b7280,color:#111827,rx:6,ry:6
-  classDef entry fill:#ffffff,stroke:#0f766e,stroke-width:3,color:#0f766e,rx:4,ry:4
-  classDef client fill:#0ea5e9,stroke:#0369a1,color:#ffffff,rx:6,ry:6
-  classDef note fill:#fef3c7,stroke:#f59e0b,color:#7c2d12,rx:4,ry:4
+flowchart LR
+%% Palette + legibility
+classDef folder fill:#ADD8E6,stroke:#6CB6D9,color:#003A8C,rx:6,ry:6;
+classDef file fill:#F5F5DC,stroke:#C9C9A3,color:#262626,rx:6,ry:6;
+classDef config fill:#9932CC,stroke:#6E259B,color:#FFFFFF,rx:6,ry:6;
+classDef generated fill:#DE5D83,stroke:#B34463,color:#FFFFFF,rx:6,ry:6;
+classDef test fill:#C41E3A,stroke:#8E1F2E,color:#FFFFFF,rx:6,ry:6;
+classDef legend fill:#FAFAFA,stroke:#D9D9D9,color:#595959,rx:6,ry:6;
 
-  subgraph CLIENT[Client/UI]
-    C[components/]:::folder --> C1[ui/]:::folder
-    C --> C2[features/]:::folder
-    C --> C3[layout/]:::folder
-    C --> C4[tables/]:::folder
-    C --> C5[charts/]:::folder
-    C --> C6[index.ts]:::entry
-  end
-  class CLIENT client;
+C["components/"]:::folder --> C1["ui/"]:::folder
+C --> C2["features/"]:::folder
+C --> C3["layout/"]:::folder
+C --> C4["tables/"]:::folder
+C --> C5["charts/"]:::folder
+C --> CF["forms/"]:::folder
+C --> CH["hooks/"]:::folder
+C --> CX["index.ts"]:::file
 
-  subgraph LEGEND[Legend]
-    L1[folder]:::folder
-    L2[[entry point]]:::entry
-    L3[PAGE/LAYOUT badge on files where used]:::note
-  end
+%% Click main files to Admin overlay (chapter view)
+click CX "/admin/diagrams/directory-map:chapters:components" "Open components chapter" _blank
+
+%% Drill-down clicks for major folders in components
+click C2 "/admin/diagrams/directory-map:chapters:components" "Open components chapter" _blank
+click C3 "/admin/diagrams/directory-map:chapters:components" "Open components chapter" _blank
+click C1 "/admin/diagrams/directory-map:chapters:components" "Open components chapter" _blank
+click C5 "/admin/diagrams/directory-map:chapters:components" "Open components chapter" _blank
+click CF "/admin/diagrams/directory-map:chapters:components" "Open components chapter" _blank
+click CH "/admin/diagrams/directory-map:chapters:components" "Open components chapter" _blank
+
+Legend["Legend:\nFolder (Light Blue)\nFile (Beige)\n Config (DarkOrchid)\n Generated (Blush)\nTests (Cardinal)"]:::legend
 ```

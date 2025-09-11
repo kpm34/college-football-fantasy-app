@@ -1,18 +1,17 @@
-[dotenv@17.2.2] injecting env (86) from .env.local -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
 {
   "config": {
     "configFile": "/Users/kashyapmaheshwari/college-football-fantasy-app/playwright.config.ts",
     "rootDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests",
-    "forbidOnly": true,
+    "forbidOnly": false,
     "fullyParallel": true,
-    "globalSetup": null,
+    "globalSetup": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/_setup/cleanup-test-results.ts",
     "globalTeardown": null,
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 1
+      "actualWorkers": 4
     },
     "preserveOutput": "always",
     "reporter": [
@@ -24,14 +23,14 @@
       "max": 5,
       "threshold": 300000
     },
-    "quiet": true,
+    "quiet": false,
     "projects": [
       {
         "outputDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 4
         },
         "id": "chromium",
         "name": "chromium",
@@ -45,9 +44,9 @@
       {
         "outputDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 4
         },
         "id": "firefox",
         "name": "firefox",
@@ -61,9 +60,9 @@
       {
         "outputDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 4
         },
         "id": "webkit",
         "name": "webkit",
@@ -77,9 +76,9 @@
       {
         "outputDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 4
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
@@ -93,9 +92,9 @@
       {
         "outputDir": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results",
         "repeatEach": 1,
-        "retries": 2,
+        "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 4
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
@@ -111,748 +110,628 @@
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.54.2",
-    "workers": 1,
-    "webServer": null
+    "workers": 4,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3001",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
   },
   "suites": [
     {
-      "title": "e2e/admin-diagrams-audit.spec.ts",
-      "file": "e2e/admin-diagrams-audit.spec.ts",
+      "title": "e2e/admin-diagrams-smoke.spec.ts",
+      "file": "e2e/admin-diagrams-smoke.spec.ts",
       "column": 0,
       "line": 0,
-      "specs": [
+      "specs": [],
+      "suites": [
         {
-          "title": "Admin buttons and diagrams audit",
-          "ok": false,
-          "tags": [],
-          "tests": [
+          "title": "Admin diagrams smoke",
+          "file": "e2e/admin-diagrams-smoke.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
             {
-              "timeout": 180000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
-              "results": [
+              "title": "Open a diagram via direct slug route",
+              "ok": false,
+              "tags": [],
+              "tests": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "timedOut",
-                  "duration": 194168,
-                  "error": {
-                    "message": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m",
-                    "stack": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m"
-                  },
-                  "errors": [
-                    {
-                      "message": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m"
-                    },
-                    {
-                      "location": {
-                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                        "column": 14,
-                        "line": 35
-                      },
-                      "message": "Error: page.goto: Test timeout of 180000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/admin?devAdmin=testtoken\", waiting until \"domcontentloaded\"\u001b[22m\n\n\n  33 |\n  34 |   // Go to admin dashboard\n> 35 |   await page.goto(`${BASE}/admin?devAdmin=${encodeURIComponent(DEV_TOKEN)}`, {\n     |              ^\n  36 |     waitUntil: 'domcontentloaded',\n  37 |   })\n  38 |   await expect(page.getByText('Admin Dashboard')).toBeVisible()\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:35:14"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2025-09-10T22:07:05.393Z",
+                  "timeout": 120000,
                   "annotations": [],
-                  "attachments": [
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
                     {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-chromium/video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-chromium/error-context.md"
-                    }
-                  ]
-                },
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 22392,
-                  "error": {
-                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n",
-                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51",
-                    "location": {
-                      "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                      "column": 51,
-                      "line": 38
-                    },
-                    "snippet": "\u001b[0m \u001b[90m 36 |\u001b[39m     waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 38 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Admin Dashboard'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 39 |\u001b[39m\n \u001b[90m 40 |\u001b[39m   \u001b[90m// 1) Quick Open flow\u001b[39m\n \u001b[90m 41 |\u001b[39m   \u001b[36mconst\u001b[39m input \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[placeholder^=\"Open by slug\"]'\u001b[39m)\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                        "column": 51,
-                        "line": 38
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 138217,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:9:8",
+                        "location": {
+                          "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                          "column": 8,
+                          "line": 9
+                        },
+                        "snippet": "   7 |\n   8 | test.describe('Admin diagrams smoke', () => {\n>  9 |   test.beforeEach(async ({ page }) => {\n     |        ^\n  10 |     // Seed dev admin token in localStorage via about:blank then navigate\n  11 |     await page.goto('about:blank')\n  12 |     await page.addInitScript("
                       },
-                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n\n  36 |     waitUntil: 'domcontentloaded',\n  37 |   })\n> 38 |   await expect(page.getByText('Admin Dashboard')).toBeVisible()\n     |                                                   ^\n  39 |\n  40 |   // 1) Quick Open flow\n  41 |   const input = page.locator('input[placeholder^=\"Open by slug\"]')\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51"
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                            "column": 8,
+                            "line": 9
+                          },
+                          "message": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n\n   7 |\n   8 | test.describe('Admin diagrams smoke', () => {\n>  9 |   test.beforeEach(async ({ page }) => {\n     |        ^\n  10 |     // Seed dev admin token in localStorage via about:blank then navigate\n  11 |     await page.goto('about:blank')\n  12 |     await page.addInitScript(\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:9:8"
+                        },
+                        {
+                          "location": {
+                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                            "column": 24,
+                            "line": 24
+                          },
+                          "message": "Error: apiRequestContext.get: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - → GET http://localhost:3001/api/docs/project-map-inventory\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Safari/537.36\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\n\n  22 |     await page.request.get(`${BASE}/api/docs/mermaid/user-journeys:create-account`)\n  23 |     await page.request.get(`${BASE}/api/docs/mermaid/system-architecture:projections-overview`)\n> 24 |     await page.request.get(`${BASE}/api/docs/project-map-inventory`)\n     |                        ^\n  25 |     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' })\n  26 |   })\n  27 |\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:24:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-11T18:08:26.192Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-smoke-A-e5d68-agram-via-direct-slug-route-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-smoke-A-e5d68-agram-via-direct-slug-route-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                        "column": 8,
+                        "line": 9
+                      }
                     }
                   ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 1,
-                  "startTime": "2025-09-10T22:10:28.931Z",
-                  "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-chromium-retry1/test-failed-1.png"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-chromium-retry1/video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-chromium-retry1/error-context.md"
-                    },
-                    {
-                      "name": "trace",
-                      "contentType": "application/zip",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-chromium-retry1/trace.zip"
-                    }
-                  ],
-                  "errorLocation": {
-                    "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                    "column": 51,
-                    "line": 38
-                  }
-                },
-                {
-                  "workerIndex": 2,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 147659,
-                  "error": {
-                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n",
-                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51",
-                    "location": {
-                      "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                      "column": 51,
-                      "line": 38
-                    },
-                    "snippet": "\u001b[0m \u001b[90m 36 |\u001b[39m     waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 38 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Admin Dashboard'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 39 |\u001b[39m\n \u001b[90m 40 |\u001b[39m   \u001b[90m// 1) Quick Open flow\u001b[39m\n \u001b[90m 41 |\u001b[39m   \u001b[36mconst\u001b[39m input \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[placeholder^=\"Open by slug\"]'\u001b[39m)\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                        "column": 51,
-                        "line": 38
-                      },
-                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n\n  36 |     waitUntil: 'domcontentloaded',\n  37 |   })\n> 38 |   await expect(page.getByText('Admin Dashboard')).toBeVisible()\n     |                                                   ^\n  39 |\n  40 |   // 1) Quick Open flow\n  41 |   const input = page.locator('input[placeholder^=\"Open by slug\"]')\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 2,
-                  "startTime": "2025-09-10T22:11:06.132Z",
-                  "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-chromium-retry2/test-failed-1.png"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-chromium-retry2/video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-chromium-retry2/error-context.md"
-                    }
-                  ],
-                  "errorLocation": {
-                    "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                    "column": 51,
-                    "line": 38
-                  }
+                  "status": "unexpected"
                 }
               ],
-              "status": "unexpected"
-            }
-          ],
-          "id": "afa7fff4395609825ca9-bd5c56c722406f706af9",
-          "file": "e2e/admin-diagrams-audit.spec.ts",
-          "line": 20,
-          "column": 5
-        },
-        {
-          "title": "Admin buttons and diagrams audit",
-          "ok": false,
-          "tags": [],
-          "tests": [
+              "id": "239016aa2626c935fd0d-0eb4170384e0bda2ebe2",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 28,
+              "column": 7
+            },
             {
-              "timeout": 180000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "firefox",
-              "projectName": "firefox",
-              "results": [
+              "title": "Open a diagram via Admin Quick Open event",
+              "ok": false,
+              "tags": [],
+              "tests": [
                 {
-                  "workerIndex": 3,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 52230,
-                  "error": {
-                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n",
-                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51",
-                    "location": {
-                      "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                      "column": 51,
-                      "line": 38
-                    },
-                    "snippet": "\u001b[0m \u001b[90m 36 |\u001b[39m     waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 38 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Admin Dashboard'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 39 |\u001b[39m\n \u001b[90m 40 |\u001b[39m   \u001b[90m// 1) Quick Open flow\u001b[39m\n \u001b[90m 41 |\u001b[39m   \u001b[36mconst\u001b[39m input \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[placeholder^=\"Open by slug\"]'\u001b[39m)\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                        "column": 51,
-                        "line": 38
-                      },
-                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n\n  36 |     waitUntil: 'domcontentloaded',\n  37 |   })\n> 38 |   await expect(page.getByText('Admin Dashboard')).toBeVisible()\n     |                                                   ^\n  39 |\n  40 |   // 1) Quick Open flow\n  41 |   const input = page.locator('input[placeholder^=\"Open by slug\"]')\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2025-09-10T22:13:43.738Z",
+                  "timeout": 120000,
                   "annotations": [],
-                  "attachments": [
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
                     {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-firefox/test-failed-1.png"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-firefox/video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-firefox/error-context.md"
-                    }
-                  ],
-                  "errorLocation": {
-                    "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                    "column": 51,
-                    "line": 38
-                  }
-                },
-                {
-                  "workerIndex": 4,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 39736,
-                  "error": {
-                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n",
-                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51",
-                    "location": {
-                      "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                      "column": 51,
-                      "line": 38
-                    },
-                    "snippet": "\u001b[0m \u001b[90m 36 |\u001b[39m     waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 38 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Admin Dashboard'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 39 |\u001b[39m\n \u001b[90m 40 |\u001b[39m   \u001b[90m// 1) Quick Open flow\u001b[39m\n \u001b[90m 41 |\u001b[39m   \u001b[36mconst\u001b[39m input \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[placeholder^=\"Open by slug\"]'\u001b[39m)\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                        "column": 51,
-                        "line": 38
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 137792,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:9:8",
+                        "location": {
+                          "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                          "column": 8,
+                          "line": 9
+                        },
+                        "snippet": "   7 |\n   8 | test.describe('Admin diagrams smoke', () => {\n>  9 |   test.beforeEach(async ({ page }) => {\n     |        ^\n  10 |     // Seed dev admin token in localStorage via about:blank then navigate\n  11 |     await page.goto('about:blank')\n  12 |     await page.addInitScript("
                       },
-                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n\n  36 |     waitUntil: 'domcontentloaded',\n  37 |   })\n> 38 |   await expect(page.getByText('Admin Dashboard')).toBeVisible()\n     |                                                   ^\n  39 |\n  40 |   // 1) Quick Open flow\n  41 |   const input = page.locator('input[placeholder^=\"Open by slug\"]')\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51"
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                            "column": 8,
+                            "line": 9
+                          },
+                          "message": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n\n   7 |\n   8 | test.describe('Admin diagrams smoke', () => {\n>  9 |   test.beforeEach(async ({ page }) => {\n     |        ^\n  10 |     // Seed dev admin token in localStorage via about:blank then navigate\n  11 |     await page.goto('about:blank')\n  12 |     await page.addInitScript(\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:9:8"
+                        },
+                        {
+                          "location": {
+                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                            "column": 24,
+                            "line": 24
+                          },
+                          "message": "Error: apiRequestContext.get: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - → GET http://localhost:3001/api/docs/project-map-inventory\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Safari/537.36\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\n\n  22 |     await page.request.get(`${BASE}/api/docs/mermaid/user-journeys:create-account`)\n  23 |     await page.request.get(`${BASE}/api/docs/mermaid/system-architecture:projections-overview`)\n> 24 |     await page.request.get(`${BASE}/api/docs/project-map-inventory`)\n     |                        ^\n  25 |     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' })\n  26 |   })\n  27 |\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:24:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-11T18:08:26.194Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-smoke-A-9106a--via-Admin-Quick-Open-event-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-smoke-A-9106a--via-Admin-Quick-Open-event-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                        "column": 8,
+                        "line": 9
+                      }
                     }
                   ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 1,
-                  "startTime": "2025-09-10T22:15:00.992Z",
-                  "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-firefox-retry1/test-failed-1.png"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-firefox-retry1/video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-firefox-retry1/error-context.md"
-                    },
-                    {
-                      "name": "trace",
-                      "contentType": "application/zip",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-firefox-retry1/trace.zip"
-                    }
-                  ],
-                  "errorLocation": {
-                    "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                    "column": 51,
-                    "line": 38
-                  }
-                },
-                {
-                  "workerIndex": 5,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 35987,
-                  "error": {
-                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n",
-                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51",
-                    "location": {
-                      "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                      "column": 51,
-                      "line": 38
-                    },
-                    "snippet": "\u001b[0m \u001b[90m 36 |\u001b[39m     waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 38 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Admin Dashboard'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 39 |\u001b[39m\n \u001b[90m 40 |\u001b[39m   \u001b[90m// 1) Quick Open flow\u001b[39m\n \u001b[90m 41 |\u001b[39m   \u001b[36mconst\u001b[39m input \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[placeholder^=\"Open by slug\"]'\u001b[39m)\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                        "column": 51,
-                        "line": 38
-                      },
-                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n\n  36 |     waitUntil: 'domcontentloaded',\n  37 |   })\n> 38 |   await expect(page.getByText('Admin Dashboard')).toBeVisible()\n     |                                                   ^\n  39 |\n  40 |   // 1) Quick Open flow\n  41 |   const input = page.locator('input[placeholder^=\"Open by slug\"]')\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 2,
-                  "startTime": "2025-09-10T22:16:11.675Z",
-                  "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-firefox-retry2/test-failed-1.png"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-firefox-retry2/video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-firefox-retry2/error-context.md"
-                    }
-                  ],
-                  "errorLocation": {
-                    "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                    "column": 51,
-                    "line": 38
-                  }
+                  "status": "unexpected"
                 }
               ],
-              "status": "unexpected"
-            }
-          ],
-          "id": "afa7fff4395609825ca9-2fa55606ff0fca3fefc7",
-          "file": "e2e/admin-diagrams-audit.spec.ts",
-          "line": 20,
-          "column": 5
-        },
-        {
-          "title": "Admin buttons and diagrams audit",
-          "ok": false,
-          "tags": [],
-          "tests": [
+              "id": "239016aa2626c935fd0d-f406d7309961e5993211",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 37,
+              "column": 7
+            },
             {
-              "timeout": 180000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "webkit",
-              "projectName": "webkit",
-              "results": [
+              "title": "Open a diagram via direct slug route",
+              "ok": false,
+              "tags": [],
+              "tests": [
                 {
-                  "workerIndex": 6,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 1,
-                  "error": {
-                    "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=35984\n[pid=35984][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 35992 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=35984\u001b[22m\n\u001b[2m  - [pid=35984][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 35992 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n",
-                    "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=35984\n[pid=35984][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 35992 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=35984\u001b[22m\n\u001b[2m  - [pid=35984][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 35992 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
-                  },
-                  "errors": [
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
                     {
-                      "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=35984\n[pid=35984][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 35992 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=35984\u001b[22m\n\u001b[2m  - [pid=35984][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 35992 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "timedOut",
+                      "duration": 131480,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:9:8",
+                        "location": {
+                          "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                          "column": 8,
+                          "line": 9
+                        },
+                        "snippet": "   7 |\n   8 | test.describe('Admin diagrams smoke', () => {\n>  9 |   test.beforeEach(async ({ page }) => {\n     |        ^\n  10 |     // Seed dev admin token in localStorage via about:blank then navigate\n  11 |     await page.goto('about:blank')\n  12 |     await page.addInitScript("
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                            "column": 8,
+                            "line": 9
+                          },
+                          "message": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n\n   7 |\n   8 | test.describe('Admin diagrams smoke', () => {\n>  9 |   test.beforeEach(async ({ page }) => {\n     |        ^\n  10 |     // Seed dev admin token in localStorage via about:blank then navigate\n  11 |     await page.goto('about:blank')\n  12 |     await page.addInitScript(\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:9:8"
+                        },
+                        {
+                          "location": {
+                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                            "column": 16,
+                            "line": 25
+                          },
+                          "message": "Error: page.goto: Test timeout of 120000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/\", waiting until \"domcontentloaded\"\u001b[22m\n\n\n  23 |     await page.request.get(`${BASE}/api/docs/mermaid/system-architecture:projections-overview`)\n  24 |     await page.request.get(`${BASE}/api/docs/project-map-inventory`)\n> 25 |     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' })\n     |                ^\n  26 |   })\n  27 |\n  28 |   test('Open a diagram via direct slug route', async ({ page }) => {\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:25:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-11T18:08:26.193Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-smoke-A-e5d68-agram-via-direct-slug-route-firefox/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-smoke-A-e5d68-agram-via-direct-slug-route-firefox/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                        "column": 8,
+                        "line": 9
+                      }
                     }
                   ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2025-09-10T22:17:01.510Z",
-                  "annotations": [],
-                  "attachments": []
-                },
-                {
-                  "workerIndex": 7,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 0,
-                  "error": {
-                    "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36065\n[pid=36065][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36071 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36065\u001b[22m\n\u001b[2m  - [pid=36065][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36071 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n",
-                    "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36065\n[pid=36065][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36071 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36065\u001b[22m\n\u001b[2m  - [pid=36065][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36071 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
-                  },
-                  "errors": [
-                    {
-                      "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36065\n[pid=36065][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36071 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36065\u001b[22m\n\u001b[2m  - [pid=36065][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36071 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 1,
-                  "startTime": "2025-09-10T22:17:05.550Z",
-                  "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "trace",
-                      "contentType": "application/zip",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-webkit-retry1/trace.zip"
-                    }
-                  ]
-                },
-                {
-                  "workerIndex": 8,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 0,
-                  "error": {
-                    "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36073\n[pid=36073][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36079 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36073\u001b[22m\n\u001b[2m  - [pid=36073][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36079 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n",
-                    "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36073\n[pid=36073][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36079 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36073\u001b[22m\n\u001b[2m  - [pid=36073][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36079 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
-                  },
-                  "errors": [
-                    {
-                      "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36073\n[pid=36073][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36079 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36073\u001b[22m\n\u001b[2m  - [pid=36073][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36079 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 2,
-                  "startTime": "2025-09-10T22:17:06.031Z",
-                  "annotations": [],
-                  "attachments": []
+                  "status": "unexpected"
                 }
               ],
-              "status": "unexpected"
-            }
-          ],
-          "id": "afa7fff4395609825ca9-705aeaeb104b414cf0ee",
-          "file": "e2e/admin-diagrams-audit.spec.ts",
-          "line": 20,
-          "column": 5
-        },
-        {
-          "title": "Admin buttons and diagrams audit",
-          "ok": false,
-          "tags": [],
-          "tests": [
+              "id": "239016aa2626c935fd0d-d6b4049f197bc0fa5fa4",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 28,
+              "column": 7
+            },
             {
-              "timeout": 180000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "Mobile Chrome",
-              "projectName": "Mobile Chrome",
-              "results": [
+              "title": "Open a diagram via Admin Quick Open event",
+              "ok": false,
+              "tags": [],
+              "tests": [
                 {
-                  "workerIndex": 9,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 9686,
-                  "error": {
-                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n",
-                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51",
-                    "location": {
-                      "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                      "column": 51,
-                      "line": 38
-                    },
-                    "snippet": "\u001b[0m \u001b[90m 36 |\u001b[39m     waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 38 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Admin Dashboard'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 39 |\u001b[39m\n \u001b[90m 40 |\u001b[39m   \u001b[90m// 1) Quick Open flow\u001b[39m\n \u001b[90m 41 |\u001b[39m   \u001b[36mconst\u001b[39m input \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[placeholder^=\"Open by slug\"]'\u001b[39m)\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                        "column": 51,
-                        "line": 38
-                      },
-                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n\n  36 |     waitUntil: 'domcontentloaded',\n  37 |   })\n> 38 |   await expect(page.getByText('Admin Dashboard')).toBeVisible()\n     |                                                   ^\n  39 |\n  40 |   // 1) Quick Open flow\n  41 |   const input = page.locator('input[placeholder^=\"Open by slug\"]')\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2025-09-10T22:17:06.525Z",
+                  "timeout": 120000,
                   "annotations": [],
-                  "attachments": [
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
                     {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Chrome/test-failed-1.png"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Chrome/video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Chrome/error-context.md"
-                    }
-                  ],
-                  "errorLocation": {
-                    "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                    "column": 51,
-                    "line": 38
-                  }
-                },
-                {
-                  "workerIndex": 10,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 8126,
-                  "error": {
-                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n",
-                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51",
-                    "location": {
-                      "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                      "column": 51,
-                      "line": 38
-                    },
-                    "snippet": "\u001b[0m \u001b[90m 36 |\u001b[39m     waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 38 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Admin Dashboard'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 39 |\u001b[39m\n \u001b[90m 40 |\u001b[39m   \u001b[90m// 1) Quick Open flow\u001b[39m\n \u001b[90m 41 |\u001b[39m   \u001b[36mconst\u001b[39m input \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[placeholder^=\"Open by slug\"]'\u001b[39m)\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                        "column": 51,
-                        "line": 38
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "timedOut",
+                      "duration": 131598,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:9:8",
+                        "location": {
+                          "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                          "column": 8,
+                          "line": 9
+                        },
+                        "snippet": "   7 |\n   8 | test.describe('Admin diagrams smoke', () => {\n>  9 |   test.beforeEach(async ({ page }) => {\n     |        ^\n  10 |     // Seed dev admin token in localStorage via about:blank then navigate\n  11 |     await page.goto('about:blank')\n  12 |     await page.addInitScript("
                       },
-                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n\n  36 |     waitUntil: 'domcontentloaded',\n  37 |   })\n> 38 |   await expect(page.getByText('Admin Dashboard')).toBeVisible()\n     |                                                   ^\n  39 |\n  40 |   // 1) Quick Open flow\n  41 |   const input = page.locator('input[placeholder^=\"Open by slug\"]')\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51"
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                            "column": 8,
+                            "line": 9
+                          },
+                          "message": "\u001b[31mTest timeout of 120000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n\n   7 |\n   8 | test.describe('Admin diagrams smoke', () => {\n>  9 |   test.beforeEach(async ({ page }) => {\n     |        ^\n  10 |     // Seed dev admin token in localStorage via about:blank then navigate\n  11 |     await page.goto('about:blank')\n  12 |     await page.addInitScript(\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:9:8"
+                        },
+                        {
+                          "location": {
+                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                            "column": 16,
+                            "line": 25
+                          },
+                          "message": "Error: page.goto: Test timeout of 120000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/\", waiting until \"domcontentloaded\"\u001b[22m\n\n\n  23 |     await page.request.get(`${BASE}/api/docs/mermaid/system-architecture:projections-overview`)\n  24 |     await page.request.get(`${BASE}/api/docs/project-map-inventory`)\n> 25 |     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' })\n     |                ^\n  26 |   })\n  27 |\n  28 |   test('Open a diagram via direct slug route', async ({ page }) => {\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:25:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-11T18:08:26.198Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-smoke-A-9106a--via-Admin-Quick-Open-event-firefox/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-smoke-A-9106a--via-Admin-Quick-Open-event-firefox/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                        "column": 8,
+                        "line": 9
+                      }
                     }
                   ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 1,
-                  "startTime": "2025-09-10T22:17:22.493Z",
-                  "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Chrome-retry1/test-failed-1.png"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Chrome-retry1/video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Chrome-retry1/error-context.md"
-                    },
-                    {
-                      "name": "trace",
-                      "contentType": "application/zip",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Chrome-retry1/trace.zip"
-                    }
-                  ],
-                  "errorLocation": {
-                    "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                    "column": 51,
-                    "line": 38
-                  }
-                },
-                {
-                  "workerIndex": 11,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 7630,
-                  "error": {
-                    "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n",
-                    "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51",
-                    "location": {
-                      "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                      "column": 51,
-                      "line": 38
-                    },
-                    "snippet": "\u001b[0m \u001b[90m 36 |\u001b[39m     waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 38 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Admin Dashboard'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 39 |\u001b[39m\n \u001b[90m 40 |\u001b[39m   \u001b[90m// 1) Quick Open flow\u001b[39m\n \u001b[90m 41 |\u001b[39m   \u001b[36mconst\u001b[39m input \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[placeholder^=\"Open by slug\"]'\u001b[39m)\u001b[0m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                        "column": 51,
-                        "line": 38
-                      },
-                      "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: getByText('Admin Dashboard')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Admin Dashboard')\u001b[22m\n\n\n  36 |     waitUntil: 'domcontentloaded',\n  37 |   })\n> 38 |   await expect(page.getByText('Admin Dashboard')).toBeVisible()\n     |                                                   ^\n  39 |\n  40 |   // 1) Quick Open flow\n  41 |   const input = page.locator('input[placeholder^=\"Open by slug\"]')\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts:38:51"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 2,
-                  "startTime": "2025-09-10T22:17:34.005Z",
-                  "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Chrome-retry2/test-failed-1.png"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Chrome-retry2/video.webm"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Chrome-retry2/error-context.md"
-                    }
-                  ],
-                  "errorLocation": {
-                    "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-audit.spec.ts",
-                    "column": 51,
-                    "line": 38
-                  }
+                  "status": "unexpected"
                 }
               ],
-              "status": "unexpected"
-            }
-          ],
-          "id": "afa7fff4395609825ca9-e6722bfdffefd72f0fe6",
-          "file": "e2e/admin-diagrams-audit.spec.ts",
-          "line": 20,
-          "column": 5
-        },
-        {
-          "title": "Admin buttons and diagrams audit",
-          "ok": false,
-          "tags": [],
-          "tests": [
+              "id": "239016aa2626c935fd0d-02220d74b9d2c2036b99",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 37,
+              "column": 7
+            },
             {
-              "timeout": 180000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "Mobile Safari",
-              "projectName": "Mobile Safari",
-              "results": [
+              "title": "Open a diagram via direct slug route",
+              "ok": false,
+              "tags": [],
+              "tests": [
                 {
-                  "workerIndex": 12,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 1,
-                  "error": {
-                    "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36850\n[pid=36850][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36856 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36850\u001b[22m\n\u001b[2m  - [pid=36850][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36856 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n",
-                    "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36850\n[pid=36850][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36856 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36850\u001b[22m\n\u001b[2m  - [pid=36850][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36856 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
-                  },
-                  "errors": [
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
                     {
-                      "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36850\n[pid=36850][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36856 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36850\u001b[22m\n\u001b[2m  - [pid=36850][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 36856 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 3,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=79626\n[pid=79626][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79639 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=79626\u001b[22m\n\u001b[2m  - [pid=79626][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79639 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=79626\n[pid=79626][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79639 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=79626\u001b[22m\n\u001b[2m  - [pid=79626][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79639 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=79626\n[pid=79626][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79639 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=79626\u001b[22m\n\u001b[2m  - [pid=79626][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79639 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-11T18:10:53.615Z",
+                      "annotations": [],
+                      "attachments": []
                     }
                   ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2025-09-10T22:17:46.908Z",
-                  "annotations": [],
-                  "attachments": []
-                },
-                {
-                  "workerIndex": 13,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 6,
-                  "error": {
-                    "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36991\n[pid=36991][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37001 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36991\u001b[22m\n\u001b[2m  - [pid=36991][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37001 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n",
-                    "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36991\n[pid=36991][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37001 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36991\u001b[22m\n\u001b[2m  - [pid=36991][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37001 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
-                  },
-                  "errors": [
-                    {
-                      "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=36991\n[pid=36991][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37001 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=36991\u001b[22m\n\u001b[2m  - [pid=36991][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37001 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 1,
-                  "startTime": "2025-09-10T22:18:00.271Z",
-                  "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "trace",
-                      "contentType": "application/zip",
-                      "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-audit-Admin-buttons-and-diagrams-audit-Mobile-Safari-retry1/trace.zip"
-                    }
-                  ]
-                },
-                {
-                  "workerIndex": 14,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 1,
-                  "error": {
-                    "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=37110\n[pid=37110][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37128 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=37110\u001b[22m\n\u001b[2m  - [pid=37110][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37128 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n",
-                    "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=37110\n[pid=37110][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37128 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=37110\u001b[22m\n\u001b[2m  - [pid=37110][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37128 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
-                  },
-                  "errors": [
-                    {
-                      "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=37110\n[pid=37110][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37128 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=37110\u001b[22m\n\u001b[2m  - [pid=37110][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 37128 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 2,
-                  "startTime": "2025-09-10T22:18:17.081Z",
-                  "annotations": [],
-                  "attachments": []
+                  "status": "unexpected"
                 }
               ],
-              "status": "unexpected"
+              "id": "239016aa2626c935fd0d-899c8839792e6489b327",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 28,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via Admin Quick Open event",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 2,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=79627\n[pid=79627][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79638 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=79627\u001b[22m\n\u001b[2m  - [pid=79627][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79638 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=79627\n[pid=79627][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79638 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=79627\u001b[22m\n\u001b[2m  - [pid=79627][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79638 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=79627\n[pid=79627][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79638 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=79627\u001b[22m\n\u001b[2m  - [pid=79627][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 79638 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-11T18:10:53.617Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-19538154a84b00dccd97",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via direct slug route",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 132081,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                            "column": 16,
+                            "line": 29
+                          },
+                          "message": "Error: page.goto: net::ERR_ABORTED; maybe frame was detached?\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/admin/diagrams/user-journeys:create-account?devAdmin=testtoken\", waiting until \"commit\"\u001b[22m\n\n\n  27 |\n  28 |   test('Open a diagram via direct slug route', async ({ page }) => {\n> 29 |     await page.goto(\n     |                ^\n  30 |       `${BASE}/admin/diagrams/user-journeys:create-account?devAdmin=${encodeURIComponent(DEV_TOKEN)}`,\n  31 |       { waitUntil: 'commit' }\n  32 |     )\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:29:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-11T18:10:57.075Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-smoke-A-e5d68-agram-via-direct-slug-route-Mobile-Chrome/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-3c38bd87259bfdd134ba",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 28,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via Admin Quick Open event",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 132054,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts",
+                            "column": 16,
+                            "line": 38
+                          },
+                          "message": "Error: page.goto: net::ERR_ABORTED; maybe frame was detached?\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/admin?devAdmin=testtoken\", waiting until \"commit\"\u001b[22m\n\n\n  36 |\n  37 |   test('Open a diagram via Admin Quick Open event', async ({ page }) => {\n> 38 |     await page.goto(`${BASE}/admin?devAdmin=${encodeURIComponent(DEV_TOKEN)}`, {\n     |                ^\n  39 |       waitUntil: 'commit',\n  40 |     })\n  41 |     // Ensure event bridge exists\n    at /Users/kashyapmaheshwari/college-football-fantasy-app/tests/e2e/admin-diagrams-smoke.spec.ts:38:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-11T18:10:57.041Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/kashyapmaheshwari/college-football-fantasy-app/test-results/e2e-admin-diagrams-smoke-A-9106a--via-Admin-Quick-Open-event-Mobile-Chrome/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-5bb9f1235f750a913886",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via direct slug route",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 3,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=80121\n[pid=80121][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80132 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=80121\u001b[22m\n\u001b[2m  - [pid=80121][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80132 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=80121\n[pid=80121][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80132 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=80121\u001b[22m\n\u001b[2m  - [pid=80121][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80132 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=80121\n[pid=80121][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80132 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=80121\u001b[22m\n\u001b[2m  - [pid=80121][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80132 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-11T18:11:21.405Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-89b97fbf4c7878e75240",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 28,
+              "column": 7
+            },
+            {
+              "title": "Open a diagram via Admin Quick Open event",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 3,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=80120\n[pid=80120][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80133 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=80120\u001b[22m\n\u001b[2m  - [pid=80120][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80133 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=80120\n[pid=80120][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80133 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=80120\u001b[22m\n\u001b[2m  - [pid=80120][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80133 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\n<launched> pid=80120\n[pid=80120][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80133 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\nCall log:\n\u001b[2m  - <launching> /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --headless --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=80120\u001b[22m\n\u001b[2m  - [pid=80120][err] /Users/kashyapmaheshwari/Library/Caches/ms-playwright/webkit-2191/pw_run.sh: line 7: 80133 Bus error: 10           DYLD_FRAMEWORK_PATH=\"$DYLIB_PATH\" DYLD_LIBRARY_PATH=\"$DYLIB_PATH\" \"$PLAYWRIGHT\" \"$@\"\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-11T18:11:21.406Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "239016aa2626c935fd0d-db79e425f38a15f28fc2",
+              "file": "e2e/admin-diagrams-smoke.spec.ts",
+              "line": 37,
+              "column": 7
             }
-          ],
-          "id": "afa7fff4395609825ca9-7854e9e8574230df424c",
-          "file": "e2e/admin-diagrams-audit.spec.ts",
-          "line": 20,
-          "column": 5
+          ]
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-09-10T22:07:03.764Z",
-    "duration": 676558.493,
+    "startTime": "2025-09-11T18:06:45.881Z",
+    "duration": 390805.646,
     "expected": 0,
     "skipped": 0,
-    "unexpected": 5,
+    "unexpected": 10,
     "flaky": 0
   }
 }

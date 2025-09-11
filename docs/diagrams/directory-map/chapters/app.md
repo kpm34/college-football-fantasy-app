@@ -5,61 +5,48 @@
 - Notes: Organize by route segments; colocate route-specific components; avoid data fetching in client components.
 
 Key files:
+
 - `app/layout.tsx` — Root layout
 - `app/globals.css` — Global styles
 
 ```mermaid
-graph LR
-  %% Classes (legend-driven colors)
-  classDef folder fill:#e5e7eb,stroke:#6b7280,color:#111827,rx:6,ry:6
-  classDef file fill:#ffffff,stroke:#94a3b8,color:#1f2937,rx:4,ry:4
-  classDef entry fill:#ffffff,stroke:#0f766e,stroke-width:3,color:#0f766e,rx:4,ry:4
-  classDef external fill:#f59e0b,stroke:#b45309,color:#1f2937,rx:6,ry:6
-  classDef generated fill:#f3f4f6,stroke:#9ca3af,color:#374151,rx:4,ry:4,stroke-dasharray:5 3
-  classDef client fill:#0ea5e9,stroke:#0369a1,color:#ffffff,rx:6,ry:6
-  classDef api fill:#14b8a6,stroke:#0f766e,color:#ffffff,rx:6,ry:6
-  classDef docs fill:#6366f1,stroke:#4338ca,color:#ffffff,rx:6,ry:6
-  classDef note fill:#fef3c7,stroke:#f59e0b,color:#7c2d12,rx:4,ry:4
+flowchart LR
+%% Palette + legibility
+classDef folder fill:#ADD8E6,stroke:#6CB6D9,color:#003A8C,rx:6,ry:6;
+classDef file fill:#F5F5DC,stroke:#C9C9A3,color:#262626,rx:6,ry:6;
+classDef config fill:#9932CC,stroke:#6E259B,color:#FFFFFF,rx:6,ry:6;
+classDef generated fill:#DE5D83,stroke:#B34463,color:#FFFFFF,rx:6,ry:6;
+classDef test fill:#C41E3A,stroke:#8E1F2E,color:#FFFFFF,rx:6,ry:6;
+classDef legend fill:#FAFAFA,stroke:#D9D9D9,color:#595959,rx:6,ry:6;
 
-  %% Client/UI cluster
-  subgraph CLIENT[Client/UI]
-    A[app/]:::folder
-    A --> A_layout[[PAGE layout.tsx]]:::entry
-    A --> A_global[file: global-error.tsx]:::file
-    A --> A_league[(league)]:::folder
-    A --> A_dashboard[(dashboard)]:::folder
-    A --> A_admin[admin/]:::folder
-  end
-  class CLIENT client;
+A["app/"]:::folder
+A --> L1["layout.tsx"]:::file
+A --> F1["global-error.tsx"]:::file
+A --> F2["globals.css"]:::file
+A --> D1["(dashboard)/"]:::folder
+A --> L2["(league)/"]:::folder
+A --> AD["admin/"]:::folder
+A --> API["api/"]:::folder
+API --> APB["api/(backend)/"]:::folder
+API --> APF["api/(frontend)/"]:::folder
+API --> APE["api/(external)/"]:::folder
+A --> DR["draft/"]:::folder
+A --> AU["auth/"]:::folder
+A --> OG["og/"]:::folder
 
-  %% API/Server cluster
-  subgraph API[API/Server]
-    A_api[app/api/]:::folder
-    A_api --> API_backend[(backend)]:::folder
-    A_api --> API_frontend[(frontend)]:::folder
-    A_api --> API_external[(external)]:::folder
-    API_external --> EXT_CFBD{{CFBD API}}:::external
-    API_external --> EXT_APPWRITE{{Appwrite}}:::external
-  end
-  class API api;
+%% Click main files to Admin overlay (chapter view)
+click L1 "/admin/diagrams/directory-map:chapters:app" "Open app chapter" _blank
+click F1 "/admin/diagrams/directory-map:chapters:app" "Open app chapter" _blank
+click F2 "/admin/diagrams/directory-map:chapters:app" "Open app chapter" _blank
 
-  %% Docs/Design pointer (optional)
-  subgraph DOCS[Docs/Design]
-    D_docs[docs/diagrams]:::folder
-  end
-  class DOCS docs;
+%% Drill-down clicks for major folders
+click API "/admin/diagrams/project-map:app:api" "Open app/api project map" _blank
+click APB "/admin/diagrams/project-map:app:api:backend" "Open app/api/(backend)" _blank
+click APF "/admin/diagrams/project-map:app:api:frontend" "Open app/api/(frontend)" _blank
+click APE "/admin/diagrams/project-map:app:api:external" "Open app/api/(external)" _blank
+click AD "/admin/diagrams/project-map:app:admin" "Open app/admin project map" _blank
+click D1 "/admin/diagrams/project-map:app:dashboard" "Open app/(dashboard) project map" _blank
+click DR "/admin/diagrams/project-map:app:draft" "Open app/draft project map" _blank
 
-  %% Legend (reused across chapters)
-  subgraph LEGEND[Legend]
-    LG_folder[folder]:::folder
-    LG_file[file]:::file
-    LG_entry[[entry point]]:::entry
-    LG_ext{{external}}:::external
-    LG_gen[generated]:::generated
-    LGE1[solid: contains]:::note --> LGE2[ ]:::note
-    LGE3[dotted: alias/generated]:::note -.-> LGE4[ ]:::note
-  end
-
-  %% Relations
-  A_admin -. uses .-> A_api
+Legend["Legend:\nFolder (Light Blue)\nFile (Beige)\n Config (DarkOrchid)\n Generated (Blush)\nTests (Cardinal)"]:::legend
 ```

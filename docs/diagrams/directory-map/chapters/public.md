@@ -1,7 +1,7 @@
-# Chapter: functions/
+# Chapter: public/
 
-- Purpose: Appwrite/cron/workers functions.
-- Usage: One folder per function; document triggers and I/O; keep shared bits in `functions/_shared` or import `lib/**`.
+- Purpose: Static assets served directly by Next.js.
+- Usage: Store images, static docs, and public files. Avoid secrets.
 
 ```mermaid
 flowchart LR
@@ -13,12 +13,15 @@ classDef generated fill:#DE5D83,stroke:#B34463,color:#FFFFFF,rx:6,ry:6;
 classDef test fill:#C41E3A,stroke:#8E1F2E,color:#FFFFFF,rx:6,ry:6;
 classDef legend fill:#FAFAFA,stroke:#D9D9D9,color:#595959,rx:6,ry:6;
 
-F["functions/"]:::folder --> F1["appwrite/"]:::folder
-F --> F2["cron/"]:::folder
-F --> F3["workers/"]:::folder
+P["public/"]:::folder --> PD["docs/"]:::folder
+P --> F1["file.svg"]:::file
+P --> F2["globe.svg"]:::file
+P --> F3["vercel.svg"]:::file
+P --> F4["next.svg"]:::file
+P --> F5["window.svg"]:::file
 
 %% Click main folder to chapter
-click F "/admin/diagrams/directory-map:chapters:functions" "Open functions chapter" _blank
+click P "/admin/diagrams/directory-map:chapters:public" "Open public chapter" _blank
 
 Legend["Legend:\nFolder (Light Blue)\nFile (Beige)\n Config (DarkOrchid)\n Generated (Blush)\nTests (Cardinal)"]:::legend
 ```
