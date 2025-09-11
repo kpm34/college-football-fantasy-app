@@ -25,18 +25,18 @@ mindmap
       "My Teams (planned)"
     League
       /league/create
-      /league/[leagueId]
-        /league/[leagueId]/locker-room
-        /league/[leagueId]/lineups (planned)
-        /league/[leagueId]/matchups (planned)
-        /league/[leagueId]/waivers (planned)
-        /league/[leagueId]/trades (planned)
-        /league/[leagueId]/schedule
-        /league/[leagueId]/scoreboard
-        /league/[leagueId]/standings
-        /league/[leagueId]/commissioner
+      /league/:leagueId
+        /league/:leagueId/locker-room
+        /league/:leagueId/lineups (planned)
+        /league/:leagueId/matchups (planned)
+        /league/:leagueId/waivers (planned)
+        /league/:leagueId/trades (planned)
+        /league/:leagueId/schedule
+        /league/:leagueId/scoreboard
+        /league/:leagueId/standings
+        /league/:leagueId/commissioner
     Draft
-      /draft/[leagueId] (time-gated)
+      /draft/:leagueId (time-gated)
       "Mock Draft (planned)"
     Admin
       /admin
@@ -55,7 +55,7 @@ mindmap
       /conference-showcase
       /projection-showcase
       /videos
-      /videos/[program]
+      /videos/:program
       /launch
       /offline
 ```
