@@ -28,9 +28,9 @@ flowchart TD
   end
 
   B --> R --> P --> I --> PR --> CI --> REV --> MERGE --> PREV --> PROD --> MON --> RPT
-  CI -- fail --> I
-  REV -- changes --> I
-  MON -- incident --> HOTFIX
+  CI --|fail|--> I
+  REV --|changes|--> I
+  MON --|incident|--> HOTFIX
 
   HOTFIX[[Hotfix Path]]
   HOTFIX --> I
