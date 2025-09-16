@@ -70,6 +70,10 @@
   --font-montserrat: 'Montserrat', sans-serif;
   --font-inter: 'Inter', sans-serif;
   --font-roboto-mono: 'Roboto Mono', monospace;
+  --font-oswald: 'Oswald', sans-serif;
+  --font-anton: 'Anton', sans-serif;
+  --font-orbitron: 'Orbitron', sans-serif;
+  --font-jetbrains: 'JetBrains Mono', monospace;
 
   /* Graduation-inspired tokens */
   /* Light, calm palette inspired by Awwwards Minimal & Pastel collections */
@@ -521,3 +525,5 @@ div {
   border-radius: 999px;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
 }
+
+/* Spline hamburger button material background */

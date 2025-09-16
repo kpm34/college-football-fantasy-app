@@ -168,8 +168,14 @@ export function getCollectionId(name: keyof typeof COLLECTIONS): string {
  */
 export async function validateCollections(): Promise<{ valid: boolean; missing: string[] }> {
   try {
-    const response = await serverDatabases.listCollections(DATABASE_ID);
-    const existingIds = new Set(response.collections.map(c => c.$id));
+    // Appwrite SDK v16: listCollections(databaseId) returns { total, items }
+    const response: any = await (serverDatabases as any).listCollections(DATABASE_ID);
+    const items = Array.isArray(response?.collections)
+      ? response.collections
+      : Array.isArray(response?.items)
+        ? response.items
+        : []
+    const existingIds = new Set(items.map((c: any) => c.$id));
     
     const requiredCollections = Object.values(COLLECTIONS);
     const missing = requiredCollections.filter(id => !existingIds.has(id));

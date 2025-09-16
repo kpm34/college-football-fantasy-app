@@ -5,7 +5,6 @@
 - Tabnine
 - Sourcegraph Cody
 - Qodo Gen
-- Bito AI
 - Continue.dev (local+cloud models)
 
 Install (Cursor/VS Code):
@@ -13,7 +12,7 @@ Install (Cursor/VS Code):
 # Choose your CLI: 'cursor' or 'code'
 BIN=${BIN:-cursor}
 $BIN --install-extension GitHub.copilot GitHub.copilot-chat TabNine.tabnine-vscode \
-  sourcegraph.cody-ai Qodo-dev.qodo bito.bito Continue.continue
+  sourcegraph.cody-ai Qodo-dev.qodo Continue.continue
 ```
 
 ## API testing

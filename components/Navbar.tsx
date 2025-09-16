@@ -10,7 +10,7 @@ import {
 import { useAuth } from '@lib/hooks/useAuth'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CFPLoadingScreen from './CFPLoadingScreen'
 
 function NavLink({ href, label }: { href: string; label: string }) {
@@ -416,6 +416,150 @@ function UserMenu({
 
 function HamburgerButton({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) {
   const [isHovered, setIsHovered] = useState(false)
+  const appRef = useRef<any>(null)
+  const originalsRef = useRef<{
+    saved: boolean
+    lacesZ: number
+    outerZ: number
+    sunIntensity: number
+    laceBars?: any[]
+    laceBarsY?: number[]
+    condensedY?: number[]
+  }>({ saved: false, lacesZ: 0, outerZ: 0, sunIntensity: 1 })
+
+  function onLoad(app: any) {
+    appRef.current = app
+    try {
+      const laces = app.findObjectByName?.('laces')
+      const outer = app.findObjectByName?.('outer edge')
+      const sun =
+        app.findObjectByName?.('Directional Light') || app.findObjectByName?.('DirectionalLight')
+      if (laces && outer && sun && !originalsRef.current.saved) {
+        originalsRef.current = {
+          saved: true,
+          lacesZ: laces.position.z,
+          outerZ: outer.position.z,
+          sunIntensity: sun.intensity ?? 1,
+        }
+        // Capture individual lace bars and build a condensed arrangement near their center
+        try {
+          const bars = (laces.children || []).filter((c: any) => c?.position)
+          if (bars.length >= 4) {
+            const ys = bars.map((b: any) => b.position.y)
+            const yCenter = ys.reduce((a: number, b: number) => a + b, 0) / ys.length
+            const spacing = 1.0
+            const indices = bars
+              .map((bar: any, index: number) => ({ b: bar, idx: index }))
+              .sort((a: { b: any }, c: { b: any }) => a.b.position.y - c.b.position.y)
+              .map((x: { idx: number }) => x.idx)
+            const condensed = indices.map(
+              (_: number, i: number) => yCenter + (i - (indices.length - 1) / 2) * spacing
+            )
+            originalsRef.current.laceBars = bars
+            originalsRef.current.laceBarsY = ys
+            originalsRef.current.condensedY = condensed
+            // Start in condensed state
+            bars.forEach((bar: any, i: number) => {
+              bar.position.y = condensed[i]
+            })
+          }
+        } catch {}
+        // Ensure sun shadows are available
+        try {
+          sun.castShadow = true
+          if (sun.shadow) {
+            sun.shadow.mapSize = { x: 2048, y: 2048 }
+            sun.shadow.radius = 2
+          }
+        } catch {}
+        // Hide large background meshes from the scene (use object names from export)
+        try {
+          const bgRect = app.findObjectByName?.('Rectangle 6')
+          if (bgRect) bgRect.visible = false
+          const football = app.findObjectByName?.('football')
+          if (football) football.visible = false
+        } catch {}
+        // Initial visibility: laces visible, crescents hidden
+        try {
+          laces.visible = true
+          outer.visible = false
+        } catch {}
+      }
+    } catch {}
+  }
+
+  function tween(durationMs: number, step: (t01: number) => void) {
+    const start = performance.now()
+    function frame(now: number) {
+      const t = Math.min(1, (now - start) / durationMs)
+      step(t)
+      if (t < 1) requestAnimationFrame(frame)
+    }
+    requestAnimationFrame(frame)
+  }
+
+  function animateExtrusion(expand: boolean) {
+    const app = appRef.current
+    if (!app || !originalsRef.current.saved) return
+    const laces = app.findObjectByName?.('laces')
+    const outer = app.findObjectByName?.('outer edge')
+    const sun =
+      app.findObjectByName?.('Directional Light') || app.findObjectByName?.('DirectionalLight')
+    if (!laces || !outer) return
+
+    const target = {
+      lacesZ: expand ? originalsRef.current.lacesZ + 12 : originalsRef.current.lacesZ,
+      outerZ: expand ? originalsRef.current.outerZ + 9 : originalsRef.current.outerZ,
+      sunIntensity: Math.max(
+        0,
+        expand
+          ? (originalsRef.current.sunIntensity || 1) * 1.4
+          : originalsRef.current.sunIntensity || 1
+      ),
+    }
+
+    const startVals = {
+      lacesZ: laces.position.z,
+      outerZ: outer.position.z,
+      sunIntensity: sun?.intensity ?? 1,
+    }
+
+    // show crescents when expanding
+    if (expand) {
+      try {
+        outer.visible = true
+      } catch {}
+    }
+    tween(360, t => {
+      const ease = t * (2 - t)
+      try {
+        laces.position.z = startVals.lacesZ + (target.lacesZ - startVals.lacesZ) * ease
+        outer.position.z = startVals.outerZ + (target.outerZ - startVals.outerZ) * ease
+        if (sun)
+          sun.intensity =
+            startVals.sunIntensity + (target.sunIntensity - startVals.sunIntensity) * ease
+        // Animate lace bar spacing
+        const bars = originalsRef.current.laceBars
+        const ys = originalsRef.current.laceBarsY
+        const condensed = originalsRef.current.condensedY
+        if (bars && ys && condensed && ys.length === bars.length) {
+          bars.forEach((bar: any, i: number) => {
+            const from = expand ? condensed[i] : ys[i]
+            const to = expand ? ys[i] : condensed[i]
+            bar.position.y = from + (to - from) * ease
+          })
+        }
+      } catch {}
+    })
+    if (!expand) {
+      setTimeout(() => {
+        try {
+          outer.visible = false
+        } catch {}
+      }, 380)
+    }
+  }
+
   return (
     <button
       className="relative w-12 h-12 flex items-center justify-center group"
@@ -424,9 +568,7 @@ function HamburgerButton({ isOpen, onClick }: { isOpen: boolean; onClick: () => 
       onMouseLeave={() => setIsHovered(false)}
       aria-label="Open menu"
     >
-      {/* Crossfade between hamburger and football states (no flip) */}
       <div className="relative w-8 h-8">
-        {/* Hamburger lines */}
         <div
           className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${isHovered || isOpen ? 'opacity-0' : 'opacity-100'}`}
         >
@@ -436,7 +578,6 @@ function HamburgerButton({ isOpen, onClick }: { isOpen: boolean; onClick: () => 
             <span className="hamburger-line" />
           </div>
         </div>
-        {/* Football with laces */}
         <div
           className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${isHovered || isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
         >
@@ -519,11 +660,8 @@ function HamburgerButton({ isOpen, onClick }: { isOpen: boolean; onClick: () => 
           </svg>
         </div>
       </div>
-      {/* Ambient glow */}
       <div
-        className={`absolute inset-0 rounded-full transition-opacity duration-500 pointer-events-none ${
-          isHovered ? 'opacity-100' : 'opacity-0'
-        }`}
+        className={`absolute inset-0 rounded-full transition-opacity duration-500 pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'}`}
         style={{
           background: 'radial-gradient(circle, rgba(165,42,42,0.2) 0%, transparent 60%)',
           filter: 'blur(10px)',

@@ -153,10 +153,13 @@ export default function ClientBriefForm() {
     } catch {}
   }, [])
   return (
-    <div className="mx-auto max-w-5xl p-6 space-y-6">
+    <div style={{ backgroundColor: '#F5F0E6', color: '#8C1515' }}>
+      <div className="mx-auto max-w-5xl p-6 space-y-6">
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold tracking-tight">Client Brief</h1>
-        <p className="text-sm text-white/70">Project: College Football Fantasy App</p>
+        <p className="text-sm">
+          Project: College Football Fantasy App
+        </p>
       </header>
 
       <form ref={formRef} className="space-y-6" onSubmit={e => e.preventDefault()}>
@@ -431,6 +434,7 @@ export default function ClientBriefForm() {
           </Button>
         </div>
       </form>
+      </div>
     </div>
   )
 }

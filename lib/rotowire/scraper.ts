@@ -38,8 +38,7 @@ export class RotowireScraper {
     console.log('Initializing Rotowire scraper...');
     
     this.browser = await chromium.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      headless: true
     });
     
     this.context = await this.browser.newContext({

@@ -2,9 +2,15 @@
 
 import { Animated } from '@components/dev/Animated'
 import { MermaidRenderer } from '@components/docs/MermaidRenderer'
+import {
+  BoltIcon,
+  MapIcon,
+  MapPinIcon,
+  Squares2X2Icon,
+  TrophyIcon,
+} from '@heroicons/react/24/outline'
 import { useAuth } from '@lib/hooks/useAuth'
 import Link from 'next/link'
-import { Lightning, MapPin, MapTrifold, SquaresFour, Trophy } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 
 export default function AdminDashboard() {
@@ -225,7 +231,7 @@ export default function AdminDashboard() {
               <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
                 <div className="absolute inset-0 bg-gradient-to-br from-sky-600/20 via-emerald-500/10 to-transparent opacity-75" />
                 <div className="relative flex items-center gap-3 text-sky-900">
-                  <MapTrifold size={20} weight="duotone" className="text-sky-700" />
+                  <MapIcon className="h-5 w-5 text-sky-700" />
                   <div className="font-semibold">User Journeys</div>
                 </div>
                 <div className="relative mt-1 text-sm text-sky-900/80">
@@ -249,7 +255,7 @@ export default function AdminDashboard() {
               <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/20 via-teal-500/10 to-transparent opacity-75" />
                 <div className="relative flex items-center gap-3 text-emerald-900">
-                  <MapPin size={20} weight="duotone" className="text-emerald-700" />
+                  <MapPinIcon className="h-5 w-5 text-emerald-700" />
                   <div className="font-semibold">Site Map</div>
                 </div>
                 <div className="relative mt-1 text-sm text-emerald-900/80">
@@ -261,7 +267,7 @@ export default function AdminDashboard() {
               <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-fuchsia-500/10 to-transparent opacity-75" />
                 <div className="relative flex items-center gap-3 text-indigo-900">
-                  <SquaresFour size={20} weight="duotone" className="text-indigo-700" />
+                  <Squares2X2Icon className="h-5 w-5 text-indigo-700" />
                   <div className="font-semibold">Entity Relations</div>
                 </div>
                 <div className="relative mt-1 text-sm text-indigo-900/80">
@@ -289,7 +295,7 @@ export default function AdminDashboard() {
               <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
                 <div className="absolute inset-0 bg-gradient-to-br from-rose-600/20 via-orange-500/10 to-transparent opacity-75" />
                 <div className="relative flex items-center gap-3 text-rose-900">
-                  <Lightning size={20} weight="duotone" className="text-rose-700" />
+                  <BoltIcon className="h-5 w-5 text-rose-700" />
                   <div className="font-semibold">Functional Flow</div>
                 </div>
                 <div className="relative mt-1 text-sm text-rose-900/80">
@@ -301,7 +307,7 @@ export default function AdminDashboard() {
               <div className="relative overflow-hidden rounded-2xl border border-amber-300 bg-white p-5 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-0.5">
                 <div className="absolute inset-0 bg-gradient-to-br from-amber-600/20 via-emerald-500/10 to-transparent opacity-75" />
                 <div className="relative flex items-center gap-3 text-amber-900">
-                  <Trophy size={20} weight="duotone" className="text-amber-700" />
+                  <TrophyIcon className="h-5 w-5 text-amber-700" />
                   <div className="font-semibold">Draft</div>
                 </div>
                 <div className="relative mt-1 text-sm text-amber-900/80">

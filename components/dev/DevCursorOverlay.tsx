@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useEffect, useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 // Light client-only overlay to capture a screenshot and POST to /api/cursor-report
 export default function DevCursorOverlay() {
@@ -27,7 +27,9 @@ export default function DevCursorOverlay() {
     try {
       const html2canvas = (await import('html2canvas')).default
       const canvas = await html2canvas(document.body, { useCORS: true, backgroundColor: '#0b0b0b' })
-      const blob = await new Promise<Blob | null>(res => canvas.toBlob(b => res(b), 'image/png'))
+      const blob = await new Promise<Blob | null>(res =>
+        canvas.toBlob((b: Blob | null) => res(b), 'image/png')
+      )
       if (!blob) throw new Error('Failed to capture')
       const form = new FormData()
       form.append('screenshot', blob, 'cursor-context.png')

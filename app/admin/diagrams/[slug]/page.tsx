@@ -211,7 +211,9 @@ export default function DiagramBySlugPage() {
     for (const label of directLabels) add(label, label)
     const header = 'Id,Label,Group,URL\n'
     const body = rows
-      .map(r => [r.id, r.label, r.group, r.url].map(v => `"${String(v).replaceAll('"', '""')}"`).join(','))
+      .map(r =>
+        [r.id, r.label, r.group, r.url].map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')
+      )
       .join('\n')
     download(header + body + '\n', `lucid-nodes-${slug || 'diagram'}.csv`, 'text/csv')
   }
@@ -231,11 +233,14 @@ export default function DiagramBySlugPage() {
       const rawFrom = m[1]
       const rawTo = m[2]
       const toLabel = rawTo.startsWith('"') ? rawTo.slice(1, -1) : idToLabel[rawTo] || rawTo
-      const fromLabel = idToLabel[rawFrom] || (rawFrom.startsWith('"') ? rawFrom.slice(1, -1) : rawFrom)
+      const fromLabel =
+        idToLabel[rawFrom] || (rawFrom.startsWith('"') ? rawFrom.slice(1, -1) : rawFrom)
       edges.push({ from: fromLabel, to: toLabel })
     }
     const header = 'From,To\n'
-    const body = edges.map(e => [e.from, e.to].map(v => `"${String(v).replaceAll('"', '""')}"`).join(',')).join('\n')
+    const body = edges
+      .map(e => [e.from, e.to].map(v => `"${String(v).replaceAll('"', '""')}"`).join(','))
+      .join('\n')
     download(header + body + '\n', `lucid-edges-${slug || 'diagram'}.csv`, 'text/csv')
   }
 
@@ -289,17 +294,68 @@ export default function DiagramBySlugPage() {
                     </div>
                     <div className="p-3 space-y-3">
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#F5F5DC', border: '1px solid #C9C9A3' }} /> <span>User</span></div>
-                        <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#ADD8E6', border: '1px solid #6CB6D9' }} /> <span>Appwrite (DB)</span></div>
-                        <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#DE5D83', border: '1px solid #B34463' }} /> <span>Meshy AI</span></div>
-                        <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#9932CC', border: '1px solid #6E259B' }} /> <span>Vercel / API</span></div>
-                        <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#C41E3A', border: '1px solid #8E1F2E' }} /> <span>External (CFBD/ESPN)</span></div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="inline-block w-4 h-4 rounded"
+                            style={{ background: '#F5F5DC', border: '1px solid #C9C9A3' }}
+                          />{' '}
+                          <span>User</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="inline-block w-4 h-4 rounded"
+                            style={{ background: '#ADD8E6', border: '1px solid #6CB6D9' }}
+                          />{' '}
+                          <span>Appwrite (DB)</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="inline-block w-4 h-4 rounded"
+                            style={{ background: '#DE5D83', border: '1px solid #B34463' }}
+                          />{' '}
+                          <span>Meshy AI</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="inline-block w-4 h-4 rounded"
+                            style={{ background: '#9932CC', border: '1px solid #6E259B' }}
+                          />{' '}
+                          <span>Vercel / API</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="inline-block w-4 h-4 rounded"
+                            style={{ background: '#C41E3A', border: '1px solid #8E1F2E' }}
+                          />{' '}
+                          <span>External (CFBD/ESPN)</span>
+                        </div>
                       </div>
-                      <div className="pt-2 mt-2 border-t" style={{ borderColor: 'rgba(148,163,184,.25)' }}>
+                      <div
+                        className="pt-2 mt-2 border-t"
+                        style={{ borderColor: 'rgba(148,163,184,.25)' }}
+                      >
                         <div className="font-medium mb-2">Shapes</div>
-                        <div className="flex items-center gap-2 mb-1"><span className="inline-block w-5 h-5 rounded-full border" style={{ background: '#93C5FD', borderColor: '#1D4ED8' }} /> <span>Terminator</span></div>
-                        <div className="flex items-center gap-2 mb-1"><span className="inline-block w-5 h-5 border rotate-45" style={{ background: '#EDE9FE', borderColor: '#7C3AED' }} /> <span>Decision</span></div>
-                        <div className="flex items-center gap-2"><span className="inline-block w-5 h-3 border" style={{ background: '#E5E7EB', borderColor: '#6B7280' }} /> <span>Process</span></div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span
+                            className="inline-block w-5 h-5 rounded-full border"
+                            style={{ background: '#93C5FD', borderColor: '#1D4ED8' }}
+                          />{' '}
+                          <span>Terminator</span>
+                        </div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span
+                            className="inline-block w-5 h-5 border rotate-45"
+                            style={{ background: '#EDE9FE', borderColor: '#7C3AED' }}
+                          />{' '}
+                          <span>Decision</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="inline-block w-5 h-3 border"
+                            style={{ background: '#E5E7EB', borderColor: '#6B7280' }}
+                          />{' '}
+                          <span>Process</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -357,11 +413,41 @@ export default function DiagramBySlugPage() {
                       Legend
                     </div>
                     <div className="p-3 space-y-2">
-                      <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#ADD8E6', border: '1px solid #6CB6D9' }} /> <span>Folder</span></div>
-                      <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#F5F5DC', border: '1px solid #C9C9A3' }} /> <span>File</span></div>
-                      <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#9932CC', border: '1px solid #6E259B' }} /> <span>Config</span></div>
-                      <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#DE5D83', border: '1px solid #B34463' }} /> <span>Generated</span></div>
-                      <div className="flex items-center gap-2"><span className="inline-block w-4 h-4 rounded" style={{ background: '#C41E3A', border: '1px solid #8E1F2E' }} /> <span>Tests</span></div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block w-4 h-4 rounded"
+                          style={{ background: '#ADD8E6', border: '1px solid #6CB6D9' }}
+                        />{' '}
+                        <span>Folder</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block w-4 h-4 rounded"
+                          style={{ background: '#F5F5DC', border: '1px solid #C9C9A3' }}
+                        />{' '}
+                        <span>File</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block w-4 h-4 rounded"
+                          style={{ background: '#9932CC', border: '1px solid #6E259B' }}
+                        />{' '}
+                        <span>Config</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block w-4 h-4 rounded"
+                          style={{ background: '#DE5D83', border: '1px solid #B34463' }}
+                        />{' '}
+                        <span>Generated</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block w-4 h-4 rounded"
+                          style={{ background: '#C41E3A', border: '1px solid #8E1F2E' }}
+                        />{' '}
+                        <span>Tests</span>
+                      </div>
                     </div>
                   </div>
                 </aside>

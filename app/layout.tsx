@@ -1,31 +1,68 @@
-import type { Metadata, Viewport } from 'next'
-import { Inter, Bebas_Neue, Montserrat, Roboto_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import type { Metadata, Viewport } from 'next'
+import {
+  Anton,
+  Bebas_Neue,
+  Inter,
+  JetBrains_Mono,
+  Montserrat,
+  Orbitron,
+  Oswald,
+  Roboto_Mono,
+} from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
 })
 
-const bebasNeue = Bebas_Neue({ 
+const bebasNeue = Bebas_Neue({
   weight: '400',
   subsets: ['latin'],
   variable: '--font-bebas',
   display: 'swap',
 })
 
-const montserrat = Montserrat({ 
+const montserrat = Montserrat({
   subsets: ['latin'],
   variable: '--font-montserrat',
   display: 'swap',
 })
 
-const robotoMono = Roboto_Mono({ 
+const robotoMono = Roboto_Mono({
   subsets: ['latin'],
   variable: '--font-roboto-mono',
+  display: 'swap',
+})
+
+const oswald = Oswald({
+  weight: ['400', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-oswald',
+  display: 'swap',
+})
+
+const anton = Anton({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-anton',
+  display: 'swap',
+})
+
+const orbitron = Orbitron({
+  weight: ['400', '700', '900'],
+  subsets: ['latin'],
+  variable: '--font-orbitron',
+  display: 'swap',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
   display: 'swap',
 })
 
@@ -46,7 +83,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: 'CFB Fantasy - Chrome Football',
-      }
+      },
     ],
     locale: 'en_US',
     type: 'website',
@@ -67,15 +104,13 @@ export const viewport: Viewport = {
   userScalable: true,
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head></head>
-      <body className={`${inter.variable} ${bebasNeue.variable} ${montserrat.variable} ${robotoMono.variable} font-sans`}>
+      <body
+        className={`${inter.variable} ${bebasNeue.variable} ${montserrat.variable} ${robotoMono.variable} ${oswald.variable} ${anton.variable} ${orbitron.variable} ${jetbrainsMono.variable} font-sans`}
+      >
         <div className="min-h-screen flex flex-col">
           {/* Global Navbar */}
           {/* eslint-disable-next-line @next/next/no-sync-scripts */}
@@ -85,13 +120,14 @@ export default function RootLayout({
         </div>
         <Analytics />
         <SpeedInsights />
-        {process.env.NODE_ENV === 'development' ? (() => {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
-          const Overlay = require('@components/dev/DevCursorOverlay').default
-          return <Overlay />
-        })() : null}
+        {process.env.NODE_ENV === 'development'
+          ? (() => {
+              // eslint-disable-next-line @typescript-eslint/no-require-imports
+              const Overlay = require('@components/dev/DevCursorOverlay').default
+              return <Overlay />
+            })()
+          : null}
       </body>
     </html>
   )
 }
-
